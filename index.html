@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<!--[if IE 9 ]><html class="ie9" data-ng-app="materialAdmin" data-ng-controller="materialadminCtrl as mactrl"><![endif]-->
+<![if IE 9 ]>
+<html data-ng-app="materialAdmin" data-ng-controller="materialadminCtrl as mactrl">
+<![endif]>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LMS </title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+
+    <!-- Vendor CSS -->
+    <!-- <link rel="stylesheet" type="text/css" href="./node_modules/angular-material/angular-material.min.css"> -->
+    <link href="vendors/bower_comp/animate.css/animate.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css" rel="stylesheet">
+    <link href="vendors/bower_components/bootstrap-sweetalert/lib/sweet-alert.css" rel="stylesheet">
+    <link href="vendors/bower_components/angular-loading-bar/src/loading-bar.css" rel="stylesheet">
+    <link href="vendors/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+	<link rel="stylesheet" type="text/css" href="../node_modules/chosen-jquery/lib/chosen.css">
+	<link rel="stylesheet" type="text/css" href="../node_modules/print-js/dist/print.min.css">
+
+    <!-- <link href="../node_modules/angular-ui-bootstrap-datetimepicker/datetimepicker.css" rel="stylesheet"> -->
+	<link rel="stylesheet" href="../node_modules/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+	<link rel="stylesheet" href="../node_modules/leaflet-draw/dist/leaflet.draw.css" />
+
+	<!-- CSS -->
+    <link href="css/app.min.1.css" rel="stylesheet" id="app-level">
+    <link href="css/app.min.2.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+    <link href="css/demo.css" rel="stylesheet">
+    <link href="css/sweetalert.css" rel="stylesheet">
+
+    <link href="node_modules/angularjs-datepicker/src/css/angular-datepicker.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-marker-clusterer/1.0.0/markerclusterer.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvqC-Jo9H1GN6M-VQaDGTc6lUT0Q8rT00&libraries=places"></script>
+	<!--<script src="https://apis.mapmyindia.com/advancedmaps/v1/a95lvestgzc91cdz48of5zkijej9cl6l/map_load?v=0.1"></script> -->
+	<script src="https://apis.mapmyindia.com/advancedmaps/v1/tinx82hphv85feke26i9itmjckkjdwy6/map_load?v=0.1"></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>-->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>-->
+</head>
+
+<body id="bdy" data-ng-class="{ 'sw-toggled': mactrl.layoutType === '1'}">
+
+    <div id="div_index_main" class="container-fluid" style="padding: 0;min-height:645px" data-ui-view></div>
+
+	<!-- Prototype -->
+	<script src="js/prototype.js"></script>
+
+    <!-- Core -->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="js/vendor/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	<script src="js/vendor/excelexport/excelexport.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+
+    <!-- Angular -->
+    <script src="./node_modules/angular/angular.min.js"></script>
+    <script src="./node_modules/angular-animate/angular-animate.min.js"></script>
+    <script src="./node_modules/angular-resource/angular-resource.min.js"></script>
+    <script src="./node_modules/angular-aria/angular-aria.min.js"></script>
+    <script src="./node_modules/angular-messages/angular-messages.min.js"></script>
+	<script src="../node_modules/angular-cookies/angular-cookies.min.js"></script>
+	<!-- <script src="./node_modules/angular-material/angular-material.min.js"></script> -->
+	<script src="../node_modules/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+	<script src="../node_modules/leaflet-draw/dist/leaflet.draw.js"></script>
+	<script src="../node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js"></script>
+
+    <!-- Angular Modules -->
+    <script src="./node_modules/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
+	<script src="./node_modules/oclazyload/dist/ocLazyLoad.min.js"></script>
+    <script src="./node_modules/oclazyload/dist/ocLazyLoad.require.js"></script>
+	<script src="vendors/bower_components/angular-loading-bar/src/loading-bar.js"></script>
+    <script src="vendors/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+	<!--Socket-->
+	<script src="./node_modules/socket.io-client/dist/socket.io.js"></script>
+	<script src="../node_modules/socket.io-stream/socket.io-stream.js"></script>
+	<script src="../node_modules/socketio-file-upload/client.min.js"></script>
+
+
+	<script type="text/javascript" src="./node_modules/angular-desktop-notification/dist/angular-desktop-notification.js"></script>
+
+
+    <script type="text/javascript" src="./node_modules/ngstorage/ngStorage.min.js"></script>
+    <script type="text/javascript" src="./node_modules/string/dist/string.min.js"></script>
+    <script type="text/javascript" src="./node_modules/lodash/lodash.min.js"></script>
+    <script type="text/javascript" src="./node_modules/ng-dropdown-multiselect/dist/angularjs-dropdown-multiselect.min.js"></script>
+    <script type="text/javascript" src="./node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js"></script>
+    <script type="text/javascript" src="./node_modules/ng-file-upload/dist/ng-file-upload.min.js"></script>
+    <script type="text/javascript" src="./node_modules/ui-router-extras/release/modular/ct-ui-router-extras.sticky.min.js"></script>
+    <script src="./node_modules/angularjs-datepicker/src/js/angular-datepicker.js"></script>
+    <script src="./node_modules/angular-filter/dist/angular-filter.min.js"></script>
+    <script src="./node_modules/ng-infinite-scroll/build/ng-infinite-scroll.min.js"></script>
+
+	<script src="./node_modules/xlsx/xlsx.mini.js"></script>
+
+	<!-- Multi Select Library-->
+	<script type="text/javascript" src="js/ja-angular-dropdown-multiselect.js"></script>
+	<link href="./gpsManagement/cluster/prune.css" rel="stylesheet">
+	<script type="text/javascript" src="./gpsManagement/cluster/pruneCluster.js"></script>
+
+    <!-- angular js rz slider -->
+    <link href="./node_modules/angularjs-slider/dist/rzslider.css" rel="stylesheet">
+    <script src="./node_modules/angularjs-slider/dist/rzslider.min.js"></script>
+
+    <!-- Common Vendors -->
+    <script src="vendors/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="vendors/sweetalert.min.js"></script>
+    <script src="vendors/bower_components/Waves/dist/waves.min.js"></script>
+    <script src="vendors/bootstrap-growl/bootstrap-growl.min.js"></script>
+    <script src="vendors/bower_comp/moment/min/moment.min.js"></script>
+    <script src="vendors/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="../node_modules/angular-ui-bootstrap-datetimepicker/datetimepicker.js"></script>
+    <script src="../node_modules/chosen-jquery/lib/chosen.jquery.js"></script>
+    <script src="../node_modules/angular-chosen-localytics/dist/angular-chosen.js"></script>
+    <script src="vendors/bower_comp/ng-table/dist/ng-table.min.js"></script>
+
+    <!-- PDF -->
+    <script src="https://cdn.rawgit.com/niklasvh/html2canvas/0.5.0-alpha2/dist/html2canvas.min.js"></script>
+    <script src="../node_modules/jspdf/dist/jspdf.debug.js"></script>
+    <script src="../node_modules/angular-save-html-to-pdf/dist/saveHtmlToPdf.min.js"></script>
+    <!-- PDF -->
+
+	<!-- fixed header -->
+	<script type="text/javascript" src="../node_modules/angular-fixed-table-header/src/fixed-table-header.min.js"></script>
+
+
+	<script src="../node_modules/ng-ui-router-state-events/dist/stateEvents.js"></script>
+
+    <!-- Placeholder for IE9 -->
+    <!--[if IE 9 ]>
+    <script src="vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js"></script>
+    <![endif]-->
+
+	<script src="js/vendor/moment-with-locales.js"></script>
+	<script src="js/vendor/angular-moment-picker.min.js"></script>
+<!--	<script src="js/vendor/angular-moment-picker.min.css"></script>-->
+
+<!--	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>-->
+<!--	<script src="https://cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>-->
+	<link href="https://cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css" rel="stylesheet">
+
+    <!-- Using below vendors in order to avoid misloading on resolve -->
+    <script src="vendors/bower_components/flot/jquery.flot.js"></script>
+    <script src="vendors/bower_components/flot.curvedlines/curvedLines.js"></script>
+    <script src="vendors/bower_components/flot/jquery.flot.resize.js"></script>
+    <script src="vendors/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+    <script src="vendors/bower_components/flot-orderBars/js/jquery.flot.orderBars.js"></script>
+    <script src="vendors/bower_components/flot/jquery.flot.pie.js"></script>
+    <script src="vendors/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
+    <script src="vendors/bower_components/angular-nouislider/src/nouislider.min.js"></script>
+	<!-- nvd3 chart-->
+	<script src="vendors/bower_components/angular-nouislider/src/nouislider.min.js"></script>
+		<!--<script src="vendors/bower_components/angular/angular.js"></script>-->
+		<script src="vendors/bower_components/d3/d3.js"></script>
+		<script src="vendors/bower_components/nvd3/build/nv.d3.js"></script> <!-- or use another assembly -->
+		<script src="vendors/bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+		<link rel="stylesheet" href="vendors/bower_components/nvd3/build/nv.d3.css">
+
+    <!-------App level------- -->
+    <script src="js/app_config.js"></script>
+    <script src="js/app.js"></script>
+    <!-- <script src="js/config.js"></script> -->
+    <script src="js/appConfigState.js"></script>
+    <script src="js/configMaintenance.js"></script>
+	<script src="js/routerStatesMRP.js"></script>
+	<!-- <script src="js/controllers/main.js"></script> -->
+    <script src="js/services.js"></script>
+    <script src="js/services/gps.socket.services.js"></script>
+	<script src="gpsManagement/socketFactory.js"></script>
+	<script src="gpsManagement/cookies.js"></script>
+
+
+	<!--Filter Service-->
+	<script src="js/services/filterService.js"></script>
+
+    <!-----Template Modules ------>
+    <script src="js/modules/template.js"></script>
+    <script src="js/modules/ui.js"></script>
+    <script src="js/modules/charts/flot.js"></script>
+    <script src="js/modules/charts/other-charts.js"></script>
+    <script src="js/modules/form.js"></script>
+    <script src="js/modules/media.js"></script>
+    <script src="js/modules/components.js"></script>
+    <script src="js/modules/calendar.js"></script>
+    <script src="js/modules/demo.js"></script>
+
+    <!---App level utilities ------->
+    <script type="text/javascript" src="js/HTTPConnection.js"></script>
+    <script type="text/javascript" src="js/URL.js"></script>
+    <script type="text/javascript" src="js/DateUtils.js"></script>
+    <script type="text/javascript" src="js/directive.js"></script>
+    <script type="text/javascript" src="js/HTTPConnection.js"></script>
+    <script type="text/javascript" src="js/access.js"></script>
+    <script type="text/javascript" src="js/constants.js"></script>
+    <script type="text/javascript" src="js/other-utils.js"></script>
+    <script type="text/javascript" src="js/sharedResources.js"></script>
+    <script type="text/javascript" src="js/controllers/commonController.js"></script>
+    <script type="text/javascript" src="js/broadcast.js"></script>
+
+	<!-- Components -->
+	<script type="text/javascript" src="component/kpi/kpi.js"></script>
+    <script type="text/javascript" src="component/map/map.js"></script>
+	<script type="text/javascript" src="component/tableComponent/table.directive.js"></script>
+	<script type="text/javascript" src="component/tableComponent/table.service.js"></script>
+	<script type="text/javascript" src="component/notification/notification.js"></script>
+
+    <!--Auth entities -->
+    <script type="text/javascript" src="js/controllers/loginController.js"></script>
+    <script type="text/javascript" src="js/services/loginService.js"></script>
+
+	<!--Socket-->
+    <script type="text/javascript" src="js/socketFactory.js"></script>
+
+	<!--Factory-->
+    <script type="text/javascript" src="js/factory/lazyload.factory.js"></script>
+    <script type="text/javascript" src="js/factory/tableAccessDetail.factory.js"></script>
+    <script type="text/javascript" src="js/factory/formula.factory.js"></script>
+    <script type="text/javascript" src="js/factory/excelDownload.factory.js"></script>
+	<script type="text/javascript" src="js/factory/commonTableSetting.factory.js"></script>
+
+    <!--Client entities -->
+    <script type="text/javascript" src="js/controllers/clientController.js"></script>
+    <script type="text/javascript" src="js/services/clientService.js"></script>
+
+    <!--App home entities -->
+    <script type="text/javascript" src="js/controllers/appController.js"></script>
+    <script type="text/javascript" src="js/services/appService.js"></script>
+    <script type="text/javascript" src="js/controllers/settingsController.js"></script>
+    <script type="text/javascript" src="js/controllers/mastersController.js"></script>
+
+    <!--Widget entities -->
+    <script type="text/javascript" src="js/controllers/clockWidgetController.js"></script>
+
+    <!--Materials entities -->
+    <script type="text/javascript" src="js/services/materialService.js"></script>
+    <script type="text/javascript" src="js/controllers/materialController.js"></script>
+
+    <!--Branch entities -->
+    <script type="text/javascript" src="js/services/branchService.js"></script>
+    <script type="text/javascript" src="js/controllers/branchController.js"></script>
+
+    <!--User entities -->
+    <script type="text/javascript" src="js/services/userService.js"></script>
+    <script type="text/javascript" src="js/controllers/userController.js"></script>
+	<script type="text/javascript" src="js/controllers/myUserController.js"></script>
+
+    <!--Role entities -->
+    <script type="text/javascript" src="js/services/roleService.js"></script>
+    <script type="text/javascript" src="js/controllers/roleController.js"></script>
+
+    <!--Department entities -->
+    <script type="text/javascript" src="js/services/departmentService.js"></script>
+    <script type="text/javascript" src="js/controllers/departmentController.js"></script>
+
+	<!--User Dashboard entities -->
+    <script type="text/javascript" src="js/services/userDashboardService.js"></script>
+    <script type="text/javascript" src="js/controllers/userDashboardController.js"></script>
+
+    <!--Send Trip Location -->
+    <script type="text/javascript" src="js/services/sendTripLocService.js"></script>
+    <script type="text/javascript" src="js/controllers/sendTripLocController.js"></script>
+
+    <!--ICD entities -->
+    <script type="text/javascript" src="js/services/icdService.js"></script>
+    <script type="text/javascript" src="js/controllers/icdController.js"></script>
+    <script type="text/javascript" src="js/controllers/icd_client_Controller.js"></script>
+    <script type="text/javascript" src="js/services/driverService.js"></script>
+    <script type="text/javascript" src="js/controllers/myDriversController.js"></script>
+
+    <script type="text/javascript" src="js/controllers/myRoutesController.js"></script>
+    <script type="text/javascript" src="js/services/routeService.js"></script>
+
+    <script type="text/javascript" src="js/controllers/mySLDOController.js"></script>
+    <script type="text/javascript" src="js/services/sldoService.js"></script>
+
+    <script type="text/javascript" src="js/controllers/vendorController.js"></script>
+    <script type="text/javascript" src="js/services/vendorService.js"></script>
+
+    <!--Vendor Courier entities -->
+    <script type="text/javascript" src="js/services/vendorCourierService.js"></script>
+    <script type="text/javascript" src="js/controllers/vendorCourierController.js"></script>
+
+    <!--Vendor Fuel entities -->
+    <script type="text/javascript" src="js/services/vendorFuelService.js"></script>
+    <script type="text/javascript" src="js/controllers/vendorFuelController.js"></script>
+
+    <!--Fleet entities -->
+    <script type="text/javascript" src="js/services/fleetService.js"></script>
+    <script type="text/javascript" src="js/controllers/myFleetController.js"></script>
+
+    <!--Vendor Maintenance entities -->
+    <script type="text/javascript" src="js/services/vendorMaintenanceService.js"></script>
+    <script type="text/javascript" src="js/controllers/vendorMaintenanceController.js"></script>
+
+    <!-- <script type="text/javascript" src="js/services/commonService.js"></script> -->
+    <script type="text/javascript" src="js/controllers/userController.js"></script>
+    <script type="text/javascript" src="js/services/userService.js"></script>
+
+    <script type="text/javascript" src="js/googlePlaceAPI.js"></script>
+
+    <script type="text/javascript" src="js/controllers/customerController.js"></script>
+    <script type="text/javascript" src="js/services/customerService.js"></script>
+
+	<!-- Bill Book-->
+	<script type="text/javascript" src="js/controllers/billBookController.js"></script>
+	<script type="text/javascript" src="js/services/billBookService.js"></script>
+
+	<!--incidentl-->
+	<script type="text/javascript" src="js/controllers/incidentalController.js"></script>
+
+	<!--fpa-->
+	<script type="text/javascript" src="js/controllers/fpaController.js"></script>
+
+	<!--coverNote-->
+	<script type="text/javascript" src="js/controllers/billsCoverNoteController.js"></script>
+	<script type="text/javascript" src="js/services/billsCoverNoteService.js"></script>
+
+    <script type="text/javascript" src="js/controllers/registeredVehicleController.js"></script>
+    <script type="text/javascript" src="js/controllers/tripMemoController.js"></script>'
+    <script type="text/javascript" src="js/controllers/brokerMemoController.js"></script>'
+    <script type="text/javascript" src="js/controllers/crossDockingController.js"></script>'
+    <script type="text/javascript" src="js/controllers/ewayBillController.js"></script>'
+
+    <script type="text/javascript" src="js/controllers/vehicleController.js"></script>
+    <script type="text/javascript" src="js/services/vehicleService.js"></script>
+
+    <script type="text/javascript" src="js/services/datamanagementsService.js"></script>
+
+    <script type="text/javascript" src="js/controllers/bookingController.js"></script>
+    <script type="text/javascript" src="js/controllers/myBookingController.js"></script>
+    <script type="text/javascript" src="js/controllers/createGRcontroller.js"></script>
+    <script type="text/javascript" src="js/services/createGRService.js"></script>
+    <script type="text/javascript" src="js/services/bookingService.js"></script>
+    <script type="text/javascript" src="js/services/tripService.js"></script>
+    <script type="text/javascript" src="js/services/ewayBillService.js"></script>
+
+    <!-- GR -->
+    <script type="text/javascript" src="js/controllers/myGRController.js"></script>
+    <script type="text/javascript" src="js/controllers/gr/grUpsertController.js"></script>
+    <script type="text/javascript" src="js/controllers/moneyReceiptController.js"></script>
+    <script type="text/javascript" src="js/controllers/moneyReceiptTripMemoController.js"></script>
+    <script type="text/javascript" src="js/controllers/grWithOutTripController.js"></script>
+
+
+
+    <!-- createTrip -->
+    <script type="text/javascript" src="js/controllers/createTripController.js"></script>
+
+
+	<!-- Diesel -->
+    <script type="text/javascript" src="js/controllers/myDieselController.js"></script>
+
+	<!-- shipment Tracking -->
+    <script type="text/javascript" src="js/controllers/shipmentTrackingController.js"></script>
+
+	<!-- Vehicle Expenses -->
+    <script type="text/javascript" src="js/controllers/vehicleExpController.js"></script>
+
+    <!-- Public Map -->
+    <script type="text/javascript" src="js/controllers/showMap.js"></script>
+    <!-- Trips -->
+    <script type="text/javascript" src="js/controllers/myTripsController.js"></script>
+	<!--TripSettlement-->
+	<script type="text/javascript" src="js/controllers/myTripSettlementController.js"></script>
+    <!-- vehicle Accident -->
+    <script type="text/javascript" src="js/controllers/vehicleAccidentController.js"></script>
+    <script type="text/javascript" src="js/controllers/vehicleAccidentListController.js"></script>
+    <!-- account opening balance add form controller -->
+    <script type="text/javascript" src="js/controllers/openingBalanceController.js"></script>
+    <!--TripAdvance-->
+	<script type="text/javascript" src="js/controllers/myTripAdvanceController.js"></script>
+
+	<!--RoundTrip-->
+	<script type="text/javascript" src="js/controllers/roundTripController.js"></script>
+
+    <!--Driver and Vehicle Association-->
+	<script type="text/javascript" src="js/controllers/driverOnVehicleController.js"></script>
+	<script type="text/javascript" src="js/services/driverOnVehicleService.js"></script>
+
+    <script type="text/javascript" src="js/controllers/reportController.js"></script>
+    <script type="text/javascript" src="js/controllers/otherReportsController.js"></script>
+
+    <script type="text/javascript" src="js/controllers/driverReportController.js"></script>
+
+    <!--vehicleAllcation entities -->
+    <script type="text/javascript" src="js/controllers/vehicleAllcateController.js"></script>
+    <script type="text/javascript" src="js/services/vehicleAllcationService.js"></script>
+    <script type="text/javascript" src="js/services/invoiceService.js"></script>
+    <script type="text/javascript" src="js/controllers/billsController.js"></script>
+    <script type="text/javascript" src="js/services/billsService.js"></script>
+    <script type="text/javascript" src="views/bills/invoice.js"></script>
+    <script type="text/javascript" src="views/bills/builty.js"></script>
+    <script type="text/javascript" src="views/bills/driver.js"></script>
+    <script type="text/javascript" src="views/bills/diesel.js"></script>
+    <script type="text/javascript" src="views/bills/company.js"></script>
+    <script type="text/javascript" src="views/bills/customerPaymentCtrl.js"></script>
+    <script type="text/javascript" src="views/bills/vendorPaymentCtrl.js"></script>
+
+	<!-- plain_voucher	-->
+	<script type="text/javascript" src="js/controllers/voucherController.js"></script>
+	<script type="text/javascript" src="js/controllers/tdsPaymentController.js"></script>
+	<script type="text/javascript" src="js/controllers/tdsReportController.js"></script>
+<!--	<script type="text/javascript" src="js/controllers/addTdsPaymentrController.js"></script>-->
+	<script type="text/javascript" src="js/services/voucherService.js"></script>
+
+	<!--MoneyReceipt-->
+	<script type="text/javascript" src="js/controllers/billsMoneyReceiptController.js"></script>
+	<script type="text/javascript" src="js/services/moneyReceiptService.js"></script>
+
+
+	<!--Landmark-->
+	<script type="text/javascript" src="js/controllers/gps/landmarkController.js"></script>
+
+	<!--creditNote-->
+	<script type="text/javascript" src="js/controllers/creditNoteController.js"></script>
+	<script type="text/javascript" src="js/services/creditNoteService.js"></script>
+
+    <!-- debitNote -->
+    <script type="text/javascript" src="js/controllers/debitNoteController.js"></script>
+    <script type="text/javascript" src="js/services/debitNoteService.js"></script>
+
+	<!--editClientId-->
+	<script type="text/javascript" src="js/controllers/commonFolder/editClientIdPopUpController.js"></script>
+	<script type="text/javascript" src="js/services/commonService.js"></script>
+
+
+    <script type="text/javascript" src="maintenance/services/masterService.js"></script>
+
+    <!--Mechanic entities -->
+    <script type="text/javascript" src="maintenance/controllers/mechanicController.js"></script>
+    <script type="text/javascript" src="maintenance/services/mechanicService.js"></script>
+
+    <!--Manufacturer entity -->
+    <script type="text/javascript" src="maintenance/controllers/manufacturerController.js"></script>
+    <script type="text/javascript" src="maintenance/services/manufacturerService.js"></script>
+
+    <!--Part Category entity -->
+    <script type="text/javascript" src="js/controllers/mrp/partCategoryController.js"></script>
+    <script type="text/javascript" src="js/services/mrp/partCategoryService.js"></script>
+
+    <!--vendor maintenance entities -->
+    <script type="text/javascript" src="js/controllers/mrp/maintenanceVendorController_.js"></script>
+    <script type="text/javascript" src="js/services/mrp/maintenanceVendorService_.js"></script>
+
+    <script type="text/javascript" src="js/services/reportService.js"></script>
+
+    <!--model entities -->
+    <script type="text/javascript" src="maintenance/controllers/modelController.js"></script>
+
+    <!--Task master controller -->
+    <script type="text/javascript" src="maintenance/controllers/taskMasterController.js"></script>
+    <script type="text/javascript" src="maintenance/services/taskMasterService.js"></script>
+
+    <!--Task master controller -->
+    <script type="text/javascript" src="maintenance/controllers/dieselMaintCtrl.js"></script>
+    <script type="text/javascript" src="maintenance/services/dieselMaintService.js"></script>
+
+
+    <!--spare parts entities -->
+    <script type="text/javascript" src="js/controllers/mrp/spareController.js"></script>
+    <script type="text/javascript" src="views/bills/purchaseOrder.js"></script>
+    <script type="text/javascript" src="views/bills/issueSlip.js"></script>
+
+	<!-- ***** Pr Po Controller ******* -->
+	<script type="text/javascript" src="js/controllers/mrp/prPoMainController.js"></script>
+
+    <!--inventory entities -->
+    <script type="text/javascript" src="maintenance/controllers/inventoryController.js"></script>
+
+	<!--MRP  entities -->
+	<script type="text/javascript" src="js/controllers/MRPcontroller.js"></script>
+
+	<!--GPS Master entities -->
+	<script type="text/javascript" src="gpsManagement/controllers/gpsMasterController.js"></script>
+	<script type="text/javascript" src="gpsManagement/controllers/gpsDeviceSlipsController.js"></script>
+	<script type="text/javascript" src="gpsManagement/services/gpsMasterService.js"></script>
+
+
+	<!--jobcard entities -->
+    <script type="text/javascript" src="maintenance/controllers/jobCardController.js"></script>
+    <script type="text/javascript" src="maintenance/services/jobCardService.js"></script>
+
+    <!--Departmnet branch association -->
+    <script type="text/javascript" src="js/services/departmentBranchService.js"></script>
+
+    <!--Structure Master -->
+    <script type="text/javascript" src="maintenance/services/structureMasterService.js"></script>
+    <script type="text/javascript" src="maintenance/controllers/structureMasterController.js"></script>
+
+    <!--Trailer master -->
+    <script type="text/javascript" src="maintenance/services/trailerMasterService.js"></script>
+    <script type="text/javascript" src="maintenance/controllers/trailerMasterController.js"></script>
+
+	<!-- Sales Order -->
+	<script type="text/javascript" src="js/services/salesOrderService.js"></script>
+	<script type="text/javascript" src="js/controllers/quotationController.js"></script>
+    <script type="text/javascript" src="js/controllers/quoteToSOController.js"></script>
+    <script type="text/javascript" src="js/controllers/SOController.js"></script>
+    <script type="text/javascript" src="js/controllers/invoicesController.js"></script>
+
+    <!--Tool master -->
+    <script type="text/javascript" src="maintenance/services/toolService.js"></script>
+    <script type="text/javascript" src="maintenance/controllers/toolMasterController.js"></script>
+
+    <!--Prime mover trailer association -->
+    <script type="text/javascript" src="maintenance/services/primeMoverTrailerAssociationService.js"></script>
+    <script type="text/javascript" src="maintenance/controllers/primeMoverTrailerAssociationController.js"></script>
+    <script type="text/javascript" src="maintenance/services/tyreMasterService.js"></script>
+    <script type="text/javascript" src="maintenance/services/tyreIssueService.js"></script>
+    <script type="text/javascript" src="maintenance/controllers/tyreMasterController.js"></script>
+    <script type="text/javascript" src="maintenance/controllers/contractor.js"></script>
+    <script type="text/javascript" src="maintenance/services/contractorService.js"></script>
+    <script type="text/javascript" src="maintenance/controllers/reportsController.js"></script>
+    <script type="text/javascript" src="maintenance/services/reportsService.js"></script>
+
+
+	<!-- ACCOUNTING	-->
+	<script type="text/javascript" src="js/services/accountingService.js"></script>
+	<script type="text/javascript" src="js/controllers/accountMasterController.js"></script>
+
+    <!--- Dues -->
+    <script type="text/javascript" src="js/controllers/duesController.js"></script>
+
+	<!--- Dues Bill -->
+    <script type="text/javascript" src="js/controllers/duesBillController.js"></script>
+
+	<!-- GPS	-->
+	<script type="text/javascript" src="js/controllers/gps/tracking.controller.js"></script>
+
+	<!-- Cost Category	-->
+	<script type="text/javascript" src="js/controllers/costCategoryController.js"></script>
+
+	<!-- Cost Center	-->
+	<script type="text/javascript" src="js/controllers/costCenterController.js"></script>
+
+	<!-- Alert & Notification	-->
+	<script type="text/javascript" src="js/controllers/notification.controller.js"></script>
+
+	<!-- billingparty & consigee/consignor	-->
+	<script type="text/javascript" src="js/controllers/myBillingPartyController.js"></script>
+	<script type="text/javascript" src="js/services/billingPartyService.js"></script>
+	<script type="text/javascript" src="js/controllers/myConsignorConsigneeController.js"></script>
+	<script type="text/javascript" src="js/services/consignorConsigneeService.js"></script>
+
+	<!--cityController-->
+	<script type="text/javascript" src="js/controllers/cityStateController.js"></script>
+	<script type="text/javascript" src="js/services/cityStateService.js"></script>
+
+	<!--directoryController-->
+	<script type="text/javascript" src="js/controllers/directoryController.js"></script>
+    <script type="text/javascript" src="js/services/directoryService.js"></script>
+
+    <!-- master-> Driver counselling controllers start  -->
+    <script type="text/javascript" src="js/controllers/driverCounsellingListController.js"></script>
+    <script type="text/javascript" src="js/controllers/driverCounsellingAddController.js"></script>
+
+    <!-- master-> Driver counselling controllers end  -->
+
+	<!-- Dashboard	-->
+
+	<script type="text/javascript" src="js/services/dashboard.service.js"></script>
+	<script type="text/javascript" src="js/controllers/dashboard/dashboard.controller.js"></script>
+	<script type="text/javascript" src="js/controllers/dashboard/booking.controller.js"></script>
+	<script type="text/javascript" src="js/controllers/dashboard/bill.controller.js"></script>
+	<script type="text/javascript" src="js/controllers/dashboard/profit.controller.js"></script>
+	<script type="text/javascript" src="js/controllers/dashboard/trip.controller.js"></script>
+	<script type="text/javascript" src="js/controllers/liveTrackerController.js"></script>
+	<script type="text/javascript" src="js/controllers/customerRateChartController.js"></script>
+    <script type="text/javascript" src="js/services/customerRateChartService.js"></script>
+    <script type="text/javascript" src="js/controllers/addOrEditQuotationController.js"></script>
+
+	<!-- Incentive -->
+	<script type="text/javascript" src="views/incentive/incentiveMain.controller.js"></script>
+	<script type="text/javascript" src="views/incentive/incentiveMain.service.js"></script>
+
+    <!-- DPH -->
+    <script type="text/javascript" src="views/dph/dphMain.controller.js"></script>
+    <script type="text/javascript" src="views/dph/dphMain.service.js"></script>
+
+	<!-- Schema Configuration -->
+	<script type="text/javascript" src="views/schemaConfiguration/conf.controller.js"></script>
+	<script type="text/javascript" src="views/schemaConfiguration/conf.service.js"></script>
+
+	<!-- FPA Master -->
+	<script type="text/javascript" src="views/fpaMaster/fpaMasterMainCtrl.js"></script>
+	<script type="text/javascript" src="views/fpaMaster/fpaMasterService.js"></script>
+
+	<!--MRP Reports -->
+	<script type="text/javascript" src="js/services/mrp/reportMRPService.js"></script>
+	<script type="text/javascript" src="js/controllers/mrp/reportMRPController.js"></script>
+
+	<script type="text/javascript" src="views/bills/addPurchaseBillCtrl.js"></script>
+
+	<!--genBillController-->
+	<script type="text/javascript" src="js/controllers/genBillController.js"></script>
+    <script type="text/javascript" src="js/services/genBillService.js"></script>
+
+    <!-- daily km analysis report start -->
+    <script type="text/javascript" src="js/controllers/dailyKmAnalysisController.js"></script>
+    <!-- daily km analysis report end -->
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvqC-Jo9H1GN6M-VQaDGTc6lUT0Q8rT00&libraries=places"></script>
+
+</body>
+
+</html>

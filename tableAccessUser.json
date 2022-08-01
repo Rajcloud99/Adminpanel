@@ -1,0 +1,364 @@
+{
+  "Booking Management => Trip": {
+    "Trip": {
+      "S.NO": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TRIP NO.": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "CATEGORY": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "GR NO.": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VEHICLE NO.": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VEHICLE TYPE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "CUSTOMER": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VENDOR": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "ROUTE NAME": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TRIP START": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TRIP END": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TRIP ENTRY": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TRIP STATUS": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "OWNERSHIP": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "DRIVER NAME": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "HIRE SLIP": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "BRANCH": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VENDOR COMPANY": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "LAST UPDATE TIME": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "DEAL DATE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      }
+    }
+  },
+  "Booking Management => Bookings": {
+    "Bookings": {
+      "B.NO.": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "CUSTOMER": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "ROUTE(DISTANCE)": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "DATE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PREFERRED VEHICLE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "ACTUAL WEIGHT (TONNE)": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "SERVED WEIGHT (TONNE)": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "REMAINING WEIGHT (TONNE)": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PROGRESS": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "B.TYPE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "MATERIAL": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "CREATED AT": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "CREATED BY": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      }
+    }
+  },
+  "Booking Management => Trip Performance": {
+    "Trip Performance": {
+      "TRIP ENTRY": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TRIP START": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TRIP NO": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "GR NO": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "CONSIGNOR": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VEHICLE NO": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "ROUTE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "ROUTE KM": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "DEAL TOTAL": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TOTAL ADVANCE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "REVENUE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "REVENUE/KM": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PROFIT": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PROFIT/KM": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VENDOR DEAL": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VENDOR CHARGES": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VENDOR DEDUCTION": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "BALANCE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TDS EXTRA": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TDS PERCENTAGE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "ADV/KM": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "DRIVER NAME": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "DRIVER NO.": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VENDOR NAME": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PAN CARD NO.": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "TRIP STATUS": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "OWNERSHIP": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "HIRE SLIP": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "BRANCH": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VENDOR COMPANY": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "LAST UPDATE TIME": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "VENDOR ADVANCE PAID": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PAY BY CHEQUE": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PAY BY BROKER": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PAY BY DIESEL": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "PAY BY CASH": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      },
+      "REMAINING AMOUNT": {
+        "allowed": true,
+        "visible": true,
+        "ordering": true
+      }
+    }
+  }
+}
