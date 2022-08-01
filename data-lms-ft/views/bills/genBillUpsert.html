@@ -1,0 +1,711 @@
+<!-- Controller: genBillUpsertCtrl-->
+<!-- ControllerAs: gbuVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+			<span class="c-black"><b>Upsert  Bill</b></span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" style="position: absolute;width: 100%;margin-bottom: 65px">
+		<form novalidate autocomplete="off" name="addBillForm">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<!-- DETAILS -->
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Buyer Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Buyer Name:<span class="req_r">*</span></label>
+									<div class="col-md-9"  style="z-index: 90">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="Buyer Search..."
+													ng-model="gbuVm.aBill.billingParty"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in gbuVm.getBillingParty($viewValue) | limitTo:6"
+													typeahead-on-select="gbuVm.aBill.billNo = undefined; gbuVm.onBPSelect($item, $model, $label)"
+													required>
+											<i class="lvh-search-close" ng-click="gbuVm.aBill.billingParty=null;gbuVm.aBill.billNo = undefined">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="gbuVm.aBill.billingParty">
+									<label class="col-sm-3 control-label">Address of Buyer:</label>
+									<div class="col-sm-8">
+										{{gbuVm.aBill.billingParty && gbuVm.aBill.billingParty.address}}
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="gbuVm.aBill.billingParty">
+									<label class="col-sm-3 control-label">State Code:</label>
+									<div class="col-sm-8">
+										{{gbuVm.aBill.billingParty && gbuVm.aBill.billingParty.state_code || 'NA'}}
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="gbuVm.aBill.billingParty">
+									<label class="col-sm-3 control-label">GSTIN No.</label>
+									<div class="col-sm-8">
+										{{gbuVm.aBill.billingParty && (gbuVm.aBill.billingParty.gstin || gbuVm.aBill.billingParty.gstin_no) || 'NA'}}
+									</div>
+								</div>
+
+
+								<div class="clearfix"></div>
+
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Seller Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Seller Name:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="Seller Name"
+													ng-model="gbuVm.aBill.sellerName"
+													typeahead-wait-ms="10"
+													required
+											>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Seller Account:<span class="req_r">*</span></label>
+									<div class="col-md-9"  style="z-index: 90">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="Seller Account Search..."
+													ng-model="gbuVm.aBill.salesAccount"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in gbuVm.accountmaster($viewValue) | limitTo:6"
+													typeahead-on-select="gbuVm.onSASelect($item, $model, $label)"
+													required
+											>
+											<i class="lvh-search-close" ng-click="gbuVm.aBill.salesAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Branch:<span class="req_r">*</span></label>
+									<div class="col-md-9"  style="z-index: 90">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="Branch Search..."
+													ng-model="gbuVm.aBill.branch"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in gbuVm.getAllBranch($viewValue) | limitTo:6"
+													typeahead-on-select="gbuVm.onBranchSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="gbuVm.aBill.branch=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Bill Date: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+
+											<input
+												fill-date
+												max-date="gbuVm.DatePicker.newDate"
+												type="text"
+												class="form-control"
+												placeholder="Bill Date"
+												ng-model="gbuVm.aBill.billDate"
+												ng-change="gbuVm.getRate()"
+											>
+										</div>
+									</div>
+								</div>
+
+<!--								<div class="col-md-3">-->
+<!--									<label class="col-sm-4 control-label">Bill Date:</label>-->
+<!--									<div class="date-picker input-group dp-blue col-sm-8" ng-class="{ 'is-opened': opened1 == true }">-->
+<!--										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">-->
+<!--											<input autocomplete="off" ng-click="gbuVm.DatePicker.openDatePicker(this, $event, 'opened1')"-->
+<!--												   type="text"-->
+<!--												   class="form-control"-->
+<!--												   uib-datepicker-popup="{{gbuVm.DatePicker.formats[0]}}"-->
+<!--												   show-weeks="false"-->
+<!--												   ng-model="gbuVm.aBill.billDate"-->
+<!--												   is-open="opened1"-->
+<!--												   datepicker-options="gbuVm.DatePicker.dateSettings"-->
+<!--												   close-text="Close"-->
+<!--												   placeholder="Bill Date"-->
+<!--												   name="Bill Date"-->
+<!--												   style="padding: 0px 4px;height: 34px;" />-->
+<!--										</div>-->
+<!--										<span class="input-group-btn">-->
+<!--									<button type="button"-->
+<!--											class="btn btn-default m-t-0 f12"-->
+<!--											ng-click="gbuVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i-->
+<!--										class="glyphicon glyphicon-calendar"></i></button>-->
+<!--								</span>-->
+<!--									</div>-->
+<!--								</div>-->
+
+								<div class="clearfix"></div>
+
+<!--								<div class="col-md-3">-->
+<!--									<label class="col-sm-4 control-label">Due Date:</label>-->
+<!--									<div class="date-picker input-group dp-blue col-sm-8" ng-class="{ 'is-opened': opened2 == true }">-->
+<!--										<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">-->
+<!--											<input autocomplete="off" ng-click="gbuVm.DatePicker.openDatePicker(this, $event, 'opened2')"-->
+<!--												   type="text"-->
+<!--												   class="form-control"-->
+<!--												   uib-datepicker-popup="{{gbuVm.DatePicker.formats[0]}}"-->
+<!--												   show-weeks="false"-->
+<!--												   ng-model="gbuVm.aBill.dueDate"-->
+<!--												   ng-change="gbuVm.dateChange('billDate');"-->
+<!--												   is-open="opened2"-->
+<!--												   datepicker-options="gbuVm.DatePicker.dateSettings"-->
+<!--												   close-text="Close"-->
+<!--												   placeholder="Bill Due Date"-->
+<!--												   name="Due Date"-->
+<!--												   style="padding: 0px 4px;height: 34px;" />-->
+<!--										</div>-->
+<!--										<span class="input-group-btn">-->
+<!--									<button type="button"-->
+<!--											class="btn btn-default m-t-0 f12"-->
+<!--											ng-click="gbuVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i-->
+<!--										class="glyphicon glyphicon-calendar"></i></button>-->
+<!--								</span>-->
+<!--									</div>-->
+<!--								</div>-->
+
+<!--								<div class="col-md-3">-->
+<!--									<label class="col-sm-4 control-label">Bill Submition Date:</label>-->
+<!--									<div class="date-picker input-group dp-blue col-sm-8" ng-class="{ 'is-opened': opened3 == true }">-->
+<!--										<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">-->
+<!--											<input autocomplete="off" ng-click="gbuVm.DatePicker.openDatePicker(this, $event, 'opened3')"-->
+<!--												   type="text"-->
+<!--												   class="form-control"-->
+<!--												   uib-datepicker-popup="{{gbuVm.DatePicker.formats[0]}}"-->
+<!--												   show-weeks="false"-->
+<!--												   ng-model="gbuVm.aBill.subDate"-->
+<!--												   ng-change="gbuVm.dateChange('billDate');"-->
+<!--												   is-open="opened3"-->
+<!--												   datepicker-options="gbuVm.DatePicker.dateSettings"-->
+<!--												   close-text="Close"-->
+<!--												   placeholder="Bill Submition Date"-->
+<!--												   name="Bill Submition Date"-->
+<!--												   style="padding: 0px 4px;height: 34px;" />-->
+<!--										</div>-->
+<!--										<span class="input-group-btn">-->
+<!--									<button type="button"-->
+<!--											class="btn btn-default m-t-0 f12"-->
+<!--											ng-click="gbuVm.DatePicker.openDatePicker(this, $event, 'opened3')"><i-->
+<!--										class="glyphicon glyphicon-calendar"></i></button>-->
+<!--								</span>-->
+<!--									</div>-->
+<!--								</div>-->
+
+								<div class="col-md-3" >
+									<label class="col-sm-3 control-label">GSTIN NO.</label>
+									<div class="col-sm-8">
+										{{gbuVm.gstinNo || 'NA'}}
+									</div>
+								</div>
+
+
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Remark:</label>
+										<div class="col-sm-9">
+											<div class="fg-line">
+												<input type="text"
+													   ng-model="gbuVm.aBill.remark"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="gbuVm.taxType === '1'">
+									<label class="col-md-3 control-label">IGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="IGST A/c Search..."
+													ng-model="gbuVm.aBill.iGSTAccount"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in gbuVm.getAllAccount($viewValue, 'IGST Paid') | limitTo:6"
+													typeahead-on-select="gbuVm.onAccountSelect($item, $model, $label)"
+													required
+											>
+											<i class="lvh-search-close" ng-click="gbuVm.aBill.iGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="gbuVm.taxType === '2'">
+									<label class="col-md-3 control-label">SGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="SGST A/c Search..."
+													ng-model="gbuVm.aBill.sGSTAccount"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in gbuVm.getAllAccount($viewValue, 'SGST Paid') | limitTo:6"
+													typeahead-on-select="gbuVm.onAccountSelect($item, $model, $label)"
+													required
+											>
+											<i class="lvh-search-close" ng-click="gbuVm.aBill.sGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="gbuVm.taxType === '2'">
+									<label class="col-md-3 control-label">CGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="CGST A/c Search..."
+													ng-model="gbuVm.aBill.cGSTAccount"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in gbuVm.getAllAccount($viewValue, 'CGST Paid') | limitTo:6"
+													typeahead-on-select="gbuVm.onAccountSelect($item, $model, $label)"
+													required
+											>
+											<i class="lvh-search-close" ng-click="gbuVm.aBill.cGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" >
+									<label class="col-md-3 control-label">Discount A/c:</label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear chosen-row-2">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="Discount A/c Search..."
+													ng-model="gbuVm.aBill.discountAcnt"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in gbuVm.getAllAccount($viewValue, 'Discount') | limitTo:6"
+											>
+											<i class="lvh-search-close" ng-click="gbuVm.aBill.discountAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Invoice Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Invoice No:<span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Invoice Number"
+													ng-model="gbuVm.aBill.billNo"
+													typeahead-wait-ms="10"
+													name="Invoice Number"
+													typeahead="item.bookNo as item.bookNo for item in gbuVm.getBillBookNo(pbuVm.aBill.billNo)|limitTo:10"
+													typeahead-on-select="gbuVm.onBillNoSelect($item, $model, $label)"
+													required>
+												<i class="lvh-search-close" ng-click="gbuVm.aBill.billNo = null;">×</i>
+												<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+												   style="right: -20px; background: #3096f3;"
+												   ng-click="gbuVm.getAutoStationaryNo(gbuVm.aBill.billDate)"></i>
+											</div>
+											<span class="warning" ng-show="gbuVm.nonBillBook">No Bill Book Linked to selected billingParty</span>
+											<span class="error" ng-if="addBillForm['Bill Number'].$error.required
+																	&& !addBillForm['Bill Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Invoice Amount:</label>
+										<div class="col-sm-9">
+											<div class="fg-line">
+												{{gbuVm.aBill.billAmt}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header pull-left">Invoice Item Details</span>
+
+						<div class="pull-right text-right m-t-5">
+							<button ng-disabled="gbuVm.flag" class="btn btn-primary" uib-tooltip="Add Item" ng-click="gbuVm.addItems()">
+								<i class="glyphicon glyphicon-plus"></i>
+							</button>
+							<button ng-disabled="!gbuVm.flag" class="btn btn-primary" uib-tooltip="Modified Item" ng-click="gbuVm.addItems(gbuVm.selectedIndex)">
+								<i class="zmdi zmdi-redo"></i>
+							</button>
+							<button ng-hide="true" class="btn btn-danger" uib-tooltip="Delete Item" ng-click="gbuVm.deleteitems()">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</div>
+						<div class="clearfix"></div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">HSN Code:<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="lvh-search ng-scope sear">
+												<input
+													type="text"
+													name="HSN Code"
+													class="form-control lvhs-input"
+													placeholder="Select hsnCode"
+													ng-model="gbuVm.oItems.hsn"
+													uib-typeahead="m.hsnCode as m.hsnCode for m in gbuVm.getHSNCode($viewValue)"
+													typeahead-on-select="gbuVm.onHSNCodeSelect($item);gbuVm.getRate($item)"
+													typeahead-wait-ms="10"
+
+												>
+												<i class="lvh-search-close" ng-click="gbuVm.oItems.hsn=undefined;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+<!--								<div class="col-md-3">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Name:<span class="req_r">*</span></label>-->
+<!--										<div class="col-sm-6" style="z-index: 87">-->
+<!--											<div class="lvh-search ng-scope sear">-->
+<!--												<input-->
+<!--													type="text"-->
+<!--													name="name"-->
+<!--													class="form-control lvhs-input"-->
+<!--													placeholder="Select name"-->
+<!--													ng-model="gbuVm.oItems.name"-->
+<!--													uib-typeahead="m as m.material for m in gbuVm.getMaterial($viewValue)"-->
+<!--													typeahead-on-select="gbuVm.onHSNCodeSelect($item, true)"-->
+<!--													typeahead-wait-ms="10"-->
+
+<!--												>-->
+<!--												<i class="lvh-search-close" ng-click="gbuVm.oItems.name=undefined;">×</i>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Name:<span class="req_r">*</span></label>
+										<div class="col-sm-6" style="z-index: 86">
+											<div class="ng-scope sear">
+												<input
+													type="text"
+													name="material"
+													class="form-control"
+													placeholder="Select Name"
+													ng-model="gbuVm.oItems.name"
+													empty-typeahead
+													typeahead-wait-ms="10"
+													ng-trim="false"
+													ng-change="gbuVm.getMaterial(gbuVm.oItems.name)"
+													uib-typeahead="m as m.name for m in gbuVm.allMaterial"
+													typeahead-on-select="gbuVm.onHSNCodeSelect(gbuVm.oItems.name,true)"
+													required>
+												<i class="lvh-search-close" ng-click="gbuVm.oItems.name=undefined;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+<!--								<div class="col-md-3">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Name:<span class="req_r">*</span></label>-->
+<!--										<div class="col-sm-6">-->
+<!--											<div class="fg-line">-->
+<!--												<input type="text"-->
+<!--													   ng-model="gbuVm.oItems.name"-->
+<!--													   class="form-control"-->
+<!--													   placeholder="Name">-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+<!--								<div class="col-md-3">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Desc:<span class="req_r">*</span></label>-->
+<!--										<div class="col-sm-6">-->
+<!--											<div class="fg-line">-->
+<!--												<input type="text"-->
+<!--													   ng-model="gbuVm.oItems.desc"-->
+<!--													   class="form-control"-->
+<!--													   placeholder="Decs">-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Quantity Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select name="unit"
+														class="form-control"
+														ng-model="gbuVm.oItems.qtyUnit"
+														ng-options="item as item for item in $constants.aUnits"
+												>
+													<option value="" selected disabled>Select Type</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Quantity:<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="gbuVm.oItems.qty"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Rate:<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="gbuVm.oItems.amount"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Discount:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="gbuVm.oItems.discount"
+													   class="form-control"
+													   placeholder="discount">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vehicle No:</label>
+										<div class="col-sm-6" style="z-index: 88">
+											<div class="lvh-search ng-scope sear">
+												<input
+													type="text"
+													name="VehicleNo"
+													class="form-control lvhs-input"
+													placeholder="Vehicle no"
+													ng-model="gbuVm.oItems.vehicle_no"
+													typeahead="person.vehicle_reg_no as person.vehicle_reg_no  for person in gbuVm.getVname($viewValue)"
+													typeahead-wait-ms="10"
+												>
+												<i class="lvh-search-close" ng-click="gbuVm.oItems.vehicle_no=undefined;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<div class="col-sm-4"><label>Tax %: </label></div>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+													class="form-control"
+													ng-options="item as (item + '%') for item in [0,0.5,1,2,5,10,12,15,18,24,28,40]"
+													ng-model="gbuVm.oItems.gstPercent"
+													ng-readonly="opertaionType | operation"
+												>
+													<option value="" selected disabled>Select Tax %</option>d
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="card-body">
+									<div class="row" style="margin:5px">
+										<div class="detailsList">
+											<div style="overflow-x: scroll">
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th>&#35;</th>
+														<th>Name</th>
+<!--														<th>Desc</th>-->
+														<th>Qty Type</th>
+														<th>HSN Code</th>
+														<th>Qty</th>
+														<th>Rate</th>
+														<th>TOTAL</th>
+														<th>Discount</th>
+														<th>Tot After Discount</th>
+														<th>CGST RT.</th>
+														<th>CGST AMT.</th>
+														<th>SGST RT.</th>
+														<th>SGST AMT.</th>
+														<th>IGST RT.</th>
+														<th>IGST AMT.</th>
+														<th>TOTAL WITH TAX</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr class="pointer selectItem"
+														ng-repeat="mat in gbuVm.aItems"
+														ng-dblclick="gbuVm.onRowClick($index, mat)"
+														ng-click="gbuVm.onItemSelect($index, mat)"
+														ng-class="{'grn': mat.$$hashKey === gbuVm.oItemId}"
+													>
+														<td>{{$index + 1}}</td>
+														<td>{{mat.name}}</td>
+<!--														<td>{{mat.desc}}</td>-->
+														<td>{{mat.qtyUnit}}</td>
+														<td>{{mat.hsn}}</td>
+														<td>{{mat.qty}}</td>
+														<td>{{mat.amount}}</td>
+														<td>{{mat.subTotal|roundOff}}</td>
+														<td>{{mat.discount|roundOff}}</td>
+														<td>{{(mat.subTotal - mat.discount)|roundOff}}</td>
+														<td>{{mat.cGSTPercent}}</td>
+														<td>{{mat.cGST|roundOff}}</td>
+														<td>{{mat.sGSTPercent}}</td>
+														<td>{{mat.sGST|roundOff}}</td>
+														<td>{{mat.iGSTPercent}}</td>
+														<td>{{mat.iGST|roundOff}}</td>
+														<td>{{mat.amountWithTax|roundOff}}</td>
+													</tr>
+													<tr ng-show="gbuVm.aItems.length"
+														style="border-top: 2px solid black"
+														class="pointer">
+														<td></td>
+<!--														<td></td>-->
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>{{gbuVm.totalItemWithoutTax|roundOff}}</td>
+														<td>{{gbuVm.totDiscount|roundOff}}</td>
+														<td>{{(gbuVm.totalItemWithoutTax - gbuVm.totDiscount)|roundOff}}</td>
+														<td></td>
+														<td>{{gbuVm.cGSTOfItem|roundOff}}</td>
+														<td></td>
+														<td>{{gbuVm.sGSTOfItem|roundOff}}</td>
+														<td></td>
+														<td>{{gbuVm.iGSTOfItem|roundOff}}</td>
+														<td>{{gbuVm.totalItemWithTax|roundOff}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="clearfix"></div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+					<div class="text-center">
+						<label class="checkbox checkbox-inline" style="margin-top: 6px;">
+							<input type="checkbox"
+								   ng-model="gbuVm.isPreserveData">
+							<i class="input-helper"></i>
+							Preserve Data
+						</label>&nbsp;&nbsp;
+						<button
+								ng-disabled="gbuVm.isDisabled"
+								class="btn btn-primary"
+								ng-click="gbuVm.submit(addBillForm)"
+						>Submit & Approve
+						</button>
+					</div>
+					</li>
+
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+
+
+	error {
+		font-size: 10px;
+		color: red;
+	}
+	color {
+		color: red;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+</style>

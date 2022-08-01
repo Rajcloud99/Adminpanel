@@ -1,0 +1,134 @@
+<!--Controller:directoryController-->
+<!--ControllerAs:dVm-->
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Directory</b></span>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)" autocomplete="off">
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<input type="text"
+									   ng-model="dVm.oFilter.first_name"
+									   name="name"
+									   class="form-control input-sm"
+									   placeholder="name"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<input type="text"
+									   ng-model="dVm.oFilter.company_name"
+									   name="company_name"
+									   class="form-control input-sm"
+									   placeholder="company name"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<input type="text"
+									   ng-model="dVm.oFilter.city"
+									   name="city"
+									   class="form-control input-sm"
+									   placeholder="city"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<input type="text"
+									   ng-model="dVm.oFilter.state"
+									   name="state"
+									   class="form-control input-sm"
+									   placeholder="state"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<input type="text"
+									   ng-model="dVm.oFilter.mobile1"
+									   name="mobile"
+									   class="form-control input-sm"
+									   placeholder="mobile"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<input type="text"
+									   ng-model="dVm.oFilter.email1"
+									   name="email"
+									   class="form-control input-sm"
+									   placeholder="email"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+
+							<div class="col-md-2">
+								<div class="form-group m-b-0 text-center">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Search"
+											ng-click="dVm.getAllDirectory()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Clear All"
+											ng-click="dVm.oFilter={};dVm.getAllDirectory()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Download"
+											ng-click="dVm.downloadDirectory(true)"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div ja-table
+									 table-body="dVm.aDirectory"
+									 table-head="dVm.tableHead"
+									 table-height='500px'
+									 table-load="dVm.getAllDirectory(true)"
+									 table-column-setting="dVm.columnSetting"
+									 table-selectable='dVm.selectType'
+									 table-api='dVm.tableApi'
+									 table-selectable-model="dVm.aSelectedDirectory"
+								></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.chosen-row-1{
+		z-index: 89;
+	}
+	tbody tr:hover{background: #dbd6d6;}
+	.m-t-10{margin-top: 10px;}
+</style>
+

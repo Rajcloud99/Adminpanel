@@ -1,0 +1,192 @@
+<form style="margin-top: 1px;">
+	<!-- <div class="modal-header p-b-0" > -->
+
+	<!-- <h5 class="modal-title m-t-0 m-b-0" align="center" >Send Trip Location</h5> -->
+	<!-- </div> -->
+	<div class="justify col-md-12">
+		<div class="" style="height: 525px; overflow: auto;padding: 4px 15px;">
+			<div class="col-md-12 col-sm-12 col-xs-12 bott" ng-controller="loadGoole">
+				<div class="validationError" ng-show="createMapErrMsg"><h5 class="c-red">* {{Mapmsg}}</h5></div>
+
+				<div class="row" style="margin-bottom: 15px;">
+					<div class="col-md-12">
+						<div class="col-md-4">
+							<div class="form-groups">
+								<div class="col-md-8">
+									<label>Contact Person :</label><br>
+									<div class="controls">
+										<input type="text" ng-model="contact_person_name"
+											   class="editable-input form-control input-sm"
+											   placeholder="Enter Contact Person">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-groups">
+								<div class="col-md-8">
+									<label>Number :</label><br>
+									<div class="controls">
+										<input type="text" ng-model="contact_person_number"
+											   class="editable-input form-control input-sm"
+											   placeholder="Enter Contact Number">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-groups">
+								<div class="col-md-8">
+									<label>Email :</label><br>
+									<div class="controls">
+										<input type="email" ng-model="contact_person_email"
+											   class="editable-input form-control input-sm" placeholder="Enter email">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 15px;">
+					<div class="col-md-6">
+						<label class="col-sm-4 control-label">Customer Name <span style="color: red;">*</span> :-</label>
+						<div class="col-sm-6">
+							<select chosen data-placeholder-text-single="'Select Customer'" allow-single-deselect="true"
+									no-results-text="'Could not find any Customer'" class="form-control"
+									ng-model="customerdata" ng-options="item as item.name for item in aCustomer">
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<label class="col-sm-4 control-label">Routes <span style="color: red;">*</span> :-</label>
+						<div class="col-sm-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label">Route Name: <span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<div  ng-dropdown-multiselect=""
+										  ng-init="route=[];aRoutes=[]"
+										  options="aRoutes"
+										  selected-model="route"
+										  extra-settings="selectRouteSettings"
+										  events='selectRouteEvents'
+										  ja-search-input='inputModel'
+										  ja-search-trigger="getRoutes(inputModel)"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<label class="col-sm-4 control-label">Location Type<span style="color: red;">*</span> :-</label>
+						<div class="col-sm-6">
+							<select chosen data-placeholder-text-single="'Select Customer'" allow-single-deselect="true"
+									no-results-text="'Could not find any Locations'" class="form-control"
+									ng-model="location_type" ng-options="item as item for item in aLocations">
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 15px;">
+					<div class="col-md-6">
+						<label class="col-sm-4 control-label">Location Name <span style="color: red;">*</span> :-</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" class="form-control" ng-model="name" placeholder="enter here..." required>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<label class="col-sm-4 control-label">Address <span style="color: red;">*</span>:-</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" class="form-control" ng-model="address" placeholder="enter here..." required>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 15px;">
+					<div class="col-md-6">
+						<label class="col-sm-4 control-label">Description :-</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" class="form-control" ng-model="description" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-bottom: 15px;">
+					<div class="col-md-6">
+						<label class="col-sm-4 control-label">Latitude :-</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" class="form-control" ng-model="latitude" ng-change="createMarker(latitude,longitude)" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<label class="col-sm-4 control-label">Longitude :-</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" class="form-control" ng-model="longitude" ng-change="createMarker(latitude,longitude)" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 form-group" id="locationField">
+						<label class="col-sm-3 control-label">Find Location :-</label>
+						<div class="col-sm-8">
+							<div class="controls">
+								<input type="text" class="form-control input-sm" id="autocomplete"
+									   placeholder="Enter a location">
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="col-sm-6 form-group">
+						<button class="btn btn-success waves-effect" ng-disabled="!(customerdata && name && address && latitude && longitude)" ng-click="add_location()">Add Location</button>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+
+
+				<br>
+				<span style="color: red;">Please find location and then click on map to save location</span>
+				<div class="col-md-12" style="width:100%;height:300px;border:1px solid" id="contactMap">
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<!-- <div class="justify col-md-3">
+		    <div class="form-group">
+	            <label class="col-sm-3 control-label">Name: <span style="color: red;">*</span></label>
+	            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+	                <div class="fg-line">
+						<input type="text" name="name" ng-model="group.name" placeholder="Enter Name" id="license_plate_numID" class="form-control" required>
+					</div>
+	            </div>
+	        </div>
+	        <div class="form-group">
+	            <label class="col-sm-3 control-label">Lat: <span style="color: red;">*</span></label>
+	            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+	                <div class="fg-line">
+						<input type="text" name="code" ng-model="group.code" placeholder="Enter Code"  class="form-control" required>
+					</div>
+	            </div>
+	        </div>
+	        <div class="form-group">
+	            <label class="col-sm-3 control-label">lng:</label>
+	            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+	                <div class="fg-line">
+						<input type="text" ng-model="group.desc" placeholder="Type here.." class="form-control">
+					</div>
+	            </div>
+	        </div>
+	</div> -->
+</form>

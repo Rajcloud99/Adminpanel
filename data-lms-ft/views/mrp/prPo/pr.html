@@ -1,0 +1,101 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:5px 15px;">
+			<div class="col-md-2">
+				<select name="ponumder" class="form-control" chosen data-placeholder-text-single="'PR Number'"
+						allow-single-deselect="true" no-results-text="'Could not find any PR Number'"
+						ng-model="prnumber" ng-options="item.prnumber as item.prnumber for item in aPrList"
+						ng-change="getAllPr()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<select name="vendor" class="form-control" chosen data-placeholder-text-single="'Requested By'"
+						allow-single-deselect="true" no-results-text="'Could not find'" ng-model="created_by"
+						ng-options="item._id as item.full_name for item in aUsers" ng-change="getAllPr()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<select name="vendor" class="form-control" chosen data-placeholder-text-single="'Approved By'"
+						allow-single-deselect="true" no-results-text="'Could not find'" ng-model="approved_by"
+						ng-options="item._id as item.full_name for item in aApprover" ng-change="getAllPr()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<select name="vendor" class="form-control" chosen data-placeholder-text-single="'By Status'"
+						allow-single-deselect="true" no-results-text="'Could not find'" ng-model="status"
+						ng-options="item as item for item in aStatus" ng-change="getAllPr()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<div class="lvh-search ng-scope sear">
+					<input type="text" placeholder="Search..." ng-model="findText" class="lvhs-input" class="form-control">
+					<i class="lvh-search-close" ng-click="clearSearch('findText')">×</i>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<button ng-disabled="!findText" href="" ng-click="searchAll()" class="btn btn-primary">Search</button>
+			</div>
+			<div class="btns">
+				<a href="" uib-tooltip="Add New PR" tooltip-placement="bottom" ng-click="addNewPr()"
+				   style="font-size: 18px;"><i class="glyphicon glyphicon-plus"></i></a>&nbsp;&nbsp;
+			</div>
+		</div>
+	</div>
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto;background: #fff;">
+			<table ng-if="aPrList.length > 0" class="table table-bordered override-table-bordered">
+				<thead>
+				<tr>
+					<th>S. No.</th>
+					<th>PR No.</th>
+					<th>Status</th>
+					<th>Requested By</th>
+					<th>Approved By</th>
+					<th>Creation Date</th>
+					<!-- <th>Needed Date</th> -->
+					<th>Action</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="objPR in aPrList">
+					<td>{{$index+1}}</td>
+					<td>{{objPR.prnumber}}</td>
+					<td>{{objPR.status || 'NA'}}</td>
+					<td>{{objPR.created_by_name || 'NA'}}</td>
+					<td>{{objPR.approver.name || 'NA'}}</td>
+					<td>{{objPR.created_at | date:'dd-MM-yyyy'}}</td>
+					<td>
+						<i ng-hide="objPR.status == 'Processed'" class="zmdi zmdi-edit pointer" tooltip="Edit"
+						   ng-click="editPR(objPR, $index)"></i>&nbsp;&nbsp;
+						<i class="zmdi zmdi-open-in-browser pointer" ng-click="previewPR(objPR, $index)"
+						   tooltip="Preview"></i>&nbsp;&nbsp;
+						<i ng-hide="objPR.status == 'Processed'" class="zmdi zmdi-shield-check pointer"
+						   ng-click="approvePR(objPR, $index)" tooltip="Approve"></i>&nbsp;&nbsp;
+						<!-- <i ng-hide="objPR.status == 'Processed'" class="zmdi zmdi-check-all zmdi-hc-fw" ng-click="processPR(objPR, $index)" tooltip="Proccesed"></i>&nbsp;&nbsp; -->
+						<i class="glyphicon glyphicon-export" ng-click="downloadPR(objPR, $index,'true')"
+						   tooltip="Excel"></i>&nbsp;&nbsp;
+						<i class="zmdi zmdi-download pointer" ng-click="downloadPR(objPR, $index,'false')"
+						   tooltip="PDF"></i>&nbsp;&nbsp;
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<div class="pagi" ng-show="total_pages>1" style="text-align: center;">
+				<pagination ng-change="pageChanged()"
+							total-items="totalItems"
+							items-per-page="itemsPerPage" num-pages="numPages"
+							ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+							boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+							first-text="&laquo;" last-text="&raquo;">
+				</pagination>
+			</div>
+			<div ng-if="aPrList.length === 0" class="ms-body" style=" min-height: 50px;">
+				<h3>PR not available !!!!!</h3>
+			</div>
+		</div>
+	</div>
+</div>

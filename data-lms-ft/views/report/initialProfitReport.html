@@ -1,0 +1,125 @@
+<div class="container" ng-controller="initialProfitReportCntrl">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="fg-line">
+									<input type="text" ng-model="trip_no" name="trip_no" class="form-control input-sm"
+										   placeholder="Search By Trip No" ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>-->
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Vehicle Search..." ng-model="vehicle_no" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue" ng-change="getVname(vehicle_no)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+									<i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Fleet Owner..." ng-model="fleet" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aFleetOwner | filter:$viewValue" ng-change="getFname(fleet)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+									<i class="lvh-search-close" ng-click="clearSearch('fleet')">×</i>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+											   datepicker-popup="{{format}}" show-weeks="false" ng-model="start" max-date="end"
+											   ng-change="setStartDate()"
+											   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="From Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened1')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+											   datepicker-popup="{{format}}" show-weeks="false" ng-model="end" min-date="start"
+											   ng-change="setEndDate()"
+											   is-open="opened2" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="To Date"
+											   style="padding: 0px 4px; height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened2')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<button ng-disabled="!(fleet && start && end)" ng-click="getInitialProfitReport()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">Search</button>
+							</div>
+							<button ng-disabled="!(fleet && start && end)" ng-click="downloadInitialProfitability()"
+									class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Download
+							</button>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>Vehicle No.</th>
+										<th>Trip Qty.</th>
+										<th>Total Workings</th>
+										<th>internal Working</th>
+										<th>Diesel</th>
+										<th>HSD/Working</th>
+										<th>HSD Milage</th>
+										<th>Bhatta</th>
+										<th>Misc Expenses</th>
+										<th>Net Amount</th>
+										<th>Net Amount%</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oTripExp in aInitialProfitReport" class="pointer selectItem">
+										<td>{{oTripExp.vehicle_reg_no}}</td>
+										<td>{{oTripExp.tripCount || 0}}</td>
+										<td>{{oTripExp.totalWorking || 0}}</td>
+										<td>{{oTripExp.internalWorking || 0}}</td>
+										<td>{{oTripExp.totalDiesel || 0}}</td>
+										<td>{{oTripExp.hsdWorking || 0}}</td>
+										<td>{{oTripExp.hsdMilage || 0}}</td>
+										<td>{{oTripExp.driverCash || 0}}</td>
+										<td>{{oTripExp.miscExpense || 0}}</td>
+										<td>{{oTripExp.netAmount || 0}}</td>
+										<td>{{oTripExp.netAmountPercent || 0}}</td>
+									</tr>
+									</tbody>
+								</table>
+								<div class="pagi" ng-show="total_pages>1">
+									<pagination ng-change="pageChanged()" total-items="totalItems"
+												items-per-page="items_per_page" num-pages="numPages"
+												ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+												boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+												first-text="&laquo;" last-text="&raquo;"></pagination>
+								</div>
+							</div>
+							<div ng-if="aInitialProfitReport.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>Report not available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

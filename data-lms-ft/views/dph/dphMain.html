@@ -1,0 +1,141 @@
+<!-- ControllerAs: dphVm -->
+
+<div class="card" style="margin:20px;">
+	<div class="card-header">
+		<div class="row m-b-5">
+			<form name='filterFrom' novalidate autocomplete="off">
+				<div class="col-sm-2 form-group">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Customer Search..."
+								ng-model="dphVm.oFilter.customer"
+								typeahead="c as c.name for c in dphVm.getCustomers($viewValue)"
+								typeahead-wait-ms="10"
+								name="customer">
+						<i class="lvh-search-close" ng-click="dphVm.oFilter.customer=null;dphVm.get()">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input
+									type="text"
+									class="form-control"
+									ng-click="dphVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+									uib-datepicker-popup="{{dphVm.DatePicker.formats[0]}}"
+									show-weeks="false"
+									max-date="dphVm.DatePicker.newDate"
+									ng-model="dphVm.oFilter.from"
+									is-open="opened1"
+									datepicker-options="dphVm.DatePicker.dateSettings"
+									close-text="Close"
+									placeholder="Start"
+									name="from"
+									style="padding: 0px 4px;height: 34px;"
+							/>
+						</div>
+						<span class="input-group-btn">
+						<button type="button" class="btn btn-default m-t-0 f12" ng-click="dphVm.DatePicker.openDatePicker(this, $event, 'opened1')">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+					</span>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input
+									ng-click="dphVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+									type="text"
+									class="form-control"
+									uib-datepicker-popup="{{dphVm.DatePicker.formats[0]}}"
+									show-weeks="false"
+									max-date="dphVm.DatePicker.newDate"
+									ng-model="dphVm.oFilter.to"
+									is-open="opened2"
+									datepicker-options="dphVm.DatePicker.dateSettings"
+									close-text="Close"
+									placeholder="End"
+									name="to"
+									style="padding: 0px 4px;height: 34px;"
+							/>
+						</div>
+						<span class="input-group-btn">
+						<button type="button" class="btn btn-default m-t-0 f12" ng-click="dphVm.DatePicker.openDatePicker(this, $event, 'opened2')">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+					</span>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="dphVm.get()">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="dphVm.oFilter={};dphVm.get();"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+				</div>
+				<div class="pull-left">
+					<button
+					class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+					style="font-size: 15px"
+							uib-tooltip="Add Diesel Petrol Hike"
+							tooltip-placement="bottom"
+							ng-click="dphVm.upsert()"
+					>
+						<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+						<span></span>
+					</button>
+					<button
+					class="btn btn-danger p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+					style="font-size: 15px"
+							uib-tooltip="Delete DPH"
+							tooltip-placement="bottom"
+							ng-click="dphVm.deleteDph()"
+					>
+						<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+						<span></span>
+					</button>
+						 <!--<button-->
+							<!--class="btn btn-primary waves-effect"-->
+							<!--uib-tooltip="Set as Default"-->
+							<!--tooltip-placement="bottom"-->
+							<!--ng-click="incentiveVm.setAsDefault('edit')"-->
+					<!--&gt;-->
+						<!--<i class="zmdi zmdi-check zmdi-hc-fw"></i>-->
+						<!--<span></span>-->
+					<!--</button>-->
+				</div>
+
+			</form>
+		</div>
+
+		<div class="row" style="margin-right: 1px;">
+			
+		</div>
+
+		<div
+				ja-table
+				table-head="dphVm.tableHead"
+				table-body="dphVm.aIncentives"
+				table-height='500px'
+				table-load="dphVm.get(true)"
+				table-column-setting="dphVm.columnSetting"
+				table-selectable='dphVm.selectType'
+				table-api='dphVm.tableApi'
+				table-selectable-model="dphVm.oDph"
+		></div>
+
+	</div>
+</div>

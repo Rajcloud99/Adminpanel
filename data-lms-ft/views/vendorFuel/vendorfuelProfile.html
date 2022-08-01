@@ -1,0 +1,434 @@
+<form ng-controller="fuelProfileCtrl">
+    <div class="row" style="margin: 5px auto;" ng-if="selectedFuelVendorData">
+        <div class="col-md-12">
+            <!-- vendorFuel basic info -->
+            <div id="div_vendorFuel_info" class="card-body" style="padding-left: 25px;padding-right: 25px">
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Vendor Name :</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedFuelVendorData.name" class="form-control" name="name" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">For branch:</label>
+                            <div class="col-sm-6">
+                                <input type="text" ng-model="selectedFuelVendorData.branch_name" class="form-control" ng-readonly=true>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Primary contact person:</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedFuelVendorData.prim_contact_person" class="form-control" name="primary contact person" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Alternate contact person:</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedFuelVendorData.alt_contact_person" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Primary contact no:</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="number" ng-model="selectedFuelVendorData.prim_contact_no" class="form-control" name="primary contact number" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Alternate contact no 1</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input  ng-model="selectedFuelVendorData.alt_contact_no1" type="number" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Alternate contact no 2</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input  ng-model="selectedFuelVendorData.alt_contact_no2" type="number" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Primary email:</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="email" ng-model="selectedFuelVendorData.prim_email" class="form-control" name="email" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <div class="form-group m-b-0">
+                                <label class="col-sm-4 control-label">Alternate email</label>
+                                <div class="col-sm-6">
+                                    <div class="fg-line">
+                                        <input ng-model="selectedFuelVendorData.alt_email" class="form-control" ng-readonly=true>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <div class="form-group m-b-0">
+                                <label class="col-sm-4 control-label">Fax </label>
+                                <div class="col-sm-6">
+                                    <div class="fg-line">
+                                        <input ng-model="selectedFuelVendorData.fax" class="form-control" ng-readonly=true>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Rating</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedFuelVendorData.rating" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Total times rated</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedFuelVendorData.total_times_rated" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label  class="col-sm-4 control-label">Status</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    {{selectedFuelVendorData.status}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Tin No.</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedFuelVendorData.tin_no" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Fuel company: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedFuelVendorData.fuel_company" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin:5px">
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Fuel Area</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text"
+										   ng-model="objStation.area_code"
+										   class="input-sm form-control fg-input"
+										   ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Fuel State</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text"
+										   ng-model="objStation.address"
+										   class="input-sm form-control fg-input"
+										   ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Created By</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+                                    {{selectedFuelVendorData.created_by_name}}
+                                </div>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Created At</label>
+							<div class="col-sm-6">
+                                <div class="fg-line">
+                                    {{selectedFuelVendorData.created_at || 'N/A' | date:"dd-MMM-yyyy"}}
+                                </div>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Last Modified By</label>
+							<div class="col-sm-6">
+                                <div class="fg-line">
+                                    {{selectedFuelVendorData.last_modified_by_name || 'N/A'}}
+                                </div>
+							</div>
+						</div>
+					</div>
+                    <div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Last Modified At</label>
+							<div class="col-sm-6">
+                                <div class="fg-line">
+                                    {{selectedFuelVendorData.last_modified_at || 'N/A' | date:"dd-MMM-yyyy"}}
+                                </div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+            <!--******************* vendorFuel address ************************-->
+            <div class="card-header" >
+                <h2 style="color: #847777;font-size: 16px;">Address </h2>
+            </div>
+
+            <div id="div_vendorFuel_address" class="card-body" style="padding-left: 25px;padding-right: 25px;">
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Address Line 1</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedFuelVendorData.address.line1" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Address Line 2</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedFuelVendorData.address.line2" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">City</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input id ="autoCompleteCity" type="text" ng-model="selectedFuelVendorData.address.city" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">District</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input  ng-model="selectedFuelVendorData.address.district" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">State</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-model="selectedFuelVendorData.address.state" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Country</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-model="selectedFuelVendorData.address.country" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">PIN code</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-model="selectedFuelVendorData.address.pincode" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </div>
+
+
+			<div class="card-header" >
+				<h2 style="color: #847777;font-size: 16px;">Account Detail </h2>
+			</div>
+
+			<div class="card-body" style="padding-left: 25px;padding-right: 25px;">
+				<div class="row" style="margin:5px">
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Name: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedFuelVendorData.account.name" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Branch: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedFuelVendorData.account.branch.name" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Type: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedFuelVendorData.account.type.name" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Limit: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedFuelVendorData.account.limit" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+
+        <div class="col-md-12">
+            <h4 style="margin-left: 19px;">Bank Details</h4>
+            <table ng-show="selectedFuelVendorData.banking_details.length" ng-table="tableParams" class="table">
+                <tr ng-repeat="vBank in selectedFuelVendorData.banking_details track by $index">
+                    <td style="width: 300px;" data-title="'Acount No '">{{vBank.a_c || 'NA'}}</td>
+                    <td data-title="'IFSC '">{{vBank.ifsc || 'NA'}}</td>
+                    <td data-title="'Declaration '">{{vBank.declaration || 'NA'}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="clearfix"></div>
+
+        <!--vendorFuel address 1-->
+        <!--<div class="card-header" >-->
+            <!--<h2 class="pull-left" style="color: #847777;font-size: 16px;">Fuel Stations</h2>-->
+			<!--<button class="btn btn-primary pull-right"-->
+					<!--uib-tooltip="Show History"-->
+					<!--tooltip-placement="bottom"-->
+					<!--ng-click="showHistory(aFuelStations[index])">-->
+				<!--<i class="zmdi zmdi-assignment zmdi-hc-fw"></i>-->
+			<!--</button>-->
+			<!--<div class="clear-fix"></div>-->
+        <!--</div>-->
+        <!--<div class="table-responsive" ng-show="aFuelStations.length>0">-->
+            <!--<table class="table">-->
+                <!--<thead>-->
+                    <!--<tr>-->
+                        <!--<th>Date</th>-->
+                        <!--<th>Fuel Type</th>-->
+                        <!--<th>Fuel Company</th>-->
+                        <!--<th>Fuel Price</th>-->
+                        <!--<th>Area Code</th>-->
+                        <!--<th>Address</th>-->
+                    <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                    <!--<tr ng-repeat="station in aFuelStations"-->
+						<!--class="pointer"-->
+						<!--ng-class="{'grn': index === $index }"-->
+						<!--ng-click="selectRow($index)">-->
+						<!--<td>{{(station.created_at | date:"dd-MMM-yyyy") || 'NA'}}</td>-->
+                        <!--<td>{{station.fuel_type}}</td>-->
+                        <!--<td>{{station.fuel_company}}</td>-->
+                        <!--<td>{{station.fuel_price}}</td>-->
+                        <!--<td>{{station.area_code}}</td>-->
+                        <!--<td>{{station.address}}</td>-->
+                    <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+    </div>
+    <div class="" ng-if="!selectedFuelVendorData">
+        <h3>No any fuel vendor register !!!</h3>
+    </div>
+</form>

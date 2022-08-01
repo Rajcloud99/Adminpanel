@@ -1,0 +1,107 @@
+<form role="form"  name="myTripPopUp" autocomplete="off">
+<div class="validationError" ng-show="createerror"><h5 class="c-red">* {{dmsg}}</h5></div>
+  <div class="modal-header">
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Trip No. {{selectedCustomerPayment.trip_no}}</h4>
+    <!-- <Span ng-if="selectedBookingItem.container_no">{{selectedBookingItem.container_no}}</Span> -->
+  </div>  
+  <div class="modal-body">
+      <div class="justify col-md-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Key<span class="req_r">*</span></label>
+              <div class="col-sm-6">
+                <input class="form-control" type="text" placeholder="Enter Key name" ng-model="payOption.key" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Amount<span class="req_r">*</span></label>
+              <div class="col-sm-6">
+                <input class="form-control" type="number" placeholder="Amount" ng-model="payOption.amount" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Status<span class="req_r">*</span></label>
+              <div class="col-sm-6">
+                <div class="select">
+                  <select class="form-control" ng-model="payOption.status" ng-options="o for o in statusSet" style="background-color: white;">
+                      <option value="" disabled selected>Set Status</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Reference No.</label>
+              <div class="col-sm-6">
+                  <input class="form-control" type="text" placeholder="Reference No." ng-model="payOption.reference_no" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Person Name</label>
+              <div class="col-sm-6">
+                  <input class="form-control" type="text" placeholder="Person Name" ng-model="payOption.person" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Remark</label>
+              <div class="col-sm-6">
+                  <input class="form-control" placeholder="Remark" ng-model="payOption.setStatus" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Time</label>
+              <div class="col-sm-6">
+                <div class="input-group date">
+                    <datetimepicker ng-model="payOption.date" date-format="dd-MMM-yyyy" date-options="dateOptions" show-button-bar="false" style="background-color: white;">
+                    </datetimepicker>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <br>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success waves-effect"   ng-disabled="!(payOption.key && payOption.amount && payOption.status)" ng-click="addPayment(payOption)">Update </button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div> 
+</form> 
+<style type="text/css">
+.modal-dialog {width: 50%;
+      height: 173px
+  }
+  .exced{
+margin-top: 20px;margin-left:10px;
+  }
+  .exced div div .control-label {
+    font-weight: bolder;
+}
+td ,th{
+   text-align:center;
+}
+.pac-container.pac-logo{z-index: 9999;}
+</style>

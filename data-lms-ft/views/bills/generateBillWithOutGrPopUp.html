@@ -1,0 +1,508 @@
+<!-- Controller: generateBillWithOutGrController -->
+<!-- ControllerAs: gbwgVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="gbwgVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+
+	<h4 class="modal-title" align="center"><b>Generate Bill</b>
+		<span class="error"
+			  ng-if="gbwgVm.userName"
+			  style="font-size: 13px">
+						(This Bill Will be Generated in {{gbwgVm.userName}})
+					</span></b>
+	</h4>
+</div>
+
+
+<form name="approvalForm" ng-submit="gbwgVm.submit(approvalForm, false)" novalidate autocomplete="off">
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!--Approval DETAILS-->
+				<li class="list-group-item">
+					<div class="card-body">
+						<span class="booking_list_header">Bill Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12 exced" style="">
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">BillingParty <span
+												class="req_r">*</span></label>
+											<div class="col-sm-8">
+												<div class="fg-line">
+													<input
+														type="text"
+														class="form-control"
+														placeholder="BillingParty Search.."
+														ng-model="gbwgVm.oBill.billingParty"
+														typeahead-wait-ms="10"
+														name="BillingParty"
+														typeahead="item as item.name for item in gbwgVm.getBillingParty($viewValue)|limitTo:6"
+														typeahead-on-select="gbwgVm.onBillingPartySelect($item, $model, $label)"
+														required>
+													<i class="lvh-search-close"
+													   ng-click="gbwgVm.oBill.billingParty=null;">×</i>
+												</div>
+												<span class="error" ng-if="approvalForm['BillingParty'].$error.required
+																	&& !approvalForm['BillingParty'].$error.required">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<label class="col-md-4 control-label">Date <span class="req_r">*</span></label>
+										<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened2 == true }">
+												<div class="fg-line"
+													 ng-class="{ 'fg-toggled': opened2 == true }">
+													<input
+														ng-click="gbwgVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+														type="text"
+														class="form-control"
+														uib-datepicker-popup="{{gbwgVm.DatePicker.formats[0]}}"
+														show-weeks="false"
+														max-date="gbwgVm.DatePicker.newDate|setMaxDate:2"
+														ng-model="gbwgVm.oBill.billDate"
+														ng-change="gbwgVm.oBill.billNo = undefined;"
+														is-open="opened2"
+														datepicker-options="gbwgVm.DatePicker.dateSettings"
+														close-text="Close"
+														placeholder="Date"
+														name="Date"
+														style="padding: 0px 4px;height: 34px;"
+													>
+												</div>
+												<span class="input-group-btn">
+													<button type="button"
+															class="btn btn-default m-t-0 f12"
+															ng-click="gbwgVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Bill No<span
+												class="req_r">*</span></label>
+											<div class="col-sm-8">
+												<div class="lvh-search ng-scope sear chosen-row-1">
+													<input
+														type="text"
+														class="form-control lvhs-input"
+														placeholder="Bill Number"
+														ng-model="gbwgVm.oBill.billNo"
+														typeahead-wait-ms="10"
+														name="Bill Number"
+														ng-change="gbwgVm.billBookInfo=undefined"
+														typeahead="item.bookNo as item.bookNo for item in gbwgVm.getBillBookNo($viewValue)|limitTo:10"
+														typeahead-on-select="gbwgVm.onSelect($item, $model, $label)"
+														required>
+													<i class="lvh-search-close"
+													   ng-click="gbwgVm.oBill.billNo=null;">×</i>
+												</div>
+												<span class="error" ng-if="approvalForm['Bill Number'].$error.required
+																	&& !approvalForm['Bill Number'].$error.required">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<label class="col-md-4 control-label">Due Date </label>
+										<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened1 == true }">
+												<div class="fg-line"
+													 ng-class="{ 'fg-toggled': opened1 == true }">
+													<input
+														ng-click="gbwgVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+														type="text"
+														class="form-control"
+														uib-datepicker-popup="{{gbwgVm.DatePicker.formats[0]}}"
+														show-weeks="false"
+														ng-model="gbwgVm.oBill.dueDate"
+														is-open="opened1"
+														max-date="gbwgVm.DatePicker.newDate"
+														datepicker-options="gbwgVm.DatePicker.dateSettings"
+														close-text="Close"
+														placeholder="Date"
+														name="Date"
+														style="padding: 0px 4px;height: 34px;"
+													>
+												</div>
+												<span class="input-group-btn">
+													<button type="button"
+															class="btn btn-default m-t-0 f12"
+															ng-click="gbwgVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-12">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Bill Type:<span class="req_r">*</span></label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<div class="select">
+														<select class="form-control"
+																ng-model="gbwgVm.oBill.type"
+																style="height: 33px;margin-top: 1px"
+																ng-options="item as item for item in gbwgVm.billType"
+																required>
+															<option value="">Bill Type</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<label class="col-sm-4 control-label">Bill Submition Date:</label>
+										<div class="col-sm-8">
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened3 == true }">
+												<div ng-class="{ 'fg-toggled': opened3 == true }">
+													<input
+														ng-click="gbwgVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+														type="text"
+														class="form-control"
+														datepicker-popup="{{gbwgVm.DatePicker.formats[0]}}"
+														show-weeks="false"
+														ng-model="gbwgVm.oBill.submitionDate"
+														max-date="gbwgVm.DatePicker.newDate"
+														is-open="opened3"
+														datepicker-options="gbwgVm.DatePicker.dateSettings"
+														close-text="Close"
+														placeholder="Submition Date"/>
+												</div>
+												<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="gbwgVm.DatePicker.openDatePicker(this, $event, 'opened3')"><i
+													class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Remark:</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="gbwgVm.oBill.remarks"
+														   placeholder="Enter Remark"
+														   name="remark"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Trip No:</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="gbwgVm.oBill.tripNo"
+														   placeholder="Trip No"
+														   name="Trip No"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Ref No:</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="gbwgVm.oBill.refNo"
+														   placeholder="Ref No"
+														   name="Ref No"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Vehicle No:</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="gbwgVm.oBill.vehicle_no"
+														   placeholder="Vehicle No"
+														   name="Vehicl No"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Amount:</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="number"
+														   ng-model="gbwgVm.oBill.amount"
+														   placeholder="Enter amount"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   ng-change="gbwgVm.calculateTax()"
+														   name="amount"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="$configs.UnBilledGr.addBranch">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Billing Branch:</label>
+											<div class="col-sm-8">
+												<div class="ng-scope sear chosen-row-1">
+													<input
+															type="text"
+															class="form-control"
+															placeholder="Billing Branch "
+															ng-model="gbwgVm.oBill.branch"
+															typeahead-wait-ms="10"
+															name="BillingBranch"
+															typeahead="item as item.name for item in gbwgVm.getAllBranchSearch($viewValue) | limitTo:6"
+													>
+													<i class="lvh-search-close"
+													   ng-click="gbwgVm.oBill.branch='';">×</i>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="clearfix"></div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">SAC Code : <span
+													class="req_r">*</span></label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   placeholder="Enter SAC Code"
+														   ng-model="gbwgVm.oBill.sacCode"
+														   name="SAC Code"
+														   maxlength="10"
+														   class="form-control"
+														   required>
+												</div>
+												<span class="error" ng-if="approvalForm['SAC Code'].$error.required
+																	&& (approvalForm['SAC Code'].$touched
+																	|| approvalForm.$submitted)">
+												This Field is Mandatory</span>
+												<span class="error" ng-show="approvalForm['SAC Code'].$error.maxlength">SAC Code should not be Greater than 10.</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3" ng-if="gbwgVm.oBill.adjAmount">
+										<label class="col-md-4 control-label">Adjustment A/c:</label>
+										<div class="col-md-8" style="z-index: 3">
+											<div class="lvh-search ng-scope sear chosen-row-1">
+												<input type="text" autocomplete="off"
+													   class="form-control lvhs-input"
+													   placeholder="Adjustment Accounts"
+													   ng-model="gbwgVm.adjDebitAc"
+													   typeahead-wait-ms="10"
+													   typeahead="item as item.name for item in gbwgVm.getAdjAcnt($viewValue)"
+												>
+												<i class="lvh-search-close" ng-click="gbwgVm.adjDebitAc=''">×</i>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Adjustment Amount:</label>
+											<div class="col-sm-6">
+												{{(gbwgVm.oBill.adjAmount)|roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> IGST ({{gbwgVm.oBill.iGST_percent}}
+												%):</label>
+											<div class="col-md-8">
+												{{gbwgVm.oBill.iGST|roundOff}}
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> CGST ({{gbwgVm.oBill.cGST_percent}}
+												%):</label>
+											<div class="col-md-8">
+												{{gbwgVm.oBill.cGST|roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> SGST ({{gbwgVm.oBill.sGST_percent}}
+												%):</label>
+											<div class="col-md-8">
+												{{gbwgVm.oBill.sGST|roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+
+
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Total Amount:</label>
+											<div class="col-md-8">
+												{{gbwgVm.oBill.totalAmount|roundOff}}
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-2">
+										<div class="form-group m-b-0">
+											<label class="col-md-6 control-label">Bill Amount:</label>
+											<div class="col-md-6">
+												<div class="fg-line">
+													<input type="number"
+														   ng-model="gbwgVm.oBill.billAmount"
+														   placeholder="bill amount"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   name="amount"
+														   ng-readonly="true"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="form-group m-b-0">
+											<button class="btn btn-primary p-t-0 p-b-0 btn-xs"
+													style="margin-top: 10px;  font-size: 16px"
+													type="button"
+													ng-click="gbwgVm.amountCeil()"
+													uib-tooltip="Round Up"
+													tooltip-placement="bottom">
+												<i class="zmdi zmdi-long-arrow-up zmdi-hc-fw"></i>
+											</button>
+											<button class="btn btn-primary p-t-0 p-b-0 btn-xs"
+													style="margin-top: 10px;  font-size: 16px"
+													type="button"
+													ng-click="gbwgVm.amountFloor()"
+													uib-tooltip="Round Down"
+													tooltip-placement="bottom">
+												<i class="zmdi zmdi-long-arrow-down zmdi-hc-fw"></i>
+											</button>
+											<button class="btn btn-danger p-t-0 p-b-0 btn-xs"
+													style="margin-top: 10px;  font-size: 16px"
+													uib-tooltip="refresh"
+													tooltip-placement="bottom"
+													type="button"
+													ng-click="gbwgVm.amountRefresh()">
+												<i class="zmdi zmdi-refresh zmdi-hc-fw"></i>
+											</button>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Address of Party:</label>
+											<div class="col-sm-8">
+												<div class="fg-line">
+													{{gbwgVm.oBill.billingParty.address}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">GST of Party:</label>
+											<div class="col-sm-8">
+												<div class="fg-line">
+													{{gbwgVm.oBill.billingParty.gstin}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">State Code:</label>
+											<div class="col-sm-8">
+												<div class="fg-line">
+													{{gbwgVm.oBill.billingParty.state_code}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button type="button" class="btn btn-primary" ng-click="gbwgVm.submit(approvalForm, true)">SUBMIT & APPROVE</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="gbwgVm.closeModal()">Close
+		</button>
+	</div>
+
+</form>
+
+<style>
+
+	.chosen-row-1 {
+		z-index: 8;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: 98;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

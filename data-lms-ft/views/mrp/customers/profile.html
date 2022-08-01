@@ -1,0 +1,94 @@
+<div ng-controller="mrpCustomerProfileCtrl">
+	<div class="row">
+    <div class="col-md-12" style="width: 96%;margin-left: 2%;">
+		<h4>Basic Info:</h4>
+		<div class="detailList">
+			<ul>
+				<li ng-if="customer.name"><span>Name</span>  : {{customer.name}}</li>
+				<li ng-if="customer.address.line1"><span>Address Line 1</span>  : {{customer.address.line1}} </li>
+				<li ng-if="customer.address.line2"><span>Address Line 2</span>  : {{customer.address.line2}}</li>
+				<li ng-if="customer.address.city"><span>City</span>  : {{customer.address.city}}</li>
+				<li ng-if="customer.address.district"><span>District</span>  : {{customer.address.district}}</li>
+				<li ng-if="customer.address.state"><span>State</span>  : {{customer.address.state}}</li>
+				<li ng-if="customer.address.pincode"><span>Pincode</span>  : {{customer.address.pincode}}</li>
+				<li ng-if="customer.address.country"><span>Country</span>  : {{customer.address.country}}</li>
+				<li ng-if="customer.status"><span>Status</span>  : {{customer.status}}</li>
+				<li ng-if="customer.type.length>0"><span>Type</span>  : <label ng-repeat="type in customer.type"> {{type}}, </label></li>
+				<li ng-if="customer.belongs_to"><span>Belongs To</span>  : {{customer.belongs_to}}</li>
+				<li ng-if="customer.activation_date"><span>Activation Date</span>  : {{customer.activation_date}}</li>
+				<li ng-if="customer.renewal_date"><span>Renewal Date</span>  : {{customer.renewal_date}}</li>
+			</ul>
+		</div>
+		<div class="clearfix"></div>
+		<br>
+		<h4>Company Info:</h4>
+		<div class="detailList">
+			<ul>
+				<li><span>GSTIN Registered</span>  : {{customer.gstin_registered?"Registered":"Not Registered"}}</li>
+				<li ng-if="customer.gstin_no"><span>GSTIN</span>  : {{customer.gstin_no}}</li>
+				<li ng-if="customer.pan_no"><span>PAN No.</span>  : {{customer.pan_no}}</li>
+				<li ng-if="customer.vendor_code"><span>Vendor Code</span>  : {{customer.vendor_code}}</li>
+				<li ng-if="customer.state_code"><span>State Code</span>  : {{customer.state_code}}</li>
+				<li ng-if="customer.company_type"><span>Company Type</span>  : {{customer.company_type}}</li>
+				<li ng-if="customer.service_tax_no"><span>Service Tax No.</span>  : {{customer.service_tax_no}}</li>
+				<li ng-if="customer.tin_no"><span>Tin No.</span>  : {{customer.tin_no}}</li>
+				<li ng-if="customer.activation_date"><span>Activation Date</span>  : {{customer.activation_date}}</li>
+				<li ng-if="customer.renewal_date"><span>Renewal Date</span>  : {{customer.renewal_date}}</li>
+			</ul>
+		</div>
+		<div class="clearfix"></div>
+		<br>
+		<h4>Contact Info:</h4>
+		<div class="detailList">
+			<ul>
+				<li ng-if="customer.prim_contact_name"><span>A/C Contact Name</span>  : {{customer.prim_contact_name}}</li>
+				<li ng-if="customer.prim_contact_designation"><span>Designation</span>  : {{customer.prim_contact_designation}}</li>
+				<li ng-if="customer.prim_cont_no"><span>A/C Contact No.</span>  : {{customer.prim_cont_no}}</li>
+				<li ng-if="customer.sec_contact_name"><span>Marketing Contact Name</span>  : {{customer.sec_contact_name}}</li>
+				<li ng-if="customer.sec_contact_designation"><span>Designation</span>  : {{customer.sec_contact_designation}}</li>
+				<li ng-if="customer.sec_cont_no"><span>Marketing Contact No.</span>  : {{customer.sec_cont_no}}</li>
+				<li ng-if="customer.other_cont_no"><span>Other Contact No</span>  : {{customer.other_cont_no}}</li>
+				<li ng-if="customer.prim_email"><span>Account Email</span>  : {{customer.prim_email}}</li>
+				<li ng-if="customer.alt_email1"><span>Marketing Email</span>  : {{customer.alt_email1}}</li>
+				<li ng-if="customer.alt_email2"><span>Alt. Email 2</span>  : {{customer.alt_email2}}</li>
+			</ul>
+		</div>
+		<div class="clearfix"></div>
+		<br>
+		<h4>Other Info:</h4>
+	  	<div class="detailList">
+			<ul>
+			  <li ng-if="customer.remarks"><span>Remarks</span>  : {{customer.remarks}}</li>
+			  <li ng-if="customer.black_listed"><span>Black Listed</span>  : {{customer.black_listed}}</li>
+			  <li ng-if="customer.created_at"><span>Created Date Time</span>  : {{customer.created_at}}</li>
+			  <li ng-if="customer.last_modified_at"><span>Last Modified At</span>  : {{customer.last_modified_at}}</li>
+			  <li ng-if="$configs.master.customer.add.required.ecc && customer.ecc"><span>ECC</span>  : {{customer.ecc}}</li>
+
+			</ul>
+	  	</div>
+		<div class="clearfix"></div>
+		<br>
+		<div ng-if="customer.bank_details.length>0">
+			<div class="" style="overflow-y: auto; max-height: 500px;">
+				<h4>Bank Account Details</h4>
+				<table class="table table-bordered unresponsive">
+					<thead>
+					<tr>
+						<th>Name</th>
+						<th>A/C No.</th>
+						<th>IFSC</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="bank in customer.bank_details">
+						<td>{{bank.bank_name || 'NA'}}</td>
+						<td>{{bank.account_no || 'NA'}}</td>
+						<td>{{bank.ifsc_code || 'NA'}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+    </div>
+  </div>
+</div>

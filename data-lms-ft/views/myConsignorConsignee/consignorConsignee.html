@@ -1,0 +1,261 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Consignor Consignee</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+		<div class="pull-right">
+
+			<button class="btn-primary btn-xs"
+                    ng-click="viewConsignorConsignee(selectedConsignorConsignee)"
+					uib-tooltip="View">
+				<i class="zmdi zmdi-local-library zmdi-hc-fw"></i>
+			</button>&nbsp;
+			<button class="btn-primary btn-xs"
+					ng-click="upsertConsignorConsignee(selectedConsignorConsignee)"
+					uib-tooltip="Edit" ng-if="$role['Consignor Consignee']['Update']">
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn-primary btn-xs"
+					ng-click="upsertConsignorConsignee()"
+					uib-tooltip="Add" ng-if="$role['Consignor Consignee']['Add']">
+				<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn-danger btn-xs"
+					ng-click="deleteConsignorConsignee(selectedConsignorConsignee)"
+					uib-tooltip="Delete" ng-if="$role['Consignor Consignee']['Delete']">
+				<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+			</button>&nbsp;
+
+			<button type="button"
+					class="btn-primary btn-xs"
+					ng-click="downloadReport()"
+					uib-tooltip="Download Consignor/Consignee"
+					tooltip-placement="bottom"
+			>
+				<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+			</button>
+			<button type="button"
+					ng-hide="true"
+					ng-if="$role['Consignor Consignee']['Edit Client'] && $user.clientAdmin"
+					class="btn-primary btn-xs"
+					ng-click="editClientId(selectedConsignorConsignee)"
+					uib-tooltip="edit ClientId"
+					tooltip-placement="bottom"
+			>
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+		</div>
+
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 7px">
+			<form ng-submit="getConsignorConsignee()" novalidate>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+
+						<input type="text"
+							   ng-model="oFilter.name"
+							   name="Name"
+							   class="form-control input-sm"
+							   placeholder="Name">
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+
+						<input type="text"
+							   ng-model="oFilter.address"
+							   name="Address"
+							   class="form-control input-sm"
+							   placeholder="Address">
+					</div>
+				</div><div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+
+						<input type="text"
+							   ng-model="oFilter.contact_person"
+							   name="Person"
+							   class="form-control input-sm"
+							   placeholder="Contact Person">
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="oFilter.type"
+								ng-options="item as item for item in $constants.aConsignorConsigneeTypes"
+								name="Type">
+							<option value="" selected>Select Type</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="lvh-search ng-scope sear">
+						<input type="text"
+							   placeholder="Customer Search..."
+							   ng-model="oFilter.customer"
+							   class="lvhs-input"
+							   typeahead-wait-ms="10"
+							   typeahead="item as item.name for item in getCustomers($viewValue)"
+
+							   class="form-control">
+						<i class="lvh-search-close" ng-click="oFilter.customer='';">×</i>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="DatePicker.newDate"
+											   ng-model="oFilter.start_date"
+											   min-date="min_date"
+											   is-open="opened1"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From"/>
+									</div>
+									<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="DatePicker.newDate"
+											   ng-model="oFilter.end_date"
+											   ng-change="dateChange('endDate')"
+											   is-open="opened2"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To"/>
+									</div>
+									<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px; margin-top: 5px; margin-left: 5px;"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="submit"
+							ng-click="oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<table class="table table-bordered unresponsive">
+				<thead id='my_fixable_table_header' fix-head>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Address</th>
+					<th>Customer</th>
+					<th>Type</th>
+					<th>Contact Person</th>
+					<th>Contact Number</th>
+					<th>GST NO</th>
+					<th>latitude</th>
+					<th>longitude</th>
+					<th>Added By</th>
+					<th>Created At</th>
+				</tr>
+				</thead>
+
+				<tbody>
+				<tr data-ng-repeat="oConsignorConsignee in aConsignorConsignee"
+					class="selectItem pointer"
+					ng-click="selectThisRow(oConsignorConsignee, $index)">
+					<td>{{((pagination.currentPage - 1) * pagination.items_per_page) + $index + 1}}</td>
+					<td>{{oConsignorConsignee.name || 'NA'}}</td>
+					<td>{{oConsignorConsignee.address || 'NA'}}</td>
+					<td>{{oConsignorConsignee.customer.name || 'NA'}}</td>
+					<td>{{oConsignorConsignee.type || 'NA'}}</td>
+					<td>{{oConsignorConsignee.contact_person || 'NA'}}</td>
+					<td>{{oConsignorConsignee.contact_number || 'NA'}}</td>
+					<td>{{oConsignorConsignee.gstin || 'NA'}}</td>
+					<td>{{oConsignorConsignee.lat || 'NA'}}</td>
+					<td>{{oConsignorConsignee.lng || 'NA'}}</td>
+					<td>{{oConsignorConsignee.last_modified_by_name || 'NA'}}</td>
+					<td>{{oConsignorConsignee.created_at | date:'dd MMM yyyy' || 'NA'}}</td>
+				</tr>
+				</tbody>
+			</table>
+			<div ng-if="aConsignorConsignee.length == 0" class="ms-body text-center" style=" min-height: 50px;">
+				<h3>No Consignor/Consignee Available !!!!!</h3>
+			</div>
+		</div>
+		<div style="text-align: center;" ng-show="aConsignorConsignee.length>0">
+			<uib-pagination ng-change="getConsignorConsignee()"
+							total-items="pagination.totalItems"
+							items-per-page="pagination.items_per_page"
+							num-pages="pagination.numPages"
+							ng-model="pagination.currentPage"
+							max-size="pagination.maxSize"
+							class="pagination-sm smallPagi"
+							boundary-links="true"
+							previous-text="&lsaquo;"
+							next-text="&rsaquo;"
+							first-text="&laquo;"
+							last-text="&raquo;">
+			</uib-pagination>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+</style>

@@ -1,0 +1,502 @@
+<form role="form"  name="vendorDealForm" autocomplete="off" novalidate>
+	<div class="modal-header" style="padding-bottom: 5px;">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add Payment Data For {{selectedVendor.name}}</h4><br>
+		<h5 class="modal-title" align="center">Address {{parseAddressToString(selectedVendor.ho_address)}}</h5><br>
+	</div>
+	<div class="modal-body">
+		<h4 ng-if="Allocate.route.rates">Route Data</h4>
+		<div class="row" style="margin:15px">
+			<div class="col-md-4" ng-if="Allocate.route.rates.allot.cash">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Driver Cash</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="number" class="form-control" ng-model="Allocate.route.rates.allot.cash" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4" ng-if="Allocate.route.rates.allot.cash">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Diesel(Liters)</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="number" class="form-control" ng-model="Allocate.route.rates.allot.diesel" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr ng-if="Allocate.route.rates">
+		<div class="row" style="margin:15px">
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Deal Date: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+								<input ng-click="open($event, 'opened3')" type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{format}}" show-weeks="false"
+									   ng-model="Allocate.vendorDeal.deal_at"
+									   is-open="opened3"
+									   datepicker-options="dateOptions" close-text="Close"
+									   placeholder="Deal Date"
+									   style="padding: 0px 4px; height: 34px;"
+								/>
+							</div>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default m-t-0 f12"
+									ng-click="open($event, 'opened3')">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Payment Type: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control"
+									ng-model="Allocate.vendorDeal.payment_type"
+									ng-options="item as item for item in $constants.paymentType"
+									ng-change="resetAll(1);changePayType(Allocate.vendorDeal.payment_type)" required>
+								<option selected disabled value="">Select</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Payment Basis: <span
+							class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control"
+									ng-options="item as item for item in $constants.aWeightTypes"
+									ng-model="Allocate.vendorDeal.weight_type"
+									name="Weight Type"
+									ng-change="resetAll();calcTotalAll()"
+									ng-disabled="!Allocate.vendorDeal.payment_type"
+									required>
+								<option selected disabled value="">Select</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<div class="checkbox m-b-15">
+						<label>
+							<input type="checkbox"
+								   ng-init="Allocate.vendorDeal.deductTDS = false"
+								   ng-model="Allocate.vendorDeal.deductTDS"
+								   name="deduct tds">
+							<i class="input-helper"></i>
+							Deduct TDS
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px" ng-if="Allocate.vendorDeal.weight_type === 'Percentage'">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Percentage (0-40): <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input
+								type="number"
+								min="0"
+								max="40"
+								class="form-control"
+								placeholder="enter here..."
+								ng-model="Allocate.vendorDeal.weightTypePercent"
+								ng-required="Allocate.vendorDeal.weight_type === 'Percentage'"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px" ng-if="Allocate.vendorDeal.weight_type === 'PMT'">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">PMT Weight: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input
+								type="number"
+								class="form-control"
+								placeholder="enter here..."
+								ng-change="calculateTotalPMT()"
+								ng-model="Allocate.vendorDeal.pmtWeight"
+								ng-required="Allocate.vendorDeal.weight_type === 'PMT'"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">PMT Rate: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input
+									type="number"
+									class="form-control"
+									placeholder="enter here..."
+									ng-change="calculateTotalPMT()"
+									ng-model="Allocate.vendorDeal.pmtRate"
+									ng-required="Allocate.vendorDeal.weight_type === 'PMT'"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px" ng-if="Allocate.vendorDeal.weight_type === 'PUnit'">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">No. of boxes: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input
+									type="number"
+									class="form-control"
+									placeholder="enter here..."
+									ng-model="Allocate.vendorDeal.totalUnits"
+									ng-change="calculateTotalPUnit()"
+									ng-required="Allocate.vendorDeal.weight_type === 'PUnit'"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Price per box: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input
+									type="number"
+									class="form-control"
+									placeholder="enter here..."
+									ng-change="calculateTotalPUnit()"
+									ng-model="Allocate.vendorDeal.perUnitPrice"
+									ng-required="Allocate.vendorDeal.weight_type === 'PUnit'"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px" ng-if="Allocate.vendorDeal.weight_type && Allocate.vendorDeal.weight_type !== 'Percentage'">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Total: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input
+								type="number"
+								class="form-control"
+								ng-change="changeAdvance('total');changeAcPayment()"
+								ng-model="Allocate.vendorDeal.total_expense"
+								ng-readonly="Allocate.vendorDeal.weight_type === 'PMT' || Allocate.vendorDeal.weight_type === 'PUnit'"
+								required
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Munshiyana  </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="number" ng-change="changeAdvance('munshiyana');changeAcPayment()" class="form-control" ng-model="Allocate.vendorDeal.munshiyana" placeholder="enter here..."  >
+						</div>
+					</div>
+				</div>
+			</div><div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Advance  <span
+							class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="number" ng-change="changeAdvance('advance');changeAcPayment()" class="form-control" ng-model="Allocate.vendorDeal.advance" placeholder="enter here..." ng-readonly="(Allocate.vendorDeal.payment_type==='To pay' || Allocate.vendorDeal.payment_type === 'To be billed')" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">To Pay/Balance: <span
+							class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input
+								type="number"
+								ng-change="changeAdvance('topay');changeAcPayment()"
+								class="form-control"
+								ng-model="Allocate.vendorDeal.toPay"
+								placeholder="enter here..."
+								ng-readonly="(Allocate.vendorDeal.payment_type==='To pay' || Allocate.vendorDeal.payment_type === 'To be billed')"
+								required
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-md-4 control-label">Advance Due Date </label>
+					<div class="date-picker input-group dp-blue"
+						 ng-class="{ 'is-opened': opened1 == true }"
+						 style=" ">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="open($event, 'opened1')" type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false"
+								   ng-model="Allocate.vendorDeal.advance_due_date"
+								   is-open="opened1" min-date="minDate" max-date="maxDate"
+								   datepicker-options="dateOptions" close-text="Close"
+								   placeholder="Advance Date"
+								   style="padding: 0px 4px; height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default m-t-0 f12"
+									ng-click="open($event, 'opened1')"><i
+									class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-md-4 control-label">Topay Due Date </label>
+					<div class="date-picker input-group dp-blue"
+						 ng-class="{ 'is-opened': opened2 == true }"
+						 style=" ">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="open($event, 'opened2')" type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false"
+								   ng-model="Allocate.vendorDeal.topay_due_date"
+								   is-open="opened2" min-date="minDate" max-date="maxDate"
+								   datepicker-options="dateOptions" close-text="Close"
+								   placeholder="Due Date"
+								   style="padding: 0px 4px; height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default m-t-0 f12"
+									ng-click="open($event, 'opened2')"><i
+									class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Hire Slip</label>
+					<div class="col-sm-6">
+						<input type="text" class="form-control" ng-model="Allocate.vendorDeal.loading_slip">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div ng-hide="!Allocate.vendorDeal.payment_type
+		|| Allocate.vendorDeal.payment_type === 'To pay'
+		|| Allocate.vendorDeal.payment_type === 'To be billed'">
+			<h4>Advance Component</h4>
+			<div class="row" style="margin:15px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Diesel</label>
+						<div class="col-sm-6">
+							<div class="select">
+								<select ng-options="t for t in aType" class="form-control" ng-model="Allocate.vendorDeal.diesel.type" ng-change="changeAmount()">
+									<option value="" selected>Select</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2" ng-show="Allocate.vendorDeal.diesel.type=='Liter'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Liter</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-change="changeAmount()" class="form-control" ng-model="Allocate.vendorDeal.diesel.quantity" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2" ng-show="Allocate.vendorDeal.diesel.type=='Liter'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Rate</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-change="changeAmount()" class="form-control" ng-model="Allocate.vendorDeal.diesel.rate" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Amount</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-change="changeAcPayment()" class="form-control" ng-model="Allocate.vendorDeal.diesel.amount" placeholder="enter here..." ng-readonly="Allocate.vendor_payment.diesel.type=='Liter'">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:15px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Driver Cash</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-change="changeAcPayment()" class="form-control" ng-model="Allocate.vendorDeal.driver_cash" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Toll Tax</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-change="changeAcPayment()" class="form-control" ng-model="Allocate.vendorDeal.toll_tax" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:15px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Other</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-change="changeAcPayment()" class="form-control" ng-model="Allocate.vendorDeal.other_charges" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark For Other</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" class="form-control" ng-model="Allocate.vendorDeal.other_charges_remark" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:15px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">A/C Payment</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" class="form-control" ng-model="Allocate.vendorDeal.account_payment" placeholder="enter here..." ng-readonly="true">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" class="form-control" ng-model="Allocate.vendorDeal.remark" placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Own Diesel</label>
+						<div class="col-sm-6">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" ng-model="Allocate.diesel_stage" value="">
+									<i class="input-helper"></i>
+									Own Diesel
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="row" style="margin:15px">
+			<div class="" style="overflow-y: auto; max-height: 200px;">
+				<table class="table table-bordered vehicleAllot">
+					<thead>
+					<tr>
+						<th>#</th>
+						<th>A/C No.</th>
+						<th>IFSC </th>
+						<th>Remark</th>
+						<th>Cancel Cheque</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr data-ng-repeat="bank in aBankingDetails track by $index">
+						<td><input type="checkbox" ng-model="bank.checked" ng-click="updateSelection($index, aBankingDetails)" /></td>
+						<td>{{bank.a_c}}</td>
+						<td>{{bank.ifsc}}</td>
+						<td>{{bank.declaration}}</td>
+						<td>
+							<button ng-click="$event.preventDefault();preview(bank.cancelled_cheque)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-show="bank.cancelled_cheque">Preview Cheque</button >
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button
+				type="submit"
+				class="btn btn-success waves-effect"
+				ng-disabled="
+					!Allocate.vendorDeal.payment_type ||
+					!Allocate.vendorDeal.weight_type ||
+					(Allocate.vendorDeal.weight_type !== 'Percentage' && !Allocate.vendorDeal.total_expense) ||
+					(Allocate.vendorDeal.weight_type === 'Percentage' && !Allocate.vendorDeal.weightTypePercent)"
+				ng-click="addData()"
+		>
+			Submit
+		</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" type="button" ng-click="closeModal()">Cancel</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+	}
+</style>

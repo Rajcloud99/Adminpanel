@@ -1,0 +1,279 @@
+<form novalidate autocomplete="off" name="addVoucherForm" ng-submit="submit(addVoucherForm)">
+	<div class="modal-header p-b-0" >
+		<button type="button" ng-click="closePopup()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">{{modalHeader || 'Add Vouchers'}}</h4><br>
+		<div class="row m-t-10">
+			<div class="col-md-6"
+				 ng-if="!hidePaymentType">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Voucher Type: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<select chosen
+								class="form-control"
+								ng-model="oVoucher.type"
+								ng-change="taxAccounts = getAccounts(); aTaxes = []; fromAccount();toAccount()"
+								ng-options="item as item for item in $constants.aVouchersType"
+								name="Voucher Type"
+								required>
+							<option value=""></option>
+						</select>
+						<span class="error" ng-if="(addVoucherForm['Voucher Type'].$error.required
+													&& (addVoucherForm['Voucher Type'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" ng-show="(oVoucher.type==='Sales'||oVoucher.type==='Purchase') && (aTaxes.length>0)">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Total Amount: </label>
+					<div class="col-sm-6">
+						{{oVoucher.netTotal}}
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6"
+				 ng-if="showBillDate">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Bill Date: </label>
+					<div class="col-sm-6">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened1 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   ng-model="oVoucher.billDate"
+									   is-open="opened1"
+									   datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="Advance Date"
+									   name="Advance Date"
+									   required
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+								<button type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="m-b-10" style="clear: both"></div>
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">From: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<select chosen
+								class="form-control"
+								ng-model="oVoucher.from"
+								ng-options="item as item.name for item in aAccountMasterfrom"
+								name="from"
+								required>
+							<option value=""></option>
+						</select>
+						<span class="error" ng-if="(addVoucherForm['from'].$error.required
+													&& (addVoucherForm['from'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">To: <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<select chosen
+								class="form-control"
+								ng-model="oVoucher.to"
+								ng-options="item as item.name for item in (aAccountMasterto|filter:{name:'!'+oVoucher.from.name})"
+								name="to"
+								required>
+							<option value=""></option>
+						</select>
+						<span class="error" ng-if="(addVoucherForm['to'].$error.required
+													&& (addVoucherForm['to'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+					</div>
+				</div>
+			</div>
+			<div class="m-b-10" style="clear: both"></div>
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label"> Enter Amount :<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="number"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+								   placeholder="Enter Amount"
+								   ng-model="oVoucher.amount"
+								   ng-change="calculateTax()"
+								   class="form-control"
+								   name="Amount"
+								   required>
+						</div>
+						<span class="error" ng-if="	(addVoucherForm['Amount'].$error.required
+													&& (addVoucherForm['Amount'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="container m-b-5 m-t-5">
+				<div class="col-sm-4">
+					<div class="form-group m-b-0 text-center"
+							 ng-show="((oVoucher.type==='Sales'||oVoucher.type==='Purchase') && (oVoucher.amount>0))">
+						<select
+								chosen
+								class="form-control"
+								ng-model="taxType"
+								name="taxType"
+								ng-change="changeTaxType(); setTax();"
+								ng-required="((oVoucher.type==='Sales'||oVoucher.type==='Purchase') && (oVoucher.amount>0))">
+							<option value="" selected>Not Tax</option>
+							<option value="intra">Intra Tax</option>
+							<option value="inter">Inter State Tax</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group m-b-0 text-center" ng-show="(taxType==='intra'||taxType==='inter')">
+						<select chosen
+								class="form-control"
+								ng-options="item as item for item in (taxAmounts)"
+								ng-model="taxPercent"
+								ng-change="setTax();"
+								name="Percent"
+								ng-required="(taxType==='intra'||taxType==='inter')">
+							<option value="" selected disabled ng-show="false">Select</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="m-b-10" style="clear: both"></div>
+
+			<div class="container m-b-5 m-t-5" ng-repeat="tax in aTaxes">
+				<div class="col-sm-4">
+					<select
+							chosen
+							class="form-control"
+							ng-options="item.account as item.name for item in (taxAccounts)"
+							ng-disabled="true"
+							ng-model="tax.account"
+							name="taxType"
+							required>
+					</select>
+					<span class="error" ng-if="(addVoucherForm['taxType'].$error.required
+													&& (addVoucherForm['to'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+				</div>
+				<div class="col-sm-3">
+					<div class="fg-line">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   onwheel="return false"
+							   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   placeholder="Percentage(%)"
+							   ng-model="tax.percent"
+							   ng-change="calculateTax()"
+							   class="form-control"
+							   ng-disabled="true"
+							   name="Percent"
+							   required>
+					</div>
+					<span class="error" ng-if="	(addVoucherForm['Percent'].$error.required
+													&& (addVoucherForm['Percent'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+					<span class="error" ng-if="	(tax.percent<0 || tax.percent>100 )">
+							Invalid Tax</span>
+				</div>
+				<div class="col-sm-3">
+					<div class="fg-line">
+						<input type="number"
+							   ng-disabled="true"
+							  ng-model="tax.amount"
+							   class="form-control"
+							   name="Amount"
+							   required>
+					</div>
+					<span class="error" ng-if="	(addVoucherForm['Amount'].$error.required
+													&& (addVoucherForm['Amount'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+				</div>
+				<!--<div class="col-sm-2">
+					<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+							style="font-size: 10px"
+							uib-tooltip="Add Tax"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="aTaxes.splice(aTaxes.indexOf(tax),1)">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+				</div>-->
+			</div>
+			<div class="m-b-10" style="clear: both"></div>
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Reference Number:</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text"
+								   placeholder="Enter Ref. Number"
+								   ng-model="oVoucher.refNo"
+								   name="Reference Number"
+								   class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="m-b-20" style="clear: both"></div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="fg-line">
+						<textarea class="form-control"
+								  rows="4"
+								  ng-model="oVoucher.narration"
+								  placeholder="Narration..."></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="closePopup()">Close</button>
+		<button class="btn btn-primary">{{submitButtonLabel || 'Add Voucher'}}</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 45%;
+		height: 173px
+	}
+	.strikeThrough{
+		text-decoration: line-through;
+	}
+
+	.activeBill{
+		background-color: #9af019;
+	}
+
+</style>

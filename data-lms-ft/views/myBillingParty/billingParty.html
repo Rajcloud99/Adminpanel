@@ -1,0 +1,347 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Billing Party</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+
+		<div class="pull-right">
+
+			<button class="btn-primary btn"
+
+					ng-click="viewBillingParty(selectedBillingParty)"
+					uib-tooltip="View">
+				<i class="zmdi zmdi-local-library zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+
+			<button class="btn-primary btn"
+					ng-if="$role['Billing Party']['Update']"
+					ng-disabled="selectedBillingParty.clientId != selectedClient"
+					ng-click="upsertBillingParty(selectedBillingParty)"
+					uib-tooltip="Edit">
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+
+			<button class="btn-primary btn"
+					ng-if="$role['Billing Party']['Add']"
+					ng-click="upsertBillingParty()"
+					uib-tooltip="Add">
+				<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+
+			<button class="btn-danger btn"
+					ng-if="$role['Billing Party']['Delete']"
+					ng-disabled="selectedBillingParty.clientId != selectedClient"
+					ng-click="deleteBillingParty(selectedBillingParty)"
+					uib-tooltip="Delete">
+				<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+			</button>&nbsp;
+
+			<button type="button"
+						class="btn-primary btn"
+						ng-click="getBillingParty(true)"
+						uib-tooltip="Download BillingParty"
+						tooltip-placement="bottom"
+				>
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			<button type="button"
+					ng-hide="true"
+					class="btn-primary btn"
+					ng-if="$role['Billing Party']['Edit Client'] && $user.clientAdmin"
+					ng-click="editClientId(selectedBillingParty)"
+					uib-tooltip="edit ClientId"
+					tooltip-placement="bottom"
+			>
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<span>
+				<button class="btn-primary btn"
+						type="button"
+						uib-tooltip="Upload BillingParty"
+						onclick="document.getElementById('toUpload').click();"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+				</button>
+				<input
+					type="file"
+					id="toUpload"
+					name="toUpload"
+					ng-model="toUpload"
+					ng-hide="true"
+					accept="*/*"
+					ngf-select
+					ngf-max-size="5MB"
+					ngf-model-invalid="errorFile"
+					ngf-change="uploadBp($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+				>&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-success btn"
+						type="button"
+						uib-tooltip="Download Sample file"
+						ng-click="downloadCsv()"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			</span>
+			</div>
+		<!--<div class="pull-right" style="width: 21%;">-->
+			<!--<div class="col-md-8">-->
+				<!--<div class="lvh-label col-md-5" style="padding-left:0;padding-right:0;">Group By:</div>-->
+				<!--<div class="select col-md-6">-->
+					<!--<select-->
+							<!--class="form-control"-->
+							<!--ng-options="item.value as item.label for item in aggrs"-->
+							<!--ng-model="oFilter.aggregateBy" style="width:120%;height:34px;"-->
+					<!--&gt;-->
+						<!--<option value="" selected disabled>None</option>-->
+					<!--</select>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="col-md-4">-->
+				<!--<button ng-click="downloadReport()" ng-disabled="aVouchers.length<=0"-->
+						<!--class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">-->
+					<!--Download-->
+				<!--</button>-->
+			<!--</div>-->
+		<!--</div>-->
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 7px">
+			<form ng-submit="getBillingParty()" novalidate>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+
+						<input type="text"
+							   ng-model="oFilter.name"
+							   name="Name"
+							   class="form-control input-sm"
+							   placeholder="Name">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+
+						<input type="text"
+							   ng-model="oFilter.address"
+							   name="Address"
+							   class="form-control input-sm"
+							   placeholder="Address">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="oFilter.category"
+								ng-options="item as item for item in $constants.aCategory"
+								name="Select Category">
+							<option value="" selected>Select Category</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="oFilter.state"
+								ng-options="item.state as item.state for item in $constants.aGSTstates"
+								name="state_name" >
+								<option value="">State Name</option>
+						</select>
+
+					</div>
+				</div>
+
+				<div class="col-md-2">
+						<div class="lvh-search ng-scope sear">
+							<input type="text"
+								   placeholder="Customer Search..."
+								   ng-model="oFilter.customer"
+								   class="lvhs-input"
+								   typeahead-wait-ms="10"
+								   typeahead="item as item.name for item in getCustomers($viewValue)"
+
+								   class="form-control">
+							<i class="lvh-search-close" ng-click="oFilter.customer='';">×</i>
+						</div>
+					</div>
+
+
+
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="DatePicker.newDate"
+											   ng-model="oFilter.start_date"
+											   min-date="min_date"
+											   is-open="opened1"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From"/>
+									</div>
+									<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="DatePicker.newDate"
+											   ng-model="oFilter.end_date"
+											   ng-change="dateChange('endDate')"
+											   is-open="opened2"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To"/>
+									</div>
+									<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px;"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<table class="table table-bordered unresponsive">
+				<thead id='my_fixable_table_header' fix-head>
+
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Address</th>
+					<th>Customer</th>
+					<th>Contract Company</th>
+					<th>Operation Company</th>
+					<th>Gst Percent</th>
+					<th>Contact Person</th>
+					<th>Contact Number</th>
+					<th>GSTIN</th>
+					<th>PAN No</th>
+					<th>CIN No</th>
+					<th>State Name</th>
+					<th>state Code</th>
+					<th>Added On</th>
+					<th>Added By</th>
+					<th>Account</th>
+					<th>Billing Party with Hold A/c</th>
+					<th>Ledger Account</th>
+					<th>Stationary Book</th>
+					<th>Last Modified by</th>
+					<th>Last Modified at</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr data-ng-repeat="oBillingParty in aBillingParty"
+					class="selectItem pointer"
+					ng-click="selectThisRow(oBillingParty, $index)">
+					<td>{{((pagination.currentPage - 1) * pagination.items_per_page) + $index + 1}}</td>
+					<td>{{oBillingParty.name || 'NA'}}</td>
+					<td>{{oBillingParty.address || 'NA'}}</td>
+					<td>{{oBillingParty.customer.name || 'NA'}}</td>
+					<td>{{($configs.client_allowed|filter:{'clientId': oBillingParty.clientId})[0].name}}</td>
+					<td>{{(this|fetchClientAllowed:oBillingParty.clientR) || 'NA'}}</td>
+					<td>{{oBillingParty.percent ? oBillingParty.percent + '%' : 'NA'}}</td>
+					<td>{{oBillingParty.contact_person || 'NA'}}</td>
+					<td>{{oBillingParty.contact_number || 'NA'}}</td>
+					<td>{{oBillingParty.gstin || 'NA'}}</td>
+					<td>{{oBillingParty.pan_number || 'NA'}}</td>
+					<td>{{oBillingParty.cin_number || 'NA'}}</td>
+                    <td>{{oBillingParty.state_name || 'NA'}}</td>
+					<td>{{oBillingParty.state_code || 'NA'}}</td>
+					<td>{{(oBillingParty.billing_dates | date:"dd-MMM-yyyy") || 'NA'}}</td>
+					<td>{{oBillingParty.last_modified_by_name || 'NA'}}</td>
+					<td>{{oBillingParty.account.name || 'NA'}}</td>
+					<td>{{oBillingParty.withHoldAccount.name || 'NA'}}	</td>
+					<td>{{oBillingParty.account.ledger_name || oBillingParty.account.name|| 'NA'}}</td>
+					<td>{{oBillingParty.billbook.name || 'NA'}}</td>
+					<td>{{oBillingParty.last_modified_by_name || 'NA'}}</td>
+					<td>{{(oBillingParty.last_modified_at | date:"dd-MMM-yyyy : hh:mm:ss") || 'NA'}}</td>
+				</tr>
+				</tbody>
+			</table>
+			<div ng-if="aBillingParty.length == 0" class="ms-body text-center" style=" min-height: 50px;">
+				<h3>No Billing Party Available !!!!!</h3>
+			</div>
+		</div>
+		<div style="text-align: center;" ng-show="aBillingParty.length>0">
+			<uib-pagination ng-change="getBillingParty()"
+							total-items="pagination.totalItems"
+							items-per-page="pagination.items_per_page"
+							num-pages="pagination.numPages"
+							ng-model="pagination.currentPage"
+							max-size="pagination.maxSize"
+							class="pagination-sm smallPagi"
+							boundary-links="true"
+							previous-text="&lsaquo;"
+							next-text="&rsaquo;"
+							first-text="&laquo;"
+							last-text="&raquo;">
+			</uib-pagination>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+</style>

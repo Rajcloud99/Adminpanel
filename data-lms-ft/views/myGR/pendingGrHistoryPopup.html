@@ -1,0 +1,81 @@
+<div class="modal-header" >
+	<button type="button" ng-click="closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Pending Gr History</h4><br>
+</div>
+<div class="modal-body">
+	<div class="row m-b-10">
+		<div class="col-md-3">
+			<div class="col-md-4"><b>Gr Number :</b></div>
+			<div class="col-md-8">{{gr.grNumber}}</div>
+		</div>
+		<div class="col-md-3">
+			<div class="col-md-4"><b>Gr Date :</b></div>
+			<div class="col-md-8">{{gr.grDate | date: 'dd-MMMM-yyyy'}}</div>
+		</div>
+		<div class="col-md-3">
+			<div class="col-md-4"><b>Gr Type :</b></div>
+			<div class="col-md-8">{{gr.gr_type}}</div>
+		</div>
+		<div class="col-md-12 m-t-10">
+			<table class="table table-bordered unresponsive">
+				<thead>
+				<tr>
+					<th>Remark</th>
+					<th>Reason</th>
+					<th>Place</th>
+					<th>Expected Arrival</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr data-ng-repeat="oRemark in gr.pendingRemark"
+					class="pointer selectItem">
+					<td>{{oRemark.remark || 'NA'}}</td>
+					<td>{{oRemark.reason || 'NA'}}</td>
+					<td>{{oRemark.place || 'NA'}}</td>
+					<td>{{(oRemark.expected_arrival | date: 'dd-MMMM-yyyy') || 'NA'}}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<hr>
+	<div class="col-md-12 m-b-10"><b>GR History</b></div>
+	<div class="col-md-12">
+		<div class="detailsList">
+			<div class="" style="overflow-y: auto; max-height: 500px;">
+				<table class="table table-bordered unresponsive">
+					<thead>
+					<tr>
+						<th>Status</th>
+						<th>Remark</th>
+						<th>Date</th>
+						<th>System Date</th>
+						<th>Update By</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="oStatus in gr.statuses | orderBy: 'date'" class="pointer selectItem">
+						<td>{{oStatus.status || 'NA'}}</td>
+						<td>{{oStatus.remark || 'NA'}}</td>
+						<td>{{oStatus.date | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+						<td>{{oStatus.systemDate | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+						<td>{{oStatus.user.full_name || 'NA'}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+</div>
+
+<style type="text/css">
+	.modal-dialog {width: 75%;
+		height: 173px
+	}
+</style>

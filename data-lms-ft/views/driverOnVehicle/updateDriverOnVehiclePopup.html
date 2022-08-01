@@ -1,0 +1,184 @@
+<form name="updateDriverOnVehicleForm" class="form-horizontal" novalidate>
+
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-title">Driver and vehicle Association
+			<span style="margin-left:10px;
+         color:#B7B7B7">({{vm.currentMode}})
+        </span>
+		</h4>
+		<button type="button" ng-click="vm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vehicle No.</label>
+									<div class="col-sm-6">
+										{{vm.objdriverOnVehicle.vehicle.vehicle_reg_no}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Driver Name :</label>
+									<div class="col-sm-6">
+										{{vm.objdriverOnVehicle.driver.name}}
+									</div>
+								</div>
+							</div>
+							<div class="m-t-10" style="clear:both;"></div>
+
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">GPS Odometer (Association)</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(vm.currentMode==='Disassociate'?
+												vm.objdriverOnVehicle.ass_gps_odo:vm.objdriverOnVehicle.vehicle.odometer)/1000 || "No GPS"}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">GPS Odometer (Dis-association)</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{vm.objdriverOnVehicle.vehicle.odometer/1000 || "No GPS"}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label  class="col-sm-4 control-label">Association date-time</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened1 == true }">
+											<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+													   type="text" class="form-control"
+													   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-model="vm.objdriverOnVehicle.ass_date"
+													   max-date="vm.objdriverOnVehicle.disass_date || vm.DatePicker.newDate"
+													   is-open="opened1"
+													   datepicker-options="vm.DatePicker.dateSettings"
+													   close-text="Close"
+													   placeholder="date"
+													   style="padding: 0px 4px;height: 34px;"/>
+											</div>
+											<span class="input-group-btn">
+											<button ng-disabled="vm.currentMode==='Disassociate'"
+													type="button" class="btn btn-default m-t-0 f12"
+													ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+													class="glyphicon glyphicon-calendar"></i></button>
+										  </span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label  class="col-sm-3 control-label">Disassociation date-time</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened2 == true }">
+											<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+													   type="text" class="form-control"
+													   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   max-date="vm.DatePicker.newDate"
+													   min-date="vm.objdriverOnVehicle.ass_date"
+													   ng-model="vm.objdriverOnVehicle.disass_date"
+													   is-open="opened2"
+													   datepicker-options="vm.DatePicker.dateSettings"
+													   close-text="Close"
+													   ng-disabled="!vm.objdriverOnVehicle.disass_date"
+													   placeholder="date"
+													   style="padding: 0px 4px;height: 34px;"/>
+											</div>
+											<span class="input-group-btn">
+											<button type="button" ng-disabled="!vm.objdriverOnVehicle.disass_date"
+													class="btn btn-default m-t-0 f12"
+													ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+													class="glyphicon glyphicon-calendar"></i></button>
+										  </span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vehicle Odometer (Association)</label>
+									<div class="col-sm-6">
+										{{vm.objdriverOnVehicle.ass_veh_odo}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Remark (Association)</label>
+									<div class="col-sm-6">
+										{{vm.objdriverOnVehicle.ass_remark}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vehicle Odometer (Dis-association)</label>
+									<div class="col-sm-6">
+										{{vm.objdriverOnVehicle.disass_veh_odo}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Remark (Dis-association)</label>
+									<div class="col-sm-6">
+										{{vm.objdriverOnVehicle.disass_remark}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" type="button"
+				ng-click="vm.closeModal()">Cancel
+		</button>
+		<button
+				class="btn btn-primary"
+				style="width: 60px"
+				type="button"
+				ng-click="vm.save(driverOnVehicleForm)"
+
+		>
+			Save
+		</button>
+	</div>
+</form>
+
+<style type="text/css">
+	.modal-dialog {
+		width: 60%;
+	}
+
+</style>

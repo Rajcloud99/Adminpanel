@@ -1,0 +1,119 @@
+<div class="container" ng-controller="dieselEscalationReportController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Customer Search..." ng-model="customer" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aCustomer | filter:$viewValue" ng-change="getCname(customer)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+									<i class="lvh-search-close" ng-click="clearSearch('customer')">×</i>
+								</div>
+							</div>
+							<div ng-show="customer" class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<select class="form-control"
+										ng-options="item as item for item in aDoNumbers"
+										ng-model="do_number" style="height: 34px;">
+									<option style="display:none" value="">DO Number</option>
+								</select>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false"
+											   ng-model="start_date" max-date="end_date" ng-change="dateChange()"
+											   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="From Date" style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+				                      <button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="open($event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+				                    </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+											   min-date="start_date"="end_date" max-date="mxDate" is-open="opened2"
+										datepicker-options="dateOptions" close-text="Close" placeholder="To Date" style=
+										"padding: 0px 4px
+									;
+										height: 34px
+									;" ng-disabled="!start_date"/>
+									</div>
+									<span class="input-group-btn">
+			                      <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened2')" ng-disabled="!start_date"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<button ng-disabled="!(customer && do_number)" ng-click="getDieselEscReport()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+									Search
+								</button>
+							</div>
+							<button ng-disabled="!(customer && do_number)" ng-click="downloadReport()" class="btn btn-primary hidden-print pull-right" style="font-size: 11px; padding: 5px;margin-top: 5px;margin-right: 5px;">Download</button>&nbsp;
+						</form>
+						<div class="clearfix"></div>
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>Sl. No.</th>
+										<th>Date</th>
+										<th>No. of Trucks</th>
+										<th>Route</th>
+										<th>Challan Qty.(MT)</th>
+										<th>Recieved Qty. (MT)</th>
+										<th>GRN Qty</th>
+										<th>TM</th>
+										<th>Normalized Qty.</th>
+										<th>Base Rate</th>
+										<th>Increased Rate</th>
+										<th>% Increase in Diesel Price</th>
+										<th>Formula = 0.37% of increased in diesel price * Transportation</th>
+										<th>Escalation Diesel</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="dt in dieselEscalationData.aModifiedData" class="pointer selectItem">
+										<td>{{$index+1}}</td>
+										<td>{{dt.date}}</td>
+										<td>{{dt.no_of_trucks}}</td>
+										<td>{{dieselEscalationData.contract.mine_name}}</td>
+										<td>{{(dt.total_chalan_qty).toFixed(2)}}</td>
+										<td>{{(dt.total_received_qty).toFixed(2)}}</td>
+										<td>{{(dt.total_grn_qty).toFixed(2)}}</td>
+										<td>{{(dt.main_actual_moisture).toFixed(2)}}</td>
+										<td>{{(dt.normalize_qty).toFixed(2)}}</td>
+										<td>{{(dt.base_rate || 0).toFixed(2)}}</td>
+										<td>{{(dt.increased_rate || 0).toFixed(2)}}</td>
+										<td>{{(dt.percent_inc_in_diesel_rate).toFixed(2)}}</td>
+										<td>{{(dt.formula).toFixed(2)}}</td>
+										<td>{{(dt.esc_amount).toFixed(2)}}</td>
+
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div ng-if="aVehicle.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any registered vehicle available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

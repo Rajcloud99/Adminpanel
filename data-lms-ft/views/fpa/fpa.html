@@ -1,0 +1,168 @@
+<!--Controller: fpaController-->
+<!--ControllerAs: fpaVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>FPA Gr</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form novalidate autocomplete="off">
+
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="fpaVm.oFilter.grNumber"
+							   name="grNumber"
+							   class="form-control input-sm"
+							   placeholder="gr Number">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="fpaVm.oFilter.fpaNo"
+							   name="fpaNo"
+							   class="form-control input-sm"
+							   placeholder="fpaNo">
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="From"
+									max-date="fpaVm.maxDate"
+									ng-model="fpaVm.oFilter.from"
+									ng-change="fpaVm.oFilter.to=undefined;"
+							>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="To"
+									max-date="fpaVm.maxDate"
+									ng-model="fpaVm.oFilter.to"
+							>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Search"
+							type="button"
+							ng-click="fpaVm.getFpaGr();"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="fpaVm.oFilter={};">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+				</div>
+				<div class="m-b-10" style="clear: both"></div>
+			</form>
+		</div>
+	</div>
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="col-md-12">
+			<button class="btn btn-primary m-r-10"
+					ng-if="$role['FPA Gr']['Add']"
+					uib-tooltip="Add FPA"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="fpaVm.upsertFpaGr('add')">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					ng-if="$role['FPA Gr']['Edit']"
+					uib-tooltip="Edit FPA"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="fpaVm.upsertFpaGr('edit')">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-10"
+					ng-if="$role['FPA Gr']['Delete']"
+					uib-tooltip="Delete FPA"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="fpaVm.deleteFpaGr()">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					ng-hide="true"
+					ng-click="fpaVm.approve()"
+					uib-tooltip="Bill Approve">
+				<i class="zmdi zmdi-thumb-up zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-10"
+					ng-hide="true"
+					ng-click="fpaVm.unapprove()"
+					uib-tooltip="Unapprove">
+				<i class="zmdi zmdi-thumb-down zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<div ja-table
+						 table-body="fpaVm.aFPAGr"
+						 table-head="fpaVm.tableHead"
+						 table-height='500px'
+						 table-load="fpaVm.getFpaGr(true)"
+						 table-column-setting="fpaVm.columnSetting"
+						 table-selectable='fpaVm.selectType'
+						 table-api='fpaVm.tableApi'
+						 table-selectable-model="fpaVm.aSelectedFpaGr"
+					></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+	.container{
+		width: 98% !important;
+	}
+</style>

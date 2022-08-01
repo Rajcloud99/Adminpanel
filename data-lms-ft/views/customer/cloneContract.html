@@ -1,0 +1,99 @@
+<form role="form"  name="cloneDT" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Clone Contract</h4><br>
+  </div>
+  <div class="modal-body">
+    <div class="justify col-md-12">
+      <div class="row" style="margin: 10px;">
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Contract Name</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-model="contractData.name" placeholder="" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Start Date</label>
+            <div class="col-sm-6">
+              <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                  <input ng-click="open($event, 'opened1')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="contractData.start_date" max-date="contractData.end_date" is-open="opened1" uib-datepicker-options="dateOptions" close-text="Close" placeholder="Select Date" />
+                </div>
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin: 10px;">
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">End Date</label>
+            <div class="col-sm-6">
+              <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                  <input ng-click="open($event, 'opened2')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="contractData.end_date" min-date="contractData.start_date"="contractData.end_date" is-open="opened2" uib-datepicker-options="dateOptions" close-text="Close" placeholder="Select Date" />
+                </div>
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Set as default</label>
+            <div class="col-sm-6">
+              <label class="checkbox checkbox-inline m-r-20">
+                <input type="checkbox" ng-model="contractData.default" name="inlinecheckboxOptions">
+                <i class="input-helper"></i>
+                  Default
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin:10px">
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Status: <span style="color: red;">*</span></label>
+            <div class="col-sm-6">
+              <div class="select">
+                <select class="form-control" ng-model="contractData.contract_status" name="status" required="">
+                  <option value="" disabled selected>Select Status</option>
+                  <option value="Not started">Not started</option>
+                  <option value="Live">Live</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>   
+  <br>   
+  <div class="modal-footer">
+    <button class="btn btn-success waves-effect"  ng-click="cloneClick(cloneDT)">Clone Contract</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>  
+  
+  </form> 
+  <style type="text/css">
+  .modal-dialog {
+      width: 60%;
+      /* height: 173px */
+    }
+  </style>

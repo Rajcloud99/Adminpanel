@@ -1,0 +1,209 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12">
+						<div class="clearfix"></div>
+						<div ng-init="(report='status')"
+							 class="select col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+							<select
+									class="form-control"
+									ng-options="item.key as item.value for item in vm.aReportType"
+									ng-model="vm.report" style="height: 34px;">
+								<option value="" selected disabled>Report Type</option>
+							</select>
+						</div>
+						<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1" ng-show="vm.report=='unsettledTripAdvance'">
+							<select class="form-control"
+									ng-model="vm.dateType"
+									ng-options="item.value as item.key for item in $constants.advanceDateType"
+									style="line-height: 34px;">
+								<option value="" selected> Select Type</option>
+							</select>
+						</div>
+						<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="vm.oFilter.from"
+										   max-date="vm.oFilter.to"
+										   ng-change="vm.dateChange('startDate')"
+										   is-open="opened1"
+										   ng-change="vm.oFilter.from > vm.oFilter.to ? (vm.oFilter.to = null) : ('add'|dateUtilsFilt:vm.oFilter.to:-6:'month') > vm.oFilter.from && (vm.oFilter.to = null) "
+										   datepicker-options="vm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="From Date" style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+				                      <button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+				                    </span>
+							</div>
+						</div>
+						<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+								 style=" ">
+								<div class="fg-line"
+									 ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="vm.oFilter.to"
+										   min-date="vm.oFilter.from"
+										   max-date="'add'|dateUtilsFilt:vm.oFilter.from:6:'month'"
+										   ng-change="vm.dateChange('endDate')"
+										   is-open="opened2"
+										   datepicker-options="vm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="To Date"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+			                      <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+							</div>
+						</div>
+						<div class="col-xs-6  col-sm-1 col-md-1 col-lg-1" ng-show="vm.report=='unsettledTripAdvance'">
+							<select chosen multiple class="form-control"
+									ng-model="vm.advanceType"
+									ng-options="item.name as item.name for item in ($constants.expenseObj2)|filter:{c: 'n'}:true"
+									style="line-height: 34px;">
+								<option value="">Advance Type</option>
+							</select>
+						</div>
+						<div class="col-xs-6 col-sm-2 col-md-2 col-lg-1" ng-show="vm.report=='unsettledTripAdvance'">
+							<div class="fg-line form-group m-b-0">
+								<select chosen
+										class="form-control"
+										ng-model="vm.segment_type"
+										ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+										name="Segment"
+										required>
+									<option value="" selected>Segment</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-xs-6   col-sm-1 col-md-1 col-lg-1" ng-show="vm.report=='unsettledTripAdvance'">
+							<select chosen
+									ng-model="vm.ownershipType"
+									no-results-text="'No Result Found'"
+									placeholder-text-multiple="'Ownership Type'"
+									ng-options="v for v in $constants.aOwnershipVehicle | filter:'!Market'">
+								<option value="">All Ownership Type</option>
+							</select>
+						</div>
+						<div class="select col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="vm.report=='unsettledTripAdvance'">
+							<select
+									class="form-control"
+									ng-options="item.key as item.value for item in vm.aTripType"
+									ng-model="vm.tripType" style="height: 34px;">
+								<option value="" selected disabled>Trip Type</option>
+							</select>
+						</div>
+						<div class="col-md-2" ng-show="vm.report=='unsettledTripAdvance'">
+							<div class="select">
+								<select class="form-control" ng-model="vm.advSettled" >
+									<option value="" selected>Select Settle Type</option>
+									<option value="Settle">Setteled</option>
+									<option value="Unsetteled">Unsetteled</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="vm.report=='diesel' || vm.report=='dieselLtr'">
+							<div class="lvh-search ng-scope sear">
+								<input type="text"
+									   placeholder="Group(A/c) Search..."
+									   ng-model="group"
+									   class="lvhs-input"
+									   typeahead-wait-ms="10"
+									   typeahead-on-select="vm.addTag('aGroupTag', group); vm.group=null"
+									   typeahead="item as item.name for item in vm.getAccount($viewValue, [])"
+									   class="form-control"
+								>
+								<i class="lvh-search-close" ng-click="group='';">×</i>
+							</div>
+						</div>
+						<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="vm.report=='diesel' || vm.report=='dieselLtr'">
+							<div class="lvh-search ng-scope sear">
+								<input type="text"
+									   placeholder="Account Search..."
+									   ng-model="account"
+									   class="lvhs-input"
+									   typeahead-wait-ms="10"
+									   typeahead-on-select="vm.addTag('aAccountTag', account); vm.account=null"
+									   typeahead="item as item.name for item in vm.getAccount($viewValue)"
+									   class="form-control"
+								>
+								<i class="lvh-search-close" ng-click="account='';">×</i>
+							</div>
+						</div>
+						<div class="col-xs-6 m-b-5 col-sm-2 col-md-3 col-lg-2" ng-show="vm.report=='combineDiesel' || vm.report=='combineDieselLtr' || vm.report=='combineDieselDaywise' || vm.report=='combineDieselLtrDaywise'">
+							<!--<select class="form-control" ng-dropdown-multiselect=""
+									ng-model="vm.fuelCompany"
+									ng-options="fCpny as fCpny for fCpny in vm.aFuelCompany">
+								<option value="" selected>Fuel Company</option>
+							</select>-->
+
+							<select multiple
+									chosen
+									ng-model="vm.fuelCompany"
+									no-results-text="'No Result Found'"
+									placeholder-text-multiple="'Fuel Company'"
+									ng-options="fCpny as fCpny for fCpny in vm.aFuelCompany">
+								<option value=""></option>
+							</select>
+						</div>
+						<div class="col-sm-2">
+							<button ng-click="vm.download(true)"
+									class="btn btn-primary hidden-print m-r-5"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Download
+							</button>
+							<button ng-click="vm.resetFilter()"
+									class="btn btn-danger hidden-print"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Reset
+							</button>
+						</div>
+					</div>
+
+					</form>
+					<div class="clearfix"></div>
+					<div class="col-xs-6 col-sm-12 col-md-12 col-lg-12">
+			  			<span class="btn-lst" ng-repeat="tag in vm.oFilter.aAccountTag">
+							<button class="btn-xs" style="background: black; color: aliceblue;">     {{tag.name}}&nbsp;
+							<a ng-click="vm.removeTag('aAccountTag', $index)"> X </a></button>
+						</span>
+						<span class="btn-lst" ng-repeat="tag in vm.oFilter.aGroupTag">
+							<button class="btn-xs" style="background: black; color: aliceblue;">     {{tag.name}}&nbsp;
+							<a ng-click="vm.removeTag('aGroupTag', $index)"> X </a></button>
+						</span>
+					</div>
+					<div class="clearfix"></div>
+
+
+					<div class="detailsList">
+						<!--Place table here-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	/*.unresponsive tbody tr td{
+		min-width: 85px;
+		padding: 5px 1px;
+		text-align: center;
+	}*/
+</style>

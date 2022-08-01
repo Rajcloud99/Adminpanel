@@ -1,0 +1,39 @@
+<div class="modal-header">
+	<button type="button" ng-click="detailVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Vehicle Details</b>
+			</span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<reg-vehicle-detail vehicle="detailVm.oVehicle"></reg-vehicle-detail>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-warning"
+			type="button"
+			ng-click="detailVm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label{
+		font-weight: bold !important;
+	}
+
+</style>
+
+

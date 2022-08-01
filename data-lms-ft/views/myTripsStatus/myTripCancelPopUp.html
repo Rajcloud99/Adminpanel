@@ -1,0 +1,125 @@
+<form role="form" name="myTripPopUp" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Trip No. {{trip.trip_no}}</h4>
+	</div>
+	<div class="modal-body" ng-if="tripUpdate">
+		<div class="justify col-md-12">
+			<h4 ng-if="isInfo" style="color: green;">{{infoMessage}}</h4><br>
+			<div class="row">
+				<div class="col-md-5">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Set Status</label>
+						<div class="col-sm-6">
+							<div class="">
+								<!--<select class="form-control" ng-model="trip.setStatus" ng-options="o for o in statusSet"
+										style="background-color: white;">
+									<option value="" disabled selected>Set Status</option>
+								</select>-->
+								{{trip.setStatus}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-7">
+					<div class="form-group m-b-0">
+						<label class="col-sm-2 control-label">Time</label>
+						<div class="col-sm-4">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+										   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="trip.date"
+										   is-open="$parent.opened1" datepicker-options="dateOptions" min-date="minDate"
+										   max-date="maxDate" close-text="Close" ng-change="changeTime3(trip.time)"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+							  	</span>
+							</div>
+						</div>
+						<label class="col-sm-1 control-label">HH</label>
+						<div class="col-sm-2">
+							<div class="select">
+								<select ng-model="$parent.hourSel1" ng-options="sAlert as sAlert for sAlert in aHours" class="form-control" ng-change="changeTime1(hourSel1)">
+								</select>
+							</div>
+						</div>
+						<label class="col-sm-1 control-label">MM</label>
+						<div class="col-sm-2">
+							<div class="select">
+								<select ng-model="$parent.minuteSel1" ng-options="sAlert as sAlert for sAlert in aMinutes" class="form-control"  ng-change="changeTime2(minuteSel1)">
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" ng-show="trip.setStatus == 'Trip cancelled'"  style="margin-top: 20px;">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Reason <span
+								class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<div class="select">
+								<select class="form-control" ng-model="trip.reason1" ng-options="r for r in aTripCancelReason"
+										required style="background-color: white;" r>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark <span
+								class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" class="form-control" ng-model="trip.remark1" required
+									   placeholder="Remark">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+			<br>
+		</div>
+	</div>
+	<div class="modal-footer" ng-if="tripUpdate">
+		<button class="btn btn-success waves-effect"
+				ng-disabled="!(trip.setStatus && trip.date && trip.remark1 && trip.reason1)"
+				ng-click="cancelTripInfo()">Cancel Trip
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 50%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

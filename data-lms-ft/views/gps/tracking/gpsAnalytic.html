@@ -1,0 +1,172 @@
+<!--Controller As : gAcVm -->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0" >
+		<div class="col-md-2">
+			<div class="fg-line form-group m-b-0">
+				<select chosen
+						class="form-control"
+						ng-model="gAcVm.selectedReport"
+						ng-options="item as item.name for item in gAcVm.report"
+						ng-change="gAcVm.reportOnChange()"
+						name="Consignor">
+					<option value="" selected disabled>Report Type</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<h5>{{gAcVm.tableTitle}}</h5>
+		</div>
+		<button class="btn btn-primary pull-right p-t-0 p-b-0 m-t-5"
+				style="margin-bottom: 3px;  font-size: 16px"
+				ng-click="gAcVm.downloadCsv(gAcVm.selectedReport.name)"
+		>
+			<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+		</button>
+		<div class="clear-fix"></div>
+		<div ng-if="gAcVm.selectedReport.name === 'Consignor Report'" class="pull-right" style="padding-top: 5px">
+			<div class="fg-line form-group m-b-0">
+						<span class="c-black"><b>Delay(100 - 71):</b>
+							<span style="margin-left: 10px; color: rgb(183, 183, 183);">Worst ,</b></span></span>&nbsp
+				<span class="c-black"><b>Delay(70 - 51):</b>
+							<span style="margin-left: 10px; color: rgb(183, 183, 183);">Not Ok ,</b></span></span>&nbsp
+				<span class="c-black"><b>Delay(50 - 31):</b>
+							<span style="margin-left: 10px; color: rgb(183, 183, 183);">Bad ,</b></span></span>&nbsp
+				<span class="c-black"><b>Delay(30 - 15):</b>
+							<span style="margin-left: 10px; color: rgb(183, 183, 183);">Good</b></span></span>
+				<span class="c-black"><b>Delay(15 - 0):</b>
+							<span style="margin-left: 10px; color: rgb(183, 183, 183);">Excellent</b></span></span>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-4" style="max-height: 600px; overflow: scroll">
+				<div class="col-md-12"
+					 ng-repeat="oGraph in gAcVm.aGraphObj track by $index">
+					<div class="col-md-12 m-l-5">
+						<div class="fg-line form-group m-b-0">
+							<select chosen
+									multiple
+									class="form-control"
+									ng-model="oGraph.selectedLegend"
+									ng-options="item as item.key for item in oGraph.tempGraphData"
+									ng-change="gAcVm.refreshKpiData(oGraph)"
+									name="Legend">
+								<option value="" disabled>Select All</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<dashboard graph="oGraph"
+								   graph-data="oGraph.graphData">
+							<ul class="lv-actions actions m-r-0">
+								<li class="btn-wave p-r-5">
+									<a href="javascript:void(0)"
+									   uib-tooltip="Show in Table"
+									   tooltip-placement="bottom"
+									   ng-click="gAcVm.showTableOfThisKpi(oGraph, $index);">
+										<i class="zmdi zmdi-tablet zmdi-hc-fw fs-25 pointer"
+										   ng-class="{'ja-green': $index === gAcVm.selectedKpiTable}"></i>
+									</a>
+								</li>
+							</ul>
+						</dashboard>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8"
+				 ja-lazy-load-repeat-name="TableData"
+				 ja-lazy-load-repeat="{{gAcVm.tableData || []}}"
+				 style="max-height: 600px; overflow: scroll">
+				<table class="table table-bordered unresponsive"
+					   ja-fix-head="jaArrTableData">
+					<thead>
+						<tr>
+							<th ng-repeat="head in gAcVm.tableHeader"
+								ng-if="!head.hideView"
+								ng-class="{pointer: !!head.onClick}"
+								ng-click="head.onClick()"
+								ng-bind-html="head.name|trustAsHtml"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="data in jaArrTableData"
+							class="pointer">
+							<td ng-repeat="head in gAcVm.tableHeader"
+								ng-class="head.class && gAcVm.getColor(data|parseTableData:head.class:this)"
+								ng-if="!head.hideView">{{ (data|parseTableData:head.key:this) || 'NA' }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	</div>
+
+<style>
+	dashboard .container:not(.ja-containter){
+		width: 100%;
+	}
+
+	.ja-green{
+		color: #039A03 !important;
+
+	}
+
+	.ja-red{
+		color: red;
+	}
+
+	.ja-grey{
+		color: #A6A5A5;
+	}
+
+
+	.ja-back{
+		position: absolute;
+		right: 40px;
+		top: 10px;
+		z-index: 1;
+	}
+
+	.ja-fullscreen{
+		position: fixed;
+		z-index: 10;
+		left: 0;
+		top: 40px;
+		width: 100% !important;
+		margin: 0 !important;
+		height: 100vh;
+		background: #0000003d;
+	}
+
+	.ja-fullscreen .card{
+		height: 80% !important;
+		width: 90%;
+		margin: 30px auto;
+		border-radius: 5px;
+	}
+
+	.nvd3-wrapper{
+		height: calc(100% - 100px) !important;
+		width: 100% !important;
+	}
+
+	nvd3, svg{
+		/*height: calc(100% - 40px) !important;*/
+		height: 100% !important;
+		width: 100% !important;
+	}
+
+	.unresponsive thead tr th{
+		min-width: 0 !important;
+		max-width: none !important;
+		padding: 5px 10px !important;
+	}
+</style>

@@ -1,0 +1,81 @@
+<form ng-controller="routeProfileCtrl">
+	<div ng-if="routes.length>0">
+		<div class="row" style="margin: 5px auto;">
+			<div class="col-md-12">
+				<h5 class="profile_h"><b>Route Details</b></h5>
+				<div class="detailList">
+					<ul>
+						<li><span>Source :</span> {{route.source.placeName}}, {{route.source.placeAddress}}</li>
+						<li><span>Source City:</span> {{route.source.c || 'NA'}}</li>
+	                    <li>
+		                    <button type="submit" title="Show On Map" class="btn btn-primary" ng-disabled="!(route.routeWayPoints[0].route)" ng-click="showOnMap()">
+								<i class="glyphicon glyphicon-map-marker"></i>
+							</button>
+						</li>
+					</ul>
+					<ul>
+	                    <li><span>Destination :</span> {{route.destination.placeName}}, {{route.destination.placeAddress}}</li>
+	                    <li><span>Destination City:</span> {{route.destination.c || 'NA'}}</li>
+	                    <li><span>Route Distance :</span> {{(route.route_distance ? route.route_distance+' Km' : '') || 'NA'}}</li>
+					</ul>
+					<ul>
+			            <table ng-show="route.toll_taxes.length" ng-table="tableParams" class="table">
+					        <tr ng-repeat="vSelect in route.toll_taxes track by $index">
+					        	<td data-title="'#'">{{$index+1}}</td>
+								<td data-title="'Intermediate City'">{{vSelect.city.c}},{{vSelect.city.st}}</td>
+								<td data-title="'Remarks'">{{vSelect.remarks}}</td>
+					        </tr>
+					    </table>
+	                </ul>
+				</div>
+			</div>
+		</div><br>
+		<!--<div class="row" style="margin: 5px auto;">-->
+			<!--<div class="col-md-12">-->
+				<!--<h5 class="profile_h"><b>Vehicle Details</b></h5>-->
+				<!--<div class="detailList">-->
+					<!--<table ng-show="route.route_time.length" ng-table="tableParams" class="table">-->
+				        <!--<tr ng-repeat="vVehicle in route.route_time track by $index">-->
+				        	<!--<td data-title="'#'">{{$index+1}}</td>-->
+							<!--<td data-title="'Vehicle Type'">{{vVehicle.vehicle_type_name}}</td>-->
+							<!--<td data-title="'up_time'"><span ng-if="vVehicle.up_time.days">{{vVehicle.up_time.days}}days/</span><span ng-if="vVehicle.up_time.hours">{{vVehicle.up_time.hours}}hours</span></td>-->
+							<!--<td data-title="'down_time'"><span ng-if="vVehicle.down_time.days">{{vVehicle.down_time.days}}days/</span><span ng-if="vVehicle.down_time.hours">{{vVehicle.down_time.hours}}hours</span></td>-->
+							<!--<td data-title="'Diesel(Ltrs.)'">{{vVehicle.diesel_allot}}</td>-->
+							<!--<td data-title="'Cash(Rs.)'">{{vVehicle.cash_allot}}</td>-->
+							<!--<td data-title="'Toll Tax(Rs.)'">{{vVehicle.toll_tax}}</td>-->
+				        <!--</tr>-->
+					<!--</table>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div><br>-->
+		<div class="row" style="margin: 5px auto;">
+			<div class="col-md-12">
+				<h5 class="profile_h"><b>User Details</b></h5>
+				<div class="detailList">
+					<ul>
+						<!-- <li><span>Creater Employee Code :</span> {{route.created_by_employee_code || 'NA'}}</li> -->
+	                    <li><span>Created By :</span> {{route.created_by_name || 'NA'}}</li>
+	                    <li><span>Created Date :</span> {{route.created_at | date:'dd-MM-yyyy' || 'NA'}}</li>
+	                    <!-- <li><span>Last Modifier Employee Code :</span> {{route.last_modified_employee_code || 'NA'}}</li> -->
+	                    <li><span>Last Modified By :</span> {{route.last_modified_by_name || 'NA'}}</li>
+	                </ul>
+				</div>
+			</div>
+			<!-- <div class="col-md-12">
+				<h4 style="margin-left: 19px;">Document Details</h4>
+				<div class="detailList">
+					<ul>
+						<li><span>Driver Photo :</span> {{driver.photo ? "Uploaded" : "Not Uploaded"}}</li>
+						<li><span>Address Proof Front Copy :</span> {{driver.address_proof_front_copy ? "Uploaded" : "Not Uploaded"}}</li>
+						<li><span>Address Proof Back Copy :</span> {{driver.address_proof_back_copy ? "Uploaded" : "Not Uploaded"}}</li>
+						<li><span>Driver License Front Copy :</span> {{driver.license_front_copy ? "Uploaded" : "Not Uploaded"}}</li>
+						<li><span>Driver License Back Copy :</span> {{driver.license_back_copy ? "Uploaded" : "Not Uploaded"}}</li>
+		            </ul>
+				</div>
+			</div> -->
+		</div>
+	</div>
+	<div ng-show="routes.length <= 0">
+        <h4 style="text-align: center;color: darkgrey;">You have no route registered. Please Register First.</h4>
+    </div>
+</form>

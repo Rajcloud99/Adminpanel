@@ -1,0 +1,180 @@
+<div class="container" ng-controller="addGrMasterCtrl">
+  <div class="card">
+    <form name="add_gr_master" novalidate autocomplete="off">
+      <div class="row" style="margin:15px;">
+        <div class="col-md-12">
+          <h3 class="text-center">Add GR</h3>
+        </div>
+      </div>
+      <div class="row" style="margin:15px;">
+        <div>
+          <label class="radio radio-inline" style="margin-left: 504px;">
+              <input type="radio" ng-model="oGrMaster.isCentralized" ng-checked="true" name="inlineRadioOptions" ng-value="false">
+              <i class="input-helper"></i>
+              Manual
+          </label>
+
+          <label class="radio radio-inline">
+              <input type="radio" ng-model="oGrMaster.isCentralized" name="inlineRadioOptions" ng-value="true">
+              <i class="input-helper"></i>
+              Centralized
+          </label>
+        </div>
+      </div>
+      <div class="row" style="margin:5px">
+        <div ng-if="!oGrMaster.isCentralized" class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">Branch Name: <span style="color: red;">*</span> </label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <select ng-model="oGrMaster.temp_data" ng-options="branch as branch.name for branch in aBranches" class="form-control" required>
+                  <option value="" style="display: none;"> Select Branch </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="oGrMaster.isCentralized" class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">Branch Name: <span style="color: red;">*</span> </label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-init="oGrMaster.branch_name = 'Centralized'" ng-model="oGrMaster.branch_name" class="form-control" readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-if="oGrMaster.isCentralized" class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">Make it active: <span style="color: red;">*</span> </label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="checkbox" class="checkbox" ng-model="oGrMaster.isActive">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <div ng-if="oGrMaster.isCentralized" class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+          <label class="checkbox checkbox-inline m-r-20" >
+          <input type="checkbox" ng-model="selected">
+            <i class="input-helper"></i>
+            All
+          </label>
+        </div> -->
+
+      </div>
+      <div class="row" style="margin:5px">
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">Book No.: <span style="color: red;">*</span> </label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-model="oGrMaster.book_no" class="form-control" required>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">Book Year: <span style="color: red;">*</span></label>
+            <div class="col-sm-6">
+              <div class="fg-line" ng-readonly="form_branch_read_only">
+                <input type="text" ng-model="oGrMaster.book_year" class="form-control" required>
+              </div>
+            </div>
+          </div>
+        </div>
+		  <div class="col-md-6">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-4 control-label">Format: </label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  <input type="text"
+								 placeholder=""
+								 ng-model="oGrMaster.format"
+								 name="format"
+								 class="form-control">
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+      </div>
+      <div ng-if="oGrMaster.isCentralized" class="row" style="margin:5px">
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">GR Code: <span style="color: red;">*</span> </label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-model="oGrMaster.grCode" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">GR Series: <span style="color: red;">*</span> </label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-model="oGrMaster.grSeries" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-if="!oGrMaster.isCentralized" class="row" style="margin:5px">
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">Series Start.: <span style="color: red;">*</span> </label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-model="oGrMaster.gr_no_start" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group m-b-0">
+            <label class="col-sm-4 control-label">Series End: <span style="color: red;">*</span></label>
+            <div class="col-sm-6">
+              <div class="fg-line" ng-readonly="form_branch_read_only">
+                <input type="text" ng-model="oGrMaster.gr_no_end" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+			<div class="row" style="margin:5px">
+				<div class="col-md-12">
+					<label class="col-sm-2 control-label">Description: <span style="color:red;">*</span></label>
+					<div class="col-sm-9">
+						<div class="fg-line">
+							<textarea
+									class="form-control"
+									rows="3"
+									ng-model="oGrMaster.remark"
+									placeholder="Please specify the reason"
+									required
+							></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+
+      <div class="row" style="margin:5px">
+        <div class="col-md-12">
+          <button
+							type="submit"
+							class="btn btn-primary"
+							ng-click="saveGrMaster(add_gr_master)"
+							ng-disabled="!((oGrMaster.temp_data || oGrMaster.branch_name) && oGrMaster.book_no && oGrMaster.book_year && oGrMaster.remark)"
+							style="margin-bottom:15px;margin-right:30px"
+					>
+						Add
+					</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

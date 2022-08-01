@@ -1,0 +1,64 @@
+<div id="div_main_client">
+    <section id="section_main_client">
+        <div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+             id="messages-main">
+            <div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
+                <div class="lvh-search ng-scope sear">
+                    <input type="text" placeholder="Search Client ..."
+                           ng-model="clientTypeAheadValue" class="lvhs-input"
+                           typeahead="client.client_display_name as client.client_display_name for client in clientNames"
+                           typeahead-min-length="2" ng-change="getClientNames(clientTypeAheadValue)"
+                           typeahead-on-select="onClientTypeAheadSelect($item, $model, $label)" >
+                    <i class="lvh-search-close" ng-click="resetClientName()">×</i>
+                </div>
+                <div class="listview lv-user clk" style="overflow: auto;height:97%;">
+                    <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)"
+                         ng-repeat="client in clients"
+                         ng-click="selectClient(client,$index)">
+                        <div class="truck-desc">
+                            <div class="row">
+                                <div class="col-md-12 bold">
+                                    {{client.client_display_name}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagi" ng-show="total_pages>1">
+                        <pagination ng-change="pageChanged()" total-items="totalItems"
+                                    items-per-page="items_per_page" num-pages="numPages"
+                                    ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi"
+                                    boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+                                    first-text="&laquo;" last-text="&raquo;"></pagination>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="min-height: 600px;margin-left:20%;overflow: auto">
+                <div class="card-header">
+                    <h2 style="font-size: 18px">Client
+                    <span ng-show="clientName.length" style="margin-left:10px;">{{clientName}}
+                    </span>
+                    <span ng-show="client_action_tag.length " style="margin-left:10px;
+                    color:#B7B7B7">({{client_action_tag}})
+                    </span> </h2>
+                </div>
+                <button class="btn btn-primary waves-effect"
+                        style="margin-top:-45px;float: right;margin-right: 20px;"
+                        ng-click="addClient()" ng-show="client_show_add_button">
+                    Register New Client
+                </button>
+
+                <div class="card-header" style="margin: 0 auto;" ng-show="(client_show_no_data && !clients.length)">
+                    <h2 style="color: grey">
+                        No clients found
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <data ui-view value=""></data>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

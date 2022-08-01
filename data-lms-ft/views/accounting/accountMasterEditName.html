@@ -1,0 +1,66 @@
+<form name="accountMaster" ng-submit="submit(accountMaster)" autocomplete="off" novalidate>
+
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Edit Name</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+							({{operationType}})
+						</span>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Account DETAILS -->
+				<li class="list-group-item">
+				   <div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Name:  </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" autocomplete="off"
+												   placeholder="Edit name"
+												   ng-model="oAccountMaster.name"
+												   name="Edit Name"
+												   class="form-control"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--<div class="m-t-10" style="clear:both;"></div>-->
+							<!--<div class="col-md-4" ng-if="operationType=='Add'">-->
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button ng-disabled="isdisabled" class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="closeModal()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+	/*.container{
+		width: 48% !important;
+	}*/
+
+	.modal-dialog{
+		width: 40%;
+	}
+
+</style>

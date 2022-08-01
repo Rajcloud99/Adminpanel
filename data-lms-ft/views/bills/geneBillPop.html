@@ -1,0 +1,118 @@
+<div id="">
+    <form name="vehicleGroupEdit" class="form-horizontal" novalidate>
+        <div class="modal-header" >
+            <button type="button" ng-click="closeModal()" class="close"
+            data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" align="center">Generate Bill</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <!-- <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-5 control-label">Billing Party</label>
+                        <div class="col-sm-5">
+                            <div class="fg-line">
+                                <input type="text" ng-model="gBillData.billing_party_name" class="form-control" placeholder="Enter Here">
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label"> Billing Party Name:</label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="gBillData.biller_id" ng-options="item as item.name for item in aBiller" name="Billing Party" ng-change="billerChange()" required>
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Due Date</label>
+                        <div class="col-sm-6">
+                        <div class="fg-line">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                                <div ng-class="{ 'fg-toggled': opened2 == true }">
+                                    <input ng-click="open($event, 'opened2')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="gBillData.due_date" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="End Date" />
+                                </div>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label"> Apply GST:  </label>
+                        <div class="col-sm-6">
+                        	<div class="fg-line">
+                        		<label style="line-height: 30px">{{gBillData.apply_gst?"Yes":"No"}}</label>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <div class="row">
+            	<div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label"> Apply No Bill:  </label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                            	<input style="line-height: 30px" type="checkbox" ng-model="gBillData.apply_no_bill" name="apply_no_bill">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            	<div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label"> Billing Party Address:  </label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <textarea rows="3" ng-model="gBillData.billing_party_address" placeholder="Billing Address" name="billing_address" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">GSTIN State Code</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+
+                                <input style="line-height: 30px" type="text" ng-model="gBillData.gstin_state_code" class="form-control" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal-footer">
+        	<button class="btn btn-primary waves-effect"  ng-click="previewBill()">Preview</button>&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-success waves-effect"  ng-click="generateBill()">Generate</button>&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+        </div>
+    </form>
+</div>
+
+<style type="text/css">
+  .modal-dialog {width: 75%;
+        height: 173px
+    }
+  </style>

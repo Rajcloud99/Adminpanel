@@ -1,0 +1,136 @@
+<div ng-controller="vehicleGTController"> 
+    <div class="card m-b-0" style="background: none;box-shadow: none;width:48%;float: left; margin-left:12px;margin-right: 8px;padding-bottom: 10px" >
+            <div class="card" style="height:580px;overflow: hidden">
+                <div class="card-header">
+                    <h2 style="font-size: 18px">Vehicle Group</h2>
+                </div>
+
+                <div class="separator" style="width: 100%;height:1px;background-color: #EAEAEA"></div>
+                  <div class="card-header" style="margin: 0 auto;" ng-show="(!vehicleGroup.length)">
+                    <h2 style="color: grey">
+                        No Vehicle Group found
+                    </h2>
+                </div>
+                <div class="col-md-12">
+                             <input type="text"
+                               ng-model="oFilter.name"
+                               name="Name"
+                               placeholder="Name">
+                  
+                
+                <button class="btn btn-primary btn-sm waves-effect"
+                        uib-tooltip="Search"
+                        type="button"
+                        ng-click="getGroup()"
+                        tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+               
+        </button>
+
+         <button  class="btn btn-primary btn-sm waves-effect"
+                  uib-tooltip="add"
+                  tooltip-placement="bottom"
+                  ng-click="addVehicleGroup()"><i class="zmdi zmdi-account-add "></i>
+
+        </button>
+
+        <button  class="btn btn-primary btn-sm waves-effect"
+                 uib-tooltip="edit"
+                 tooltip-placement="bottom"
+                 ng-click="editVehicleGroup(selectGtGroup)"><i class="zmdi zmdi-edit"></i>
+
+        </button>
+
+        <button class="btn btn-danger btn-sm waves-effect"
+                uib-tooltip="delete"
+                tooltip-placement="bottom"
+                ng-click="deleteVehicleGroup(selectGtGroup)"><i class="zmdi zmdi-delete"></i>
+   
+        </button>
+        
+    </div>
+                <div class="col-md-12">
+                    <table ng-show="vehicleGroup.length" ng-table="tableParams" class="table">
+                        <tr ng-repeat="vSelect in vehicleGroup track by $index"
+                            ng-click="onClickGtGroup(vSelect, $index)"
+                            ng-class="{ 'grn': groupGtIndex === $index }"
+                            class="selectItem pointer">
+                            <td data-title="'#'">{{$index+1}}</td>
+                            <td data-title="'Name '">{{vSelect.name || 'NA'}}</td>
+                            <td data-title="'Code'">{{vSelect.code || 'NA'}}</td>
+                            <td data-title="'Description'">{{vSelect.desc || 'NA'}}</td>
+                            
+                        </tr>
+                    </table>
+                </div>
+            </div>
+    </div>
+
+    <div class="card m-b-0" style="background: none;box-shadow: none;width:48%;float: left;padding-bottom: 10px" >
+        <div class="card" style="overflow: hidden">
+            <div class="card-header">
+                <h2 style="font-size: 18px">Vehicle Type
+                </h2>
+            </div>
+           
+
+
+            <div class="separator" style="width: 100%;height:1px;background-color: #EAEAEA"></div>
+
+            <div class="card-header" style="margin: 0 auto;" ng-show="(!vehicleType.length)">
+                <h2 style="color: grey">
+                    No Vehicle Type Found
+                </h2>
+            </div>
+              <div class="col-md-12">
+                   <input type="text"
+                   ng-model="oFilter.vehicleType"
+                   name="Name"
+                   placeholder="Name">
+
+            <button class="btn btn-primary btn-sm waves-effect"
+                 uib-tooltip="Search"
+                 type="button"
+                 ng-click="getAllType(true)"
+                 tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+
+            </button>
+
+            <button  class="btn btn-primary btn-sm waves-effect"
+                     uib-tooltip="add"
+                     tooltip-placement="bottom"
+                     ng-click="addVehicleType()"><i class="zmdi zmdi-account-add "></i>
+
+            </button>
+
+            <button class="btn btn-primary btn-sm waves-effect"
+                    uib-tooltip="edit"
+                    tooltip-placement="bottom"
+                    ng-click="editVehicleType(selectGtType)"><i class="zmdi zmdi-edit"></i>
+
+            </button>
+
+            <button  class="btn btn-danger btn-sm waves-effect"
+                     uib-tooltip="delete"
+                    tooltip-placement="bottom"
+                    ng-click="deleteVehicleType(selectGtType)"><i class="zmdi zmdi-delete"></i>
+
+            </button>
+
+        </div>
+            <div class="col-md-12">
+                    <table ng-show="vehicleType.length" ng-table="tableParams" class="table">
+                        <tr ng-repeat="vSelect in vehicleType track by $index"
+                            ng-click="onClickGtType(vSelect, $index)"
+                            ng-class="{ 'grn': typeGtIndex === $index }"
+                            class="selectItem pointer">
+                            <td data-title="'#'">{{$index+1}}</td>
+                            <td data-title="'Name '">{{vSelect.name || 'NA'}}</td>
+                            <td data-title="'Code'">{{vSelect.code || 'NA'}}</td>
+                            <td data-title="'Group Name(Code)'">{{vSelect.group_name || 'NA'}}<span ng-if="vSelect.group_code">({{vSelect.group_code}})</span></td>
+                            
+                        </tr>
+                    </table>
+                </div>
+        </div>
+    </div>
+</div>

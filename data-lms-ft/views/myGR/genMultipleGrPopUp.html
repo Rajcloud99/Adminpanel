@@ -1,0 +1,106 @@
+<!-- Controller: genMultipleGrPopUpCtrl -->
+<!-- ControllerAs: gmgVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="gmgVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Add Multiple Gr</b>
+		</span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<form name="form" novalidate autocomplete="off">
+			<ul class="list-group list-group-flush">
+				<!--GR DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">GR DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12">
+								<div class="col-md-12">
+									<div ja-table
+										 table-body="gmgVm.aGr"
+										 table-head="gmgVm.tableHead"
+										 table-column-setting="gmgVm.columnSetting"
+										 table-height='200px'
+										 table-selectable='index'
+										 table-api="gmgVm.tableApi"
+										 table-selectable-model="gmgVm.aSelectedGr"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+<form name="addGrForm" ng-submit="gmgVm.submit(addGrForm)" novalidate autocomplete="off">
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!--Approval DETAILS-->
+				<li class="list-group-item">
+					<div class="card-body">
+						<span class="booking_list_header">Add Gr</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> ADD GR</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="number"
+														   ng-model="gmgVm.numOfGr"
+														   placeholder="Add Gr"
+														   name="grCount"
+														   ng-change="gmgVm.numValidation(gmgVm.numOfGr)"
+														   class="form-control">
+												</div>
+												<span class="error" ng-if="gmgVm.numError">
+														 {{gmgVm.numError}}</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="gmgVm.closeModal()">Close
+		</button>
+	</div>
+
+</form>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

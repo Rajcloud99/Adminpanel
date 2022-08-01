@@ -1,0 +1,290 @@
+<form name="DriverProfile" ng-controller="editSLDOController">
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Employee Id </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.employee_id" class="form-control" readonly style="background-color: white;">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Driver Name </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.name" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Father Name </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.father_name" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Mobile Number </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="driver.prim_contact_no" id="MobileNumberID" class="form-control" ng-minlength="10" ng-maxlength="10">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Employee Status </label>
+				<div class="col-sm-6">
+					<div class="select">
+                    	<select class="form-control" name="addrProof" id="addrProof" ng-model="driver.employee_status">
+                        	<option value="" disabled selected>Select Status</option>
+                        	<option value="temporary">Temporary</option>
+                       		<option value="permanent">Permanent</option>
+                    	</select>
+                	</div>
+				</div>
+            </div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Driver Age</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="driver.age" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Mother Name</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.mother_name" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">E-mail Id</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.email_id" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Insurance Company</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.insurance_company" class="form-control">
+					</div>
+				</div> 
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Insurance Policy No.</label> 
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.insurance_policy_number" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Insurance Amount </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="driver.insured_amount" class="form-control">
+					</div>
+				</div> 
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Gross Fixed Salary</label> 
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="driver.gross_fixed_salary" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Join Date</label>
+				<div class="col-sm-6">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="open($event, 'opened1')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="driver.date_of_joining" is-open="opened1" uib-datepicker-options="dateOptions" close-text="Close" placeholder="Select Date" />
+						</div>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Leave Date</label>
+				<div class="col-sm-6">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="open($event, 'opened2')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="driver.date_of_leaving" is-open="opened2" uib-datepicker-options="dateOptions" close-text="Close" placeholder="Select Date" />
+						</div>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Leave Reason</label> 
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.leave_reason" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Religion </label>
+				<div class="col-sm-6">
+					<div class="select">
+	                    <select class="form-control" name="religion" id="religion" ng-model="driver.religion">
+	                        <option value="" disabled selected>Select Religion</option>
+	                        <option value="hindu">Hindu</option>
+	                        <option value="muslim">Muslim</option>
+							<option value="sikh">Sikh</option>
+							<option value="christian">Christian</option>
+							<option value="buddhism">Buddhism</option>
+							<option value="jainism">Jainism</option>
+							<option value="other">Other</option>
+	                    </select>
+                	</div>
+				</div>
+            </div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Gender</label>
+				<div class="col-sm-6">
+					<div class="select">
+	                    <select class="form-control" ng-model="driver.gender">
+	                        <option value="" disabled selected>Select Gender</option>
+	                        <option value="male">Male</option>
+	                        <option value="female">Female</option>
+							<option value="other">Other</option>
+	                    </select>
+                	</div>
+				</div>
+            </div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Marital Status </label>
+				<div class="col-sm-6">
+					<div class="select">
+	                    <select class="form-control" ng-model="driver.marital_status">
+	                        <option value="" disabled selected>Select Marital Status</option>
+	                        <option value="married">Married</option>
+	                        <option value="single">Single</option>
+							<option value="widow">Widow</option>
+							<option value="widower">Widower</option>
+	                    </select>
+                	</div>
+				</div>
+            </div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Blood Group </label>
+				<div class="col-sm-6">
+					<div class="select">
+	                    <select class="form-control" ng-model="driver.blood_group">
+	                        <option value="" disabled selected>Select Blood Group</option>
+	                        <option value="A+">A+</option>
+	                        <option value="B+">B+</option>
+							<option value="O+">O+</option>
+							<option value="AB+">AB+</option>
+							<option value="A-">A-</option>
+							<option value="B-">B-</option>
+							<option value="AB-">AB-</option>
+						</select>
+                	</div>
+				</div>
+            </div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Education </label>
+				<div class="col-sm-6">
+					<div class="select">
+	                    <select class="form-control" name="education" id="education" ng-model="driver.education">
+	                        <option value="" disabled selected>Select Education</option>
+	                        <option value="primary">Primary</option>
+	                        <option value="secondary">Secondary</option>
+							<option value="senior_secondary">Senior Secondary</option>
+							<option value="graduate">Graduate</option>
+							<option value="post_graduate">Post Graduate</option>
+							<option value="diploma">Diploma</option>
+							<option value="doctorate">Doctorate</option>
+						</select>
+                	</div>
+				</div>
+            </div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-10">
+				<button type="submit" class="btn btn-primary" ng-disabled="!(DriverProfile.$dirty)"
+					ng-click="saveDriverDetails()" style="margin-bottom: 12px;">Save</button>
+			</div>
+		</div>
+	</div>
+</form>

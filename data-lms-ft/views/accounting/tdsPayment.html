@@ -1,0 +1,121 @@
+<!--Controller: tdsPaymentController-->
+<!--ControllerAs: tdspVm-->
+
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>TDS Payment</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form ng-submit="tdspVm.getTdsVouchers()" novalidate>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+								fill-date
+								type="text"
+								max-date="tdspVm.maxDate"
+								class="form-control"
+								placeholder="Till Date"
+								ng-model="tdspVm.oFilter.to_date"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<div class="col-xs-6">
+							<div class="select">
+								<select
+									class="form-control"
+									ng-model="tdspVm.oFilter.tdsSection"
+									ng-options="item.section as (item.section + '('+(item.source)+')') for item in $constants.tdsSources">
+									<option value="" selected disabled>Select TDS Section</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="tdspVm.oFilter={};tdspVm.aLedger = [];">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+				</div>
+
+				<div class="clearfix"></div>
+			</form>
+		</div>
+	</div>
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="col-md-12">
+
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Add Voucher"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="tdspVm.addPayment('edit')">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<div ja-table
+						 table-body="tdspVm.aVouchers"
+						 table-head="tdspVm.tableHead"
+						 table-height='500px'
+						 table-load="tdspVm.getTdsVouchers(true)"
+						 table-column-setting="tdspVm.columnSetting"
+						 table-selectable='tdspVm.selectType'
+						 table-api='tdspVm.tableApi'
+						 table-selectable-model="tdspVm.aSelectedVouchers"
+						 table-row-click-event="tdspVm.selectedVoucher()"
+					></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+	.container{
+		width: 98% !important;
+	}
+</style>

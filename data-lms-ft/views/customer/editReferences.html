@@ -1,0 +1,140 @@
+<form name="DriverReference" ng-controller="editDriverController">
+	
+	 <div class="row" style="margin:15px">
+	  <h5>Reference 1</h5>
+	   <hr>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Name</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.reference1.name"
+						 class="form-control">
+					</div>
+				</div>
+				
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Relation</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.reference1.relation_type" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Employee Code</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.reference1.employee_code" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+	  <div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="driver.reference1.address"
+						 class="form-control"></textarea>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Contact Number</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="driver.reference1.contact_no" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+	  <h5>Reference 2</h5>
+	   <hr>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Name</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.reference2.name"
+						 class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Relation</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.reference2.relation_type" class="form-control">
+					</div>
+				</div> 
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Employee Code</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.reference2.employee_code" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+	  <div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="driver.reference2.address"
+						 class="form-control"></textarea>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Contact Number</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="driver.reference2.contact_no" class="form-control">
+					</div>
+				</div> 
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+
+	
+	<div class="row">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-0">
+				<button type="submit" class="btn btn-primary" ng-disabled="!(DriverReference.$dirty)" style="margin-bottom: 3%;"
+					ng-click="saveDriverDetails()">Save</button>
+			</div>
+		</div>
+	</div>
+</form>

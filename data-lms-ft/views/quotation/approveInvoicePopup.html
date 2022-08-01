@@ -1,0 +1,55 @@
+<div class="modal-header">
+	<button type="button" ng-click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Approve Invoice</h4>
+</div>
+
+<div class="modal-body center">
+	<h3 style="text-align:center">Do you really want to approve this invoice?</h3>
+</div>
+
+<div class="modal-footer">
+	<button type="button" class="btn btn-success waves-effect" ng-click="approve()">Approve</button>&nbsp;&nbsp;&nbsp;
+	<button type="button" class="btn btn-warning" ng-click="closeModal()">Close</button>
+</div>
+
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td,
+	th {
+		text-align: center;
+	}
+
+	.modal .modal-header {
+		padding: 10px 23px;
+	}
+
+	.top-table {
+		width: 80%;
+		border: 1px solid #d3d3d3;
+		margin: 0 auto;
+	}
+
+	.top-table>table>thead>tr>th {
+		background: #1dd5ffcc;
+		border-right: 1px solid #ddd;
+	}
+
+	.top-table>table>tbody>tr>td {
+		border-right: 1px solid #ddd;
+	}
+</style>

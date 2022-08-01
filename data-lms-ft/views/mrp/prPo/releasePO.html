@@ -1,0 +1,151 @@
+<form role="form"  name="reelase" autocomplete="off" novalidate>
+  <div class="modal-header" style="padding-bottom: 5px;">
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Release PO</h4><br>
+  </div>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Bill Location</label>
+          <div class="col-sm-6">
+            <!--<div class="fg-line">
+              <input type="text" class="form-control" ng-model="selPOforRelease.billing_location" placeholder="enter here..." ng-readonly="true">
+            </div>-->
+			  {{selPOforRelease.billing_location || 'NA'}}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Ship Location</label>
+          <div class="col-sm-6">
+            <!--<div class="fg-line">
+              <input type="text" class="form-control" ng-model="selPOforRelease.shipping_location" placeholder="enter here..." ng-readonly="true">
+            </div>-->
+			  {{selPOforRelease.shipping_location || 'NA'}}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Vendor</label>
+          <div class="col-sm-6">
+            <!-- <div class="select">
+              <select class="form-control" placeholder="Select" ng-options="item as item.name for item in aPOvendor" ng-model="POvendorSel">
+                <option value="" selected> Select </option>
+              </select>
+            </div> -->
+            <!--<div class="fg-line">
+              <input type="text" class="form-control" ng-model= "selPOforRelease.vendor_name" ng-readonly="true">
+            </div>-->
+			  {{selPOforRelease.vendor_name || 'NA'}}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Tax</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="number" class="form-control" ng-model="selPOforRelease.tax" placeholder="enter here..." ng-readonly="true">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Freight</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="number" class="form-control" ng-model="selPOforRelease.freight" placeholder="enter here..." ng-readonly="true">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Grand Total</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="number" class="form-control" ng-model="selPOforRelease.total" placeholder="enter here..." ng-readonly="true">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+		  <div class="col-md-4">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-6 control-label">Freight Terms</label>
+				  <div class="col-sm-6">
+					  <!--<div class="fg-line">
+						  <input type="text" class="form-control" ng-model="selPOforRelease.freightTerms" placeholder="enter here..." ng-readonly="true">
+					  </div>-->
+					  {{selPOforRelease.freightTerms || 'NA'}}
+				  </div>
+			  </div>
+		  </div>
+		  <div class="col-md-4">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-6 control-label">Payment Terms</label>
+				  <div class="col-sm-6">
+					  <!--<div class="fg-line">
+						  <input type="text" class="form-control" ng-model="selPOforRelease.payment_terms" placeholder="enter here..." ng-readonly="true">
+					  </div>-->
+					  {{selPOforRelease.payment_terms || 'NA'}}
+				  </div>
+			  </div>
+		  </div>
+	  </div>
+    <div class="row" style="margin:15px">
+      <div class="" style="overflow-y: auto;min-height: 200px;">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="color:#fff;background: #2196f3;">Spare</th>
+              <th style="color:#fff;background: #2196f3;">Prev Rate</th>
+              <th style="color:#fff;background: #2196f3;">Qty.</th>
+              <th style="color:#fff;background: #2196f3;">New Rate</th>
+              <th style="color:#fff;background: #2196f3;">Inc Tax</th>
+              <th style="color:#fff;background: #2196f3;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-ng-repeat="objPO in selPOforRelease.spare track by $index" class="pointer">
+              <td>{{objPO.code + ' - ' +objPO.name }}</td>
+              <td>{{objPO.previousRate || 'NA'}}</td>
+              <td><input type="number" class="form-control" ng-model="objPO.quantity" ng-change="qtyChange(objPO, $index)"></td>
+              <td>{{objPO.rate}}</td>
+              <td>{{objPO.rate_inc_tax}}</td>
+              <td>{{objPO.total}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div ng-if="selPOforRelease.spare.length == 0" class="ms-body" style=" min-height: 50px;">
+          <h3> PO spare not found !!!!!</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin:15px"></div>
+
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success waves-effect" ng-click="releaseFinal(release)">Release</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()">Cancel</button>
+  </div>
+</form>
+<style type="text/css">
+  .modal-dialog {
+      width: 70%;
+    }
+  </style>
+

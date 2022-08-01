@@ -1,0 +1,253 @@
+<form role="form" name="addMoreGRForm" autocomplete="off" ng-submit="submit()">
+
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add More GR</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+
+			<div class="row" style="margin: 15px">
+
+				<div class="col-sm-12">
+					<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+						<div class="fg-line">
+							<input type="text" ng-model="booking" name="booking" class="form-control input-sm"
+										 placeholder="B. No." ng-model-options="{ updateOn: 'blur' }"
+										 ng-change="getBooking()" style="height: 34px;font-size: 13px;">
+						</div>
+					</div>
+					<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+						<div class="fg-line">
+							<div class="select">
+								<select class="form-control" placeholder="booking Type"
+												ng-options="item as item for item in $constants.aBookingTypes"
+												ng-model="bookingType" ng-change="getBooking()" style="height: 34px;">
+									<option value="" ng-click="getBooking()">Booking Type</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6 col-sm-2 m-b-5">
+						<div class="lvh-search ng-scope sear">
+							<input type="text" placeholder="Cutomer Search..." ng-model="bookingCustomer" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aCustomer" ng-change="getCname(bookingCustomer)" class="form-control"
+										 typeahead-on-select="getBooking()">
+							<i class="lvh-search-close" ng-click="bookingCustomer=undefined;getBooking()">×</i>
+						</div>
+					</div>
+					<div class="col-xs-6 col-sm-2 m-b-5">
+						<div class="lvh-search ng-scope sear">
+							<input type="text" placeholder="Consignor Search..." ng-model="bookingConsignor" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aConsignor" ng-change="getConsignor(bookingConsignor)" class="form-control" typeahead-on-select="getBooking()">
+							<i class="lvh-search-close" ng-click="bookingConsignor=undefined;getBooking()">×</i>
+						</div>
+					</div>
+					<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': xopened1 == true }">
+								<div ng-class="{ 'fg-toggled': xopened1 == true }">
+									<input
+											type="text"
+											class="form-control"
+											ng-click="DatePicker.openDatePicker(this, $event, 'xopened1')"
+											datepicker-popup="{{DatePicker.formats[0]}}"
+											show-weeks="false"
+											ng-model="start_date"
+											is-open="xopened1"
+											datepicker-options="DatePicker.dateSettings"
+											close-text="Close"
+											placeholder="Start date"
+											ng-change="getBooking()"
+									/>
+								</div>
+								<span class="input-group-btn">
+								<button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="DatePicker.openDatePicker(this, $event, 'xopened1')">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</button>
+		</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': xopened2 == true }">
+								<div ng-class="{ 'fg-toggled': xopened2 == true }">
+									<input
+											type="text"
+											class="form-control"
+											ng-click="DatePicker.openDatePicker(this, $event, 'xopened2')"
+											datepicker-popup="{{DatePicker.formats[0]}}"
+											show-weeks="false"
+											ng-model="end_date"
+											is-open="xopened2"
+											datepicker-options="DatePicker.dateSettings"
+											close-text="Close"
+											placeholder="End date"
+											ng-change="getBooking()"
+									/>
+								</div>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+													ng-click="DatePicker.openDatePicker(this, $event, 'xopened2')">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="lv-body">
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-md-12" style="min-height: 200px;">
+								<div class="clearfix"></div>
+								<div class="detailsList">
+									<div class="" style="overflow-y: auto;max-height: 250px;">
+										<table class="table table-bordered unresponsive">
+											<thead>
+											<tr>
+												<th>B. No.</th>
+												<th>B. Type</th>
+												<th>Customer</th>
+												<th>Consignor</th>
+												<th>Route(Distance)</th>
+												<th>Contract</th>
+												<th>Invoice</th>
+												<th>Progress</th>
+												<th>Preferred Vehicle</th>
+												<th>Material</th>
+												<th>Actual Weight (Tonne)</th>
+												<th>Served Weight (Tonne)</th>
+												<th>Remaining Weight (Tonne)</th>
+												<th>Date</th>
+												<th>Remark</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr data-ng-repeat="oBooking in aBookings" class="pointer selectItem"
+													ng-click="selectBookingFromList(oBooking, $index)"
+													ng-class="{grn: selectedBooking._id === oBooking._id}"
+													ng-init="oBooking.remaining_weight = oBooking.total_weight - (oBooking.served.servedWeight || 0)">
+												<td>{{oBooking.booking_no}}</td>
+												<td>{{oBooking.booking_type}}</td>
+												<td>{{oBooking.customer.name}}</td>
+												<td>{{oBooking.consigner.name}}</td>
+												<td>{{((oBooking.route | filterRoute) | mergeString:', ') || 'NA'}}</td>
+												<td>{{oBooking.contract_id.name || 'NA'}}</td>
+												<td>{{oBooking.factory_invoice_number || 'NA'}}</td>
+												<td>
+													{{oBooking | calculateProgress}}%
+													<uib-progressbar class="progress-striped active"
+																					 value="oBooking | calculateProgress"
+																					 type="success"><b>{{(oBooking | calculateProgress) | roundOff}}%</b>
+													</uib-progressbar>
+												</td>
+												<td>{{(oBooking.preference | preferredVehicleArrayToArrayOfString:'name') |
+													mergeString:', '}}
+												</td>
+												<td>{{oBooking.material_type.name}}
+													({{oBooking.material_type.group_name}})
+												</td>
+												<td>{{(oBooking.total_weight || 0) | roundOff}}</td>
+												<td>{{(oBooking.served.servedWeight || 0) | roundOff}}</td>
+												<td>{{(oBooking.total_weight - oBooking.served.servedWeight) | roundOff}}
+												</td>
+												<td>{{oBooking.booking_date | date:'dd-MMM-yyyy'}}</td>
+												<td>{{oBooking.remark || 'NA'}}</td>
+											</tr>
+											</tbody>
+										</table>
+										<div ng-if="aBookings == 0" class="ms-body" style=" min-height: 50px;">
+											<h3>No any Booking available !!!!!</h3>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 m-t-10">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Route Search..."
+												 ng-model="route" class="lvhs-input"
+												 typeahead-wait-ms="10"
+												 typeahead="item as item.name for item in aRoute | filter:$viewValue"
+												 ng-change="getDname(route)" class="form-control"
+									>
+									<i class="lvh-search-close" ng-click="route=''">×</i>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-6 m-t-10">
+									<input type="number" placeholder="Weight" ng-model="weight" class="form-control">
+									<i class="lvh-search-close">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="modal-footer">
+		<span class="req_r" ng-bind="err"></span>&nbsp;&nbsp;&nbsp;
+		<button type="submit" class="btn btn-success waves-effect">Add</button>
+		<button type="button" class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+
+
+
+
+<style>
+	.modal-dialog {
+		width: 80%;
+		height: 200px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td,
+	th {
+		text-align: center;
+	}
+
+	.modal .modal-header {
+		padding: 10px 23px;
+	}
+
+	.top-table {
+		width: 80%;
+		border: 1px solid #d3d3d3;
+		margin: 0 auto;
+	}
+
+	.top-table > table > thead > tr > th {
+		background: #1dd5ffcc;
+		border-right: 1px solid #ddd;
+	}
+
+	.top-table > table > tbody > tr > td {
+		border-right: 1px solid #ddd;
+	}
+	.box ul li {
+		list-style: none;
+		width: 165px;
+		float: left;
+		background: #eee;
+		padding: 2px;
+		margin-left: 10px;
+	}
+	.box ul li span:nth-child(2) {
+		background: red;
+		padding: 1px 6px;
+		border-radius: 50%;
+		color: #fff;
+	}
+</style>

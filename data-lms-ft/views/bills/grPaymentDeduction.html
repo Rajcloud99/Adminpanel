@@ -1,0 +1,60 @@
+<!--Controller: grPaymentDeductionController-->
+<!--ControllerAs: vm-->
+
+<div class="modal-header p-b-0">
+	<button type="button" ng-click="vm.closePopup()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Driver Payment</h4><br>
+	<ul class="list-group list-group-flush">
+		<!-- DETAILS -->
+
+		<li class="list-group-item">
+			<div class="card-body">
+				<div class="row" style="overflow-y: auto; max-height: 300px;">
+					<div class="col-md-12">
+						<table class="table table-bordered unresponsive">
+							<thead>
+							<tr>
+								<th>S.No.</th>
+								<th>Gr Number</th>
+								<th>Payment Type</th>
+								<th>Vch Date</th>
+								<th>Amount</th>
+								<th>Ref. No.</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="payment in vm.aPayment"
+								class="pointer">
+								<td>{{$index+1}}</td>
+								<td>{{payment.grNumber || payment.tMemoNo|| 'NA'}}</td>
+								<td>{{payment.vT || 'NA'}}</td>
+								<td>{{(payment.date || payment.paymentDate) | date: 'dd-MM-yyyy' || 'NA'}}</td>
+								<td>{{payment.amount || '0'}}</td>
+								<td>{{payment.refNo || 'NA'}}</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+<style type="text/css">
+	.modal-dialog {
+		width: 60%;
+		height: 173px
+	}
+
+	.strikeThrough {
+		text-decoration: line-through;
+	}
+
+	.activeBill {
+		background-color: #9af019;
+	}
+
+</style>

@@ -1,0 +1,194 @@
+<!-- Controller: genBillOBalUpsert as vm -->
+
+
+<div class="container" style="">
+	<div class="m-b-0" ng-class="{readonly: vm.readonly}" id="messages-main" >
+		<form name="genBill" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<!--<span class="booking_list_header">Gr Details: </span>-->
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-2" ng-if="!vm.readonly">
+									<div class="">
+										<input type="text"
+											   placeholder="Billing Party..."
+											   ng-model="vm.billingParty"
+											   style="padding-left: 5px !important;"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in vm.getBillingParty($viewValue)"
+											   class="form-control lvhs-input"
+											   required
+											   typeahead-on-select="vm.onBPSelect($item, $model, $label)">
+										<i class="lvh-search-close"
+										   ng-click="vm.billingParty='';">×</i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Bills: </span>
+						<div class="pull-right">
+							<button class="btn btn-primary"
+									ng-disabled="vm.mode === 'edit'"
+									uib-tooltip="Add Bill"
+									ng-click="vm.addBill()">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-danger"
+									ng-disabled="vm.mode === 'edit'"
+									uib-tooltip="Remove Bill"
+									tooltip-placement="bottom"
+									ng-click="vm.aBill.splice(vm.iSelectedBill, 1)">
+								<i class="zmdi zmdi-minus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+						</div>
+
+						<div class="card-body m-t-10" style="overflow: auto; min-height: 450px">
+							<table class="table table-bordered unresponsive">
+								<thead>
+									<tr>
+										<th style="min-width: 40px;">#</th>
+										<th style="min-width: 110px;">Bill Date</th>
+										<th style="min-width: 130px;">Bill No.</th>
+										<th>Amount</th>
+<!--										<th style="min-width: 70px;">CGST(%)</th>-->
+<!--										<th style="min-width: 70px;">SGST(%)</th>-->
+<!--										<th style="min-width: 70px;">IGST(%)</th>-->
+<!--										<th>CGST</th>-->
+<!--										<th>SGST</th>-->
+<!--										<th>IGST</th>-->
+<!--										<th>Total Amount</th>-->
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="oBill in vm.aBill"
+										ng-class="{'grn': vm.iSelectedBill === $index}"
+										ng-click="vm.oSelectedBill = oBill; vm.iSelectedBill = $index">
+										<td>{{$index+1}}</td>
+										<td>
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened1 == true }">
+												<div ng-class="{ 'fg-toggled': opened1 == true }">
+													<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+														   type="text"
+														   class="form-control"
+														   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+														   show-weeks="false"
+														   max-date="vm.DatePicker.newDate"
+														   ng-model="oBill.billDate"
+														   is-open="opened1"
+														   datepicker-options="vm.DatePicker.dateSettings"
+														   close-text="Close"
+														   required
+														   placeholder="Bill Date"/>
+												</div>
+												<span class="input-group-btn">
+													<button type="button"
+															class="btn btn-default m-t-0 f12"
+															ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+															class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</div>
+										</td>
+										<td>
+											<div class="fg-line form-group m-b-0">
+												<input type="text"
+													   ng-model="oBill.billNo"
+													   name="bill_no"
+													   class="form-control input-sm"
+													   placeholder="Bill No."
+													   required
+													   ng-model-options="{ updateOn: 'blur' }">
+											</div>
+										</td>
+										<td>
+											<div class="fg-line form-group m-b-0">
+												<input type="number"
+													   ng-model="oBill.amount"
+													   ng-change="vm.calAmt(oBill);"
+													   class="form-control input-sm"
+													   placeholder="Amount"
+													   required
+													   ng-model-options="{ updateOn: 'blur' }">
+											</div>
+										</td>
+<!--										<td>-->
+<!--											<div class="fg-line form-group m-b-0"-->
+<!--												 ng-if="!oBill.iGST_percent">-->
+<!--												<input type="number"-->
+<!--													   ng-model="oBill.cGST_percent"-->
+<!--													   class="form-control input-sm"-->
+<!--													   min="0"-->
+<!--													   max="100"-->
+<!--													   ng-change="vm.calAmt(oBill);"-->
+<!--													   placeholder="CGST(%)"-->
+<!--													   ng-model-options="{ updateOn: 'blur' }">-->
+<!--											</div>-->
+<!--											<span ng-if="oBill.iGST_percent">-->
+<!--												{{oBill.cGST_percent}}-->
+<!--											</span>-->
+<!--										</td>-->
+<!--										<td>{{oBill.sGST_percent}}</td>-->
+<!--										<td>-->
+<!--											<div class="fg-line form-group m-b-0"-->
+<!--												 ng-if="!oBill.cGST_percent">-->
+<!--												<input type="number"-->
+<!--													   ng-model="oBill.iGST_percent"-->
+<!--													   ng-change="vm.calAmt(oBill);"-->
+<!--													   ng-readonly="oBill.cGST_percent"-->
+<!--													   min="0"-->
+<!--													   max="100"-->
+<!--													   class="form-control input-sm"-->
+<!--													   placeholder="IGST(%)"-->
+<!--													   ng-model-options="{ updateOn: 'blur' }">-->
+<!--											</div>-->
+
+<!--											<span ng-if="oBill.cGST_percent">-->
+<!--												{{oBill.iGST_percent}}-->
+<!--											</span>-->
+<!--										</td>-->
+<!--										<td>{{oBill.cGST}}</td>-->
+<!--										<td>{{oBill.sGST}}</td>-->
+<!--										<td>{{oBill.iGST}}</td>-->
+<!--										<td>{{oBill.totalAmount}}</td>-->
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body text-center">
+							<button ng-click="vm.submit(genBill)"
+									class="btn btn-primary">SUBMIT</button>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+
+	.red {
+		color: red;
+	}
+
+	.border-red {
+		border: 2px solid #ff000080 !important;
+	}
+
+	.container:not(.ja-containter) {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+</style>

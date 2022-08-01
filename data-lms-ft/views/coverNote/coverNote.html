@@ -1,0 +1,183 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Cover Note</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" >
+		<div class="card-header" style="padding: 0px 25px;">
+			<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<select chosen class="form-control"
+						ng-options="item as item for item in vm.aCategory"
+						ng-model="vm.status">
+					<option value="">Search by Status</option>
+				</select>
+			</div>
+			-->
+			<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+				<select chosen class="form-control"
+						placeholder="Select ClientR"
+						ng-options="item.lms_id as item.name for item in $configs.clientR"
+						ng-model="vm.lmsId">
+					<option value="" disabled>
+						Select Client
+					</option>
+				</select>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input type="text" placeholder="Customer Search..." ng-model="vm.oFilter.grCustomer"
+						   class="lvhs-input" typeahead-wait-ms="10"
+						   typeahead="item as item.name for item in vm.aCustomer"
+						   ng-change="vm.getCustomer(vm.oFilter.grCustomer)" class="form-control">
+					<i class="lvh-search-close" ng-click="vm.oFilter.grCustomer='';getCoverNote()">×</i>
+				</div>
+			</div>
+			<!--<form>-->
+			<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear">
+					<input type="text"
+						   placeholder="Vendor Search..."
+						   ng-model="vm.vendor"
+						   class="lvhs-input" typeahead-wait-ms="10"
+						   typeahead="item as item.name for item in vm.aVendor"
+						   ng-change="vm.getVendorName(vm.vendor)"
+						   class="form-control"
+						   typeahead-on-select="vm.onSelect($item, $model, $label)">
+					<i class="lvh-search-close" ng-click="vm.vendor='';vm.getCoverNote()">×</i>
+				</div>
+			</div>-->
+			<div class="col-md-2">
+				<div class="lvh-search ng-scope sear chosen-row-3">
+					<input type="text" placeholder="Billing Search..."
+						   ng-model="vm.oFilter.billingParty" class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="person as person.name for person in vm.aBilling | filter:$viewValue"
+						   ng-change="vm.getBilling(vm.oFilter.billingParty)" class="form-control"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.billingParty='';vm.getCoverNote();">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }"
+					 style=" ">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="vm.start_date"
+							   is-open="opened1"
+							   datepicker-options="vm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="From Date"
+							   name="Date start"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+							<button type="button"
+									class="btn btn-default m-t-0 f12"
+									ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+									class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+				</div>
+			</div>
+
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+					 style=" ">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="vm.DatePicker.	 openDatePicker(this, $event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="vm.end_date"
+							   min-date="vm.start_date"
+							   is-open="opened2"
+							   datepicker-options="vm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="To Date"
+							   name="Date end"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+							<button type="button"
+									class="btn btn-default m-t-0 f12"
+									ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+									class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="form-group m-b-0 text-center">
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Search"
+							ng-click="vm.getCoverNote()"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<!--<button class="btn btn-primary p-t-0 p-b-0"-->
+					<!--style="margin-top: 5px;  font-size: 16px"-->
+					<!--uib-tooltip="Clear Search"-->
+					<!--tooltip-placement="bottom"-->
+					<!--type="button"-->
+					<!--ng-click="vm.requestFilter={};vm.getAllTrip()">-->
+					<!--<i class="zmdi zmdi-close zmdi-hc-fw"></i>-->
+					<!--</button>-->
+				</div>
+			</div>
+			<!--</form>-->
+			<div class="btns" ng-if="vm.status === 'Vehicle Given'">
+				<button class="btn btn-primary waves-effect"
+						ng-click="vm.makeCoverNote()">Make CoverNote
+				</button>
+			</div>
+			<div class="btns" ng-if="vm.status === 'Vehicle Hire'">
+				<button class="btn btn-primary waves-effect"
+						ng-click="vm.generateGr()">Generate GR
+				</button>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card card-header">
+		<div class="row">
+			<div class="col-md-12">
+				<div ja-table
+					 ng-if="vm.showTable"
+					 table-body="vm.aCoverNote"
+					 table-head="vm.tableHead"
+					 table-height='500px'
+					 table-load="vm.getCoverNote(true)"
+					 table-column-setting="vm.columnSetting"
+					 table-selectable="'multiple'"
+					 table-api="vm.tableApi"
+					 table-selectable-model="vm.grs"
+				></div>
+			</div>
+	</div>
+  </div>
+</div>
+
+
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+</style>

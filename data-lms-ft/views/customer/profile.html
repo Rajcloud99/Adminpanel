@@ -1,0 +1,72 @@
+<div ng-controller="customerProfileCtrl">
+	<div class="row">
+    <div class="col-md-12">
+      <div class="detailList">
+        <ul>
+          <li ng-if="customer.customerId"><span>Customer Id</span>  : {{customer.customerId}}</li>
+          <li ng-if="customer.branch"><span>Branch</span>  : {{ customer.branch.name }}</li>
+          <li ng-if="customer.category"><span>Category</span>  : {{ customer.category }}</li>
+          <li ng-if="customer.name"><span>Name</span>  : {{customer.name}}</li>
+          <li ng-if="customer.account"><span>Account</span>  : {{customer.account.name}}</li>
+          <li ng-if="customer.address.line1"><span>Address Line 1</span>  : {{customer.address.line1}} </li>
+          <li ng-if="customer.address.line2"><span>Address Line 2</span>  : {{customer.address.line2}}</li>
+          <li ng-if="customer.address.city"><span>City</span>  : {{customer.address.city}}</li>
+          <li ng-if="customer.address.district"><span>District</span>  : {{customer.address.district}}</li>
+          <li ng-if="customer.address.state"><span>State</span>  : {{customer.address.state}}</li>
+          <li ng-if="customer.clientName"><span>ClientR</span>  : {{customer.clientName}}</li>
+          <li ng-if="customer.address.pincode"><span>Pincode</span>  : {{customer.address.pincode}}</li>
+          <li ng-if="customer.address.country"><span>Country</span>  : {{customer.address.country}}</li>
+          <li ng-if="customer.status"><span>Status</span>  : {{customer.status}}</li>
+          <li><span>GSTIN Registered</span>  : {{customer.gstin_registered?"Registered":"Not Registered"}}</li>
+          <li ng-if="customer.gstin_no"><span>GSTIN</span>  : {{customer.gstin_no}}</li>
+          <li ng-if="customer.pan_no"><span>PAN No.</span>  : {{customer.pan_no}}</li>
+          <li ng-if="customer.vendor_code"><span>Vendor Code</span>  : {{customer.vendor_code}}</li>
+          <li ng-if="customer.state_code"><span>State Code</span>  : {{customer.state_code}}</li>
+          <li ng-if="customer.type.length>0"><span>Type</span>  : <label ng-repeat="type in customer.type"> {{type}}, </label></li>
+          <li ng-if="customer.customer"><span>Customer</span>  : {{customer.customer.name}}</li>
+          <li ng-if="customer.company_type"><span>Company Type</span>  : {{customer.company_type}}</li>
+          <li ng-if="customer.service_tax_no"><span>Service Tax No.</span>  : {{customer.service_tax_no}}</li>
+          <li ng-if="customer.tin_no"><span>Tin No.</span>  : {{customer.tin_no}}</li>
+          <li ng-if="customer.prim_contact_name"><span>A/C Contact Name</span>  : {{customer.prim_contact_name}}</li>
+          <li ng-if="customer.prim_contact_designation"><span>Designation</span>  : {{customer.prim_contact_designation}}</li>
+          <li ng-if="customer.prim_cont_no"><span>A/C Contact No.</span>  : {{customer.prim_cont_no}}</li>
+          <li ng-if="customer.sec_contact_name"><span>Marketing Contact Name</span>  : {{customer.sec_contact_name}}</li>
+          <li ng-if="customer.sec_contact_designation"><span>Designation</span>  : {{customer.sec_contact_designation}}</li>
+          <li ng-if="customer.sec_cont_no"><span>Marketing Contact No.</span>  : {{customer.sec_cont_no}}</li>
+          <li ng-if="customer.other_cont_no"><span>Other Contact No</span>  : {{customer.other_cont_no}}</li>
+          <li ng-if="customer.prim_email"><span>Account Email</span>  : {{customer.prim_email}}</li>
+          <li ng-if="customer.alt_email1"><span>Marketing Email</span>  : {{customer.alt_email1}}</li>
+          <li ng-if="customer.alt_email2"><span>Alt. Email 2</span>  : {{customer.alt_email2}}</li>
+          <li ng-if="customer.active_contract"><span>Active Contract</span>  : {{customer.active_contract}}</li>
+          <li ng-if="customer.sap_id"><span>SAP ID</span>  : {{customer.sap_id}}</li>
+          <li ng-if="customer.remarks"><span>Remarks</span>  : {{customer.remarks}}</li>
+          <li ng-if="customer.black_listed"><span>Black Listed</span>  : {{customer.black_listed}}</li>
+          <li ng-if="customer.created_at"><span>Created At</span>  : {{customer.created_at}}</li>
+          <li ng-if="customer.last_modified_at"><span>Last Modified At</span>  : {{customer.last_modified_at}}</li>
+          <li ng-if="customer.last_modified_at"><span>Last Modified By</span>  : {{customer.last_modified_by_name}}</li>
+          <li ng-if="$configs.master.customer.add.required.ecc && customer.ecc"><span>ECC</span>  : {{customer.ecc}}</li>
+        </ul>
+      </div>
+    </div>
+	<div ng-show="customer.documents.length>0" class="col-md-12">
+			<h5 class="profile_h">Document Details</h5>
+			<div class="detailList">
+				<!--<ul>
+					<li><span>Driver Photo :</span> {{driver.photo ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Address Proof Front Copy :</span> {{driver.address_proof_front_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Address Proof Back Copy :</span> {{driver.address_proof_back_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Driver License Front Copy :</span> {{driver.license_front_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Driver License Back Copy :</span> {{driver.license_back_copy ? "Uploaded" : "Not Uploaded"}}</li>
+	            </ul>-->
+				<table ng-table="tableParams" class="table">
+					<tr ng-repeat="f in customer.documents track by $index">
+						<td data-title="'File Name '">{{f.name}}</td>
+						<td data-title="'Preview'">
+							<button ng-click="$event.preventDefault();previewFile(f.docReference)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-show="f.docReference">Preview</button >
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+  </div>
+</div>

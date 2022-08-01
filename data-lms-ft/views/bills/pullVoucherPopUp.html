@@ -1,0 +1,56 @@
+<!-- Controller: pullVoucherPopUpCtrl-->
+<!-- ControllerAs: pvVm-->
+
+<div class="modal-header">
+	<button type="button" ng-click="pvVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Pull Voucher</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<form novalidate autocomplete="off" name="pullVoucher">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-10">
+									<div class="form-group m-b-0">
+										<label class="col-sm-2 control-label">Ref No:</label>
+										<div class="col-sm-6">
+											<div class="lvh-search ng-scope sear">
+												<input
+														type="text"
+														class="form-control lvhs-input"
+														placeholder="Ref No..."
+														name="Ref no"
+														ng-model="pvVm.refNo"
+														typeahead-wait-ms="10"
+														typeahead="item as item.refNo for item in pvVm.getRef($viewValue) | limitTo:10">
+												<i class="lvh-search-close" ng-click="pvVm.refNo=''">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-success waves-effect" ng-click="pvVm.submit()">Submit</button>&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-warning" ng-click="pvVm.closeModal()">Close</button>
+</div>
+<style type="text/css">
+	.modal-dialog {
+		width: 40%;
+		height: 150px
+	}
+</style>

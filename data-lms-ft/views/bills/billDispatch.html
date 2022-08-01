@@ -1,0 +1,217 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:15px;">
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="myFilter.bill_no"
+						   name="bill_no"
+						   class="form-control input-sm"
+						   placeholder="Bill No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input
+							type="text"
+							ng-model="myFilter.gr_no"
+							name="gr_no"
+							class="form-control input-sm"
+							placeholder="GR No."
+							ng-model-options="{ updateOn: 'blur' }"
+					>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="lvh-search ng-scope sear">
+							<input type="text"
+								   placeholder="Billing Party..."
+								   ng-model="myFilter.search_billParty"
+								   class="lvhs-input"
+								   typeahead-wait-ms="10"
+								   typeahead="item as item.name for item in aBillingParty"
+								   ng-change="getBillingPartyName(myFilter.search_billParty)"
+								   class="form-control"
+								   typeahead-on-select="onSelect($item, $model, $label)">
+							<i class="lvh-search-close"
+							   ng-click="myFilter.search_billParty='';getGeneratedBills();multipleBillSelection=false;">×</i>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="form-group m-b-0">
+					<div class="fg-line">
+						<div class="select">
+							<select class="form-control"
+									ng-model="myFilter.grStatus"
+									style="height: 33px;margin-top: 1px"
+									ng-options="item as item for item in abillStatus">
+								<option value="" disabled>Select Status</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   max-date="DatePicker.newDate"
+										   ng-model="myFilter.start_date"
+										   is-open="opened1"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Start Date"/>
+								</div>
+								<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened2 == true }">
+								<div ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="myFilter.end_date"
+										   max-date="DatePicker.newDate"
+										   min-date="myFilter.start_date"
+										   is-open="opened2"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="End Date"/>
+								</div>
+								<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="select">
+					<select class="form-control"
+							ng-model="myFilter.dateType"
+							name="Branch Name">
+						<option value="">Select Type</option>
+						<option value="billDate">Bill Date</option>
+						<option value="acknowledge.systemDate">Ack Date</option>
+						<option value="approve.date">Approve Date</option>
+						<option value="items.settlement.date">Settlement Date</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Search"
+						type="submit"
+						ng-click="getGeneratedBills()"
+						tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Clear Search"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="myFilter={};getGeneratedBills();multipleBillSelection=false;"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="form-group m-b-0">
+			<button class="btn btn-primary"
+					ng-if="$role['Bill Acknowledge']['Edit']"
+					ng-click="billOperation('Edit')"
+					ng-disabled="!selectedBills._id"
+					uib-tooltip="Edit">
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<!--<button class="btn btn-primary"-->
+					<!--ng-click="billCancellationORApprovePopup('Cancel')"-->
+					<!--ng-disabled="!selectedBills._id"-->
+					<!--uib-tooltip="Cancel">-->
+				<!--<i class="zmdi zmdi-close-circle zmdi-hc-fw"></i>-->
+			<!--</button>&nbsp;&nbsp;-->
+			<button class="btn btn-primary"
+					ng-click="printBill('Preview')"
+					ng-disabled="!selectedBills._id"
+					uib-tooltip="Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw"></i></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+							ng-click="uploadDocs(selectedBills)"
+							ng-disabled="!selectedBills._id"
+							uib-tooltip="Upload Docs">
+				<i class="zmdi zmdi-upload zmdi-hc-fw"></i></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+							ng-click="previewDocs(selectedBills)"
+							ng-disabled="!selectedBills._id"
+							uib-tooltip="Preview Docs">
+				<i class="zmdi zmdi-border-color glyphicon glyphicon-list-alt"></i></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-click="updateBillForDispatch()"
+					ng-disabled="!selectedBills._id"
+					uib-tooltip="Dispatch">
+				<i class="glyphicon glyphicon-send"></i>
+			</button>
+		</div>
+	</div>
+
+
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<div ja-table
+				 table-body="aBill"
+				 table-head="tableHead"
+				 table-column-setting="columnSetting"
+				 table-load="getGeneratedBills(true)"
+				 table-height='500px'
+				 table-selectable='selectType'
+				 table-api="tableApi"
+				 table-selectable-model="selectedBills"
+			></div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+</style>

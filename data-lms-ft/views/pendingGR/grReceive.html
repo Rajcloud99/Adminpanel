@@ -1,0 +1,208 @@
+<form role="form"  name="upReceive" autocomplete="off" novalidate>
+	<div class="validationError" ng-show="grPopup"><h5 class="c-red">* {{gmsg}}</h5></div>
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Gr received for Trip No. {{gr.trip.trip_no}} for Route {{gr.trip.route.name}}</h4><br>
+		<h5 class="modal-title" align="center">Branch : {{gr.branch.name}}</h5><br>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="row" style="">
+
+					<div class="col-md-3">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label"><b>Dispatch By :</b></label>
+							<div class="col-sm-8">
+								<div class="select">
+									<select class="form-control"
+											ng-model="grReceive.type"
+											ng-options="option as option for option in aDispatched_by"
+											ng-change="dispatch(grReceive)">
+										<option value="" disabled> Select</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-2" ng-if="grReceive.type === 'Courier'">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label"><b>Courier Name :</b></label>
+							<div class="col-sm-8">
+								<div class="select">
+									<select class="form-control"
+											ng-model="grReceive.courier"
+											ng-options="option._id as option.name for option in aCourier"
+											>
+										<option value="" disabled>Select Name</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="grReceive.type === 'Driver'">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Driver Search..."
+								ng-model="grReceive.driver"
+								typeahead-wait-ms="10"
+								typeahead="option as (option.nameCode || option.name) for option in aDriver | limitTo:6"
+								ng-change="getDriver(grReceive.driver)"
+								typeahead-on-select="onSelectDriver($item, $model, $label)"
+						>
+						<i class="lvh-search-close" ng-click="grReceive.driver=null;aDriver=null">×</i>
+					</div>
+				</div>
+				<div class="col-md-2" ng-if="grReceive.type === 'By Hand'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label"><b>Person :</b></label>
+						<div class="col-sm-8">
+							<div class="fg-line">
+								<input type="text"
+									   ng-model="person" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="col-md-2">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label"><b>AR No. :</b></label>
+							<div class="col-sm-8">
+								<div class="fg-line">
+									<input type="text"
+										   ng-model="arNo" class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label"><b>AR Remark :</b></label>
+							<div class="col-sm-8">
+								<div class="fg-line">
+									<input type="text"
+										   ng-model="arRemark" class="form-control">
+								</div>
+							</div>
+						</div>
+					</div>
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened3 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="arDate"
+							   min-date="gr.grDate"
+							   is-open="opened3"
+							   datepicker-options="DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="arDate"
+							   name="arDate"
+							   style="padding: 0px 4px;height: 34px;" />
+					</div>
+					<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+				</div>
+			</div>
+				<div class="clearfix"></div>
+				<br>
+
+			</div>
+			<div class="row m-b-12">
+				<div class="col-md-2">
+					<div class="date-picker input-group dp-blue"
+						 ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="billingLoadingTime"
+								   is-open="opened1"
+								   datepicker-options="DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="Loding Time"
+								   name="Loding Time"
+								   style="padding: 0px 4px;height: 34px;" />
+						</div>
+						<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+					</div>
+				</div>
+				<div class="col-md-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   ng-model="billingUnloadingTime"
+									   is-open="opened2"
+									   datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="UnLoding Time"
+									   name="UnLoding Time"
+									   style="padding: 0px 4px;height: 34px;" />
+							</div>
+							<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+						</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="col-md-4"><b>Gr Number :</b></div>
+					<div class="col-md-8">{{gr.grNumber}}</div>
+				</div>
+				<div class="col-md-3">
+					<div class="col-md-4"><b>Gr Date :</b></div>
+					<div class="col-md-8">{{gr.grDate | date: 'dd-MMMM-yyyy'}}</div>
+				</div>
+				<div class="col-md-2">
+					<div class="col-md-4"><b>Gr Type :</b></div>
+					<div class="col-md-8">{{gr.gr_type}}</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect"  ng-click="update(upReceive)">Add GR</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+
+
+	<div class="col-md-12">
+		<h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 75%;
+		height: 173px
+	}
+</style>

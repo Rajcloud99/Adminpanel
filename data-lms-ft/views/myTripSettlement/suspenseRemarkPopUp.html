@@ -1,0 +1,53 @@
+<!-- Controller: suspenseRemarkPopUpCtrl -->
+<!-- ControllerAs: sRVm -->
+
+<form role="form" name="suspenseRemark" autocomplete="off" novalidate ng-init="sRVm.setModalWidth()">
+	<div class="modal-header">
+		<button type="button" ng-click="sRVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add SuspenseRemark</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label">Remark</label>
+					<div class="col-sm-7">
+						<div class="fg-line">
+							<input type="text"
+								   placeholder="Remark"
+								   class="form-control"
+								   ng-model="sRVm.suspenseRemark"
+								   name="Remark"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect"  ng-disabled="sRVm.isDisabled" ng-click="sRVm.submit(suspenseRemark)">submit</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="sRVm.closeModal()">Close</button>
+	</div>
+</form>
+
+<style type="text/css">
+	#suspenseRemarkId.modal-dialog {width: 50%;
+		height: 173px
+	}
+	#suspenseRemarkId .exced{
+		margin-top: 20px;margin-left:10px;
+	}
+	#suspenseRemarkId .exced div div .control-label {
+		font-weight: bolder;
+	}
+	#suspenseRemarkId td ,th{
+		text-align:center;
+	}
+	#suspenseRemarkId .pac-container.pac-logo{z-index: 9999;}
+</style>

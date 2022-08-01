@@ -1,0 +1,562 @@
+<div ng-controller="gstPaymentReportController">
+	<div class="container m-b-10">
+		<div class="col-md-12 card m-b-0">
+			<form ng-submit="searchGstPayment(gstPaymentRef, '', 'sRef')" name="gstPaymentRef" novalidate>
+				<div class="col-md-3">
+					<div class="lvh-label">
+						<span class="c-black"><b>GST Payment</b></span>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<input type="text"
+						   placeholder="ENTER REF NO TO UPDATE GST PAYMENT"
+						   ng-model="oFilter.refNoUpdate"
+						   name="searchrefNo"
+						   class="form-control">
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+<!--					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"-->
+<!--							style="font-size: 16px"-->
+<!--							uib-tooltip="Clear Search"-->
+<!--							tooltip-placement="bottom"-->
+<!--							type="submit"-->
+<!--							ng-click="oFilter.refNoUpdate='';"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>-->
+				</div>
+				<div class="col-md-2"></div>
+				<div class="col-md-2">
+					<button class="btn btn-danger btn-xs p-l-5 p-r-5 waves-effect" style="font-size: 20px" uib-tooltip="Delete GST Payment Voucher" ng-show="selectedVchId" tooltip-placement="bottom" type="button" ng-click="deleteVoucher($role['Voucher']['Delete'])">
+					<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="container" style="">
+		<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+			<div class="row hidden-print" style="margin:7px;">
+				<form ng-submit="searchGstPayment(gstPaymentReport, '', 'sDate')" name="gstPaymentReport" novalidate>
+					<div class="col-md-2">
+						<div class="form-group m-b-0">
+							<div class="col-sm-12">
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue chosen-row-1"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="oFilter.from_date"
+												   ng-change="oFilter.to_date=undefined"
+												   is-open="opened1"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   required
+												   placeholder="From"/>
+										</div>
+										<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group m-b-0">
+							<div class="col-sm-12">
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue chosen-row-1"
+										 ng-class="{ 'is-opened': opened2 == true }">
+										<div ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+												   type="text"
+												   class="form-control"
+												   datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="oFilter.to_date"
+												   min-date="oFilter.from_date"
+												   max-date="oFilter.from_date|setMaxDate:5"
+												   is-open="opened2"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   required
+												   placeholder="To"/>
+										</div>
+										<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+								style="font-size: 16px"
+								uib-tooltip="Search"
+								type="submit"
+								tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+						<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+								style="font-size: 16px"
+								uib-tooltip="Clear Search"
+								tooltip-placement="bottom"
+								type="submit"
+								ng-click="oFilter={};setDefaultDate();"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<form novalidate autocomplete="off" name="addPaymentVoucherForm" ng-submit="submitPaymentVoucher(addPaymentVoucherForm)">
+		<div class="detailsList card" style="background: white">
+			<table class="table table-bordered unresponsive taxDetailDetail">
+				<tr>
+					<th>CGST: {{CGSTLedgerPayment || 0}}</th>
+					<th><span style="color:#0a68b4">Remaining CGST: {{ledgerCGSTRemaining || 0}}</span></th>
+					<th>SGST: {{SGSTLedgerPayment || 0}}</th>
+					<th><span style="color: #0a68b4">Remaining SGST: {{ledgerSGSTRemaining || 0}}</span></th>
+					<th>IGST: {{IGSTLedgerPayment || 0}}</th>
+					<th><span style="color: #0a68b4">Remaining IGST: {{ledgerIGSTRemaining || 0}}</span></th>
+				</tr>
+			</table>
+			<table class="table table-bordered unresponsive taxDetailDetail">
+				<tr>
+					<th>Taxable Amount: {{FRLedgerPayment || 0}}</th>
+					<th>Total Tax: {{totTaxGSTs || 0}}</th>
+					<th>Total Debit Amount: {{DrLedgerPayment || "0"}}</th>
+				</tr>
+			</table>
+			<li class="list-group-item">
+			<span class="booking_list_header">Vouchers Details</span>
+			<div class="card-body">
+				<div class="row" style="margin:5px">
+<!--					<div class="col-md-3">-->
+<!--						<div class="form-group m-b-0">-->
+<!--							<label class="col-sm-5 control-label">Payment Type: <span class="req_r">*</span></label>-->
+<!--							<div class="col-sm-6"  ng-if="!oFilter.readOnly">-->
+<!--								<select chosen-->
+<!--										class="form-control"-->
+<!--										ng-model="oFilter.oPaymentType"-->
+<!--										ng-options="item as item.pType for item in $constants.aVoucherPaymentType"-->
+<!--										ng-change="onSelect(oFilter.oPaymentType, 'PaymentType');oFilter.oVoucher.edited=true"-->
+<!--										name="Payment Type"-->
+<!--										required>-->
+<!--									<option value=""></option>-->
+<!--								</select>-->
+<!--							</div>-->
+<!--							<div class="col-sm-6" ng-if="oFilter.readOnly">-->
+<!--								{{oFilter.oPaymentType.pType}}-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--					<div class="col-md-3">-->
+<!--						<div class="form-group m-b-0">-->
+<!--							<label class="col-sm-5 control-label">Voucher Type: <span class="req_r">*</span></label>-->
+<!--							<div class="col-sm-6">-->
+<!--								<select chosen-->
+<!--										class="form-control"-->
+<!--										ng-model="oFilter.oVoucher.type"-->
+<!--										ng-change="oFilter.taxAccounts = oFilter.getAccounts(); aTaxes = []; setBillType()"-->
+<!--										ng-options="item as item for item in aVouchersType"-->
+<!--										name="Voucher Type"-->
+<!--										required>-->
+<!--									<option value=""></option>-->
+<!--								</select>-->
+<!--								<span class="error" ng-if="(addVoucherForm['Voucher Type'].$error.required-->
+<!--													&& (addVoucherForm['Voucher Type'].$touched-->
+<!--														|| addVoucherForm.$submitted))">-->
+<!--							This Field is Mandatory</span>-->
+<!--							</div>-->
+<!--							<div class="col-sm-6" ng-if="oFilter.readOnly">-->
+<!--								{{oFilter.oVoucher.type}}-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+					<div class="col-md-3">
+						<div class="form-group m-b-0">
+							<label class="col-sm-5 control-label">Date: <span class="req_r">*</span></label>
+							<div class="col-sm-6">
+
+								<input
+										fill-date
+										max-date="DatePicker.newDate"
+										min-date="'setDate'|dateUtilsFilt:'31/03/2019'"
+										type="text"
+										class="form-control"
+										placeholder="Date"
+										ng-model="oVoucher.billDate"
+										ng-readonly="readOnly"
+								>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group m-b-0">
+							<label class="col-sm-5 control-label">Branch :<span class="req_r">*</span></label>
+							<div class="col-sm-6">
+								<div class="ng-scope sear chosen-row-1">
+									<input
+											type="text"
+											class="form-control"
+											placeholder="Branch Search.."
+											ng-model="oVoucher.branch"
+											typeahead-wait-ms="10"
+											name="Branch"
+											typeahead="item as item.name for item in getAllBranch($viewValue, 'Add')|limitTo:6"
+											typeahead-on-select="onSelect($item, $model, $label)"
+											required ng-readonly="readOnly">
+									<i class="lvh-search-close"  ng-if="!readOnly" ng-click="oVoucher.branch=null;">×</i>
+								</div>
+								<span class="error" ng-show="!oVoucher.branch">No Branch Selected</span>
+								<span class="warning" ng-show="oVoucher.branch && !oVoucher.branch.refNoBook">No Ref Book Linked to selected branch</span>
+							</div>
+						</div>
+					</div>
+
+				<div class="col-md-3">
+					<div class="form-group m-b-0">
+						<label class="col-sm-5 control-label">Payment Ref:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text"
+									   placeholder="Payment Ref"
+									   ng-model="oVoucher.paymentRef"
+									   name="Payment Ref"
+									   ng-change="oVoucher.edited=true"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   ng-readonly="readOnly"
+									   class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="form-group">
+						<div class="fg-line">
+							<textarea class="form-control"
+									  rows="2"
+									  ng-model="oVoucher.narration"
+									  ng-change="oVoucher.edited=true"
+									  ng-readonly="readOnly"
+									  placeholder="Narration..."></textarea>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-md-3" ng-if="!readOnly">
+					<div class="form-group m-b-0">
+						<label class="col-sm-3 control-label">Account:<span class="req_r">*</span></label>
+						<div class="col-sm-8">
+							<div class="ng-scope sear chosen-row-1">
+								<input
+										type="text"
+										class="form-control"
+										placeholder="Account"
+										ng-model="oFilter.aVoucher.to"
+										typeahead-wait-ms="10"
+										ng-trim="false"
+										name="Account"
+										typeahead="item as item.name for item in accountMasterDetail($viewValue) | limitTo:20"
+										typeahead-on-select="onSelectAccount($item, $model, $label)"
+										ng-change="oFilter.aVoucher.edited=true"
+								>
+								<i class="lvh-search-close" ng-click="oFilter.aVoucher.to=null;">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group m-b-0">
+						<label class="col-sm-3 control-label">Ref No:<span
+								class="req_r">*</span></label>
+						<div class="col-sm-8">
+							<div class="ng-scope sear chosen-row-1">
+								<input
+										type="text"
+										class="form-control"
+										placeholder="Ref Number"
+										ng-model="oVoucher.refNo"
+										typeahead-wait-ms="10"
+										name="Reference Number"
+										typeahead="item.bookNo as item.bookNo for item in getRefNo(oVoucher.refNo)|limitTo:10"
+										typeahead-on-select="setUsed($item, $model, $label)"
+										required ng-readonly="readOnly">
+								<i class="lvh-search-close" ng-if="!readOnly"
+								   ng-click="oVoucher.refNo=null;">×</i>
+								<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+								   style="right: -20px; background: #3096f3;" ng-if="!readOnly"
+								   ng-click="getAutoStationaryNo(oVoucher.billDate)"></i>
+							</div>
+							<span class="error" ng-if="addVoucherForm['Reference Number'].$error.required
+																	&& !addVoucherForm['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="form-group m-b-0">
+						<label class="col-sm-5 control-label">Payment Mode: </label>
+						<div class="col-sm-6" ng-if="!readOnly">
+							<select chosen
+									class="form-control"
+									ng-model="oVoucher.paymentMode"
+									ng-options="item as item for item in aPaymentMode"
+									name="Payment Mode"
+									ng-readonly="readOnly"
+									ng-change="oVoucher.edited=true">
+								<option value=""></option>
+							</select>
+						</div>
+						<div class="col-sm-6" ng-if="readOnly">
+							{{oVoucher.paymentMode}}
+						</div>
+					</div>
+				</div>
+
+
+<!--				<div class="col-md-3" ng-if="!readOnly">-->
+<!--					<div class="form-group m-b-0">-->
+<!--						<label class="col-sm-5 control-label">Bill Type: </label>-->
+<!--						<div class="col-sm-6">-->
+<!--							<select chosen-->
+<!--									class="form-control"-->
+<!--									ng-model="oFilter.aVoucher.billType"-->
+<!--									ng-options="item as item for item in aBillType"-->
+<!--									name="Bill Type"-->
+<!--									ng-change="oFilter.aVoucher.edited=true; oFilter.aVoucher.billNo = ''">-->
+<!--								<option value="">Select Type</option>-->
+<!--							</select>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				<div class="col-md-3" ng-if="!readOnly">-->
+<!--					<div class="form-group m-b-0">-->
+<!--						<label class="col-sm-3 control-label">Bill No:</label>-->
+<!--						<div class="col-sm-8">-->
+<!--							<div class="ng-scope sear chosen-row-1">-->
+<!--								<input-->
+<!--										type="text"-->
+<!--										class="form-control"-->
+<!--										placeholder="Bill Number"-->
+<!--										ng-model="oFilter.aVoucher.billNo"-->
+<!--										ng-change="oFilter.aVoucher.edited=true"-->
+<!--										empty-typeahead-->
+<!--										typeahead-wait-ms="10"-->
+<!--										ng-trim="false"-->
+<!--										name="BillNumber"-->
+<!--										typeahead="item as (item.billNo + ' / ' + (item.remAmt ? '('+ item.remAmt +') - ' + item.cRdR + '/ '  : '') + (item.date | date:'dd-MM-yyyy')) for item in getBillNo(oFilter.aVoucher.billNo)|limitTo:10"-->
+<!--										typeahead-on-select="onBillSelect($item, $model, $label); setAmount($item, $model, $label)">-->
+<!--								<i class="lvh-search-close"  ng-click="oFilter.aVoucher.billNo=null;">×</i>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				<div class="col-md-2" ng-if="!readOnly">-->
+<!--					<div class="form-group m-b-0" ng-if="oFilter.aVoucher.billNo">-->
+<!--						<label class="col-sm-5 control-label">Bill Date:</label>-->
+<!--						<div class="col-sm-6">-->
+<!--							{{date | date: "dd-MM-yyyy"}}-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+				<div class="clearfix"></div>
+			</div>
+			</li>
+			<div class="" style="overflow-y: auto; max-height: 450px;">
+
+				<table class="table table-bordered unresponsive taxDetailDetail2">
+
+					<thead id='my_fixable_table_header' fix-head>
+
+					<tr>
+						<th>Particulars</th>
+						<th>Tax</th>
+						<th>Interest</th>
+						<th>Penalty</th>
+						<th>Fee</th>
+						<th>Total</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>CGST</td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Tax Payment CGST"
+								   ng-model="oFilter.taxPaymentCGST"
+								   name="Tax Payment CGST"
+								   class="form-control" ng-keyup="taxPaymentCalculation()">
+							<span class="error" ng-if="errorCGST">CGST Payment should not be greter than {{ledgerCGSTRemaining}} </span>
+						</td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Interest CGST"
+								   ng-model="oFilter.interestCGST"
+								   name="Interest"
+								   class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+										  placeholder="Penalty CGST"
+										  ng-model="oFilter.penaltyCGST"
+										  name="Penalty"
+										  class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+									  placeholder="Fee CGST"
+									  ng-model="oFilter.feeCGST"
+									  name="Fee"
+									  class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+										placeholder="Total CGST"
+										ng-model="oFilter.totalCGST"
+										name="Total CGST"
+										class="form-control" readonly></td>
+					</tr>
+					<tr>
+						<td>SGST</td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Tax Payment SGST"
+								   ng-model="oFilter.taxPaymentSGST"
+								   name="Tax Payment SGST"
+								   class="form-control" ng-keyup="taxPaymentCalculation()">
+							<span class="error" ng-if="errorSGST">SGST Payment should not be greter than {{ledgerSGSTRemaining}} </span>
+						</td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Interest SGST"
+								   ng-model="oFilter.interestSGST"
+								   name="Interest"
+								   class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Penalty SGST"
+								   ng-model="oFilter.penaltySGST"
+								   name="Penalty"
+								   class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Fee SGST"
+								   ng-model="oFilter.feeSGST"
+								   name="Fee"
+								   class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Total SGST"
+								   ng-model="oFilter.totalSGST"
+								   name="Total SGST"
+								   class="form-control" readonly></td>
+					</tr>
+					<tr>
+						<td>IGST</td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Tax Payment IGST"
+								   ng-model="oFilter.taxPaymentIGST"
+								   name="Tax Payment IGST"
+								   class="form-control" ng-keyup="taxPaymentCalculation()">
+							<span class="error" ng-if="errorIGST">IGST Payment should not be greter than {{ledgerIGSTRemaining}} </span>
+						</td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Interest IGST"
+								   ng-model="oFilter.interestIGST"
+								   name="Interest"
+								   class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Penalty IGST"
+								   ng-model="oFilter.penaltyIGST"
+								   name="Penalty"
+								   class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Fee IGST"
+								   ng-model="oFilter.feeIGST"
+								   name="Fee"
+								   class="form-control" ng-keyup="taxPaymentCalculation()"></td>
+
+						<td><input type="text"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+								   placeholder="Total IGST"
+								   ng-model="oFilter.totalIGST"
+								   name="Total IGST"
+								   class="form-control" readonly></td>
+					</tr>
+					<tr>
+						<td colspan="2"><span style="color:#0a68b4"><b>Total Tax Payment Amount:</b></span></td>
+						<td><input type="text"
+								   placeholder="Total Tax Payment"
+								   ng-model="oFilter.totalTaxPayment"
+								   name="Total Tax Payment"
+								   class="form-control" readonly></td>
+						<td><button class="btn btn-primary">{{upsertButtonLable}}</button></td>
+					</tr>
+					</tbody>
+				</table>
+				<div ng-if="aGSTPaymentReport.length <= 0 " class="ms-body" style=" min-height: 50px;">
+					<h3>No Reports Found !!!!!</h3>
+				</div>
+			</div>
+
+		</div>
+		</form>
+	</div>
+</div>
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+</style>
+

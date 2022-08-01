@@ -1,0 +1,278 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Driver and vehicle Association</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" >
+		<div class="card-header" style="padding: 0px 25px;">
+<!--			<div class="xx">-->
+<!--				<select chosen class="form-control" ng-options="item as item for item in vm.aCategory" ng-model="vm.status"-->
+<!--						ng-change="vm.getAlldriverOnVehicle()">-->
+<!--					<option value="">Search by Status</option>-->
+<!--				</select>-->
+<!--			</div>-->
+			<div class="col-md-2">
+				<div class="select">
+					<select class="form-control" ng-model="vm.status"
+							ng-options="item as item for item in vm.aCategory"
+							ng-change="vm.getAlldriverOnVehicle()">
+						<option value="" selected>Search by Status</option>
+					</select>
+				</div>
+			</div>
+				<!--<form>-->
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Vehicle No."
+								ng-model="vm.vehicle"
+								typeahead-wait-ms="10"
+								typeahead="item as (item.vehicle_reg_no  + ' (' + item.ownershipType[0] + ')') for item in vm.getVehicle(vm.vehicle) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="vm.vehicle=null;vm.aVehicle=null;vm.getVehicle()">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Driver Search..."
+								ng-model="vm.driver"
+								typeahead-wait-ms="10"
+								typeahead="item as (item.nameCode || item.name) for item in vm.getDriver(vm.driver) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="vm.driver=null;vm.aDriver=null;">×</i>
+					</div>
+				</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Driver Assistant..."
+							ng-model="vm.driver2"
+							typeahead-wait-ms="10"
+							typeahead="item as (item.nameCode || item.name) for item in vm.getDriver(vm.driver2) | limitTo:6"
+					>
+					<i class="lvh-search-close" ng-click="vm.driver2=null;vm.aDriver=null;">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-1">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="vm.DatePicker.newDate"
+							   ng-model="vm.start_date"
+							   is-open="opened1"
+							   datepicker-options="vm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="From Date"
+							   name="From Date"
+							   required
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-1">
+				<div class="date-picker input-group dDiesel Budget(ltr)p-blue"
+					 ng-class="{ 'is-opened': opened2 == true }"
+					 style=" ">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="vm.DatePicker.newDate"
+							   ng-model="vm.end_date"
+							   ng-change="vm.dateChange('endDate')"
+							   is-open="opened2"
+							   datepicker-options="vm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="To Date"
+							   name="To Date"
+							   required
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="select">
+					<select class="form-control" ng-model="vm.sortBy"
+						ng-change="vm.getAlldriverOnVehicle()">
+						<option value="" selected>Sort By</option>
+						<option value="Assending">Assending</option>
+						<option value="Dessending">Dessending</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-md-2 pull-right">
+				<div class="form-group m-b-0 text-center">
+					<button class="btn btn-primary p-t-0 p-b-0 "
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Search"
+							ng-click="vm.getAlldriverOnVehicle();"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0 "
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="vm.status=null;vm.vehicle=null;vm.driver=null;vm.start_date=null;vm.end_date=null;vm.sortBy=null;vm.getAlldriverOnVehicle();">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</div>
+
+				<!--</form>-->
+			<div class="btns" style="">
+
+				<button class="btn btn-warning waves-effect"
+						ng-if="vm.selecteddriverOnVehicle._id && !vm.selecteddriverOnVehicle.driver2 && !vm.selecteddriverOnVehicle.disassociated"
+						ng-click="vm.associateOrDisassociate(vm.selecteddriverOnVehicle)">Disassociate
+				</button>
+
+                <!--	Disassociate Assistant Driver			-->
+				<button class="btn btn-warning waves-effect"
+						ng-if="$role['Driver And Vehicle Association']['Assistant Driver'] && vm.selecteddriverOnVehicle._id && vm.selecteddriverOnVehicle.driver2 && !vm.selecteddriverOnVehicle.disassociated"
+						ng-click="vm.upsertAssistantDriver(vm.selecteddriverOnVehicle)">Disassociate Assistant
+				</button>
+				<button class="btn btn-primary waves-effect"
+						ng-click="vm.associateOrDisassociate()">Add new association
+				</button>
+				<!--	Associate Assistant Driver			-->
+				<button class="btn btn-primary waves-effect"
+						ng-if="$role['Driver And Vehicle Association']['Assistant Driver']"
+						ng-click="vm.upsertAssistantDriver()">Driver Assistant
+				</button>
+				<button class="btn btn-primary waves-effect"
+						ng-click="vm.backdateEntry()"
+						ng-show="$role['Driver And Vehicle Association']['Back DateEntry']">BackDate Entry
+				</button>
+
+
+				<span>
+				<button class="btn-primary btn-xs"
+						ng-if="$role['Driver And Vehicle Association']['Edit Association']"
+						type="button"
+						uib-tooltip="update"
+						ng-click="vm.updateDriverOnVehicle(vm.selecteddriverOnVehicle)"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+				</button>
+					<button class="btn-success btn-xs"
+						type="button"
+						uib-tooltip="Report"
+						ng-click="vm.downloadDAReport('driverVehicleAssc')"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+				<!--<button class="btn btn-primary waves-effect"-->
+						<!--ng-click="vm.downloadPMT()">Download-->
+				<!--</button>-->
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="detailsList">
+			<div class="" style="overflow-y: auto; max-height: 500px;">
+				<table class="table table-bordered unresponsive">
+					<thead id='my_fixable_table_header' fix-head>
+							<tr>
+								<th>S.No.</th>
+								<th>Association Date</th>
+								<th>Dis-ssociation Date</th>
+								<th>Vehicle no.</th>
+								<th>Driver Name</th>
+								<th>Driver Code</th>
+								<th>Driver Assistant</th>
+								<th>Association entry by</th>
+								<th>Disassociation entry by</th>
+								<th>Association Remark</th>
+								<th>Disassociation Remark</th>
+								<th>GPS Odo Association</th>
+								<th>GPS Odo Disassociation</th>
+								<th>Veh Odo Association</th>
+								<th>Veh Odo Disassociation</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr class="lv-item pointer selectItem"
+								ng-repeat="objdriverOnVehicle in vm.driverOnVehicle"
+								ng-click="vm.selectdriverOnVehicleAtIndex($index)">
+								<td>{{$index+1 || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.ass_date | date:'dd-MM-yyyy'}}</td>
+								<td>{{objdriverOnVehicle.disass_date | date:'dd-MM-yyyy'}}</td>
+								<td>{{objdriverOnVehicle.vehicle.vehicle_reg_no || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.driver.nameCode || objdriverOnVehicle.driver.name || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.driver.employee_code || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.driver2.nameCode || objdriverOnVehicle.driver2.name || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.ass_by.full_name || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.disass_by.full_name || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.ass_remark || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.disass_remark || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.ass_gps_odo/1000 || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.disass_gps_odo/1000 || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.ass_veh_odo || 'NA'}}</td>
+								<td>{{objdriverOnVehicle.disass_veh_odo || 'NA'}}</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+			<div class="pagi text-center" ng-show="vm.pagination.total_pages > 0">
+				<uib-pagination ng-change="vm.getAlldriverOnVehicle()"
+								total-items="vm.pagination.totalItems"
+								items-per-page="vm.pagination.items_per_page"
+								num-pages="vm.pagination.numPages"
+								ng-model="vm.pagination.currentPage" max-size="vm.pagination.maxSize"
+								class="vm.pagination-sm smallPagi" boundary-links="true"
+								previous-text="&lsaquo;" next-text="&rsaquo;"
+								first-text="&laquo;" last-text="&raquo;">
+				</uib-pagination>
+			</div>
+				</div>
+			</div>
+		</div>
+
+
+<style type="text/css">
+	.xx {
+		width: 190px;
+		float: left;
+		margin: 10px;
+	}
+</style>

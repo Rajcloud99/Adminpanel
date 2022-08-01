@@ -1,0 +1,132 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div style="min-height: 550px;">
+			<div class="listview lv-message">
+
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span class="c-black">
+							<b>Invoice</b>
+						</span>
+					</div>
+				</div>
+
+				<div class="lv-body">
+
+					<div class="row hidden-print" style="margin:5px 15px;">
+
+						<div class="col-md-2">
+							<select chosen name="vendor" class="form-control" data-placeholder-text-single="'Invoice No.'" allow-single-deselect="true" no-results-text="'Could not find any Invoice'"
+							 ng-model="invoice_no" ng-options="item.invoice_no as item.invoice_no for item in aInvoices" ng-change="getInvoices()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-2">
+							<select name="vendor" class="form-control" chosen data-placeholder-text-single="'By Status'" allow-single-deselect="true"
+							 no-results-text="'Could not find'" ng-model="status" ng-options="item as item for item in aStatus" ng-change="getInvoices()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-8" style="text-align: right;">
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Approve" tooltip-placement="bottom"
+							 type="button" ng-click="approveInvoice()" ng-disabled="!selectedInvoice || selectedInvoice.status !== 'Unapproved'">
+								<i class="zmdi zmdi-assignment-check zmdi-hc-fw"></i>
+							</button>
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Cancel" tooltip-placement="bottom"
+							 type="button" ng-click="declineInvoice()" ng-disabled="!selectedInvoice || selectedInvoice.status === 'Cancelled'">
+								<i class="zmdi zmdi-close-circle zmdi-hc-fw fs-20"></i>
+							</button>
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Bill Dispatch" tooltip-placement="bottom"
+							 type="button" ng-click="billDispatch()" ng-disabled="!selectedInvoice || selectedInvoice.status === 'Unapproved' || selectedInvoice.status === 'Dispatched' || selectedInvoice.status === 'Acknowledged' || selectedInvoice.status === 'Cancelled'">
+								<i class="zmdi zmdi-mail-send zmdi-hc-fw"></i>
+							</button>
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Bill Acknowledge" tooltip-placement="bottom"
+							 type="button" ng-click="acknowledgeInvoice()" ng-disabled="!selectedInvoice || selectedInvoice.status === 'Unapproved' || selectedInvoice.status === 'Approved' || selectedInvoice.status === 'Acknowledged' || selectedInvoice.status === 'Cancelled'">
+								<i class="zmdi zmdi-badge-check zmdi-hc-fw"></i>
+							</button>
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Preview" tooltip-placement="bottom"
+							 type="button" ng-click="previewInvoice()" ng-disabled="!selectedInvoice">
+								<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+							</button>
+
+						</div>
+
+					</div>
+					<div class="clearfix"></div>
+
+					<div class="row" style="margin: 5px auto;">
+						<div class="col-md-12">
+							<div class="clearfix"></div>
+
+							<div class="detailsList">
+								<div style="overflow-x: scroll">
+									<table class="table table-bordered unresponsive soTable">
+										<thead>
+											<tr>
+												<th>&#35;</th>
+												<th>Invoice Number</th>
+												<th>Status</th>
+												<th>Created At</th>
+												<th>Created By</th>
+												<th>Customer</th>
+												<th>Billing Amount</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="pointer selectItem"
+												ng-repeat="inv in aInvoices"
+												ng-click="selectThisRow(inv, $index)">
+													<td>{{$index + 1}}</td>
+													<td>{{inv.invoice_no}}</td>
+													<td>{{inv.status}}</td>
+													<td>{{inv.created_at | date:'dd-MMM-yyyy'}}</td>
+													<td>{{inv.created_by.full_name}}</td>
+													<td>{{inv.customer.name}}</td>
+													<td>{{inv.subtotal2}}</td>
+											</tr>
+											<tr ng-show="!aInvoices.length">
+												<td colspan="100">
+													<h4>No Invoice available !!!</h4>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="pagi" ng-if="pag.total_pages > 1" style="text-align: center;">
+									<uib-pagination
+											ng-change="getQuotations(true)"
+											total-items="pag.totalItems"
+											items-per-page="pag.itemsPerPage"
+											ng-model="pag.currentPage"
+											max-size="pag.maxSize"
+											class="pagination-sm"
+											boundary-links="false"
+											previous-text="&lsaquo;"
+											next-text="&rsaquo;"
+											first-text="&laquo;"
+											last-text="&raquo;">
+									</uib-pagination>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.bg-green {
+		background-color: green;
+		color: white;
+	}
+</style>

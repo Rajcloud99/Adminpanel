@@ -1,0 +1,175 @@
+<div class="container card">
+	<div class="col-md-12 text-right" style="padding: 25px 25px 50px 0;">
+		<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+				ng-if="grData.booking.payment_type.toLowerCase().indexOf('advance') > -1"
+				uib-tooltip="Advance Payment"
+				ng-click="takeAdvancePayment(grData)"
+				ng-disabled="disableThisButtonAfterOneClick"
+				tooltip-placement="bottom"
+				type="button">
+			<span class="glyphicon glyphicon-usd"
+				  style="font-size: 15px;padding: 7px;"></span>
+		</button>
+
+		<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+				style="font-size: 20px"
+				uib-tooltip="Generate Loading Receipt"
+				ng-click="generateLoadingRecipt()"
+				ng-disabled="disableThisButtonAfterOneClick"
+				tooltip-placement="bottom"
+				type="button">
+			<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+		</button>
+	</div>
+	<div class="col-md-6 m-b-5">
+		<div class="form-group m-b-0">
+			<label class="col-md-4">Billing Party</label>
+			<div class="col-sm-6">
+				<div class="lvh-search ng-scope sear">
+					<input type="text"
+						   placeholder="Billing Party..."
+						   ng-model="billingParty"
+						   class="lvhs-input ja"
+						   typeahead-wait-ms="10"
+						   typeahead="item as item.name for item in aBillingParty | filter:$viewValue"
+						   ng-change="getBillingPartyName(grData.booking.billing_party);clearSelection();"
+						   class="form-control">
+					<i class="lvh-search-close"
+					   ng-click="billingParty='';clearSelection();">×</i>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="col-md-6 m-b-25">
+		<table class="table table-bordered unresponsive">
+			<tbody>
+			<tr>
+				<td>Route</td>
+				<td>
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="lvh-search ng-scope sear" style="z-index: 1">
+								<input type="text"
+									   placeholder="Route Search..."
+									   ng-model="route"
+									   class="lvhs-input ja"
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.name for item in aRoute | filter:$viewValue"
+									   ng-change="getRouteName(route);"
+									   class="form-control">
+								<i class="lvh-search-close" ng-click="route=''">×</i>
+							</div>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>Truck No</td>
+				<td>
+					{{grData.trip.vehicle.vehicle_reg_no || 'NA'}}
+				</td>
+			</tr>
+			<tr>
+				<td>Truck Details</td>
+				<td>
+					{{(grData.trip.vehicle.veh_type.name || 'NA') + ' ( ' + (grData.trip.vehicle.veh_type.group_name || 'NA') + ' )' }}
+				</td>
+			</tr>
+			<tr>
+				<td>Driver Phone</td>
+				<td>
+					<div class="form-group m-b-0 col-md-12">
+						{{grData.trip.vehicle.driver_contact_no || 'NA'}}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>Driver Name</td>
+				<td>
+					<div class="form-group m-b-0 col-md-12">
+						{{grData.trip.vehicle.driver_name || 'NA'}}
+					</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="col-md-6 m-b-5">
+		<div class="form-group m-b-0">
+			<label class="col-sm-4 control-label">Payment Type: <span class="req_r">*</span></label>
+			<div class="col-sm-6">
+				<div class="select">
+					<select class="form-control"
+							ng-model="grData.booking.payment_type"
+							ng-options="item as item for item in $constants.paymentType"
+							ng-model-option="{updateOn: 'blur'}"
+							name="Payment Type"
+							required>
+						<option value="" disabled>Payment type</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 m-b-5">
+		<div class="form-group m-b-0">
+			<label class="col-sm-4 control-label">Basis: <span
+					class="req_r">*</span></label>
+			<div class="col-sm-6">
+				<div class="select">
+					<select class="form-control"
+							ng-options="item as item for item in $constants.aWeightTypes"
+							ng-model="grData.booking.payment_basis"
+							name="Payment Basis"
+							ng-model-option="{updateOn: 'blur'}"
+							required>
+						<option value="" disabled style="display: none;">
+							Payment Basis
+						</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 m-b-5">
+		<label class="col-md-4">Total Rate</label>
+		<div class="form-group m-b-0 col-md-6">
+			<input type="text"
+				   ng-model="grData.rate"
+				   name="rate"
+				   class="form-control input-sm"
+				   placeholder="Total Rate">
+		</div>
+	</div>
+	<div class="col-md-6 m-b-5" ng-if="grData.booking.payment_type.toLowerCase().indexOf('advance') > -1">
+		<label class="col-md-4">Advance</label>
+		{{ $parent.advance = (grData.advance | getArrayElementSum:'amount') || 0}}
+		<!---->
+		<!--<div class="form-group m-b-0 col-md-6">-->
+			<!--<input type="text"-->
+				   <!--ng-model="$parent.advance"-->
+				   <!--name="advance"-->
+				   <!--class="form-control input-sm"-->
+				   <!--placeholder="Advance">-->
+		<!--</div>-->
+	</div>
+	<div ng-if="grData.booking.payment_type.toLowerCase().indexOf('advance') == -1">
+		<span ng-init="$parent.advance=0"></span>
+	</div>
+	<div class="col-md-6 m-b-5">
+		<label class="col-md-4">Balance</label>
+		<div class="col-md-6">
+			{{balance = grData.rate - advance}}
+		</div>
+	</div>
+</div>
+
+<style>
+	.table-bordered{
+		border-bottom: 1px solid #f4f4f4;
+		border-left:  1px solid #f4f4f4;
+		border-right:  1px solid #f4f4f4;
+	}
+
+</style>

@@ -1,0 +1,331 @@
+<div class="container" ng-controller="pendingGRController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix" style="padding: 5px;">
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="trip_no" name="trip_no" class="form-control input-sm"
+										   placeholder="Trip No" ng-model-options="{ updateOn: 'blur' }"
+										    style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="gr_no" name="gr_no" class="form-control input-sm"
+										   placeholder="GR No." ng-model-options="{ updateOn: 'blur' }"
+										    style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="booking_no" name="booking_no"
+										   class="form-control input-sm" placeholder="Booking No"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="fg-line">
+									<input type="text" ng-model="container_no" name="container_no"
+										   class="form-control input-sm" placeholder="Container No"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="select">
+									<select chosen
+											class="form-control"
+											ng-model="branch"
+											ng-options="item._id as item.name for item in $aBranch"
+											name="Branch Name"
+											>
+										<option value="" selected>select branch</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="select">
+									<select chosen
+											class="form-control"
+											ng-model="status"
+											ng-init="status='GR Assigned';getGRAck()"
+											ng-options="item as item for item in $constants.aGRstate.slice(1,10)"
+											name="GR State"
+									>
+									</select>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+									<input type="text"
+										   placeholder="Customer Search..."
+										   ng-model="grCustomer"
+										   class="lvhs-input"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in aCustomer"
+										   ng-change="getCname(grCustomer)"
+										   class="form-control"
+										   >
+									<i class="lvh-search-close" ng-click="grCustomer='';getGRAck()">×</i>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Vehicle Search..."
+										   ng-model="vehicle_no" class="lvhs-input"
+										   typeahead-wait-ms="10"
+										   typeahead="person as person.vehicle_reg_no for person in aVehicles | filter:$viewValue"
+										   ng-change="getVname(vehicle_no)" class="form-control"
+										   >
+									<i class="lvh-search-close" ng-click="vehicle_no='';getGRAck()">×</i>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Vendor Search..." ng-model="vendor_id"
+										   class="lvhs-input" typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in aVendor"
+										   ng-change="getVendorName(vendor_id)" class="form-control"
+										   >
+									<i class="lvh-search-close" ng-click="vendor_id='';getGRAck()">×</i>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="expected_arrival"
+											   is-open="opened1"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Expected Arrival"
+											   name="Expected Arrival"
+											   style="padding: 0px 4px;height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="start_date"
+											   is-open="opened2"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From Date"
+											   name="From Date"
+											   style="padding: 0px 4px;height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened3 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="end_date"
+											   is-open="opened3"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To Date"
+											   name="To Date"
+											   required
+											   style="padding: 0px 4px;height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group m-b-0 text-center">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Search"
+											ng-click="getGRAck()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+									<!--<button class="btn btn-primary p-t-0 p-b-0"-->
+									<!--style="margin-top: 5px;  font-size: 16px"-->
+									<!--uib-tooltip="Clear Search"-->
+									<!--tooltip-placement="bottom"-->
+									<!--type="button"-->
+									<!--ng-click="">-->
+									<!--<i class="zmdi zmdi-close zmdi-hc-fw"></i>-->
+									<!--</button>-->
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2 pull-right">
+								<!--<label class="checkbox checkbox-inline m-r-20"
+									   style="margin-left: 29%; margin-top: 9px;">
+									<input type="checkbox" ng-model="selected" ng-click="getGRAck()">
+									<i class="input-helper"></i>
+									All
+								</label>-->
+								<label ng-if="!(role_local_data.gr.indexOf('add')==-1)"
+									   style="margin-top: 8px;margin-bottom: 0px;float: right;">
+									<a href="" uib-tooltip="Gr Receive" ng-click="grReceive(selectedTrip, $index)"
+									   tooltip-placement="bottom">
+										<span class="glyphicon glyphicon-thumbs-up" style="font-size: 20px;"></span>
+									</a>
+									<a href="" uib-tooltip="Upload Documents"
+									   tooltip-placement="bottom"
+									   ng-click="uploadDocs(selectedTrip)" style="font-size:large">
+										<span class="glyphicon glyphicon-upload"></span>
+									</a>&nbsp;&nbsp;
+									<a href="" uib-tooltip="Preview Documents"
+									   tooltip-placement="bottom"
+									   ng-click="previewBuilty(selectedTrip)"
+									   style="font-size:large">
+										<span class="glyphicon glyphicon-list-alt"></span>
+									</a>&nbsp;&nbsp;
+									<a href="" uib-tooltip="Show Gr History" ng-click="showHistory(selectedTrip)"
+									   tooltip-placement="bottom">
+										<i class="zmdi zmdi-time-restore zmdi-hc-fw" style="font-size: 20px;"></i>
+									</a>&nbsp;
+									<a href="" uib-tooltip="Add Remark" ng-click="addRemark(selectedTrip, $index)"
+									   tooltip-placement="bottom">
+										<span class="glyphicon glyphicon-plus" style="font-size: 20px;"></span>
+									</a>&nbsp;
+									<a href="" uib-tooltip="GR Detail" ng-click="previewGRDetails(selectedTrip)"
+									   tooltip-placement="bottom">
+										<span class="glyphicon glyphicon-info-sign" style="font-size: 20px;"></span>
+									</a>&nbsp;
+									<a href="" uib-tooltip="Print Builty" ng-click="printBuilty(selectedTrip)"
+									   tooltip-placement="bottom">
+										<span class="glyphicon glyphicon-print" style="font-size: 20px;"></span>
+									</a>&nbsp;
+								</label>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<a href="" uib-tooltip="Download Report" tooltip-placement="bottom"
+									   ng-show="start_date && end_date"
+									   ng-click="getGRAck(true,true);"><i class="glyphicon glyphicon-download"></i></a>
+								</div>
+							</div>
+						</form>
+
+						<div class="clearfix"></div>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead id='my_fixable_table_header' fix-head>
+									<tr>
+										<th>Trip No./ Booking No.</th>
+										<th>Gr No.</th>
+										<th>Vehicle No.</th>
+										<th>Vendor</th>
+										<th>Customer</th>
+										<th>Consignor</th>
+										<th>Consignee</th>
+										<th>Route Name</th>
+										<th>Allocation Date</th>
+										<th>Payment Basis</th>
+										<th>Payment Type</th>
+										<th>Weight(Tonne)</th>
+										<th>Rate</th>
+										<th>Freight</th>
+										<th>Branch</th>
+										<th>Gr Status</th>
+										<th>Container No.</th>
+										<th>Driver</th>
+										<th>Eway Bill</th>
+										<th>Unloaded By</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oTrip in aTrip" class="pointer selectItem"
+										ng-click="infoItem(oTrip,$index)"
+										ng-class="{green :oTrip.status != 'GR Not Assigned'}">
+										<td>{{oTrip.trip.trip_no}}
+											<span ng-if="oTrip.booking.booking_no">/{{oTrip.booking.booking_no}}</span>
+										</td>
+										<td>{{oTrip.grNumber || 'NA'}}</td>
+										<td>{{oTrip.trip.vehicle_no || 'NA'}}</td>
+										<td>{{oTrip.trip.vendor.name || 'NA'}}</td>
+										<td>{{oTrip.booking.customer.name || 'NA'}}</td>
+										<td>{{oTrip.consignor.name || oTrip.booking.consigner.name || 'NA'}}</td>
+										<td>{{oTrip.consignee.name || oTrip.booking.consignee[0].name || 'NA'}}</td>
+										<td>{{oTrip.trip.route.name || 'NA'}}</td>
+										<td>{{oTrip.trip.allocation_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+										<td>{{oTrip.payment_basis || oTrip.booking.payment_basis || 'NA'}}</td>
+										<td>{{oTrip.payment_type || oTrip.booking.payment_type || 'NA'}}</td>
+										<td>{{oTrip.weight || 'NA'}}</td>
+										<td>{{oTrip.rate || oTrip.booking.rate || 'NA'}}</td>
+										<td>{{oTrip.freight = (oTrip.rate || oTrip.booking.rate || 0) * ((oTrip.payment_basis || oTrip.booking.payment_basis) === 'PUnit' ? (oTrip.total_no_of_units || oTrip.booking.total_no_of_units || 0) : (oTrip.weight || 0))}}</td>
+										<td>{{oTrip.branch.name || 'NA'}}</td>
+										<td>{{oTrip.status || 'NA'}}</td>
+										<td>
+											<span ng-repeat="info in oTrip.container">{{info.number+", "}}</span>
+										</td>
+										<td>{{oTrip.trip.driver.name || 'NA'}}</td>
+										<td>
+											<span ng-repeat="eway in oTrip.eWayBills">{{eway.number}}, {{eway.expiry}}</span>
+										</td>
+										<td>{{filterStatusUser(oTrip.statuses,"Unloading Ended")}}</td>
+									</tr>
+									</tbody>
+								</table>
+
+							</div>
+							<div class="pagi" style="text-align: center;" ng-show="total_pages>1">
+								<pagination ng-change="pageChanged()" total-items="totalItems"
+											items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage"
+											max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true"
+											previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+											last-text="&raquo;"></pagination>
+							</div>
+							<div ng-if="aTrip.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any GR available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+			</div>
+		</div>
+	</div>
+</div>

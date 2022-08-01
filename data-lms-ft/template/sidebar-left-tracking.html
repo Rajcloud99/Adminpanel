@@ -1,0 +1,58 @@
+<div class="sidebar-inner c-overflow">
+
+    <ul class="main-menu">
+
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.branch"><i class="zmdi zmdi-truck"></i> <br>Branch</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.driverDetails.profile" data-ng-click="mactrl.sidebarStat($event)">
+                <i class="zmdi zmdi-account zmdi-hc-fw"></i>
+                <br> Driver</a>
+        </li>
+
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.routeDetails.allRoutes" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-account zmdi-hc-fw"></i><br> Route</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.sldoDetails.list" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-account zmdi-hc-fw"></i><br>SLDO</a>
+        </li>
+        <!-- <li data-ui-sref-active="active" ng-controller="vendorProfileCommonController" ng-click="getALLVendor()">
+            <a href="" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> <br>Vendor</a>
+        </li> -->
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.vendorRegistration.profile" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-home"></i> <br>Vendor</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.customer.profile" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-account zmdi-hc-fw"></i><br> Customer</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.vehicle.profile" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-truck"></i> <br>Vehicle</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.bookings" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-truck"></i> <br>Bookings</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.myGR" data-ng-click="mactrl.sidebarStat($event)"><i class="zmdi zmdi-account zmdi-hc-fw"></i><br> GR </a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.vehicleAllcation" data-ng-click="mactrl.sidebarStat($event)"><span class="glyphicon glyphicon-retweet"></span><br>Vehicle Allcation</a>
+        </li>
+        <li data-ui-sref-active="active">
+            <a data-ui-sref="masters.bills" data-ng-click="mactrl.sidebarStat($event)"><span class="glyphicon glyphicon-paperclip"></span><br>Bills</a>
+        </li>
+        <!-- <li class="sub-menu" data-ng-class="{ 'active toggled': mactrl.$state.includes('headers') }">
+            <a href="" toggle-submenu><i class="zmdi zmdi-home"></i><br> Vendor </a>
+
+            <ul>
+                <li data-ui-sref-active="active">
+                    <a data-ui-sref="vendorRegistration.profile" data-ng-click="mactrl.sidebarStat($event)">Transport</a>
+                </li>
+                <li data-ui-sref-active="active">
+                    <a data-ui-sref="vendorFuelRegistration.fuel" data-ng-click="mactrl.sidebarStat($event)">Fuel</a>
+                </li>
+            </ul>
+        </li> -->
+
+    </ul>
+</div>

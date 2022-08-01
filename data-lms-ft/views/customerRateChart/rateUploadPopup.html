@@ -1,0 +1,78 @@
+<form role="form" name="myForm" autocomplete="off">
+
+	<div class="modal-header">
+		<button
+			type="button"
+			class="close"
+			ng-click="closeModal()"
+			data-dismiss="modal"
+			aria-label="Close"
+		>
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Upload Rate</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+
+			<div class="row">
+
+				<div class="col-sm-3"></div>
+					<div class="col-sm-4">
+						<button class="btn btn-sm btn-primary" ng-click="downloadSample({download: 1})">Download Sample</button>
+					</div>
+					<div class="col-sm-4">
+						<button
+							class="btn btn-sm btn-primary"
+							onclick="document.getElementById('toUpload').click();">
+							Upload Excel
+						</button>
+						<input
+							type="file"
+							id="toUpload"
+							name="toUpload"
+							ng-model="toUpload"
+							ng-hide="true"
+							accept="*/*"
+							ngf-select
+							ngf-max-size="2MB"
+							ngf-model-invalid="errorFile"
+							ngf-change="upload($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+						>
+						<i ng-show="myForm.toUpload.$error.maxSize">File too large {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+						<br>
+					</div>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button type="button" class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 50%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

@@ -1,0 +1,1983 @@
+<form name="customerRateChartForm" ng-submit="submit(customerRateChartForm)" novalidate autocomplete="off">
+
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Rate Chart</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">({{operationType}})</span>
+			</span>
+		</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+
+				<li class="list-group-item">
+					<span class="booking_list_header">BASIC DETAILS</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Customer: <span class="req_r">*</span></label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear">
+											<input
+													type="text"
+													name="customer"
+													class="form-control lvhs-input"
+													placeholder="Select customer"
+													ng-model="oRateChart.customer"
+													uib-typeahead="c as c.name for c in getCustomers($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="onSelect($item, $model, $label)"
+													required
+													ng-disabled="operationType === 'edit'"
+											>
+											<i class="lvh-search-close"
+											   ng-click="oRateChart.customer=undefined"
+											   ng-hide="operationType === 'edit'"
+											>×</i>
+										</div>
+										<span
+												class="error"
+												ng-if="customerRateChartForm['customer'].$error.required
+													&& (customerRateChartForm['customer'].$touched
+													|| customerRateChartForm.$submitted)"
+										>
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-if="oRateChart.customer._id" ng-repeat="conf in rateChartConfig">
+
+								<div ng-if="conf.field === 'effectiveDate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="date-picker input-group dp-blue chosen-row-1" ng-class="{ 'is-opened': opened1 == true }">
+												<div ng-class="{ 'fg-toggled': opened1 == true }">
+													<input
+															type="text"
+															class="form-control"
+															name="effectiveDate"
+															ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+															datepicker-popup="{{DatePicker.formats[0]}}"
+															ng-model="oRateChart.effectiveDate"
+															is-open="opened1"
+															show-weeks="false"
+															close-text="Close"
+															datepicker-options="DatePicker.dateSettings"
+															placeholder="{{conf.label}}"
+															required
+															ng-disabled="conf.field === 'effectiveDate' && !(conf.editable|hdlUdf:'true')"
+													/>
+												</div>
+												<span class="input-group-btn">
+												<button
+														type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+														ng-show="conf.field === 'effectiveDate' && (conf.editable|hdlUdf:'true')"
+												>
+													<i class="glyphicon glyphicon-calendar"></i>
+												</button>
+											</span>
+											</div>
+											<span class="error" ng-if="customerRateChartForm['effectiveDate'].$error.required
+																			&& (customerRateChartForm['effectiveDate'].$touched
+																			|| customerRateChartForm.$submitted)">
+														This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'source' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="lvh-search ng-scope sear">
+												<input
+														type="text"
+														name="source"
+														class="form-control lvhs-input"
+														placeholder="Enter {{conf.label}}"
+														ng-model="oRateChart.source"
+														uib-typeahead="s.source as s.source for s in getSource($viewValue)"
+														typeahead-wait-ms="10"
+														typeahead-on-select="onSelect($item, $model, $label)"
+														ng-required="conf.field === 'source'"
+														ng-readonly="conf.field === 'source' && !(conf.editable|hdlUdf:'true')"
+												>
+												<i class="lvh-search-close"
+												   ng-click="oRateChart.source=undefined"
+												   ng-show="conf.field === 'source' && (conf.editable|hdlUdf:'true')">×</i>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'source' && customerRateChartForm['source'].$error.required
+													&& (customerRateChartForm['source'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'destination' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="lvh-search ng-scope sear">
+												<input
+														type="text"
+														name="destination"
+														class="form-control lvhs-input"
+														placeholder="Enter {{conf.label}}"
+														ng-model="oRateChart.destination"
+														uib-typeahead="s.destination as s.destination for s in getDestination($viewValue)"
+														typeahead-wait-ms="10"
+														typeahead-on-select="onSelect($item, $model, $label)"
+														ng-required="conf.field === 'destination'"
+														ng-readonly="conf.field === 'destination' && !(conf.editable|hdlUdf:'true')"
+												>
+												<i class="lvh-search-close"
+												   ng-click="oRateChart.destination=undefined"
+												   ng-show="conf.field === 'destination' && (conf.editable|hdlUdf:'true')"
+												>×</i>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'destination' && customerRateChartForm['destination'].$error.required
+													&& (customerRateChartForm['destination'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<input
+													type="number"
+													name="rate"
+													class="form-control"
+													placeholder="{{conf.label}}"
+													ng-model="oRateChart.rate"
+													ng-required="conf.field === 'rate'"
+													ng-readonly="conf.field === 'rate' && !(conf.editable|hdlUdf:'true')"
+											>
+										</div>
+										<span
+												class="error"
+												ng-if="conf.field === 'rate' && customerRateChartForm['rate'].$error.required
+												&& (customerRateChartForm['rate'].$touched
+												|| customerRateChartForm.$submitted)"
+										>
+										This Field is Mandatory
+									</span>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'materialGroupCode' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="lvh-search ng-scope sear">
+												<input
+														type="text"
+														name="materialGroupCode"
+														class="form-control lvhs-input"
+														placeholder="Select {{conf.label}}"
+														ng-model="oRateChart.materialSearchModel"
+														uib-typeahead="mg as mg.newName for mg in getMaterialGroup($viewValue)"
+														typeahead-wait-ms="10"
+														typeahead-on-select="materialOnSelect($item, $model, $label)"
+														ng-required="conf.field === 'materialGroupCode'"
+														ng-readonly="conf.field === 'materialGroupCode' && !(conf.editable|hdlUdf:'true')"
+												>
+												<i class="lvh-search-close"
+												   ng-click="oRateChart.materialSearchModel=null"
+												   ng-show="conf.field === 'materialGroupCode' && (conf.editable|hdlUdf:'true')"
+												>×</i>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'materialGroupCode' && customerRateChartForm['materialGroupCode'].$error.required
+													&& (customerRateChartForm['materialGroupCode'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'routeDistance' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="">
+												<input
+														type="number"
+														name="routeDistance"
+														class="form-control"
+														placeholder="Enter {{conf.label}}"
+														ng-model="oRateChart.routeDistance"
+														ng-required="conf.field === 'routeDistance'"
+														ng-readonly="conf.field === 'routeDistance' && !(conf.editable|hdlUdf:'true')"
+												>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'routeDistance' && customerRateChartForm['routeDistance'].$error.required
+													&& (customerRateChartForm['routeDistance'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'unit' && conf.visible|hdlUdf:'true'">
+									<label class="col-sm-4 control-label">{{conf.label}}: <span class="req_r">*</span></label>
+									<div class="col-sm-8">
+										<div class="select">
+											<select
+													name="unit"
+													class="form-control"
+													ng-model="oRateChart.unit"
+													ng-init="oRateChart.unit=oRateChart.unit||conf.defVal"
+													ng-options="item as item for item in $constants.aUnits"
+													ng-required="conf.field === 'unit'"
+													ng-disabled="conf.field === 'unit' && !(conf.editable|hdlUdf:'true')"
+											>
+												<option value="" selected disabled>Select Type</option>
+											</select>
+										</div>
+										<span class="error" ng-if="conf.field === 'unit' && customerRateChartForm['unit'].$error.required
+																			&& (customerRateChartForm['unit'].$touched
+																			|| customerRateChartForm.$submitted)">
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'grCharges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="grCharges"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.grCharges.rate"
+													ng-init="oRateChart.grCharges.rate=conf.defVal"
+													ng-required="conf.field === 'grCharges.rate'"
+													ng-readonly="conf.field === 'grCharges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'grCharges.rate' && customerRateChartForm['grCharges'].$error.required
+													&& (customerRateChartForm['grCharges'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'grCharges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="grCharges.basis"
+														ng-model="oRateChart.grCharges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.grCharges.basis=conf.defVal"
+														ng-required="conf.field === 'grCharges.basis'"
+														ng-disabled="conf.field === 'grCharges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'grCharges.basis' && customerRateChartForm['grCharges.basis'].$error.required
+													&& (customerRateChartForm['grCharges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'surCharges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="surCharges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.surCharges.rate"
+													ng-init="oRateChart.surCharges.rate=conf.defVal"
+													ng-required="conf.field === 'surCharges.rate'"
+													ng-readonly="conf.field === 'surCharges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'surCharges.rate' && customerRateChartForm['surCharges.rate'].$error.required
+													&& (customerRateChartForm['surCharges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'surCharges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="surCharges.basis"
+														ng-model="oRateChart.surCharges.basis"
+														ng-init="oRateChart.surCharges.basis=conf.defVal"
+														ng-options="item as item for item in conf.enum"
+														ng-required="conf.field === 'surCharges.basis'"
+														ng-disabled="conf.field === 'surCharges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'surCharges.basis' && customerRateChartForm['surCharges.basis'].$error.required
+													&& (customerRateChartForm['surCharges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'cartageCharges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="cartageCharges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.cartageCharges.rate"
+													ng-init="oRateChart.cartageCharges.rate=conf.defVal"
+													ng-required="conf.field === 'cartageCharges.rate'"
+													ng-readonly="conf.field === 'cartageCharges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'cartageCharges.rate' && customerRateChartForm['cartageCharges.rate'].$error.required
+													&& (customerRateChartForm['cartageCharges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'cartageCharges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="cartageCharges.basis"
+														ng-model="oRateChart.cartageCharges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.cartageCharges.basis=conf.defVal"
+														ng-required="conf.field === 'cartageCharges.basis'"
+														ng-disabled="conf.field === 'cartageCharges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'cartageCharges.basis' && customerRateChartForm['cartageCharges.basis'].$error.required
+													&& (customerRateChartForm['cartageCharges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'labourCharges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="labourCharges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.labourCharges.rate"
+													ng-init="oRateChart.labourCharges.rate=conf.defVal"
+													ng-required="conf.field === 'labourCharges.rate'"
+													ng-readonly="conf.field === 'labourCharges.rate' && !(conf.editable|hdlUdf:'true')"
+
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'labourCharges.rate' && customerRateChartForm['labourCharges.rate'].$error.required
+													&& (customerRateChartForm['labourCharges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'labourCharges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="labourCharges.basis"
+														ng-model="oRateChart.labourCharges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.labourCharges.basis=conf.defVal"
+														ng-required="conf.field === 'labourCharges.basis'"
+														ng-disabled="conf.field === 'labourCharges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'labourCharges.basis' && customerRateChartForm['labourCharges.basis'].$error.required
+													&& (customerRateChartForm['labourCharges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'otherCharges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="otherCharges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.otherCharges.rate"
+													ng-init="oRateChart.otherCharges.rate=conf.defVal"
+													ng-required="conf.field === 'otherCharges.rate'"
+													ng-readonly="conf.field === 'otherCharges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'otherCharges.rate' && customerRateChartForm['otherCharges.rate'].$error.required
+													&& (customerRateChartForm['otherCharges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'otherCharges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="otherCharges.basis"
+														ng-model="oRateChart.otherCharges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.otherCharges.basis=conf.defVal"
+														ng-required="conf.field === 'otherCharges.basis'"
+														ng-disabled="conf.field === 'otherCharges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'otherCharges.basis' && customerRateChartForm['otherCharges.basis'].$error.required
+													&& (customerRateChartForm['otherCharges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'prevFreightCharges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="prevFreightCharges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.prevFreightCharges.rate"
+													ng-init="oRateChart.prevFreightCharges.rate=conf.defVal"
+													ng-required="conf.field === 'prevFreightCharges.rate'"
+													ng-readonly="conf.field === 'prevFreightCharges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'prevFreightCharges.rate' && customerRateChartForm['prevFreightCharges.rate'].$error.required
+													&& (customerRateChartForm['prevFreightCharges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'prevFreightCharges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="prevFreightCharges.basis"
+														ng-model="oRateChart.prevFreightCharges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.prevFreightCharges.basis=conf.defVal"
+														ng-required="conf.field === 'prevFreightCharges.basis'"
+														ng-disabled="conf.field === 'prevFreightCharges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'prevFreightCharges.basis' && customerRateChartForm['prevFreightCharges.basis'].$error.required
+													&& (customerRateChartForm['prevFreightCharges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'detentionLoading.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="detentionLoading.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.detentionLoading.rate"
+													ng-init="oRateChart.detentionLoading.rate=conf.defVal"
+													ng-required="conf.field === 'detentionLoading.rate'"
+													ng-readonly="conf.field === 'detentionLoading.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'detentionLoading.rate' && customerRateChartForm['detentionLoading.rate'].$error.required
+													&& (customerRateChartForm['detentionLoading.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'detentionLoading.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="detentionLoading.basis"
+														ng-model="oRateChart.detentionLoading.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.detentionLoading.basis=conf.defVal"
+														ng-required="conf.field === 'detentionLoading.basis'"
+														ng-disabled="conf.field === 'detentionLoading.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'detentionLoading.basis' && customerRateChartForm['detentionLoading.basis'].$error.required
+													&& (customerRateChartForm['detentionLoading.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'detentionUnloading.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="detentionUnloading.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.detentionUnloading.rate"
+													ng-init="oRateChart.detentionUnloading.rate=conf.defVal"
+													ng-required="conf.field === 'detentionUnloading.rate'"
+													ng-readonly="conf.field === 'detentionUnloading.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'detentionUnloading.rate' && customerRateChartForm['detentionUnloading.rate'].$error.required
+													&& (customerRateChartForm['detentionUnloading.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'detentionUnloading.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="detentionUnloading.basis"
+														ng-model="oRateChart.detentionUnloading.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.detentionUnloading.basis=conf.defVal"
+														ng-required="conf.field === 'detentionUnloading.basis'"
+														ng-disabled="conf.field === 'detentionUnloading.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'detentionUnloading.basis' && customerRateChartForm['detentionUnloading.basis'].$error.required
+													&& (customerRateChartForm['detentionUnloading.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'discount.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="discount.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.discount.rate"
+													ng-init="oRateChart.discount.rate=conf.defVal"
+													ng-required="conf.field === 'discount.rate'"
+													ng-readonly="conf.field === 'discount.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'discount.rate' && customerRateChartForm['discount.rate'].$error.required
+													&& (customerRateChartForm['discount.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'discount.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="discount.basis"
+														ng-model="oRateChart.discount.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.discount.basis=conf.defVal"
+														ng-required="conf.field === 'discount.basis'"
+														ng-disabled="conf.field === 'discount.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'discount.basis' && customerRateChartForm['discount.basis'].$error.required
+													&& (customerRateChartForm['discount.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'loading_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="loading_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.loading_charges.rate"
+													ng-init="oRateChart.loading_charges.rate=conf.defVal"
+													ng-required="conf.field === 'loading_charges.rate'"
+													ng-readonly="conf.field === 'loading_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'loading_charges.rate' && customerRateChartForm['loading_charges.rate'].$error.required
+													&& (customerRateChartForm['loading_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'loading_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="loading_charges.basis"
+														ng-model="oRateChart.loading_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.loading_charges.basis=conf.defVal"
+														ng-required="conf.field === 'loading_charges.basis'"
+														ng-disabled="conf.field === 'loading_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'loading_charges.basis' && customerRateChartForm['loading_charges.basis'].$error.required
+													&& (customerRateChartForm['loading_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'unloading_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="unloading_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.unloading_charges.rate"
+													ng-init="oRateChart.unloading_charges.rate=conf.defVal"
+													ng-required="conf.field === 'unloading_charges.rate'"
+													ng-readonly="conf.field === 'unloading_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'unloading_charges.rate' && customerRateChartForm['unloading_charges.rate'].$error.required
+													&& (customerRateChartForm['unloading_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'unloading_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="unloading_charges.basis"
+														ng-model="oRateChart.unloading_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.unloading_charges.basis=conf.defVal"
+														ng-required="conf.field === 'unloading_charges.basis'"
+														ng-disabled="conf.field === 'unloading_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'unloading_charges.basis' && customerRateChartForm['unloading_charges.basis'].$error.required
+													&& (customerRateChartForm['unloading_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'weightman_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="weightman_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.weightman_charges.rate"
+													ng-init="oRateChart.weightman_charges.rate=conf.defVal"
+													ng-required="conf.field === 'weightman_charges.rate'"
+													ng-readonly="conf.field === 'weightman_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'weightman_charges.rate' && customerRateChartForm['weightman_charges.rate'].$error.required
+													&& (customerRateChartForm['weightman_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'weightman_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="weightman_charges.basis"
+														ng-model="oRateChart.weightman_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.weightman_charges.basis=conf.defVal"
+														ng-required="conf.field === 'weightman_charges.basis'"
+														ng-disabled="conf.field === 'weightman_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'weightman_charges.basis' && customerRateChartForm['weightman_charges.basis'].$error.required
+													&& (customerRateChartForm['weightman_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'overweight_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="overweight_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.overweight_charges.rate"
+													ng-init="oRateChart.overweight_charges.rate=conf.defVal"
+													ng-required="conf.field === 'overweight_charges.rate'"
+													ng-readonly="conf.field === 'overweight_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'overweight_charges.rate' && customerRateChartForm['overweight_charges.rate'].$error.required
+													&& (customerRateChartForm['overweight_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'overweight_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="overweight_charges.basis"
+														ng-model="oRateChart.overweight_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.overweight_charges.basis=conf.defVal"
+														ng-required="conf.field === 'overweight_charges.basis'"
+														ng-disabled="conf.field === 'overweight_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'overweight_charges.basis' && customerRateChartForm['overweight_charges.basis'].$error.required
+													&& (customerRateChartForm['overweight_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'advance_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="advance_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.advance_charges.rate"
+													ng-init="oRateChart.advance_charges.rate=conf.defVal"
+													ng-required="conf.field === 'advance_charges.rate'"
+													ng-readonly="conf.field === 'advance_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'advance_charges.rate' && customerRateChartForm['advance_charges.rate'].$error.required
+													&& (customerRateChartForm['advance_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'advance_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="advance_charges.basis"
+														ng-model="oRateChart.advance_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.advance_charges.basis=conf.defVal"
+														ng-required="conf.field === 'advance_charges.basis'"
+														ng-disabled="conf.field === 'advance_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'advance_charges.basis' && customerRateChartForm['advance_charges.basis'].$error.required
+													&& (customerRateChartForm['advance_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'damage.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="damage.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.damage.rate"
+													ng-init="oRateChart.damage.rate=conf.defVal"
+													ng-required="conf.field === 'damage.rate'"
+													ng-readonly="conf.field === 'damage.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'damage.rate' && customerRateChartForm['damage.rate'].$error.required
+													&& (customerRateChartForm['damage.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'damage.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="damage.basis"
+														ng-model="oRateChart.damage.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.damage.basis=conf.defVal"
+														ng-required="conf.field === 'damage.basis'"
+														ng-disabled="conf.field === 'damage.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'damage.basis' && customerRateChartForm['damage.basis'].$error.required
+													&& (customerRateChartForm['damage.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'incentive.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="incentive.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.incentive.rate"
+													ng-init="oRateChart.incentive.rate=(oRateChart.incentive.rate||conf.defVal)"
+													ng-required="conf.field === 'incentive.rate'"
+													ng-readonly="conf.field === 'incentive.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'incentive.rate' && customerRateChartForm['incentive.rate'].$error.required
+													&& (customerRateChartForm['incentive.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'incentive.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="incentive.basis"
+														ng-model="oRateChart.incentive.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.incentive.basis=conf.defVal"
+														ng-required="conf.field === 'incentive.basis'"
+														ng-disabled="conf.field === 'incentive.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'incentive.basis' && customerRateChartForm['incentive.basis'].$error.required
+													&& (customerRateChartForm['incentive.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'shortage.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="shortage.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.shortage.rate"
+													ng-init="oRateChart.shortage.rate=conf.defVal"
+													ng-required="conf.field === 'shortage.rate'"
+													ng-readonly="conf.field === 'shortage.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'shortage.rate' && customerRateChartForm['shortage.rate'].$error.required
+													&& (customerRateChartForm['shortage.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'shortage.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="shortage.basis"
+														ng-model="oRateChart.shortage.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.shortage.basis=conf.defVal"
+														ng-required="conf.field === 'shortage.basis'"
+														ng-disabled="conf.field === 'shortage.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'shortage.basis' && customerRateChartForm['shortage.basis'].$error.required
+													&& (customerRateChartForm['shortage.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'penalty.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="penalty.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.penalty.rate"
+													ng-init="oRateChart.penalty.rate=conf.defVal"
+													ng-required="conf.field === 'penalty.rate'"
+													ng-readonly="conf.field === 'penalty.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'penalty.rate' && customerRateChartForm['penalty.rate'].$error.required
+													&& (customerRateChartForm['penalty.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'penalty.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="penalty.basis"
+														ng-model="oRateChart.penalty.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.penalty.basis=conf.defVal"
+														ng-required="conf.field === 'penalty.basis'"
+														ng-disabled="conf.field === 'penalty.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'penalty.basis' && customerRateChartForm['penalty.basis'].$error.required
+													&& (customerRateChartForm['penalty.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'extra_running.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="extra_running.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.extra_running.rate"
+													ng-init="oRateChart.extra_running.rate=conf.defVal"
+													ng-required="conf.field === 'extra_running.rate'"
+													ng-readonly="conf.field === 'extra_running.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'extra_running.rate' && customerRateChartForm['extra_running.rate'].$error.required
+													&& (customerRateChartForm['extra_running.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'extra_running.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="extra_running.basis"
+														ng-model="oRateChart.extra_running.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.extra_running.basis=conf.defVal"
+														ng-required="conf.field === 'extra_running.basis'"
+														ng-disabled="conf.field === 'extra_running.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'extra_running.basis' && customerRateChartForm['extra_running.basis'].$error.required
+													&& (customerRateChartForm['extra_running.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'dala_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="dala_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.dala_charges.rate"
+													ng-init="oRateChart.dala_charges.rate=conf.defVal"
+													ng-required="conf.field === 'dala_charges.rate'"
+													ng-readonly="conf.field === 'dala_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'dala_charges.rate' && customerRateChartForm['dala_charges.rate'].$error.required
+													&& (customerRateChartForm['dala_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'dala_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="dala_charges.basis"
+														ng-model="oRateChart.dala_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.dala_charges.basis=conf.defVal"
+														ng-required="conf.field === 'dala_charges.basis'"
+														ng-disabled="conf.field === 'dala_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'dala_charges.basis' && customerRateChartForm['dala_charges.basis'].$error.required
+													&& (customerRateChartForm['dala_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'diesel_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="diesel_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.diesel_charges.rate"
+													ng-init="oRateChart.diesel_charges.rate=conf.defVal"
+													ng-required="conf.field === 'diesel_charges.rate'"
+													ng-readonly="conf.field === 'diesel_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'diesel_charges.rate' && customerRateChartForm['diesel_charges.rate'].$error.required
+													&& (customerRateChartForm['diesel_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'diesel_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="diesel_charges.basis"
+														ng-model="oRateChart.diesel_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.diesel_charges.basis=conf.defVal"
+														ng-required="conf.field === 'diesel_charges.basis'"
+														ng-disabled="conf.field === 'diesel_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'diesel_charges.basis' && customerRateChartForm['diesel_charges.basis'].$error.required
+													&& (customerRateChartForm['diesel_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'kanta_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="kanta_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.kanta_charges.rate"
+													ng-init="oRateChart.kanta_charges.rate=conf.defVal"
+													ng-required="conf.field === 'kanta_charges.rate'"
+													ng-readonly="conf.field === 'kanta_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'kanta_charges.rate' && customerRateChartForm['kanta_charges.rate'].$error.required
+													&& (customerRateChartForm['kanta_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'kanta_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="kanta_charges.basis"
+														ng-model="oRateChart.kanta_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.kanta_charges.basis=conf.defVal"
+														ng-required="conf.field === 'kanta_charges.basis'"
+														ng-disabled="conf.field === 'kanta_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'kanta_charges.basis' && customerRateChartForm['kanta_charges.basis'].$error.required
+													&& (customerRateChartForm['kanta_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'factory_halt.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="factory_halt.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.factory_halt.rate"
+													ng-init="oRateChart.factory_halt.rate=conf.defVal"
+													ng-required="conf.field === 'factory_halt.rate'"
+													ng-readonly="conf.field === 'factory_halt.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'factory_halt.rate' && customerRateChartForm['factory_halt.rate'].$error.required
+													&& (customerRateChartForm['factory_halt.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'factory_halt.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="factory_halt.basis"
+														ng-model="oRateChart.factory_halt.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.factory_halt.basis=conf.defVal"
+														ng-required="conf.field === 'factory_halt.basis'"
+														ng-disabled="conf.field === 'factory_halt.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'factory_halt.basis' && customerRateChartForm['factory_halt.basis'].$error.required
+													&& (customerRateChartForm['factory_halt.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'company_halt.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="company_halt.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.company_halt.rate"
+													ng-init="oRateChart.company_halt.rate=conf.defVal"
+													ng-required="conf.field === 'company_halt.rate'"
+													ng-readonly="conf.field === 'company_halt.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'company_halt.rate' && customerRateChartForm['company_halt.rate'].$error.required
+													&& (customerRateChartForm['company_halt.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'company_halt.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="company_halt.basis"
+														ng-model="oRateChart.company_halt.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.company_halt.basis=conf.defVal"
+														ng-required="conf.field === 'company_halt.basis'"
+														ng-disabled="conf.field === 'company_halt.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'company_halt.basis' && customerRateChartForm['company_halt.basis'].$error.required
+													&& (customerRateChartForm['company_halt.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'toll_charges.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="toll_charges.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.toll_charges.rate"
+													ng-init="oRateChart.toll_charges.rate=conf.defVal"
+													ng-required="conf.field === 'toll_charges.rate'"
+													ng-readonly="conf.field === 'toll_charges.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'toll_charges.rate' && customerRateChartForm['toll_charges.rate'].$error.required
+													&& (customerRateChartForm['toll_charges.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'toll_charges.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="toll_charges.basis"
+														ng-model="oRateChart.toll_charges.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.toll_charges.basis=conf.defVal"
+														ng-required="conf.field === 'toll_charges.basis'"
+														ng-disabled="conf.field === 'toll_charges.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'toll_charges.basis' && customerRateChartForm['toll_charges.basis'].$error.required
+													&& (customerRateChartForm['toll_charges.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'internal_rate.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="internal_rate.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.internal_rate.rate"
+													ng-init="oRateChart.internal_rate.rate=conf.defVal"
+													ng-required="conf.field === 'internal_rate.rate'"
+													ng-readonly="conf.field === 'internal_rate.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'internal_rate.rate' && customerRateChartForm['internal_rate.rate'].$error.required
+													&& (customerRateChartForm['internal_rate.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'internal_rate.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="internal_rate.basis"
+														ng-model="oRateChart.internal_rate.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.internal_rate.basis=conf.defVal"
+														ng-required="conf.field === 'internal_rate.basis'"
+														ng-disabled="conf.field === 'internal_rate.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'internal_rate.basis' && customerRateChartForm['internal_rate.basis'].$error.required
+													&& (customerRateChartForm['internal_rate.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'green_tax.rate' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													name="green_tax.rate"
+													class="form-control"
+													placeholder="Enter {{conf.label}}"
+													ng-model="oRateChart.green_tax.rate"
+													ng-init="oRateChart.green_tax.rate=conf.defVal"
+													ng-required="conf.field === 'green_tax.rate'"
+													ng-readonly="conf.field === 'green_tax.rate' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'green_tax.rate' && customerRateChartForm['green_tax.rate'].$error.required
+													&& (customerRateChartForm['green_tax.rate'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'green_tax.basis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="green_tax.basis"
+														ng-model="oRateChart.green_tax.basis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.green_tax.basis=conf.defVal"
+														ng-required="conf.field === 'green_tax.basis'"
+														ng-disabled="conf.field === 'green_tax.basis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'green_tax.basis' && customerRateChartForm['green_tax.basis'].$error.required
+													&& (customerRateChartForm['green_tax.basis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'paymentBasis' && conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+														class="form-control"
+														name="paymentBasis"
+														ng-model="oRateChart.paymentBasis"
+														ng-options="item as item for item in conf.enum"
+														ng-init="oRateChart.paymentBasis=oRateChart.paymentBasis||conf.defVal"
+														ng-required="conf.field === 'paymentBasis'"
+														ng-disabled="conf.field === 'paymentBasis' && !(conf.editable|hdlUdf:'true')"
+												>
+													<option value="" disabled>Select Type</option>
+												</select>
+											</div>
+											<span
+													class="error"
+													ng-if="conf.field === 'paymentBasis' && customerRateChartForm['paymentBasis'].$error.required
+													&& (customerRateChartForm['paymentBasis'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'baseValue' &&  conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<!--<div class="select">-->
+												<!--<select-->
+														<!--class="form-control"-->
+														<!--name="baseValue"-->
+														<!--ng-model="oRateChart.baseValue"-->
+														<!--ng-options="item as item for item in conf.enum"-->
+														<!--ng-init="oRateChart.baseValue=oRateChart.baseValue||conf.defVal"-->
+														<!--ng-required="conf.field === 'baseValue'"-->
+														<!--ng-disabled="conf.field === 'baseValue' && !(conf.editable|hdlUdf:'true')"-->
+												<!--&gt;-->
+													<!--<option value="" disabled>Select Type</option>-->
+												<!--</select>-->
+											<!--</div>-->
+											<input
+													type="number"
+													name="baseValue"
+													class="form-control"
+													placeholder="{{conf.label}}"
+													ng-model="oRateChart.baseValue"
+													ng-required="conf.field === 'baseValue'"
+													ng-readonly="conf.field === 'baseValue' && !(conf.editable|hdlUdf:'true')"
+											>
+											<span
+													class="error"
+													ng-if="conf.field === 'baseValue' && customerRateChartForm['baseValue'].$error.required
+													&& (customerRateChartForm['baseValue'].$touched
+													|| customerRateChartForm.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="conf.field === 'baseValueLabel' &&  conf.visible|hdlUdf:'true'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{conf.label}}: </label>
+										<div class="col-sm-6">
+											<input
+													type="text"
+													name="baseValueLabel"
+													class="form-control"
+													placeholder="{{conf.label}}"
+													ng-model="oRateChart.baseValueLabel"
+													ng-readonly="conf.field === 'baseValueLabel' && !(conf.editable|hdlUdf:'true')"
+											>
+											<!--<span-->
+													<!--class="error"-->
+													<!--ng-if="conf.field === 'baseValueLabel' && customerRateChartForm['baseValueLabel'].$error.required-->
+													<!--&& (customerRateChartForm['baseValueLabel'].$touched-->
+													<!--|| customerRateChartForm.$submitted)"-->
+											<!--&gt;-->
+											<!--This Field is Mandatory-->
+										<!--</span>-->
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="m-t-10" style="clear:both;"></div>
+							<hr/>
+							<div class="m-t-10" style="clear:both;"></div>
+
+							<div ng-repeat="conf in rateChartConfig|filter:{'field': 'vehicleTypeCode'}" ng-show="oRateChart.customer._id && conf.field === 'vehicleTypeCode' && conf.visible">
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vehicle Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<!--<div class="lvh-search">-->
+											<input
+													type="text"
+													class="form-control lvhs-input"
+													placeholder="Select Vehicle Type"
+													ng-model="XvehicleType"
+													uib-typeahead="v.code as v.name for v in getVehicleType($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="onSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="XvehicleType=undefined">×</i>
+											<!--</div>-->
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Rate: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input
+													type="number"
+													class="form-control"
+													ng-model="Xrate"
+													placeholder="Enter Rate"
+											>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<button
+											type="button"
+											class="btn btn-primary"
+											style="font-size:x-large;padding:0 10px;"
+											uib-tooltip="Add Vehicle Rate"
+											tooltip-placement="top"
+											ng-click="addVehicleRate()"
+									>
+										&#43;
+									</button>
+								</div>
+
+								<div class="col-md-12">
+									<div class="table-responsive">
+										<table class="table table-bordered unresponsive">
+											<thead>
+											<tr>
+												<th>Vehicle Type Code</th>
+												<th>Rate Per Trip</th>
+												<th></th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat="vr in vehicleRates">
+												<td>{{vr.vehicleTypeCode}}</td>
+												<td>{{vr.rate}}</td>
+												<td><i ng-click="vehicleRates.splice($index,1)" class="zmdi zmdi-delete zmdi-hc-fw"></i></td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+
+							<div ng-repeat="conf in rateChartConfig|filter:{'field': 'baseRate'}" ng-show="oRateChart.customer._id && conf.field === 'baseRate'">
+								<div ng-repeat="val in conf.values">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{val.label}}: <span class="req_r">*</span></label>
+											<div class="col-sm-8">
+												<input type="number"
+													   class="form-control"
+													   name="{{val.label}}"
+													   placeholder="{{val.label}}"
+													   ng-model="val.rate"
+													   required
+												>
+											</div>
+											<span class="error"
+												  ng-show="customerRateChartForm[val.label].$error.required
+												&& (customerRateChartForm[val.label].$touched
+												|| customerRateChartForm.$submitted)"
+											>This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<span class="req_r">{{errMsg}}</span>
+		<button class="btn btn-primary" type="submit">SUBMIT</button>
+		<button class="btn btn-warning" type="button" ng-click="closeModal()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.modal-dialog{
+		width: 90%;
+	}
+
+</style>

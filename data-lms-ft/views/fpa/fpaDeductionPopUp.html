@@ -1,0 +1,95 @@
+<!-- contoller : fpaDedPopupController-->
+<!-- contollerAs : vm-->
+
+<div class="modal-header">
+	<button type="button" ng-click="vm.close()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Add Deduction</h4><br>
+</div>
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<div class="row" style="margin:10px;">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Deduction Type: <span style="color: red;">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<div class="select">
+								<select class="form-control"
+										ng-options="item as item for item in vm.aDeductionType"
+										ng-model="vm.dedType"
+										ng-change="vm.getDeduction()"
+										required>
+									<option value="" disabled>Select Deduction Type</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+<!--			<div class="col-md-4">-->
+<!--				<div class="form-group m-b-0">-->
+<!--					<label class="col-sm-6 control-label">Applied Deduction: </label>-->
+<!--					<div class="col-sm-6">-->
+<!--						{{vm.appliedDeduction || 0}}-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<div class="col-md-4">-->
+<!--				<div class="form-group m-b-0">-->
+<!--					<label class="col-sm-6 control-label">Deduction %:</label>-->
+<!--					<div class="col-sm-6">-->
+<!--						<input type="text"-->
+<!--							   ng-model="vm.deductionPercent"-->
+<!--							   ng-model-options="{ updateOn: 'blur' }"-->
+<!--							   ng-change="vm.applyPercent()"-->
+<!--							   name="deductionPercent"-->
+<!--							   class="form-control"-->
+<!--							   placeholder="Deduction %">-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Deduction Amount :</label>
+					<div class="col-sm-6">
+						<input type="text"
+							   ng-model="vm.dedAmt"
+							   name="dedAmt"
+							   class="form-control"
+							   placeholder="Deduction Amount">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Link To Money Receipt :</label>
+					<div class="col-sm-6">
+						<label class="checkbox checkbox-inline m-r-20">
+							<input type="checkbox"
+								   ng-model="vm.linkMr"
+								   ng-change="">
+							<i class="input-helper"></i>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<br>
+<div class="modal-footer">
+	<button class="btn btn-success waves-effect"
+			ng-click="vm.submit()">Add</button>
+	&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-warning" ng-click="vm.close()">Close</button>
+</div>
+
+<style type="text/css">
+	.modal-dialog {
+		width: 75%;
+		height: 173px
+	}
+</style>

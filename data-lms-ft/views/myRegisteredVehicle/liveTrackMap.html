@@ -1,0 +1,106 @@
+<div class="container" ng-controller="liveTrackPageController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix" style="padding: 5px;">
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="from" is-open="opened1" datepicker-options="dateOptions" close-text="Close" placeholder="From Date" style="padding: 0px 4px;height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }" style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="to" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="To Date" style="padding: 0px 4px; height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="fg-line">
+									<input type="text" ng-model="address" name="address" class="form-control input-sm" placeholder="Address Search" style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="">
+									<button class="btn btn-primary" ng-click="getAllLiveTrack()">Search</button>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2 pull-right">
+
+							</div>&nbsp;
+						</form>
+						
+                        <div class="clearfix"></div>
+                        <!-- Map View -->
+                        <div id="toolTipDiv" class="mapToolTipDiv hideIt"></div>
+
+                        <div id="toolTipDivMapWrapper"
+                        style="diplay: none; z-index: 11"
+                        class="mapViewPopup">
+                            <div class="addr" style="font-size: 12px;color: black;font-weight: bold;"></div>
+                        </div>
+                        <!-- End Map View-->
+                        <div class="clearfix"></div>
+						&nbsp;&nbsp;<span class="booking_list_header">Live Track Map View</span>						
+						<div class="clearfix"></div>
+						<div class="detailsList" style="margin-top:10px;">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th>Date</th>
+										<th>Address</th>
+										<th>Status</th>
+										<th>Remark</th>
+										<th>Created By</th>
+										<th>Entry Date</th>
+									</tr>
+									</thead>
+									<tbody>  
+									<!--<tr ng-repeat="liveData in aLiveTrackData"
+									ng-click="selectliveData = liveData; obj.selectedIndex = $index;"
+									ng-class="{grn: obj.selectedIndex === $index}"
+									class="pointer">-->
+									<tr ng-repeat="liveData in aLiveTrackData"
+									class="selectItem pointer"
+									ng-click="selectThisRow(liveData, $index)">
+										<td>{{liveData.created_at | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+										<td>{{liveData.address || "NA"}}</td>
+										<td>{{liveData.status || "NA"}}</td>
+										<td>{{liveData.remarks || "NA"}}</td>
+										<td>{{liveData.created_by || "NA"}}</td>
+										<td>{{liveData.datetime | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+									</tr>
+									</tbody>
+								</table>
+								<div class="pagi" style="text-align: center;" ng-show="total_pages>1">
+									<pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+												first-text="&laquo;" last-text="&raquo;"></pagination>
+								</div>
+							</div>
+							<div ng-if="aLiveTrackData.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>Data not available !!!!!</h3>
+							</div>
+                        </div>
+                        
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

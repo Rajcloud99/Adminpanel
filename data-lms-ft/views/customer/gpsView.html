@@ -1,0 +1,50 @@
+<div ng-controller="gpsViewCtrl">
+	<div class="row">
+<!--		<div class="col-md-12">-->
+<!--			<div class="detailList">-->
+<!--				<ul>-->
+<!--					<div class="col-md-4">-->
+<!--						<div class="form-group m-b-0">-->
+<!--							<label class="col-sm-6 control-label">GPS View: </label>-->
+<!--							<div class="col-sm-6">-->
+<!--								<div class="select">-->
+<!--									<select class="form-control"-->
+<!--											ng-model="customer.gps_view"-->
+<!--											ng-options="item for item in aGpsView">-->
+<!--										<option value="" selected>Select</option>-->
+<!--									</select>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--					<div class="col-md-4">-->
+<!--						<div class="form-group m-b-0">-->
+<!--							<label class="col-sm-6 control-label">Shipper Enterprise: </label>-->
+<!--							<div class="col-sm-6">-->
+<!--								{{customer.shipperEnterprise}}-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--					<div class="col-md-4">-->
+<!--						<div class="form-group m-b-0">-->
+<!--							<label class="col-sm-6 control-label">Shipper Organization: </label>-->
+<!--							<div class="col-sm-6">-->
+<!--								{{customer.shipperOrganization}}-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--&lt;!&ndash;					<li ng-if="$configs.master.customer.add.required.ecc && customer.ecc"><span>ECC</span>  : {{customer.ecc}}</li>&ndash;&gt;-->
+<!--				</ul>-->
+<!--			</div>-->
+<!--		</div>-->
+		<div class="col-md-12">
+			<div class="detailList">
+				<ul>
+					<li ng-if="customer.gps_view"><span>GPS View</span>  : {{customer.gps_view}}</li>
+					<li ng-if="customer.shipperEnterprise"><span>Shipper Enterprise</span>  : {{ customer.shipperEnterprise}}</li>
+					<li ng-if="customer.shipperOrganization"><span>Shipper Organization</span>  : {{ customer.shipperOrganization }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

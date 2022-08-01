@@ -1,0 +1,181 @@
+<form role="form" name="" autocomplete="off" novalidate>
+    <div class="modal-header" style="padding-bottom: 5px">
+        <button type="button" ng-click="aiVm.closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" align="center">Add Intermittent Points</h4>
+        <br />
+    </div>
+
+    <div class="modal-body">
+
+
+		<div class="row col-md-12" style="margin: 5px">
+
+			<div class="col-md-3">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label"><b>Source Code</b></label>
+						<div class="col-sm-8">
+							<div class="fg-line">
+								<input type="text"
+									   placeholder="Source Code"
+									   class="form-control"
+									   ng-model="aiVm.sCode"
+									   name="Source Code">
+							</div>
+						</div>
+					</div>
+				</div>
+			<div class="col-md-3">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label"><b>Destination Code</b></label>
+						<div class="col-sm-8">
+							<div class="fg-line">
+								<input type="text"
+									   placeholder="Destination Code"
+									   class="form-control"
+									   ng-model="aiVm.dCode"
+									   name="Destination Code"
+								>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div class="col-md-1 pull-right">
+				<div class="form-group">
+					<button type="button"
+							ng-click="aiVm.addMoreImds($index)"
+							uib-tooltip="Add Imds"
+							class="btn btn-primary"
+							>+</button>
+				</div>
+			</div>
+<!--			<div class="col-md-1 pointer pull-right">-->
+<!--				<span ng-click="aiVm.addMoreImds($index)" uib-tooltip="Add Imds">+</span>-->
+<!--			</div>-->
+		</div>
+
+<!--        <span class="pointer pull-right" ng-click="aiVm.addMoreImds($index)" uib-tooltip="Add Imds">-->
+<!--           +-->
+<!--        </span>-->
+        <div class="row" style="margin: 5px">
+            <div class="col-md-12" style="overflow: scroll; height: 400px">
+                <table class="table table-bordered unresponsive">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 40px">#</th>
+                            <th>add</th>
+                            <th>Action</th>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Entry Date and Time</th>
+                            <th>Exit Date and Time</th>
+                            <th>Remark</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in aiVm.intermediateRoute">
+                            <td>{{$index + 1}}</td>
+							<td>
+								<div class="form-group m-b-0">
+									<a data-ui-sref="" tooltip-placement="bottom" ng-click="aiVm.intermediateRoute.splice($index, 0, {});"><i class="zmdi zmdi-plus"></i></a>&nbsp;&nbsp;
+								</div>
+							</td>
+                            <td>
+                                <span class="pointer" ng-click="aiVm.intermediateRoute.splice($index, 1)"
+                                    uib-tooltip="Remove">
+                                    <i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+                                </span>
+                            </td>
+                            <td>
+                                <div>
+                                    <input type="text" placeholder="Intermittent Search..." ng-model="item.c"
+                                        class="form-control" typeahead-wait-ms="10"
+                                        typeahead="item as item.c + ' ' + '(' + item.d + ')' + ' (' + item.s + ')' for item in aiVm.getIntermediatePoint($viewValue) | limitTo:8"
+                                        class="form-control"
+                                        typeahead-on-select="aiVm.onSelectIntermediate($item, $index, $model, $label)" />
+                                </div>
+                            </td>
+							<td><div class="form-group m-b-0">
+								<div class="fg-line">
+									<input type="text" ng-model="item.code" class="form-control" name="Code"
+										   placeholder="Code" />
+								</div>
+							</div></td>
+                            <td>
+                                <div class="form-group m-b-0">
+                                    <div class="fg-line">
+                                        <div class="date-picker timepicker input-group dp-blue"
+                                            ng-class="{ 'is-opened': opened2 == true }">
+                                            <input ng-click="aiVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+                                                type="text" uib-datepicker-popup="{{aiVm.DatePicker.formats[0]}}"
+                                                show-weeks="false" ng-model="item.entryDate" min-date="selectedTrip.start_date"
+
+                                                ng-change="item.entryDateModel = item.entryDate" class="form-control"
+                                                is-open="opened2" uib-datepicker-options="aiVm.DatePicker.dateSettings"
+                                                close-text="Close" placeholder="Entry date" name="Entry date" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default m-t-0 f12"
+                                                    ng-click="aiVm.DatePicker.openDatePicker(this, $event, 'opened2')">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <timepicker ng-model="item.entryDate" show-spinners="false"
+                                                show-meridian="false"></timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group m-b-0">
+                                    <div class="fg-line">
+                                        <div class="date-picker timepicker input-group dp-blue"
+                                            ng-class="{ 'is-opened': opened3 == true }">
+                                            <input ng-click="aiVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+                                                type="text" uib-datepicker-popup="{{aiVm.DatePicker.formats[0]}}"
+                                                show-weeks="false" ng-model="item.exitDate" min-date="item.entryDate"
+
+                                                ng-change="item.exitDateModel = item.exitDate" class="form-control"
+                                                is-open="opened3" uib-datepicker-options="aiVm.DatePicker.dateSettings"
+                                                close-text="Close" placeholder="Exit date" name="Exit date" />
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default m-t-0 f12"
+                                                    ng-click="aiVm.DatePicker.openDatePicker(this, $event, 'opened3')">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <timepicker ng-model="item.exitDate" show-spinners="false"
+                                                show-meridian="false"></timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group m-b-0">
+                                    <div class="fg-line">
+                                        <input type="text" ng-model="item.remark" class="form-control" name="Remark"
+                                            placeholder="Enter Remark" />
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success waves-effect" ng-click="aiVm.submit(selectedTrip)">
+            Submit</button>&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-warning" ng-click="aiVm.closeModal()">Cancel</button>
+    </div>
+</form>
+<style type="text/css">
+    .modal-dialog {
+        width: 80%;
+    }
+</style>

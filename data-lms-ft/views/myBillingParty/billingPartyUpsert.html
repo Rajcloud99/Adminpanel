@@ -1,0 +1,837 @@
+<form name="billingParty" ng-submit="submit(billingParty)" novalidate autocomplete="off">
+
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Billing Party </b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+							({{operationType}})
+						</span>
+
+				<span style="margin-left: 10px; color: red;">
+							(Contract Company: {{($configs.client_allowed|filter:{'clientId': (oBillingParty.clientId || selectedClient)})[0].name}})
+						</span>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Billing Party DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">BASIC BILLING PARTY DETAILS</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Name: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Name"
+												   ng-model="oBillingParty.name"
+												   ng-change="oBillingParty.billName = oBillingParty.name;"
+												   name="Name"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="billingParty['Name'].$error.required
+																			&& (billingParty['Name'].$touched
+																			|| billingParty.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Bill Name: <span
+										class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter BillName"
+												   ng-model="oBillingParty.billName"
+												   name="Bill Name"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="billingParty['Bill Name'].$error.required
+																			&& (billingParty['Bill Name'].$touched
+																			|| billingParty.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Address 1: <span
+										class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Address"
+												   ng-model="oBillingParty.address"
+												   name="Address"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="billingParty['Address'].$error.required
+																			&& (billingParty['Address'].$touched
+																			|| billingParty.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Address 2: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Address"
+												   ng-model="oBillingParty.address2"
+												   name="Address"
+												   class="form-control"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Address 3: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Address"
+												   ng-model="oBillingParty.address3"
+												   name="Address"
+												   class="form-control"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--<div class="col-md-3">-->
+							<!--<div class="form-group m-b-0">-->
+							<!--<label class="col-sm-4 control-label">category: <span-->
+							<!--class="req_r">*</span></label>-->
+							<!--<div class="col-sm-6">-->
+							<!--<div class="select">-->
+							<!--<select chosen-->
+							<!--class="form-control"-->
+							<!--placeholder="Category Type"-->
+							<!--ng-options="item as item for item in $constants.aCategory"-->
+							<!--ng-model="oBillingParty.category"-->
+							<!--ng-change="getPercent(oBillingParty.category)"-->
+							<!--name="Category Type"-->
+							<!--required>-->
+							<!--<option value="" disabled selected>-->
+							<!--Select Type-->
+							<!--</option>-->
+							<!--</select>-->
+							<!--</div>-->
+							<!--<span class="error" ng-if="billingParty['category'].$error.required-->
+							<!--&& (billingParty['category'].$touched-->
+							<!--|| billingParty.$submitted)">-->
+							<!--This Field is Mandatory</span>-->
+							<!--</div>-->
+							<!--</div>-->
+							<!--</div>-->
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">percent: </label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select chosen
+													class="form-control"
+													placeholder="Percent Type"
+													ng-model="oBillingParty.percent"
+													ng-options="item as item for item in $constants.aPercent"
+													name="percent"
+													>
+												<option value="" disabled selected>
+													Select Type
+												</option>
+											</select>
+										</div>
+										<span class="error" ng-if="billingParty['percent'].$error.required
+																			&& (billingParty['percent'].$touched
+																			|| billingParty.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-if="$configs.master && $configs.master.billingParty && $configs.master.billingParty.reverseCharge">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Reverse Charge <span class="req_r" ng-if="upsertVm.oVehicle.ownershipType!='Market'">*</span> </label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select
+													name="reverse_charge"
+													class="form-control"
+													ng-model="oBillingParty.reverse_charge"
+													ng-options="item as item for item in ['Yes', 'No']"
+													required>
+												<option value="" selected disabled>Reverse Charge</option>
+											</select>
+										</div>
+										<span class="error" ng-if="billingParty['reverse_charge'].$error.required
+																			&& (billingParty['reverse_charge'].$touched
+																			|| billingParty.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-if="!oBillingParty.isCustomer">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Customer:</label>
+									<div class="col-sm-8">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+												type="text"
+												class="form-control"
+												placeholder="Customer"
+												ng-model="oBillingParty.customer"
+												typeahead-wait-ms="10"
+												name="Customer"
+												typeahead="item as item.name for item in getCustomer($viewValue) | limitTo:6"
+												>
+											<i class="lvh-search-close" ng-click="oBillingParty.customer=null;">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" >
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Billing Branch:</label>
+									<div class="col-sm-8">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+													type="text"
+													class="form-control"
+													placeholder="Billing Branch "
+													ng-model="oBillingParty.billingBranch"
+													typeahead-wait-ms="10"
+													name="BillingBranch"
+													typeahead="item as item.name for item in getAllBranchSearch($viewValue) | limitTo:6"
+													>
+											<i class="lvh-search-close"
+											ng-click="oBillingParty.billingBranch='';">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-if="$configs.master && $configs.master.billingParty && $configs.master.billingParty.courierAddress">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Courier Address:</label>
+									<div class="col-sm-8">
+										<div class="ng-scope sear chosen-row-1">
+											<textarea rows="2"
+													class="form-control"
+													placeholder="Courier Address"
+													ng-model="oBillingParty.courierAddress"
+													name="Courier Address">
+											</textarea>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">GSTIN: <span
+										ng-if="!$configs.master.billingParty.required.gstin"
+										class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter GSTIN"
+												   ng-model="oBillingParty.gstin"
+												   name="GSTIN"
+												   maxlength="{{$constants.gstinLength}}"
+												   minlength="{{$constants.gstinLength}}"
+												   class="form-control"
+												   ng-required="!$configs.master.billingParty.required.gstin">
+										</div>
+										<span class="error" ng-if="!$configs.master.billingParty.required.gstin && billingParty['GSTIN'].$error.required
+																	&& (billingParty['GSTIN'].$touched
+																	|| billingParty.$submitted)">
+												This Field is Mandatory</span>
+										<span class="error" ng-show="billingParty['GSTIN'].$error.minlength">GSTIN should not be Smaller OR Greater than {{$constants.gstinLength}}.</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">State Name:<span
+										class="req_r">*</span></label>
+									<div class="col-md-6">
+										<div class="select">
+											<select chosen
+													class="form-control"
+													placeholder="State Name"
+													ng-options="item.state as item.state for item in $constants.aGSTstates"
+													ng-model="oBillingParty.state_name"
+													ng-change="onStateSelect(oBillingParty.state_name)"
+													name="state_name"
+													required>
+												<option value="" disabled selected>
+													Select Type {{item}}
+												</option>
+											</select>
+										</div>
+										<span class="error"
+											  ng-if="billingParty['state_name'].$error.required
+													&& (billingParty['state_name'].$touched
+													|| billingParty.$submitted)">
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">State Code:<span
+										class="req_r">*</span></label>
+									<div class="col-sm-6">
+										{{oBillingParty.state_code}}
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-hide="$configs.master.billingParty.hideSegment">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Segment: </label>
+									<div class="col-sm-6">
+										<div class="fg-line form-group m-b-0">
+											<select chosen
+													class="form-control"
+													ng-model="oBillingParty.segment_type"
+													ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+													name="Segment">
+												<option value="" selected>Select Segment</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Contact Person: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter  Name"
+												   ng-model="oBillingParty.contact_person"
+												   name="Contact Person"
+												   class="form-control"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Contact Number: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Number"
+												   ng-model="oBillingParty.contact_number"
+												   name="Contact Number"
+												   class="form-control"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">PAN No.: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter PAN No"
+												   ng-model="oBillingParty.pan_number"
+												   name="panNo"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">CIN No.: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter CIN No"
+												   ng-model="oBillingParty.cin_number"
+												   name="cinNo"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">ISD GST: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter ISD GST"
+												   ng-model="oBillingParty.isdgst"
+												   name="ISD GST"
+												   class="form-control"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<!--<div class="col-md-3">-->
+							<!--<div class="form-group m-b-0">-->
+							<!--<label class="col-sm-4 control-label">Operation Company: </label>-->
+							<!--<div class="col-sm-6">-->
+							<!--<div class="select">-->
+							<!--<select chosen-->
+							<!--multiple-->
+							<!--class="form-control"-->
+							<!--placeholder="Select ClientR"-->
+							<!--ng-options="item.clientId as item.name for item in aClientR"-->
+							<!--ng-model="oBillingParty.clientR"-->
+							<!--name="ClientR">-->
+							<!--<option value="" disabled>-->
+							<!--Select Clients-->
+							<!--</option>-->
+							<!--</select>-->
+							<!--</div>-->
+							<!--</div>-->
+							<!--</div>-->
+							<!--</div>-->
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Location: <span class="req_r">*</span>
+									</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Location"
+												   ng-model="oBillingParty.businessLocation"
+												   name="Location"
+												   class="form-control"
+												   required
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Date:</label>
+									<div class="col-sm-6">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened1 == true }">
+											<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+												<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+													   type="text"
+													   class="form-control"
+													   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-model="oBillingParty.billing_dates"
+													   is-open="opened1"
+													   datepicker-options="DatePicker.dateSettings"
+													   close-text="Close"
+													   placeholder="Date"
+													   name="Date"
+													   style="padding: 0px 4px;height: 34px;"/>
+											</div>
+											<span class="input-group-btn">
+								                      <button type="button" class="btn btn-default m-t-0 f12"
+															  ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														  class="glyphicon glyphicon-calendar"></i></button>
+								                    </span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-if="$configs.master.billingParty.clientType === 'FCM'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Group: </span></label>
+									<div class="col-sm-6">
+										<div class="fg-line form-group m-b-0">
+											<select chosen
+													class="form-control"
+													ng-model="oBillingParty.group"
+													ng-options="item as item for item in  $constants.aBPGroup"
+													name="Segment">
+												<option value="" selected>Select Group</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-if="$configs.master.showAccount">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Account: <span class="req_r">*</span></label>
+									<div class="col-sm-8">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+												type="text"
+												ng-readonly="readonlyAc"
+												class="form-control"
+												placeholder="bp Account"
+												ng-model="oBillingParty.account"
+												typeahead-wait-ms="10"
+												name="bp account"
+												typeahead="item as item.name for item in getBpHoldAccount($viewValue, 'Customer')"
+												ng-required="true">
+											<i class="lvh-search-close" ng-click="oBillingParty.account=null;" ng-hide="readonlyAc">×</i>
+										</div>
+										<span class="error" ng-if="billingParty['bp account'].$error.required
+																	&& !billingParty['bp account'].$error.required">
+													This Field is Mandatory</span>
+										<br>
+										<div class="text-center">
+											<button class="btn btn-primary waves-effect"
+													type="button"
+													ng-disabled="readonlyAc"
+													style="padding: 3px 5px"
+													ng-click="addNewAccount(false,'bpCheck')"
+													uib-tooltip="Add">
+												<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+											</button>
+											<!-- <button class="btn btn-danger waves-effect"
+													type="button"
+													style="padding: 3px 5px"
+													ng-click="onDelinkAccount()"
+													uib-tooltip="Delink"
+													ng-disabled="!oBillingParty.account._id"
+											>
+												<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+											</button> -->
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">BillingParty with Hold A/c: <span
+										ng-if="$configs.master.billingParty.required.whAcc"
+										class="req_r">*</span></label>
+									<div class="col-sm-8">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+												type="text"
+												class="form-control"
+												ng-readonly="readwhcc"
+												placeholder="bp hold account"
+												ng-model="oBillingParty.withHoldAccount"
+												typeahead-wait-ms="10"
+												name="bp hold account"
+												typeahead="item as item.name for item in getBpHoldAccount($viewValue, 'Debtor with Hold')"
+												ng-required="$configs.master.billingParty.required.whAcc ? true : false">
+											<i class="lvh-search-close"
+											   ng-click="oBillingParty.withHoldAccount=null;" ng-hide="readwhcc">×</i>
+										</div>
+										<span class="error" ng-if="billingParty['bp hold account'].$error.required
+																	&& !billingParty['bp hold account'].$error.required">
+													This Field is Mandatory</span>
+										<br>
+										<div class="text-center">
+											<button class="btn btn-primary waves-effect"
+													type="button"
+													ng-disabled="readwhcc"
+													style="padding: 3px 5px"
+													ng-click="addNewAccount('Debtor with Hold')"
+													uib-tooltip="Add">
+												<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+											</button>
+											<!-- <button class="btn btn-danger waves-effect"
+													type="button"
+													style="padding: 3px 5px"
+													ng-click="onDelinkAccount('Debtor with Hold')"
+													uib-tooltip="Delink"
+													ng-disabled="!oBillingParty.withHoldAccount._id"
+											>
+												<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+											</button> -->
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<!--							<div class="col-md-3">-->
+							<!--								<div class="form-group m-b-0">-->
+							<!--									<label class="col-sm-4 control-label">Credit Note Book :</label>-->
+							<!--									<div class="col-sm-8">-->
+							<!--										<div ng-dropdown-multiselect=""-->
+							<!--											 options="aCnBooks"-->
+							<!--											 selected-model="cnBook"-->
+							<!--											 extra-settings="selectSettings"-->
+							<!--											 ja-search-input='inputModel'-->
+							<!--											 ja-search-trigger="getCnBooks(inputModel)"-->
+							<!--										></div>-->
+							<!--									</div>-->
+							<!--								</div>-->
+							<!--							</div>-->
+
+						</div>
+						<div class="row" style="margin:5px" ng-if="$configs.master.billingParty.multiTasking">
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="col-xs-4"><label>Customer :</label></div>
+								<div class="col-xs-6">
+									<label class="checkbox checkbox-inline m-r-20">
+										<input type="checkbox"
+											   ng-disabled="isCustomer"
+											   ng-model="oBillingParty.isCustomer">
+										<i class="input-helper"></i>
+									</label>
+								</div>
+							</div>
+						</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<div class="col-xs-4"><label>Consignor:</label></div>
+									<div class="col-xs-6">
+										<label class="checkbox checkbox-inline m-r-20">
+											<input type="checkbox"
+												   ng-disabled="isConsignor"
+												   ng-model="oBillingParty.isConsignor">
+											<i class="input-helper"></i>
+										</label>
+									</div>
+								</div>
+							</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<div class="col-xs-4"><label>Consignee:</label></div>
+								<div class="col-xs-6">
+									<label class="checkbox checkbox-inline m-r-20">
+										<input type="checkbox"
+											   ng-disabled="isConsignee"
+											   ng-model="oBillingParty.isConsignee">
+										<i class="input-helper"></i>
+									</label>
+								</div>
+							</div>
+						</div>
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item" ng-hide="$configs.master.billingParty.defaultCreditNoteBook">
+					<span class="booking_list_header"> </span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="col-md-6">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Credit Note Book:</label>
+										<div class="col-sm-8" ng-hide="crReadonly">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Search CRBook"
+													ng-model="addCNBook"
+													typeahead-wait-ms="10"
+													ng-trim="false"
+													name="CN Book"
+													typeahead="item as item.name for item in getCnBooks($viewValue) | limitTo:20"
+													typeahead-on-select="onBookSelect($item);addCNBook=null"
+												>
+												<i class="lvh-search-close" ng-click="addCNBook=null;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--								<button-->
+								<!--									type="button"-->
+								<!--									class="btn btn-danger waves-effect"-->
+								<!--									uib-tooltip="Delete Book"-->
+								<!--									tooltip-placement="bottom"-->
+								<!--									ng-click="cnBook.splice($index, 1)">-->
+								<!--									<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+								<!--								</button>-->
+								<div class="clearfix"></div>
+								<div class="col-md-12">
+									<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="cnBook.length">
+			  <span class="btn-lst" ng-repeat="select in cnBook">
+				  <button class="btn-xs" style="background: black; color: aliceblue;">     {{select.name}}&nbsp;
+				  <a ng-click="cnBook.splice($index, 1)"> X </a></button>&nbsp;&nbsp;</span>
+									</div>
+									<!--									<div class="detailsList">-->
+									<!--										<div class="" style="overflow-y: auto; max-height: 80px;">-->
+									<!--											<table class="table table-bordered unresponsive">-->
+									<!--												<thead id='my_fixable_table_header1'>-->
+									<!--												<tr>-->
+									<!--													<th>#</th>-->
+									<!--													<th>name</th>-->
+									<!--												</tr>-->
+									<!--												</thead>-->
+									<!--												<tbody>-->
+									<!--												<tr ng-repeat="oBook in cnBook"-->
+									<!--													class="pointer"-->
+									<!--													ng-class="{grn: selectedCRRow._id === oBook._id}"-->
+									<!--													ng-click="selectedCRRow = oBook">-->
+									<!--													<td>{{$index + 1}}</td>-->
+									<!--													<td>{{oBook.name}}</td>-->
+									<!--												</tr>-->
+									<!--												</tbody>-->
+									<!--											</table>-->
+									<!--										</div>-->
+									<!--									</div>-->
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item" ng-if="!$configs.master.billingParty.defaultBillBook">
+					<div class="card-body">
+						<div class="pull-right text-right m-t-5">
+							<button type="button" class="btn-primary btn-xs"
+									ng-click="addBillBook(oBillingParty.billBookObj);"
+									uib-tooltip="Add BiilBook"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button type="button" class="btn-danger btn-xs"
+									ng-click="removeBillBook(obj.selectedIndex);"
+									uib-tooltip="Delete ExtraCharges"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="row" style="margin:5px">
+
+<!--							<div class="col-md-3">-->
+<!--								<div class="form-group m-b-0">-->
+<!--									<label class="col-sm-4 control-label">Stationary Book :</label>-->
+<!--									<div class="col-sm-8">-->
+<!--										<div ng-dropdown-multiselect=""-->
+<!--											 options="aBillBooks"-->
+<!--											 selected-model="billBookObj"-->
+<!--											 extra-settings="selectAccountSettings"-->
+<!--											 ja-search-input='inputModel'-->
+<!--											 ja-search-trigger="getbillBooks(inputModel)"-->
+<!--										></div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Stationary Book:</label>
+									<div class="col-sm-8">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+												type="text"
+												class="form-control"
+												placeholder="Stationary Book"
+												ng-model="oBillingParty.billBookObj"
+												typeahead-wait-ms="10"
+												name="Stationary Book"
+												typeahead="item as item.name for item in getbillBooks($viewValue)"
+												>
+											<i class="lvh-search-close"
+											   ng-click="oBillingParty.billBookObj=null;">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="oBillingParty.billBookData.length">
+							<div class="" style="overflow-y: auto; height: 200px;">
+								<table class="table table-bordered vehicleAllot">
+									<thead>
+									<tr>
+										<th>#</th>
+										<th>Stationary Book</th>
+										<th>Branch</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oBillbook in oBillingParty.billBookData"
+										ng-class="{grn: obj.selectedIndex === $index}"
+										ng-click="obj.selectedIndex = $index">
+										<td>{{$index+1}}</td>
+										<td>{{oBillbook.name}}</td>
+										<td>
+											<div class="col-sm-8">
+												<div ng-dropdown-multiselect=""
+													 options="aBranch"
+													 selected-model="oBillbook.branch"
+													 extra-settings="selectAccountSettings"
+													 ja-search-input='inputModel'
+													 ja-search-trigger="getAllBranch(inputModel)"
+												>
+												</div>
+												<span class="error"
+													  ng-if="('isEmptyObject'|otherUtilsFilt:oBillbook.branch)">
+														This is Mandatory Feild
+													</span>
+											</div>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="closeModal()">Close
+		</button>
+	</div>
+
+</form>
+
+
+<style>
+
+	form .col-md-3 {
+		min-height: 50px;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+</style>

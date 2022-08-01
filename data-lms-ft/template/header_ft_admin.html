@@ -1,0 +1,33 @@
+<ul class="header-inner clearfix" style="background-color: #0d3349">
+    <li class="logo hidden-xs" style="padding: 10px 10px 10px 20px">
+        <a>FT ADMIN</a>
+    </li>
+    <li class="pull-right">
+        <ul class="top-menu">
+            <li class="dropdown" uib-dropdown="">
+                <a uib-dropdown-toggle="" href="" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                    <i class="tm-icon zmdi zmdi-settings"></i>
+                </a>
+                <ul class="dropdown-menu dm-icon pull-right">
+                    <li>
+                        <a data-ui-sref="user.profile"><i class="zmdi zmdi-face"></i> User Settings</a>
+                    </li>
+                    <li>
+                        <a data-ui-sref="roles" href="#!/roles"><i class="zmdi zmdi-settings"></i> Role Settings</a>
+                    </li>
+                    <li>
+                        <a data-ui-sref="login" href="#!/auth/login"><i class="zmdi zmdi-logout"></i>Logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>
+
+<!-- Top Search Content -->
+<div id="top-search-wrap">
+    <div class="tsw-inner">
+        <i id="top-search-close" class="zmdi zmdi-arrow-left" data-ng-click="hctrl.closeSearch()"></i>
+        <input type="text">
+    </div>
+</div>

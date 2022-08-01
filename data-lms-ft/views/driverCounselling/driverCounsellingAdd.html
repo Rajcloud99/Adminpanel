@@ -1,0 +1,176 @@
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+    id="messages-main">
+    <div class="card" style="min-height: 600px;">
+        <!--Form starts here -->
+        <div class="card-body">
+            <form name="counsellingForm" novalidate>
+                <ul class="list-group list-group-flush">
+                    <!-- BASIC DETAILS -->
+                    <li class="list-group-item">
+                        <span class="booking_list_header">BASIC DETAILS</span>
+                        <div class="card-body">
+                            <div class="row" style="margin:5px">
+                                <div class="col-md-4">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Vehicle No: <span
+                                                class="req_r">*</span></label>
+                                        <div class="col-sm-6">
+                                            <div class="lvh-search ng-scope sear chosen-row-1">
+                                                <input type="text" class="form-control lvhs-input" required
+                                                    placeholder="Vehicle Search..." ng-model="vehc"
+                                                    typeahead-wait-ms="10" name="Vehicle"
+                                                    typeahead="item as item.vehicle_reg_no for item in getVehicle($viewValue) | limitTo:6"
+                                                    typeahead-on-select="onSelect($item, $model, $label)">
+                                                <i class="lvh-search-close" ng-click="vehc=null;oCounselling.vehicle=null;oCounselling.fleet=null">×</i>
+                                                <span class="error" ng-if="	counsellingForm['Vehicle'].$error.required
+                                                    && (counsellingForm['Vehicle'].$touched
+                                                    || counsellingForm.$submitted)">
+                                                    This Field is Mandatory</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                <!-- Driver Code -->
+                                <div class="col-md-4">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Driver Code: <span
+                                            class="req_r">*</span> </label>
+                                        <div class="col-sm-6">
+                                            <!-- <div class="fg-line">
+                                                <input type="text" placeholder="Enter Driver Code" ng-model="oCounselling.driverCode"
+                                                    class="form-control" name="Driver Code">
+                                            </div> -->
+                                            <div class="lvh-search ng-scope sear chosen-row-1">
+                                                <input type="text" class="form-control lvhs-input" required
+                                                    placeholder="Code Search..." ng-model="code"
+                                                    typeahead-wait-ms="10" name="Driver Code"
+                                                    typeahead="item as item.employee_code for item in getDriver($viewValue) | limitTo:6"
+                                                    typeahead-on-select="onDriverCodeSelect($item, $model, $label)">
+                                                <i class="lvh-search-close" ng-click="code=null;oCounselling.driverCode=null;">×</i>
+                                                <span class="error" ng-if="	counsellingForm['Driver Code'].$error.required
+                                                    && (counsellingForm['Driver Code'].$touched
+                                                    || counsellingForm.$submitted)">
+                                                    This Field is Mandatory</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Date Of Entry -->
+                                <div class="col-md-4">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Date of Entry: <span
+                                            class="req_r">*</span></label>
+                                        <div class="col-sm-6">
+                                            <div class="date-picker input-group dp-blue"
+                                                ng-class="{ 'is-opened': opened1 == true }">
+
+                                                <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                                                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+                                                        type="text" class="form-control"
+                                                        uib-datepicker-popup="{{DatePicker.formats[0]}}"
+                                                        show-weeks="false" ng-model="oCounselling.date"
+                                                        datepicker-options="DatePicker.dateSettings" close-text="Close"
+                                                        placeholder="Date" name="Date"
+                                                        style="padding: 0px 4px;height: 34px;"
+                                                        required disabled />
+                                                </div>
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default m-t-0 f12"
+                                                        ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+                                                            class="glyphicon glyphicon-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                            <span class="error" ng-if="	counsellingForm['Date'].$error.required
+                                                    && (counsellingForm['Date'].$touched
+                                                    || counsellingForm.$submitted)">
+                                                This Field is Mandatory</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="animate-show-hide row" style="margin:5px">
+                                <div class="col-md-4">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Driver Avg. Running: <span
+                                                class="req_r">*</span></label>
+                                        <div class="col-sm-6">
+                                            <div class="fg-line">
+                                                <input type="number" placeholder="Enter Avg. Running" required
+                                                    ng-model="oCounselling.avgRun" class="form-control" name="Avg Running"
+                                                    >
+                                            </div>
+                                            <span class="error" ng-if="	counsellingForm['Avg Running'].$error.required
+                                                                        && (counsellingForm['Avg Running'].$touched
+                                                                            || counsellingForm.$submitted)">
+                                                This Field is Mandatory</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Remarks: <span
+                                                class="req_r">*</span></label>
+                                        <div class="col-sm-6">
+                                            <div class="fg-line">
+                                                <input type="text" placeholder="Enter remark" required
+                                                    ng-model="oCounselling.remark" class="form-control" name="Remark">
+                                            </div>
+                                            <span class="error" ng-if="	counsellingForm['Remark'].$error.required
+                                                                        && (counsellingForm['Remark'].$touched
+                                                                            || counsellingForm.$submitted)">
+                                                This Field is Mandatory</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Driver Bal. As Per Copy:</label>
+                                        <div class="col-sm-6">
+                                            <div class="fg-line">
+                                                <input type="number" placeholder="Enter Driver Balance"
+                                                    ng-model="oCounselling.driverBalCopy" class="form-control"
+                                                    name="Driver Bal Copy">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="animate-show-hide row" style="margin:5px">
+
+                                <div class="col-md-4">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Driver Bal. As Per System:</label>
+                                        <div class="col-sm-6">
+                                            <div class="fg-line">
+                                                <input type="number" placeholder="Enter Driver Balance" 
+                                                    ng-model="oCounselling.driverBalSystem" class="form-control"
+                                                    name="Driver Bal System">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="animate-show-hide list-group-item">
+                        <div class="card-body">
+                            <div class="row" style="margin:5px">
+                                <div class="col-md-12 text-center">
+                                    <button class="btn btn-primary" ng-click="submit(counsellingForm);"
+                                        ng-disabled="disableSubmit">SUBMIT</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>

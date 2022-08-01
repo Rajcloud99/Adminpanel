@@ -1,0 +1,422 @@
+<div class="container">
+    <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <div class="row hidden-print" style="margin:15px;">
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="myFilter.bill_no"
+						   name="bill_no"
+						   class="form-control input-sm"
+						   placeholder="Bill No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input
+					 type="text"
+					 ng-model="myFilter.gr_no"
+					 name="gr_no"
+					 class="form-control input-sm"
+					 placeholder="GR No."
+					 ng-model-options="{ updateOn: 'blur' }"
+					>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="myFilter.coverNoteNo"
+						   name="bill_no"
+						   class="form-control input-sm"
+						   placeholder="Cover Note No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="lvh-search ng-scope sear">
+							<input type="text"
+								   placeholder="Billing Party..."
+								   ng-model="myFilter.search_billParty"
+								   class="lvhs-input"
+								   typeahead-wait-ms="10"
+								   typeahead="item as item.name for item in aBillingParty"
+								   ng-change="getBillingPartyName(myFilter.search_billParty)"
+								   class="form-control"
+								   typeahead-on-select="onSelect($item, $model, $label)">
+							<i class="lvh-search-close"
+							   ng-click="myFilter.search_billParty='';clearSelection();">×</i>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="form-group m-b-0">
+					<div class="fg-line">
+						<div class="select">
+							<select class="form-control"
+									ng-model="myFilter.status"
+									style="height: 33px;margin-top: 1px"
+									ng-options="item as item for item in $constants.abillStatus">
+								<option value="">All Status</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="select">
+					<select class="form-control"
+							ng-model="myFilter.dateType"
+							name="Branch Name">
+						<option value="">Select Type</option>
+						<option value="billDate">Bill Date</option>
+						<option value="acknowledge.systemDate">Ack Date</option>
+						<option value="approve.date">Approve Date</option>
+						<option value="items.settlement.date">Settlement Date</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   ng-change="getInvoice(false,true);dateChange('startDate')"
+										   class="form-control"
+										   datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   max-date="DatePicker.newDate"
+										   ng-model="myFilter.start_date"
+										   is-open="opened1"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Start Date"/>
+								</div>
+								<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened2 == true }">
+								<div ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+										   ng-change="getInvoice(false,true);dateChange('endDate')"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   max-date="DatePicker.newDate"
+										   min-date="myFilter.start_date"
+										   ng-model="myFilter.end_date"
+										   is-open="opened2"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="End Date"/>
+								</div>
+								<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Search"
+						type="submit"
+						ng-click="getGeneratedBills()"
+						tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Clear Search"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="myFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Report"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="getGeneratedBills(undefined, true);"><i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			</div>
+        </div>
+    </div>
+
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="form-group m-b-0">
+			<button class="btn btn-primary"
+					ng-click="addRemarkMultipleBill()"
+					ng-disabled="billIconRemark"
+					uib-tooltip="Multiple Bill Add Remark">
+				<i class="zmdi zmdi-comment-text"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary" ng-disabled="billIconStatus"
+					ng-click="printMultipleBill('Preview')"
+					uib-tooltip="Multi Bill Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<!--<button class="btn btn-primary"-->
+					<!--ng-click="genActFrmPro()"-->
+					<!--ng-disabled="selectedBill.type != 'Provisional Bill' || selectedBill.status == 'Cancelled'"-->
+					<!--uib-tooltip="Gen. Actual Bill">-->
+				<!--<i class="zmdi zmdi-file-plus zmdi-hc-fw"></i>-->
+			<!--</button>&nbsp;&nbsp;-->
+			<button class="btn btn-primary"
+					ng-click="genProFrmPro()"
+					ng-disabled=" (selectedBill.type != 'Provisional Bill' || selectedBill.status == 'Cancelled') || billIconStatus "
+					uib-tooltip="Gen. Provisional Bill">
+				<i class="zmdi zmdi-file-plus zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-click="generateCoverNote('add')"
+					ng-disabled="(selectedBill.type === 'Provisional Bill') || billIconStatus"
+					uib-tooltip="Generate Cover Note">
+				<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-click="generateCoverNote('edit')"
+					ng-disabled="(selectedBill.type === 'Provisional Bill') || billIconStatus"
+					uib-tooltip="Edit CoverNote">
+				<i class="zmdi zmdi-border-color zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<span ng-show="selectedBill.status == 'Cancelled'">
+				<button class="btn btn-primary"
+						ng-click="billEditOperation('Edit & Gen')"
+						ng-disabled="(selectedBill.type === 'Provisional Bill') || billIconStatus"
+						uib-tooltip="Edit And Generate New Bill">
+					<i class="zmdi zmdi-assignment-return zmdi-hc-fw"></i>
+				</button>&nbsp;&nbsp;
+			</span>
+			
+			<button class="btn btn-primary"
+					ng-click="billOperation('Edit')"
+					ng-disabled="(selectedBill.status == 'Cancelled' || selectedBill.acknowledge.status) || billIconStatus"
+					uib-tooltip="Edit">
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-click="printBill('Preview')"
+					ng-disabled="billIconStatus"
+					uib-tooltip="Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					uib-tooltip="Generate SupplementaryBill"
+					tooltip-placement="bottom"
+					type="button"
+					ng-disabled="(selectedBill.status == 'Cancelled' || selectedBill.type == 'Supplementary Bill' || selectedBill.type === 'Provisional Bill') || billIconStatus"
+					ng-click="generateSuppleBill('Supplementary Bill')">
+				<i class="zmdi zmdi-assignment-returned zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-click="billCancellationORApprovePopup('Cancel')"
+					
+					ng-disabled="(selectedBill.status == 'Cancelled' || selectedBill.acknowledge.status) || billIconStatus"
+					uib-tooltip="Cancel">
+				<i class="zmdi zmdi-close-circle zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-click="billApprovePopup('Approve')"
+					ng-disabled="(selectedBill.status == 'Cancelled' || selectedBill.acknowledge.status) || billIconStatus"
+					 
+					uib-tooltip="Approve">
+				<i class="zmdi zmdi-assignment-check zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-danger"
+					ng-click="revertAck()"
+					ng-disabled="(selectedBill.status == 'Unapproved') || billIconStatus"
+					uib-tooltip="UnApprove">
+				<i class="zmdi zmdi-assignment-check zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-disabled="(selectedBill.status == 'Cancelled' || selectedBill.acknowledge.status || selectedBill.items[0].gr._id || selectedBill.type === 'Provisional Bill') || billIconStatus"
+					ng-click="generateBillWithOutGr('edit')"
+					uib-tooltip="Edit Bill Without Gr">
+				<i class="zmdi zmdi-border-color zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Generate Bill Without Gr"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="generateBillWithOutGr();">
+				<i class="zmdi zmdi-collection-plus"></i>
+			</button>
+
+			<!-- TODO UI refectoring fron future version-->
+				<!-- Dispatch -->
+
+				<!--<button class="btn btn-primary"-->
+						<!--ng-click="printBill('Preview')"-->
+						<!--ng-disabled="selectedBill.length !== 1"-->
+						<!--uib-tooltip="Preview">-->
+					<!--<i class="zmdi zmdi-print zmdi-hc-fw fs-20"></i>-->
+				<!--</button>&nbsp;&nbsp;-->
+				<!--<button class="btn btn-primary"-->
+						<!--ng-click="uploadDocs()"-->
+						<!--ng-show="selectedBill.length === 1"-->
+						<!--uib-tooltip="Upload Docs">-->
+					<!--<i class="zmdi zmdi-upload zmdi-hc-fw fs-20"></i>-->
+				<!--</button>&nbsp;&nbsp;-->
+				<!--<button class="btn btn-primary"-->
+						<!--ng-click="previewDocs()"-->
+						<!--ng-show="selectedBill.length === 1"-->
+						<!--uib-tooltip="Preview Docs">-->
+					<!--<i class="zmdi zmdi-border-color glyphicon glyphicon-list-alt"></i>-->
+				<!--</button>&nbsp;&nbsp;-->
+				<!--<button class="btn btn-primary"-->
+						<!--ng-click="updateBillForDispatch()"-->
+						<!--ng-disabled="selectedBill.length !== 1"-->
+						<!--uib-tooltip="Dispatch">-->
+					<!--<i class="glyphicon glyphicon-send fs-20"></i>-->
+				<!--</button>-->
+
+				<!--Acknowledge-->
+				<!--<button class="btn btn-primary"-->
+						<!--ng-disabled="selectedBill.acknowledge.state"-->
+						<!--ng-click="uploadAcknowledgeBill(selectedBill)"-->
+						<!--uib-tooltip="Upload Acknowledged Bill">-->
+					<!--<i class="zmdi zmdi-upload zmdi-hc-fw fs-20"></i>-->
+				<!--</button>&nbsp;&nbsp;-->
+				<!--<button class="btn btn-primary"-->
+						<!--ng-click="printBill('Preview')"-->
+						<!--uib-tooltip="Preview">-->
+					<!--<i class="zmdi zmdi-print zmdi-hc-fw fs-20"></i>-->
+				<!--</button>&nbsp;&nbsp;-->
+				<!--<button class="btn btn-primary"-->
+						<!--ng-click="acknowledgeBill(selectedBill)"-->
+						<!--ng-disabled="selectedBill.acknowledge.state"-->
+						<!--uib-tooltip="Acknowledge Bill">-->
+					<!--<i class="zmdi zmdi-badge-check zmdi-hc-fw fs-20"></i>-->
+				<!--</button>-->
+			<!--END-->
+		</div>
+	</div>
+
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div ja-table
+					 table-body="aGeneratedBill"
+					 table-head="tableHead"
+					 table-column-setting="columnSetting"
+					 table-load="getGeneratedBills(true)"
+					 table-height='500px'
+					 table-selectable='selectType'
+					 table-api="tableApi"
+					 table-selectable-model="aSelectedBill"
+					 table-row-click-event="selectedMultiBill()"
+				></div>
+			</div>
+		</div>
+	</div>
+
+
+	<!--<div class="detailsList">-->
+		<!--<div class="" style="overflow-y: auto; max-height: 500px;">-->
+			<!--<table class="table table-bordered unresponsive">-->
+				<!--<thead id='my_fixable_table_header' fix-head>-->
+
+				<!--<tr>-->
+						<!--<th style="min-width: 70px">Bill No.</th>-->
+						<!--<th style="min-width: 160px">Gr No.</th>-->
+                        <!--<th style="min-width: 120px">Bill Type</th>-->
+                        <!--<th style="min-width: 100px">Status</th>-->
+                        <!--<th style="min-width: 320px">Billing Party</th>-->
+                        <!--<th style="min-width: 100px">Billing Date</th>-->
+                        <!--<th style="min-width: 100px">Due Date</th>-->
+						<!--<th style="min-width: 100px">Amount(Rs.)</th>-->
+                        <!--<th style="min-width: 130px">Amount Received</th>-->
+                        <!--<th style="min-width: 100px">Due Amount</th>-->
+						<!--<th style="min-width: 100px">CGST</th>-->
+						<!--<th style="min-width: 100px">SGST</th>-->
+						<!--<th style="min-width: 100px">IGST</th>-->
+						<!--<th style="min-width: 100px">Total Tax</th>-->
+                        <!--<th style="min-width: 150px">Created By</th>-->
+                        <!--<th style="min-width: 150px">Remark</th>-->
+
+                    <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                    <!--<tr data-ng-repeat="oBill in aBill"-->
+						<!--class="selectItem pointer"-->
+						<!--ng-click="selectThisRow(oBill, $index)">-->
+						<!--<td>{{oBill.billNo}}</td>-->`
+                        <!--<td class="">{{oBill.items|getGrNumber}}</td>-->
+                        <!--<td>{{oBill.type || 'NA'}}</td>-->
+                        <!--<td>{{oBill.status || 'NA'}}</td>-->
+                        <!--<td>{{oBill.billingParty.name}}</td>-->
+                        <!--<td>{{(oBill.billDate || oBill.created_at) | date:"dd-MM-yyyy"}}</td>-->
+                        <!--<td>{{(oBill.dueDate | date:"dd-MM-yyyy") || 'NA'}}</td>-->
+                        <!--<td>{{oBill.totalAmount|roundOff}}</td>-->
+                        <!--<td>{{((oBill | calculateReceivedAmount) || 0)|roundOff}}</td>-->
+                        <!--<td>{{ ((oBill.totalAmount - (oBill | calculateReceivedAmount)) || 0)|roundOff}}</td>-->
+						<!--<td>{{(oBill.cGST || 0)|roundOff}}</td>-->
+						<!--<td>{{(oBill.sGST || 0)|roundOff}}</td>-->
+						<!--<td>{{(oBill.iGST || 0)|roundOff}}</td>-->
+						<!--<td>{{ (oBill.iGST !== 0 ? oBill.iGST : (oBill.cGST + oBill.sGST) )|roundOff}}</td>-->
+                        <!--<td>{{oBill.created_by.full_name || "NA"}}</td>-->
+                        <!--<td>{{(oBill | currentStatusRemark) || "NA"}}</td>-->
+                    <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+            <!--<div ng-if="aBill.length == 0" class="ms-body" style=" min-height: 50px;">-->
+                <!--<h3>No any bill available !!!!!</h3>-->
+            <!--</div>-->
+        <!--</div>-->
+		<!--<div style="text-align: center;" ng-show="aBill.length>0">-->
+			<!--<uib-pagination ng-change="getGeneratedBills()"-->
+							<!--total-items="pagination.totalItems"-->
+							<!--items-per-page="pagination.items_per_page"-->
+							<!--num-pages="pagination.numPages"-->
+							<!--ng-model="pagination.currentPage"-->
+							<!--max-size="pagination.maxSize"-->
+							<!--class="pagination-sm smallPagi"-->
+							<!--boundary-links="true"-->
+							<!--previous-text="&lsaquo;"-->
+							<!--next-text="&rsaquo;"-->
+							<!--first-text="&laquo;"-->
+							<!--last-text="&raquo;"></uib-pagination>-->
+		<!--</div>-->
+    <!--</div>-->
+</div>
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+	.hideExtraData{
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		height: 45px;
+	}
+</style>

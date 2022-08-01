@@ -1,0 +1,258 @@
+<form role="form"  name="" autocomplete="off" novalidate>
+	<div class="modal-header" style="padding-bottom: 5px;">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add New Vehicle</h4><br>
+	</div>
+	<div class="modal-body">
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Vehicle No.</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text"
+								   class="form-control"
+								   ng-model="newVeh.vehicle_reg_no"
+								   placeholder="enter here..." ng-blur="vehicleCheckExist()">
+						</div>
+						<span class="error" ng-if="checkExists"> {{checkExists}}</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Vehicle Group</label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select chosen class="form-control"
+									ng-model="newVeh.group_data"
+									ng-options="option as option.name for option in aVehicleGroups"
+									ng-selected="aVehicleType=newVeh.group_data.vehicle_types"
+									search-contains="true"
+									name="Group Name"
+									ng-disabled="(registered_vehicle_mode=='View')"
+									required>
+								<option value="" selected>Select Group</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Vehicle Type</label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select chosen class="form-control"
+									placeholder="Select Type"
+									ng-options="option as option.name for option in aVehicleType"
+									ng-model="newVeh.veh_type_data"
+									name="vehicle type"
+									ng-disabled="(registered_vehicle_mode=='View')" required>
+								<option value="" disabled selected>Select Vehicle Type</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Vehicle Category:</label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select chosen class="form-control"
+									ng-model="newVeh.category"
+									ng-options="option as option for option in aCategory"
+									search-contains="true"
+									name="Category Name"
+									ng-disabled="(registered_vehicle_mode=='View')"
+									required>
+								<option value="" selected>Select Category</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4" ng-if="$configs.costCenter.show">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label">Cost Center <span class="req_r">*</span>: </label>
+					<div class="col-sm-8">
+						<div class="ng-scope sear chosen-row-1">
+							<input
+								type="text"
+								class="lvhs-input"
+								placeholder="Cost Center"
+								ng-model="newVeh.costCenter"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in getCostCenter($viewValue)"
+								class="form-control"
+								 required>
+							<i class="lvh-search-close" ng-click="newVeh.costCenter='';">×</i>
+						</div>
+						<!-- <span class="error"
+							  ng-if=" vehicleRegistration['cost_center'].$error.required
+												&& (vehicleRegistration['cost_center'].$touched
+												|| vehicleRegistration.$submitted)">
+							This Field is Mandatory</span>
+						<br>
+						<div class="text-center">
+						</div> -->
+					</div>
+				</div>
+			</div>
+		  <div class="clearfix"></div>
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="checkbox" style="margin: 0 0 10px 0">
+							<label>
+								<input type="checkbox"
+									   ng-model="newVeh.unknown_driver"
+									   ng-change="checkUnknown()" value="">
+								<i class="input-helper"></i>
+								Unknown Driver
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-md-4" ng-hide="newVeh.unknown_driver">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Driver Name</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text"
+								   class="form-control"
+								   ng-model="newVeh.driver_name"
+								   placeholder="enter here..."
+								   ng-readonly="newVeh.driver_name == 'unknown'">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4" ng-hide="newVeh.unknown_driver">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Driver Contact</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text"
+								   class="form-control"
+								   ng-model="newVeh.driver_contact"
+								   placeholder="enter here..."
+								   ng-readonly="newVeh.driver_name == 'unknown'">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4" ng-hide="newVeh.unknown_driver">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Driver License</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text"
+								   class="form-control"
+								   ng-model="newVeh.driver_license"
+								   placeholder="enter here..."
+								   ng-readonly="newVeh.driver_name == 'unknown'">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px">
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="checkbox" style="margin: 0 0 10px 0">
+							<label>
+								<input type="checkbox"
+									   ng-model="newVeh.unknownVendor"
+									   ng-change="unknownVendor()" value="">
+								<i class="input-helper"></i>
+								Unknown Vendor
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4" ng-hide="newVeh.unknownVendor">
+				<div class="lvh-search ng-scope sear">
+					<input type="text"
+						   placeholder="Vendor Search..."
+						   ng-model="newVeh.vendor"
+						   class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="vendor as (vendor.name + (vendor.pan_no ? '(' + vendor.pan_no + ')' : '')) for vendor in getMarketVehicleVendor($viewValue)"
+						   class="form-control"
+					>
+					<i class="lvh-search-close" ng-click="newVeh.vendor='';">×</i>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px">
+			<!--<div class="col-md-4">-->
+				<!--<div class="col-md-12 form-group">-->
+					<!--<label class="col-sm-5">Segment:</label>-->
+					<!--<div class="col-sm-6">-->
+						<!--{{newVeh.segment_type}}-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">segment</label>
+					<div class="col-sm-6">
+						<div class="select" style="z-index: 1;">
+							<select chosen class="form-control"
+									placeholder="Select Type"
+									ng-model="newVeh.segment_type"
+									name="segment"
+									required>
+								<option value="" disabled selected>Market</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<label class="col-sm-6 control-label">Carrying Capacity(Ton):</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text"
+									   class="form-control"
+									   ng-model="newVeh.capacity_tonne"
+									   required
+									   placeholder="enter here...">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px"></div>
+
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="addMvehCall()">Submit</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Cancel</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+	}
+</style>
+

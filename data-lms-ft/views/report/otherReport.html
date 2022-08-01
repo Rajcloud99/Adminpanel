@@ -1,0 +1,246 @@
+<div class="container" ng-controller="otherReportCntrl">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 575px;">
+      <div class="listview lv-message">
+        <div class="lv-body">
+          <div class="col-md-12" style="min-height: 272px;">
+            <div class="clearfix"></div>
+            <form role="form" ng-submit="filter(form)">
+
+              <div class="select col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-3">
+                <select class="form-control" ng-options="item as item for item in $constants.aReportTypes"
+                        ng-model="report" ng-change="onReportTypeSelect()" style="height: 34px;">
+                  <option style="display:none" value="">Report Type</option>
+                </select>
+              </div>
+
+              <div class="select col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-3">
+                <div class="fg-line">
+                  <div class="date-picker input-group dp-blue chosen-row-1"
+                       ng-class="{ 'is-opened': opened1 == true }">
+                    <div ng-class="{ 'fg-toggled': opened1 == true }">
+                      <input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+                             type="text"
+                             class="form-control"
+                             datepicker-popup="{{DatePicker.formats[0]}}"
+                             show-weeks="false"
+                             ng-model="start_date"
+							 max-date="end_date"
+                             is-open="opened1"
+                             datepicker-options="DatePicker.dateSettings"
+                             close-text="Close"
+                             placeholder="From "/>
+                    </div>
+                    <span class="input-group-btn">
+                    <button type="button"
+                            class="btn btn-default m-t-0 f12"
+                            ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+                        class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="select col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-3">
+                <div class="fg-line">
+                  <div class="date-picker input-group dp-blue chosen-row-1"
+                       ng-class="{ 'is-opened': opened2 == true }">
+                    <div ng-class="{ 'fg-toggled': opened2 == true }">
+                      <input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+                             type="text"
+                             class="form-control"
+                             datepicker-popup="{{DatePicker.formats[0]}}"
+                             show-weeks="false"
+                             ng-model="end_date"
+                             min-date="start_date"
+                             max-date="start_date|setMaxDate:6"
+                             is-open="opened2"
+                             datepicker-options="DatePicker.dateSettings"
+                             close-text="Close"
+                             placeholder="To"/>
+                    </div>
+                    <span class="input-group-btn">
+            		                			<button type="button"
+                                              class="btn btn-default m-t-0 f12"
+                                              ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+                                          class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+                  </div>
+                </div>
+              </div>
+
+              <button ng-disabled="!report || aProfitReport.length == 0" ng-click="downloadClicked()"
+                      class="btn btn-primary hidden-print pull-right"
+                      style="font-size: 11px; padding: 5px;margin-top: 5px;">Download
+              </button>
+            </form>
+            <div class="clearfix"></div>
+
+            <div class="detailsList">
+              <div class="" style="overflow-y: auto; max-height: 500px;">
+                <table class="table table-bordered unresponsive"
+                       ng-show="report == $constants.aReportTypes[0] || report == $constants.aReportTypes[1] || report == $constants.aReportTypes[2]">
+                  <thead>
+                  <tr>
+                    <th>Trip No.</th>
+                    <th ng-show="reportType != 'customers'">Customer</th>
+                    <th>Vendor</th>
+                    <th ng-show="reportType != 'vehicle_no'">Vehicle</th>
+                    <th ng-show="reportType != 'datetime'">Date</th>
+                    <th>Branch</th>
+                    <th>Trip Manager</th>
+                    <th>Customer Pay</th>
+                    <th>Costing</th>
+                    <th>Profit</th>
+                    <th>% Profit</th>
+                  </tr>
+                  </thead>
+                  <tbody data-ng-repeat="(key, value) in aProfitReport | groupBy: reportType">
+                  <tr>
+                    <td colspan="10" style="text-align: start; font-weight: bold;"> {{key}}</td>
+                  </tr>
+                  <tr ng-repeat="oTripExp in value" class="pointer selectItem">
+                    <td>{{oTripExp.trip_no}}</td>
+                    <td ng-show="reportType != 'customers'">{{oTripExp.customers || 'NA'}}</td>
+                    <td>{{oTripExp.vendor_name || 'NA'}}</td>
+                    <td ng-show="reportType != 'vehicle_no'">{{oTripExp.vehicle_no || 'NA'}}</td>
+                    <td ng-show="reportType != 'datetime'">{{oTripExp.datetime || 'NA'}}</td>
+                    <td>{{oTripExp.branch || "NA"}}</td>
+                    <td>{{oTripExp.trip_manager.name || "NA"}}</td>
+                    <td style="text-align: end;">{{oTripExp.invoiceTotal || "NA"}}</td>
+                    <td style="text-align: end;">{{oTripExp.total_expences || "NA"}}</td>
+                    <td style="text-align: end;">{{oTripExp.profitability || "NA"}}</td>
+                    <td style="text-align: end;">{{oTripExp.profitability_percent || "NA"}}</td>
+                  </tr>
+                  <tr>
+                    <th>{{value.length}}</th>
+                    <th ng-show="reportType != 'customers'"></th>
+                    <th></th>
+                    <th ng-show="reportType != 'vehicle_no'"></th>
+                    <th ng-show="reportType != 'datetime'"></th>
+                    <th></th>
+                    <th></th>
+                    <th style="text-align: end;">{{getSum('invoiceTotal', value)}}</th>
+                    <th style="text-align: end;">{{getSum('total_expences', value)}}</th>
+                    <th style="text-align: end;">{{getSum('profitability', value)}}</th>
+                    <th style="text-align: end;">{{getProfitPercent(value)}}</th>
+                  </tr>
+                  </tbody>
+                </table>
+                <table class="table table-bordered unresponsive"
+                       ng-show="report == $constants.aReportTypes[3] || report == $constants.aReportTypes[4] || report == $constants.aReportTypes[5]">
+                  <thead>
+                  <tr>
+                    <th>Trip No.</th>
+                    <th>Customer</th>
+                    <th ng-show="reportType != 'vehicle.vehicle_reg_no'">Vehicle</th>
+                    <th ng-show="reportType != 'driver_name'">Driver</th>
+                    <th ng-show="reportType != 'allocation_date'">Date</th>
+                    <th>GR No.</th>
+                    <th>GR Type</th>
+                    <th>Strat Location</th>
+                    <th>End Location</th>
+                    <th>Vehicle Status</th>
+                    <th>Trip Status</th>
+                    <th>Trip Location</th>
+                  </tr>
+                  </thead>
+                  <tbody data-ng-repeat="(key, value) in aTrip | groupBy: reportType">
+                  <tr>
+                    <td colspan="10" style="text-align: start; font-weight: bold;"> {{key}}</td>
+                  </tr>
+                  <tr ng-repeat="oTrip in value" class="pointer selectItem">
+                    <td>{{oTrip.trip_no}}</td>
+                    <td>{{oTrip.aCustomer.toString() || 'NA'}}</td>
+                    <td ng-show="reportType != 'vehicle.vehicle_reg_no'">{{oTrip.vehicle.vehicle_reg_no || "NA"}}</td>
+                    <td ng-show="reportType != 'driver_name'">{{oTrip.driver_name || 'NA'}}</td>
+                    <td ng-show="reportType != 'allocation_date'">{{oTrip.allocation_date || 'NA'}}</td>
+                    <td>{{oTrip.aGRno.toString() || 'NA'}}</td>
+                    <td>{{oTrip.gr_type || 'NA'}}</td>
+                    <td>{{oTrip.start_loc || "NA"}}</td>
+                    <td>{{oTrip.end_loc || "NA"}}</td>
+                    <td>{{oTrip.vehicle_running_status || 'NA'}}</td>
+                    <td>{{oTrip.trip_status || 'NA'}}</td>
+                    <td>{{oTrip.trip_loc || 'NA'}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+
+                <table class="table table-bordered unresponsive"
+                       ng-show="report == $constants.aReportTypes[6] || report == $constants.aReportTypes[7]">
+                  <thead>
+                  <tr>
+                    <th>Invoice No.</th>
+                    <th ng-show="reportType != 'trip_no'">Trip No.</th>
+
+                    <!-- <th>Vehicle No.</th>
+                    <th>Route Name</th>
+                    <th>Allocation Date</th>
+                    <th>Trip Start Location</th>
+                    <th>Trip End Location</th> -->
+
+                    <!-- <th>Driver</th> -->
+
+                    <!-- <th>Cash</th>
+                                    <th>Vendor</th>
+                                    <th>Advance</th>
+                                    <th>To Pay</th>
+                                    <th>Diesel/Price</th>
+                                    <th>Toll Tax</th>
+                                    <th>Extra Cost </th>
+                                    <th>Update</th> -->
+
+
+                    <th>Billing Party Name</th>
+                    <th>Billing Party Address</th>
+                    <th>Invoice Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                  </tr>
+                  </thead>
+                  <tbody data-ng-repeat="(key, value) in aBillReports | groupBy: reportType">
+                  <tr>
+                    <td colspan="6" style="text-align: start; font-weight: bold;"> {{key}}</td>
+                  </tr>
+                  <tr ng-repeat="oTripExp in value" class="pointer selectItem">
+                    <td>{{oTripExp.invoice_no}}</td>
+                    <td ng-show="reportType != 'trip_no'">{{oTripExp.trip_no}}</td>
+
+                    <!-- <td>{{oTripExp.vehicle_no || 'NA'}}</td>
+                    <td>{{oTripExp.route.route_name || 'NA'}}</td>
+                    <td>{{oTripExp.allocation_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+                    <td>{{oTripExp.trip_start.address.formatted_address || 'NA'}}</td>
+                    <td>{{oTripExp.trip_end.address.formatted_address || "NA"}}</td> -->
+
+                    <!-- <td>{{oTripExp.driver_name || "NA"}}</td> -->
+
+                    <!-- <td>{{oTripExp.driver_cash || "NA"}}</td>
+                                    <td>{{oTripExp.vendor_name}}({{oTripExp.vendor_contact}})</td>
+                                    <td>{{oTripExp.vendor_payment.advance || "NA"}}</td>
+                                    <td>{{oTripExp.vendor_payment.toPay || "NA"}}</td>
+                                    <td>
+                                      {{oTripExp.diesel_expenses_total_litre || "NA"}}/ {{oTripExp.diesel_expenses_total_price || "NA"}}
+                                    </td>
+                                    <td>{{oTripExp.toll_tax_total_price || "NA"}}</td>
+                                    <td>{{oTripExp.additional_expenses_total_price || "NA"}}</td>
+                                    <td><a href="" uib-tooltip="Trip Status" ng-click="tripExpDeatil(oTripExp, $index)" tooltip-placement="bottom"><span class="glyphicon glyphicon-pencil"></span></a>
+                                    </td> -->
+
+                    <td>{{oTripExp.billing_party_name}}</td>
+                    <td>{{oTripExp.billing_party_address}}</td>
+                    <td>{{oTripExp.invoice_date || 'NA'}}</td>
+                    <td>{{oTripExp.sub_total}}</td>
+                    <td>{{oTripExp.status}}</td>
+                  </tr>
+                  </tbody>
+                </table>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

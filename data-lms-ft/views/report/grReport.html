@@ -1,0 +1,318 @@
+<div class="container" ng-controller="grReportCntrl">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+
+							<div ng-init="(report='status')"
+								 class="select col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<select
+										class="form-control"
+										ng-options="item.key as item.value for item in $constants.aGrReportTypes"
+										ng-model="report" style="height: 34px;"
+								        ng-checked="onTypeSelect(report)">
+									<option value="" selected disabled>Report Type</option>
+								</select>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-hide="hideFilter">
+								<div class="select">
+									<select chosen
+											class="form-control"
+											ng-model="status"
+											ng-options="item as item for item in $constants.aGrStatuses"
+											name="Branch Name">
+										<option value="" selected disabled>GR Status</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+								<div class="select">
+									<select chosen class="form-control"
+											ng-model="dateKey"
+											ng-init="dateKey='grDate'">
+										<option value="grDate">Gr Date</option>
+										<option value="grDate">Bill Date</option>
+										<option value="acknowledge.systemDate">Gr Ack Date</option>
+										<option value="expected_arrival">Expected Arrival</option>
+										<option value="pod.pendingRemark.systemDate">Remark Date</option>
+										<option value="created_at">Entry Date</option>
+										<option value="pod.date">Gr Receiving Date</option>
+										<!--<option value="pod.billingLoadingTime">Bill Date</option>-->
+									</select>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="start_date"
+											   is-open="opened1"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From Date" style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+				                      <button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+				                    </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line"
+										 ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+											type="text"
+											class="form-control"
+											uib-datepicker-popup="{{DatePicker.formats[0]}}"
+											show-weeks="false"
+											ng-model="end_date"
+											min-date="start_date"
+											max-date="DatePicker.newDate"
+											is-open="opened2"
+											datepicker-options="DatePicker.dateSettings"
+											close-text="Close"
+											placeholder="To Date"
+											style="padding: 0px 4px;height: 34px;"
+											ng-disabled="!start_date"/>
+									</div>
+									<span class="input-group-btn">
+			                      <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="DatePicker.openDatePicker(this, $event, 'opened2')" ng-disabled="!start_date"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1" ng-show="report=='grReportCron'">
+								<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened3 == true }">
+								<div ng-class="{ 'fg-toggled': opened3 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   max-date="DatePicker.newDate"
+										   ng-model="asOnDate"
+										   is-open="opened3"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="As On Date"/>
+								</div>
+								<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-1 col-lg-1" ng-if="$configs.client_allowed.length > 1 && (report=='UnbilledRpt' || report=='LoadingRpt' || report=='grReportCron' )">
+								<div class="select">
+									<select class="form-control" ng-model="oFilter.bPclientId"
+											ng-options="c.clientId as c.name for c in $constants.client_allowed">
+										<option value="" selected>Select client</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="showFilters">
+								<input type="text"
+									   placeholder="billingParty Search..."
+									   ng-model="billingParty"
+									   class="lvhs-input"
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.name for item in getBilling($viewValue)"
+									   class="form-control"
+								>
+								<i class="lvh-search-close" ng-click="billingParty='';clearSelection();">×</i>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1" ng-hide="hideFilter">
+								<button ng-disabled="!start_date || !end_date"
+										class="btn btn-primary" ng-click="downloadReport()" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+									Search
+								</button>
+							</div>
+							<button ng-disabled="!start_date || !end_date"
+									ng-click="downloadReport(true)" class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Download
+							</button>
+							<div class="clearfix"></div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-hide="hideFilter">
+								<select chosen class="form-control"
+										ng-options="item as item for item in aBill"
+										ng-model="bill">
+									<option value="">All Bills</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-hide="hideFilter">
+								<select chosen class="form-control"
+										ng-options="item as item for item in aPod"
+										ng-model="received"
+										style="line-height: 34px;"
+								>
+									<option value="">All GR's</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-hide="hideFilter">
+								<select chosen class="form-control"
+										ng-options="item as item for item in aAcknowledged"
+										ng-model="acknowledge"
+										style="line-height: 34px;"
+								>
+									<option value="">All Acknowledged</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="showFilters">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Customer Search..." ng-model="customer"
+										   class="lvhs-input" typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in getCustomer($viewValue, 'Broker') | limitTo:6"
+										   class="form-control">
+									<i class="lvh-search-close" ng-click="customer = null">×</i>
+								</div>
+							</div>
+							<!-- -->
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="report=='BilledRpt'">
+								<input type="text"
+									   placeholder="billingParty Search..."
+									   ng-model="billingPartyBilled"
+									   class="lvhs-input"
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.name for item in getBilling($viewValue)"
+									   typeahead-on-select="onBillingPartySelect($item, $model, $label)"
+									   class="form-control"
+								>
+								<i class="lvh-search-close" ng-click="billingParty='';clearSelection();">×</i>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="report=='BilledRpt'">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Customer Search..." ng-model="customerBilled"
+										   class="lvhs-input" typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in getCustomer($viewValue, 'Broker') | limitTo:6"
+										   typeahead-on-select="onCustomerSelect($item, $model, $label)"
+										   class="form-control">
+									<i class="lvh-search-close" ng-click="customer = null">×</i>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group m-b-0">
+									<select chosen multiple
+											class="form-control"
+											ng-model="category"
+											ng-options="item as item for item in aCategory"
+											name="Category Type">
+										<option value="" ></option>
+									</select>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="aBillParty.length" ng-show="report=='BilledRpt'">
+			  					<span class="btn-lst" ng-repeat="select in aBillParty">
+				  					<button class="btn-xs" style="background: black; color: aliceblue;">{{select.name}}&nbsp;
+				  					<a ng-click="removeBillingParty(select,$index)"> X </a>
+									</button>&nbsp;&nbsp;
+								</span>
+							</div>
+							<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="aCstDetail.length" ng-show="report=='BilledRpt'">
+			  					<span class="btn-lst" ng-repeat="select in aCstDetail">
+				  					<button class="btn-xs" style="background: black; color: aliceblue;">{{select.name}}&nbsp;
+				  					<a ng-click="removeCustomerDetail(select,$index)"> X </a>
+									</button>&nbsp;&nbsp;
+								</span>
+							</div>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="detailsList" >
+							<div class="" style="overflow: auto; max-height: 500px;/* position: relative;*/">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>Sl No</th>
+										<th>GR No.</th>
+										<th>GR Type</th>
+										<th>GR Date</th>
+										<th>Trip No.</th>
+										<th>Booking No</th>
+										<th>Booking Type</th>
+										<th>Branch Name</th>
+										<th>Customer Name</th>
+										<th>Route Name</th>
+										<th>Material Group</th>
+										<th>Material Name</th>
+										<th>GR receiving date</th>
+										<th>Gr ACK date</th>
+										<th>AR no</th>
+										<th>total billable amount</th>
+										<th>Bill No</th>
+										<th>Bill Date</th>
+										<th>Loading Weight</th>
+										<th>Unloading Weight</th>
+										<th>Weight</th>
+									</tr>
+									</thead>
+									<tbody ng-repeat="name in aGrReport.name">
+										<tr style="background:#f2da97">
+											<td colspan="23" style="text-align: start; font-weight: bold;">{{ name }}
+											</td>
+										</tr>
+										<tr ng-repeat="value in aGrReport.value[name]">
+											<td>{{$index+1}}</td>
+											<td>{{value.grNumber || 'NA'}}</td>
+											<td>{{value.gr_type || 'NA'}}</td>
+											<td>{{value.grDate |
+												date:'dd-MM-yyyy'}}
+											</td>
+											<td>{{value.trip.trip_no || 'NA'}}</td>
+											<td>{{value.booking.booking_no}}</td>
+											<td>{{value.booking.booking_type}}</td>
+											<td>{{value.branch.name || 'NA'}}</td>
+											<td>{{value.booking.customer.name || 'NA'}}</td>
+											<td>{{value.booking.route.name || 'NA'}}</td>
+											<td>{{value.booking.material_type.group_name}}</td>
+											<td>{{value.booking.material_type.name}}</td>
+											<td>{{value.pod.date |
+												date:'dd-MM-yyyy'}}
+											</td>
+											<td>{{value.acknowledge.systemDate |
+												date:'dd-MM-yyyy'}}
+											</td>
+											<td>{{value.pod.arNo || 'NA'}}</td>
+											<td>{{value.trip.total_amount || 'NA'}}</td>
+											<td>{{value.bill.actualBillNo || 'NA'}}</td>
+											<td>{{value.bill.billDate | date:'dd-MM-yyyy'}}</td>
+											<td>{{value.l_net_w}}</td>
+											<td>{{value.ul_net_w}}</td>
+											<td>{{value.weight}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	/*.unresponsive tbody tr td{
+		min-width: 85px;
+		padding: 5px 1px;
+		text-align: center;
+	}*/
+</style>

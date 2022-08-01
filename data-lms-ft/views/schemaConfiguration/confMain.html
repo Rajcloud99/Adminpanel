@@ -1,0 +1,327 @@
+<!-- ControllerAs: confVm -->
+
+<div class="card" style="margin:20px;">
+
+	<div class="card-header">
+		<div class="row m-b-5">
+			<div class="col-sm-6 col-md-1">
+				<select
+						class="form-control"
+						ng-model="confVm.oSend.model"
+						ng-change="confVm.onSchemaChange(confVm.oSend.model)">
+
+					<option value="" selected disabled>Select</option>
+					<option value="GR">GR</option>
+					<option value="RATE_CHART">Rate Chart</option>
+				</select>
+			</div>
+			<div class="col-sm-6 col-md-2">
+				<div class="lvh-search ng-scope sear">
+					<input
+							type="text"
+							name="customer"
+							class="form-control lvhs-input"
+							placeholder="Select customer"
+							ng-model="confVm.cust"
+							typeahead-wait-ms="10"
+							typeahead-on-select="confVm.onCustomerSelect($item, $model, $label)"
+							uib-typeahead="c as c.name for c in confVm.getCustomers($viewValue)"
+							ng-disabled="!confVm.selectedConfig"
+					>
+					<i class="lvh-search-close" ng-click="confVm.onCustomerRemove();">×</i>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-2">
+				<div class="lvh-search ng-scope sear">
+					<input
+							type="text"
+							name="billingParty"
+							class="form-control lvhs-input"
+							placeholder="Select billing party"
+							ng-model="confVm.bp"
+							typeahead-wait-ms="10"
+							typeahead-on-select="confVm.onBPSelect($item, $model, $label)"
+							uib-typeahead="c as c.name for c in confVm.getBillingParty($viewValue,confVm.oSend.customer)"
+							ng-disabled="!confVm.selectedConfig || !confVm.cust"
+					>
+					<i class="lvh-search-close" ng-click="confVm.onBPRemove();">×</i>
+				</div>
+			</div>
+			<div class="col-sm-6 col-md-2">
+				<button
+						type="button"
+						class="btn btn-primary waves-effect"
+						uib-tooltip="Generate Formula"
+						tooltip-placement="bottom"
+						ng-click="confVm.generateFormula()"
+						ng-disabled="!confVm.selectedConfig">
+					<i class="zmdi zmdi-attachment-alt zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+				<button
+						type="button"
+						class="btn btn-primary waves-effect"
+						uib-tooltip="Base Rate Comparer"
+						tooltip-placement="bottom"
+						ng-click="confVm.baseValueComparer('operand')"
+						ng-disabled="!confVm.selectedConfig">
+					<i class="zmdi zmdi-view-headline zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+				<button
+						type="button"
+						class="btn btn-primary waves-effect"
+						uib-tooltip="Add Base Value and Rate"
+						tooltip-placement="bottom"
+						ng-click="confVm.addBaseRateConf()"
+						ng-hide="!confVm.selectedConfig || confVm.oSend.model !== 'RATE_CHART'">
+					<i class="zmdi zmdi-plus-circle zmdi-hc-fw"></i>
+				</button>&nbsp;&nbsp;
+				<button
+					type="button"
+					class="btn btn-danger waves-effect"
+					uib-tooltip="Delete config"
+					tooltip-placement="bottom"
+					ng-click="confVm.deleteConfigs()">
+					<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+				</button>&nbsp;&nbsp;
+				<button ng-if="confVm.selectedConfig[confVm.selectedFormListEle].evalExp"
+					type="button"
+					class="btn btn-danger waves-effect"
+					uib-tooltip="Delete Formula"
+					tooltip-placement="bottom"
+					ng-click="confVm.deleteFormula()">
+					<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item">
+				<span class="booking_list_header">Configurations</span>
+				<div class="lvh-label">
+				<span class="c-black"><b>Last Update By:</b>
+				<span style="margin-left: 10px; color: rgb(23, 0, 0);">
+					 {{confVm.lastUpdateConfigsBy}}
+				</span>
+			</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<span class="c-black"><b>Last Update At:</b>
+				<span style="margin-left: 10px; color: rgb(23, 0, 0);">
+					 {{confVm.lastUpdateConfigsAt | date : "dd/MM/yyyy"}}
+				</span>
+			</span>&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
+				<div class="card-body">
+					<div class="row" style="margin:5px; height: 500px; overflow: scroll">
+
+						<div class="col-md-12" ng-if="confVm.selectedConfig.baseRate && confVm.selectedConfig.baseRate.length">
+							<table class="table table-bordered unresponsive">
+								<thead>
+								<tr>
+									<th>Label</th>
+									<th>Base Value</th>
+									<th>Rate</th>
+									<th>Visible</th>
+									<th>Editable</th>
+									<th>Settings</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr ng-repeat="br in confVm.selectedConfig.baseRate">
+									<td>
+										<input type="text"
+											   class="form-control"
+											   placeholder="DEFINE LABEL"
+											   ng-model="br.label"
+										>
+									</td>
+									<td>
+										<input type="number"
+											   class="form-control"
+											   ng-model="br.baseVal"
+										>
+									</td>
+									<td>
+										<input type="number"
+											   class="form-control"
+											   ng-model="br.rate"
+										>
+									</td>
+									<td>
+										<label class="checkbox checkbox-inline">
+											<input type="checkbox" ng-model="br.visible">
+											<i class="input-helper"></i>
+										</label>
+									</td>
+									<td>
+										<label class="checkbox checkbox-inline">
+											<input type="checkbox" ng-model="br.editable">
+											<i class="input-helper"></i>
+										</label>
+									</td>
+									<td>
+										<button class="btn-primary btn-xs"
+												ng-click="confVm.onBaseRateDel($index)"
+												uib-tooltip="Delete">
+											<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+										</button>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+
+
+
+
+
+						<div class="col-md-12" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+								<thead id='my_fixable_table_header' fix-head>
+									<tr>
+										<th>Fields</th>
+										<th>Label</th>
+										<th><div class="col-xs-8"><label>Visible</label></div>
+											<div class="col-xs-1">
+												<label class="checkbox checkbox-inline m-r-20">
+													<input type="checkbox"
+														   ng-model="confVm.visible"
+														   ng-change="confVm.isVisible(confVm.visible)">
+													<i class="input-helper"></i>
+												</label>
+											</div>
+										</th>
+										<th><div class="col-xs-8"><label>Editable</label></div>
+											<div class="col-xs-1">
+												<label class="checkbox checkbox-inline m-r-20">
+													<input type="checkbox"
+														   ng-model="confVm.editable"
+														   ng-change="confVm.isEditable(confVm.editable)">
+													<i class="input-helper"></i>
+												</label>
+											</div>
+										</th>
+										<th><div class="col-xs-8"><label>Don't Apply Tax</label></div>
+											<div class="col-xs-1">
+												<label class="checkbox checkbox-inline m-r-20">
+													<input type="checkbox"
+														   ng-model="confVm.applyTax"
+														   ng-change="confVm.isApplyTax(confVm.applyTax)">
+													<i class="input-helper"></i>
+												</label>
+											</div>
+										</th>
+										<th><div class="col-xs-9"><label>Mandatory</label></div>
+											<div class="col-xs-1">
+												<label class="checkbox checkbox-inline m-r-20">
+													<input type="checkbox"
+														   ng-model="confVm.mandatory"
+														   ng-change="confVm.isMandatory(confVm.mandatory)">
+													<i class="input-helper"></i>
+												</label>
+											</div>
+										</th>
+										<th>Min Value</th>
+										<th>Max Value</th>
+										<th>Default Value</th>
+										<th>Type</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<tr class="pointer"
+
+									ng-class="{grn: key === confVm.selectedFormListEle}"
+									ng-click="confVm.selectedFormListEle = key"
+									ng-repeat="(key, value) in confVm.selectedConfig"
+									ng-if="key !== 'baseRate'"
+
+								>
+									<td>{{value.evalExp ? value.ourLabel +  '**': value.ourLabel}}</td>
+										<td>
+										<input type="text"
+											   class="form-control"
+											   ng-model="value.label"
+										>
+									</td>
+									<td>
+										<label class="checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-model="value.visible">
+											<i class="input-helper"></i>
+										</label>
+									</td>
+									<td>
+										<label class="checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-model="value.editable">
+											<i class="input-helper"></i>
+										</label>
+									</td>
+									<td>
+										<label class="checkbox checkbox-inline"
+											   ng-hide="value.notApplyTax|typeOfFilter:'undefined'">
+											<input type="checkbox"
+												   ng-hide="value.notApplyTax|typeOfFilter:'undefined'"
+												   ng-model="value.notApplyTax">
+											<i class="input-helper"></i>
+										</label>
+									</td>
+										<td>
+											<label class="checkbox checkbox-inline">
+												<input type="checkbox"
+													   ng-model="value.req">
+												<i class="input-helper"></i>
+											</label>
+										</td>
+									<td>
+										<input type="number"
+											   class="form-control"
+											   ng-model="value.minVal"
+											   ng-disabled="value.type !== 'number'"
+										>
+									</td>
+									<td>
+										<input type="number"
+											   class="form-control"
+											   ng-model="value.maxVal"
+											   ng-disabled="value.type !== 'number'"
+										>
+									</td>
+									<td>
+										<input type="{{value.type}}"
+											   class="form-control"
+											   ng-model="value.defVal"
+											   ng-disabled="value.type !== 'number' && value.type !== 'text'"
+										>
+									</td>
+
+
+
+
+
+
+										<td>{{(value.type === 'string') || (value.type === '__date__') ? (value.type === 'string' ?'text': 'date') : value.type}}</td>
+
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row" style="margin:5px">
+						<div class="col-md-12 text-right">
+							<button class="btn btn-primary"
+									type="button" onclick="Modifieddate()"
+									ng-click="confVm.saveConf()"
+									ng-hide="!confVm.selectedConfig">
+								submit
+							</button>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

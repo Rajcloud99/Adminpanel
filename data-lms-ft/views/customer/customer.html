@@ -1,0 +1,207 @@
+<div class="container" ng-controller="customerCommonController">
+	<!-- <div class="ttl-1">
+            <div class="pull-left">My Drivers</div>
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary" ng-click="newDriverReg()">Register New Driver</button>
+            </div>
+        </div> -->
+    <div class="card m-b-0" id="messages-main">
+        <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+            <!-- <div style="border-bottom:2px solid #4285f4">
+                My Vehicles <button type="submit" class="btn btn-primary" ng-click="newVehicleReg()">Register <br> New Vehicle</button>
+            </div> -->
+            <div class="lvh-search ng-scope sear">
+                <input type="text" placeholder="Start typing..." ng-model="customerName" class="lvhs-input" typeahead-wait-ms="10" typeahead="person as person.name for person in customers" ng-change="getCname(customerName)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+                <i class="lvh-search-close" ng-click="clearSearch()">×</i>
+            </div>
+            <div class="listview lv-user clk" style="overflow: auto;height:97%;">
+                <div class="lv-item media"  style="border-bottom:2px solid #4285f4" ng-repeat="customer in customers" ng-click="selectCustomer(customer,$index)">
+                    <div class="truck-desc">
+                    	<div class="row">
+    	                    <div class="col-md-7 bold">
+    	                    	{{customer.name | capitalize}}
+    	                    </div>
+                            <div class="col-md-5 bold">
+                                {{customer.customerId}}
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="pagi" ng-show="total_pages>1">
+                  <pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                </div>
+            </div>
+        </div>
+
+        <div class="ms-body" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <!-- <div ng-if="driver.isNew" class="lv-header-alt clearfix">
+                   <div class="lvh-label">
+                       <span class="c-black"><b>New Driver Registration </b></span>
+                    </div>
+                </div>
+
+                <div ng-if="!driver.isNew" class="lv-header-alt clearfix">
+                    <div class="lvh-label">
+                       <span class="c-black"><b>{{driver.name | capitalize}}</b> &nbsp;&nbsp;&nbsp;{{driver.mobile}}</span>
+                    </div>
+
+                    <ul class="lv-actions actions">
+                        <li>
+                            <a href="#">
+                                <i class="zmdi zmdi-delete"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div> -->
+                <!--ng-if="drivers.length != 0 || driver.isNew" -->
+                <!-- <div ng-if="drivers.length == 0 && !driver.isNew" class="lv-body" >
+                    <h3>You have no Driver Registered. Please Register First.</h3>
+                </div> -->
+                <div class="lv-header-alt clearfix">
+					<div class="col-sm-1">
+						<select class="form-control"
+								ng-init="filterObj.status = status[0]"
+								placeholder="status"
+								ng-options="item as item for item in status"
+								ng-model="filterObj.status"
+								style="height: 34px;">
+							<option value="" disabled>Status</option>
+						</select>
+					</div>
+					<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened1 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="DatePicker.newDate"
+									   ng-model="filterObj.start_date"
+									   min-date="min_date"
+									   is-open="opened1"
+									   datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="From"
+									   name="Start Date"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+						</div>
+					</div>
+					<div class="col-xs-6 col-sm- col-md-2 col-lg-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="DatePicker.newDate"
+									   ng-model="filterObj.end_date"
+									   ng-change="dateChange('endDate')"
+									   is-open="opened2"
+									   datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="End Date"
+									   name="To"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group m-b-0 text-center">
+							<button class="btn btn-primary p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									ng-click="getCustomers()"
+									uib-tooltip="Search"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+							</button>
+							<button class="btn btn-primary p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Clear Search"
+									ng-click="filterObj={};customerName = undefined; getCustomers()"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+							</button>
+							<button ng-if="!customer.deleted && $role['Customer']['Update']"
+									class="btn btn-danger p-t-0 p-b-0"
+									style="margin-bottom: 3px;  font-size: 16px"
+									type="button"
+									ng-click="customersStatus('Disable')"
+									uib-tooltip="Disable customers">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+							<button ng-if="customer.deleted && $role['Customer']['Update']"
+									class="btn btn-primary p-t-0 p-b-0"
+									style="margin-bottom: 3px;  font-size: 16px"
+									type="button"
+									ng-click="customersStatus('Enable')"
+									uib-tooltip="Enable customers">
+								<i class="zmdi zmdi-undo zmdi-hc-fw"></i>
+							</button>
+						</div>
+					</div>
+                    <ul class="lv-actions actions" ng-if="hideBtns">
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.profile" uib-tooltip="Show Customer" tooltip-placement="bottom"><i class="zmdi zmdi-menu zmdi-hc-fw"></i></a></li>
+                        <div class="clearfix"></div>
+                    </ul>
+                    <ul class="lv-actions actions" ng-if="!hideBtns">
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.register" uib-tooltip="Create Customer" tooltip-placement="bottom"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i></a></li>
+                        <li class="btn-wave" ng-if="customers.length>0 && !customer.deleted" data-ui-sref-active="active"><a data-ui-sref="masters.customer.editProfile" uib-tooltip="Edit Customer" tooltip-placement="bottom"><i class="zmdi zmdi-edit"></i></a></li>
+                        <li><a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"><i class="zmdi zmdi-download"></i></a></li>
+                        <li ng-hide="true" ng-if="$role['Customers']['Edit Client'] && $user.clientAdmin"><a href="" uib-tooltip="Edit ClientId" tooltip-placement="bottom" ng-click="editClientId()"><i class="zmdi zmdi-border-color"></i></a></li>
+						<li ng-show="customers.length>0 && !customer.deleted"><a href="" uib-tooltip="Upload Documents" tooltip-placement="bottom" ng-click="uploadFiles()"><i class="glyphicon glyphicon-upload"></i></a></li>
+						<li ng-show="customers.length>0"><a href="" uib-tooltip="preview Documents" tooltip-placement="bottom" ng-click="previewDocs()"><i class="glyphicon glyphicon-list-alt"></i></a></li>
+						<div class="clearfix"></div>
+                    </ul>
+                </div>
+                <!--ng-if="drivers.length != 0 || driver.isNew" -->
+                <div class="lv-body">
+                    <ul class="tab-nav tn-justified" ng-if="wantThis2" >
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.profile">Profile</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.contract">Contract</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.rates">Rates</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.document">Document</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.detention">Detention</a></li>
+                        <li ng-if="customers[0].gps_view" class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.gpsView">GPS View</a></li>
+                        <!-- <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="customer.editReferences">References</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="customer.editGuarantor">Guarantor</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="customer.document">Document</a></li> -->
+                    </ul>
+                	<ul class="tab-nav tn-justified" ng-if="wantThis" >
+	                	<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.customer.editProfile">Profile</a></li>
+                        <!-- <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="customer.editContract">Contract</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="customer.editAddress">Address</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="customer.editReferences">References</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="customer.editGuarantor">Guarantor</a></li>
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="customer.document">Document</a></li> -->
+                    </ul>
+                	<data ui-view></data>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+

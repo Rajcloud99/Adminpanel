@@ -1,0 +1,144 @@
+<div ng-controller="budgetingCtrl" class="container">
+	<div class="row">
+		<div class="col-md-12">
+
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Billing Party DETAILS -->
+				<li class="list-group-item">
+
+
+			<div class="detailList2">
+				<div class=" w-set" style="margin:5px 15px;">
+					<div class="col-md-3">
+						<div class="ng-scope sear chosen-row-1">
+							<input
+									type="text"
+									class="form-control"
+									placeholder="Customer Search"
+									ng-model="customer__id"
+									typeahead-wait-ms="10"
+									name="Customer"
+									autocomplete="off"
+									typeahead="item as item.name for item in getCustomer($viewValue) | limitTo:6"
+									typeahead-on-select="getBudgeting();"
+							>
+							<i class="lvh-search-close" ng-click="customer__id=null; getBudgeting();">×</i>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="select">
+							<select chosen
+									class="form-control"
+									placeholder="Service Type"
+									ng-model="service"
+									ng-options="item as item for item in aService"
+									name="service"
+									ng-change="getBudgeting();"
+									required
+							>
+								<option value=""  selected>
+									Select Service Type
+								</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3" >
+						<div class="fg-line">
+							<select chosen
+									class="form-control"
+									ng-model="vehType"
+									ng-change="getBudgeting();"
+									ng-options="item._id as item.name for item in aVehicleTypes">
+								<option value="" >Select vehicle Type</option>
+							</select>
+						</div>
+					</div>
+					<div class="pull-right">
+						<div class="form-group m-b-0">
+							<a data-ui-sref="" uib-tooltip="Add Customer" tooltip-placement="bottom" ng-click="upsertCustomer()"><i class="zmdi zmdi-plus-box"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a data-ui-sref="" uib-tooltip="Edit Customer" tooltip-placement="bottom" ng-click="upsertCustomer(selectedRow)"><i class="zmdi zmdi-minus-square"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a data-ui-sref="" uib-tooltip="Upload Excel" tooltip-placement="bottom" onclick="document.getElementById('toUpload').click();"><i class="zmdi zmdi-upload"></i></a>&nbsp;&nbsp;
+							<input
+									type="file"
+									id="toUpload"
+									name="toUpload"
+									ng-model="toUpload"
+									ng-hide="true"
+									accept="*/*"
+									ngf-select
+									ngf-max-size="5MB"
+									ngf-model-invalid="errorFile"
+									ngf-change="uploadReport($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event, 'budgeting')"
+							>
+							<a href="" uib-tooltip="Download Excel"
+							   tooltip-placement="bottom"
+							   ng-click="downloadBudgetingReport('budgeting')">
+								<i class="zmdi zmdi-download"></i></a>
+
+						</div>
+					</div>
+					<table class="table table-bordered  unresponsive">
+						<thead>
+						<tr>
+							<th style="min-width: 65px;">Customer</th>
+							<th style="min-width: 65px;">vehicle type</th>
+							<th style="min-width: 65px;">Service Type</th>
+							<th style="min-width: 65px;">Rate/km</th>
+							<th style="min-width: 65px;">Diesel/km</th>
+							<th style="min-width: 65px;">Toll</th>
+<!--							<th style="min-width: 65px;">Action</th>-->
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="list in aBudgetingData"
+							ng-click="selectIndex(list, $index)"
+							class="pointer"
+							ng-class="{grn: indx === $index}">
+							<td>{{list.customer_name}}</td>
+							<td>{{list.vehTypeNam}}</td>
+							<td>{{list.service}}</td>
+							<td>{{list.rateKm || 0}}</td>
+							<td>{{list.dieselKm || 0}}</td>
+							<td>{{list.toll || 0}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	.radio-inline + .radio-inline,
+	.checkbox-inline + .checkbox-inline {
+		margin-left: 0px;
+	}
+
+	.checkbox-inline,
+	.radio-inline {
+		width: 40%;
+	}
+
+	.tbl-w tbody tr td input {
+		width: 60px;
+	}
+
+	.unresponsive thead tr th:nth-child(2) {
+		min-width: 115px;
+	}
+
+	.unresponsive thead tr th:first-child{
+		max-width: 125px;
+		padding: 0 5px;
+	}
+
+	.xxaa .checkbox-inline,
+	.xxaa .radio-inline {
+		width: auto;
+	}
+</style>

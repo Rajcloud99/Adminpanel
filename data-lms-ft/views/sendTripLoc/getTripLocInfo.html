@@ -1,0 +1,140 @@
+<form name="userProfileForm" novalidate>
+	<div class="card-header" ng-if="!location.isEditing">
+		<b>{{location.name + ' (' + location.customer_name + ')'}}</b>
+		<ul class="actions">
+			<li class="dropdown" dropdown is-open="status.isopen">
+				<a href="" dropdown-toggle>
+					<i class="zmdi zmdi-more-vert"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right" style="height: auto;">
+					<li>
+						<a href="" ng-click="location.isEditing = true;setRoutesToModel();">Edit Page</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<div class="row" ng-if="!location.isEditing" class="editable-text">
+		<div class="col-md-12">
+			<div class="detailList">
+				<ul>
+					<li><span>Contact Name :</span> {{location.contact_person_name || 'NA'}}</li>
+					<li><span>Contact Mobile :</span> {{location.contact_person_number || 'NA'}}</li>
+					<li><span>Email :</span> {{location.contact_person_email || 'NA'}}</li>
+
+					<li><span>Location Name :</span> {{location.name || 'NA'}}</li>
+					<li><span>Location Type :</span> {{location.location_type || 'NA'}}</li>
+
+					<li><span>latitude :</span> {{location.location.lat || 'NA'}}</li>
+					<li><span>longitude :</span> {{location.location.lng || 'NA'}}</li>
+					<li><span>Description :</span> {{location.description || 'NA'}}</li>
+					<li><span>Address :</span> {{location.address || 'NA'}}</li>
+					<li><span>Routes</span><br>
+						<table class="table table-bordered unresponsive">
+							<thead>
+							<tr>
+								<th>Sno</th>
+								<th>Name</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr class="pointer" ng-repeat="item in location.routes">
+								<td>{{$index + 1}}</td>
+								<td>{{item.name}}</td>
+							</tr>
+							</tbody>
+						</table>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="row" ng-if="location.isEditing" style="margin-left: 3%;padding-top: 35px;">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<div class="form-groups">
+					<div class="col-md-8">
+						<label>Location Name :</label><br>
+						<div class="controls">
+							<input type="text" ng-model="location.name" class="editable-input form-control input-sm"
+								   placeholder="Enter Location Name">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-groups">
+					<div class="col-md-8">
+						<label>Contact Person :</label><br>
+						<div class="controls">
+							<input type="text" ng-model="location.contact_person_name"
+								   class="editable-input form-control input-sm" placeholder="Enter Customer Name">
+						</div>
+					</div>
+				</div>
+				<br><br>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<div class="form-groups">
+					<div class="col-md-8">
+						<label>Contact Mobile :</label><br>
+						<div class="controls">
+							<input type="text" ng-model="location.contact_person_number" ng-minlength="10"
+								   ng-maxlength="10" class="editable-input form-control input-sm"
+								   placeholder="Enter Customer Number">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-groups">
+					<div class="col-md-8">
+						<label>Email Id :</label><br>
+						<div class="controls">
+							<input type="email" ng-model="location.contact_person_email"
+								   class="editable-input form-control input-sm" placeholder="Enter Customer Email">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-6" style="padding-top: 15px">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Route Name: <span
+							class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div  ng-dropdown-multiselect=""
+							  ng-init="oRoutes.route = oRoutes.route ? oRoutes.route : [];oRoutes.aRoutes= oRoutes.aRoutes ? oRoutes.aRoutes : []"
+							  options="oRoutes.aRoutes"
+							  selected-model="oRoutes.route"
+							  extra-settings="selectRouteSettings"
+							  ja-search-input='inputModel'
+							  ja-search-trigger="getRoutes(inputModel)"
+						></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<ul>
+				<li ng-repeat="item in oRoutes.route">{{item.name}}</li>
+			</ul>
+		</div>
+		<br><br>
+		<div class="col-sm-10" style="text-align: right;margin-top: 16px;">
+			<div class="form-group">&nbsp &nbsp
+				<button type="submit" class="btn btn-primary" ng-click="editSave(location)" ng-if="location.isEditing">
+					Save
+				</button>
+
+				<button class="btn btn-default btn-sm" ng-click="cancel(location)"
+						ng-if="location.isEditing"><span class="glyphicon glyphicon-remove"></span>
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
+

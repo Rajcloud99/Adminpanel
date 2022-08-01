@@ -1,0 +1,102 @@
+<!-- Controller: addMultipleGrPopUpCtrl -->
+<!-- ControllerAs: amgVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="amgVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Add Multiple Gr</b>
+		</span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<form name="form" novalidate autocomplete="off">
+			<ul class="list-group list-group-flush">
+				<!--GR DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">GR DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12">
+								<div class="col-md-12">
+									<div ja-table
+										 table-body="amgVm.aSelectedGr"
+										 table-head="amgVm.tableHead"
+										 table-column-setting="amgVm.columnSetting"
+										 table-height='200px'
+										 table-selectable='index'
+										 table-api="tableApi"
+										 table-selectable-model="amgVm.selectedTrip"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+<form name="addGrForm" ng-submit="amgVm.submit(addGrForm)" novalidate autocomplete="off">
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!--Approval DETAILS-->
+				<li class="list-group-item">
+					<div class="card-body">
+						<span class="booking_list_header">Add Gr</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> ADD GR</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="number"
+														   ng-model="amgVm.numOfGr"
+														   placeholder="Add Gr"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="amgVm.closeModal()">Close
+		</button>
+	</div>
+
+</form>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

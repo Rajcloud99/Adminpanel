@@ -1,0 +1,925 @@
+<!-- Controller: approvalPopupController -->
+<!-- ControllerAs: approvalVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="approvalVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Advances</b>
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					({{approvalVm.modelDetail.type}})
+			</span>
+		</span>
+	</h4>
+
+	<div class="col-md-3">
+		<div class="form-group m-b-0">
+			<div class="col-sm-6">
+				<div class="checkbox">
+					<label class="text-center">
+						<input type="checkbox"
+							   ng-model="approvalVm.dataPreserve"
+							   value="">
+						<i class="input-helper"></i>
+						Preserve Data
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal-body"
+	 ng-if="approvalVm.showTripForm.toShow">
+	<div class="justify col-md-12">
+		<form name="form" novalidate autocomplete="off">
+			<ul class="list-group list-group-flush">
+				<!-- Basic DETAILS -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2"
+								 ng-if="approvalVm.showTripForm.showVehicle">
+								<div class="lvh-search ng-scope sear"
+									 ng-if="($role['Trip Advance']['Edit Vehicle'] || approvalVm.showInAdd) && approvalVm.oAdvance.editable != false">
+									<input type="text"
+										   placeholder="Vehicle Search..."
+										   ng-model="approvalVm.oAdvance.vehicle"
+										   class="lvhs-input"
+										   typeahead-wait-ms="10"
+										   typeahead="person as person.vehicle_reg_no for person in approvalVm.getVname($viewValue)"
+										   typeahead-on-select="approvalVm.onVehicleSelect($item, $model, $label)"
+										   class="form-control"
+									>
+									<i class="lvh-search-close" ng-click="approvalVm.oAdvance.vehicle=''; approvalVm.oAdvance.ccVehicle = null">×</i>
+								</div>
+								<div ng-if="approvalVm.oAdvance.editable === false || (!$role['Trip Advance']['Edit Vehicle'] && approvalVm.showInEdit)">
+									<label class="col-md-6 control-label">Vehicle No: {{approvalVm.oAdvance.vehicle_no}}</label>
+								</div>
+							</div>
+
+							<!-- <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2"
+								 ng-if="approvalVm.showTripForm.showAdvanceDate">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="approvalVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{approvalVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="approvalVm.date"
+											   ng-change="approvalVm.advanceDateType()"
+											   max-date="approvalVm.allocationDate"
+											   is-open="opened1"
+											   datepicker-options="approvalVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Advance Date"
+											   name="Advance Date"
+											   required
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="approvalVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div> -->
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2"
+								ng-if="approvalVm.showTripForm.showAdvanceDate">
+						 		  <div class="date-picker input-group dp-blue">
+								   <input
+										  fill-date
+										  type="text"
+										  class="form-control"
+										  ng-model="approvalVm.date"
+										  ng-change="approvalVm.advanceDateType()"
+										  ng-model-options="{updateOn: 'blur'}"
+										  max-date="approvalVm.allocationDate"
+										  close-text="Close"
+										  placeholder="Advance Date"
+										  name="AdvanceDate"
+										  required
+										  style="padding: 0px 4px;height: 34px;"/>
+						  		 </div>
+					       </div>
+
+							<div class="col-md-1"
+								 ng-if="approvalVm.showTripForm.showTripSearchBtn && approvalVm.oAdvance.linkable != false">
+								<div class="form-group m-b-0 text-center">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Search"
+											ng-click="approvalVm.getTrips()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+									<button ng-if="$configs.tripAdv.associationDriver"
+											class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Driver Association"
+											ng-click="approvalVm.associateDriver()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-arrow-merge zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2"
+								 ng-if="$role['Trip Advance']['Edit Vehicle'] && approvalVm.modelDetail.type == 'edit' && approvalVm.oAdvance.voucher && approvalVm.prevSelectedVehicle != approvalVm.oAdvance.vehicle._id">
+								<div class="lvh-search ng-scope sear">
+									<input type="text"
+										   placeholder="Internal A\c Search..."
+										   ng-model="approvalVm.oAdvance.internalAccount"
+										   class="lvhs-input"
+										   typeahead-wait-ms="10"
+										   typeahead="person as person.name for person in approvalVm.getAccountAsync($viewValue, ['Internal Cashbook'])"
+										   class="form-control"
+										   ng-readonly="true"
+										   required
+									>
+									<i class="lvh-search-close" ng-click="approvalVm.oAdvance.internalAccount;">×</i>
+								</div>
+								<div ng-if="!$role['Trip Advance']['Edit Vehicle'] && approvalVm.showInEdit">
+									<label class="col-md-6 control-label">Vehicle No: {{approvalVm.oAdvance.vehicle_no}}</label>
+								</div>
+							</div>
+
+							<div ng-show="$configs.tripAdv && $configs.tripAdv.showSettleBal" class="col-md-7">
+								<div ng-if="approvalVm.closingBal">
+									<label class="col-md-2 control-label">Settle Bal: {{approvalVm.closingBal}}</label>
+								</div>
+								<div ng-if="approvalVm.advanceAfterRt">
+									<label class="col-md-2 control-label">Happay: {{approvalVm.advanceAfterRt.happay}}</label>
+									<label class="col-md-2 control-label">Fastag: {{approvalVm.advanceAfterRt.fastag}}</label>
+									<label class="col-md-2 control-label">Dr. Cash: {{approvalVm.advanceAfterRt.driverCash}}</label>
+									<label class="col-md-2 control-label">Diesel: {{approvalVm.advanceAfterRt.diesel}}</label>
+									<label class="col-md-2 control-label">Diesel Lit: {{approvalVm.advanceAfterRt.dieselLtr}}</label>
+									<label class="col-md-2 control-label">Total: {{approvalVm.advanceAfterRt.totalAdv}}</label>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</li>
+				<!--Table DETAILS-->
+				<li class="list-group-item" ng-if="approvalVm.showTripForm.showTripTable && approvalVm.oAdvance.linkable != false">
+					<span class="booking_list_header">TRIP DETAIL</span>
+
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12">
+								<div class="col-md-12">
+									<div ja-table
+										 table-body="approvalVm.aTrip"
+										 table-head="approvalVm.tableHead"
+										 table-height='200px'
+										 table-column-setting="approvalVm.columnSetting"
+										 table-api="approvalVm.tableApi"
+										 table-selectable='"single"'
+										 table-selectable-model="approvalVm.selectedTrip"
+										 table-row-click-event="approvalVm.tableRowClick();"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+<form name="approvalForm" ng-submit="approvalVm.submit(approvalForm)" novalidate autocomplete="off">
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!--Approval DETAILS-->
+				<li class="list-group-item">
+					<div class="card-body">
+						<span class="booking_list_header">Add Advance</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12 exced" style="">
+									<div class="col-md-4" ng-show="approvalVm.showAdvanceType || $configs.tripAdv.showAdvType">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Select Type <span
+													class="req_r">*</span></label>
+											<div class="col-md-4"
+												 ng-if="approvalVm.showInAdd">
+												<div class="fg-line">
+													<select class="form-control"
+															name="SelectType"
+															ng-model="approvalVm.oAdvance.advanceType"
+															ng-options="item.name as item.name for item in approvalVm.aAdvanceType"
+															ng-change="approvalVm.setUnsetAccountMasterVendor(approvalVm.oAdvance.advanceType, 'advType');"
+															required>
+														<option value="" disabled selected> Select</option>
+													</select>
+												</div>
+
+												<span class="error"
+													  ng-if="advanceForm['Select Type'].$error.required
+															&& (advanceForm['Select Type'].$touched
+															|| advanceForm.$submitted)">
+														This Field is Mandatory</span>
+											</div>
+											<div class="col-md-4"
+												 ng-if="approvalVm.showInEdit">
+												{{approvalVm.oAdvance.advanceType}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4"
+										 ng-if="approvalVm.showCategory">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Select Category <span
+													class="req_r">*</span></label>
+											<div class="col-md-4"
+												 ng-if="approvalVm.showInAdd">
+												<div class="fg-line">
+													<select class="form-control"
+															name="SelectType"
+															ng-model="approvalVm.oAdvance.category"
+															ng-options="item.name as item.name for item in approvalVm.aCatagory"
+															ng-change="approvalVm.setUnsetAccountMasterVendor(approvalVm.oAdvance.category);"
+															required>
+														<option value="" disabled selected> Select</option>
+													</select>
+												</div>
+
+												<span class="error"
+													  ng-if="advanceForm['Select Type'].$error.required
+															&& (advanceForm['Select Type'].$touched
+															|| advanceForm.$submitted)">
+														This Field is Mandatory</span>
+											</div>
+											<div class="col-md-4"
+												 ng-if="approvalVm.showInEdit">
+												{{approvalVm.oAdvance.category}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<label class="col-md-4 control-label">Advance Date <span class="req_r">*</span></label>
+										<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+											<div ng-if="approvalVm.oAdvance.editable != false">
+												<!-- <div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened2 == true }">
+													<div class="fg-line"
+														 ng-class="{ 'fg-toggled': opened2 == true }">
+														<input ng-click="approvalVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{approvalVm.DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="approvalVm.oAdvance.date"
+															   ng-change="approvalVm.getFuelStation(approvalVm.oAdvance.diesel_info.vendor)"
+															   max-date="approvalVm.allocationDate"
+															   is-open="opened2"
+															   datepicker-options="approvalVm.DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Advance Date"
+															   name="Advance Date"
+															   style="padding: 0px 4px;height: 34px;"
+														>
+													</div>
+													<span class="input-group-btn">
+													<button type="button"
+															class="btn btn-default m-t-0 f12"
+															ng-click="approvalVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+															class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+												</div> -->
+
+													<div class="date-picker input-group dp-blue">
+														<input
+																   fill-date
+																   type="text"
+																   class="form-control"
+																   max-date="approvalVm.allocationDate"
+																   ng-model="approvalVm.oAdvance.date"
+																   ng-change="approvalVm.getFuelStation(approvalVm.oAdvance.diesel_info.vendor)"
+																   ng-model-options="{updateOn: 'blur'}"
+																   close-text="Close"
+																   placeholder="Advance Date"
+																   name="Advancefrom"
+																   required
+																   style="padding: 0px 4px;height: 34px;" />
+													</div>
+
+												<!-- <timepicker ng-show="approvalVm.oAdvance.date"
+															style="margin-left: 100px;margin-top: -34px;"
+															ng-model="approvalVm.oAdvance.date"
+															show-spinners="false"
+															show-meridian="true"></timepicker> -->
+											</div>
+											 <div ng-if="approvalVm.oAdvance.editable === false">
+												{{approvalVm.oAdvance.date|date:'dd-MMM-yyyy At h:mma'}}
+											</div>
+										</div>
+										<!-- <div class="col-xs-6 col-sm-4 col-md-4 col-lg-4"
+											 ng-if="approvalVm.showInEdit">{{approvalVm.oAdvance.date|date: "dd-MM-yyyy h:mma"}}
+										</div> -->
+									</div>
+
+<!--									<div class="col-md-4" ng-show="approvalVm.showAdvanceType && $configs.tripAdv.showAdvType">-->
+
+<!--										<div class="form-group m-b-0">-->
+<!--											<label class="col-md-4 control-label">Select Amount Type <span-->
+<!--													class="req_r"></span></label>-->
+<!--											<div class="col-md-4">-->
+<!--												<div class="fg-line">-->
+<!--													<select class="form-control"-->
+<!--															name="SelectType"-->
+<!--															ng-model="approvalVm.oAdvance.amtType"-->
+<!--															ng-options="item as item for item in ['Advance', 'Dala', 'Gate Pass', 'Kanta', 'Panni', 'Account Salary', 'Service', 'Unloading', 'Repairing', 'Commission']"-->
+<!--															required>-->
+<!--														<option value="" disabled selected> Select</option>-->
+<!--													</select>-->
+<!--												</div>-->
+<!--												&lt;!&ndash; ng-change="approvalVm.setUnsetAccountMasterVendor(approvalVm.oAdvance.category);"&ndash;&gt;-->
+
+<!--&lt;!&ndash;												<span class="error"&ndash;&gt;-->
+<!--&lt;!&ndash;													  ng-if="advanceForm['Select Type'].$error.required&ndash;&gt;-->
+<!--&lt;!&ndash;															&& (advanceForm['Select Type'].$touched&ndash;&gt;-->
+<!--&lt;!&ndash;															|| advanceForm.$submitted)">&ndash;&gt;-->
+<!--&lt;!&ndash;														This Field is Mandatory</span>&ndash;&gt;-->
+<!--											</div>-->
+<!--											<div class="col-md-4"-->
+<!--												 ng-if="approvalVm.showInEdit">-->
+<!--												{{approvalVm.oAdvance.amtType}}-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+
+
+<!--									<div class="col-md-4" ng-show="approvalVm.showAdvanceType &&	 $configs.tripAdv.showAdvType">-->
+<!--										<div class="form-group m-b-0">-->
+<!--											<label class="col-md-4 control-label"> Amount<span-->
+<!--													class="req_r"> </span> </label>-->
+<!--											<div class="col-md-8">-->
+
+<!--												<div class="fg-line">-->
+<!--													<input type="number"-->
+<!--														   onwheel="return false"-->
+<!--														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"-->
+<!--														   onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 45 && event.charCode <= 57"-->
+<!--														   ng-model="approvalVm.oAdvance.amtTypeAmount"-->
+<!--														   ng-model-options="{updateOn: 'blur'}"-->
+<!--														   placeholder="Enter Amount"-->
+<!--														   name="Amount"-->
+<!--														   class="form-control" required>-->
+<!--												</div>-->
+
+<!--&lt;!&ndash;											<span class="error" ng-if="approvalForm['Amount'].$error.required&ndash;&gt;-->
+<!--&lt;!&ndash;													&& (approvalForm['Amount'].$touched&ndash;&gt;-->
+<!--&lt;!&ndash;													|| approvalForm.$submitted)">&ndash;&gt;-->
+<!--&lt;!&ndash;													This Field is Mandatory</span>&ndash;&gt;-->
+<!--											</div>-->
+<!--											<div class="col-md-8"-->
+<!--												 >-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+
+
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Branch <span class="req_r">*</span></label>
+											<div class="col-sm-8" ng-if="approvalVm.oAdvance.editable != false">
+												<div class="fg-line">
+													<input
+															type="text"
+															class="form-control"
+															placeholder="Branch Search.."
+															ng-model="approvalVm.oAdvance.branch"
+															typeahead-wait-ms="10"
+															name="Branch"
+															typeahead="item as item.name for item in approvalVm.getAllBranch($viewValue)|limitTo:6"
+															typeahead-on-select="approvalVm.onBranchSelect($item, $model, $label)"
+															>
+													<i class="lvh-search-close" ng-click="approvalVm.oAdvance.branch=null; approvalVm.oAdvance.ccBranch=null;">×</i>
+												</div>
+												<!--<span class="error" ng-show="!approvalVm.oAdvance.branch._id">No Branch Selected</span>-->
+												<span class="warning" ng-show="approvalVm.oAdvance.branch._id && !approvalVm.oAdvance.branch.refNoBook">No Ref Book Linked to selected branch</span>
+											</div>
+											<div class="col-sm-8" ng-if="approvalVm.oAdvance.editable === false">{{approvalVm.oAdvance.branch.name || 'NA'}}</div>
+										</div>
+									</div>
+
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-4"
+									 ng-if="approvalVm.showGr">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Gr Number </label>
+										<label class="col-sm-8">
+											<div class="lvh-search ng-scope sear chosen-row-2">
+												<input
+														type="text"
+														class="form-control lvhs-input"
+														placeholder="Gr Number"
+														ng-model="approvalVm.oAdvance.gr"
+														typeahead-wait-ms="10"
+														typeahead="item as item.grNumber for item in approvalVm.getGr($viewValue) | limitTo:6"
+												>
+												<i class="lvh-search-close" ng-click="approvalVm.oAdvance.gr='';">×</i>
+											</div>
+										</label>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-12 exced"
+									 ng-if="approvalVm.oAdvance.advanceType=='Diesel' || approvalVm.oAdvance.advanceType=='M.OIL'">
+									<div class="col-md-4" ng-if="approvalVm.oAdvance.advanceType=='Diesel' ">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Vendor: <span class="req_r">*</span></label>
+											<div class="col-sm-8">
+												<div class="fg-line">
+													<input
+															type="text"
+															class="form-control"
+															placeholder="Vendor Search.."
+															ng-model="approvalVm.oAdvance.diesel_info.vendor"
+															typeahead-wait-ms="10"
+															name="Branch"
+															typeahead="item as item.name for item in approvalVm.getFuelVendor($viewValue)|limitTo:6"
+															typeahead-on-select="approvalVm.onVendorSelect($item, $model, $label)"
+															required>
+													<i class="lvh-search-close" ng-click="approvalVm.oAdvance.diesel_info.vendor=null;">×</i>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Rate <span class="req_r">*</span></label>
+											<div class="col-md-8" ng-if="approvalVm.oAdvance.editable !== false && approvalVm.showTripForm.editRate">
+												<div class="fg-line">
+													<input type="number"
+														   onwheel="return false"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   ng-model="approvalVm.oAdvance.diesel_info.rate"
+														   ng-change="$configs.tripAdv.calLitre ? approvalVm.setLiterRate(approvalVm.oAdvance.diesel_info.rate) : approvalVm.setAmountRate(approvalVm.oAdvance.diesel_info.rate); approvalVm.generateRemark()"
+														   class="form-control"
+														   name="Litres"
+														   required>
+												</div>
+												<span class="error" ng-if="approvalForm['Litres'].$error.required
+													&& (approvalForm['Litres'].$touched
+													|| approvalForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+											<div class="col-md-8" ng-if="approvalVm.oAdvance.editable === false || !approvalVm.showTripForm.editRate">{{approvalVm.oAdvance.diesel_info.rate}}</div>
+										</div>
+<!--										<div class="form-group m-b-0">-->
+<!--											<label class="col-md-4 control-label"> Rate <span-->
+<!--													class="req_r">*</span></label>-->
+<!--											<div class="col-md-8">-->
+<!--												<div class="fg-line">-->
+<!--													<span> {{ approvalVm.oAdvance.diesel_info.rate}}</span>-->
+<!--												</div>-->
+<!--											</div>-->
+<!--										</div>-->
+									</div>
+									<div class="col-md-2">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Litres <span
+													class="req_r">*</span></label>
+											<div class="col-md-8" ng-if="approvalVm.oAdvance.editable != false">
+												<div class="fg-line">
+													<input type="number"
+														   onwheel="return false"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   ng-model="approvalVm.oAdvance.diesel_info.litre"
+														   ng-change="$configs.tripAdv.calLitre ? approvalVm.generateRemark() : approvalVm.setAmount(approvalVm.oAdvance.diesel_info.litre); approvalVm.generateRemark()"
+														   class="form-control"
+														   name="Litres"
+														   required>
+												</div>
+												<span class="error" ng-if="approvalForm['Litres'].$error.required
+													&& (approvalForm['Litres'].$touched
+													|| approvalForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+											<div class="col-md-8" ng-if="approvalVm.oAdvance.editable === false">{{approvalVm.oAdvance.diesel_info.litre}}</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4" ng-if="$configs.master.showAccount">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">From Account: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Account Search.."
+													ng-model="approvalVm.oAdvance.account_data.from"
+													typeahead-wait-ms="10"
+													name="FromAccount"
+													typeahead="item as item.name for item in approvalVm.getAccount('aFromAccount', approvalVm.aFromGroup, $viewValue)|limitTo:6"
+													required>
+												<i class="lvh-search-close" ng-click="approvalVm.oAdvance.account_data.from=null;">×</i>
+											</div>
+											<span class="error"
+												  ng-if="'isEmptyObject'|otherUtilsFilt:approvalVm.oAdvance.account_data.from">
+													This Field is Mandatory</span><br>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="$configs.master.showAccount">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">To Account: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Account Search.."
+													ng-model="approvalVm.oAdvance.account_data.to"
+													typeahead-wait-ms="10"
+													name="ToAccount"
+													typeahead="item as item.name for item in approvalVm.getAccount('aToAccount', approvalVm.aToGroup, $viewValue)|limitTo:6"
+													typeahead-on-select="approvalVm.onToAcSelect($item, $model, $label)"
+													required>
+												<i class="lvh-search-close" ng-click="approvalVm.oAdvance.account_data.to=null;">×</i>
+											</div>
+											<span class="error"
+												  ng-if="'isEmptyObject'|otherUtilsFilt:approvalVm.oAdvance.account_data.to">
+													This Field is Mandatory</span><br>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="approvalVm.showTripForm.showVehicle">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label"> Vehicle Owner Name:</label>
+										<div class="col-md-8">{{approvalVm.oAdvance.vehicle.owner_name}}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">{{approvalVm.driverLable || 'Person'}}  <span
+													class="req_r">*</span> </label>
+											<div class="col-md-8"
+												 ng-if="approvalVm.showInAdd">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="approvalVm.oAdvance.person"
+														   placeholder="Enter Person Name "
+														   name="Person"
+														   class="form-control" required>
+												</div>
+
+												<span class="error" ng-if="advanceForm['Person'].$error.required
+													&& (advanceForm['Person'].$touched
+													|| advanceForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+											<div class="col-md-8"
+												 ng-if="approvalVm.showInEdit">{{approvalVm.oAdvance.person}}
+											</div>
+										</div>
+									</div>
+									<!-- it will run only for mmp client -->
+									<div class="col-md-4" ng-show="$configs.tripAdv.calLitre">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Amount<span
+													class="req_r">*</span> </label>
+											<div class="col-md-8"
+												 ng-if="approvalVm.oAdvance.editable != false">
+												<div class="fg-line">
+													<input type="number"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   ng-model="approvalVm.oAdvance.amount"
+														   ng-model-options="{updateOn: 'blur'}"
+														   ng-change="approvalVm.setLiter(approvalVm.oAdvance.amount); approvalVm.generateRemark();"
+														   placeholder="Enter Amount"
+														   name="Amount"
+														   class="form-control" required>
+												</div>
+												<span class="error" ng-if="approvalForm['Amount'].$error.required
+													&& (approvalForm['Amount'].$touched
+													|| approvalForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+											<div class="col-md-8"
+												 ng-if="approvalVm.oAdvance.editable === false">
+												{{approvalVm.oAdvance.amount || 0}}
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-4" ng-hide="$configs.tripAdv.calLitre">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Amount<span
+													class="req_r">*</span> </label>
+											<div class="col-md-8"
+												 ng-if="approvalVm.oAdvance.editable != false">
+												<div class="fg-line">
+													<input type="number"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   ng-model="approvalVm.oAdvance.amount"
+														   ng-model-options="{updateOn: 'blur'}"
+														   ng-change="approvalVm.validateAmount(approvalVm.oAdvance.amount.toFixed(2));"
+														   placeholder="Enter Amount"
+														   name="Amount"
+														   class="form-control" required>
+												</div>
+												<span class="error" ng-if="approvalForm['Amount'].$error.required
+													&& (approvalForm['Amount'].$touched
+													|| approvalForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+											<div class="col-md-8"
+												 ng-if="approvalVm.oAdvance.editable === false">
+												{{approvalVm.oAdvance.amount || 0}}
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Bill No</label>
+											<!-- <span
+												  ng-if="approvalVm.oAdvance.advanceType === 'Driver Cash'"></span></label> -->
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="approvalVm.oAdvance.bill_no"
+														   ng-readonly="approvalVm.oAdvance.editable === false"
+														   placeholder="Enter billNo"
+														   class="form-control"
+														   name="BillNo">
+												</div>
+												<!-- </div> ng-required="approvalVm.oAdvance.advanceType === 'Driver Cash'" -->
+												<!-- <span class="error" ng-if="approvalForm['Bill No'].$error.required
+													&& (approvalForm['Bill No'].$touched
+													|| approvalForm.$submitted)">
+													This Field is Mandatory</span> -->
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-3 control-label">{{$configs.tripAdv.refLable || 'Ref No'}}:<span class="req_r">*</span></label>
+											<div class="col-sm-8"
+												 ng-if="approvalVm.oAdvance.editable != false">
+												<div class="ng-scope sear chosen-row-1">
+													<input
+
+															type="text"
+															class="form-control"
+															placeholder="Ref Number"
+															ng-model="approvalVm.oAdvance.reference_no"
+															typeahead-wait-ms="10"
+															name="ReferenceNumber"
+															typeahead="item.bookNo as item.bookNo for item in approvalVm.getRefNo($viewValue)|limitTo:10"
+															typeahead-on-select="approvalVm.onRefSelect($item, $model, $label)"
+															required>
+													<i class="lvh-search-close" ng-click="approvalVm.oAdvance.reference_no=null;">×</i>
+													<!--<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"-->
+													   <!--style="right: -20px; background: #3096f3;"-->
+													   <!--ng-click="approvalVm.getAutoStationaryNo('auto')"></i>-->
+
+													<i class="lvh-search-close zmdi zmdi-plus-circle zmdi-hc-fw"
+													   style="right: -45px; background: #3096f3;"
+													   ng-hide="$configs.tripAdv.hideCentRefBtn"
+													   ng-click="approvalVm.getAutoStationaryNo('centrailized')"></i>
+
+												<span class="error" ng-if="approvalForm['Reference Number'].$error.required
+																	&& !approvalForm['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+											</div>
+											<div class="col-sm-8"
+												 ng-if="approvalVm.oAdvance.editable === false">
+												{{approvalVm.oAdvance.reference_no || 'NA'}}
+											</div>
+										</div>
+									</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Remark</label>
+											<div class="col-md-8">
+												<div class="fg-line" >
+													<input type="text"
+														   ng-model="approvalVm.oAdvance.remark"
+														   ng-readonly="approvalVm.oAdvance.editable === false"
+														   placeholder="Enter Remark"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Narration</label>
+											<div class="col-md-8">
+												<div class="fg-line" >
+													{{approvalVm.oAdvance.narration}}
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="clearfix"></div>
+
+									<div class="col-md-4" ng-show="trip.isMarketVehicle">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">Paid To Vendor</label>
+											<div class="col-sm-6"
+												 ng-if="approvalVm.showInAdd">
+												<div class="checkbox">
+													<label>
+														<input type="checkbox"
+															   ng-model="approvalVm.oAdvance.paidToVendor"
+															   value="">
+														<i class="input-helper"></i>
+														Paid To Vendor
+													</label>
+												</div>
+											</div>
+											<div class="col-md-6"
+												 ng-if="approvalVm.showInEdit">
+												{{approvalVm.oAdvance.paidToVendor ? 'True' : 'False'}}
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-4" ng-if="$configs.tripAdv.driverDetails">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Driver Code: </label>
+											<div class="col-md-8">{{approvalVm.oAdvance.driverCode}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!-- Extra Charges -->
+				<li ng-if="$configs.tripAdv.showAdvanceExtCharg && (approvalVm.oAdvance.advanceType === 'Happay' || approvalVm.oAdvance.advanceType === 'Driver Cash') && !approvalVm.showCategory" class="list-group-item">
+					<div class="card-body">
+						<span class="booking_list_header">Extra Charges</span>
+						<div class="pull-right text-right m-t-5">
+							<button type="button" class="btn-primary btn-xs"
+									ng-click="approvalVm.addExtraChrges(approvalVm.oAdvance); approvalVm.oExtraCharges = {};"
+									uib-tooltip="Add Charges"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button type="button" class="btn-danger btn-xs"
+									ng-click="approvalVm.remove(approvalVm.oAdvance, approvalVm.selectedExtraChargesIndex, 'charges');"
+									uib-tooltip="Delete ExtraCharges"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Charges:</label></label>
+									<div class="col-sm-8">
+										<div class="">
+											<select chosen
+													name="charges"
+													class="form-control"
+													ng-options="item as item for item in ['Advance', 'Dala', 'Gate Pass', 'Kanta', 'Panni', 'Account Salary', 'Service', 'Unloading', 'Repairing', 'Commission']"
+													ng-model="approvalVm.oAdvance.amtType"
+													>
+												<option value="" disabled selected>Select</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Amount: </label></label>
+									<div class="col-sm-8">
+										<input type="number"
+											   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   onwheel="return false"
+											   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+											   placeholder="Amount"
+											   name="amount"
+											   class="form-control"
+											   ng-model="approvalVm.oAdvance.amtTypeAmount"
+											   >
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+
+						<div class="row" style="margin:5px">
+<!--								 ng-if="!('isEmptyObject'|otherUtilsFilt:approvalVm.oAdvance.amtType)">-->
+							<div class="" style="overflow-y: auto; max-height: 200px;">
+								<table class="table table-bordered vehicleAllot">
+									<thead>
+									<tr>
+										<th>#</th>
+										<th>Charges</th>
+										<th>Amount</th>
+									</tr>
+									</thead>
+									<tbody>
+
+									<tr ng-repeat="(key,value) in approvalVm.oAdvance.aExtraCharges"
+										ng-class="{grn: approvalVm.selectedExtraChargesIndex === key}"
+										ng-click="approvalVm.selectedExtraChargesIndex = key">
+										<td>{{$index+1}}</td>
+										<td>{{value.amtType}}</td>
+										<td>{{value.amtTypeAmount}}</td>
+									</tr>
+									<tr >
+										<td></td>
+										<td></td>
+										<td>{{approvalVm.oAdvance.totalExtraChrges}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+					</div></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="approvalVm.closeModal()">Close
+		</button>
+	</div>
+
+</form>
+
+<style>
+
+	.btn-warning:focus {
+		box-shadow: 0px 0px 13px 2px darkred !important;
+	}
+
+	.btn-primary:focus {
+		box-shadow: 0px 0px 13px 2px blue !important;
+	}
+
+	.chosen-row-1 {
+		z-index: 8;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: 98;
+	}
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

@@ -1,0 +1,509 @@
+<form name="customerReg" ng-controller="registerCustomerController" novalidate autocomplete="off">
+    <div class="validationError" ng-show="createcustmsg"><h5 class="c-red">* {{dmsg}}</h5></div>
+	<div class="row" style="margin:15px">
+
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Category: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control"
+								ng-model="customerSel.category"
+								ng-options="item for item in aCategory" required>
+						<option value="" selected>Select Category</option>
+
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Name: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.name" class="form-control" name="name" required>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-4 control-label">Branch:  <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control"
+								ng-model="oBranch"
+								chosen
+								ng-options="branch._id as branch.name for branch in aBranches"
+								required
+								name="Branch">
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<div class="col-md-4">-->
+			<!--<div class="form-group m-b-0">-->
+				<!--<label class="col-sm-4 control-label">ClientR: </label>-->
+				<!--<div class="col-sm-6">-->
+					<!--<div class="select">-->
+						<!--<select chosen-->
+								<!--multiple-->
+								<!--class="form-control"-->
+								<!--placeholder="Select ClientR"-->
+								<!--ng-options="item.lms_id as item.name for item in $configs.clientR"-->
+								<!--ng-model="customerSel.clientR"-->
+								<!--name="ClientR">-->
+							<!--<option value="" disabled>-->
+								<!--Select Clients-->
+							<!--</option>-->
+						<!--</select>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+		<!--</div>-->
+	</div>
+		<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 1 </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.line1" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 2</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.line2" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">City: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.city" class="form-control">
+						<!--<input id="city" placeholder="City"  class="form-control" ng-model="city.c" ngFocus="geolocate('city')" type="text" ng-blur="searchRegisterCity()" name="city" required>-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">District</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.district" class="form-control">
+						<!--<input id="city" placeholder="District" class="form-control" ng-model="district" type="text" >-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">State<span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<select chosen
+							ng-model="customerSel.state"
+							class="form-control"
+							ng-change="setStateCode(customerSel.state)"
+							ng-options="item.state as item.state for item in aGSTstates">
+							<option value="" selected disabled>Select state </option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Pincode: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="customerSel.pincode" class="form-control">
+						<!--<input id="city" placeholder="pincode" class="form-control" ng-model="pincode" type="text" namsdfsdfe="pincode" required>-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Country</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.country" class="form-control">
+						<!--<input id="city" placeholder="country" class="form-control" ng-model="country" type="text" >-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Status</label>
+				<div class="col-sm-6">
+					<div class="select">
+	        	<select class="form-control" ng-model="customerSel.status">
+            	<option value="Active" selected>Active</option>
+            	<option value="Inactive">Inactive</option>
+	        	</select>
+        	</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">GSTIN Registered:</label>
+				<div class="col-sm-5">
+					<label class="checkbox checkbox-inline m-r-20">
+			          <input type="checkbox" ng-model="customerSel.gstin_registered"  value="">
+			          <i class="input-helper"></i>
+			        </label>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4" ng-if="customerSel.gstin_registered">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">GSTIN: <span ng-show="customerSel.gstin_registered" style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input placeholder="GSTIN" class="form-control" ng-model="customerSel.gstin_no" type="text" name="gstin_no" ng-required="customerSel.gstin_registered">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">State Code: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input placeholder="GSTIN" class="form-control" ng-model="customerSel.state_code" type="text" name="state_code" readonly>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<div class="row" style="margin:15px" ng-if="$configs.master.customer.custType">
+	<div class="col-md-12">
+		<div class="form-group m-b-0">
+			<label class="col-sm-2 control-label">Type: <span style="color: red;">*</span></label>
+			<div class="col-sm-10">
+				<label class="checkbox checkbox-inline m-r-20" ng-repeat="custT in custTypes">
+				  <input type="checkbox" value="{{custT}}" ng-checked="selection.indexOf(custT) > -1" ng-click="toggleSelection(custT)" name="type" required>
+				  <i class="input-helper"></i>
+				  {{custT}}
+				</label>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row" style="margin:15px">
+	<div class="col-md-4" ng-if="!(selection.indexOf('Customer') > -1) && selection.length > 0">
+		<div class="form-group m-b-0">
+			<label class="col-sm-4 control-label">Customer Name:
+				<span class="req_r">*</span>
+			</label>
+			<div class="col-sm-4">
+				<select chosen
+						class="form-control"
+						ng-model="customerSel.customer"
+						ng-options="item._id as item.name for item in aCustomers"
+						search-contains="true"
+						name="Customer Name"
+						required>
+					<option value=""></option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4" ng-if="(selection.indexOf('Billing party') > -1) && $configs.master.showAccount">
+		<div class="form-group m-b-0">
+			<label class="col-sm-4 control-label">Account :
+				<span class="req_r">*</span>
+			</label>
+			<div class="col-sm-4">
+				<select chosen
+						class="form-control"
+						ng-model="$parent.account"
+						ng-options="item._id as item.name for item in aAccountMaster"
+						search-contains="true"
+						ng-change="onSelectAccount()"
+						name="Account"
+						required>
+					<option value=""></option>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row" style="margin:15px">
+	<div class="col-md-4">
+		<div class="form-group m-b-0">
+			<label class="col-sm-6 control-label">Company Type</label>
+			<div class="col-sm-6">
+				<div class="select">
+					<select class="form-control" ng-model="customerSel.company_type">
+						<option value="" disabled selected>Select Company type</option>
+						<option value="Public Limited" selected>Public Limited</option>
+						<option value="Private">Private</option>
+						<option value="Group">Group</option>
+					</select>
+				</div>
+			</div>
+			<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Service Tax No.</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.service_tax_no" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Tin No.</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.tin_no" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">PAN No.:</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text"
+							   ng-model="customerSel.pan_no"
+							   class="form-control"
+							   name="prime contact">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Vendor Code</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+							   onwheel="return false"
+							   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   ng-model="customerSel.vendor_code"
+							   class="form-control">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Designation Type</label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" ng-model="customerSel.designation_type">
+							<option value="" disabled selected>Select Designation Type</option>
+							<option value="Business Development Manager" selected>Business Development Manager</option>
+							<option value="Customer Service Executive">Customer Service Executive</option>
+							<option value="Key Account Manager">Key Account Manager</option>
+							<option value="Telesales Representative">Telesales Representative</option>
+						</select>
+					</div>
+				</div>				
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Account Contact Name: <span style="color: red;"></span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.prim_contact_name" class="form-control"  name="prime contact">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Designation</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.prim_contact_designation" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Account Contact No.</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="customerSel.prim_cont_no" class="form-control" ng-maxlength="10" name="Contact No">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Marketing Contact Name</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.sec_contact_name" class="form-control" name="Second Contact">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Designation</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.sec_contact_designation" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Marketing Contact No.</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="customerSel.sec_cont_no" class="form-control" ng-maxlength="10" name="Contact No.">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Other Contact No.</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="customerSel.other_cont_no" class="form-control" ng-maxlength="10" name="Other Contact No">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Account Email</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="email" ng-model="customerSel.prim_email" class="form-control" name="email">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Marketing Email</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input  type="email" ng-model="customerSel.alt_email1" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Alt. Email 2</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="email" ng-model="customerSel.alt_email2" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Website Address</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.website_address" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Remarks</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customerSel.remarks" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+
+		<div class="col-md-4" ng-if="$configs.master.customer.add.required.ecc">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">ECC</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="customer.ecc" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-10">
+				<button type="submit" class="btn btn-primary" ng-click="saveCustomerDetails(customerReg)" style="margin-bottom: 12px;">Save</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+	</div>
+</form>

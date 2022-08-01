@@ -1,0 +1,165 @@
+<!-- ControllerAs: fpaVm -->
+
+<div class="card" style="margin:20px;">
+	<div class="card-header">
+		<div class="row m-b-5">
+			<form name='filterFrom' novalidate autocomplete="off">
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Vendor Search..."
+								ng-model="fpaVm.oFilter.vendor"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in fpaVm.getVendor($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="fpaVm.oFilter.vendor=null;">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Customer Search..."
+								ng-model="fpaVm.oFilter.customer"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in fpaVm.getCustomer($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="fpaVm.oFilter.customer='';">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+					<div class="date-picker input-group dp-blue"
+						 ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="fpaVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{fpaVm.DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   max-date="fpaVm.DatePicker.newDate"
+								   ng-model="fpaVm.oFilter.from"
+								   is-open="opened1"
+								   datepicker-options="fpaVm.DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="From Date"
+								   name="From Date"
+								   required
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="fpaVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+					<div class="date-picker input-group dDiesel Budget(ltr)p-blue"
+						 ng-class="{ 'is-opened': opened2 == true }"
+						 style=" ">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="fpaVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{fpaVm.DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   max-date="fpaVm.DatePicker.newDate"
+								   ng-model="fpaVm.oFilter.to"
+								   is-open="opened2"
+								   datepicker-options="fpaVm.DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="To Date"
+								   name="To Date"
+								   required
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="fpaVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="fpaVm.get()">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="fpaVm.oFilter={};fpaVm.get();"><i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Add"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="fpaVm.upsert()">
+						<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+
+<!--		<div class="row" style="margin-right: 1px;">-->
+<!--			<div class="pull-right">-->
+<!--				<button-->
+<!--						class="btn btn-primary waves-effect"-->
+<!--						uib-tooltip="Add"-->
+<!--						tooltip-placement="bottom"-->
+<!--						ng-click="fpaVm.upsert()"-->
+<!--				>-->
+<!--					<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>-->
+<!--					<span></span>-->
+<!--				</button>-->
+<!--&lt;!&ndash;				<button&ndash;&gt;-->
+<!--&lt;!&ndash;						class="btn btn-primary waves-effect"&ndash;&gt;-->
+<!--&lt;!&ndash;						uib-tooltip="Edit"&ndash;&gt;-->
+<!--&lt;!&ndash;						tooltip-placement="bottom"&ndash;&gt;-->
+<!--&lt;!&ndash;						ng-click="fpaVm.upsert('edit')"&ndash;&gt;-->
+<!--&lt;!&ndash;				>&ndash;&gt;-->
+<!--&lt;!&ndash;					<i class="zmdi zmdi-edit zmdi-hc-fw"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;					<span></span>&ndash;&gt;-->
+<!--&lt;!&ndash;				</button>&ndash;&gt;-->
+<!--&lt;!&ndash;				<button&ndash;&gt;-->
+<!--&lt;!&ndash;						class="btn btn-primary waves-effect"&ndash;&gt;-->
+<!--&lt;!&ndash;						uib-tooltip="Set as Default"&ndash;&gt;-->
+<!--&lt;!&ndash;						tooltip-placement="bottom"&ndash;&gt;-->
+<!--&lt;!&ndash;						ng-click="fpaVm.setAsDefault('edit')"&ndash;&gt;-->
+<!--&lt;!&ndash;				>&ndash;&gt;-->
+<!--&lt;!&ndash;					<i class="zmdi zmdi-check zmdi-hc-fw"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;					<span></span>&ndash;&gt;-->
+<!--&lt;!&ndash;				</button>&ndash;&gt;-->
+<!--			</div>-->
+<!--		</div>-->
+
+		<div class="row">
+			<div class="col-md-12">
+				<div ja-table
+					 table-body="fpaVm.aIncentives"
+					 table-head="fpaVm.tableHead"
+					 table-height='500px'
+					 table-load="fpaVm.get(true)"
+					 table-column-setting="fpaVm.columnSetting"
+					 table-selectable="'index'"
+					 table-api="fpaVm.tableApi"
+					 table-selectable-model="fpaVm.oIncentive"
+				></div>
+			</div>
+		</div>
+
+	</div>
+</div>

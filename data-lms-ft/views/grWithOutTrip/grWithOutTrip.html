@@ -1,0 +1,292 @@
+<!--Controller: grWithOutTripController-->
+<!--ControllerAs: vm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Gr Without Trip</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(View)
+				</span>
+			</span>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style="min-height: 575px;">
+			<div class="listview lv-message">
+
+
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<div class="col-md-12">
+							<form role="form">
+
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-2">
+									<div class="fg-line">
+										<input type="text" ng-model="vm.oFilter.grNumber" name="grNumber"
+											   class="form-control input-sm" placeholder="GR No"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Customer Search..."
+												ng-model="vm.oFilter.grCustomer"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in vm.getCustomer($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="vm.oFilter.grCustomer='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-xs-4 m-b-2 col-sm-1 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Billing Search..."
+												ng-model="vm.oFilter.billingParty"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in vm.getBilling($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="vm.oFilter.billingParty='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-xs-4 m-b-2 col-sm-1 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Consignor Search..."
+												ng-model="vm.oFilter.grConsignor"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in vm.getConsignor($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="vm.oFilter.grConsignor='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-xs-4 m-b-2 col-sm-1 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Consignee Search..."
+												ng-model="vm.oFilter.grConsignee"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in vm.getConsignor($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="vm.oFilter.grConsignee='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-xs-4 m-b-2 col-sm-1 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="branch Search..."
+												ng-model="vm.oFilter.branch"
+												typeahead-wait-ms="10"
+												typeahead="item as (item.name + '('+($configs.client_allowed|filter:{'clientId': item.clientId})[0].name+')') for item in vm.getAllBranch($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="vm.oFilter.branch='';">×</i>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="vm.DatePicker.newDate"
+												   ng-model="vm.oFilter.from"
+												   ng-change="vm.onFromDateChange()"
+												   is-open="opened1"
+												   datepicker-options="vm.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="Allocation from"
+												   name="Allocation from"
+												   required
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+									<div class="date-picker input-group dDiesel Budget(ltr)p-blue"
+										 ng-class="{ 'is-opened': opened2 == true }"
+										 style=" ">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+												   type="text"
+												   class="form-control"
+												   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="vm.DatePicker.newDate"
+												   min-date="vm.oFilter.from"
+												   ng-model="vm.oFilter.to"
+												   ng-change="vm.onFromDateChange()"
+												   is-open="opened2"
+												   datepicker-options="vm.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="Allocation To"
+												   name="Allocation To"
+												   required
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+									</div>
+								</div>
+
+
+								<div class="col-md-3">
+
+									<div class="text-center">
+										<button class="btn btn-primary p-t-0 p-b-0" ng-disabled="buttonDisable"
+												type="button"
+												style="font-size: 16px"
+												uib-tooltip="Search"
+												ng-click="vm.getAllGR()"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0"
+												style="font-size: 16px"
+												uib-tooltip="Clear Search"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="vm.oFilter={}; vm.buttonDisable = false;">
+											<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+										</button>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+							</form>
+							<div class="pull-right">
+								<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['GR']['Add']"
+										style="font-size: 20px"
+										uib-tooltip="Add Gr"
+										tooltip-placement="bottom"
+										type="button"
+										ng-click="vm.grOpperation('add')"
+								>
+									<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+								</button>
+
+								<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['GR']['Update'] && vm.selectedTrip.grNumber"
+										style="font-size: 20px"
+										uib-tooltip="Edit Gr"
+										tooltip-placement="bottom"
+										type="button"
+										ng-click="vm.grOpperation('edit')"
+								>
+									<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+								</button>
+
+								<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['GR WithOut Trip']['Map Gr Into Trip'] && vm.selectedTrip.grNumber"
+										style="font-size: 20px"
+										uib-tooltip="Map Gr to Trip"
+										tooltip-placement="bottom"
+										type="button"
+										ng-click="vm.mapGrIntoTrip()"
+								>
+									<i class="zmdi zmdi-map zmdi-hc-fw fs-20"></i>
+								</button>
+
+								<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="vm.selectedTrip.grNumber"
+										style="font-size: 20px"
+										uib-tooltip="Print Builty"
+										tooltip-placement="bottom"
+										type="button"
+										ng-click="vm.printBuilty()"
+								>
+									<i class="zmdi zmdi-print zmdi-hc-fw fs-20"></i>
+								</button>
+
+							</div>
+						</div>
+
+						<div class="clearfix"></div>
+
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-12">
+										<div ja-table
+											 table-body="vm.aTrip"
+											 table-head="vm.tableHead"
+											 table-column-setting="vm.columnSetting"
+											 table-load="vm.getAllGR(true)"
+											 table-height='400px'
+											 table-selectable='vm.selectType'
+											 table-api="vm.tableApi"
+											 table-selectable-model="vm.selectedTrip"
+										></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+
+	.pull-right.ng-scope a {
+		font-size: 22px;
+	}
+	.color1{
+		background: rgb(30, 175, 20);
+		color: white;
+	}
+	.color2{
+		background: rgb(199, 194, 32);
+		color: white;
+	}
+</style>

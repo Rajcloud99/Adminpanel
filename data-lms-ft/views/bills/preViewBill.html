@@ -1,0 +1,819 @@
+<!--Controller: previewBillCtrl-->
+<!--ControllerAs: vm-->
+
+<div class="container" style="">
+	<div class="m-b-0" id="messages-main">
+		<form role="form" name="previewBillForm" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<div class="row m-b-20">
+							<div class="col-md-8">
+								<div class="col-md-3"
+									 ng-hide="vm.hideBillTypeOpt">
+									<div class="fg-line form-group m-b-0">
+										<select chosen
+												class="form-control"
+												disable-search="true"
+												ng-model="vm.billType"
+												ng-options="item as item for item in vm.aBillType"
+												ng-change="vm.onChangeBillType();"
+												name="billType"
+												required>
+											<option value="" selected disabled>Select Bill Type</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-3" ng-show="vm.billType === 'Provisional Bill'" >
+									<div class="fg-line form-group m-b-0">
+										<input type="number"
+											   ng-model="vm.billPercent"
+											   name="billPercent"
+											   ng-change="vm.setPercent()"
+											   class="form-control input-sm"
+											   placeholder="Bill %"
+											   ng-model-options="{ updateOn: 'blur' }">
+									</div>
+								</div>
+								<div class="col-md-3" ng-show="vm.billType === 'Provisional Bill'" >
+									<label class="col-sm-4 control-label">Allowed %:</label>
+									<div class="col-sm-6">
+										{{vm.allowedPercent}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="pull-right">
+									<button class="btn btn-success waves-effect"
+											ng-show="vm.addMode"
+											ng-disabled="previewBillForm.$error.required || !(vm.billingParty|typeOfFilter:'object')"
+											ng-click="vm.generateBill(vm.billType)">
+										Generate {{vm.billType}}
+									</button>
+									<!--<button class="btn btn-success waves-effect"-->
+									<!--ng-show="vm.editMode && vm.operationType!='Preview'"-->
+									<!--ng-click="vm.updateBill()">Update Bill-->
+									<!--</button>-->
+									<button class="btn btn-success waves-effect"
+											ng-show="vm.editMode && vm.operationType!='Preview' && vm.billType == 'Provisional Bill'"
+											ng-click="vm.updateBill()">Update Bill
+									</button>&nbsp;&nbsp;
+									<button class="btn btn-success waves-effect"
+											ng-show="vm.editMode && vm.operationType!='Preview' && vm.billType != 'Provisional Bill'"
+											ng-click="vm.updateBill(true)">Update And Ack. Bill
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<h5 class="modal-title" align="center"><b>TAX INVOICE
+								<span class="error"
+									  ng-if="($configs.client_allowed|filter:{'clientId': vm.billingParty.clientId})[0].name"
+									  style="font-size: 13px">
+									(This Bill Will be Generated in {{($configs.client_allowed|filter:{'clientId': vm.billingParty.clientId})[0].name}})
+								</span></b>
+							</h5>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+
+								<div class="col-md-4">
+									<label class="col-sm-4 control-label">Billing Party:</label>
+									<div class="col-sm-6">
+										{{vm.billingParty.name}}
+									</div>
+								</div>
+								<div class="col-md-8">
+									<label class="col-sm-3 control-label">Address of Party:</label>
+									<div class="col-sm-8">
+										{{vm.billingParty.address}}
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">State Code:</label>
+									<div class="col-sm-6">
+										{{vm.billingParty.state_code || 'NA'}}
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">{{vm.billingParty.category}}</label>
+									<div class="col-sm-6">
+										{{vm.billingParty.percent ? vm.billingParty.percent + '%' : '0'}}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">GSTIN No.</label>
+									<div class="col-sm-6">
+										{{vm.billingParty.gstin || vm.billingParty.gstin_no || 'NA'}}
+									</div>
+								</div>
+
+
+								<div class="col-md-3"
+									 ng-if="$configs.billing_managment.preview_bill.visible.batchNumber">
+									<label class="col-sm-4 control-label">Batch Number:</label>
+									<div class="col-sm-8">
+										<div class="fg-line">
+											<input type="text"
+												   ng-model="vm.batchNumber"
+												   class="form-control"
+												   ng-model-options="{ updateOn: 'blur' }">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Date:</label>
+									<div class="col-sm-8">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened1 == true }">
+											<div ng-class="{ 'fg-toggled': opened1 == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+													   type="text"
+													   max-date="vm.DatePicker.newDate|setMaxDate:2"
+													   class="form-control"
+													   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-init="vm.billDate = vm.billDate ? vm.billDate : vm.DatePicker.newDate"
+													   ng-model="vm.billDate"
+													   is-open="opened1"
+													   datepicker-options="vm.DatePicker.dateSettings"
+													   close-text="Close"
+													   ng-disabled="vm.operationType=='Preview'"
+													   placeholder="Date"/>
+											</div>
+											<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Due Date:</label>
+									<div class="col-sm-8">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened2 == true }">
+											<div ng-class="{ 'fg-toggled': opened2 == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+													   type="text"
+													   class="form-control"
+													   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-model="vm.dueDate"
+													   is-open="opened2"
+													   datepicker-options="vm.DatePicker.dateSettings"
+													   ng-disabled="vm.operationType=='Preview'"
+													   close-text="Close"
+													   placeholder="Due Date"/>
+											</div>
+											<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Bill Submition Date:</label>
+									<div class="col-sm-8">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened3 == true }">
+											<div ng-class="{ 'fg-toggled': opened3 == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened3')"
+													   type="text"
+													   class="form-control"
+													   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-model="vm.submitionDate"
+													   is-open="opened3"
+													   datepicker-options="vm.DatePicker.dateSettings"
+													   ng-disabled="vm.operationType=='Preview'"
+													   close-text="Close"
+													   placeholder="Submition Date"/>
+											</div>
+											<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened3')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Trip No:</label>
+									<div class="col-sm-8">
+										<div class="fg-line">
+											<input type="text"
+												   ng-model="vm.tripNo"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Bill No:</label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input type="text"
+												   placeholder="Bill No Search..."
+												   ng-model="vm.billNo"
+												   class="lvhs-input"
+												   typeahead-wait-ms="10"
+												   typeahead="item.bookNo as item.bookNo for item in vm.getBillBookNo(vm.billNo)|limitTo:10"
+												   class="form-control"
+												   typeahead-on-select="vm.onBillNoSelect($item)">
+											<i class="lvh-search-close" ng-click="vm.billNo='';">×</i>
+											<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+											   ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill) && $role['GR']['Centralize Book']"
+											   style="right: -15px; background: #3096f3;"
+											   uib-tooltip="Auto"
+											   ng-click="vm.getBillBookNo('auto')"></i>
+											<i class="lvh-search-close zmdi zmdi-plus-circle zmdi-hc-fw" ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill) && $role['GR']['Centralize Book']"
+											   style="right: -35px; background: #3096f3;"
+											   uib-tooltip="Centrailized"
+											   ng-click="vm.getBillBookNo('centrailized')"></i>
+										</div>
+										<span class="warning" ng-show="vm.nonBillBook">No Bill Book Linked to selected billingParty</span>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label"><b>Sales A/c:</b><span class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!vm.doesDefaultAccountConfigExists">
+										<div class="ng-scope sear chosen-row-3">
+											<input type="text"
+												   placeholder="Search Sales A/c..."
+												   name="Sales A/c"
+												   ng-model="vm.salesAcccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAccount($viewValue, ['Sales']) | limitTo:6"
+												   class="form-control"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.salesAcccount=null;">×</i>
+										</div>
+									</div>
+									<div class="col-sm-6"
+										 ng-if="vm.doesDefaultAccountConfigExists">
+										{{vm.salesAcccount.name}}
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="$configs.billing_managment.preview_bill.visible.reciveDate">
+									<label class="col-sm-4 control-label">Receive Date:</label>
+									<div class="col-sm-8">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened4 == true }">
+											<div ng-class="{ 'fg-toggled': opened4 == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened4')"
+													   type="text"
+													   class="form-control"
+													   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-init="vm.dueDate = vm.dueDate ? vm.dueDate : vm.DatePicker.newDate"
+													   ng-model="vm.reciveDate"
+													   is-open="opened4"
+													   datepicker-options="vm.DatePicker.dateSettings"
+													   ng-disabled="vm.operationType=='Preview'"
+													   close-text="Close"
+													   placeholder="Due Date"/>
+											</div>
+											<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened4')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Ref No:</label>
+									<div class="col-sm-8">
+										<div class="fg-line">
+											<input type="text"
+												   ng-model="vm.refNo"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Remark:</label>
+									<div class="col-sm-8">
+										<div class="fg-line">
+											<input type="text"
+												   ng-model="vm.remarks"
+												   class="form-control"
+												   placeholder="Please specify Remark">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Internal Remark:</label>
+									<div class="col-sm-8">
+										<div class="fg-line">
+											<input type="text"
+												   ng-model="vm.intRemarks"
+												   class="form-control"
+												   placeholder="Please specify Internal Remark">
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-3" ng-if="$configs.UnBilledGr.sacCode">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">SAC Code : <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Enter SAC Code"
+													   ng-model="vm.sacCode"
+													   name="SAC Code"
+													   maxlength="10"
+													   class="form-control"
+													   required>
+											</div>
+											<span class="error" ng-if="previewBillForm['SAC Code'].$error.required
+																	&& (previewBillForm['SAC Code'].$touched
+																	|| previewBillForm.$submitted)">
+												This Field is Mandatory</span>
+											<span class="error" ng-show="previewBillForm['SAC Code'].$error.maxlength">SAC Code should not be Greater than 10.</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="$configs.UnBilledGr.addBranch">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Billing Branch:</label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Billing Branch "
+														ng-model="vm.branch"
+														typeahead-wait-ms="10"
+														name="BillingBranch"
+														typeahead-on-select="vm.onBranchSelect()"
+														typeahead="item as item.name for item in vm.getAllBranchSearch($viewValue) | limitTo:6"
+												>
+												<i class="lvh-search-close"
+												   ng-click="vm.branch='';">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="vm.iGST">
+									<label class="col-sm-4 control-label"><b>IGST A/c:</b><span class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!vm.doesDefaultAccountConfigExists">
+										<div class="ng-scope sear chosen-row-3">
+											<input type="text"
+												   placeholder="Search IGST A/c..."
+												   name="IGST_A/c"
+												   ng-model="vm.iGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAccount($viewValue, ['IGST Payable']) | limitTo:6"
+												   class="form-control"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.iGSTAccount=null;">×</i>
+										</div>
+									</div>
+									<div class="col-sm-6"
+										 ng-if="vm.doesDefaultAccountConfigExists">
+										{{vm.iGSTAccount.name}}
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="vm.cGST">
+									<label class="col-sm-4 control-label"><b>CGST A/c:</b><span class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!vm.doesDefaultAccountConfigExists">
+										<div class="ng-scope sear chosen-row-3">
+											<input type="text"
+												   placeholder="Search CGST A/c..."
+												   name="CGST_A/c"
+												   ng-model="vm.cGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAccount($viewValue, ['CGST Payable']) | limitTo:6"
+												   class="form-control"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.cGSTAccount=null;">×</i>
+										</div>
+									</div>
+									<div class="col-sm-6"
+										 ng-if="vm.doesDefaultAccountConfigExists">
+										{{vm.cGSTAccount.name}}
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="vm.sGST">
+									<label class="col-sm-4 control-label"><b>SGST A/c:</b><span class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!vm.doesDefaultAccountConfigExists">
+										<div class="ng-scope sear chosen-row-3">
+											<input type="text"
+												   placeholder="Search SGST A/c..."
+												   name="SGST A/c"
+												   ng-model="vm.sGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAccount($viewValue, ['SGST Payable']) | limitTo:6"
+												   class="form-control"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.sGSTAccount=null;">×</i>
+										</div>
+									</div>
+									<div class="col-sm-6"
+										 ng-if="vm.doesDefaultAccountConfigExists">
+										{{vm.sGSTAccount.name}}
+									</div>
+
+								</div>
+								<div class="col-md-3" ng-if="vm.adjAmount">
+									<label class="col-sm-4 control-label"><b>Adjustment A/c:</b><span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="ng-scope sear chosen-row-3">
+											<input type="text"
+												   placeholder="Adjustment A/c..."
+												   name="Adjustment A/c"
+												   ng-model="vm.adjDebitAc"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAccount($viewValue, ['Adjustment']) | limitTo:6"
+												   class="form-control"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.adjDebitAc=null;">×</i>
+										</div>
+									</div>
+
+								</div>
+								<div class="col-md-3" ng-if="vm.amtWithoutGR">
+									<label class="col-sm-4 control-label"><b>W/o Gr Amount:</b></label>
+									<div class="col-sm-6">
+										{{vm.amtWithoutGR}}
+									</div>
+
+								</div>
+								<div class="col-md-2">
+									<label class="col-sm-4 control-label"><b>Total Amount:</b></label>
+									<div class="col-sm-6">
+										{{ (vm.totalAmount|roundOff) || 0}}
+									</div>
+								</div>
+								<div class="col-md-2">
+									<label class="col-sm-4 control-label"><b>Bill Amount:</b></label>
+									<div class="col-sm-6">
+										{{ (vm.billAmount|roundOff) || 0}}
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group m-b-0">
+										<button class="btn btn-primary p-t-0 p-b-0 btn-xs"
+												style="margin-top: 10px;  font-size: 16px"
+												type="button"
+												ng-click="vm.amountCeil()"
+												uib-tooltip="Round Up"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-long-arrow-up zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0 btn-xs"
+												style="margin-top: 10px;  font-size: 16px"
+												type="button"
+												ng-click="vm.amountFloor()"
+												uib-tooltip="Round Down"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-long-arrow-down zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-danger p-t-0 p-b-0 btn-xs"
+												style="margin-top: 10px;  font-size: 16px"
+												uib-tooltip="refresh"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="vm.amountRefresh()">
+											<i class="zmdi zmdi-refresh zmdi-hc-fw"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="pull-left">
+							<span class="booking_list_header">Add GR</span>
+						</div>
+						<div class="row hidden-print" style="margin:15px;">
+							<div class="col-md-1">
+								<div class="form-group m-b-0">
+									<input type="text"
+										   ng-model="vm.filter.grNo"
+										   name="GR No"
+										   class="form-control input-sm"
+										   placeholder="Get Gr">
+								</div>
+							</div>
+							<div class="col-md-1" ng-if="$configs.tripMemo.show">
+								<div class="form-group m-b-0">
+									<input type="text"
+										   ng-model="vm.filter.tMNo"
+										   name="Trip Memo No"
+										   class="form-control input-sm"
+										   placeholder="Trip Memo No">
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group m-b-0">
+									<input type="text"
+										   ng-model="vm.filter.shipmentNo"
+										   name="Shipment No"
+										   class="form-control input-sm"
+										   placeholder="Shipment/Invoice No">
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group m-b-0">
+									<input type="text"
+										   ng-model="vm.filter.tripNo"
+										   name="Trip No"
+										   class="form-control input-sm"
+										   placeholder="Trip No">
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group m-b-0">
+									<input
+											fill-date
+											type="text"
+											class="form-control"
+											placeholder="From"
+											ng-model="vm.filter.from"
+											ng-change="vm.filter.to=undefined;"
+									>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group m-b-0">
+									<input
+											fill-date
+											type="text"
+											class="form-control"
+											placeholder="To"
+											ng-model="vm.filter.to"
+									>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											style="margin-top: 10px;  font-size: 16px"
+											type="button"
+											ng-click="vm.getGr()"
+											ng-enabled="!vm.filter.grNo && !vm.filter.shipmentNo && !vm.filter.tripNo"
+											uib-tooltip="Search"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-danger p-t-0 p-b-0"
+											style="margin-top: 10px;  font-size: 16px"
+											uib-tooltip="Remove Gr"
+											tooltip-placement="bottom"
+											type="button"
+											ng-click="vm.removeGr(vm.selectedBill)">
+										<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+									</button>
+									<button ng-if="vm.billType == 'Supplementary Bill'"
+											class="btn btn-primary p-t-0 p-b-0"
+											style="margin-top: 10px;  font-size: 16px"
+											uib-tooltip="Edit SupplyBill"
+											tooltip-placement="bottom"
+											type="button"
+											ng-click="vm.selectedBill && vm.editSupplyBill(vm.selectedBill, vm.selectedBillIndex)">
+										<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+									</button>
+<!--									<button ng-if="$role['Unbilled Gr']['Update Gr']"-->
+<!--											class="btn btn-primary p-t-0 p-b-0"-->
+<!--											style="margin-top: 10px;  font-size: 16px"-->
+<!--											uib-tooltip="Refresh Rate"-->
+<!--											tooltip-placement="bottom"-->
+<!--											type="button"-->
+<!--											ng-click="vm.refreshRate()">-->
+<!--										<i class="zmdi zmdi-refresh-alt zmdi-hc-fw"></i>-->
+<!--									</button>-->
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="" style="overflow-y: auto; max-height: 500px;">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th style="min-width: 40px;">S No.</th>
+													<th style="min-width: 55px;">Gr Type</th>
+													<th style="min-width: 55px;">Trip No.</th>
+													<th style="min-width: 80px;">GR Date</th>
+													<th style="min-width: 55px;">GR No</th>
+													<th ng-if="$configs.tripMemo.show" style="min-width: 55px;">TMemo No</th>
+													<th style="min-width: 100px;">Vehicle No.</th>
+													<th style="min-width: 100px;">Route</th>
+													<th style="min-width: 300px;">Consignor</th>
+													<th style="min-width: 300px;">Consignee</th>
+													<th style="min-width: 200px;">Payment Basis</th>
+													<th style="min-width: 100px;">Weight(Tonne)</th>
+													<th style="min-width: 70px;">Unit</th>
+													<th style="min-width: 80px;">Rate</th>
+													<th style="min-width: 65px;">Freight</th>
+													<th style="min-width: 65px;">Charges</th>
+													<th style="min-width: 65px;">Deduction</th>
+													<th style="min-width: 120px;" ng-show="vm.billType === 'Provisional Bill'">Already Applied %</th>
+													<th style="min-width: 120px;" ng-show="vm.billType === 'Provisional Bill'">Bill %</th>
+													<th style="min-width: 120px;">Total Freight</th>
+													<th ng-if="$role['Unbilled Gr']['Update Gr'] && $configs.UnBilledGr.editGr">Update Gr</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr data-ng-repeat="oItem in vm.aItems  | orderBy : 'gr.grNumber'  | orderBy : 'gr.trip_no'"
+													ng-click="vm.selectedBillIndex = $index ;vm.selectedBill = oItem"
+													ng-class="{grn: vm.selectedBillIndex === $index}"
+													class="pointer">
+													<td>{{$index+1}}</td>
+													<td>{{oItem.gr.gr_type ? (oItem.gr_type == 'Market' ? 'Market' :
+														'Own')
+														: 'NA'}}
+													</td>
+													<td>{{oItem.gr.trip_no || 'NA'}}</td>
+													<td>{{(oItem.gr.grDate | date : "dd-MM-y") || 'NA'}}</td>
+													<td>{{oItem.gr.grNumber || 'NA'}}</td>
+													<td ng-if="$configs.tripMemo.show">{{oItem.gr.tMemo.tMNo || 'NA'}}</td>
+													<td>{{oItem.gr.vehicle_no || oItem.gr.vehicle.vehicle_reg_no ||
+														'NA'}}
+													</td>
+													<td>{{(oItem.gr.acknowledge.source ||
+														oItem.gr.acknowledge.billedSource) +
+														' to ' + (oItem.gr.acknowledge.destination ||
+														oItem.gr.acknowledge.billedDestination) +
+														(oItem.gr.route.route_distance ? '('+
+														oItem.gr.route.route_distance
+														+')' : '')}}
+													</td>
+													<td>{{oItem.gr.consignor.name || 'NA'}}</td>
+													<td>{{oItem.gr.consignee.name || 'NA'}}</td>
+													<td>{{oItem.gr.payment_basis}}</td>
+													<td>{{oItem.gr.invoices[0].billingWeightPerUnit || 0}}</td>
+													<td>{{oItem.gr.invoices[0].billingNoOfUnits || 0}}</td>
+													<td>{{oItem.gr.invoices[0].rate.toFixed(2) || oItem.gr.invoices[0].billingRate.toFixed(2) || 0}}
+													</td>
+													<td>{{(vm.suppBillType ? oItem.supplementaryBill.basicFreight :
+														oItem.gr.basicFreight).toFixed(2) || 0}}
+													</td>
+													<td>{{(vm.suppBillType ? oItem.supplementaryBill.totalCharges :
+														oItem.gr.totalCharges).toFixed(2) || 0}}
+													</td>
+													<td>{{(vm.suppBillType ? oItem.supplementaryBill.totalDeduction :
+														oItem.gr.totalDeduction).toFixed(2) || 0}}
+													</td>
+													<td ng-show="vm.billType === 'Provisional Bill'">
+														{{oItem.appliedPercent}}
+													</td>
+													<td ng-show="vm.billType === 'Provisional Bill'">
+														<div class="fg-line form-group m-b-0">
+															<input type="number"
+																   ng-model="oItem.billPercent"
+																   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+																   onwheel="return false"
+																   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+																   name="billPercent"
+																   class="form-control input-sm"
+																   ng-change="vm.calculateTax()"
+																   max="{{oItem.allowedPercent}}"
+																   min="0"
+																   ng-model-options="{ updateOn: 'blur' }"
+																   placeholder="Bill %">
+															<span class="error"
+																  ng-if="!oItem.billPercent">Max Allowed {{oItem.allowedPercent}}%</span>
+														</div>
+													</td >
+													<td>{{(oItem.totFreight).toFixed(2) || 0}}</td>
+													<td ng-if="$role['Unbilled Gr']['Update Gr'] && $configs.UnBilledGr.editGr">
+														<button
+																class="btn btn-primary p-t-0 p-b-0"
+																style="margin-top: 10px;  font-size: 16px"
+																uib-tooltip="Edit Gr"
+																tooltip-placement="bottom"
+																type="button"
+																ng-disabled="$configs.tripMemo.show"
+																ng-click="vm.grUpsertPopup(oItem, $index)">
+															<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+														</button>
+													</td>
+												</tr>
+												<tr>
+													<td class="ja-text-left"
+														colspan="{{vm.colSpan}}">Total
+													</td>
+													<td>{{vm.amount.toFixed(2) || 0}}</td>
+												</tr>
+												<tr>
+													<td class="ja-text-left"
+														colspan="{{vm.colSpan}}">
+														<div style="display: inline-flex">
+															<label>CGST @ &nbsp;&nbsp;</label>
+															<label>{{vm.cGST_percent}}&nbsp; %</label>
+														</div>
+													</td>
+													<td>{{vm.cGST|roundOff}}</td>
+												</tr>
+												<tr>
+													<td class="ja-text-left"
+														colspan="{{vm.colSpan}}">
+														<div style="display: inline-flex">
+															<label>SGST /UTGST @ &nbsp;&nbsp;</label>
+															<label>{{vm.sGST_percent}}&nbsp; %</label>
+														</div>
+													</td>
+													<td>{{vm.sGST|roundOff}}</td>
+												</tr>
+												<tr>
+													<td class="ja-text-left"
+														colspan="{{vm.colSpan}}">
+														<div style="display: inline-flex">
+															<label>IGST @ &nbsp;&nbsp;</label>
+															<label>{{vm.iGST_percent}}&nbsp; %</label>
+														</div>
+													</td>
+													<td>{{vm.iGST|roundOff}}</td>
+												</tr>
+												<tr>
+													<td class="ja-text-left"
+														colspan="{{vm.colSpan}}">
+														<div style="display: inline-flex">
+															<label>Final Invoice Amount</label>
+														</div>
+													</td>
+													<td>{{ (vm.totalAmount|roundOff) || 0}}</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+	hr {
+		margin-top: 5px;
+		margin-bottom: 2px;
+	}
+
+	.ja-index {
+		z-index: 10;
+	}
+
+	.modal-dialog {
+		width: 80%;
+	}
+
+	.footAct div div {
+		text-align: center;
+	}
+
+	.footAct {
+		margin-top: 91px;
+	}
+
+	body {
+		font-size: 12px;
+	}
+
+	.unresponsive tbody tr td {
+		vertical-align: middle;
+	}
+
+</style>

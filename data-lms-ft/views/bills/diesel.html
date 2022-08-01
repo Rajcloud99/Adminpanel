@@ -1,0 +1,206 @@
+<form role="form"  name="myGRPopPrint" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <button id="pdf" type="submit" ng-click="pdf()" class="btn btn-primary" style="margin-bottom: 12px;">Download Pdf</button>
+  </div>
+  <div class="modal-body">
+    <!-- <!DOCTYPE html>
+<html> -->
+<style type="text/css">
+    
+    #blank {
+        height: 80px
+    }
+
+    #heading {
+        text-align: center;
+        font-weight: bold
+    }
+
+    #title {
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    #iso {
+        font-size: 9px;
+        font-weight: bold
+    }
+
+    #subtitle {
+        font-size: 10px;
+    }
+
+    #addr {
+        font-size: 9px;
+    }
+
+    .num {
+        font-size: 9px;
+    }
+
+    .centertext= {
+        text-align: center;
+    }
+
+    .header {
+        font-size: 12px;
+        background-color: #d3d3d3
+    }
+
+    .data {
+        font-size: 12px;
+        padding-left: 2px;
+        font-weight: bold
+    }
+
+    .ctable,
+    .cth,
+    .ctd {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    .ctd {
+        padding-left: 2px;
+    }
+
+    .cthnotop {
+        border: 1px solid black;
+        border-collapse: collapse;
+        border-top: 0;
+    }
+
+    .bold {
+        font-weight: bold
+    }
+
+    .calign {
+        text-align: center
+    }
+    
+    .longu {
+        border: 1px solid black;
+        border-left: 0;
+        border-right: 0;
+        border-top: 0;
+    }
+
+    .utop {
+        border: 1px solid black;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+    }
+</style>
+
+<div>
+
+    <div style="width:100%; overflow:hidden;">
+        <div style="float:left; width:15%;">
+            <img src={{clientData.logo_url}} alt="logo" style="width:90px;">
+        </div>
+        <div class="row" ng-show={{show_selector}}>
+            <div class="col-md-4" >
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Slip No</label>
+                    <div class="col-sm-6">
+                        <div class="select">
+                            <select class="form-control" placeholder="Select Type" ng-options="item as item.no for item in data" ng-model="oDiesel.no" ng-change="onSlipSelect(oDiesel.no)">
+                                <option value="" disabled selected style="display: none;">1</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="float:left; width:70%; text-align:center;">
+            <div id="title" class="editable">{{clientData.client_full_name}}</div>
+            <div id="iso" class="editable">{{clientData.client_iso}}</div>
+            <div id="subtitle" class="editable">{{clientData.client_subtitle}}</div>
+            <div id="addr" class="editable">{{clientData.address}}</div>
+        </div>
+
+        <div style="float:right;  text-align:center;">
+            <table style="padding-left:5px">
+                <tr>
+                    <td class="num bold">Office : </td>
+                    <td class="num editable">{{clientData.client_primary_contact_no}}</td>
+                </tr>
+                <tr>
+                    <td class="num bold">Fax : </td>
+                    <td class="num editable">{{clientData.client_fax}}</td>
+                </tr>
+                <tr>
+                    <td class="num bold">PAN : </td>
+                    <td class="num editable">{{clientData.client_pan_no}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    <div id="heading">Diesel Requistion Slip</div>
+
+    <div style="overflow:hidden; width:80%; margin-left:auto; margin-right:auto; padding:10px">
+        <div style="padding-bottom:25px">
+            <div class="data" style="float:left; width:7%;">Sr.No. </div>
+            <div class="data calign longu editable" style="float:left;  width:40%;">{{serial_no}}</div>
+            <div class="data" style="float:left; width:10%">Truck No.</div>
+            <div class="data calign longu editable" style="float:left; width:40%;">{{truck_no}}</div>
+        </div>
+        <div style="padding-bottom:25px">
+            <div class="data" style="float:left; width:15%;">Vendor Name</div>
+            <div class="data calign longu editable" style="float:left;  width:83%;">{{vendor_name}}</div>
+        </div>
+        <div style="padding-bottom:25px">
+            <div class="data" style="float:left; width:17%;">Diesel Required</div>
+            <div class="data calign longu editable" style="float:left;  width:30%;">{{diesel_required}}</div>
+            <div class="data" style="float:left; width:5%">Rate</div>
+            <div class="data calign longu editable" style="float:left; width:36%;">{{rate}}</div>
+            <div class="data" style="float:left; width:10%">Per Ltr.</div>
+        </div>
+        <div style="padding-bottom:25px">
+            <div class="data" style="float:left; width:12%;">Amount Rs</div>
+            <div class="data calign longu editable" style="float:left;  width:87%;">{{amount}}</div>
+        </div>
+        <div style="padding-bottom:25px">
+            <div class="data" style="float:left; width:12%;">(In Words)</div>
+            <div class="data calign longu editable" style="float:left;  width:87%;">{{amount_in_words}}</div>
+        </div>
+
+
+
+        <div style="height:60px"></div>
+        <div style="width:99%; overflow:hidden">
+            <div class="data calign editable" style="width:33%; float:right">{{driver_name}}</div>
+        </div>
+
+        <div>
+            <div class="data calign utop" style="width:33%; float:left">Supervisor Sign</div>
+
+            <div class="data calign utop" style="width:33%; float:right">Driver</div>
+        </div>
+    </div>
+    <div class="data calign editable">Printed by: {{printed_by}}</div>
+    <div class="data calign">{{datetime}}</div>
+
+
+</div>
+
+<!-- </html> -->
+
+
+  </div>    
+  <div class="modal-footer">
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>  
+</form> 
+  <style type="text/css">
+  .modal-dialog {width: 75%;
+        height: 173px
+    }
+  </style>

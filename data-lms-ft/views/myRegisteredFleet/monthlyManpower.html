@@ -1,0 +1,50 @@
+<ul class="list-group list-group-flush">
+	<li class="list-group-item">
+		<!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+		<div class="card-body">
+			<div class="row" style="margin:5px">
+				<div class="col-md-12 text-center">
+					<button class="btn btn-primary btn-xs m-b-20"
+							style="font-size: 15px"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="addManpower('Add')">
+						<i class="zmdi zmdi-plus zmdi-hc-fw"></i> Manpower
+					</button>
+					<button class="btn btn-primary btn-xs m-b-20"
+							uib-tooltip="Edit Salray"
+							style="font-size: 15px"
+							tooltip-placement="bottom"
+							type="button"
+							ng-disabled='(monthlyManpowerSelectedIndex|typeOfFilter:"number" && monthlyManpowerSelectedIndex>=0)'
+							ng-click="addManpower('Edit', monthlyManpowerSelectedIndex)"><i class="zmdi zmdi-edit zmdi-hc-fw"></i> Manpower</button>
+				</div>
+				<div class="col-md-12">
+					<table class="table table-bordered unresponsive">
+						<thead>
+						<tr>
+							<th style="min-width: 140px">#</th>
+							<th style="min-width: 140px">MM/YY</th>
+							<th style="min-width: 140px">Salary</th>
+							<th style="min-width: 140px">Created By</th>
+							<th style="min-width: 140px">Created At</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="oMonthlyManpower in oFleet.monthlyManpower | orderBy: '-created_at'"
+							class="pointer selectItem"
+							ng-click="selectThis($index);"
+							ng-class="$index === monthlyManpowerSelectedIndex ? 'grn' : ''">
+							<td>{{$index+1}}</td>
+							<td>{{oMonthlyManpower.mm_yy | date: "MMMM-yyyy"}}</td>
+							<td>{{oMonthlyManpower.amount}}</td>
+							<td>{{oMonthlyManpower.created_by}}</td>
+							<td>{{oMonthlyManpower.created_at | date: "dd-MM-yyyy"}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</li>
+</ul>

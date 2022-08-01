@@ -1,0 +1,443 @@
+<ul class="list-group list-group-flush">
+	<li class="list-group-item">
+		<!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+		<div class="card-body">
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">User ID: <span ng-hide="(user_mode=='View')" class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="User ID" ng-model="oUser.userId" ng-change="checkUserId(oUser.userId);" ng-model-options="{ updateOn: 'blur' }" placeholder="Enter User ID" class="form-control" ng-readonly="(user_mode=='View')||(user_mode=='Edit')" required>
+							</div>
+							<span ng-show="userIdExist" style="color: red; font-size: 11px;">UserId already Exist</span>
+						</div>
+					</div>
+				</div>
+
+				<!--<div class="col-md-4"-->
+					 <!--ng-if="$configs.master.showAccount  && user_mode=='Edit' ? showAccountDropdown : true">-->
+					<!--<div class="form-group m-b-0">-->
+						<!--<label class="col-sm-5 control-label">Account :</label>-->
+						<!--<div class="col-sm-6" ng-if="!(user_mode=='View')">-->
+							<!--<select chosen-->
+									<!--class="form-control"-->
+									<!--ng-model="oUser.account"-->
+									<!--ng-options="item._id as item.name for item in aAccountMaster"-->
+									<!--search-contains="true"-->
+									<!--ng-change="onSelectAccount()"-->
+									<!--name="Account"-->
+							<!--&gt;-->
+								<!--<option value=""></option>-->
+							<!--</select>-->
+						<!--</div>-->
+						<!--<div ng-if="(user_mode=='View')">-->
+							<!--{{oUser.account.name || 'NA'}}-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Full name:  <span ng-hide="(user_mode=='View')" class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Full name" ng-model="oUser.full_name" placeholder="Enter Full name" class="form-control" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-hide="((user_mode=='View') || (user_mode=='Edit'))" class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Password:  <span ng-hide="(user_mode=='View')" class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Password" ng-model="oUser.password" placeholder="Enter Password" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4"
+					 ng-if="$role['User']['Password']"
+					 ng-hide="((user_mode=='Add') || (user_mode=='Edit'))">
+					<label class="col-sm-3">Password:</label>
+					<div class="col-md-6" style="padding-left: 15px;">
+
+						{{passVisible ? oUser.password : '************'}}
+
+						<i class="zmdi zmdi-eye pull-right"
+						   style="padding-right: 10px;"
+						   ng-hide="passVisible"
+						   ng-click="viewUserPass(oUser); passVisible = !passVisible"></i>
+
+						<i class="zmdi zmdi-eye-off pull-right"
+						   style="padding-right: 10px;"
+						   ng-show="passVisible"
+						   ng-click="passVisible = !passVisible"></i>
+
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">User Type: <span ng-hide="(user_mode=='View')" class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<!--<select chosen class="form-control" ng-model="oUser.user_type" ng-options="c for c in $constants.user_type" search-contains="true" name="User Type" ng-disabled="(user_mode=='View')">
+								<option value="" selected>User Type</option>
+							</select>-->
+							<div class="select">
+								<select multiple
+										chosen
+										class="form-control"
+										ng-model="oUser.user_type"
+										ng-options="c for c in $constants.user_type"
+										ng-model-option="{updateOn: 'blur'}"
+										name="User Type"
+										ng-disabled="(user_mode=='View')">
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Father's name: <span ng-hide="(user_mode=='View')" class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Father's name" ng-model="oUser.father_name" class="form-control" placeholder="Enter Father's name" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Mother's name: </label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Mother's name" ng-model="oUser.mother_name" class="form-control" placeholder="Enter Mother's name" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Blood Group:</label>
+						<div class="col-sm-6">
+							<select chosen class="form-control" ng-model="oUser.blood_group" ng-options="x for x in $constants.bloodGroupTypes" search-contains="true" name="Blood Group" ng-disabled="(user_mode=='View')"
+									required>
+								<option value="" selected>Blood Group</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Gender:</label>
+						<div class="col-sm-6">
+							<select chosen class="form-control" ng-model="oUser.gender" ng-options="y for y in $constants.gender" search-contains="true" name="Gender" ng-disabled="(user_mode=='View')"
+									required>
+								<option value="" selected>Select Gender</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Date of birth:</label>
+						<div class="col-sm-6">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="open($event, 'opened1')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="oUser.date_of_birth" is-open="opened1" datepicker-options="dateOptions" close-text="Close" placeholder="Select Date"
+										   style="padding: 0px 4px;height: 34px;" ng-disabled="(user_mode=='View')" />
+								</div>
+								<span class="input-group-btn">
+								  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened1')" ng-disabled="(user_mode=='View')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Education:</label>
+						<div class="col-sm-6">
+							<select chosen class="form-control" ng-model="oUser.education" ng-options="e for e in $constants.educationTypes" search-contains="true" name="Education" ng-disabled="(user_mode=='View')"
+									required>
+								<option value="" selected>Select Education</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Marital Status:</label>
+						<div class="col-sm-6">
+							<select chosen class="form-control" ng-model="oUser.marital_status" ng-options="m for m in $constants.maritalStatusTypes" search-contains="true" name="Marital Status" ng-disabled="(user_mode=='View')"
+									required>
+								<option value="" selected>Select Marital Status</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">No of dependents:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" name="No of dependents" ng-model="oUser.no_of_dependents" class="form-control" placeholder="Enter Father's name" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">ID Type:<span ng-hide="(user_mode=='View')" class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<select chosen class="form-control" ng-model="oUser.id_type" ng-options="t for t in $constants.idTypes" search-contains="true" name="ID Type" ng-disabled="(user_mode=='View')"
+									required>
+								<option value="" selected>Select ID Type</option>
+							</select>
+
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">ID No:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="ID no" ng-model="oUser.id_number" class="form-control" placeholder="Enter ID No" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Employment Type:</label>
+						<div class="col-sm-6">
+							<select chosen class="form-control" ng-model="oUser.type_of_employment" ng-options="x for x in $constants.employmentTypes" search-contains="true" name="Employment Type" ng-disabled="(user_mode=='View')">
+								<option value="" selected>Select Employment Type</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Nationality:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Nationality" ng-model="oUser.nationality" class="form-control" placeholder="Enter Nationality" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Contact No:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" name="Contact No" ng-model="oUser.contact_no" ng-minlength="10" ng-maxlength="10" class="form-control" placeholder="Enter Contact No" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Emergency Contact No:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" name="Emergency Contact No" ng-model="oUser.emergency_contact_no" ng-minlength="10" ng-maxlength="10"  class="form-control" placeholder="Enter Emergency Contact No" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Email:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="email" name="Email" ng-model="oUser.email" class="form-control" placeholder="Enter Email" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Current Address:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Line 1" ng-model="oUser.current_address.line1" class="form-control" placeholder="Enter Line 1" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Line 2:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Line 2" ng-model="oUser.current_address.line2" class="form-control" placeholder="Enter Line 2" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">City:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="City" ng-model="oUser.current_address.city" class="form-control" placeholder="Enter City" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">District:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="District" ng-model="oUser.current_address.district" class="form-control" placeholder="Enter District" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">State:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="State" ng-model="oUser.current_address.state" class="form-control" placeholder="Enter State" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Country:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Country" ng-model="oUser.current_address.country" class="form-control" placeholder="Enter Country" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Pincode:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" name="Pincode" ng-model="oUser.current_address.pincode" class="form-control" placeholder="Enter Pincode" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Permanent Address:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Line 1" ng-model="oUser.permanent_address.line1" class="form-control" placeholder="Enter Line 1" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Line 2:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Line 2" ng-model="oUser.permanent_address.line2" class="form-control" placeholder="Enter Line 2" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">City:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="City" ng-model="oUser.permanent_address.city" class="form-control" placeholder="Enter City" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">District:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="District" ng-model="oUser.permanent_address.district" class="form-control" placeholder="Enter District" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">State:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="State" ng-model="oUser.permanent_address.state" class="form-control" placeholder="Enter State" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Country:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" name="Country" ng-model="oUser.permanent_address.country" class="form-control" placeholder="Enter Country" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Pincode:</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="number" name="Pincode" ng-model="oUser.permanent_address.pincode" class="form-control" placeholder="Enter Pincode" ng-readonly="(user_mode=='View')">
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+		</div>
+	</li>
+</ul>
+
+<style>
+	.field-icon {
+		float: right;
+		margin-left: -20px;
+		margin-top: -15px;
+		position: relative;
+		z-index: 2;
+	}
+	</style>

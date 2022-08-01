@@ -1,0 +1,108 @@
+<div ng-controller="vendorReconciliationCtrl">
+	<div class="card m-b-10" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 0px">
+			<form role="form" ng-submit="filter(form)">
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input type="text"
+							   placeholder="Vendor Search..."
+							   ng-model="vendor"
+							   class="lvhs-input"
+							   typeahead-wait-ms="10"
+							   typeahead="person as person.name for person in aVendor | filter:$viewValue"
+							   ng-change="getVname(vendor)"
+							   class="form-control">
+						<i class="lvh-search-close" ng-click="vendor='';">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+					<button ng-disabled="!(reportType && vendor)" ng-click="getAllCostingReport()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">Search</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="col-md-12 pp" ng-show="aCostingReport.length>0">
+							<ul class="listB" style="list-style-type: none;">
+								<li>Name: {{summary.name}}</li>
+								<li>Date: {{summary.date | date:'dd-MM-yyyy'}}</li>
+								<li>Net hire charges: {{summary.netHireAmt}}</li>
+								<li>Deductions: {{summary.deductions}}</li>
+								<li>Detension to add: {{summary.detention_to_add}}</li>
+								<li>Total to be paid: {{summary.total_to_paid}}</li>
+								<li>Actual advance paid: {{summary.actual_advance_paid}}</li>
+								<li>Balance amount paid: {{summary.balance_amount_paid}}</li>
+								<li>Total paid till date: {{summary.total_paid_till_date}}</li>
+								<li>Net: {{summary.netPaid}}</li>
+							</ul>
+						</div>
+						<div class="clearfix"></div>
+						<br>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>S. No.</th>
+										<th>Trip No.</th>
+										<th>Vehicle No.</th>
+										<th>Allocation Date</th>
+										<th>Vendor Name</th>
+										<th>LR No.</th>
+										<th>Hire Amount</th>
+										<th>Advance to be paid</th>
+										<th>Net blc. without dedction</th>
+										<th>Actual advance paid</th>
+										<th>Actual balance paid</th>
+										<th>Deduction due to damage</th>
+										<th>Detention charge to add</th>
+										<th>POD submission date</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oTripExp in aCostingReport" class="pointer selectItem">
+										<td>{{$index+1}}</td>
+										<td>{{oTripExp.trip.trip_no}}</td>
+										<td>{{oTripExp.vehicle_no || 'NA'}}</td>
+										<td>{{oTripExp.allocation_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+										<td>{{oTripExp.trip.vendorData[0].name || 'NA'}}</td>
+										<td><span ng-repeat="gr in oTripExp.trip.aGR">{{gr.grNumber + ','}}</span></td>
+										<td>{{oTripExp.trip.vendorDeal.total_expense}}</td>
+										<td>{{oTripExp.trip.vendorDeal.advance}}</td>
+										<td>{{oTripExp.trip.vendorDeal.toPay}}</td>
+										<td>{{oTripExp.vNet}}</td>
+
+										<td>{{oTripExp.trip.vendorDeal.advance>=oTripExp.vNet?(oTripExp.trip.vendorDeal.advance || 0)-oTripExp.vNet:0}}</td>
+
+										<td>{{oTripExp.vDamage}}</td>
+										<td>{{oTripExp.vDetention}}</td>
+										<td>{{oTripExp.podSubmissionDate}}</td>
+
+									</tr>
+									</tbody>
+								</table>
+								<!--<div class="pagi" ng-show="total_pages>1">
+                                    <pagination ng-change="pageChanged()" total-items="totalItems"
+                                                items-per-page="items_per_page" num-pages="numPages"
+                                                ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+                                                boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+                                                first-text="&laquo;" last-text="&raquo;"></pagination>
+                                </div>-->
+							</div>
+							<div ng-if="aCostingReport.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any costing report available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

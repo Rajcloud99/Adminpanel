@@ -1,0 +1,87 @@
+<!-- Controller: updateStatusPopupCtrl-->
+<!-- ControllerAs: usVm-->
+
+<div class="modal-header">
+	<button type="button" ng-click="usVm.closeModal()" class="close pull-right"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h3 class="text-center">Update Status</h3>
+</div>
+
+<form name="upDateStatus" novalidate autocomplete="off" ng-submit="usVm.submit(upDateStatus)">
+	<div class="container modal-body">
+		<div class="col-md-6">
+			<div class="col-md-4">
+				Select Status:<span class="req_r">*</span>
+			</div>
+			<div class="col-md-8">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							class="form-control"
+							ng-model="usVm.status"
+							name="status"
+							required>
+						<option value="" selected>Select Type</option>
+						<option value="Available" selected>Available</option>
+						<option value="Accident" selected>Accident</option>
+						<option value="Block" selected>Block</option>
+						<option value="Driver rest" selected>Driver rest</option>
+						<option value="Maintenance" selected>Maintenance</option>
+						<option ng-if="usVm.oVehicle.status==='Available'" value="RTO Passing" selected>RTO Passing</option>
+					</select>
+				</div>
+				<span class="error"
+					  ng-if="upDateStatus['status'].$error.required">This Field is Mandatory</span>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="col-md-4">
+				Remark:<span class="req_r">*</span>
+			</div>
+			<div class="col-md-8">
+				<div class="fg-line form-group m-b-0">
+					<input
+							type="text"
+							class="form-control"
+							placeholder="Remark..."
+							ng-model="usVm.remark"
+							name="remark"
+							required
+							>
+				</div>
+				<span class="error"
+					  ng-if="upDateStatus['remark'].$error.required">This Field is Mandatory</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">Submit</button>
+	</div>
+</form>
+
+<style>
+	.modal .modal-content{
+		width: 720px;
+	}
+
+	.btn-lst {
+		background: #eee;
+		margin-right: 5px;
+		padding: 3px 5px
+	}
+
+	.btn-lst a {
+		cursor: pointer;
+		background: #5B5B5B;
+		padding: 0 4px 2px 6px;
+		color: #fff;
+		line-height: 30px
+	}
+
+	.btn-lst a:hover {
+		background: #333
+	}
+
+</style>

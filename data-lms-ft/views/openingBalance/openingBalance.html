@@ -1,0 +1,158 @@
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+    id="messages-main">
+    <div class="card" style="min-height: 600px;">
+        <!--Form starts here -->
+        <div class="card-body">
+            <form name="openingBalanceForm" novalidate>
+                <ul class="list-group list-group-flush">
+                    <!-- BASIC DETAILS -->
+                    <li class="list-group-item">
+                        <span class="booking_list_header">BASIC DETAILS</span>
+                        <div class="card-body">
+                            <div class="row" style="margin:5px">
+                                <div class="col-md-3">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-3 control-label">Ledger: <span
+                                                class="req_r">*</span></label>
+                                        <div class="col-sm-7">
+                                            <div class="lvh-search ng-scope sear chosen-row-1">
+                                                <input type="text" class="form-control lvhs-input" required
+                                                    placeholder="Ledger Search..." ng-model="account"
+                                                    typeahead-wait-ms="10" name="Account"
+                                                    typeahead="item as item.name for item in accountMaster($viewValue) | limitTo:6"
+                                                    typeahead-on-select="onAccountSelect($item, $model, $label)">
+                                                <i class="lvh-search-close" ng-click="account=null;oAccount={};">×</i>
+                                                <span class="error" ng-if="openingBalanceForm['Account'].$error.required">
+                                                    This Field is Mandatory</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Emist Balance: <span
+                                                class="req_r">*</span> </label>
+                                        <div class="col-sm-6">
+                                            <div class="fg-line">
+                                                <input type="number" placeholder="Enter Emist Balance" required
+                                                    ng-model="oAccount.openBal1" class="form-control"
+                                                    name="Op Bal1" ng-change="onTypeOpenBal1(oAccount.openBal1)" 
+                                                    >
+                                            </div>
+                                            <span class="error" ng-if="	openingBalanceForm['Op Bal1'].$error.required
+                                                                        && (openingBalanceForm['Op Bal1'].$touched
+                                                                            || openingBalanceForm.$submitted)">
+                                                This Field is Mandatory</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Dgfc D Balance: <span
+                                                class="req_r">*</span> </label>
+                                        <div class="col-sm-6">
+                                            <div class="fg-line">
+                                                <input type="number" placeholder="Enter Dgfc Balance" required
+                                                    ng-model="oAccount.openBal2" class="form-control"
+                                                    name="Op Bal2" ng-change="onTypeOpenBal2(oAccount.openBal2)" 
+                                                    >
+                                            </div>
+                                            <span class="error" ng-if="	openingBalanceForm['Op Bal2'].$error.required
+                                                                        && (openingBalanceForm['Op Bal2'].$touched
+                                                                            || openingBalanceForm.$submitted)">
+                                                This Field is Mandatory</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Settled Code: </label>
+                                        <div class="col-sm-6">
+                                            <div class="fg-line">
+                                                <input type="text" placeholder="Enter Code"
+                                                    ng-model="oAccount.settledCode" class="form-control"
+                                                    name="Settled Code" 
+                                                    >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="btn btn-primary" ng-click="submit(openingBalanceForm);"
+                                        ng-disabled="disableSubmit">SUBMIT
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <div class="row" style="margin: 5px;">
+                                <div class="col-md-4">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Opening Balance: </label>
+                                        <div class="col-sm-6">
+                                            <div class="fg-line">
+                                                <input type="number" placeholder="Total Opening Balance" 
+                                                    ng-model="oAccount.amount" class="form-control"
+                                                    name="Amount" readonly
+                                                    >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-4 control-label">Date: <span
+                                                class="req_r">*</span></label>
+                                        <div class="col-sm-6">
+                                            <div class="date-picker input-group dp-blue"
+                                                ng-class="{ 'is-opened': opened1 == true }">
+
+                                                <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                                                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+                                                        type="text" class="form-control"
+                                                        uib-datepicker-popup="{{DatePicker.formats[0]}}"
+                                                        show-weeks="false" ng-model="oAccount.date" 
+                                                        datepicker-options="DatePicker.dateSettings" close-text="Close"
+                                                        placeholder="Date" name="Date"
+                                                        max-date="maxDate" required  disabled
+                                                        style="padding: 0px 4px;height: 34px;" />
+                                                </div>
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default m-t-0 f12"
+                                                        ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+                                                            class="glyphicon glyphicon-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                            <span class="error" ng-if="	openingBalanceForm['Date'].$error.required
+                                                    && (openingBalanceForm['Date'].$touched
+                                                    || openingBalanceForm.$submitted)">
+                                                This Field is Mandatory</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </li>
+
+                  
+
+                    <!-- <li class="animate-show-hide list-group-item">
+                        <div class="card-body">
+                            <div class="row" style="margin:5px">
+                                <div class="col-md-12 text-center">
+                                    <button class="btn btn-primary" ng-click="submit(openingBalanceForm);"
+                                        ng-disabled="disableSubmit">SUBMIT</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li> -->
+
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>

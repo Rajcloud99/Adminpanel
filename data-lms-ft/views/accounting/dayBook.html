@@ -1,0 +1,305 @@
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>DayBook</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View Book)
+					</span>
+				</span>
+		</div>
+		<div class="pull-right" style="width: 21%;">
+			<!-- <div class="col-md-8">
+				<div class="lvh-label col-md-5" style="padding-left:0;padding-right:0;">Group By:</div>
+				<div class="select col-md-6">
+					<select
+							class="form-control"
+							ng-options="item.value as item.label for item in aggrs"
+							ng-model="oFilter.aggregateBy" style="width:120%;height:34px;"
+					>
+						<option value="" selected disabled>None</option>
+					</select>
+				</div>
+			</div> -->
+			<div class="col-md-4">
+				<button ng-click="getVouchers(true)" ng-disabled="aVouchers.length<=0"
+								class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+					Download
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form ng-submit="getVouchers()" novalidate>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="oFilter.refNo"
+							   name="refNo"
+							   class="form-control input-sm"
+							   placeholder="refNo">
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<input type="text"
+							   ng-model="oFilter.particular"
+							   name="Particular"
+							   class="form-control input-sm"
+							   placeholder="Particular">
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Debit Account"
+								ng-model="oFilter.to"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in accountmaster($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="oFilter.to = undefined;">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Credit Account"
+								ng-model="oFilter.from"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in accountmaster($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="oFilter.from = undefined;">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Ledger Account"
+								ng-model="oFilter.ledger"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in accountmaster($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="oFilter.ledger = undefined;">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Branch Search..."
+								ng-model="oFilter.branch"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in getAllBranch($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="pvVm.oFilter.branch=null;">×</i>
+					</div>
+				</div>
+				<div class="col-md-1 text-center">
+					<div>
+						<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+								style="font-size: 16px"
+								uib-tooltip="Search"
+								type="submit"
+								tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+					</div>
+					<div>
+						<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 m-t-5 app_tile"
+								style="font-size: 16px"
+								uib-tooltip="Clear Search"
+								tooltip-placement="bottom"
+								type="submit"
+								ng-click="oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0 select">
+						<select class="form-control"
+								ng-model="oFilter.type"
+								ng-options="item as item for item in $constants.aVouchersType"
+								name="Voucher Type"
+								required>
+							<option value="" disabled selected>Select Voucher Type</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="select">
+						<select class="form-control" ng-model="oFilter.dateType">
+							<option value="" selected>Select Date</option>
+							<option value="created_at">Creation date</option>
+							<option value="date">Voucher date</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="From"
+									ng-model="oFilter.from_date"
+									ng-change="oFilter.to_date=undefined;"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="To"
+									ng-model="oFilter.to_date"
+							>
+						</div>
+					</div>
+				</div>
+				<!--<div class="col-md-2">-->
+					<!--<div class="form-group m-b-0">-->
+						<!--<div class="col-sm-12">-->
+							<!--<div class="fg-line">-->
+								<!--<div class="date-picker input-group dp-blue chosen-row-1"-->
+									 <!--ng-class="{ 'is-opened': opened1 == true }">-->
+									<!--<div ng-class="{ 'fg-toggled': opened1 == true }">-->
+										<!--<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"-->
+											   <!--type="text"-->
+											   <!--class="form-control"-->
+											   <!--datepicker-popup="{{DatePicker.formats[0]}}"-->
+											   <!--show-weeks="false"-->
+											   <!--ng-model="oFilter.from_date"-->
+											   <!--ng-change="oFilter.to_date=undefined;"-->
+											   <!--is-open="opened1"-->
+											   <!--datepicker-options="DatePicker.dateSettings"-->
+											   <!--close-text="Close"-->
+											   <!--placeholder="From"/>-->
+									<!--</div>-->
+									<!--<span class="input-group-btn">-->
+                		                		<!--<button type="button"-->
+														<!--class="btn btn-default m-t-0 f12"-->
+														<!--ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i-->
+														<!--class="glyphicon glyphicon-calendar"></i></button>-->
+                		              	  <!--</span>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--<div class="col-md-2">-->
+					<!--<div class="form-group m-b-0">-->
+						<!--<div class="col-sm-12">-->
+							<!--<div class="fg-line">-->
+								<!--<div class="date-picker input-group dp-blue chosen-row-1"-->
+									 <!--ng-class="{ 'is-opened': opened2 == true }">-->
+									<!--<div ng-class="{ 'fg-toggled': opened2 == true }">-->
+										<!--<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"-->
+											   <!--type="text"-->
+											   <!--class="form-control"-->
+											   <!--datepicker-popup="{{DatePicker.formats[0]}}"-->
+											   <!--show-weeks="false"-->
+											   <!--ng-model="oFilter.to_date"-->
+											   <!--min-date="oFilter.from_date"-->
+											   <!--max-date="oFilter.from_date|setMaxDate:6"-->
+											   <!--is-open="opened2"-->
+											   <!--datepicker-options="DatePicker.dateSettings"-->
+											   <!--close-text="Close"-->
+											   <!--placeholder="To"/>-->
+									<!--</div>-->
+									<!--<span class="input-group-btn">-->
+            		                			<!--<button type="button"-->
+														<!--class="btn btn-default m-t-0 f12"-->
+														<!--ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i-->
+														<!--class="glyphicon glyphicon-calendar"></i></button>-->
+                		              	  <!--</span>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+			</form>
+		</div>
+	</div>
+	<!--
+	<div class="container m-b-5 m-t-5">
+		<div class="col-md-12">
+			<div class="form-group m-b-0 text-right">
+				<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+						style="font-size: 20px"
+						uib-tooltip="Add Voucher"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="addVoucher()">
+					<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+	-->
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<table class="table table-bordered unresponsive">
+				<thead id='my_fixable_table_header' fix-head>
+				<tr>
+					<th>Vch Type</th>
+					<th>Credit</th>
+					<th>Debit</th>
+					<th>Amount</th>
+					<th>Reference</th>
+					<th>Narration</th>
+					<th>Date</th>
+					<th>Created By</th>
+					<th>Created At</th>
+					<!--<th>Vch No.</th>-->
+					<!--<th>VId</th>-->
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="voucher in aVouchers">
+					<td>{{voucher.type}}</td>
+					<td>{{voucher.from.name}}</td>
+					<td>{{voucher.to.name}}</td>
+					<td>{{voucher.amount}}</td>
+					<td>{{voucher.refNo}}</td>
+					<td>{{voucher.narration}}</td>
+					<td>{{voucher.date| date:"dd-MMM-yyyy 'at' h:mma"}}</td>
+					<td>{{voucher.created_by.full_name}}</td>
+					<td>{{voucher.created_at | date:"dd-MMM-yyyy 'at' h:mma"}}</td>
+					<!--<td>{{voucher.voucherId}}</td>-->
+					<!--<td>{{voucher.vId}}</td>-->
+				</tr>
+				</tbody>
+			</table>
+			<div ng-if="aVouchers.length === 0" class="ms-body" style=" min-height: 50px;">
+				<h3>No Voucher Found !!!!!</h3>
+			</div>
+		</div>
+		<div class="pagi text-center" ng-if="aVouchers.length>0">
+			<uib-pagination ng-change="getVouchers()" total-items="pagination.totalItems"
+							items-per-page="pagination.items_per_page" num-pages="pagination.numPages"
+							ng-model="pagination.currentPage" max-size="pagination.maxSize"
+							class="pagination-sm smallPagi" boundary-links="true"
+							previous-text="&lsaquo;" next-text="&rsaquo;"
+							first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+		</div>
+	</div>
+</div>
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+</style>

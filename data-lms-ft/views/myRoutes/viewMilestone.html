@@ -1,0 +1,35 @@
+<form>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item m-t-5 m-l-5" ng-click="openInfoWindow($event,marker)" ng-repeat="marker in markers" style="color: blue; cursor: pointer;">
+                        {{marker.name}} ({{marker.category}})
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9" style="height:600px;border:1px solid black" id="trMap">
+            </div>
+        </div>
+    </div>
+</form>
+
+<style>
+    .map-popup p {
+		margin: 0px !important;
+		color: #1E85D8;
+		font-weight: bold;
+	}
+
+	.map-popup p.pp-hd{
+		background: #eee;
+		color: #000!important;
+		font-size:15px;
+		border-bottom: 1px solid #000;
+	}
+
+	.map-popup p span {
+		color: #55595D !important;
+		font-weight: normal;
+	}
+</style>

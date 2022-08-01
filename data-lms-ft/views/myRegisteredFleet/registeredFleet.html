@@ -1,0 +1,129 @@
+<div class="container">
+    <div class="card m-b-0" id="messages-main">
+        <!-- Search -->
+        <div ng-show="!((aFleet)&&(aFleet.length==0))" class="ms-menu">
+            <div class="lvh-search ng-scope sear">
+                <input type="text" placeholder="Search Fleet..." ng-model="fleetName" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.name as person.name for person in fleetNames | filter:$viewValue" ng-change="getFleetByName(fleetName)" class="form-control"
+                    typeahead-on-select="onSelect($item, $model, $label)">
+                <i class="lvh-search-close" ng-click="clearSearch()">×</i>
+                <div class="listview lv-user clk" style="overflow: auto;height:97%;">
+                    <div class="lv-item media" ng-repeat="fleet in aFleet" ng-click="selectFleet($index)">
+                        <div class="truck-desc">
+                            <div class="row">
+                                <div class="col-md-5 bold">{{fleet.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagi" ng-show="total_pages>1">
+                        <pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;">
+                        </pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body  -->
+        <div class="ms-body" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lvh-label">
+                    <span style="margin-left: 1px;font-weight: bold;font-size: 20px;">{{((fleet_mode == 'Edit')||(fleet_mode=='View'))?oFleet.name:"Register New Fleet"}}
+						<span style="margin-left:10px;color:#B7B7B7">
+							({{fleet_mode}})
+						</span>
+                    </span>
+                </div>
+            </div>
+            <div ng-show="(aFleet.length>0)" class="lv-body" style="margin-top: 13px;border-top: 1px solid #a9a8a8;">
+                <form name="registeredFleetForm" class="tab-form-demo" novalidate>
+                    <fieldset ng-disabled="false">
+                        <ul class="lv-actions actions right" style="position: absolute; right: 22px; margin-top: 10px; margin-right: 0;">
+                            <li class="btn-wave">
+                                <button class="btn-primary btn-xs" uib-tooltip="Register Fleet" tooltip-placement="bottom" ng-click="setMode('Add')">
+									<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+								</button>
+                            </li>
+                            <li class="btn-wave">
+                                <button class="btn-primary btn-xs" ng-hide="!(fleet_mode=='View')" uib-tooltip="Edit Fleet" tooltip-placement="bottom" ng-click="setMode('Edit')">
+									<i class="zmdi zmdi-edit"></i>
+								</button>
+                            </li>
+                            <li class="btn-wave">
+                                <button class="btn-primary btn-xs" ng-hide="!(fleet_mode=='View')" ng-if="$role['Fleet']['Delete']" uib-tooltip="Delete Fleet" tooltip-placement="bottom" ng-click="deleteFleetMode('Delete')">
+									<i class="zmdi zmdi-delete"></i>
+								</button>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                        <div class="wid100">
+                            <uib-tabset active="activeForm" class="pull-left">
+                                <uib-tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
+                                    <div ng-include="tab.content"></div>
+                                </uib-tab>
+                            </uib-tabset>
+                            <section ng-show="((!(fleet_mode=='View')) && oFleet.name && (oFleet.prim_cont_no))" class="fixed-registered-vehicle-submit">
+                                <div class="fixed-booking-submit-inner text-center">
+                                    <button type="submit" ng-click="submitFleet()" class="btn btn-success fixed-registered-vehicle-btn-style">Submit
+								</button>
+                                </div>
+                            </section>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div ng-show="!(aFleet.length>0)" class="lv-body" style="margin-top: 13px;border-top: 1px solid #a9a8a8;">
+                <form name="registeredFleetForm" class="tab-form-demo" novalidate>
+                    <fieldset ng-disabled="false">
+                        <uib-tabset ng-show="!(fleet_mode == 'View')" active="activeForm" class="pull-left">
+                            <uib-tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
+                                <div ng-include="tab.content"></div>
+                            </uib-tab>
+                        </uib-tabset>
+                        <ul class="lv-actions actions right" style="position: absolute; right: 22px; margin-top: 10px; margin-right: 0;">
+                            <li class="btn-wave">
+                                <button class="btn-primary btn-xs" uib-tooltip="Register Fleet" tooltip-placement="bottom" ng-click="setMode('Add')">
+									<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+								</button>
+                            </li>
+                        </ul>
+                        <section ng-show="(((fleet_mode=='Add')) && oFleet.name && (oFleet.prim_cont_no))" class="fixed-registered-vehicle-submit">
+                            <div class="fixed-booking-submit-inner text-center">
+                                <button type="submit" ng-click="submitFleet()" class="btn btn-success fixed-registered-vehicle-btn-style">Submit
+								</button>
+                            </div>
+                        </section>
+                    </fieldset>
+                </form>
+                <span ng-show="(fleet_mode == 'View')">No Registered Fleet Found!</span>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    form.tab-form-demo .tab-pane {
+        margin: 20px 20px;
+    }
+
+    .wid100>div {
+        width: 100%;
+    }
+
+    .nav-tabs>li.active {
+        background: #2196f5;
+    }
+
+    .nav-tabs>li.active>a {
+        color: #fff !important;
+    }
+
+    .nav-tabs>li.active>a,
+    .nav-tabs>li.active>a:hover,
+    .nav-tabs>li.active>a:focus {
+        border: 1px solid #2196f5;
+    }
+
+    .list_border_background {
+        border: 2px solid blue !important;
+        background: #47d6c9;
+    }
+</style>

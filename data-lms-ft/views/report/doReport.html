@@ -1,0 +1,128 @@
+<div class="container" ng-controller="doReportController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Customer Search..." ng-model="customer" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aCustomer | filter:$viewValue" ng-change="getCname(customer)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+									<i class="lvh-search-close" ng-click="clearSearch('customer')">×</i>
+								</div>
+							</div>
+							<div ng-show="customer" class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<select class="form-control"
+										ng-options="item as item for item in aDoNumbers"
+										ng-model="do_number" style="height: 34px;">
+									<option style="display:none" value="">DO Number</option>
+								</select>
+							</div>-->
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false"
+											   ng-model="date" ng-change="setStartDate()"
+											   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="From Date" style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+				                      <button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="open($event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+				                    </span>
+								</div>
+							</div>
+							<!--<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+											   min-date="start_date"="end_date" max-date="mxDate" is-open="opened2"
+										datepicker-options="dateOptions" close-text="Close" placeholder="To Date" style=
+										"padding: 0px 4px
+									;
+										height: 34px
+									;" ng-disabled="!start_date"/>
+									</div>
+									<span class="input-group-btn">
+			                      <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened2')" ng-disabled="!start_date"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+								</div>
+							</div>-->
+
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<button ng-disabled="!(date)" ng-click="getDoReport()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+									Search
+								</button>
+							</div>
+							<button ng-disabled="!(date)" ng-click="downloadReport()" class="btn btn-primary hidden-print pull-right" style="font-size: 11px; padding: 5px;margin-top: 5px;margin-right: 5px;">Download</button>&nbsp;
+						</form>
+						<div class="clearfix"></div>
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th rowspan="2">Sl. No.</th>
+										<th rowspan="2">Party</th>
+										<!--<th rowspan="2">Owner</th>-->
+										<th rowspan="2">Mine</th>
+										<th rowspan="2">DO No.</th>
+										<th rowspan="2">DO Qty.</th>
+										<th rowspan="2">Lapsing On</th>
+										<th colspan="2">{{date | date:'dd/MM/yyyy'}}</th>
+										<th colspan="2">Cumulative</th>
+										<th rowspan="2">Balance Qty.</th>
+										<th colspan="3">Asking Rate(In Day)</th>
+										<th rowspan="2">Progress %</th>
+									</tr>
+									<tr>
+										<th>Trucks</th>
+										<th>Qty.</th>
+										<th>Trucks</th>
+										<th>Qty.</th>
+										<th>Day Left</th>
+										<th>Trucks</th>
+										<th>Qty.</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="dt in aContracts" class="pointer selectItem">
+										<td>{{$index+1}}</td>
+										<td>{{dt.customer_name}}</td>
+										<!--<td>{{dt.name}}</td>-->
+										<td>{{dt.mine_name}}</td>
+										<td>{{dt.name}}</td>
+										<td>{{dt.totalWeight}}</td>
+										<td>{{dt.contract_end_date | date:'dd/MM/yyyy'}}</td>
+										<td>{{(dt.todayTrucks).toFixed(2)}}</td>
+										<td>{{(dt.todayQty).toFixed(2)}}</td>
+										<td>{{(dt.lastGr?dt.totalTrucks:0).toFixed(2)}}</td>
+										<td>{{(dt.totalQty).toFixed(2)}}</td>
+										<td>{{(dt.totalWeight - dt.totalQty).toFixed(2)}}</td>
+										<td>{{daysLeft(dt)}}</td>
+										<td>{{trucks(dt)}}</td>
+										<td>{{qty(dt)}}</td>
+										<td>{{progress(dt)}}</td>
+
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div ng-if="aVehicle.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any registered vehicle available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

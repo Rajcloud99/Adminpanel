@@ -1,0 +1,335 @@
+<form name="emptyTripForm" ng-submit="submitEmptyTrip(emptyTripForm)" novalidate autocomplete="off">
+
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black">
+				<b>Empty Trip</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">({{operationType || 'Add'}})</span>
+			</span>
+		</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Trip # / Route / Status:</label>
+									<div class="col-sm-8"><strong>{{oTrip.trip_no}} / {{oTrip.route_name}} / {{oTrip.status}}</strong></div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vehicle:</label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear">
+											<input
+													type="text"
+													name="vehicle"
+													class="form-control lvhs-input"
+													placeholder="Select vehicle"
+													ng-model="v_no"
+													uib-typeahead="s as s.vehicle_reg_no for s in getVehicle($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="onVehSelect($item, $model, $label)"
+													required
+											>
+											<i
+													class="lvh-search-close"
+													ng-click="v_no=undefined;oSend.vehicle=undefined;oSend.vehicle_no=undefined;"
+											>×</i>
+										</div>
+										<span
+												class="error"
+												ng-if="emptyTripForm['vehicle'].$error.required
+													&& (emptyTripForm['vehicle'].$touched
+													|| emptyTripForm.$submitted)"
+										>
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Driver:</label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear">
+											<input
+													type="text"
+													name="driver"
+													class="form-control lvhs-input"
+													placeholder="Select driver"
+													ng-model="d_no"
+													uib-typeahead="d as d.name for d in getDriver($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="onDriverSelect($item, $model, $label)"
+													required
+											>
+											<i
+													class="lvh-search-close"
+													ng-click="d_no=undefined;oSend.driver=undefined;"
+											>×</i>
+										</div>
+										<span
+												class="error"
+												ng-if="emptyTripForm['driver'].$error.required
+													&& (emptyTripForm['driver'].$touched
+													|| emptyTripForm.$submitted)"
+										>
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="m-b-10" style="clear:both"></div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Trip Start Date: <span class="req_r">*</span></label>
+									<div class="col-sm-8">
+										<div class="date-picker timepicker input-group dp-blue chosen-row-1" ng-class="{ 'is-opened': opened1 == true }">
+											<div ng-class="{ 'fg-toggled': opened1 == true }">
+												<input
+														type="text"
+														class="form-control"
+														name="tripStartDate"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+														datepicker-popup="{{DatePicker.formats[0]}}"
+														ng-model="oSend.tripStartDate"
+														is-open="opened1"
+														show-weeks="false"
+														close-text="Close"
+														uib-datepicker-options="DatePicker.dateSettings"
+														close-text="Close"
+														placeholder="Trip Start Date"
+														required
+												/>
+											</div>
+											<span class="input-group-btn">
+												<button
+														type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')">
+													<i class="glyphicon glyphicon-calendar"></i>
+												</button>
+											</span>
+										</div>
+										<timepicker
+												ng-show="oSend.tripStartDate"
+												ng-model="oSend.tripStartTime"
+												show-spinners="false"
+												show-meridian="true"
+										>
+										</timepicker>
+										<span class="error" ng-if="emptyTripForm['tripStartDate'].$error.required
+																			&& (emptyTripForm['tripStartDate'].$touched
+																			|| emptyTripForm.$submitted)">
+														This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Trip End Date: </label>
+									<div class="col-sm-8">
+										<div class="date-picker input-group dp-blue chosen-row-1" ng-class="{ 'is-opened': opened2 == true }">
+											<div ng-class="{ 'fg-toggled': opened2 == true }">
+												<input
+														type="text"
+														class="form-control"
+														name="tripEndDate"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+														datepicker-popup="{{DatePicker.formats[0]}}"
+														ng-model="oSend.tripEndDate"
+														is-open="opened2"
+														show-weeks="false"
+														close-text="Close"
+														datepicker-options="DatePicker.dateSettings"
+														placeholder="Trip End Date"
+														ng-disabled="!oSend.tripStartDate"
+												/>
+											</div>
+											<span class="input-group-btn">
+												<button
+														type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')">
+													<i class="glyphicon glyphicon-calendar"></i>
+												</button>
+											</span>
+										</div>
+										<timepicker
+												ng-show="oSend.tripEndDate"
+												ng-model="oSend.tripEndTime"
+												show-spinners="false"
+												show-meridian="true"
+										>
+										</timepicker>
+									</div>
+								</div>
+							</div>
+
+							<div ng-if="!$configs.trips.updateRoute" class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Route: <span class="req_r">*</span></label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear">
+											<input
+													type="text"
+													name="route"
+													class="form-control lvhs-input"
+													placeholder="Enter route name"
+													ng-model="oSend.route"
+													uib-typeahead="s as s.name for s in getRoutes($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="onSelect($item, $model, $label)"
+													required
+											>
+											<i class="lvh-search-close" ng-click="oSend.route=undefined">×</i>
+										</div>
+										<span
+												class="error"
+												ng-if="emptyTripForm['route'].$error.required
+													&& (emptyTripForm['route'].$touched
+													|| emptyTripForm.$submitted)"
+										>
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="form-group col-md-4" ng-if="($configs.trips.updateRoute)">
+								<label class="col-sm-4 control-label">Loading Point :<span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<input type="text"
+										   placeholder="Source Search..."
+										   ng-model="oSend.ld"
+										   on-select="onSelectSource($item)"
+										   class="form-control"
+										   place-autocomplete
+										   name="Loading Point"
+										   required>
+									<i class="lvh-search-close" ng-click="oSend.ld=''">×</i>
+									<span class="error" ng-if="emptyTripForm['Loading Point'].$error.required
+												&& (emptyTripForm['Loading Point'].$touched
+													|| emptyTripForm.$submitted)">
+												This Field is Mandatory</span>
+								</div>
+							</div>
+							<div class="form-group col-md-4" ng-if="($configs.trips.updateRoute)">
+								<label class="col-sm-4 control-label">Unloading Point :<span class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<input type="text"
+										   placeholder="Dest Search..."
+										   ng-model="oSend.uld"
+										   place-autocomplete
+										   class="form-control"
+										   typeahead-wait-ms="10"
+										   on-select="onSelectDest($item)"
+										   name="Unloading Point"
+										   required>
+									<i class="lvh-search-close" ng-click="oSend.uld=''">×</i>
+									<span class="error" ng-if="emptyTripForm['Unloading Point'].$error.required
+													  && (emptyTripForm['Unloading Point'].$touched
+													  || emptyTripForm.$submitted)">
+												  This Field is Mandatory</span>
+								</div>
+							</div>
+							
+			
+							<div class="col-md-4" ng-if="($configs.trips.updateRoute)">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label"> Km :<span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   placeholder="Enter Total Km"
+												   ng-model="oSend.rKm"
+												   step="0.001"
+												   class="form-control"
+												   max="5000"
+												   name="Route Km"
+												   required>
+										</div>
+										<span class="error" ng-if="	(emptyTripForm['Route Km'].$error.required
+																						&& (emptyTripForm['Route Km'].$touched
+																							|| emptyTripForm.$submitted))">
+															This Field is Mandatory
+														</span>
+										<span class="error col-sm-12" ng-if="emptyTripForm['Route Km'].$error.max">Max 5000 Km allowed</span>
+									</div>
+								</div>
+							</div>
+					<div ng-if="$configs && $configs.booking">
+							<div ng-if="$configs.booking && $configs.booking.odometer">
+						        	<div class="col-md-4">
+												<div class="form-group m-b-0">
+													<label class="col-sm-6 control-label">Start Odometer</label>
+												 <div class="col-sm-6">
+														<div class="fg-line">
+													<input type="number" ng-model="oSend.startOdo" placeholder="Enter Start Reading" class="form-control">
+											</div>
+										</div>
+									</div>
+						   	 </div>
+								<div class="col-md-4">
+												<div class="form-group m-b-0">
+													<label class="col-sm-6 control-label">End Odometer</label>
+													<div class="col-sm-6">
+														<div class="fg-line">
+															<input type="number" ng-model="oSend.endOdo" placeholder="Enter End Reading" class="form-control">
+														</div>
+												</div>
+										</div>
+							 </div>
+		    	</div>
+		</div>
+
+						</div>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary" type="submit">SUBMIT</button>
+		<button class="btn btn-warning" type="button" ng-click="closeModal()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.modal-dialog{
+		width: 90%;
+	}
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

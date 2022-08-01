@@ -1,0 +1,237 @@
+<form name="SLDO" ng-controller="registerSLDOController" novalidate>
+    <div class="validationError" ng-show="createSLDOerrormsg"><h5 class="c-red">* {{SLDOmsg}}</h5></div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">SL Name: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.name" class="form-control" name="SL name" required>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">SLDO CODE: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.code" class="form-control" name="SL code" required>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">SLDO Details</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.details" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 1: <span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="sldoReg.address1" class="form-control" name="Address line 1" required></textarea> 
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 2 </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="sldoReg.address2" class="form-control"></textarea> 
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 3 </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="sldoReg.address3" class="form-control"></textarea> 
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Mobile Number: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sldoReg.prim_contact_no" class="form-control" ng-minlength="10" ng-maxlength="10" name="mobile number" required>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Phone Number</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sldoReg.alt_contact_no1" class="form-control" >
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">E-mail</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.email" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Contact Person Name: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.contact_person_name" class="form-control" name="contact person name" required>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Contact Person Num: </span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sldoReg.alt_contact_person_name" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">PORT Name: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.port_name" class="form-control" name="port name" required>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Alternate Contact Number</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sldoReg.alt_contact_no2" class="form-control" >
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Alternate E-mail</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.alt_email" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Remarks</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.remarks" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<!-- <div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Created By</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.created_by_name" class="form-control">
+					</div>
+				</div>
+				<div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Creater Employee Code</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.created_by_employee_code" class="form-control">
+					</div>
+				</div>
+				<div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Last Modified By</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.last_modified_by_name" class="form-control">
+					</div>
+				</div>
+				<div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Last Modifier Employee Code</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sldoReg.last_modified_employee_code" class="form-control">
+					</div>
+				</div>
+				<div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div>
+			</div>
+		</div>
+	</div> -->
+	<div class="row">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-10">
+				<button type="submit" class="btn btn-primary"
+					ng-click="saveSLDORegDetails(SLDO)" style="margin-bottom: 12px;">Save</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+	</div>
+</form>

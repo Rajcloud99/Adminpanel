@@ -1,0 +1,124 @@
+
+<!--
+* "opertaionType" Defines the possible operations i.e. show, add, update
+* accordingly to the operations below ng-show, ng-hide and ng-if is used.
+-->
+
+<div class="card" style="margin: 5px auto;">
+	<div class="row" style="padding: 20px;" >
+		<div class="col-md-3" ng-hide="opertaionType|operation">
+			<div class="lvh-search ng-scope sear chosen-row-1">
+				<input
+						type="text"
+						class="form-control lvhs-input"
+						placeholder="Route Search..."
+						ng-model="routes"
+						typeahead-wait-ms="10"
+						typeahead="item as item.name for item in getAllRoute($viewValue) | limitTo:6"
+						typeahead-on-select="addRoute($item, $model, $label)">
+				<i class="lvh-search-close" ng-click="routes=null;">×</i>
+			</div>
+		</div>
+		<!--<div class="col-md-3 select" ng-hide="opertaionType|operation" style="padding: 0 10px;">-->
+			<!--<select chosen-->
+					<!--class="form-control"-->
+					<!--ng-model="routes.route"-->
+					<!--ng-change="addRoute(routes);routes = {};"-->
+					<!--placeholder-text-single="'Select Route'"-->
+					<!--ng-options="o.name for o in routesList | filter:{ disabled: false }">-->
+			<!--</select>-->
+		<!--</div>-->
+		<div class="col-md-3 text-center">
+			<button class="btn btn-primary waves-effect pointer" ng-if="$role['All Vendor']['Update']"
+					ng-if="opertaionType === 'show'"
+					ng-click="editInfo()"> Edit
+			</button>
+		</div>
+		<div class="col-sm-12" style="margin:15px" ng-show="vendor.routes.length">
+			<div class="row" style="margin-right: 15px">
+				<div class="col-md-12">
+					<table class="table table-bordered unresponsive">
+						<thead>
+						<tr>
+							<th style="width:10%">Route Name</th>
+							<th ng-hide="opertaionType|operation" style="width:50px"></th>
+							<th style="width:10%">Vehicle Type</th>
+							<th>Vehicle Rate</th>
+							<th ng-hide="opertaionType|operation" style="width:50px"></th>
+						</tr>
+						</thead>
+						<tbody ng-repeat="oRoute in vendor.routes">
+							<tr ng-repeat="type in ((oRoute.vehicleTypes.length === 0 || !oRoute.vehicleTypes ) ? ( 1|getNumber) : oRoute.vehicleTypes) track by $index ">
+								<td rowspan="{{oRoute.vehicleTypes.length + 2}}" ng-if="$index==0" style="vertical-align:middle">{{oRoute.route.name}}</td>
+								<td rowspan="{{oRoute.vehicleTypes.length + 2}}" ng-if="$index==0" ng-hide="opertaionType|operation" style="vertical-align:middle">
+									<button
+											class="btn btn-primary waves-effect pointer"
+											ng-click="vendor.routes.splice($parent.$parent.$index,1)">
+										<i class="zmdi zmdi-minus zmdi-hc-fw"></i>
+									</button>
+								</td>
+								<td ng-if="!(oRoute.vehicleTypes.length === 0 || !oRoute.vehicleTypes)">{{type.vehicleType.name}}</td>
+								<td ng-if="!(oRoute.vehicleTypes.length === 0 || !oRoute.vehicleTypes)">
+									<input type="number"
+										   class="form-control"
+										   ng-model="type.rates"
+										   ng-readonly="opertaionType|operation"
+										   placeholder="Rate per trip">
+									<input type="number"
+												 class="form-control"
+												 ng-model="type.ratePerMT"
+												 ng-readonly="opertaionType|operation"
+												 placeholder="Rate per MT">
+									<input type="number"
+												 class="form-control"
+												 ng-model="type.ratePerUnit"
+												 ng-readonly="opertaionType|operation"
+												 placeholder="Rate per Unit">
+									<input type="number"
+												 class="form-control"
+												 ng-model="type.minPayableAmt"
+												 ng-readonly="opertaionType|operation"
+												 placeholder="Min payable amount">
+								</td>
+								<td ng-if="!(oRoute.vehicleTypes.length === 0 || !oRoute.vehicleTypes)" ng-hide="opertaionType|operation">
+									<button
+											class="btn btn-primary waves-effect pointer"
+											ng-click="oRoute.vehicleTypes.splice($index,1)">
+										<i class="zmdi zmdi-minus zmdi-hc-fw"></i>
+									</button>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" style="border-left: 1px solid #f0f0f0;" ng-hide="opertaionType|operation">
+									<select chosen
+											class="form-control"
+											ng-model="vehicleTypeObj.vehicleType"
+											placeholder-text-single="'Select Vehicle Type'"
+											ng-change="addVehicleType(oRoute,vehicleTypeObj);vehicleTypeObj={}"
+											ng-options="o.name for o in vehicleTypesList  | filter:{ disabled: false }">
+									</select>
+									<!--<button class="btn btn-primary waves-effect pointer" ng-click="addVehicleType(oRoute)"><i class="zmdi zmdi-plus zmdi-hc-fw"></i> Add </button>-->
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-12">
+					<button class="btn btn-primary"
+							ng-hide="opertaionType|operation"
+							ng-click="submitForm()">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	html:not(.ie9) .select:not(.fg-line):before{
+		right: 10px;
+	}
+	.form-control {
+		display: inline-block;
+		width: auto;
+	}
+</style>

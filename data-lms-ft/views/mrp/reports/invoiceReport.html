@@ -1,0 +1,142 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+
+							<div class="col-md-2">
+								<div class="select">
+									<div class="select">
+										<select class="form-control"
+												name="type" ng-model="status"
+												style="margin-top:15px">
+											<option value="" selected style="color:grey">Select status</option>
+											<option ng-repeat="x in $constants.so_invoice_statuses"
+													value="{{x}}" >{{x}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-2">
+								<div class="lvh-search sear">
+									<input type="text"
+										   class="lvhs-input"
+										   placeholder="By Branch"
+										   ng-model="selectedBranch"
+										   typeahead-wait-ms="100"
+										   typeahead="item as item.name for item in allBranches | limitTo:10"
+										   ng-change="getBranches(selectedBranch)"
+										   typeahead-on-select="onSelect($item, $model, $label)">
+									<i class="lvh-search-close" ng-click="clearBranchSearch()">×</i>
+								</div>
+							</div>
+
+							<div class="col-md-2">
+								<div class="lvh-search sear">
+									<input type="text"
+										   class="lvhs-input"
+										   placeholder="By Customer"
+										   ng-model="selectedCustomer"
+										   typeahead-wait-ms="100"
+										   typeahead="item as item.name for item in allCustomers | limitTo:10"
+										   ng-change="getCustomers(selectedCustomer)"
+										   typeahead-on-select="onSelect($item, $model, $label)">
+									<i class="lvh-search-close" ng-click="clearCustomerSearch()">×</i>
+								</div>
+							</div>
+
+							<div class="col-md-2"
+								 moment-picker="start_date" style="float: left"
+								 format="DD-MM-YYYY">
+								<div class="fg-line">
+									<input class="form-control"
+										   placeholder="Start date"
+										   ng-model="start_date"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="padding: 9px">
+								</div>
+								<span class="input-group-addon" style="min-width: 0px;padding: 0px;
+								float: right;position: absolute;right: 20px;top: 10px;">
+									<i class="glyphicon glyphicon-calendar" ></i>
+								</span>
+							</div>
+
+							<div class="col-md-2"
+								 moment-picker="end_date" style="float: left"
+								 format="DD-MM-YYYY">
+								<div class="fg-line">
+									<input class="form-control"
+										   placeholder="End date"
+										   ng-model="end_date"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="padding: 9px">
+								</div>
+								<span class="input-group-addon" style="min-width: 0px;padding: 0px;
+									float: right;position: absolute;right: 20px;top: 10px;">
+									<i class="glyphicon glyphicon-calendar" ></i>
+								</span>
+							</div>
+
+							<div class="col-md-1">
+								<button ng-click="getReport()" ng-disabled="!start_date || !end_date"
+										class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+									Search
+								</button>
+							</div>
+							<div class="col-md-1">
+								<button ng-click="getReport(true)" ng-disabled="!start_date || !end_date"
+										class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+									Download
+								</button>
+							</div>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="detailsList">
+							<div class="" style="overflow: auto; max-height: 500px;/* position: relative;*/">
+								<table class="table table-bordered unresponsive">
+									<thead style="/*position: absolute;*/">
+									<tr>
+										<th>S.No.</th>
+										<th>Invoice Number</th>
+										<th>Invoice Date</th>
+										<th>SO Number</th>
+										<th>Status</th>
+										<th>Customer</th>
+										<th>Customer Id</th>
+										<th>Total Amount</th>
+										<th>Tax</th>
+										<th>Address</th>
+										<th>Approver</th>
+										<th>Approval Date</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="row in invoiceReport">
+										<td>{{$index+1}}</td>
+										<td>{{row.invoice_no || ''}}</td>
+										<td>{{row.invoice_date?getDD_MM_YYYY(row.invoice_date):''}}</td>
+										<td>{{row.items?(row.items[0].so_number?row.items[0].so_number:""):""}}</td>
+										<td>{{row.status}}</td>
+										<td>{{row.customer.name || ''}}</td>
+										<td>{{row.customer.customerId}}</td>
+										<td>{{row.total}}</td>
+										<td>{{row.total_tax}}</td>
+										<td>{{parseOaddressToString(row.billing_address)|| ''}}</td>
+										<td>{{row.approver.full_name|| ''}}</td>
+										<td>{{row.approved_by_date?getDD_MM_YYYY(row.approved_by_date):""}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,1253 @@
+<!-- Controller: vendorDealPopUpController -->
+<!-- ControllerAs: bMemoVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Broker Memo Details</b>
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+			</span>
+		</span>
+	</h4>
+</div>
+
+
+<form name="bMemoForm" ng-submit="submit(bMemoForm)" novalidate autocomplete="off">
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- Basic DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">BASIC DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							 <div class="form-group col-md-4" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
+								<label class="col-sm-4 control-label">Branch: </label>
+								<div class="col-sm-8">
+									{{bMemoVm.branch.name}}
+								</div>
+								 <br><span class="error"
+									   ng-if="bMemoVm.branch && !(bMemoVm.branch.brokerMemoBook)">No BrokerMemo Book Linked to selected branch</span>
+							</div>
+
+							<div class="form-group col-md-4" ng-if="!bMemoVm.isShowBrokerMemo">
+									<div class="lvh-search ng-scope sear">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Pan Number"
+												ng-model="bMemoVm.aTripData.vendorDeal.panNumber"
+												typeahead-wait-ms="10"
+												typeahead="item.pan_no as (item.name + ' ' + '('+item.pan_no+')') for item in bMemoVm.getVendorName(false, {'pan_no': bMemoVm.panNumber}) | limitTo:6"
+												typeahead-on-select="bMemoVm.onVendorSelect($item, $model, $label)"
+												ng-readonly="bMemoVm.isAcknowledge">
+										<i class="lvh-search-close" ng-if="!bMemoVm.isAcknowledge"
+										   ng-click="bMemoVm.aTripData.vendorDeal.panNumber=null;">×</i>
+									</div>
+								</div>
+
+							<div class="form-group col-md-4" ng-if="!bMemoVm.isShowBrokerMemo">
+								<label class="col-sm-4 control-label">Transporter : <span class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   placeholder="Transporter Search..."
+											   ng-init="bMemoVm.aTripData._vendor_= bMemoVm.aTripData.vendor || bMemoVm.aTripData.vendor_id"
+											   ng-model="bMemoVm.aTripData.vendorDeal.selectedVendor"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in bMemoVm.getVendorName($viewValue) | limitTo:6"
+											   typeahead-on-select="bMemoVm.onVendorSelect($item, $model, $label)"
+											   class="form-control"
+											   ng-readonly="bMemoVm.isAcknowledge"
+											   required
+										>
+										<i class="lvh-search-close" ng-if="!bMemoVm.isAcknowledge"
+										   ng-click="bMemoVm.aTripData.vendorDeal.selectedVendor=undefined;
+										bMemoVm.aTripData.vendor=undefined;">×</i>
+									</div>
+									<span class="error"
+										  ng-if="bMemoVm.vendorDealPayment.accountCr == 'vendor' && !bMemoVm.isAcknowledge && !bMemoVm.aTripData.vendorDeal.lorryAc">
+										Acount not linked.
+									</span>
+								</div>
+							</div>
+
+							<div class="col-md-4 form-group" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
+								<div class="text-center booking_list_header m-t-4 label"><u><b>Customer</b></u></div>  <span class="req_r">*</span>
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   placeholder="Customer Search..."
+											   ng-model="bMemoVm.aTripData.vendorDeal.customer"
+											   class="lvhs-input form-control"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in bMemoVm.getCustomers($viewValue)"
+											   typeahead-on-select="bMemoVm.onCustomerSelect($item, $model, $label)"
+											   ng-disabled="brokerMemoBType"
+											   ng-required>
+										<i ng-if="!(brokerMemoBType)" class="lvh-search-close" ng-click="bMemoVm.aTripData.vendorDeal.customer=undefined;">×</i>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group col-md-4" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
+								<div class="text-center booking_list_header m-t-4 label"><u><b>Billing Party</b></u></div>  <span class="req_r">*</span>
+								<div class="col-md-2"></div>
+									<div class="col-md-8">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input type="text"
+													class="lvhs-input form-control"
+													placeholder="Billing Party Search.."
+													ng-model="bMemoVm.aTripData.vendorDeal.billingParty"
+													typeahead-wait-ms="10"
+													name="Billing Party"
+													typeahead="item as item.name for item in bMemoVm.getAllBillingParty($viewValue)|limitTo:6"
+													typeahead-on-select="bMemoVm.onBillingPartySelect($item, $model, $label)">
+											<i class="lvh-search-close"
+											   ng-click="bMemoVm.aTripData.vendorDeal.billingParty = undefined;">×</i>
+										</div>
+									</div>
+									<div>
+										&nbsp;&nbsp;
+										<button class="btn-primary btn ng-scope waves-effect btn-sm"
+												ng-click="bMemoVm.upsertBillingParty();$event.preventDefault();"
+												uib-tooltip="Add BillingParty"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-account-add zmdi-hc-sm"></i>
+										</button>
+									</div>
+							</div>
+
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="form-group col-md-4">
+								<div class="text-center booking_list_header m-t-5 label"><u><b>Consignor</b></u></div>
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   class="lvhs-input form-control"
+											   placeholder="Consignor Search..."
+											   ng-model="bMemoVm.aTripData.vendorDeal.consignor"
+											   typeahead-wait-ms="10"
+											   name="Consignor"
+											   typeahead="item as item.name for item in bMemoVm.getConsignor($viewValue)|limitTo:6"
+											   typeahead-on-select="bMemoVm.onConsignorSelectt($item, $model, $label)">
+										<i class="lvh-search-close"
+										   ng-click="bMemoVm.aTripData.vendorDeal.consignor = undefined;">×</i>
+									</div>
+								</div>
+								<div>
+									&nbsp;&nbsp;
+									<button class="btn-primary btn ng-scope waves-effect btn-sm"
+									ng-click="bMemoVm.upsertConsignorConsignee();$event.preventDefault();"
+									uib-tooltip="Add Consignor"
+									tooltip-placement="bottom">
+									<i class="zmdi zmdi-account-add zmdi-hc-sm"></i>
+									</button>
+								</div>
+							</div>
+
+							<div class="form-group col-md-4">
+								<div class="text-center booking_list_header m-t-5 label"><u><b>Consignee</b></u></div>
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   class="lvhs-input form-control"
+											   placeholder="Consignee Search..."
+											   ng-model="bMemoVm.aTripData.vendorDeal.consignee"
+											   typeahead-wait-ms="10"
+											   name="Consignee"
+											   typeahead="item as item.name for item in  bMemoVm.getConsignee($viewValue)"
+											   typeahead-on-select="bMemoVm.onConsigneeSelect($item, $model, $label)">
+										<i class="lvh-search-close"
+										   ng-click="bMemoVm.aTripData.vendorDeal.consignee = undefined;">×</i>
+									</div>
+								</div>
+								<div>
+									&nbsp;&nbsp;
+									<button class="btn-primary btn ng-scope waves-effect btn-sm"
+									ng-click="bMemoVm.upsertConsignorConsignee();$event.preventDefault();"
+									uib-tooltip="Add Consignee"
+									tooltip-placement="bottom">
+									<i class="zmdi zmdi-account-add zmdi-hc-sm"></i>
+									</button>
+								</div>
+							</div>
+
+							<div class="form-group col-md-4">
+								<div class="text-center booking_list_header m-t-5 label"><u><b>Transporter</b></u></div>
+								<div class="col-md-2"></div>
+								<div class="col-md-8">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   class="lvhs-input form-control"
+											   placeholder="Transporter Search..."
+											   ng-model="bMemoVm.aTripData.vendorDeal.selectedVendor"
+											   typeahead-wait-ms="10"
+											   name="Transporter"
+											   typeahead="item as item.name for item in  bMemoVm.getVendorName($viewValue) | limitTo:6"
+											   typeahead-on-select="bMemoVm.onVendorSelect($item, $model, $label)">
+										<i class="lvh-search-close"
+										   ng-click="bMemoVm.aTripData.vendorDeal.vendor = undefined;">×</i>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-4 control-label">Vehicle Type: <span class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="fg-line">
+										<select chosen
+												class="form-control"
+												ng-model="bMemoVm.aTripData.vendorDeal.vehicle"
+												ng-options="item as item.name for item in bMemoVm.aVehicleTypes"
+												name="Vehicle Type"
+												ng-disabled="bMemoVm.isDisableVehType"
+												required>
+											<option value="" disabled>Select Vehicle</option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-if="bMemoVm.isShowBrokerMemo">
+								<label class="col-sm-4 control-label">Broker Memo Date: <span
+										class="req_r">*</span></label></label>
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened3 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+										<input ng-click="bMemoVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{bMemoVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="bMemoVm.aTripData.vendorDeal.brokerMemoDate"
+											   is-open="opened3"
+											   datepicker-options="bMemoVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Memo Date"
+											   name="Memo Date"
+											   required
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="bMemoVm.DatePicker.openDatePicker(this, $event, 'opened3')">
+											<i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+								<div ng-if="bMemoVm.isAcknowledge">
+									{{bMemoVm.aTripData.vendorDeal.deal_at |date:"dd-MM-yyyy"}}
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-if="bMemoVm.isShowBrokerMemo">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Broker Memo No./ Slip N.1234 <span class="req_r">*</span></label>
+									<div class="col-sm-8">
+										<div class="fg-line chosen-row-1" style="display: inline-flex">
+											<div style="z-index: 1; position: relative;">
+												<input type="text"
+													class="form-control"
+													ng-model="bMemoVm.aTripData.vendorDeal.bMemo"
+													typeahead-wait-ms="10"
+													typeahead="item.bookNo as item.bookNo for item in bMemoVm.getBillBookNo($viewValue)|limitTo:10"
+													style="width: calc( 100% - 27px)"
+													   typeahead-on-select="bMemoVm.onBookNoSelect($item)">
+													<i class="lvh-search-close"
+															ng-click="bMemoVm.aTripData.vendorDeal.bMemo = '';">×</i>
+														<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+															style="right: -20px; background: #3096f3;"
+															uib-tooltip="Auto"
+															ng-click="bMemoVm.getBillBookNo('auto')"></i>
+														<i class="lvh-search-close zmdi zmdi-plus-circle zmdi-hc-fw" ng-if="!(bMemoVm.readonly || bMemoVm.selectedGr.invToBill)"
+															style="right: -45px; background: #3096f3;"
+															uib-tooltip="Centrailized"
+															ng-click="bMemoVm.getBillBookNo('centrailized')"></i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="col-md-4" ng-if="bMemoVm.isShowBrokerMemo">
+								<label class="col-sm-3 control-label">Gr Date: </label></label>
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened4 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+										<input ng-click="bMemoVm.DatePicker.openDatePicker(this, $event, 'opened4')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{bMemoVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="bMemoVm.aTripData.vendorDeal.grDate"
+											   is-open="opened4"
+											   datepicker-options="bMemoVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Gr Date"
+											   name="Gr Date"
+											   required
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="bMemoVm.DatePicker.openDatePicker(this, $event, 'opened4')">
+											<i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-if="bMemoVm.isShowBrokerMemo">
+								<div class="form-group m-b-0">
+									<label class="col-sm-2 control-label">Gr No.:</label>
+									<div class="col-sm-10">
+										<div class="fg-line chosen-row-1" style="display: inline-flex">
+											<div style="z-index: 1; position: relative;">
+												<input type="text"
+													   class="form-control"
+													   ng-model="bMemoVm.aTripData.vendorDeal.grNumber"
+													   typeahead-wait-ms="10"
+													   typeahead="item as item.bookNo for item in bMemoVm.getGrBookNo($viewValue)|limitTo:10"
+													   typeahead-on-select="bMemoVm.onGrBookSelect($item, $model, $label);"
+													   style="width: calc( 100% - 27px)">
+												<i class="lvh-search-close"
+												   ng-click="bMemoVm.grNumber = '';">×</i>
+												<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+												   style="right: -20px; background: #3096f3;"
+												   uib-tooltip="Auto"
+												   ng-click="bMemoVm.getGrBookNo('auto')"></i>
+												<i class="lvh-search-close zmdi zmdi-plus-circle zmdi-hc-fw" ng-if="$role['GR']['Centralize Book']"
+												   style="right: -45px; background: #3096f3;"
+												   uib-tooltip="Centrailized"
+												   ng-click="bMemoVm.getGrBookNo('centrailized')"></i>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Remark</label>
+									<div class="col-sm-9">
+										<input type="text"
+											   class="form-control"
+											   ng-model="bMemoVm.aTripData.vendorDeal.remark"
+											   ng-readonly="bMemoVm.isAcknowledge">
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</li>
+
+				<!--VENDOEDEAL DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">PAYMENT DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Payment Type: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!bMemoVm.isAcknowledge">
+										<div class="select chosen-row-2">
+											<select class="form-control"
+													ng-model="bMemoVm.aTripData.vendorDeal.payment_type"
+													ng-options="item as item for item in $constants.paymentType"
+													ng-change="bMemoVm.changePayType(bMemoVm.aTripData.vendorDeal.payment_type);bMemoVm.resetAll()"
+													required>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-if="bMemoVm.isAcknowledge">
+										{{bMemoVm.aTripData.vendorDeal.payment_type}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Payment Basis: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!bMemoVm.isAcknowledge">
+										<div class="select">
+											<select class="form-control"
+													ng-options="item as item for item in bMemoVm.aWeightTypes"
+													ng-model="bMemoVm.aTripData.vendorDeal.weight_type"
+													name="Weight Type"
+													ng-change="bMemoVm.resetAll()"
+													required>
+												<option selected disabled value="">Select</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-if="bMemoVm.isAcknowledge">
+										{{bMemoVm.aTripData.vendorDeal.weight_type}}
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="bMemoVm.aTripData.vendorDeal.weight_type === 'Percentage'">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Percentage: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!bMemoVm.isAcknowledge">
+										<div class="select">
+											<select class="form-control"
+													ng-options="item as (item + '%') for item in [70,75,80,85,90,95]"
+													ng-model="bMemoVm.aTripData.vendorDeal.weightPercent"
+													name="Weight Type"
+													ng-change="bMemoVm.changeAdvance()"
+													required>
+												<option selected disabled value="">Select</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-if="bMemoVm.isAcknowledge">
+										{{bMemoVm.aTripData.vendorDeal.weightPercent}}
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="clearfix"></div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="bMemoVm.aTripData.vendorDeal.weight_type === 'PMT'">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">PMT Weight: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													placeholder="enter here..."
+													ng-change="bMemoVm.calculateTotalPMT();bMemoVm.autoMunsiyanaCal();"
+													ng-model="bMemoVm.aTripData.vendorDeal.pmtWeight"
+													ng-required="bMemoVm.aTripData.vendorDeal.weight_type === 'PMT'"
+													ng-readonly="bMemoVm.isAcknowledge"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="bMemoVm.aTripData.vendorDeal.weight_type === 'PMT'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">PMT Rate: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													placeholder="enter here..."
+													ng-change="bMemoVm.calculateTotalPMT();bMemoVm.autoMunsiyanaCal();"
+													ng-model="bMemoVm.aTripData.vendorDeal.pmtRate"
+													ng-required="bMemoVm.aTripData.vendorDeal.weight_type === 'PMT'"
+													ng-readonly="bMemoVm.isAcknowledge"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3"  ng-if="bMemoVm.aTripData.vendorDeal.weight_type === 'PMT' && $configs.vendorDeal.otherExp">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Other Exp </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   class="form-control"
+												   ng-model="bMemoVm.aTripData.vendorDeal.otherExp"
+												   ng-readonly="bMemoVm.isAcknowledge"
+												   placeholder="Other Exp">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="bMemoVm.aTripData.vendorDeal.weight_type === 'PUnit'">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">No. of boxes: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													placeholder="enter here..."
+													ng-change="bMemoVm.calculateTotalPUnit();bMemoVm.autoMunsiyanaCal();"
+													ng-model="bMemoVm.aTripData.vendorDeal.perUnitPrice"
+													ng-required="bMemoVm.aTripData.vendorDeal.weight_type === 'PUnit'"
+													ng-readonly="bMemoVm.isAcknowledge"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Price per box: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													placeholder="enter here..."
+													ng-change="bMemoVm.calculateTotalPUnit();bMemoVm.autoMunsiyanaCal()"
+													ng-model="bMemoVm.aTripData.vendorDeal.totalUnits"
+													ng-required="bMemoVm.aTripData.vendorDeal.weight_type === 'PUnit'"
+													ng-readonly="bMemoVm.isAcknowledge"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:15px"
+							 ng-if="bMemoVm.aTripData.vendorDeal.weight_type">
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													ng-change="bMemoVm.changeAdvance('total');bMemoVm.changeAcPayment();bMemoVm.autoMunsiyanaCal()"
+													ng-model="bMemoVm.aTripData.vendorDeal.total_expense"
+													ng-readonly="bMemoVm.aTripData.vendorDeal.weight_type === 'PMT' || bMemoVm.aTripData.vendorDeal.weight_type === 'PUnit' || bMemoVm.isAcknowledge"
+													required>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Munshiyana </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   ng-change="bMemoVm.changeAdvance('munshiyana');bMemoVm.changeAcPayment();"
+												   class="form-control"
+												   ng-model="bMemoVm.aTripData.vendorDeal.munshiyana"
+												   ng-readonly="bMemoVm.isAcknowledge"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total With Munshiyana: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{bMemoVm.aTripData.vendorDeal.totWithMunshiyana}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Advance <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   ng-change="bMemoVm.changeAdvance('advance');bMemoVm.changeAcPayment()"
+												   class="form-control"
+												   ng-model="bMemoVm.aTripData.vendorDeal.advance"
+												   placeholder="enter here..."
+												   name="advance"
+												   ng-readonly="(bMemoVm.aTripData.vendorDeal.payment_type==='To pay' || bMemoVm.aTripData.vendorDeal.payment_type === 'To be billed' || bMemoVm.isAcknowledge)"
+												   required>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">TDS Amount: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(bMemoVm.tdsAmount = bMemoVm.aTripData.vendorDeal.tdsAmount =
+											('ceil'|NumberUtilFilter:((bMemoVm.aTripData.vendorDeal.totWithMunshiyana
+											|| 0) * (bMemoVm.aTripData.vendorDeal.tdsPercent || 0) / 100)))|roundOff}}
+											<!--<span ng-hide="true">{{bMemoVm.tdsAccount = $clientConfigs.accountDetails.tdsPayable}}</span>-->
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">To Pay/Balance: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{bMemoVm.aTripData.vendorDeal.toPay =
+											(((bMemoVm.aTripData.vendorDeal.totWithMunshiyana || 0) -
+											(bMemoVm.aTripData.vendorDeal.advance || 0) - (bMemoVm.tdsAmount ||
+											0))|roundOff:0:0)}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<!-- <hr> -->
+							 <div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total Charges:</label>
+									<div class="col-sm-6">
+										{{(bMemoVm.aTripData.vendorDeal.totalCharges =
+											(bMemoVm.aTripData.vendorDeal.charges | sumOfGrChargesWithTax:grUVm.__FormList)) | roundOff}}
+
+									</div>
+								</div>
+							</div>
+
+							 <div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total Deduction: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(bMemoVm.aTripData.vendorDeal.totalDeduction =
+												(bMemoVm.aTripData.vendorDeal.deduction | sumOfGrChargesWithTax:grUVm.__FormList)) | roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total Payable:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{bMemoVm.aTripData.vendorDeal.totalDeal = (bMemoVm.aTripData.vendorDeal.totalFreight) | roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							 <div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Remaining Amt:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(bMemoVm.aTripData.vendorDeal.remainingAmount = (bMemoVm.aTripData.vendorDeal.totalDeal
+											- (bMemoVm.aTripData.vendorDeal.tRecv || 0))) | roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+
+					</div>
+				</li>
+				<!-- Charges DETAILS -->
+				<li class="list-group-item podDetail">
+					<span class="booking_list_header">CHARGES  DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Loading Charges :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.charges.loading_charges"
+												   class="form-control"
+												   name="loading_charges"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Unloading Charges :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.charges.unloading_charges"
+												   class="form-control"
+												   name="unloading_charges"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Dala Charge :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.charges.dala_charges"
+												   name="dala_charges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Kanta Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.kanta_charges"
+												   name="kanta_charges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- <div class="clearfix" ></div> -->
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Toll Charge :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.toll_charges"
+												   name="toll_charges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">GR Charge :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.grCharges"
+												   name="grCharges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Green Tax :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.green_tax"
+												   name="green_tax"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label"
+										   style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis;">Two
+										Point Delivery :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.twoPtDelivery"
+												   name="twoPtDelivery"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="clearfix"></div> -->
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Diesel Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.diesel_charges"
+												   name="diesel_charges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Surcharge :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.surCharges"
+												   name="surCharges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Cartage Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.cartageCharges"
+												   name="cartageCharges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Labour Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.labourCharges"
+												   name="labourCharges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="clearfix"></div> -->
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Prev Freight Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.prevFreightCharges"
+												   name="prevFreightCharges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Other Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.charges.other_charges"
+												   name="other_charges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Weightman Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.weightman_charges"
+												   name="weightman_charges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Overweight Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.overweight_charges"
+												   name="overweight_charges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="clearfix"></div> -->
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Extra Running:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.extra_running"
+												   name="extra_running"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Factory Halt:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.factory_halt"
+												   name="factory_halt"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Company Halt:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.charges.company_halt"
+												   name="company_halt"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+<!--							<div class="col-md-3">-->
+<!--								<div class="form-group m-b-0">-->
+<!--									<label class="col-sm-4 control-label">Total Charges:</label>-->
+<!--									<div class="col-sm-6">-->
+<!--										{{(ackDealVm.aTripData.vendorDeal.totalCharges =-->
+<!--											(ackDealVm.aTripData.vendorDeal.charges | sumOfGrChargesWithTax:grUVm.__FormList)) | roundOff}}-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+							<div class="clearfix"></div>
+
+						</div>
+					</div>
+				</li>
+
+				<!-- Deduction DETAILS -->
+				<li class="list-group-item podDetail">
+					<span class="booking_list_header">DEDUCTION  DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Penalty:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.deduction.penalty"
+												   name="penalty"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Shortage Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.deduction.shortage"
+												   name="shortage"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Damage Charge:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.deduction.damage"
+												   name="damage"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Discount:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.deduction.discount"
+												   name="discount"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="clearfix"></div> -->
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Advance Charges :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.deduction.advance_charges"
+												   name="advance_charges"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">TT Delay :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.deduction.ttDelay"
+												   name="ttDelay"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Dala Comission :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.deduction.dalaComission"
+												   name="ttDelay"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">TDS :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.deduction.tds"
+												   name="ttDelay"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- <div class="clearfix"></div> -->
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Mamul :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="ackDealVm.aTripData.vendorDeal.deduction.mamul"
+												   name="ttDelay"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+<!--							<div class="col-md-3">-->
+<!--								<div class="form-group m-b-0">-->
+<!--									<label class="col-sm-4 control-label">Total Deduction:</label>-->
+<!--									<div class="col-sm-6">-->
+<!--										{{(ackDealVm.aTripData.vendorDeal.totalDeduction =-->
+<!--											(ackDealVm.aTripData.vendorDeal.deduction | sumOfGrChargesWithTax:grUVm.__FormList)) | roundOff}}-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+
+							<!-- <div class="clearfix"></div> -->
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Basic Freight:</label>
+									<div class="col-sm-6">
+										<span>{{(bMemoVm.aTripData.vendorDeal.basicFreight = (bMemoVm.aTripData.vendorDeal.total_expense)) | roundOff}}</span>
+									</div>
+								</div>
+							</div>
+
+
+
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Total Freight:</label>
+									<div class="col-sm-6" ng-hide="true">
+										{{(bMemoVm.aTripData.vendorDeal.totalFreight = (bMemoVm.aTripData.vendorDeal.basicFreight +
+											bMemoVm.aTripData.vendorDeal.totalCharges - bMemoVm.aTripData.vendorDeal.totalDeduction)) | roundOff}}
+									</div>
+									<div class="col-sm-6">
+										{{bMemoVm.totalFreight = (bMemoVm.aTripData.vendorDeal.basicFreight +
+											bMemoVm.aTripData.vendorDeal.totalCharges - bMemoVm.aTripData.vendorDeal.totalDeduction) | roundOff}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button ng-disabled="isDisable"
+				class="btn btn-primary">SUBMIT
+		</button>
+		<button ng-if="isShowTripMemo" class="btn btn-danger"
+				type="button"
+				ng-click="resetForm()">Reset Form
+		</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="closeModal()">Close
+		</button>
+	</div>
+</form>
+
+<style>
+	.chosen-row-1 {
+		z-index: 1;
+	}
+
+	.chosen-row-2 {
+		z-index: 0;
+	}
+
+	.chosen-row-3 {
+		z-index: auto;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

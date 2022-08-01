@@ -1,0 +1,138 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Driver Counselling</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(View)
+				</span>
+			</span>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form ng-submit="getCounselling()" novalidate>
+
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input type="text" class="form-control lvhs-input" placeholder="vehicle Search..."
+							ng-model="oFilter.vehicle" typeahead-wait-ms="10"
+							typeahead="item as item.vehicle_reg_no for item in getAllVehicle($viewValue)"
+							typeahead-on-select="onSelectVehicle($item, $model, $label)">
+						<i class="lvh-search-close" ng-click="oFilter.vehicle=null;">×</i>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input type="text" class="form-control lvhs-input" placeholder="Driver Code Search..."
+							ng-model="oFilter.driverCode" typeahead-wait-ms="10"
+							typeahead="item as item.employee_code for item in getAllDriverCode($viewValue)"
+							typeahead-on-select="onSelectCode($item, $model, $label)">
+						<i class="lvh-search-close" ng-click="oFilter.driverCode=null;">×</i>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input type="text" class="form-control lvhs-input" placeholder="Fleet Search..."
+							ng-model="oFilter.fleet" typeahead-wait-ms="10"
+							typeahead="item as item.name for item in getFleet($viewValue)"
+							typeahead-on-select="onSelectFleet($item, $model, $label)">
+						<i class="lvh-search-close" ng-click="oFilter.fleet=null;">×</i>
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input fill-date type="text" class="form-control" placeholder="From" max-date="maxDate"
+								ng-model="oFilter.from">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input fill-date type="text" class="form-control" placeholder="To" max-date="maxDate"
+								ng-model="oFilter.to">
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size: 12px" uib-tooltip="Search"
+						type="submit" tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size: 12px"
+						uib-tooltip="Clear Search" tooltip-placement="bottom" type="button"
+						ng-click="oFilter={};aVehicle=[];getCounselling();">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size:12px" uib-tooltip="Excel"
+						tooltip-placement="bottom" type="button" ng-click="downloadCounselling('excel');">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+				</div>
+				<div class="m-b-10" style="clear: both"></div>
+				<div class="clearfix"></div>
+				<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="aVehicle.length">
+					<span class="btn-lst" ng-repeat="select in aVehicle">
+						<button class="btn-xs" style="background: black; color: aliceblue;"> {{select.vehicle_reg_no}}&nbsp;
+							<a ng-click="removeVehicle(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="col-md-12">
+
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Add Counselling"
+				tooltip-placement="bottom" type="button" ng-click="addCounselling('add')">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+
+			<button class="btn btn-danger btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Delete Counselling"
+				tooltip-placement="bottom" type="button" ng-click="deleteCounselling()">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<div ja-table table-body="aCounselling" table-head="tableHead" table-height='500px'
+						table-load="getCounselling(true)" table-column-setting="columnSetting"
+						table-selectable='selectType' table-api='tableApi'
+						table-selectable-model="aSelectedCounselling"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.chosen-row-1 {
+		z-index: 89;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: 98;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+</style>

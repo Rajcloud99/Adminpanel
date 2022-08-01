@@ -1,0 +1,178 @@
+<!--Controller: duesBillController-->
+<!--ControllerAs: dbVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Dues Bill</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form ng-submit="dbVm.getDuesBill()" novalidate autocomplete="off">
+
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="dbVm.oFilter.billNo"
+							   name="billNo"
+							   class="form-control input-sm"
+							   placeholder="bill No.">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="dbVm.oFilter.refNo"
+							   name="Ref no"
+							   class="form-control input-sm"
+							   placeholder="Ref. no.">
+					</div>
+				</div>
+
+<!--				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+<!--					<div class="lvh-search ng-scope sear chosen-row-1">-->
+<!--						<input-->
+<!--								type="text"-->
+<!--								class="form-control lvhs-input"-->
+<!--								placeholder="Ledger"-->
+<!--								ng-model="dbVm.oFilter.ledger"-->
+<!--								typeahead-wait-ms="10"-->
+<!--								typeahead="item as item.name for item in dbVm.accountMaster($viewValue)">-->
+<!--						<i class="lvh-search-close" ng-click="dbVm.oFilter.ledger=null;">×</i>-->
+<!--					</div>-->
+<!--				</div>-->
+
+
+<!--				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">-->
+<!--					<select class="form-control"-->
+<!--							ng-model="dbVm.oFilter.dateType"-->
+<!--							ng-options="item.value as item.key for item in dbVm.dateType"-->
+<!--							style="line-height: 34px;">-->
+<!--						<option value="" selected> Select Type</option>-->
+<!--					</select>-->
+<!--				</div>-->
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="From"
+									max-date="dbVm.maxDate"
+									ng-model="dbVm.oFilter.from"
+									ng-change="dbVm.oFilter.to=undefined;"
+							>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="To"
+									max-date="dbVm.maxDate"
+									ng-model="dbVm.oFilter.to"
+							>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="dbVm.oFilter={};dbVm.getDues();">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+				</div>
+				<div class="m-b-10" style="clear: both"></div>
+			</form>
+		</div>
+	</div>
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="col-md-12">
+			<button class="btn btn-primary m-r-10"
+					uib-tooltip="Add Dues Bill"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="dbVm.upsertDuesBill('add')">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					uib-tooltip="Edit Dues Bill"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="dbVm.upsertDuesBill('edit')">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					ng-click="dbVm.approve()"
+					uib-tooltip="Bill Approve">
+				<i class="zmdi zmdi-thumb-up zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-10"
+					ng-click="dbVm.unapprove()"
+					uib-tooltip="Unapprove">
+				<i class="zmdi zmdi-thumb-down zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<div ja-table
+						 table-body="dbVm.aDuesBill"
+						 table-head="dbVm.tableHead"
+						 table-height='500px'
+						 table-load="dbVm.getDuesBill(true)"
+						 table-column-setting="dbVm.columnSetting"
+						 table-selectable='dbVm.selectType'
+						 table-api='dbVm.tableApi'
+						 table-selectable-model="dbVm.aSelectedDuesBill"
+					></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+	.container{
+		width: 98% !important;
+	}
+</style>

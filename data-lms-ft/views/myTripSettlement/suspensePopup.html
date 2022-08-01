@@ -1,0 +1,160 @@
+<!-- Controller: supensePopupCtrl -->
+<!-- ControllerAs: suspensPopupVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="suspensPopupVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Suspense Advance's</b></span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<ul class="list-group list-group-flush">
+			<!--Table DETAILS-->
+			<li class="list-group-item">
+				<div class="row">
+					<div class="col-md-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened1 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="suspensPopupVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{suspensPopupVm.DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   ng-model="suspensPopupVm.from"
+									   ng-change="suspensPopupVm.dateChange('startDate')"
+									   is-open="opened1"
+									   datepicker-options="suspensPopupVm.DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="Start Date"
+									   name="Start Date"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+								<button type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-click="suspensPopupVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="suspensPopupVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{suspensPopupVm.DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   ng-model="suspensPopupVm.to"
+									   ng-change="suspensPopupVm.dateChange('startDate')"
+									   is-open="opened2"
+									   datepicker-options="suspensPopupVm.DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="End Date"
+									   name="End Date"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+								<button type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-click="suspensPopupVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+					</div>
+					<div class="col-sm-2">
+<!--						<label class="col-sm-7 control-label">Advance Type:</label>-->
+<!--						<div class="col-sm-7">-->
+							<select chosen class="form-control"
+									ng-model="suspensPopupVm.advanceType"
+									ng-options="item.name as item.name for item in ($constants.expenseObj2)|filter:{c: 'n'}:true"
+									style="line-height: 34px;">
+								<option value="">All Advance Type</option>
+							</select>
+<!--						</div>-->
+					</div>
+					<div class="col-md-2">
+						<button class="btn btn-primary p-t-0 p-b-0"
+								type="button"
+								style="margin-bottom: 3px;  font-size: 16px"
+								uib-tooltip="Search"
+								ng-click="suspensPopupVm.getSuspense()"
+								tooltip-placement="bottom">
+							<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+						</button>
+					</div>
+					<div class="col-md-3">
+						<label class="col-sm-7 control-label">Add Advance To Trip No:</label>
+						<div class="col-md-5">
+							<select chosen class="form-control"
+									ng-options="item._id as item.trip_no for item in suspensPopupVm.aTrips"
+									ng-model="suspensPopupVm.tripId"
+									style="line-height: 34px;">
+								<option value="">Select Trip</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<!--<div class="pull-right">-->
+					<!--<button class="btn-danger btn-xs"-->
+							<!--ng-click="suspensPopupVm.deleteSupense()"-->
+							<!--uib-tooltip="Delete suspense"-->
+							<!--tooltip-placement="bottom">-->
+						<!--<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+					<!--</button>&nbsp;&nbsp;-->
+				<!--</div>-->
+				<div class="card-body">
+					<div class="row" style="margin:5px">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<div ja-table
+									 table-body="suspensPopupVm.aTripSuspense"
+									 table-head="suspensPopupVm.tableHead"
+									 table-load="suspensPopupVm.getSuspense(true)"
+									 table-height='500px'
+									 table-column-setting="suspensPopupVm.columnSetting"
+									 table-selectable="$role['Trip Settlement']['Map To Trip'] ? 'multiple' : 'index'"
+									 table-api="suspensPopupVm.tableApi"
+									 table-selectable-model="suspensPopupVm.aSelectedSuspense"
+								></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-primary"
+			ng-if="$role['Trip Settlement']['Map To Trip']"
+			ng-click="suspensPopupVm.mapTrip()">Map Trip
+	</button>&nbsp;&nbsp;
+	<button class="btn btn-warning"
+			ng-click="suspensPopupVm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

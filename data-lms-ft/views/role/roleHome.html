@@ -1,0 +1,147 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<!-- Search -->
+
+		<div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+			<div class="lvh-search ng-scope sear">
+				<input type="text" placeholder="Search Role..." ng-model="roleName" class="lvhs-input"
+					   typeahead-wait-ms="10"
+					   typeahead="item.name as item.name for item in getRoleByName($viewValue) | limitTo:6"
+					   class="form-control"
+					   typeahead-on-select="onSelect($item, $model, $label)">
+				<i class="lvh-search-close" ng-click="roleName = ''; clearSearch()">×</i>
+			</div>
+			<div class="listview lv-user clk" style="overflow: auto;height:97%;">
+				<div class="lv-item media" style="border-bottom:2px solid #4285f4" ng-repeat="r in aRole"
+					 ng-click="selectRole(r,$index)">
+					<div class="truck-desc">
+						<div class="row">
+							<div class="col-md-5 bold">
+								{{r.name | capitalize}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="pagi" ng-show="total_pages>1">
+					<pagination ng-change="pageChanged()"
+								total-items="totalItems"
+								items-per-page="items_per_page"
+								num-pages="numPages"
+								ng-model="currentPage"
+								max-size="maxSize"
+								class="pagination-sm smallPagi"
+								boundary-links="true"
+								previous-text="&lsaquo;"
+								next-text="&rsaquo;"
+								first-text="&laquo;"
+								last-text="&raquo;"></pagination>
+				</div>
+			</div>
+		</div>
+
+		<!-- Body  -->
+		<div class="ms-body" style=" max-height: 800px;overflow: auto;">
+			<div class="listview lv-message">
+				<div class="lvh-label">
+                    <span style="margin-left: 1px;font-weight: bold;font-size: 20px;">{{selectedRole.name}}
+                    </span>
+				</div>
+			</div>
+			<div class="separator_header"></div>
+			<div class="card-header" style="margin: 0 auto;" ng-show="!aRole.length">
+				<h2 style="color: grey">
+					No roles found
+				</h2>
+			</div>
+
+			<ul ng-show="!editMode" class="lv-actions actions">
+				<li class="btn-wave" data-ui-sref-active="active">
+					<a uib-tooltip="Edit Role" tooltip-placement="bottom" ng-click="editMode = true">
+						<i class="zmdi zmdi-edit"></i>
+					</a>
+				</li>
+
+				<li>
+					<a href="" uib-tooltip="Delete Role" tooltip-placement="bottom" ng-click="deleteRole()">
+						<i class="zmdi zmdi-delete"></i>
+					</a>
+				</li>
+			</ul>
+			<ul ng-show="editMode" class="lv-actions actions">
+				<li class="btn-wave" data-ui-sref-active="active">
+					<a uib-tooltip="Save Role" tooltip-placement="bottom" ng-click="saveRole()">
+						<i class="zmdi zmdi-save"></i>
+					</a>
+				</li>
+				<li class="btn-wave" data-ui-sref-active="active">
+					<a uib-tooltip="Discard Changes" tooltip-placement="bottom" ng-click="resetChanges()">
+						<i class="zmdi zmdi-undo"></i>
+					</a>
+				</li>
+			</ul>
+			<!-- role basic info -->
+			<div id="div_role_info" class="card-body" style="padding-left: 25px;padding-right: 25px;margin-top: 60px">
+				<label class="checkbox checkbox-inline m-r-20">
+					<input  type="checkbox" ng-model="selectedAll"ng-init="selectedAll = false" ng-change="checkAllRole(selectedAll)" ng-disabled="!editMode" />
+					<i class="input-helper"></i>
+					<h4>All Selected</h4>
+				</label>
+				<ul class="list-unstyled">
+					<li ng-repeat="(modulename,value) in loggedUserRole">
+						<h4>{{modulename}}<label
+								class="checkbox checkbox-inline m-l-5">
+							<input type="checkbox" ng-init="selectmodule = false" ng-model="selectmodule" ng-change="selectmodules(modulename,selectmodule)"
+								   ng-disabled="!editMode"/>
+							<i class="input-helper"></i>
+							{{feature}}
+						</label></h4>
+						<ul class="list-inline" style="margin: 10px 0 20px 10px;">
+							<li ng-repeat="(feature,allowed) in loggedUserRole[modulename]">
+								<label
+									   class="checkbox checkbox-inline m-r-20">
+									<input type="checkbox" ng-model="selectedRole.role[modulename][feature]"
+										   ng-disabled="!editMode"/>
+									<i class="input-helper"></i>
+									{{feature}}
+								</label>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+
+<style type="text/css">
+	form.tab-form-demo .tab-pane {
+		margin: 20px 20px;
+	}
+
+	.wid100 > div {
+		width: 100%;
+	}
+
+
+	.nav-tabs > li.active {
+		background: #2196f5;
+	}
+
+	.nav-tabs > li.active > a {
+		color: #fff !important;
+	}
+
+	.nav-tabs > li.active > a,
+	.nav-tabs > li.active > a:hover,
+	.nav-tabs > li.active > a:focus {
+		border: 1px solid #2196f5;
+	}
+
+	.list_border_background {
+		border: 2px solid blue !important;
+		background: #47d6c9;
+	}
+</style>

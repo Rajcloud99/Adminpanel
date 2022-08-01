@@ -1,0 +1,204 @@
+<!-- gstr1ReportController" -->
+<div ng-controller="gstr1ReportController">
+   <div class="container m-b-10">
+      <div class="col-md-12 card m-b-0">
+         <div class="col-md-3">
+            <div class="lvh-label">
+               <span class="c-black"><b>GST Report</b></span>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <div class="container" style="">
+      <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+         <div class="row hidden-print" style="margin:7px;">
+            <form ng-submit="searchGstr1ReportType(gstr1Report,reportType)" name="gstr1Report" novalidate>
+               <div class="col-md-2">
+                  <div class="form-group m-b-0">
+                     <div class="col-sm-12">
+                        <div class="fg-line">
+                           <div class="date-picker input-group dp-blue chosen-row-1"
+                              ng-class="{ 'is-opened': opened1 == true }">
+                              <div ng-class="{ 'fg-toggled': opened1 == true }">
+                                 <input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')" type="text"
+                                    class="form-control" datepicker-popup="{{DatePicker.formats[0]}}" show-weeks="false"
+                                    ng-model="oFilter.start_date" ng-change="oFilter.end_date=undefined"
+                                    is-open="opened1" datepicker-options="DatePicker.dateSettings" close-text="Close"
+                                    required placeholder="From" />
+                              </div>
+                              <span class="input-group-btn">
+                                 <button type="button" class="btn btn-default m-t-0 f12"
+                                    ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+                                       class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-2">
+                  <div class="form-group m-b-0">
+                     <div class="col-sm-12">
+                        <div class="fg-line">
+                           <div class="date-picker input-group dp-blue chosen-row-1"
+                              ng-class="{ 'is-opened': opened2 == true }">
+                              <div ng-class="{ 'fg-toggled': opened2 == true }">
+                                 <input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')" type="text"
+                                    class="form-control" datepicker-popup="{{DatePicker.formats[0]}}" show-weeks="false"
+                                    ng-model="oFilter.end_date" min-date="oFilter.start_date"
+                                    max-date="oFilter.start_date|setMaxDate:5" is-open="opened2"
+                                    datepicker-options="DatePicker.dateSettings" close-text="Close" required
+                                    placeholder="To" />
+                              </div>
+                              <span class="input-group-btn">
+                                 <button type="button" class="btn btn-default m-t-0 f12"
+                                    ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+                                       class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                  <div class="select ">
+                     <select class="form-control" ng-model="reportType" style="height: 34px;">
+                        <option value="" selected disabled>Bill Report Type</option>
+                        <option value="Monthly Bill Report">Monthly Bill Report</option>
+                        <option value="Summary Bill Report">Summary Bill Report</option>
+                        <option value="CreditNote Bill Report">Credit Note Bill Report</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-md-2">
+                  <button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile" style="font-size: 16px"
+                     uib-tooltip="Search" type="submit" tooltip-placement="bottom"><i
+                        class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+                  <button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile" style="font-size: 16px"
+                     uib-tooltip="Clear Search" tooltip-placement="bottom" type="submit"
+                     ng-click="oFilter={};setDefaultDate(); "><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+               </div>
+            </form>
+         </div>
+      </div>
+      <!-- ////////////////// -->
+      <div class="detailsList card p-5" style="background: white;   border: 1px solid #2a96f3;">
+            <div class="row ">
+               <div class="col-md-2 col-sm-2">
+                  <li>Tot Approved WithGst Bill: {{aReportgst.grandTotalBill - aReportgst.totalWithoutGSTBill || 0}}</li>
+                 <li>Tot CreditNote Generated:{{aReportgst.totalCreditNote || 0}}</li>
+                 <li>Tot Withoutgst Bill: {{aReportgst.totalWithoutGSTBill || 0}}</li>
+                 <li>GrandTotal Bill: {{(aReportgst.grandTotalBill + aReportgst.totalCreditNote)|| 0}}</li>
+                  </div>
+                  <div class="col-md-3 col-sm-3">
+                  <li>Tot Taxable FreightValue: {{totaltaxaablefreight || 0}}</li>
+                  <li>Tot CreditNote TaxableValue: {{aReportgst.totalCreditNoteTaxableValue|| 0}}</li>
+                  <li>Tot Withoutgst Bill Amt: {{ aReportgst.totalWithoutGSTBillValue||0}}</li>
+                  <li>GrandTotal TaxableValue: {{grandtotaltaxable|| 0}}</li>
+                  </div>
+                  <div class="col-md-2 col-sm-2 ">
+                  <li>TotTax Amt of Bill: {{ totaltax|| 0}}</li>
+                  <li>TotTax Amt CreditNote:{{totalCreditNotetaxValue || 0}}</li>
+                  <li>GrandTotal Tax Amt: {{grandtotaltax|| 0}}</li>
+                  </div>
+                  <div class="col-md-3  col-sm-3">
+                  <li>Tot Invoice Amt  Bill: {{ totalinvoiceAmt|| 0}} </li>
+                  <li>Tot CreditNote Invoice Amt: {{aReportgst.totalCreditNoteInvoiceValue|| 0}}</li>
+                  <li>Tot Withoutgst Invoice Amt: {{ aReportgst.totalWithoutGSTBillValue|| 0}}</li>
+                  <li>GrandTotal  Invoice Amt: {{ grandtotalinvoiceAmt|| 0}}</li>
+                  </div>
+                  <div class="col-md-2 col-sm-2 ">
+                  <li>Tot IGST Payable: {{(aReportgst.totaligstAmount) ||aReportgst.totalIGSTAmount || 0}}</li>
+                  <li>Tot CGST Payable: {{(aReportgst.totalcgstAmount) ||aReportgst.totalCGSTAmount || 0}}</li>
+                  <li>Tot SGST Payable: {{(aReportgst.totalsgstAmount) ||aReportgst.totalSGSTAmount || 0}}</li>
+                  </div>     
+                </div>
+               <div class="clearfix"></div>
+           </div>
+          
+           <!-- table -->
+      <div class="detailsList card" style="overflow-y: auto; max-height: 450px;">
+         <table class="table table-bordered unresponsive taxDetailDetail2">
+            <thead id='my_fixable_table_header' fix-head>
+               <tr>
+                  <th>S.No</th>
+                  <th ng-hide="reportType == 'Summary Bill Report'">Date</th>
+                  <th>Billing Name</th>
+                  <th>GSTIN/UIN</th>
+                  <th ng-show="reportType == 'CreditNote Bill Report'">Voucher Type</th>
+                  <th ng-show="reportType == 'CreditNote Bill Report'">Credit No</th>
+                  <th ng-hide="reportType == 'Summary Bill Report'">Invoice No</th>
+                  <th ng-show="reportType == 'Summary Bill Report'">Voucher Count</th>
+                  <th>Taxable Value</th>
+                  <th>Integrated Tax Amount</th>
+                  <th>Central tax Amount</th>
+                  <th>State tax Amount</th>
+                  <th ng-show="reportType == 'Summary Bill Report'">total tax Amount</th>
+                  <th>Invoice Amount</th>
+               </tr>
+            </thead>
+            <tbody>
+                  <tr  ng-hide="reportType == 'CreditNote Bill Report'" ng-repeat="rpt in aReport" class="pointer selectItem" ng-click="selectThisRow(rpt, $index)">                    
+                  <td>{{$index+1}}</td>
+                  <td ng-hide="reportType == 'Summary Bill Report'">{{rpt.billDate||'NA'|date:'dd-MMM-yyyy'}}</td>
+                  <td>{{rpt.billingName||rpt._id.billingName || 'NA'}}</td>
+                  <td>{{rpt.GST || 'NA'}}</td>
+                  <td ng-hide="reportType == 'Summary Bill Report'">{{rpt.billNo||'NA'}}</td>
+                  <td ng-show="reportType == 'Summary Bill Report'">{{rpt.count||'NA'}}</td>
+                  <td>{{(rpt.invoiceAmount || rpt.amount).toFixed(2) ||"0"}}</td>
+                  <td>{{(rpt.iGST ||rpt.igstAmount).toFixed(2)||"0"}}</td>
+                  <td>{{(rpt.cGST||rpt.cgstAmount).toFixed(2)||"0"}}</td>
+                  <td>{{(rpt.sGST||rpt.sgstAmount).toFixed(2)||"0"}}</td>
+                  <td ng-show="reportType == 'Summary Bill Report'">{{(rpt.sgstAmount + rpt.igstAmount + rpt.cgstAmount).toFixed(2)||"0"}}</td>
+                  <td>{{(rpt.billAmount||rpt.finalAmount|| rpt.totalAmount).toFixed(2)||"0"}}</td>
+               </tr>
+               <!-- /////////// table for credit notes only -->
+
+                                 <tr ng-show="reportType == 'CreditNote Bill Report'" ng-repeat="rpt in aReport" class="pointer selectItem" ng-click="selectThisRow(rpt, $index)">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{rpt.date ||'NA'|date:'dd-MMM-yyyy'}}</td>
+                                    <td>{{rpt.billingName||rpt._id.billingName || 'NA'}}</td>
+                                    <td>{{rpt.GST || 'NA'}}</td>
+                                    <td>{{rpt.type[0]||'NA'}}</td>
+                                    <td>{{rpt.creditNo||'NA'}}</td>
+                                    <td>{{rpt.billNo||'NA'}}</td>
+                                    <td>{{'(-)' + (rpt.amount|| "0")}}</td>
+                                    <td>{{'(-)' + (rpt.iGST.toFixed(2)||"0")}}</td>
+                                    <td>{{'(-)' + (rpt.cGST.toFixed(2)||"0")}}</td>
+                                    <td>{{'(-)' + (rpt.sGST.toFixed(2)||"0")}}</td>      
+                                    <td>{{'(-)' + (rpt.totalAmount.toFixed(2)||"0")}}</td>
+                                 </tr>
+               <!-- \\\\\\\\\\\\\\\\\\\\\\\ -->
+                  <tr ng-if="aReport.length >0" class="bg-primary">
+                     <td ng-show="reportType == 'CreditNote Bill Report'" colspan="7">Grand Total</td>
+                     <td ng-hide="reportType == 'CreditNote Bill Report'" colspan="{{reportType == 'Summary Bill Report' ? '3' : '5'}}">Grand Total</td>
+                     <td ng-show="reportType == 'Summary Bill Report'"> {{aReportgst.grandTotalBill}}</td>
+                     <td> {{aReportgst.totalTaxableFreightValue }}</td>
+                     <td>{{(aReportgst.totaligstAmount || totaligst)}}</td>
+                     <td>{{(aReportgst.totalcgstAmount || totalcgst)}}</td>
+                     <td>{{(aReportgst.totalsgstAmount || totalsgst)}}</td>
+                     <td ng-show="reportType == 'Summary Bill Report'">{{(aReportgst.totalsgstAmount + aReportgst.totalcgstAmount + aReportgst.totaligstAmount).toFixed(2)||"0"}}</td>
+                     <td>{{aReportgst.totalAfterTaxAmount}}</td>
+                  </tr>          
+            </tbody>
+         </table>
+         <div ng-if="aReport.length <= 0 " class="ms-body" style=" min-height: 50px;">
+            <h3>No Reports Found !!!!!</h3>
+         </div>
+      </div>
+   </div>
+</div>
+<style>
+   .container {
+      width: 98% !important;
+   }
+   li {
+		list-style-type: none;
+       font-weight: bold;
+        padding-left: 20px ;
+        padding-right: 0px;
+
+   }
+
+</style>

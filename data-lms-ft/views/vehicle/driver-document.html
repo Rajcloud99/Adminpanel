@@ -1,0 +1,46 @@
+<div class="panel-body">
+	<form ng-controller="driverDocument" name="DrivDocumentForm">
+		<br>
+		<div class="row" style="margin:0px 15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-10">
+					<div class="fg-line">
+						<label for="pincode">Select Driver</label>
+						<div class="select">
+							<select class="form-control" ng-model="driver" ng-options="option as (option.first_name + ' ' + option.last_name) for option in drivers"></select>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin:0px 10px">
+			<div class="col-md-3 col-sm-3 col-xs-6" ng-if="driver.first_name">
+				<p>Name:- <span class="bold">{{driver.first_name+' '+driver.last_name}}</span></p>
+			</div>
+			<div class="col-md-3 col-sm-3 col-xs-6" ng-if="driver.mobile">
+				<p>Mobile:- <span class="bold">{{driver.mobile}}</span></p>
+			</div>
+			<div class="col-md-3 col-sm-3 col-xs-6" ng-if="driver.license_no">
+				<p>License:- <span class="bold">{{driver.license_no}}</span></p>
+			</div>
+			<div class="col-md-3 col-sm-3 col-xs-6" ng-if="driver.city">
+				<p>City:- <span class="bold">{{driver.city}}</span></p>
+			</div>
+			<div class="col-md-3 col-sm-3 col-xs-6" ng-if="driver.district">
+				<p>District:- <span class="bold">{{driver.district}}</span></p>
+			</div>
+			<div class="col-md-3 col-sm-3 col-xs-6" ng-if="driver.pincode">
+				<p>Pincode:- <span class="bold">{{driver.pincode}}</span></p>
+			</div>
+		</div>
+		<div class="row" ng-if="driver.first_name">
+			<div class="m-l-30 col-md-10">
+				<div class="form-group m-b-10">
+					<button type="submit" class="btn btn-primary"
+						ng-click="saveDriverDetails(DriverProfile)">Save</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,1399 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Vehicle Registration</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					{{upsertVm.mode}}
+				</span>
+			</span>
+		</div>
+<!--		<div class="pull-right">-->
+<!--			<div class="select col-md-12">-->
+<!--				<select-->
+<!--					class="form-control"-->
+<!--					ng-options="item as item for item in ['Enable', 'Disable']"-->
+<!--					ng-model="upsertVm.status" style="width:120%;height:34px;"-->
+<!--				    ng-change="upsertVm.vehicleStatus(upsertVm.status)">-->
+<!--				</select>-->
+<!--			</div>-->
+<!--		</div>-->
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px" id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<div class="card-body">
+			<form name="vehicleRegistration" ng-submit="upsertVm.submit(vehicleRegistration)" novalidate autocomplete="off">
+				<ul class="list-group list-group-flush">
+					<!-- BASIC Account DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">PROFILE DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Registration Number: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Enter Registration Number"
+													   ng-model="upsertVm.oVehicle.vehicle_reg_no"
+													   name="Registration Number"
+													   ng-readonly="upsertVm.readOnly"
+													   class="form-control"
+													   ng-pattern="'.*'"
+													   ng-blur="upsertVm.vehicleCheckExist()" required>
+
+											</div>
+											<span class="error" ng-if=" upsertVm.mode!=='Edit' && vehicleRegistration['Registration Number'].$error.required
+																			&& (vehicleRegistration['Registration Number'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+
+									   <span class="error" ng-if="vehicleRegistration['Registration Number'].$invalid">
+														Invalid Vehicle Reg. No.</span>
+											<span class="error" ng-if="upsertVm.checkExists">Reg. no. already exist.</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Device IMEI:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Enter IMEI Number"
+													   ng-model="upsertVm.oVehicle.device_imei"
+													   name="Device IMEI"
+													   class="form-control"
+												>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Device IMEI'].$error.required
+																			&& (vehicleRegistration['Device IMEI'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="upsertVm.oVehicle.ownershipType != 'Market'">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Fleet: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														class="form-control"
+														ng-model="upsertVm.oVehicle.owner_group"
+														ng-options="item.name as item.name for item in upsertVm.aOwners"
+														name="Fleet Group">
+													<option value="" disabled>Select Fleet</option>
+												</select>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Fleet Group'].$error.required
+																			&& (vehicleRegistration['Fleet Group'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Ownership Type: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														class="form-control"
+														ng-model="upsertVm.oVehicle.ownershipType"
+														ng-options="item as item for item in $constants.aOwnershipVehicle"
+														ng-change="upsertVm.aVendors=[]; upsertVm.oVehicle.costCenter= null;upsertVm.oVehicle.vendor_name=''; upserupsertVm.oVehicle.vendor_mobile=''"
+														name="Ownership Type">
+													<option value="" disabled>Select Ownership</option>
+												</select>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Ownership Type'].$error.required
+																			&& (vehicleRegistration['Ownership Type'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="upsertVm.oVehicle.ownershipType === 'Market' || upsertVm.oVehicle.ownershipType === 'Associate'">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vendor: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="lvh-search ng-scope sear">
+												<input type="text"
+													   placeholder="Vendor Search..."
+													   ng-model="upsertVm.oVehicle.vendor_name"
+													   class="lvhs-input"
+													   typeahead-wait-ms="10"
+													   typeahead="item as item.name for item in upsertVm.aVendors"
+													   typeahead-on-select='upsertVm.onVendorSelect($item, $model, $label)'
+													   ng-change="upsertVm.getAllVendorsListOnSearch(upsertVm.oVehicle.vendor_name)"
+													   name="vendor"
+													   required
+													   class="form-control">
+												<i class="lvh-search-close" ng-click="upsertVm.oVehicle.vendor_name=''">×</i>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['vendor'].$error.required
+																			&& (vehicleRegistration['vendor'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="upsertVm.oVehicle.ownershipType === 'Market'  || upsertVm.oVehicle.ownershipType === 'Associate'">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vendor Mobile: </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Mobile Number"
+													   ng-model="upsertVm.oVehicle.vendor_mobile"
+													   name="Mobile Number"
+													   ng-minlength="10"
+													   ng-maxlength="10"
+													   class="form-control"
+													   >
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Mobile Number'].$error.required
+																			&& (vehicleRegistration['Mobile Number'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+											<span class="error" ng-if="	(vehicleRegistration['Mobile Number'].$error.minlength
+																				|| vehicleRegistration['Mobile Number'].$error.maxlength)
+																			&& (vehicleRegistration['Mobile Number'].$touched
+																				|| vehicleRegistration.$submitted)">
+													Invalid Mobile Number</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="upsertVm.oVehicle.ownershipType === 'Market'">
+										<label class="col-sm-5">Vendor No of Vehicle: </label>
+										<div class="col-md-6" style="margin-top: 6px;">
+											{{upsertVm.vehicleCount || 0}}
+										</div>
+								</div>
+								<div class="col-md-3" ng-if="$configs.gpsApi.length || upsertVm.oVehicle.gpsApi.lengths">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Gps Api's: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														multiple
+														class="form-control"
+														ng-model="upsertVm.oVehicle.gpsApi"
+														ng-options="item as item for item in ($configs.gpsApi || upsertVm.oVehicle.gpsApi)"
+														name="Gps Api">
+													<option value="" disabled>Select Gps Api's</option>
+												</select>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Gps Api'].$error.required
+																			&& (vehicleRegistration['Gps Api'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+<!--								<div class="col-md-3"  ng-if="upsertVm.oVehicle.ownershipType === 'Sold'">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-5 control-label">sold Date: <span class="req_r">*</span></label>-->
+<!--										<div class="col-sm-6">-->
+
+<!--											<input-->
+<!--													fill-date-->
+<!--													type="text"-->
+<!--													class="form-control"-->
+<!--													placeholder="Date"-->
+<!--													ng-model="upsertVm.oVehicle.sd"-->
+<!--													required-->
+<!--											>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<div class="col-md-3" ng-if="upsertVm.oVehicle.ownershipType === 'Sold'">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Sold Amt:<span class="req_r">*</span></label>-->
+<!--										<div class="col-sm-6">-->
+<!--											<div class="fg-line">-->
+<!--												<input type="number"-->
+<!--													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"-->
+<!--													   onwheel="return false"-->
+<!--													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"-->
+<!--													   placeholder="sold Amount"-->
+<!--													   ng-model="upsertVm.oVehicle.sa"-->
+<!--													   class="form-control"-->
+<!--													   name="Sold Amount"-->
+<!--												       required>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<span class="booking_list_header">VEHICLE DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Status: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											{{upsertVm.oVehicle.status}}
+										</div>
+<!--										<div class="col-sm-6">-->
+<!--											<div class="fg-line">-->
+<!--												<select chosen-->
+<!--														class="form-control"-->
+<!--														ng-model="upsertVm.oVehicle.status"-->
+<!--														ng-options="item as item for item in upsertVm.aStatus"-->
+<!--														name="Vehicle Status"-->
+<!--														required>-->
+<!--													<option value="" disabled>Select Status</option>-->
+<!--												</select>-->
+<!--											</div>-->
+<!--											<span class="error" ng-if="vehicleRegistration['Vehicle Status'].$error.required-->
+<!--																			&& (vehicleRegistration['Vehicle Status'].$touched-->
+<!--																			|| vehicleRegistration.$submitted)">-->
+<!--														This Field is Mandatory</span>-->
+<!--										</div>-->
+
+
+<!--				***************** Right now anyone can update its status from "Available" to "In Trip" or vice versa that's we block it *****************-->
+
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Group: <span ng-if="!$configs.master.regVehicle.groupRequired" class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														class="form-control"
+														ng-model="upsertVm.oVehicle.veh_group"
+														ng-options="item._id as item.name for item in upsertVm.aVehicleGroups"
+														name="Vehicle Group"
+														ng-required="!$configs.master.regVehicle.groupRequired">
+													<option value="" disabled>Select Group</option>
+												</select>
+											</div>
+											<span class="error" ng-if="!$configs.master.regVehicle.groupRequired && vehicleRegistration['Vehicle Group'].$error.required
+																			&& (vehicleRegistration['Vehicle Group'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Type: <span ng-if="!$configs.master.regVehicle.typeRequired" class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														class="form-control"
+														ng-model="upsertVm.oVehicle.veh_type"
+														ng-options="item._id as item.name for item in upsertVm.aVehicleTypes"
+														name="Vehicle Type"
+														ng-required="!$configs.master.regVehicle.typeRequired">
+													<option value="" disabled>Select Group</option>
+												</select>
+											</div>
+											<span class="error" ng-if="!$configs.master.regVehicle.typeRequired && vehicleRegistration['Vehicle Type'].$error.required
+																			&& (vehicleRegistration['Vehicle Type'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Category: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														class="form-control"
+														ng-model="upsertVm.oVehicle.category"
+														ng-options="item as item for item in upsertVm.aCategory"
+														name="Vehicle Category"
+														>
+													<option value="" disabled>Select Category</option>
+												</select>
+											</div>
+											<!-- <span class="error" ng-if="vehicleRegistration['Vehicle Category'].$error.required
+																			&& (vehicleRegistration['Vehicle Category'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span> -->
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Segment: <span ng-if="!$configs.master.regVehicle.segmentRequired" class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														class="form-control"
+														ng-model="upsertVm.oVehicle.segment_type"
+														ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+														name="Segment"
+														ng-required="!$configs.master.regVehicle.segmentRequired">
+													<option value="" disabled>Select Segment</option>
+												</select>
+											</div>
+											<span class="error" ng-if="!$configs.master.regVehicle.segmentRequired && vehicleRegistration['Segment'].$error.required
+																			&& (vehicleRegistration['Segment'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Owner Name: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Enter Owner Name"
+													   ng-model="upsertVm.oVehicle.owner_name"
+													   name="Owner Name"
+													   class="form-control"
+													   >
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Owner Name'].$error.required
+																			&& (vehicleRegistration['Owner Name'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Owner Mobile: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Enter Owner Number"
+													   ng-model="upsertVm.oVehicle.owner_mobile"
+													   name="Owner Number"
+													   class="form-control"
+													  >
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Owner Number'].$error.required
+																			&& (vehicleRegistration['Owner Number'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Structure: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														class="form-control"
+														ng-model="upsertVm.oVehicle.structure_name"
+														ng-options="item.structure_name as item.structure_name for item in upsertVm.aStructure"
+														name="Vehicle Structure"
+														>
+													<option value="" disabled>Select Structure</option>
+												</select>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Vehicle Structure'].$error.required
+																			&& (vehicleRegistration['Vehicle Structure'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+									</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Manufacturer: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<select chosen
+														class="form-control"
+														ng-model="upsertVm.oVehicle.manufacturer"
+														ng-options="key as key for (key , value) in upsertVm.vehModelMatrix"
+														name="Vehicle Manufacturer"
+														ng-change="upsertVm.setModal(upsertVm.oVehicle.manufacturer)"
+													>
+													<option value="" disabled>Select Manufacturer</option>
+												</select>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Vehicle Manufacturer'].$error.required
+																			&& (vehicleRegistration['Vehicle Manufacturer'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Registration Date </label>
+										<div class="col-sm-6">
+											<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened7 == true }">
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened7 == true }">
+													<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened7')"
+														   type="text"
+														   class="form-control"
+														   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+														   show-weeks="false"
+														   ng-model="upsertVm.oVehicle.manufactureDate"
+														   is-open="opened7"
+														   datepicker-options="upsertVm.DatePicker.dateSettings"
+														   close-text="Close"
+														   placeholder="Registration Date"
+														   name="Vehicle Manufacture Date"
+														   style="padding: 0px 4px;height: 34px;" />
+												</div>
+												<span class="input-group-btn">
+								                      <button type="button" class="btn btn-default m-t-0 f12"
+															  ng-clcick="upsertVm.DatePicker.openDatePicker(this, $event, 'opened7')"><i
+															  class="glyphicon glyphicon-calendar"></i></button>
+								                    </span>
+											</div>
+											<!-- <span class="error" ng-if="vehicleRegistration['Vehicle Manufacture Date'].$error.required
+																			&& (vehicleRegistration['Vehicle Manufacture Date'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span> -->
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Model: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+												       placeholder="Enter Model"
+														class="form-control"
+														ng-model="upsertVm.oVehicle.model"
+														name="Vehicle Model"
+														>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Vehicle Model'].$error.required
+																			&& (vehicleRegistration['Vehicle Model'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Vehicle Model Year: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+												       placeholder="Enter Model"
+														class="form-control"
+														ng-model="upsertVm.oVehicle.modelYear"
+														name="Vehicle Model"
+														>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">PUC No.: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Enter PUC number"
+													   ng-model="upsertVm.oVehicle.puc_no"
+													   name="PUC No."
+													   class="form-control"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">PUC Issue Date:</label>
+										<div class="col-sm-6">
+											<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened8 == true }">
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened8 == true }">
+													<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened8')"
+														   type="text"
+														   class="form-control"
+														   max-date="upsertVm.DatePicker.newDate"
+														   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+														   show-weeks="false"
+														   ng-model="upsertVm.oVehicle.puc_issuance_date"
+														   is-open="opened8"
+														   datepicker-options="upsertVm.DatePicker.dateSettings"
+														   close-text="Close"
+														   placeholder="PUC Issue Date"
+														   style="padding: 0px 4px;height: 34px;" />
+												</div>
+												<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened8')"
+									><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">PUC Expiry Date:</label>
+										<div class="col-sm-6">
+											<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened9 == true }">
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened9 == true }">
+													<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened9')"
+														   type="text"
+														   class="form-control"
+														   min-date="upsertVm.oVehicle.puc_issuance_date"
+														   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+														   show-weeks="false"
+														   ng-model="upsertVm.oVehicle.puc_expiry_date"
+														   is-open="opened9"
+														   datepicker-options="upsertVm.DatePicker.dateSettings"
+														   close-text="Close"
+														   placeholder="PUC Expiry Date"
+														   style="padding: 0px 4px;height: 34px;" />
+												</div>
+												<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened9')"
+									><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Carrying Capacity(Ton):<span ng-if="$configs.master.regVehicle.capacityRequired" class="req_r">*</span> </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Capacity"
+													   ng-model="upsertVm.oVehicle.capacity_tonne"
+													   name="Vehicle Capacity"
+													   class="form-control"
+													   ng-required="$configs.master.regVehicle.capacityRequired"
+													   >
+											</div>
+											<span class="error" ng-if="$configs.master.regVehicle.capacityRequired && vehicleRegistration['Vehicle Capacity'].$error.required
+																			&& (vehicleRegistration['Vehicle Capacity'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Permit Expiry Date: </label>
+										<div class="col-sm-6">
+											<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+													<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+														   type="text"
+														   class="form-control"
+														   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+														   show-weeks="false"
+														   ng-model="upsertVm.oVehicle.permit_expiry_date"
+														   is-open="opened1"
+														   datepicker-options="upsertVm.DatePicker.dateSettings"
+														   close-text="Close"
+														   placeholder="Enter Permit Expiry"
+														   name="Permit Expiry Date"
+														   style="padding: 0px 4px;height: 34px;" />
+												</div>
+												<span class="input-group-btn">
+								                      <button type="button" class="btn btn-default m-t-0 f12"
+															  ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+															  class="glyphicon glyphicon-calendar"></i></button>
+								                    </span>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Permit Expiry Date'].$error.required
+																			&& (vehicleRegistration['Permit Expiry Date'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Height in Feet: </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Height"
+													   ng-model="upsertVm.oVehicle.height_ft"
+													   name="Height"
+													   class="form-control">
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Height'].$error.required
+																&& (vehicleRegistration['Height'].$touched
+																|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Width in Feet: </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Width"
+													   ng-model="upsertVm.oVehicle.width_ft"
+													   name="Vehicle Width"
+													   class="form-control">
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Vehicle Width'].$error.required
+																			&& (vehicleRegistration['Vehicle Width'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Length in Feet: </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Length"
+													   ng-model="upsertVm.oVehicle.length_ft"
+													   name="Vehicle Length"
+													   class="form-control">
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Vehicle Length'].$error.required
+																			&& (vehicleRegistration['Vehicle Length'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<!--<div class="col-md-4" ng-if="$configs.master.showAccount && !upsertVm.isAccountLinked">-->
+									<!--<div class="form-group m-b-0">-->
+										<!--<label class="col-sm-5">Account :-->
+											<!--<span class="req_r">*</span>-->
+										<!--</label>-->
+										<!--<div class="col-sm-6">-->
+											<!--<select chosen-->
+													<!--class="form-control"-->
+													<!--ng-model="upsertVm.oVehicle.account"-->
+													<!--ng-options="item._id as item.name for item in upsertVm.aAccountMaster"-->
+													<!--search-contains="true"-->
+													<!--ng-change="upsertVm.onSelectAccount()"-->
+													<!--name="Account"-->
+													<!--required>-->
+												<!--<option value=""></option>-->
+											<!--</select>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Hypothecated To: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Enter Hypothecated To"
+													   ng-model="upsertVm.oVehicle.hypothecatedTo"
+													   name="Hypothecated To"
+													   class="form-control"
+												>
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Hypothecated To'].$error.required
+																			&& (vehicleRegistration['Hypothecated To'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Gross Vehicle Weight : </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Gross Vehicle Weight"
+													   ng-model="upsertVm.oVehicle.grossVehicleweight"
+													   name="Gross Vehicle Weight"
+													   class="form-control">
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Gross Vehicle Weight'].$error.required
+																			&& (vehicleRegistration['Gross Vehicle Weight'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Unladen Weight : </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Unladen Weight"
+													   ng-model="upsertVm.oVehicle.unladenWeight"
+													   name="Unladen Weight"
+													   class="form-control">
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Unladen Weight'].$error.required
+																			&& (vehicleRegistration['Unladen Weight'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Laden Weight : </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Laden Weight"
+													   ng-model="upsertVm.oVehicle.ladenWeight"
+													   name="Laden Weight"
+													   class="form-control">
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Laden Weight'].$error.required
+																			&& (vehicleRegistration['Laden Weight'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="$configs.master.showAccount">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Account:  <span class="req_r" ng-if="upsertVm.oVehicle.ownershipType!='Market'">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													ng-readonly="upsertVm.readonlyAC"
+													class="form-control"
+													placeholder="Vehicle Account"
+													ng-model="upsertVm.oVehicle.account"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in upsertVm.getALLAccount($viewValue)"
+													name="Vehicle account"
+													ng-required= "upsertVm.oVehicle.ownershipType!='Market'">
+												<i class="lvh-search-close" ng-click="upsertVm.oVehicle.account=null;" ng-hide="upsertVm.readonlyAC">×</i>
+											</div>
+												<span class="error" ng-if="vehicleRegistration['Vehicle account'].$error.required
+																			  && (vehicleRegistration['Vehicle account'].$touched
+                                                                                             || vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+											<br>
+											<div class="text-center">
+												<button class="btn btn-primary waves-effect"
+														type="button"
+														ng-disabled="upsertVm.readonlyAC"
+														style="padding: 3px 5px"
+														ng-click="upsertVm.onSelectAccount('bpCheck')"
+														uib-tooltip="Add">
+													<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+												</button>
+												<!-- <button class="btn btn-danger waves-effect"
+														type="button"
+														style="padding: 3px 5px"
+														ng-click="upsertVm.onDelinkAccount()"
+														uib-tooltip="Delink"
+														ng-disabled="!upsertVm.oVehicle.account._id"
+												>
+													<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+												</button> -->
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+<!--								ng-readonly="upsertVm.readOnly && upsertVm.oVehicle.ownershipType === 'Market'"-->
+								<div class="col-md-3" ng-if="$configs.costCenter.show">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Cost Center <span class="req_r">*</span>:</label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Cost Center"
+													ng-model="upsertVm.oVehicle.costCenter"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in upsertVm.getCostCenter($viewValue)"
+													name="cost_center" required>
+												<i class="lvh-search-close" ng-click="upsertVm.oVehicle.costCenter= null;">×</i>
+
+											</div>
+											<span class="error"
+												  ng-if=" vehicleRegistration['cost_center'].$error.required
+																	&& (vehicleRegistration['cost_center'].$touched
+																	|| vehicleRegistration.$submitted)">
+												This Field is Mandatory</span>
+											<br>
+												</div>
+											<div class="text-center">
+<!--												TODO Add Cost Center from here-->
+<!--												<button class="btn btn-primary waves-effect"-->
+<!--														type="button"-->
+<!--														style="padding: 3px 5px"-->
+<!--														ng-click="upsertVm.onSelectAccount()"-->
+<!--														uib-tooltip="Add">-->
+<!--													<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>-->
+<!--												</button>-->
+<!--												TODO Cost Center De-link feature -->
+<!--												<button class="btn btn-danger waves-effect"-->
+<!--														type="button"-->
+<!--														style="padding: 3px 5px"-->
+<!--														ng-click="upsertVm.onDelinkAccount()"-->
+<!--														uib-tooltip="Delink"-->
+<!--														ng-disabled="!upsertVm.oVehicle.account._id"-->
+<!--												>-->
+<!--													<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>-->
+<!--												</button>-->
+											</div>
+									</div>
+
+								</div>
+
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Active: </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<label class="checkbox checkbox-inline m-r-20">
+													<input type="checkbox"
+														   ng-model="upsertVm.oVehicle.activeStatus"
+														   ng-value="upsertVm.oVehicle.activeStatus"
+													>
+													<i class="input-helper"></i>
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--<div class="col-md-4">-->
+									<!--<div class="col-md-12 form-group">-->
+										<!--<label class="col-sm-5">Rate/km: </label>-->
+										<!--<div class="col-md-6">-->
+											<!--<div class="fg-line">-->
+												<!--<input type="number"-->
+													   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+													   <!--onwheel="return false"-->
+													   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+													   <!--placeholder="Enter RatePerKm"-->
+													   <!--ng-model="upsertVm.oVehicle.current_budget.rpk"-->
+													   <!--name="RatePerKm"-->
+
+													   <!--class="form-control">-->
+											<!--</div>-->
+											<!--<span class="error" ng-if="vehicleRegistration['RatePerKm'].$error.required-->
+																			<!--&& (vehicleRegistration['RatePerKm'].$touched-->
+																			<!--|| vehicleRegistration.$submitted)">-->
+														<!--This Field is Mandatory</span>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<span class="booking_list_header">DRIVER DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Driver :
+											<!--<span class="req_r">*</span>-->
+										</label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear">
+												<input
+														type="text"
+														class="form-control lvhs-input"
+														placeholder="Driver Search..."
+														ng-model="upsertVm.oVehicle.driver"
+														typeahead-wait-ms="10"
+														typeahead="item as (item.nameCode || item.name) for item in upsertVm.getAllDriver($viewValue) | limitTo:6"
+														typeahead-on-select="upsertVm.onDriverChanged($item, $model, $label)"
+														ng-readonly="true"
+												>
+												<!--<i class="lvh-search-close" ng-click="upsertVm.oVehicle.driver=null;">×</i>-->
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Driver Mobile: </label>`
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Mobile Number"
+													   ng-model="upsertVm.oVehicle.driver_contact_no"
+													   name="Driver Mobile Number"
+													   ng-readonly="true"
+													   class="form-control">
+												<!--ng-minlength="10"
+													   ng-maxlength="10"-->
+											</div>
+											<span class="error" ng-if="vehicleRegistration['Driver Mobile Number'].$error.required
+																			&& (vehicleRegistration['Driver Mobile Number'].$touched
+																			|| vehicleRegistration.$submitted)">
+														This Field is Mandatory</span>
+											<span class="error" ng-if="	(vehicleRegistration['Driver Mobile Number'].$error.minlength
+																				|| vehicleRegistration['Driver Mobile Number'].$error.maxlength)
+																			&& (vehicleRegistration['Driver Mobile Number'].$touched
+																				|| vehicleRegistration.$submitted)">
+													Invalid Mobile Number</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="col-md-12 form-group">
+										<label class="col-sm-5">Driver Code: </label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Enter code"
+													   ng-model="upsertVm.oVehicle.driver_employee_code"
+													   name="Driver code"
+													   ng-readonly="true"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+						<li class="list-group-item">
+							<span class="booking_list_header">IDENTITY DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Chasis Number:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   name="Chasis Number"
+														   ng-model="upsertVm.oVehicle.chassis_no"
+														   placeholder="Enter Chasis Number"
+														   class="form-control"
+														   >
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Engine Number:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   name="Engine Number"
+														   ng-model="upsertVm.oVehicle.engine_no"
+														   placeholder="Enter Engine Number"
+														   class="form-control"
+														   >
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Insurance Company:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   name="Insurance Company"
+														   ng-model="upsertVm.oVehicle.insurance_company"
+														   placeholder="Enter Insurance Company"
+														   class="form-control"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Insurance Number:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   name="Insurance Number"
+														   ng-model="upsertVm.oVehicle.insurance_no"
+														   placeholder="Enter Insurance Number"
+														   class="form-control"
+														  >
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Insured Amount:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   name="Insurance Value"
+														   ng-model="upsertVm.oVehicle.insured_amount"
+														   placeholder="Enter Insurance Value"
+														   class="form-control"
+														   >
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Insurance Expiry Date:</label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+														<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="upsertVm.oVehicle.insurance_expiry_date"
+															   is-open="opened2"
+															   datepicker-options="upsertVm.DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Insurance Expiry Date"
+															   style="padding: 0px 4px;height: 34px;"
+															   />
+													</div>
+													<span class="input-group-btn">
+								  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+										  ><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">RC Book No:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   name="RC Book No"
+														   ng-model="upsertVm.oVehicle.rc_book_no"
+														   placeholder="Enter RC Book No"
+														   class="form-control"
+														   >
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Fitness Issuance Date:</label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+														<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="upsertVm.oVehicle.fitness_cert_issuance_date"
+															   is-open="opened3"
+															   datepicker-options="upsertVm.DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Fitness Issuance Date"
+															   style="padding: 0px 4px;height: 34px;"
+															    />
+													</div>
+													<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+											><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Fitness Expiry Date:</label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+														<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened4')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="upsertVm.oVehicle.fitness_cert_expiry_date"
+															   is-open="opened4"
+															   datepicker-options="upsertVm.DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Fitness Expiry Date"
+															   style="padding: 0px 4px;height: 34px;"
+															    />
+													</div>
+													<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened4')"
+											><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">road tax doc no:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   name="Road Tax Doc No"
+														   ng-model="upsertVm.oVehicle.road_tax_doc_no"
+														   placeholder="road tax doc no"
+														   class="form-control"
+														   >
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Road Tax Issuance Date:</label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened5 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened5 == true }">
+														<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened5')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="upsertVm.oVehicle.road_tax_doc_issuance_date"
+															   is-open="opened5"
+															   datepicker-options="upsertVm.DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="road tax issuance Date"
+															   style="padding: 0px 4px;height: 34px;"
+															  />
+													</div>
+													<span class="input-group-btn">
+										<button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened5')"
+												><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Road Tax Expiry Date:</label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened6 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened6 == true }">
+														<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened6')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="upsertVm.oVehicle.road_tax_doc_expiry_date"
+															   is-open="opened6"
+															   datepicker-options="upsertVm.DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Road Tax Expiry Date"
+															   style="padding: 0px 4px;height: 34px;"
+															    />
+													</div>
+													<span class="input-group-btn">
+										<button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened6')"
+										 ><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+												</div>
+											</div>
+										</div>
+									</div>
+<!--									<div class="col-md-4" ng-if="upsertVm.oVehicle.ownershipType==='Sold'">-->
+<!--										<div class="form-group m-b-0">-->
+<!--											<label class="col-sm-5">Sold Vehicle Vendor Name: </label>-->
+<!--											<div class="col-sm-6">-->
+<!--												<div class="fg-line">-->
+<!--													<input type="text"-->
+<!--														   placeholder="Enter Vendor Name"-->
+<!--														   ng-model="upsertVm.oVehicle.vendor_name"-->
+<!--														   name="Sold Vendor Name"-->
+<!--														   class="form-control"-->
+<!--														   >-->
+<!--												</div>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--									<div class="col-md-4" ng-if="upsertVm.oVehicle.ownershipType==='Sold'">-->
+<!--										<div class="form-group m-b-0">-->
+<!--											<label class="col-sm-5">Sold Vehicle Vendor Address: </label>-->
+<!--											<div class="col-sm-6">-->
+<!--												<div class="fg-line">-->
+<!--													<input type="text"-->
+<!--														   placeholder="Enter Vendor Address"-->
+<!--														   ng-model="upsertVm.oVehicle.vendor_address"-->
+<!--														   name="Sold Vendor Address"-->
+<!--														   class="form-control"-->
+<!--														   >-->
+<!--												</div>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--									<div class="col-md-4" ng-if="upsertVm.oVehicle.ownershipType==='Sold'">-->
+<!--										<div class="form-group m-b-0">-->
+<!--											<label class="col-sm-5">Sold Vehicle Vendor Phone No: </label>-->
+<!--											<div class="col-sm-6">-->
+<!--												<div class="fg-line">-->
+<!--													<input type="number"-->
+<!--		                                                   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+<!--													       onwheel="return false"-->
+<!--													       onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+<!--														   placeholder="Enter Vendor Address"-->
+<!--														   ng-model="upsertVm.oVehicle.vendor_phno"-->
+<!--														   name="Sold Vendor Phone No"-->
+<!--														   class="form-control"-->
+<!--														   >-->
+<!--												</div>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--									<div class="col-md-4" ng-if="upsertVm.oVehicle.ownershipType==='Sold'">-->
+<!--										<div class="form-group m-b-0">-->
+<!--											<label class="col-sm-5">Sold Vehicle Vendor Pan No: </label>-->
+<!--											<div class="col-sm-6">-->
+<!--												<div class="fg-line">-->
+<!--													<input type="text"-->
+<!--														   placeholder="Enter Vendor Pan No"-->
+<!--														   ng-model="upsertVm.oVehicle.vendor_panNo"-->
+<!--														   name="Sold Vendor Pan No"-->
+<!--														   class="form-control"-->
+<!--														   >-->
+<!--												</div>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+
+								</div>
+							</div>
+							<!--<div ng-include="'views/myRegisteredVehicle/vehicleDocuments.html'"></div>-->
+						</li>
+					<li class="animate-show-hide list-group-item">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12 text-center">
+									<button type="submit"
+											class="btn btn-primary"
+											ng-disabled="upsertVm.disableSubmit">SUBMIT</button>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	label{
+		font-weight: bold;
+		margin-top: 5px;
+	}
+
+	.col-md-12.form-group{
+		height: 50px;
+		margin-bottom: 0px;
+	}
+
+	form.tab-form-demo .tab-pane {
+		margin: 20px 20px;
+	}
+
+	.nav-tabs>li.active {
+		background: #2196f5;
+	}
+
+	.nav-tabs>li.active>a {
+		color: #fff !important;
+	}
+
+	.nav-tabs>li.active>a,
+	.nav-tabs>li.active>a:hover,
+	.nav-tabs>li.active>a:focus {
+		border: 1px solid #2196f5;
+	}
+
+	.list_border_background {
+		border: 2px solid blue !important;
+		background: #47d6c9;
+	}
+</style>

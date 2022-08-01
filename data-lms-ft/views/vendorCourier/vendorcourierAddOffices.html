@@ -1,0 +1,108 @@
+<form name="VendorCourierForm" ng-controller="courierVendorAddOfficeCtrl">
+    <div class="row" style="margin: 5px auto;">
+        <!--*************** Courier prices ***************-->
+
+        <!--vendorCourier address 1-->
+        <div class="card-header" >
+            <h2 style="color: #847777;font-size: 16px;">Courier Office</h2>
+        </div>
+
+        <div class="card-body" style="padding-left: 25px;padding-right: 25px;">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" ng-model="objOffice.branch_name" class="input-sm form-control fg-input">
+                            <label class="fg-label">Branch Name</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" ng-model="objOffice.address" class="input-sm form-control fg-input">
+                            <label class="fg-label">Address</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input id ="autoCompleteCity" type="text" ng-model="objOffice.city" class="input-sm form-control fg-input">
+                            <label class="fg-label">City</label>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" ng-model="objOffice.contact_person" class="input-sm form-control fg-input">
+                            <label class="fg-label">Contact Person</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" ng-model="objOffice.contact_prime" class="input-sm form-control fg-input" ng-minlength="10" ng-maxlength="10">
+                            <label class="fg-label">Contact Num.</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" ng-model="objOffice.address" class="input-sm form-control fg-input">
+                            <label class="fg-label">Address</label>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-sm-2" ng-show="selectedCourierVendorData">
+                    <a ng-click="addOffice()" class="btn btn-primary waves-effect pointer">
+                        <i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Branch</th>
+                                    <th>Address</th>
+                                    <!-- <th>City</th> -->
+                                    <th>Contact Person</th>
+                                    <th>Contact Num.</th>
+                                    <!-- <th>Email.</th> -->
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="office in aCourierOffices">
+                                    <td><input type="text" ng-model="office.branch_name" class="form-control" ng-readonly="editMode"></td>
+                                    <td><input type="text" ng-model="office.address" class="form-control" ng-readonly="editMode"></td>
+                                    <!-- <td><input type="text" ng-model="office.city" class="form-control" ng-readonly="editMode"></td> -->
+                                    <td><input type="text" ng-model="office.contact_person" class="form-control" ng-readonly="editMode"></td>
+                                    <td><input type="text" ng-model="office.contact_prime" class="form-control" ng-readonly="editMode"></td>
+                                    <!-- <td><input type="text" ng-model="Office.address" class="form-control" ng-readonly="editMode"></td> -->
+                                    <td>
+                                        <a ng-click="updateOffice(office)" class="btn btn-success waves-effect pointer" ng-show="savebtn">
+                                            <i class="zmdi zmdi-check-all zmdi-hc-fw"></i>
+                                        </a>
+                                        <a ng-click="editOffice(office)" class="btn btn-primary waves-effect pointer" ng-hide="savebtn">
+                                            <i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<style type="text/css">
+    .fg-float .fg-label{top: 0px;}
+</style>

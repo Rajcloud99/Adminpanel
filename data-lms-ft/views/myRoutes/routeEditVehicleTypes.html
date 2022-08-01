@@ -1,0 +1,121 @@
+<form name="routeVehi" ng-controller="editRouteController">
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Vehicle Type</label>
+				<div class="col-sm-6 select">
+	                <select chosen data-placeholder-text-single="'Select Type'" allow-single-deselect="true" class="form-control" ng-model="selected_type" ng-options="item as item.name for item in vehicleTypeData">
+	                  <option value=""></option>
+	                </select>
+          		</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Up Time(Days)</label>
+				<div class="col-sm-6 select">
+	                <select class="form-control" ng-model="up_time.days" ng-options="item for item in daysList">
+	                  <option value="" selected>Select Day</option>
+	                </select>
+              	</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Up Time(Hours)</label>
+				<div class="col-sm-6 select">
+	                <select class="form-control" ng-model="up_time.hours" ng-options="item for item in hoursList">
+	                  <option value="" selected>Select Hour</option>
+	                </select>
+              	</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Down Time(Days)</label>
+				<div class="col-sm-6 select">
+	                <select class="form-control" ng-model="down_time.days" ng-options="item for item in daysList">
+	                  <option value="" selected>Select Days</option>
+	                </select>
+              	</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Down Time(Hours)</label>
+				<div class="col-sm-6 select">
+	                <select class="form-control" ng-model="down_time.hours" ng-options="item for item in hoursList">
+	                  <option value="" selected>Select Hours</option>
+	                </select>
+              	</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Allot Diesel(Ltrs.)</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="diesel_allot" class="form-control">
+					</div>
+				</div> 
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Allot Cash(Rs.)</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="cash_allot" class="form-control">
+					</div>
+				</div> 
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Toll Tax(Rs.)</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="toll_tax" class="form-control">
+					</div>
+				</div> 
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<div class="col-sm-6">
+					<button title="Add Vehicle Type" ng-disabled="!(selected_type)" ng-click="addVehicle()" class="btn btn-primary waves-effect">
+						<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-10">
+				<button type="submit" ng-disabled="!(enableUpdateBtn)" class="btn btn-primary" ng-click="updateRouteRegDetails()" style="margin-bottom: 12px;">Update</button>
+			</div>
+		</div>
+	</div>
+	<div>
+	    <table ng-show="route.route_time.length" ng-table="tableParams" class="table">
+	        <tr ng-repeat="vVehicle in route.route_time track by $index">
+	        	<td data-title="'#'">{{$index+1}}</td>
+				<td data-title="'Vehicle Type'">{{vVehicle.vehicle_type_name}}</td>
+				<td data-title="'Up Time'"><span ng-if="vVehicle.up_time.days">{{vVehicle.up_time.days}}days/</span><span ng-if="vVehicle.up_time.hours">{{vVehicle.up_time.hours}}hours</span></td>
+				<td data-title="'Down Time'"><span ng-if="vVehicle.down_time.days">{{vVehicle.down_time.days}}days/</span><span ng-if="vVehicle.down_time.hours">{{vVehicle.down_time.hours}}hours</span></td>
+				<td data-title="'Diesel(Ltrs.)'">{{vVehicle.diesel_allot}}</td>
+				<td data-title="'Cash(Rs.)'">{{vVehicle.cash_allot}}</td>
+				<td data-title="'Toll Tax(Rs.)'">{{vVehicle.toll_tax}}</td>
+				<td data-title="'Action'">
+	                <a href ng-click="removeVehicle($index)" uib-tooltip="Remove " tooltip-placement="bottom" class="active"><i class="zmdi zmdi-minus-circle zmdi-hc-fw" style="font-size: 22px"></i></a>
+	            </td>
+	        </tr>
+		</table>
+	</div>
+	
+</form>

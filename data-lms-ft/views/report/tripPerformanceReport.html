@@ -1,0 +1,277 @@
+<!--Controller:tripPerformanceReportCntrl-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label p-t-5" style="width: 200px">
+			<div class="select">
+<!--				ng-options="item as item for item in $constants.aReport"-->
+				<select class="form-control"
+
+						ng-model="vm.reportType"
+						ng-change="vm.onTypeSelect(vm.reportType)"
+						style="height: 34px;">
+					<option disabled value="">Report Type</option>
+					<option  value="DLP" ng-if="$role['Trip Performance Report']['DLP']">DLP</option>
+					<option  value="DUP" ng-if="$role['Trip Performance Report']['DUP']">DUP</option>
+					<option  value="RTP" ng-if="$role['Trip Performance Report']['RTP']">RTP</option>
+					<option  value="RTP New" ng-if="$role['Trip Performance Report']['RTP']">RTP New</option>
+					<option  value="RTP Expense" ng-if="$role['Trip Performance Report']['RTP Expense']">RTP Expense</option>
+					<option  value="RTP Expense New" ng-if="$role['Trip Performance Report']['RTP Expense']">RTP Expense New</option>
+					<option  value="Detail RTP" ng-if="$role['Trip Performance Report']['Detail RTP']">Detail RTP</option>
+					<option  value="RTP Gap" ng-if="$role['Trip Performance Report']['RTP Gap']">RTP Gap</option>
+					<option  value="Last Settle RTP" ng-if="$role['Trip Performance Report']['Last Settle RTP']">Last Settle RTP</option>
+					<option  value="Last Settle RT Report">Last Settle RT Report</option>
+					<option  value="Monthly Performance" ng-if="$role['Trip Performance Report']['Monthly Performance']">Monthly Performance</option>
+					<option  value="RT Gross Profit Report">RT Gross Profit Report</option>
+					<option  value="Combine RTwise Gross Profit Report">Combine RTwise Gross Profit Report</option>
+					<option  value="Job Order Report">Job Order Report</option>
+					<option  value="Job Order Risky Report">Job Order Risky Report</option>
+					<option  value="Job Order Power Report">Job Order Power Report</option>
+
+				</select>
+			</div>
+		</div>
+<!--			<div style="display: inline" ng-if="vm.reportType == 'Detail RTP'">-->
+<!--				<input	ng-model="vm.oFilter.showTrips"-->
+<!--					type="checkbox"-->
+<!--					name="ShowTrip">&nbsp;Show Trip Detail-->
+<!--			</div>-->
+			<div class="pull-right">
+			<button ng-click="vm.getAllReport(false,true)" ng-disabled="aReport.length<=0"
+					class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+				Download
+				</button>
+			</div>
+			<div class="col-md-2 pull-right" ng-if="vm.reportType == 'Detail RTP'">
+				<div class="lvh-label col-md-5" style="padding-left:0;padding-right:0;">Aggre By:</div>
+				<div class="select col-md-6">
+					<select
+						class="form-control"
+						ng-init="vm.oFilter.aggregateBy = vm.aggrs[0]"
+						ng-options="item as item for item in vm.aggrs"
+						ng-model="vm.oFilter.aggregateBy" style="width:120%;height:34px;"
+					>
+<!--						<option value="" selected>None</option>-->
+					</select>
+				</div>
+			</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<form role="form" autocomplete="off">
+		<div class="row hidden-print" style="margin:7px;">
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1" ng-if="vm.reportType == 'RTP' || vm.reportType == 'RTP New' || vm.reportType == 'Detail RTP' || vm.reportType == 'RTP Expense' || vm.reportType == 'RTP Expense New' || vm.reportType == 'RT Gross Profit Report' || vm.reportType == 'Combine RTwise Gross Profit Report' ">
+					<div class="fg-line">
+						<input type="number" ng-model="vm.oFilter.tsNo" name="tsNo"
+							   class="form-control input-sm" placeholder="RT NO."
+							   ng-model-options="{ updateOn: 'blur' }"
+							   style="height: 34px;font-size: 13px;">
+					</div>
+				</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="vm.reportType == 'RTP' || vm.reportType == 'RTP New' || vm.reportType == 'Detail RTP' || vm.reportType == 'RTP Expense' || vm.reportType == 'RTP Expense New' || vm.reportType == 'Last Settle RTP' || vm.reportType == 'Last Settle RT Report' || vm.reportType == 'Monthly Performance' || vm.reportType == 'RT Gross Profit Report'  || vm.reportType == 'Combine RTwise Gross Profit Report' ">
+				<div class="lvh-search ng-scope sear">
+					<input type="text" placeholder="Vehicle Search..."
+						   ng-model="vm.oFilter.vehicle"
+						   class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="person as (person.vehicle_reg_no + (person.vendor_name ? '('+person.vendor_name+')' : '')) for person in vm.getVname($viewValue) | limitTo:10"
+						   class="form-control"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.vehicle='';getAllTrip();">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="vm.reportType == 'Job Order Report' || vm.reportType =='Job Order Risky Report' || vm.reportType =='Job Order Power Report'">
+				<div class="lvh-search ng-scope sear">
+					<input type="text" placeholder="Vehicle Search..."
+						   ng-model="vm.oFilter.vehicle"
+						   class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="person as (person.vehicle_reg_no) for person in vm.getVname($viewValue) | limitTo:10"
+						   class="form-control"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.vehicle='';getAllTrip();">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="vm.reportType == 'RTP New' || vm.reportType == 'RT Gross Profit Report' || vm.reportType == 'Combine RTwise Gross Profit Report' ">
+				<div class="lvh-search ng-scope sear">
+					<input type="text"
+						   placeholder="Driver Search..."
+						   ng-model="vm.oFilter.driver"
+						   class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="item as (item.nameCode || item.name) for item in vm.getDriver($viewValue)"
+						   class="form-control"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.driver='';">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2" ng-if="vm.reportType == 'RTP New' || vm.reportType == 'RT Gross Profit Report' || vm.reportType == 'Combine RTwise Gross Profit Report' ">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							placeholder-text-single="'Mark Settle'"
+							class="form-control"
+							ng-model="vm.oFilter.mSettle"
+							ng-options="item as item for item in ['Yes', 'No']"
+							name="By"
+							required>
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2" ng-hide=" vm.reportType == 'RT Gross Profit Report' || vm.reportType == 'Combine RTwise Gross Profit Report' || vm.reportType == 'Job Order Report' || vm.reportType =='Job Order Risky Report' || vm.reportType =='Job Order Power Report'">
+				<div class="fg-line form-group m-b-0">
+					<select chosen multiple
+							class="form-control"
+							ng-model="vm.oFilter.segment_type"
+							ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+							name="Segment"
+							required>
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2" ng-hide="vm.reportType == 'RT Gross Profit Report' || vm.reportType == 'Combine RTwise Gross Profit Report'  || vm.reportType == 'Job Order Report' || vm.reportType =='Job Order Risky Report' || vm.reportType =='Job Order Power Report'">
+				<div class="fg-line form-group m-b-0">
+					<select chosen multiple
+							placeholder-text-multiple="'Select Fleet'"
+							class="form-control"
+							ng-model="vm.oFilter.owner_group"
+							ng-options="item.name as item.name for item in vm.aOwners"
+							name="FleetGroup">
+						<option value="">Select Fleet</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2" ng-if="vm.reportType == 'RTP New' || vm.reportType == 'RTP Expense New'">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							class="form-control"
+							placeholder-text-single="'Date By'"
+							ng-model="vm.oFilter.by"
+							ng-options="item as item for item in ['RT Start', 'RT End', 'RT Creation', 'RT Mark Settle']"
+							name="date_by"
+							required>
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="vm.oFilter.from"
+							   is-open="opened1"
+							   datepicker-options="vm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="from"
+							   max-date="vm.oFilter.to"
+							   name="Allocation from"
+							   required
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+					<button type="button"
+							class="btn btn-default m-t-0 f12"
+							ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+					<div class="date-picker input-group dDiesel Budget(ltr)p-blue"
+						 ng-class="{ 'is-opened': opened2 == true }"
+						 style=" ">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   max-date="vm.DatePicker.newDate"
+								   min-date="vm.oFilter.from"
+								   ng-model="vm.oFilter.to"
+								   is-open="opened2"
+								   datepicker-options="vm.DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="To"
+								   name="Allocation To"
+								   required
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+					</div>
+				</div>
+
+				<div class="col-md-2 text-center">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Search"
+							type="button"
+							ng-click="vm.getAllReport()"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="submit"
+							ng-click="vm.oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+				</div>
+		</div>
+		<div class="col-md-12 pp" ng-if="!vm.reportType == 'RTP' && !vm.reportType == 'RT Expense'">
+			<ul class="listB" style="list-style-type: none;"
+				ng-repeat="val in vm.summaryConfig">
+				<li>{{val.label}}:{{(vm.summary[val.key])| roundOff:'0'}}</li>
+			</ul>
+		</div>
+		<div class="clearfix"></div>
+		</form>
+	</div>
+</div>
+
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="row">
+			<div class="col-md-12">
+				<div ja-table
+					 table-body="vm.aTrips"
+					 table-head="vm.tableHead"
+					 table-height='500px'
+					 table-column-setting="vm.columnSetting"
+					 table-selectable='vm.selectType'
+					 table-api="vm.tableApi"
+					 table-selectable-model="vm.aSelectedTrips"
+				></div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.listB > li{
+		width: 20%;
+		float: left;margin-left: 1%;
+	}
+	.pp{
+		list-style-type: none;
+		padding: 20px;
+		font-weight: bold;
+		border: 1px solid #2a96f3;
+	}
+
+</style>

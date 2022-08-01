@@ -1,0 +1,228 @@
+<!-- Controller: voucherCostcatPopUpCtrl -->
+<!-- ControllerAs: vm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="vm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Voucher Cost Category</b></span>
+	</h4>
+</div>
+
+	<div class="container" style="">
+		<div class="m-b-0" id="messages-main">
+			<form name="addForm" autocomplete="off" novalidate>
+				<div class="card-body">
+			<ul class="list-group list-group-flush">
+				<!--Approval DETAILS-->
+				<li class="list-group-item" ng-hide="vm.mode === 'view'">
+					<div class="card-body">
+						<span class="booking_list_header">Add</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">CostCategory: <span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="CostCategory Search.."
+														ng-model="vm.category"
+														typeahead-wait-ms="10"
+														name="CostCategory"
+														typeahead="item as item.name for item in vm.getCostCategory($viewValue)|limitTo:6"
+														required>
+												<i class="lvh-search-close" ng-click="vm.category=null;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-2">
+									<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+											style="font-size: 20px"
+											uib-tooltip="Add"
+											tooltip-placement="bottom"
+											type="button"
+											ng-click="vm.add()">
+										<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+									</button>
+								</div>
+
+							</div>
+						</div>
+							<div class="clearfix"></div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">List View: </span>
+
+					&nbsp;&nbsp;
+					<div class="pull-right" ng-hide="vm.mode === 'view'">
+						<button class="btn btn-primary"
+								uib-tooltip="Add Center"
+								tooltip-placement="bottom"
+								ng-click="vm.addCenter(vm.catIndex)">
+							<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+						</button>&nbsp;&nbsp;
+						<button class="btn btn-danger"
+								uib-tooltip="Remove Category"
+								tooltip-placement="bottom"
+								ng-click="vm.oVoucher.costCategory.splice(vm.catIndex, 1)">
+							<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+						</button>
+					</div>
+					<div class="card-body">
+						<div class="row hidden-print" style="margin:15px;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="" style=" max-height: 500px;">
+										<table class="table table-bordered unresponsive">
+											<thead>
+											<tr>
+												<th>Cost Category</th>
+												<th>Cost Center</th>
+												<th>Amount</th>
+												<th>Remove</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat-start="oItem in vm.oVoucher.costCategory"
+												ng-class="{grn1: vm.selectedCategories.categoryId === oItem.categoryId && vm.catIndex === $index}"
+												ng-click="vm.selectedCategories = oItem; vm.catIndex = $index">
+												<td rowspan="{{oItem.center.length+1}}"
+													style="vertical-align: middle;">{{oItem.category || 'NA'}}
+												</td>
+											</tr>
+											<tr ng-repeat-end ng-repeat="value in oItem.center"
+												ng-class="{grn2: vm.selectedItem.center._id === oItem.center._id && vm.selectedIndex === $index}"
+												class="pointer"
+												ng-click="vm.selectedItem = oItem; vm.selectedIndex = $index">
+												<td>
+													<div class="col-md-12">
+														<div class="" style="z-index: 100">
+															<input
+																	type="text"
+																	class="form-control"
+																	placeholder="Cost Center.."
+																	ng-model="value.centerId"
+																	typeahead-wait-ms="10"
+																	name="Cost Center"
+																	ng-readonly="vm.mode === 'view'"
+																	typeahead="item as item.name for item in vm.getCostCenter($viewValue, oItem.categoryId)|limitTo:6"
+																	required>
+															<i class="lvh-search-close" ng-hide="vm.mode === 'view'"
+															   ng-click="value.centerId = null;">×</i>
+														</div>
+													</div>
+												</td>
+												<td>
+													<input type="number"
+														   ng-model="value.amount"
+														   placeholder="Anount"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   name="Amount"
+														   ng-readonly="vm.mode === 'view'"
+														   class="form-control">
+												</td>
+												<td>
+													<button class="btn btn-danger"
+															ng-hide="vm.mode === 'view'"
+															uib-tooltip="Remove center"
+															tooltip-placement="bottom"
+															ng-click="oItem.center.splice(vm.selectedIndex, 1)">
+														<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+													</button>
+												</td>
+											</tr>
+											<tr ng-repeat-end>
+												<!--<td>display: hidden</td>-->
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row hidden-print" style="margin:15px;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="text-right p-10">
+										<button class="btn btn-primary"
+												type="button"
+												ng-hide="vm.mode === 'view'"
+												ng-click="vm.submit()">SUBMIT
+										</button>
+										<button class="btn btn-warning"
+												type="button"
+												ng-click="vm.closeModal(submitForm)">Close
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+</form>
+		</div>
+	</div>
+
+<style>
+
+	.chosen-row-1 {
+		z-index: 8;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: 98;
+	}
+	.container {
+		width: 88% !important;
+	}
+
+	.modal-dialog {
+		width: 80%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.red {
+		color: red;
+	}
+
+	.border-red {
+		border: 2px solid #ff000080 !important;
+	}
+
+	.container:not(.ja-containter) {
+		width: 98% !important;
+	}
+
+	.grn1 {
+		background: #D1F2EB;
+	}
+	.grn2 {
+		background: #D1F2EB;
+	}
+</style>

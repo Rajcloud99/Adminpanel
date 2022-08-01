@@ -1,0 +1,132 @@
+<!--controller: transShipmentPopUpController-->
+<!--controllerAs: transVm-->
+
+<form role="form" name="myTripPopUp" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="transVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Trip No. {{transVm.trip.trip_no}}</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Vehicle</label>
+						<div class="col-sm-8">
+							<div class="lvh-search ng-scope sear">
+								<input
+										type="text"
+										class="form-control lvhs-input"
+										placeholder="Vehicle Search..."
+										ng-model="transVm.vehicle"
+										typeahead-wait-ms="10"
+										typeahead="item as (item.vehicle_reg_no  + ' (' + item.ownershipType[0] + ')') for item in transVm.getVname($viewValue) | limitTo:10"
+										typeahead-on-select="transVm.onSelect($item, $model, $label)"
+								>
+								<i class="lvh-search-close" ng-click="transVm.vehicle=''">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Driver</label>
+						<div class="col-sm-8">
+							<div class="lvh-search ng-scope sear">
+								<input
+										type="text"
+										class="form-control lvhs-input"
+										placeholder="Driver Search..."
+										ng-model="transVm.driver_name"
+										typeahead-wait-ms="10"
+										typeahead="item as (item.nameCode || item.name) for item in transVm.aDriver | limitTo:6"
+										ng-change="transVm.getDriver(transVm.driver_name)"
+										typeahead-on-select="transVm.onSelectDriver($item, $model, $label)">
+								<i class="lvh-search-close" ng-click="transVm.driver_name=''">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+					<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Date</label>
+						<div class="col-sm-4">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="transVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{transVm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="transVm.date"
+										   is-open="opened1"
+										   datepicker-options="transVm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Date"
+										   name="Date"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="transVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark <span class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<input type="text" class="form-control" ng-model="transVm.remark" required>
+						</div>
+					</div>
+				</div>
+			</div>
+				</li>
+			</ul>
+			<br>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="transVm.submit()">Update
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="transVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 50%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

@@ -1,0 +1,38 @@
+<form novalidate autocomplete="off" name="remarkPopupForm" ng-submit="submit(remarkPopupForm)">
+	<div class="modal-header p-b-0">
+		<button type="button" ng-click="closePopup()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Reverse selected vouchers</h4><br>
+		<div class="row m-t-10">
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Remark: </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text"
+								   placeholder="Enter remark"
+								   ng-model="remark"
+								   name="remark"
+								   class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-warning" type="button" ng-click="closePopup()">Close</button>
+		<button class="btn btn-primary" ng-disabled="isDisabled">Reverse</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 45%;
+		height: 173px
+	}
+	.strikeThrough{
+		text-decoration: line-through;
+	}
+
+</style>

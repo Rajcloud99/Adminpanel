@@ -1,0 +1,232 @@
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+         <span class="booking_list_header">IDENTITY DETAILS</span>
+        <div class="card-body">
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Chasis Number:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Chasis Number" ng-model="oVehicle.chassis_no" placeholder="Enter Chasis Number" class="form-control" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Engine Number:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Engine Number" ng-model="oVehicle.engine_no" placeholder="Enter Engine Number" class="form-control" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Insurance Company:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Insurance Company" ng-model="oVehicle.insurance_company" placeholder="Enter Insurance Company" class="form-control" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Insurance Number:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Insurance Number" ng-model="oVehicle.insurance_no" placeholder="Enter Insurance Number" class="form-control" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Insured Amount:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="Insurance Value" ng-model="oVehicle.insured_amount" placeholder="Enter Insurance Value" class="form-control" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Insurance Expiry Date:</label>
+                        <div class="col-sm-6">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="oVehicle.insurance_expiry_date"
+										   is-open="opened2"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Insurance Expiry Date"
+										   style="padding: 0px 4px;height: 34px;"
+										   ng-disabled="(registered_vehicle_mode=='View')" />
+                                </div>
+                                <span class="input-group-btn">
+								  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+										  ng-disabled="(registered_vehicle_mode=='View')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+        <div class="card-body">
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">RC Book No:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="RC Book No" ng-model="oVehicle.rc_book_no" placeholder="Enter RC Book No" class="form-control" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Fitness Issuance Date:</label>
+                        <div class="col-sm-6">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+                                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="oVehicle.fitness_cert_issuance_date"
+										   is-open="opened3"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Fitness Issuance Date"
+										   style="padding: 0px 4px;height: 34px;"
+										   ng-disabled="(registered_vehicle_mode=='View')" />
+                                </div>
+                                <span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="DatePicker.openDatePicker(this, $event, 'opened3')" ng-disabled="(registered_vehicle_mode=='View')"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Fitness Expiry Date:</label>
+                        <div class="col-sm-6">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+                                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened4')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="oVehicle.fitness_cert_expiry_date"
+										   is-open="opened4"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Fitness Expiry Date"
+										   style="padding: 0px 4px;height: 34px;"
+										   ng-disabled="(registered_vehicle_mode=='View')" />
+                                </div>
+                                <span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="DatePicker.openDatePicker(this, $event, 'opened4')" ng-disabled="(registered_vehicle_mode=='View')"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Road Tax Doc No:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Road Tax Doc No" ng-model="oVehicle.road_tax_doc_no" placeholder="Enter Road Tax Doc No" class="form-control" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Road Tax Issuance Date:</label>
+                        <div class="col-sm-6">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened5 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened5 == true }">
+                                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened5')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="oVehicle.road_tax_doc_issuance_date"
+										   is-open="opened5"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Road Tax Issuance Date"
+										   style="padding: 0px 4px;height: 34px;"
+										   ng-disabled="(registered_vehicle_mode=='View')" />
+                                </div>
+                                <span class="input-group-btn">
+										<button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="DatePicker.openDatePicker(this, $event, 'opened5')" ng-disabled="(registered_vehicle_mode=='View')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Road Tax Expiry Date:</label>
+                        <div class="col-sm-6">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened6 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened6 == true }">
+                                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened6')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="oVehicle.road_tax_doc_expiry_date"
+										   is-open="opened6"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Road Tax Expiry Date"
+										   style="padding: 0px 4px;height: 34px;"
+										   ng-disabled="(registered_vehicle_mode=='View')" />
+                                </div>
+                                <span class="input-group-btn">
+										<button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="DatePicker.openDatePicker(this, $event, 'opened6')" ng-disabled="(registered_vehicle_mode=='View')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>

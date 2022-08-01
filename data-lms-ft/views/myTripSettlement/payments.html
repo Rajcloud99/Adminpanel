@@ -1,0 +1,388 @@
+<!--Controller: paymentsController-->
+<!--ControllerAs: pVm-->
+
+<form novalidate autocomplete="off" name="addVoucherForm" ng-submit="pVm.submit(addVoucherForm)">
+	<div class="modal-header p-b-0">
+		<button type="button" ng-click="pVm.closePopup()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Driver Payment</h4><br>
+		<ul class="list-group list-group-flush">
+		  <div ng-if="!(pVm.trip.advSettled.isCompletelySettled)">
+			<!-- DETAILS -->
+			<li class="list-group-item"
+				ng-if="$role['Trip Settlement']['Add Driver Payment']">
+				<div class="card-body">
+					<div class="row" style="margin:5px">
+						<!--<div class="row m-t-10">-->
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label">Payment Type: <span class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<select chosen
+											class="form-control"
+											ng-model="pVm.oPaymentType"
+											ng-options="item as item.pType for item in pVm.aDriverPaymentType"
+											ng-change="pVm.setPaymentType(pVm.oPaymentType)"
+											name="Payment_Type"
+											required
+									>
+										<option value=""></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label">Voucher Type: <span class="req_r">*</span></label>
+								<div class="col-sm-6" ng-hide="true">
+									<select chosen
+											class="form-control"
+											ng-model="pVm.oVoucher.type"
+											ng-options="item as item for item in pVm.aVouchersType"
+											name="Voucher Type"
+											required>
+										<option value=""></option>
+									</select>
+									<span class="error" ng-if="(addVoucherForm['Voucher Type'].$error.required
+													&& (addVoucherForm['Voucher Type'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+								</div>
+								<div class="col-md-6">{{pVm.oVoucher.type}}</div>
+							</div>
+						</div>
+						<div class="m-b-5" style="clear: both"></div>
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label">From: <span class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<div class="lvh-search ng-scope sear chosen-row-1"
+										 ng-hide="pVm.hideFrom">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="From Account"
+												ng-model="pVm.oVoucher.from"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in pVm.accountmaster($viewValue, 'from')"
+												typeahead-on-select="pVm.aAccountMaster = []"
+										>
+										<i class="lvh-search-close"
+										   ng-click="pVm.oVoucher.from=null;pVm.aAccountMaster=null;pVm.setPaymentType(pVm.oPaymentType)">×</i>
+									</div>
+									<div class="col-sm-6" ng-show="pVm.hideFrom">
+										{{pVm.oVoucher.from.name}}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label">To: <span class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<div class="lvh-search ng-scope sear" style="z-index: 99; "
+										 ng-hide="pVm.hideTo">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="To Account"
+												ng-model="pVm.oVoucher.to"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in pVm.accountmaster($viewValue, 'to')"
+												typeahead-on-select="pVm.aAccountMaster = []"
+										>
+										<i class="lvh-search-close"
+										   ng-click="pVm.oVoucher.to=null;pVm.aAccountMaster=null;pVm.setPaymentType(pVm.oPaymentType)">×</i>
+									</div>
+								</div>
+								<div class="col-sm-6" ng-show="pVm.hideTo">
+									{{pVm.oVoucher.to.name}}
+								</div>
+							</div>
+						</div>
+						<div class="m-b-10" style="clear: both"></div>
+
+						<div class="col-md-6"
+							 ng-if="pVm.oPaymentType.pType === 'Shortage Diesel'">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label"> Rate :<span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number"
+											   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   onwheel="return false"
+											   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   placeholder="Enter Rate"
+											   ng-model="pVm.oVoucher.rate"
+											   ng-change="pVm.oVoucher.amount = (pVm.oVoucher.rate) * (pVm.oVoucher.liter); pVm.calculateTax()"
+											   class="form-control"
+											   name="rate">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6"
+							 ng-if="pVm.oPaymentType.pType === 'Shortage Diesel'">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label"> Liter :<span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number"
+											   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   onwheel="return false"
+											   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   placeholder="Enter Liter"
+											   ng-model="pVm.oVoucher.liter"
+											   ng-change="pVm.oVoucher.amount = (pVm.oVoucher.rate) * (pVm.oVoucher.liter); pVm.calculateTax()"
+											   class="form-control"
+											   name="liter">
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label"> Enter Amount :<span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number"
+											   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   onwheel="return false"
+											   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   placeholder="Enter Amount"
+											   ng-model="pVm.oVoucher.amount"
+											   ng-change="pVm.calculateTax()"
+											   class="form-control"
+											   name="Amount"
+											   ng-readonly="pVm.oPaymentType.pType === 'Shortage Diesel'"
+											   required>
+									</div>
+									<span class="error" ng-if="	(addVoucherForm['Amount'].$error.required
+													&& (addVoucherForm['Amount'].$touched
+														|| addVoucherForm.$submitted))"> This Field is Mandatory</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label">Branch Name: <span
+										class="req_r">*</span></label>
+								<div class="col-md-6" ng-if="!$configs.driverPayments.branch">
+									<div class="lvh-search ng-scope sear">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Branch Search..."
+												ng-model="pVm.oVoucher.branch"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in pVm.getAllBranch($viewValue) | limitTo:6"
+												typeahead-on-select="pVm.onBranchSelect($item, $model, $label)"
+										>
+										<i class="lvh-search-close" ng-click="pVm.oVoucher.branch=null;">×</i>
+									</div>
+								</div>
+								<div class="col-md-6" ng-if="$configs.driverPayments.branch">
+									<div>{{pVm.oVoucher.branch.name}}</div>
+									<span class="warning"
+										  ng-if="!$configs.driverPayments.branch.billBook">
+										No Ref Book Linked to selected branch
+									</span>
+								</div>
+
+							</div>
+						</div>
+						<div class="m-b-10" style="clear: both"></div>
+
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label">Reference Number:</label>
+								<div class="col-sm-6">
+									<div class="">
+										<input
+												type="text"
+												class="form-control"
+												placeholder="Ref Number"
+												ng-model="pVm.oVoucher.refNo"
+												typeahead-wait-ms="10"
+												name="Reference Number"
+												typeahead="item.bookNo as item.bookNo for item in pVm.getRefNo(pVm.oVoucher.refNo)|limitTo:10"
+												typeahead-on-select="pVm.onRefSelect($item, $model, $label)">
+										<i class="lvh-search-close" ng-click="pVm.oVoucher.refNo=null;">×</i>
+										<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+										   style="right: -20px; background: #3096f3;"  uib-tooltip="Auto"
+										   ng-click="pVm.getAutoStationaryNo('auto')"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-4"
+							 ng-if="pVm.showGr">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label">Gr Number </label>
+								<label class="col-sm-8">
+									<div class="lvh-search ng-scope sear"
+										 style="z-index: 1;">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Gr Number"
+												ng-model="pVm.oVoucher.gr"
+												typeahead-wait-ms="10"
+												typeahead="item as item.grNumber for item in pVm.getGr($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="pVm.oVoucher.gr='';">×</i>
+									</div>
+								</label>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label">Voucher Date: <span class="req_r">*</span></label>
+								<!--								<div class="col-sm-6">-->
+								<!--									<div class="date-picker input-group dp-blue"-->
+								<!--										 ng-class="{ 'is-opened': opened1 == true }">-->
+								<!--										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">-->
+								<!--											<input ng-click="pVm.DatePicker.openDatePicker(this, $event, 'opened1')"-->
+								<!--												   type="text"-->
+								<!--												   class="form-control"-->
+								<!--												   uib-datepicker-popup="{{pVm.DatePicker.formats[0]}}"-->
+								<!--												   show-weeks="false"-->
+								<!--												   ng-model="pVm.oVoucher.billDate"-->
+								<!--												   max-date="pVm.DatePicker.newDate"-->
+								<!--												   min-date="pVm.minDate"-->
+								<!--												   is-open="opened1"-->
+								<!--												   datepicker-options="pVm.DatePicker.dateSettings"-->
+								<!--												   close-text="Close"-->
+								<!--												   placeholder="Advance Date"-->
+								<!--												   name="Advance Date"-->
+								<!--												   required-->
+								<!--												   style="padding: 0px 4px;height: 34px;"/>-->
+								<!--										</div>-->
+								<!--										<span class="input-group-btn">-->
+								<!--								<button type="button"-->
+								<!--										class="btn btn-default m-t-0 f12"-->
+								<!--										ng-click="pVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i-->
+								<!--										class="glyphicon glyphicon-calendar"></i></button>-->
+								<!--							</span>-->
+								<!--									</div>-->
+								<!--								</div>-->
+								<div class="col-sm-6">
+									{{pVm.oVoucher.billDate |date: "dd-MM-yyyy"}}
+								</div>
+							</div>
+						</div>
+						<div class="m-b-20" style="clear: both"></div>
+
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label">Narration:</label>
+								<div class="col-sm-6">
+									<input
+											type="text"
+											class="form-control"
+											placeholder="Narration..."
+											ng-model="pVm.oVoucher.narration"
+											typeahead-wait-ms="10"
+											name="Narration"
+									>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</li>
+			<div class="modal-footer">
+				<button class="btn btn-primary"
+						ng-if="$role['Trip Settlement']['Add Driver Payment']">Submit
+				</button>
+				<button class="btn btn-warning"
+						type="button"
+						ng-if="$role['Trip Settlement']['Add Driver Payment']"
+						ng-click="pVm.clear()">
+					Clear Form
+				</button>
+				<button class="btn btn-warning"
+						type="button"
+						ng-click="pVm.closePopup()">Close
+				</button>
+				<button class="btn btn-danger"
+						type="button"
+						ng-if="$role['Trip Settlement']['Delete Driver Payment']"
+						ng-click="pVm.deletePayment(pVm.oVoucher)">Delete
+				</button>
+			</div>
+		  </div>
+
+			<li class="list-group-item">
+				<div class="card-body">
+					<div class="row" style="overflow-y: auto; max-height: 300px;">
+						<div class="col-md-12">
+							<table class="table table-bordered unresponsive">
+								<thead>
+								<tr>
+									<th>S.No.</th>
+									<th>Payment Type</th>
+									<th>Vch Type</th>
+									<th>Vch Date</th>
+									<th>Credit</th>
+									<th>Debit</th>
+									<th>Rate</th>
+									<th>Liter</th>
+									<th>Amount</th>
+									<th>Branch</th>
+									<th>Ref. No.</th>
+									<th>Gr Number</th>
+									<th>Narration</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr ng-repeat="payment in pVm.aPayment"
+									class="pointer"
+									ng-class="{grn: pVm.oVoucher._id === payment._id}"
+									ng-dblclick="$role['Trip Settlement']['Edit Driver Payment'] && pVm.driverPaymentEdit(payment)">
+									<td>{{$index+1}}</td>
+									<td>{{payment.vT || 'NA'}}</td>
+									<td>{{payment.type || 'NA'}}</td>
+									<td>{{payment.date|date: 'dd-MM-yyyy' || 'NA'}}</td>
+									<td>{{payment.ledgers[0].lName || 'NA'}}</td>
+									<td>{{payment.ledgers[1].lName || 'NA'}}</td>
+									<td>{{payment.drPay.rate || '0'}}</td>
+									<td>{{payment.drPay.liter || '0'}}</td>
+									<td>{{payment.ledgers[0].amount || '0'}}</td>
+									<td>{{payment.branch.name || payment.branchName || 'NA'}}</td>
+									<td>{{payment.refNo || 'NA'}}</td>
+									<td>{{payment.gr.grNumber || 'NA'}}</td>
+									<td>{{payment.narration || 'NA'}}</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 60%;
+		height: 173px
+	}
+
+	.strikeThrough {
+		text-decoration: line-through;
+	}
+
+	.activeBill {
+		background-color: #9af019;
+	}
+
+</style>

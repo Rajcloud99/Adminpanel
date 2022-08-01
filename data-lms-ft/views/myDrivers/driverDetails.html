@@ -1,0 +1,320 @@
+<div class="container" ng-controller="driverCommonController">
+	<!-- <div class="ttl-1">
+            <div class="pull-left">My Drivers</div>
+            <div class="pull-right">
+                <button type="submit" class="btn btn-primary" ng-click="newDriverReg()">Register New Driver</button>
+            </div>
+        </div> -->
+    <div class="card m-b-0" id="messages-main">
+        <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+            <!-- <div style="border-bottom:2px solid #4285f4">
+                My Vehicles <button type="submit" class="btn btn-primary" ng-click="newVehicleReg()">Register <br> New Vehicle</button>
+            </div> -->
+            <div class="lvh-search ng-scope sear">
+                <input type="text" placeholder="Start typing..."
+					   ng-model="driverName" class="lvhs-input"
+                       typeahead-wait-ms="10"
+					   typeahead="person.name as (person.nameCode || person.name) for person in getVname($viewValue)"
+                       class="form-control"
+                       typeahead-on-select="onSelect($item, $model, $label)" >
+                <i class="lvh-search-close" ng-click="driverName = ''; clearSearch()">×</i>
+            </div>
+            <div class="listview lv-user clk" style="overflow: auto;height:97%;">
+                <div class="lv-item media"  style="border-bottom:2px solid #4285f4" ng-repeat="driver in drivers" ng-click="selectDriver(driver,$index)">
+                    <div class="truck-desc">
+                    	<div class="row">
+    	                    <div class="col-md-5 bold">
+    	                    	{{driver.name | capitalize}}
+    	                    </div>
+                            <div class="col-md-4 bold">
+                            {{driver.mobile}}
+                            </div>
+
+                        </div>
+                    	<div class="row">
+    	                    <div class="col-md-5 bold">
+                                {{driver.license_no}}
+                            </div>
+                            <div class="col-md-4 bold">
+                            {{driver.city | capitalize}}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="pagi" ng-show="total_pages>1">
+                  <pagination ng-change="getAllDriverData()"
+							  total-items="totalItems"
+							  items-per-page="items_per_page"
+							  num-pages="numPages"
+							  ng-model="currentPage"
+							  max-size="maxSize"
+							  class="pagination-sm smallPagi"
+							  boundary-links="true"
+							  previous-text="&lsaquo;"
+							  next-text="&rsaquo;"
+							  first-text="&laquo;"
+							  last-text="&raquo;"></pagination>
+                </div>
+            </div>
+        </div>
+
+        <div class="ms-body" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <!-- <div ng-if="driver.isNew" class="lv-header-alt clearfix">
+                   <div class="lvh-label">
+                       <span class="c-black"><b>New Driver Registration </b></span>
+                    </div>
+                </div>
+
+                 <div ng-if="!driver.isNew" class="lv-header-alt clearfix">
+                    <div class="lvh-label">
+                       <span class="c-black"><b>{{driver.name | capitalize}}</b> &nbsp;&nbsp;&nbsp;{{driver.mobile}}</span>
+                    </div>
+
+                    <ul class="lv-actions actions">
+                        <li>
+                            <a href="#">
+                                <i class="zmdi zmdi-delete"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div> -->
+                <!--ng-if="drivers.length != 0 || driver.isNew" -->
+                <!-- <div ng-if="drivers.length == 0 && !driver.isNew" class="lv-body" >
+                    <h3>You have no Driver Registered. Please Register First.</h3>
+                </div> -->
+                <div class="lv-header-alt clearfix">
+<!--                    <button><div class="lvh-label" ng-if="!wantReg">-->
+<!--						<span class="c-black"><b>Driver Name:</b><i>{{driver.name | capitalize}}</i> &nbsp;&nbsp;&nbsp;</span>-->
+<!--					</div></button>-->
+<!--                    	<div class="lvh-label" ng-if="wantReg">-->
+<!--                       <span class="c-black"><b>Register New Driver</b> &nbsp;&nbsp;&nbsp;</span>-->
+<!--                    </div>-->
+					<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+							<div class="lvh-search ng-scope sear">
+								<input
+									type="text"
+									class="form-control lvhs-input"
+									placeholder="Driver license_no..."
+									ng-model="filterObj.driverLNo"
+									typeahead-wait-ms="10"
+									typeahead="item as (item.nameCode || item.name) for item in dData | limitTo:6"
+									ng-change="getDriver(filterObj.driverLNo)"
+									typeahead-on-select="onSelect($item, $model, $label)" >
+								<i class="lvh-search-close" ng-click="filterObj.driverLNo=null;driver_id=null; getAllDriverData()">×</i>
+							</div>
+					</div>
+					<div class="col-sm-2">
+						<select class="form-control"
+								ng-init="filterObj.status = status[0]"
+								placeholder="status"
+								ng-options="item as item for item in status"
+								ng-model="filterObj.status"
+								style="height: 34px;">
+							<option value="" disabled>Status</option>
+						</select>
+					</div>
+					<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened1 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="DatePicker.newDate"
+									   ng-model="filterObj.start_date"
+									   min-date="min_date"
+									   is-open="opened1"
+									   datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="From"
+									   name="Start Date"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+						</div>
+					</div>
+					<div class="col-xs-6 col-sm- col-md-2 col-lg-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="DatePicker.newDate"
+									   ng-model="filterObj.end_date"
+									   ng-change="dateChange('endDate')"
+									   is-open="opened2"
+									   datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="End Date"
+									   name="To"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group m-b-0 text-center">
+							<button class="btn btn-primary p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									ng-click="getAllDriverData()"
+									uib-tooltip="Search"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+							</button>
+							<button class="btn btn-primary p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Clear Search"
+									ng-click="filterObj={};driver_id=null; getAllDriverData()"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+							</button>
+							<button ng-if="!driver.deleted && $role['Driver']['Delete']"
+									class="btn btn-danger p-t-0 p-b-0"
+									style="margin-bottom: 3px;  font-size: 16px"
+									type="button"
+									ng-click="driverStatus('Disable')"
+									uib-tooltip="Disable Driver">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+							<button ng-if="driver.deleted && $role['Driver']['Update']"
+									class="btn btn-primary p-t-0 p-b-0"
+									style="margin-bottom: 3px;  font-size: 16px"
+									type="button"
+									ng-click="driverStatus('Enable')"
+									uib-tooltip="Enable Driver">
+								<i class="zmdi zmdi-undo zmdi-hc-fw"></i>
+							</button>
+							<button class="btn btn-primary p-t-0 p-b-0" ng-if="$role['Driver']['Preview']"
+									ng-click="driverPreview('Preview')"
+									ng-disabled="billIconStatus"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Preview">
+								<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+							</button>&nbsp;
+							<button class="btn btn-primary p-t-0 p-b-0" ng-if="$role['Driver']['Aggrement']"
+									ng-click="driverAggrement('Preview')"
+									ng-disabled="billIconStatus"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Aggrement Preview">
+								<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+							</button>&nbsp;
+							<button class="btn btn-success p-t-0 p-b-0"
+									ng-click="downloadReport('csv')"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Download Csv">
+								<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+						</div>
+					</div>
+
+                    <ul class="lv-actions actions">
+                        <li class="btn-wave"
+							ng-if="$role['Driver']['Add']"
+							data-ui-sref-active="active">
+							<a href="" ng-click="setMode('Add')" uib-tooltip="Create Driver" tooltip-placement="bottom"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i></a>
+						</li>
+                        <li ng-show="drivers.length>0"
+							ng-if="!driver.deleted && $role['Driver']['Update']"
+							class="btn-wave"
+							data-ui-sref-active="active">
+							<a href="" ng-click="setMode('Edit')" uib-tooltip="Edit Driver" tooltip-placement="bottom"><i class="zmdi zmdi-edit"></i></a>
+						</li>
+                        <li ng-show="drivers.length>0"
+							ng-if="!driver.deleted && $role['Driver']['Update']">
+							<a href="" uib-tooltip="Upload Documents" tooltip-placement="bottom" ng-click="uploadDocs()"><i class="glyphicon glyphicon-upload"></i></a>
+						</li>
+						<li ng-show="drivers.length>0"><a href="" uib-tooltip="preview Documents" tooltip-placement="bottom" ng-click="previewDocs()"><i class="glyphicon glyphicon-list-alt"></i></a></li>
+						<li ng-show="drivers.length>0">
+							<a href="" uib-tooltip="Download Excel"
+							   tooltip-placement="bottom"
+							   ng-click="downloadReport('excel')">
+								<i class="zmdi zmdi-download"></i></a>
+						</li>
+						<li ng-if="!driver.deleted && $role['Driver']['Upload Excel']">
+							<a href="" uib-tooltip="Upload Excel"
+							   tooltip-placement="bottom"
+							   onclick="document.getElementById('toUpload').click();">
+								<i class="zmdi zmdi-upload"></i>
+							</a>
+						</li>
+						<input
+								type="file"
+								id="toUpload"
+								name="toUpload"
+								ng-model="toUpload"
+								ng-hide="true"
+								accept="*/*"
+								ngf-select
+								ngf-max-size="5MB"
+								ngf-model-invalid="errorFile"
+								ngf-change="uploadReport($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+						>
+                        <li ng-show="drivers.length>0"
+							ng-if="!driver.deleted && $role['Driver']['Add Happay']">
+							<a href="javascript:void(0)"
+							   uib-tooltip="Add Happay A/c"
+							   tooltip-placement="bottom"
+							   ng-click="addHappayAccount()">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</a>
+						</li>
+                        <div class="clearfix"></div>
+                    </ul>
+                </div>
+                <!--ng-if="drivers.length != 0 || driver.isNew" -->
+<!--                <div class="lv-body">-->
+<!--                	<ul class="tab-nav tn-justified" ng-if="wantThis" >-->
+<!--	                	<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.driverDetails.editProfile">Profile</a></li>-->
+<!--                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.driverDetails.editDriving">Driving</a></li>-->
+<!--                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.driverDetails.editAddress">Address</a></li>-->
+<!--                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.driverDetails.editReferences">References</a></li>-->
+<!--                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.driverDetails.editGuarantor">Guarantor</a></li>-->
+<!--						<li ng-if="$role['Driver']['Old Docs']" class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.driverDetails.document">Document</a></li>-->
+<!--                    </ul>-->
+<!--                    &lt;!&ndash; <ul class="tab-nav tn-justified" ng-if="wantReg" >-->
+<!--                        <li class="btn-wave" data-ui-sref-active="active"><a href="">Register New Driver</a></li>-->
+<!--                    </ul> &ndash;&gt;-->
+<!--                    <data ui-view></data>-->
+<!--                    &lt;!&ndash; <div ng-show="drivers.length == 0 || wantReg" class="lv-body" >-->
+<!--                        <h4 style="text-align: center;">You have no driver registered. Please Register First.</h4>-->
+<!--                    </div> &ndash;&gt;-->
+<!--                </div>-->
+
+				<div class="wid100">
+					<uib-tabset active="activeForm" class="pull-left">
+						<uib-tab ng-repeat="tab in dupTabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
+							<div ng-include="tab.content"></div>
+						</uib-tab>
+					</uib-tabset>
+					<section ng-show="(!(mode==='View'))" class="fixed-registered-vehicle-submit">
+						<div class="fixed-booking-submit-inner text-center">
+							<button type="submit" ng-click="saveDriverDetails()" class="btn btn-success fixed-registered-vehicle-btn-style">Submit
+							</button>
+						</div>
+					</section>
+				</div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,496 @@
+<div class="container" ng-controller="myTripsController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="col-md-12">
+							<form role="form" ng-submit="filter(form)">
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="number" ng-model="oSearchTripFilter.trip_no" name="trip_no"
+											   class="form-control input-sm" placeholder="Trip No"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="text" ng-model="oSearchTripFilter.loading_slip" name="loading_slip"
+											   class="form-control input-sm" placeholder="Hire Slip"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+<!--								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">-->
+<!--									<div class="fg-line">-->
+<!--										<input type="text" ng-model="oSearchTripFilter.grNumber" name="gr_no"-->
+<!--											   class="form-control input-sm" placeholder="GR No"-->
+<!--											   ng-model-options="{ updateOn: 'blur' }"-->
+<!--											   style="height: 34px;font-size: 13px;">-->
+<!--									</div>-->
+<!--								</div>-->
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="number" ng-model="oSearchTripFilter.tsNo" name="tsNo"
+											   class="form-control input-sm" placeholder="RT NO."
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="fg-line">
+										<div class="select">
+											<select class="form-control"
+													placeholder="Trip Status"
+													ng-options="item.key as item.label for item in ($configs.trip_statuses || $constants.aTripStatus)"
+													ng-model="oSearchTripFilter.status"
+													style="height: 34px;">
+												<option value="">Trip Status</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear">
+										<input type="text" placeholder="Vehicle Search..."
+											   ng-model="oSearchTripFilter.vehicle_id"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="person as (person.vehicle_reg_no + ' (' + person.ownershipType[0] + ')' + (person.vendor_name ? '('+person.vendor_name+')' : '')) for person in getVname($viewValue) | limitTo:10"
+											   class="form-control"
+										>
+										<i class="lvh-search-close"
+										   ng-click="oSearchTripFilter.vehicle_id='';getAllTrip()">×</i>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="$configs.trips.routeFilter">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+								<input type="text"
+								       class="form-control lvhs-input"
+									   placeholder="Loading Point..."
+									   ng-model="oSearchTripFilter.source"
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.c for item in getRoute($viewValue) | limitTo:6">
+								<i class="lvh-search-close" ng-click="oSearchTripFilter.source=''">×</i>
+								   </div>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="$configs.trips.routeFilter">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text"
+										   class="form-control lvhs-input"
+										   placeholder="Unloading Point ..."
+										  ng-model="oSearchTripFilter.destination"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.c for item in getRoute($viewValue) | limitTo:6">
+									<i class="lvh-search-close" ng-click="oSearchTripFilter.destination=''">×</i>
+									   </div>
+									</div>
+
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="!$configs.trips.routeFilter">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   class="form-control lvhs-input"
+											   placeholder="Route Search..."
+											   ng-model="oSearchTripFilter.route_id"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in getAllRoute($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="oSearchTripFilter.route_id='';">×</i>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   class="form-control lvhs-input"
+											   placeholder="Vendor Search..."
+											   ng-model="oSearchTripFilter.vendor"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in getVendorName($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="oSearchTripFilter.vendor='';">×</i>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+
+								<!--<div class="col-xs-6 col-sm-2 col-md-1 col-lg-1">-->
+								<!--<div class="select">-->
+								<!--<select-->
+								<!--class="form-control"-->
+								<!--ng-options="c.clientId as c.name for c in $constants.client_allowed"-->
+								<!--ng-model="oSearchTripFilter.bPclientId"-->
+								<!--&gt;-->
+								<!--<option value="" selected>Select client</option>-->
+								<!--</select>-->
+								<!--</div>-->
+								<!--</div>-->
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   class="form-control lvhs-input"
+											   placeholder="Branch Search..."
+											   ng-model="oSearchTripFilter.branch"
+											   typeahead-wait-ms="10"
+											   typeahead="item as (item.name + '('+($configs.client_allowed|filter:{'clientId': item.clientId})[0].name+')') for item in getAllBranch($viewValue) | limitTo:6"
+											   typeahead-on-select="onBranchSelect($item, $model, $label)">
+										<i class="lvh-search-close" ng-click="oSearchTripFilter.branch='';">×</i>
+									</div>
+								</div>
+								<!--- Customer search start-->
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="$role['Trip']['Customer Filter']">
+									<div class="lvh-search ng-scope sear" style="z-index: 99">
+										<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Customer Search..."
+											ng-model="oSearchTripFilter.bookingCustomer"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in getCustomer($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close"
+										   ng-click="oSearchTripFilter.bookingCustomer='';">×</i>
+									</div>
+								</div>
+								<!-- customer search end-->
+								<div class="col-xs-6 col-sm-2 col-md-2 col-lg-1">
+									<div class="fg-line form-group m-b-0">
+										<select chosen
+												class="form-control"
+												ng-model="oSearchTripFilter.segment_type"
+												ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+												name="Segment"
+												required>
+											<option value="" selected>Segment</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line form-group m-b-0">
+										<select chosen
+												name="category"
+												class="form-control"
+												ng-model="oSearchTripFilter.category"
+												ng-options="item as item for item in ($configs.master.aTripCategoryType || $constants.aTripCategoryType)"
+										>
+											<option value="" selected>Category</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<select chosen
+												ng-model="oSearchTripFilter.ownershipType"
+												no-results-text="'No Result Found'"
+												placeholder-text-multiple="'Ownership Type'"
+												ng-options="v for v in $constants.aOwnershipVehicle">
+											<option value="">Ownership</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<select chosen="GR" class="form-control"
+												name="All  GR"
+												ng-init="oSearchTripFilter.grGenerated = 'All GR' "
+												ng-model="oSearchTripFilter.grGenerated"
+												style="height: 34px; required">
+											<option value="All GR" selected>All GR</option>
+											<option value="GR Generated" >GR Generated</option>
+											<option value="GR Not-Generated" >GR Not-Generated</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<select class="form-control"
+											ng-init="oSearchTripFilter.dateType = 'allocation_date'"
+											ng-model="oSearchTripFilter.dateType"
+											ng-options="item.value as item.key for item in $constants.tripDateType"
+											style="line-height: 34px;">
+										<option value="" selected> Select Type</option>
+									</select>
+								</div>
+								<div class="col-xs-4 col-sm-1 col-md-1 col-lg-1">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="DatePicker.newDate"
+												   ng-model="oSearchTripFilter.start_date"
+												   is-open="opened1"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="From Date"
+												   name="From Date"
+												   required
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+									<div class="date-picker input-group dDiesel Budget(ltr)p-blue"
+										 ng-class="{ 'is-opened': opened2 == true }"
+										 style=" ">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+												   type="text"
+												   class="form-control"
+												   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="DatePicker.newDate"
+												   ng-model="oSearchTripFilter.end_date"
+												   min-date="oSearchTripFilter.start_date"
+												   is-open="opened2"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="To Date"
+												   name="To Date"
+												   required
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+									</div>
+								</div>
+								<div class="col-md-2 pull-right">
+									<div class="form-group m-b-0 text-center">
+										<button class="btn btn-primary p-t-0 p-b-0"
+												type="button"
+												style="margin-bottom: 3px;  font-size: 16px"
+												uib-tooltip="Search"
+												ng-click="getAllTrip()"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0"
+												style="margin-bottom: 3px;  font-size: 16px"
+												uib-tooltip="Clear Search"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="oSearchTripFilter={};aBranch = [];getAllTrip();">
+											<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0"
+												type="button"
+												style="margin-bottom: 3px;  font-size: 16px"
+												uib-tooltip="Download trip"
+												ng-click="getTripReport('onTrip')"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-info p-t-0 p-b-0"
+												type="button"
+												style="margin-bottom: 3px;  font-size: 16px"
+												uib-tooltip="Download CSV"
+												ng-click="downloadCacheCSV()"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$role['Trip']['Job Order Report']" class="btn btn-warning p-t-0 p-b-0"
+												type="button"
+												style="margin-bottom: 3px;  font-size: 16px"
+												uib-tooltip="Job Order Report"
+												ng-click="downloadJobOrderReport('report')"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$role['Trip']['Job Order Risky Report']" class="btn btn-warning p-t-0 p-b-0"
+												type="button"
+												style="margin-bottom: 3px;  font-size: 16px"
+												uib-tooltip="Job Risky Report"
+												ng-click="downloadJobRiskyReport('report')"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$role['Trip']['Job Order Power Connect Report']" class="btn btn-warning p-t-0 p-b-0"
+												type="button"
+												style="margin-bottom: 3px;  font-size: 16px"
+												uib-tooltip="Job Order Power Connect Report"
+												ng-click="downloadJobPowerConnectReport('report')"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$role['Trip']['Live Track']"
+											class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											ng-click="getTripDetailReport('onTripDetail')"
+											uib-tooltip="Download Detail trip"
+											tooltip-placement="bottom"
+											ng-hide="currOwnershipType !== 'Market'"
+										>
+											<i class="zmdi zmdi-cloud-download zmdi-hc-fw"></i>
+										</button>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+								<div class="col-xs-6 col-sm-2 col-md-2 col-lg-1">
+									<div class="fg-line form-group m-b-0">
+										<select chosen
+												class="form-control"
+												ng-model="oSearchTripFilter.veh_group"
+												ng-options=" item as item.name for item in aVehicleGroups "
+												name="Vehicle Group"
+												required>
+											<option value="" selected>Vehicle Group</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1" ng-if="$role['Trip']['Vendor Payment']">
+									<div class="select">
+										<select class="form-control" ng-model="oSearchTripFilter.vendPaymStatus">
+											<option value="">Vendor Payment Status</option>
+											<option value="Paid">Paid</option>
+											<option value="Unpaid">Unpaid</option>
+											<option value="Balance Pending">Balance Pending</option>
+											<option value="Over Paid">Over Paid</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-3 col-md-3 col-lg-1" ng-if="$role['Trip']['DocType Filter']">
+									<div class="fg-line form-group m-b-0">
+										<select chosen multiple class="form-control"
+												ng-model="oSearchTripFilter.tripDocType"
+												ng-options="item.value as item.key for item in $constants.aTripDocType"
+												style="line-height: 34px;">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear">
+										<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Gr Number"
+											ng-model="oSearchTripFilter.grData"
+											typeahead-wait-ms="10"
+											typeahead="item as item.grNumber for item in getGr($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="oSearchTripFilter.grData='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="oSearchTripFilter.sortBy">
+											<option value="" selected>Sort By</option>
+											<option value="Assending">Assending</option>
+											<option value="Dessending">Dessending</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="aBranch.length">
+			                       <span class="btn-lst" ng-repeat="select in aBranch">
+				                    <button class="btn-xs" style="background: black; color: aliceblue;"> {{select.name}}&nbsp;
+				                    <a ng-click="removeBranch(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+								</div>
+
+								<!--<div class="pull-right">-->
+								<div class="pull-right">
+									<div class="form-group m-b-0">
+										<!--<a uib-tooltip="Reset Search" tooltip-placement="bottom" style="font-size:20px;" ng-click="getAllTrip(false,false,true)">-->
+										<!--<i class="zmdi zmdi-search-replace zmdi-hc-fw"></i>-->
+										<!--</a>-->
+
+										<a ng-hide="selectedTrip.isCancelled" ng-click="editGrNumber(selectedTrip)"
+										   uib-tooltip="Edit GrNo" tooltip-placement="bottom" style="font-size:20px;">
+											<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+										</a>
+										<a ng-click="myTripDeatils(selectedTrip, index)" uib-tooltip="Detail View"
+										   tooltip-placement="bottom" style="font-size:20px;">
+											<i class="zmdi zmdi-assignment zmdi-hc-fw"></i>
+										</a>
+
+										<a ng-click="printBill(selectedTrip)" uib-tooltip="Preview"
+										   ng-if="$configs.trips.tripPreview"
+										   ng-show="selectedTrip.trip_no && selectedTrip.gr[0].customer.name=='HERO MOTOCORP LTD.'"
+												tooltip-placement="bottom" style="font-size:20px;">
+											<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+										</a>
+
+										<a uib-tooltip="Live Track" ng-if="$role['Trip']['Live Track']"
+										   ng-hide="currOwnershipType !== 'Market'" tooltip-placement="bottom"
+										   ng-click="liveTrack(selectedTrip)">
+											<i class="glyphicon glyphicon-road"></i>
+										</a>
+										<a uib-tooltip="Upload Documents" tooltip-placement="bottom"
+										   ng-click="uploadDocs(selectedTrip)" style="font-size:18px;">
+											<i class="glyphicon glyphicon-upload"></i>
+										</a>
+										<a uib-tooltip="Preview Documents" tooltip-placement="bottom"
+										   ng-click="previewDocs(selectedTrip)" style="font-size:18px;">
+											<i class="glyphicon glyphicon-list-alt"></i>
+										</a>
+										<a uib-tooltip="Create Empty Trip" tooltip-placement="bottom"
+										   ng-click="emptyTrip(selectedTrip)" style="font-size:18px;">
+											<i class="zmdi zmdi-truck"></i>
+										</a>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1 pull-right"
+									 style="margin-right: 20px">
+									<div class="fg-line">
+										<button
+											ng-show="oSearchTripFilter.status == 'Trip not started' || oSearchTripFilter.status == 'Trip started'"
+											class="btn btn-success waves-effect"
+											ng-click="changeStatusMultiTrip(aStatusChange[aStatusChange.indexOf(oSearchTripFilter.status)+1],selectedTrip.length)"
+											ng-disabled="aStatusChange[aStatusChange.indexOf(oSearchTripFilter.status)+1] === 'Trip started' && selectedTrip.length !== 1"
+										>
+											{{aStatusChange[aStatusChange.indexOf(oSearchTripFilter.status)+1]}}
+										</button>
+									</div>
+								</div>
+								<!--</div>-->
+							</form>
+						</div>
+
+						<div class="clearfix"></div>
+
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-12">
+										<div ja-table
+											 table-body="aTrip"
+											 table-head="tableHead"
+											 table-column-setting="columnSetting"
+											 table-load="getAllTrip(true)"
+											 table-height='600px'
+											 table-selectable='selectType'
+											 table-api="tableApi"
+											 table-selectable-model="selectedTrip"
+											 table-row-dbl-click-event="showTripDetailPopup()"
+										></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

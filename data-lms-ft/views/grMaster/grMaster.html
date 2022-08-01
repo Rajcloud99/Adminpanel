@@ -1,0 +1,66 @@
+<div class="container" ng-controller="grMasterController">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 550px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix">
+          <div class="lvh-label">
+             <span class="c-black"><b>GR Master</b> &nbsp;&nbsp;&nbsp;</span>
+          </div>
+          <ul class="lv-actions actions">
+            <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.addGr" uib-tooltip="Add GR Book" tooltip-placement="bottom"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i></a></li>
+            <div class="clearfix"></div>
+          </ul><br>
+          <div class="clearfix"></div>
+        </div>
+        <div class="lv-body">
+          <div class="row" style="margin: 5px auto;">
+            <div class="col-md-12">
+              <div class=" ddd">
+                <div class="">
+                  <div class="u_mid">
+                    <!--<tabset active="active">
+                      <tab index="1">
+                        <tab-heading>
+                           All GR
+                        </tab-heading>
+                        <div data-ng-include="'views/grMaster/allGrMaster.html'"></div>
+                      </tab>
+                      <tab index="2">
+                        <tab-heading>
+                           Centralized GR
+                        </tab-heading>
+                        <div data-ng-include="'views/grMaster/centralizedGR.html'"></div>
+                      </tab>
+                      <tab index="3">
+                        <tab-heading>
+                           Used GR
+                        </tab-heading>
+                        <div data-ng-include="'views/grMaster/usedGr.html'"></div>
+                      </tab>
+                      <tab index="4">
+                        <tab-heading>
+                           Canceled GR
+                        </tab-heading>
+                        <div data-ng-include="'views/grMaster/canceledGr.html'"></div>
+                      </tab>
+                    </tabset>-->
+
+					  <ul class="tab-nav tn-justified" style="margin-bottom: 7px;">
+						  <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.grMaster.allGrMaster">All GR</a></li>
+						  <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.grMaster.centralizedGR">Centralized GR</a></li>
+						  <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.grMaster.usedGr">Used GR</a></li>
+						  <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.grMaster.canceledGr">Canceled GR</a></li>
+					  </ul>
+					  <data ui-view></data>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+

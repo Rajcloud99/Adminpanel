@@ -1,0 +1,450 @@
+<div class="container" ng-controller="allocateVehicleCtrl">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<form role="form" name="AllocatePost" autocomplete="off">
+				<div class="modal-header">
+					<h4 class="modal-title" align="center">Vehicle Allocation<span
+							ng-if="selectedBookingItem.booking_type"> for Booking Type :- {{selectedBookingItem.booking_type}}</span>
+					</h4>
+				</div>
+				<!--{{Allocate}}-->
+				<div class="modal-body">
+					<div class="justify col-md-12">
+						<div class="row" style="">
+							<div class="col-md-12 pt-10">
+								<div class="col-md-12 pb-10">
+									<span class="booking_list_header">VEHICLE DETAILS</span>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vehicle:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text" ng-model="Allocate.vehicle_no" class="form-control"
+													   ng-readonly="true">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vehicle Type:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text" ng-model="Allocate.vehicle_type" class="form-control"
+													   ng-readonly="true">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 pt-10">
+								<div class="col-md-12 pb-10">
+									<span class="booking_list_header">DRIVER DETAILS</span>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Driver: </label>
+										<div class="col-sm-8">
+											{{Allocate.driver_name || 'NA'}}
+										</div>
+										<div class="col-sm-12" ng-hide="{{::(Allocate.driver_name ? true : false) }}">
+											<input type="checkbox"
+												   ng-model="unknownDriver"
+												   ng-click="setAllocateDriverDetail(unknownDriver)">
+											<label>Unknown Driver</label>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Driver Contact:</label>
+										<div class="col-sm-8">
+											{{Allocate.driver_contact || 'NA'}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Licence Num.:</label>
+										<div class="col-sm-8">
+											{{Allocate.driver_license || 'NA'}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12 pt-10">
+								<div class="col-md-12 pb-10">
+									<span class="booking_list_header">TRIP DETAILS</span>
+								</div>
+								<div class="col-md-8 pb-10">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Allocate Date time: </label>
+										<div class="col-sm-3">
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened2 == true }"
+												 style=" ">
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+													<input ng-click="open($event, 'opened2')" type="text"
+														   class="form-control"
+														   uib-datepicker-popup="{{format}}" show-weeks="false"
+														   ng-model="Allocate.allocation_date"
+														   is-open="opened2" min-date="minDate" max-date="maxDate"
+														   datepicker-options="dateOptions" close-text="Close"
+														   placeholder="Allocation date" ng-change="changeTime()"
+														   style="padding: 0px 4px; height: 34px;"/>
+												</div>
+												<span class="input-group-btn">
+											  <button type="button" class="btn btn-default m-t-0 f12"
+													  ng-click="open($event, 'opened2')"><i
+													  class="glyphicon glyphicon-calendar"></i></button>
+											</span>
+											</div>
+										</div>
+										<label class="col-sm-1 control-label">HH</label>
+										<div class="col-sm-2">
+											<div class="select">
+												<select ng-model="hourSel1"
+														ng-options="sAlert as sAlert for sAlert in aHours"
+														class="form-control" ng-change="changeTime()">
+												</select>
+											</div>
+										</div>
+										<label class="col-sm-1 control-label">MM</label>
+										<div class="col-sm-2">
+											<div class="select">
+												<select ng-model="minuteSel1"
+														ng-options="sAlert as sAlert for sAlert in aMinutes"
+														class="form-control" ng-change="changeTime()">
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12 pb-10">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<!--{{Allocate.oManager}}-->
+											<label class="col-sm-4 control-label">Trip Manager:</label>
+											<div class="col-sm-8">
+												<select chosen data-placeholder-text-single="'Trip Manager'"
+														allow-single-deselect="true"
+														no-results-text="'Could not find any Manager'" class="form-control"
+														ng-model="Allocate.oManager"
+														ng-options="item as item.name for item in users"
+														style="width:155px">
+													<option value=""></option>
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Trip Manager Number: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													{{Allocate.oManager.contact_no || 'NA'}}
+													<!--<input type="number" ng-model="Allocate.oManager.contact_no"-->
+													<!--class="form-control" ng-readonly="true">-->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12 pb-10">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">Vehicle Type:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text" ng-model="Allocate.vehicle_type_old" class="form-control"
+														   ng-readonly="true">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5 control-label">Payment Basis: </label>
+											<div class="col-sm-7">
+												<div class="fg-line">
+													<input type="text" ng-model="Allocate.weight_type" class="form-control"
+														   ng-readonly="true">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="selectedVehicle.owner_group=='Market'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Market Vehicle No.: </label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="text" ng-model="Allocate.m_vehicle_no" class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="Allocate.isMarketVehicle">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vendor Name: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text" ng-model="Allocate.vendor_name" class="form-control"
+													   ng-readonly="true">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="Allocate.isMarketVehicle">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 control-label">.</label>
+										<div class="col-sm-9">
+											<a class="btn btn-primary" ng-click="addDealObjData()">Add Payment Deal</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-show='aNewRates.length'>
+						<div class="clearfix"></div>
+						<hr>
+						<h4>Latest Rates of Customer: <b>{{$rootScope.selectedBookingItem.customer_name}}</b></h4>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="" style="overflow-y: auto; max-height: 200px;">
+									<table class="table table-bordered vehicleAllot">
+										<thead>
+										<tr>
+											<th>Vehicle Type</th>
+											<th>Veh. Group Name</th>
+											<th>New Rate</th>
+											<th>New Freight</th>
+											<th>Cash</th>
+											<th>Diesel</th>
+											<th>Toll</th>
+
+										</tr>
+										</thead>
+										<tbody>
+										<tr data-ng-repeat="rate in aNewRates track by $index">
+											<td><input type="radio" name="radio" value="{{$index}}" ng-model="rate.selected"
+													   ng-click="checkRadio($index)"><a href="">&nbsp;&nbsp;&nbsp;{{rate.vehicle_type}}</a>
+											</td>
+											<td>{{rate.vehicle_group_name}}</td>
+											<td>{{rate.rate_final}}</td>
+											<td>{{rate.freight_final}}</td>
+											<td>{{rate.allot.cash || 'NA'}}</td>
+											<td>{{rate.allot.diesel || 'NA'}}</td>
+											<td>{{rate.allot.toll || 'NA'}}</td>
+
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+					<hr>
+					<div class="justify col-md-12 detailsList">
+						<div class="row" style="margin-left: -4px;">
+							<div class="col-xs-3 m-b-3 col-sm-2 col-md-2 col-lg-2">
+								<div class="fg-line">
+									<input type="text" ng-model="booking_no" name="booking_no"
+										   class="form-control input-sm" id="interest_id" placeholder="Booking No"
+										   ng-model-options="{ updateOn: 'blur' }" ng-change="getItemOfBooking()"
+										   style=" height: 27px; border-color: #2F89D8; font-size: 14px;">
+								</div>
+							</div>
+							<div class="col-xs-3 m-b-3 col-sm-2 col-md-2 col-lg-2">
+								<div class="fg-line">
+									<div class="select">
+										<select chosen data-placeholder-text-single="'Search Customer'"
+												allow-single-deselect="true"
+												no-results-text="'Could not find any Customer'" class="form-control"
+												placeholder="Search by Customer" ng-model="customerSearch"
+												ng-options="item as item.name for item in aCustomers"
+												ng-change="getItemOfBooking()"
+												style=" height: 27px; border-color: #2F89D8;font-size: 14px;">
+											<option value=""></option>
+										</select>
+
+										<!-- <select chosen data-placeholder-text-single="'Search Customer'" allow-single-deselect="true" no-results-text="'Could not find any Customer'" class="form-control" ng-model="customerName" ng-options="item as item.name for item in aCustomer" ng-change="getBooking()" >
+                                              <option value=""></option>
+                                            </select> -->
+									</div>
+								</div>
+							</div>
+							<!-- <div class="col-xs-6 m-b-6 col-sm-4 col-md-4 col-lg-4">
+                              <div class="n-bg rdo">
+                                <label class="radio radio-inline m-r-20" ng-class="{active : isSingleBooking == 'true'}">
+                                    <input type="radio" name="options" id="option1" ng-model="isSingleBooking" value="true" autocomplete="off">
+                                    <i class="input-helper"></i>
+                                   Single Booking
+                                </label>
+                                <label class="radio radio-inline m-r-20" ng-class="{active : isSingleBooking == 'false'}">
+                                    <input type="radio" name="options" id="option2" ng-click="getCustomer(isSingleBooking)" value="false" ng-model="isSingleBooking" autocomplete="off">
+                                    <i class="input-helper"></i>
+                                    Multiple Booking
+                                </label>
+                              </div>
+                            </div> -->
+						</div>
+					</div>
+					<hr>
+					<div class="justify col-md-12 detailsList" ng-if="isSingleBooking == 'true'">
+						<div class="" style="overflow-y: auto; max-height: 300px;">
+							<table class="table table-bordered vehicleAllot">
+								<thead>
+								<tr>
+									<th>Booking No.</th>
+									<th>Customer</th>
+									<th>Container/Item</th>
+									<th ng-show="isContainerType">Container Type</th>
+									<th>P Type</th>
+									<th>P Basis</th>
+									<th>Rate</th>
+									<th>Unit/Weight</th>
+									<th>Freight</th>
+									<th ng-show="oBooking.isTransporter">Advance</th>
+									<th ng-show="oBooking.isTransporter">Balance/To Pay</th>
+									<th>BOE</th>
+									<th>Booking Date</th>
+									<th>Route</th>
+									<th>Booking Type</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr data-ng-repeat="oBooking in getSelectedBookingAllItem track by $index"
+									ng-class="{green : Allocate.booking_no == true}">
+									<!--ng-click="addBookingInArray(oBooking, $index)"-->
+									<td><input type="checkbox" ng-model="oBooking.selected"><a href="">&nbsp;&nbsp;&nbsp;{{oBooking.booking_no}}</a>
+									</td>
+									<td>{{oBooking.customer_name}}</td>
+									<td>{{oBooking.container_no || oBooking.item_no}}</td>
+									<td ng-show="isContainerType">{{oBooking.container_type}}</td>
+									<td>{{oBooking.payment_type || oBooking.contract_id.payment_type}}</td>
+									<td>{{oBooking.weight_type}}</td>
+									<td>{{oBooking.rate}}</td>
+									<td>
+										<div ng-show="oBooking.weight_type == 'PUnit'">{{oBooking.no_of_unit}}</div>
+										<div ng-show="oBooking.weight_type == 'PMT'"><input type="number" class="form-control" ng-model="oBooking.weight.value"
+													placeholder="Weight" ng-change="weightChange1($index)"
+													style="width: 56px;">{{oBooking.weight.unit}}</div>
+									</td>
+									<td>{{oBooking.freight}}</td>
+									<!--<td>{{oBooking.rate * (oBooking.weight.value != undefined ? oBooking.weight.value : oBooking.no_of_unit)}}</td>-->
+									<td ng-show="oBooking.isTransporter">
+										<input type="number"
+											   class="form-control"
+											   ng-model="oBooking.advance"
+											   placeholder="Advance">
+									</td>
+									<td ng-show="oBooking.isTransporter">{{oBooking.balance = (oBooking.freight - oBooking.advance)}}</td>
+									<td>{{oBooking.boe_no || 'NA'}}</td>
+									<td>{{oBooking.booking_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+									<td>{{oBooking.route.route_name}}</td>
+									<td>{{oBooking.booking_type}}</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<hr>
+						<div ng-if="getSelectedBookingAllItem.length == 0" class="ms-body" style=" min-height: 100px;">
+							<h3>No any Booking Item available !!!!!</h3>
+						</div>
+					</div>
+					<div class="justify col-md-12 detailsList" ng-if="isSingleBooking == 'false'">
+						<div class="" style="overflow-y: auto; max-height: 300px;">
+							<table class="table table-bordered vehicleAllot">
+								<thead>
+								<tr>
+									<th>Booking No.</th>
+									<th>Booking Type</th>
+									<th>Customer Name</th>
+									<th>Route</th>
+									<th>Container No. / Item No.</th>
+									<!-- <th>Vehicle Type</th> -->
+									<th>Weight</th>
+									<th>Booking Date</th>
+									<th>BOE No.</th>
+									<!-- <th >DeAllocate</th> -->
+								</tr>
+								</thead>
+								<tbody>
+								<tr data-ng-repeat="oBooking in selectedTypeBookings"
+									ng-class="{green : oBooking.vehicle_alloted == true}">
+									<td><input type="checkbox" ng-model="oBooking.selected"
+											   ng-click="addBookingInArray(oBooking)"><a href="">&nbsp;&nbsp;&nbsp;{{oBooking.booking_no}}</a>
+									</td>
+
+									<td>{{oBooking.booking_type}}</td>
+									<td>{{oBooking.customer_name}}</td>
+									<td>{{oBooking.route.route_name}}</td>
+									<td>{{oBooking.container_no || oBooking.item_no}}</td>
+									<!-- <td>{{oBooking.vehicle_type}}</td> -->
+									<td><input type="number" class="form-control" ng-model="oBooking.weight.value"
+											   placeholder="Weight" ng-change="weightChange2($index)"
+											   style="width: 56px;">{{oBooking.weight.unit}}
+									</td>
+									<td>{{oBooking.boe_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+									<td>{{oBooking.boe_no || 'NA'}}</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<div ng-if="selectedTypeBookings.length == 0" class="ms-body" style=" min-height: 100px;">
+							<h3>No any Booking Item available !!!!!</h3>
+						</div>
+					</div>
+					<div class="justify col-md-12">
+						<div class="row" style="margin:15px">
+							<div class="col-md-12">
+								<span class="route_iCity" ng-repeat="iLocal in containerArray">{{iLocal.booking_no }}&nbsp;-{{iLocal.container_no || iLocal.item_no}}&nbsp;-{{iLocal.customer_name }} <a
+										class="route_iCityRemove" ng-click="remove(iLocal,$index)">x</a></span>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="justify col-md-12">
+						<div class="col-md-12 col-sm-12 col-xs-12 m-t-12">
+							<div class="form-group">
+								<div class=" text-right">
+									<button class="btn btn-success waves-effect"
+											ng-disabled="!((Allocate.driver_name && Allocate.oManager ))"
+											ng-click="AllocateSubmit()">Allocate
+									</button>
+									&nbsp;&nbsp;&nbsp;
+									<!-- <button class="btn btn-warning" ng-click="closeModal()">Close</button> -->
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+					</div>
+				</div>
+				<span ng-show="!(Allocate.driver_name)" style="color: red;">*Please allocate driver to this vehicle in masters</span><br>
+				<span style="color: green;">*To change driver go to vehicle page in masters</span>
+			</form>
+		</div>
+
+	</div>
+</div>
+<!--
+  <style type="text/css">
+  .modal-dialog {width: 50%;
+        height: 173px
+    }
+  </style> -->
+
+<style>
+	.pt-10{
+		padding-top: 10px;
+	}
+
+	.pb-10{
+		padding-bottom: 10px;
+	}
+</style>

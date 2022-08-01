@@ -1,0 +1,77 @@
+<!-- ControllerAs -> detailVm-->
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label ja-chosen-wrapper">
+			<select chosen
+					class="form-control"
+					disable-search=true
+					ng-model="detailVm.selectedGraph"
+					ng-change='detailVm.resetGraph()'
+					ng-options="item as item.name for item in detailVm.aData">
+			</select>
+		</div>
+	</div>
+</div>
+
+<div class="container ja-temp m-b-10">
+	<div style="margin-right: -10px; margin-left: -5px;height: 100%">
+		<div class="col-md-12 p-0"
+			 style="height: 100%;"
+			 ng-if="detailVm.visibility">
+			<dashboard graph="detailVm.selectedGraph"
+					   activate-change-on-fullscreen="true" ></dashboard>
+		</div>
+	</div>
+</div>
+
+<style>
+	#section_main_masters_home{
+		height: calc(100vh - 100px);
+	}
+
+	.ja-temp{
+		height: calc(100% - 40px);
+	}
+
+	dashboard .container:not(.ja-containter){
+		width: 99%;
+	}
+
+	dashboard .container,
+	dashboard .container .card{
+		height: 100% !important;
+	}
+
+	.ja-chosen-wrapper .chosen-container{
+		width: 200px !important;
+	}
+
+	.ja-fullscreen{
+		position: fixed;
+		z-index: 10;
+		left: 0;
+		top: 40px;
+		width: 100% !important;
+		margin: 0 !important;
+		height: 100vh;
+		background: #0000003d;
+	}
+
+	.ja-fullscreen .card{
+		height: 80% !important;
+		width: 90%;
+		margin: 30px auto;
+		border-radius: 5px;
+	}
+
+	.nvd3-wrapper{
+		height: calc(100% - 64px) !important;
+		width: 100% !important;
+	}
+
+	nvd3, svg{
+		/*height: calc(100% - 40px) !important;*/
+		height: 100% !important;
+		width: 100% !important;
+	}
+</style>

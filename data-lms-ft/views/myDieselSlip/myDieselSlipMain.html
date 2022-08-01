@@ -1,0 +1,188 @@
+<div class="container" ng-controller="myDieselController">
+    <div class="card m-b-0" id="messages-main">
+        <div class="" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lv-header-alt clearfix" style="padding: 5px;">
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="lv-body">
+                    <div class="col-md-12" style="min-height: 272px;">
+                        <!-- <div class="col-md-6">
+                            <h5 style="margin-left: 19px;">Trip Details</h5>
+                        </div>
+                        <div class="col-sm-2" style="float:right;">
+                            <button class="btn btn-primary hidden-print" ng-click="printDiesel()">Print Diesel Slip</button>
+                        </div>
+                        <div class="col-sm-2" style="float:right;">
+                            <button class="btn btn-primary hidden-print" ng-click="printDriver()">Print Driver Undertaking</button>
+                        </div> -->
+                        <div class="clearfix"></div>
+                        <form role="form" ng-submit="filter(form)">
+                            <div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="trip_no" name="trip_no" class="form-control input-sm" placeholder="Trip No" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllDiesel()" style="height: 34px;font-size: 13px;">
+                                </div>
+                            </div>
+                            <!-- <div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+                            <div class="fg-line">
+                                <input type="text" ng-model="booking" name="booking" class="form-control input-sm"  placeholder="booking" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllDiesel()" style="height: 34px;font-size: 13px;">
+                            </div>
+                          </div> -->
+                            <div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="grNumber" name="Gr Number" class="form-control input-sm" placeholder="GR NO" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllDiesel()" style="height: 34px;font-size: 13px;">
+                                </div>
+                            </div>
+                            <!-- <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                            <div class="fg-line">
+                                <div class="select">
+                                  <select class="form-control"  placeholder="booking Type" ng-options="item as item for item in aBookingTypes" ng-model="bookingType" ng-change="getBooking()" style="height: 34px;">
+                                  <option value="" ng-click="getBooking()"> Booking Type </option> </select>
+                                </div>
+                            </div>
+                          </div> -->
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <!-- <select chosen data-placeholder-text-single="'Search Vehicle'" allow-single-deselect="true" no-results-text="'Could not find any Vehicle'" class="form-control" ng-model="vehicle_no" ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aVehicles" ng-change="getAllDiesel()"  search-contains="true">
+                              <option value=""></option>
+                            </select> -->
+                                <div class="lvh-search ng-scope sear">
+                                    <input type="text" placeholder="Vehicle Search..." ng-model="vehicle_no" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue" ng-change="getVname(vehicle_no)"
+                                        class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+                                    <i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <div class="lvh-search ng-scope sear">
+                                    <input type="text" placeholder="Route Search..." ng-model="route_id" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aRoute | filter:$viewValue" ng-change="getDname(route_id)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+                                    <i class="lvh-search-close" ng-click="clearSearch('route')">×</i>
+                                </div>
+                            </div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+									<input type="text" placeholder="Vendor Search..." ng-model="vendor_id"
+										   class="lvhs-input" typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in aVendor"
+										   ng-change="getVendorName(vendor_id)" class="form-control"
+										   typeahead-on-select="onSelect($item, $model, $label)">
+									<i class="lvh-search-close" ng-click="vendor_id='';getAllGR()">×</i>
+								</div>
+							</div>
+                            <!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                &lt;!&ndash; <select chosen data-placeholder-text-single="'Search Customer'" allow-single-deselect="true" no-results-text="'Could not find any Customer'" class="form-control" ng-model="customerName" ng-options="item as item.name for item in aCustomer" ng-change="getAllDiesel()" >
+                              <option value=""></option>
+                            </select> &ndash;&gt;
+
+                                <div class="lvh-search ng-scope sear">
+                                    <input type="text" placeholder="Cutomer Search..." ng-model="customerName" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aCustomer | filter:$viewValue" ng-change="getCname(customerName)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+                                    <i class="lvh-search-close" ng-click="clearSearch('customer')">×</i>
+                                </div>
+                            </div>-->
+                            <!-- <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                              <select chosen data-placeholder-text-single="'Search Branch'" allow-single-deselect="true" no-results-text="'Could not find any Branch'" class="form-control" ng-model="branch" ng-options="item as item for item in aBranch" ng-change="getAllGR()" required>
+                                <option value="" ></option>
+                              </select>
+                          </div> -->
+                            <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+                                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                                    <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                                        <input ng-click="open($event, 'opened1')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date" is-open="opened1" datepicker-options="dateOptions" close-text="Close" placeholder="From Date" ng-change="getAllDiesel()"
+                                            style="padding: 0px 4px;height: 34px;" />
+                                    </div>
+                                    <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }" style=" ">
+                              <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                                <input ng-click="open($event, 'opened2')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="To Date" ng-change="getAllDiesel()" style="padding: 0px 4px; height: 34px;" />
+                              </div>
+                                <span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </div>
+                          </div>
+                            <!-- <div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+                            <div class="">
+                              <button class="btn btn-success waves-effect" tooltip="Search by Other Fields"  ng-click="searchOthers()">Search</button>
+                            </div>
+                          </div>  box-shadow: 1px 1px 4px 2px;" -->
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <!--<label class="checkbox checkbox-inline m-r-20" style="margin-left: 0%;margin-top: 9px;margin-right: 10px !important;">
+                                <input type="checkbox" ng-model="selected" ng-click="getAllDiesel()">
+                                  <i class="input-helper"></i>
+                                  All
+                                </label>-->
+								<label ng-if="!(role_local_data.diesel.indexOf('add')==-1)" style="margin-top: 5px;margin-bottom: -10px;float: right;font-size: 20px;">
+									<a href="" uib-tooltip="Print Diesel" ng-click="printDiesel(selectedTrip)" tooltip-placement="bottom">
+										<span class="glyphicon glyphicon-print"></span>
+									</a>&nbsp;&nbsp;
+									<a href="" uib-tooltip="Print Driver Undertaking" tooltip-placement="bottom" ng-click="printDriver(selectedTrip)">
+										<span class="glyphicon glyphicon-plane"></span>
+									</a>&nbsp;&nbsp;
+									<a href="" uib-tooltip="Add Diesel" ng-click="myDieselDeatils(selectedTrip, $index)" tooltip-placement="bottom">
+										<span class="glyphicon glyphicon-plus"></span>
+									</a>
+									<!--<a uib-tooltip="Trup End ,diesel not possible" tooltip-placement="bottom">
+										<span class="glyphicon glyphicon-plus"></span>
+									</a>-->
+								</label>
+                            </div>&nbsp;
+                        </form>
+                        <div class="clearfix"></div>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead id='my_fixable_table_header' fix-head>
+
+									<tr>
+											<th>Trip No.</th>
+											<th>GR No.</th>
+											<th>Vehicle No.</th>
+											<!--<th style="min-width: 130px;">Trip Location</th>-->
+											<th>Vendor</th>
+											<th>Route Name</th>
+											<th style="min-width: 122px;">Allocation Date</th>
+											<th style="min-width: 100px;">Trip Status</th>
+											<th>Driver Name</th>
+											<th style="padding-right: 5px;">Last Update Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="oTrip in aTrip" class="pointer selectItem" ng-click="infoItem(oTrip,$index)" ng-class="{green :  oTrip.trip_expenses.length>1}">
+											<td>{{oTrip.trip_no}}</td>
+											<td>
+												<span ng-repeat="g in oTrip.gr">{{g.grNumber}}{{$last ? '' : ', '}} </span>
+											</td>
+											<td>
+												{{oTrip.vehicle_no || 'NA'}}
+												<span ng-if="oTrip.m_vehicle_no"> ({{oTrip.m_vehicle_no}})</span>
+											</td>
+											<td>{{oTrip.vendor.name || 'NA'}}</td>
+											<!--<td>{{'NA'}}</td>-->
+											<td>{{oTrip.route.name || 'NA'}}</td>
+											<td>{{oTrip.allocation_date | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+											<td>{{oTrip.status}}</td>
+											<td>{{oTrip.vehicle.driver_name || "NA"}}</td>
+											<td>{{oTrip.last_modified_at | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="pagi" style="text-align: center;" ng-show="total_pages>1">
+                                    <pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+                                        first-text="&laquo;" last-text="&raquo;"></pagination>
+                                </div>
+                            </div>
+                            <div ng-if="aTrip.length == 0" class="ms-body" style=" min-height: 100px;">
+                                <h3>Diesel data not available !!!!!</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

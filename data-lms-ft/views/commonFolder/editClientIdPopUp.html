@@ -1,0 +1,102 @@
+<!--controller: editClientIdPopUpController-->
+<!--controllerAs: clientVm-->
+
+<form role="form" name="myTripPopUp" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="clientVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Edit Client</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<div class="row">
+						<div class="col-md-6" style="margin-bottom: 10px">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Name: </label>
+								<div class="col-sm-6">
+									{{clientVm.selectedInfo.name}}
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label">Contract Company: </label>
+								<div class="col-sm-6">
+									<div class="select">
+										<select chosen
+												class="form-control"
+												placeholder="Select ClientId"
+												ng-options="item.clientId as item.name for item in $user.client_allowed"
+												ng-model="clientVm.selectedInfo.clientId"
+												name="ClientId">
+											<option value="" disabled>
+												Select Clients
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6" ng-show="clientVm.selectedInfo.clientId">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label">Operation Company: </label>
+								<div class="col-sm-6">
+									<div class="select">
+										<select chosen
+												multiple
+												class="form-control"
+												placeholder="Select ClientR"
+												ng-options="item.clientId as item.name for item in $user.client_allowed|filter:{clientId: '!'+clientVm.selectedInfo.clientId}"
+												ng-model="clientVm.selectedInfo.clientR"
+												name="ClientR">
+											<option value="" disabled>
+												Select Clients
+											</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</li>
+			</ul>
+			<br>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="clientVm.submit()">Update
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="clientVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 50%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

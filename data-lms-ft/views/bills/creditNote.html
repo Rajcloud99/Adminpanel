@@ -1,0 +1,241 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:15px;">
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="vm.myFilter.creditNo"
+						   name="creditNo"
+						   class="form-control input-sm"
+						   placeholder="Credit Note No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="vm.myFilter.billNo"
+						   name="bill_no"
+						   class="form-control input-sm"
+						   placeholder="Bill No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="lvh-search ng-scope sear chosen-row-1">
+							<input type="text"
+								   placeholder="Billing Party Search"
+								   ng-model="vm.myFilter.billingParty"
+								   class="lvhs-input"
+								   typeahead-wait-ms="10"
+								   typeahead="item as item.name for item in vm.getBilling($viewValue)"
+								   class="form-control"
+							>
+							<i class="lvh-search-close" ng-click="vm.myFilter.billingParty='';clearSelection();">×</i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="select">
+					<select class="form-control"
+							ng-model="vm.myFilter.dateType">
+						<option value="">Select Date</option>
+						<option value="created_at">Entry Date</option>
+						<option value="date">Credit Note Date</option>
+					</select>
+				</div>
+			</div>
+			<!-- approved / unapproved -->
+			<div class="col-sm-2">
+				<div class="select">
+					<select class="form-control"
+							ng-model="vm.myFilter.voucher">
+						<option value="">Select Approved</option>
+						<option value="approve">Approved</option>
+						<option value="unApprove">Un Approved</option>
+						<option value="Both">Both</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   max-date="vm.DatePicker.newDate"
+										   ng-model="vm.myFilter.start_date"
+										   is-open="opened1"
+										   datepicker-options="vm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Start Date"/>
+								</div>
+								<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened2 == true }">
+								<div ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   max-date="vm.DatePicker.newDate"
+										   ng-model="vm.myFilter.end_date"
+										   min-date="vm.myFilter.start_date"
+										   is-open="opened2"
+										   datepicker-options="vm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="End Date"/>
+								</div>
+								<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2 pull-right">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Search"
+						type="submit"
+						ng-click="vm.getCreditNote()"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+				</button>
+
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Clear Search"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="vm.myFilter={};vm.getCreditNote();">
+					<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+				</button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Download"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="vm.getCreditNote(false, true);">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Deduction Monthly"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="vm.rptDownload('dedRpt');">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+
+			</div>
+
+		</div>
+	</div>
+
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="form-group m-b-0">
+			<button class="btn btn-primary m-r-5" ng-if="$role['Credit Note']['MiscAdd']"
+					ng-click="vm.miscCreditNotePopUp('Add')"
+					uib-tooltip="Add Misc Credit Note">
+				<i class="zmdi zmdi-plus-box zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-5" ng-if="$role['Credit Note']['MiscEdit'] && vm.oSelectedCreditNo.isMiscCreditNote"
+					ng-click="vm.miscCreditNotePopUp('Edit')"
+					uib-tooltip="Edit Misc Credit Note">
+				<i class="zmdi zmdi-minus-square zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-5"
+					ng-click="vm.creditNoteUpsert('add')"
+					uib-tooltip="Add Credit Note">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-5" ng-hide="vm.oSelectedCreditNo.isMiscCreditNote"
+					ng-click="vm.creditNoteUpsert('edit')"
+					uib-tooltip="edit Credit Note">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-5"
+					ng-click="vm.unapprove()"
+					uib-tooltip="Unapprove">
+				<i class="zmdi zmdi-assignment-check zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-5"
+					ng-if="$role['Credit Note']['MiscDelete'] && vm.oSelectedCreditNo.isMiscCreditNote"
+					ng-click="vm.deleteMisc()"
+					uib-tooltip="Delete Misc CN">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-5"
+					ng-if="$role['Credit Note']['Delete'] && !vm.oSelectedCreditNo.isMiscCreditNote"
+					ng-click="vm.remove()"
+					uib-tooltip="Remove">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-5"
+					type="button"
+					ng-click="vm.printBill()"
+					uib-tooltip="Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+
+	<div class="detailsList">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-12">
+						<div ja-table
+							 table-body="vm.aCreditNote"
+							 table-head="vm.tableHead"
+							 table-height='500px'
+							 table-load="vm.getCreditNote(true)"
+							 table-column-setting="vm.columnSetting"
+							 table-selectable='vm.selectType'
+							 table-api='vm.tableApi'
+							 table-selectable-model="vm.oSelectedCreditNo"
+						></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20 {
+		font-size: 20px;
+	}
+</style>

@@ -1,0 +1,155 @@
+<form name="upModelF" ng-controller="editSpareMsController">
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Part Name: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="sSpare.name" placeholder="Enter here" class="form-control"
+							   name="Part Name" required>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Category: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select chosen data-placeholder-text-single="'Search Category'"
+								allow-single-deselect="true" no-results-text="'Could not find any category'"
+								class="form-control" ng-model="part_cat"
+								ng-options="item as item.name for item in aPartCat"
+								search-contains="true" ng-change="changePartCategory(part_cat)" required>
+							<option value=""></option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Min. Requirement: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sSpare.min_buffer" placeholder="Enter here" class="form-control"
+							   name="Reorder Level" required>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Max. Requirement: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sSpare.max_buffer" placeholder="Enter here" class="form-control"
+							   name="Reorder Level" required>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Unit of Measure: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" ng-model="sSpare.uom"
+								ng-options="item as item for item in $constants.uomTypes" required>
+							<option value=""> Select UOM</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Active Status:</label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" ng-model="sSpare.active_status"
+								ng-options="item as item for item in aStatusActive" required>
+							<option value=""> Select Status</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Room Number </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sSpare.room" placeholder="Enter here" class="form-control"
+							   name="Room">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Shelf Number </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sSpare.shelf" placeholder="Enter here" class="form-control"
+							   name="Shelf">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Rack Number </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sSpare.rack" placeholder="Enter here" class="form-control"
+							   name="Rack">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4" ng-show="part_cat.type == 'Tyre'">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Mileage:</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="sSpare.mileage" placeholder="Enter here"
+							   class="form-control" name="Mileage">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-10">
+				<button type="submit" class="btn btn-primary" ng-disabled="!(sSpare.name && part_cat && sSpare.min_buffer && sSpare.max_buffer && sSpare.uom)"
+						ng-click="updateSpare()" style="margin-bottom: 12px;">Update
+				</button>
+				<button type="submit" class="btn btn-warning"
+						ng-click="cancel()" style="margin-bottom: 12px;">Cancel
+				</button>
+			</div>
+		</div>
+	</div>
+</form>
+
+<style type="text/css">
+	.arr_empl > span {
+		/* border: 1px solid #000; */
+		margin-left: 10px;
+		background: #eee;
+	}
+
+	.arr_empl > span > span {
+		background: red;
+		padding: 1px 7px;
+		color: #fff;
+	}
+</style>

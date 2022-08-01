@@ -1,0 +1,413 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Account Master</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+		<div class="pull-right" style="width: 40%;">
+			<div class="col-md-4">
+				<div class="lvh-label col-md-5" style="padding-left:0;padding-right:0;">Group By:</div>
+				<div class="select col-md-6">
+					<select
+							class="form-control"
+							ng-options="item.value as item.label for item in aggrs"
+							ng-model="oFilter.aggregateBy" style="width:120%;height:34px;"
+					>
+						<option value="" selected disabled>None</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<button class="btn btn-primary btn-xs"
+						ng-disabled="aVouchers.length<=0"
+						ng-click="downloadReport()"
+						uib-tooltip="Download Report">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				<button ng-if="$role['Account Report']['CSV']"
+						class="btn btn-primary btn-xs"
+						ng-disabled="aVouchers.length<=0"
+						ng-click="downloadReport('csv')"
+						uib-tooltip="Download CSV">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				<button class="btn btn-primary btn-xs"
+						ng-if="$role['Account Master']['Structure All']"
+						ng-click="downloadStructureReportAll()"
+						uib-tooltip="Download All Structure Report">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				<button ng-if="$role['Account Master']['Structure']"
+						class="btn btn-primary btn-xs"
+						ng-click="downloadStructureReport()"
+						uib-tooltip="Download Structure Report">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				<button class="btn btn-primary btn-xs"
+						ng-if="$role['Account Master']['Balance Sheet']"
+						ng-click="downloadBalanceSheet()"
+						uib-tooltip="Download BalanceSheet">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				<button
+						class="btn btn-success btn-xs"
+						ng-click="downloadSampleFile()"
+						uib-tooltip="Download Sample file for account ledger">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				<button ng-if="$role['Account Master']['Upload']"
+						onclick="document.getElementById('toUpload').click();"
+						class="btn btn-primary btn-xs"
+						ng-disabled="aVouchers.length<=0"
+						uib-tooltip="Upload Accounts">
+					<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+				</button>
+				<input
+						type="file"
+						id="toUpload"
+						name="toUpload"
+						ng-model="toUpload"
+						ng-hide="true"
+						accept="*/*"
+						ngf-select
+						ngf-max-size="5MB"
+						ngf-model-invalid="errorFile"
+						ngf-change="upload($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+				>
+				<div class="col-md-2" ng-hide="true">
+					<button type="button"
+							ng-if="$role['Account Master']['Upload Modified Structure']"
+							onclick="document.getElementById('toUploadModified').click();"
+							uib-tooltip="Upload Modified Structure"
+							tooltip-placement="bottom"
+							class="btn btn-primary" style="font-size: 14px">
+						<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+					</button>
+					<input
+							type="file"
+							id="toUploadModified"
+							name="toUploadModified"
+							ng-model="toUploadModified"
+							ng-hide="true"
+							accept="*/*"
+							ngf-select
+							ngf-max-size="5MB"
+							ngf-model-invalid="errorFile"
+							ngf-change="uploadModifyStructure($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+					>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 7px">
+			<form ng-submit="getAccountMasters()" novalidate autocomplete="off">
+				<div class="col-md-1">
+
+					<div class="fg-line form-group m-b-0">
+
+						<input type="text"
+							   ng-model="oFilter.name"
+							   name="Name"
+							   class="form-control input-sm"
+							   placeholder="Name">
+					</div>
+				</div>
+				<!--
+				<div class="col-md-2">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="oFilter.branch"
+								ng-options="item._id as item.name for item in aBranch"
+								name="Branch Name">
+							<option value="" selected>Select Branch</option>
+						</select>
+					</div>
+				</div>
+				-->
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Ledger Group..."
+								ng-model="oFilter.type"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in accountMaster($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="oFilter.type = undefined;">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Branch Search..."
+								ng-model="oFilter.branch"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in getAllBranch($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="oFilter.branch = undefined;">×</i>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								multiple
+								class="form-control"
+								placeholder="Select Type"
+								ng-options="item as item for item in $constants.aAccountGroup"
+								ng-model="oFilter.group"
+								name="Group"
+								required>
+							<option value="" disabled>
+								Select Group
+							</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="DatePicker.newDate"
+											   ng-model="oFilter.from"
+											   is-open="opened1"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From"/>
+										<!--ng-change="dateChange('startDate')"-->
+									</div>
+									<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="oFilter.to"
+											   max-date="DatePicker.newDate"
+											   min-date="oFilter.from"
+											   max-date="oFilter.from|setMaxDate:12"
+											   is-open="opened2"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To"/>
+										<!--ng-change="dateChange('endDate')"-->
+									</div>
+									<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="submit"
+							ng-click="oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!--<div class="row">-->
+	<!--<div class="detailsList">-->
+		<!--<div class="" style="overflow-y: auto; max-height: 500px;">-->
+			<!--<table class="table table-bordered unresponsive">-->
+				<!--<thead id='my_fixable_table_header' fix-head>-->
+				<!--<tr>-->
+					<!--<th>#</th>-->
+					<!--<th>Name</th>-->
+					<!--<th>Branch</th>-->
+					<!--<th>Account Id</th>-->
+					<!--<th>Account Type</th>-->
+					<!--<th>Group</th>-->
+					<!--<th>Balance</th>-->
+					<!--<th>Added By</th>-->
+					<!--<th>Added On</th>-->
+				<!--</tr>-->
+				<!--</thead>-->
+				<!--<tbody>-->
+					<!--<tr data-ng-repeat="oAccountMaster in aAccountMaster"-->
+						<!--class="selectItem pointer"-->
+						<!--ng-click="selectThisRow(oAccountMaster, $index)">-->
+						<!--<td>{{$index + 1}}</td>-->
+						<!--<td>{{oAccountMaster.name || 'NA'}}</td>-->
+						<!--<td>{{oAccountMaster.branch.name || 'NA'}}</td>-->
+						<!--<td>{{oAccountMaster.accountId || 'NA'}}</td>-->
+						<!--<td>{{oAccountMaster.type || 'NA'}}</td>-->
+						<!--<td>{{oAccountMaster.group || 'NA'}}</td>-->
+						<!--<td>{{oAccountMaster.balance || 0}}</td>-->
+						<!--<td>{{oAccountMaster.created_by.full_name || 'NA'}}</td>-->
+						<!--<td>{{oAccountMaster.created_at | date:'dd-MM-yyyy'}}</td>-->
+					<!--</tr>-->
+				<!--</tbody>-->
+			<!--</table>-->
+			<!--<div ng-if="aAccountMaster.length == 0" class="ms-body text-center" style=" min-height: 50px;">-->
+				<!--<h3>No Account Master Available !!!!!</h3>-->
+			<!--</div>-->
+		<!--</div>-->
+		<!--<div style="text-align: center;" ng-show="pagination.total_pages > 0">-->
+			<!--<uib-pagination ng-change="getAccountMasters()"-->
+							<!--total-items="pagination.totalItems"-->
+							<!--items-per-page="pagination.items_per_page"-->
+							<!--num-pages="pagination.numPages"-->
+							<!--ng-model="pagination.currentPage"-->
+							<!--max-size="pagination.maxSize"-->
+							<!--class="pagination-sm smallPagi"-->
+							<!--boundary-links="true"-->
+							<!--previous-text="&lsaquo;"-->
+							<!--next-text="&rsaquo;"-->
+							<!--first-text="&laquo;"-->
+							<!--last-text="&raquo;">-->
+			<!--</uib-pagination>-->
+		<!--</div>-->
+	<!--</div>-->
+	<!--</div>-->
+	<div class="row">
+		<div class="col-md-12 text-right">
+			<button type="button"
+					ng-hide="true"
+					ng-if="$role['Account Master']['Edit Client'] && $user.clientAdmin"
+					class="btn btn-primary btn-xs"
+					ng-click="editClientId(selectedAccountMaster)"
+					uib-tooltip="edit ClientId"
+					tooltip-placement="bottom"
+			>
+				<i class="zmdi zmdi-border-color zmdi-hc-fw"></i>
+			</button>
+
+			<button type="button"
+					ng-disabled="selectedAccountMaster.clientId != selectedClient || !selectedAccountMaster._id"
+					ng-if="$role['Account Master']['Reset Balance']"
+					class="btn btn-primary btn-xs"
+					ng-click="resetBalance(selectedAccountMaster)"
+					uib-tooltip="Reset Balance"
+					tooltip-placement="bottom"
+			>
+				<i class="zmdi zmdi-balance-wallet zmdi-hc-fw"></i>
+			</button>
+
+			<button type="button"
+					ng-disabled="selectedAccountMaster.clientId != selectedClient || !selectedAccountMaster._id"
+					ng-if="$role['Account Master']['OpeningBalance']"
+					class="btn btn-primary btn-xs"
+					ng-click="editOpeningBalnc(selectedAccountMaster)"
+					uib-tooltip="Edit Opening Balance"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-comment-edit zmdi-hc-fw"></i>
+			</button>
+
+			<button class="btn btn-primary btn-xs"
+					ng-disabled="!selectedAccountMaster"
+					ng-click="viewAccountMaster(selectedAccountMaster)"
+					uib-tooltip="View">
+				<i class="zmdi zmdi-local-library zmdi-hc-fw"></i>
+			</button>
+
+			<button class="btn btn-primary btn-xs"
+					ng-disabled="selectedAccountMaster.clientId != selectedClient || selectedAccountMaster.reserve"
+					ng-click="upsertAccountMaster(selectedAccountMaster)"
+					uib-tooltip="Edit Account">
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>
+
+			<button class="btn btn-primary btn-xs"
+					ng-disabled="selectedAccountMaster.clientId != selectedClient || selectedAccountMaster.reserve"
+					ng-if="$role['Account Master']['Edit Name']"
+					ng-click="updateAccountMasterName(selectedAccountMaster)"
+					uib-tooltip="Edit Name">
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>
+
+			<button class="btn btn-primary btn-xs"
+					ng-click="upsertAccountMaster()"
+					uib-tooltip="Add">
+				<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+			</button>
+
+			<button class="btn btn-danger btn-xs"
+					ng-disabled="selectedAccountMaster.clientId != selectedClient || selectedAccountMaster.reserve"
+					ng-click="deleteAccount()"
+					uib-tooltip="Delete Account">
+				<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+			</button>
+
+<!--			<button class="btn-danger btn-xs"-->
+<!--					ng-disabled="selectedAccountMaster.clientId != selectedClient || selectedAccountMaster.reserve"-->
+<!--					type="button"-->
+<!--					ng-click="deleteAccount()"-->
+<!--					uib-tooltip="Delete">-->
+<!--				<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+<!--			</button>-->
+		</div>
+		<div class="col-md-12">
+			<div ja-table
+				 table-body="aAccountMaster"
+				 table-head="tableHead"
+				 table-order-by-model='orderBy'
+				 table-order-by-event='getAccountMasters()'
+				 table-height='500px'
+				 table-load="getAccountMasters(true)"
+				 table-column-setting="columnSetting"
+				 table-selectable='"true"'
+				 table-api="tableApi"
+				 table-selectable-model="selectedAccountMaster"
+				 table-index="true"
+			></div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+</style>

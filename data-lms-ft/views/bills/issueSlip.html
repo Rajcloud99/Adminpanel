@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    .num {
+        font-size: 9px;
+    }
+
+    .ctext{
+        text-align: center;
+    }
+    .bold {
+        font-weight: bold
+    }
+    .ib {
+        display: inline-block;
+    }
+
+    .f12 {
+        font-size: 12px
+    }
+
+    .fr {
+        float: right
+    }
+
+    body {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+	.btop {border-top: 1px solid black;}
+
+    .bbottom {border-bottom: 1px solid black;}
+
+    .nobleft {border-left: 0}
+    .nobright {border-right: 0}
+
+
+	.bright {border-right: 1px solid black;}
+    #blank {height:80px}
+    #container {width:100%; font-size: 0;}
+    #left, #middle, #right {display: inline-block; *display: inline; zoom: 1; vertical-align: top; font-size: 12px; font-family:Verdana}
+    #left {width: 15%;}
+    #middle {width: 65%; text-align:center}
+    #right {width: 20%; text-align:center;}
+    #title {font-size: 14px; font-weight: bold}
+    #iso {font-size: 9px; font-weight: bold}
+    #subtitle {font-size: 10px; }
+    #addr {font-size: 9px; }
+    .heading {text-align:center; font-weight: bold}
+	#heading2 {text-align:center;}
+    .num {font-size: 9px;}
+    .bold { font-weight: bold }
+</style>
+
+<body style="width:670px;" ng-app="app" ng-controller="issueSlipCtrl">
+    <div>
+        <script>
+            function toggleEdit(editable){
+                var editables = document.getElementsByClassName("editable");
+                for(var i=0; i<editables.length; i++)
+                    editables[i].setAttribute("contentEditable", editable);
+            }
+        </script>
+    </div>
+    <p style="overflow:hidden;" id="heading" class="heading">{{client_full_name}}</p>
+	<p style="overflow:hidden;" id="heading2">Issue Slip Spares: Mechanic</p>
+
+
+    <div style="font-size: 12px; margin-top: 20px;">
+		<div style="width:15%;" class="ib">
+			<p class="bold">Slip No</p>
+            <p class="bold">Job Card No</p>
+            <p class="bold">Vehicle No</p>
+            <p class="bold">Mechanic Name</p>
+            <p class="bold">Supervisor Name</p>
+		</div>
+		<div style="width:25%;" class="ib">
+			<p class="bold">: {{slip_no}}</p>
+            <p class="bold">: {{job_card_no}}</p>
+            <p class="bold">: {{vehicle_no}}</p>
+            <p class="bold">: {{mechanic_name}}</p>
+            <p class="bold">: {{supervisor_name}}</p>
+		</div>
+		<div style="width:24%;" class="ib fr">
+			<p class="bold">: {{datetime}}</p>
+            <p class="bold">: {{job_card_type}}</p>
+            <p class="bold">: {{branch_name}}</p>
+		</div>
+        <div style="width:15%;" class="ib fr">
+			<p class="bold">Date & Time</p>
+            <p class="bold">Job Card Type</p>
+            <p class="bold">Branch Name</p>
+		</div>
+		
+
+
+
+    </div>
+
+
+
+    <table border="1" id="t1" class="ctext" style="width:100%; margin-top: 20px">
+        <tr style="font-size: 12px;">
+            <th>Sl No</th>
+            <th>Spare Code</th>
+            <th>Spare Name</th>
+            <th>Category</th>
+            <th>Uom</th>
+            <th>Quantity Issued</th>
+            <th>Rate (Qty*Rate)</th>
+            <th>Total</th>
+            <th>Remarks</th>
+        </tr>
+    </table>
+
+
+	<div class="f12" style="margin-top: 20px; width: 100%">
+		<div class="ib ctext bold" style="width: 25%">
+            <p>Issued By : {{issued_by}}</p>
+		</div>
+        <div class="ib ctext bold" style="width: 25%">
+            <p>Verified By : {{verified_by}}</p>
+        </div>
+        <div class="ib ctext bold" style="width: 24%">
+            <p>Received By : {{received_by}}</p>
+        </div>
+        <div class="ib ctext bold" style="width: 24%">
+            <p>Reprinted By : {{reprinted_by}}</p>
+        </div>
+	</div>
+   
+    <script src="issueSlip.js"></script>
+
+</body>
+
+</html>

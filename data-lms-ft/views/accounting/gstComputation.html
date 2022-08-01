@@ -1,0 +1,151 @@
+<div ng-controller="gstComputationReportController">
+	<div class="container m-b-10">
+		<div class="col-md-12 card m-b-0">
+			<div class="lvh-label">
+				<span class="c-black"><b>GST Computation</b></span>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" style="">
+		<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+			<div class="row hidden-print" style="margin:7px;">
+				<form ng-submit="searchGstComp(gstCompReport)" name="gstCompReport" novalidate>
+					<div class="col-md-2">
+						<div class="form-group m-b-0">
+							<div class="col-sm-12">
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue chosen-row-1"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="oFilter.from_date"
+												   ng-change="oFilter.to_date=undefined"
+												   is-open="opened1"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   required
+												   placeholder="From"/>
+										</div>
+										<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group m-b-0">
+							<div class="col-sm-12">
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue chosen-row-1"
+										 ng-class="{ 'is-opened': opened2 == true }">
+										<div ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+												   type="text"
+												   class="form-control"
+												   datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="oFilter.to_date"
+												   min-date="oFilter.from_date"
+												   max-date="oFilter.from_date|setMaxDate:5"
+												   is-open="opened2"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   required
+												   placeholder="To"/>
+										</div>
+										<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+								style="font-size: 16px"
+								uib-tooltip="Search"
+								type="submit"
+								tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+						<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+								style="font-size: 16px"
+								uib-tooltip="Clear Search"
+								tooltip-placement="bottom"
+								type="submit"
+								ng-click="oFilter={};setDefaultDate();"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="detailsList card" style="background: white">
+			<div class="" style="overflow-y: auto; max-height: 450px;">
+				<table class="table table-bordered unresponsive invoiceDetail">
+					<thead id='my_fixable_table_header' fix-head>
+						<tr>
+							<th>Billing Party</th>
+<!--							<th>Bill Number</th>-->
+<!--							<th>Bill Date</th>-->
+							<th>Taxable</th>
+							<th>CGST</th>
+							<th>SGST</th>
+							<th>IGST</th>
+							<th>Bill Amount</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="report in aGSTComputationReport">
+<!--							<td collapse="8">-->
+							<!--								<table width="100%">-->
+							<!--									<tr>-->
+										<td>{{report._id.ledgerDr}}</td>
+<!--										<td>&nbsp;</td>-->
+<!--										<td>&nbsp;</td>-->
+										<td>{{report.ledgerFR.toFixed(2) || "0"}}</td>
+										<td>{{report.ledgerCGST.toFixed(2) || 0}}</td>
+										<td>{{report.ledgerSGST.toFixed(2) || "0"}}</td>
+										<td>{{report.ledgerIGST.toFixed(2) || "0"}}</td>
+										<td>{{report.ledgerDr.toFixed(2) || "0"}}</td>
+<!--									</tr>-->
+<!--										<tr ng-repeat="gstSummary in report.ledger">-->
+<!--										<td>&nbsp;</td>-->
+<!--										<td>{{gstSummary.refNo}}</td>-->
+<!--										<td>{{(gstSummary.date | date:"dd-MMM-yyyy 'at' h:mma") || 'NA'}}</td>-->
+<!--										<td>{{gstSummary.ledgerFR.amount.toFixed(2)}}</td>-->
+<!--										<td>{{gstSummary.ledgerCGST.amount.toFixed(2)||0}}</td>-->
+<!--										<td>{{gstSummary.ledgerSGST.amount.toFixed(2)||"0"}}</td>-->
+<!--										<td>{{gstSummary.ledgerIGST.amount.toFixed(2)||"0"}}</td>-->
+<!--										<td>{{gstSummary.ledgerDr.amount.toFixed(2)||"0"}}</td>-->
+<!--									</tr>-->
+<!--								</table>-->
+<!--							</td>-->
+						</tr>
+					</tbody>
+				</table>
+				<div ng-if="aGSTComputationReport.length <= 0 " class="ms-body" style=" min-height: 50px;">
+					<h3>No Reports Found !!!!!</h3>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+</style>
+

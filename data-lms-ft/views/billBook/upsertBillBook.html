@@ -1,0 +1,403 @@
+<!-- ControllerAs: upsertVm-->
+
+<form name="upserForm" ng-submit="upsertVm.submit(upserForm)" novalidate autocomplete="off">
+
+	<div class="modal-header">
+		<button type="button" ng-click="upsertVm.closePopup()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>{{upsertVm.modelName}}</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183); text-transform: capitalize">
+							({{upsertVm.modelType}})
+						</span>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Name: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Name"
+												   ng-model="upsertVm.oBillBook.name"
+												   name="name"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="upserForm['name'].$error.required
+																			&& (upserForm['name'].$touched
+																			|| upserForm.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Book Type: <span
+										class="req_r">*</span></label>
+									<div class="col-sm-6" ng-hide="upsertVm.editMode">
+										<select chosen
+												class="form-control"
+												ng-model="upsertVm.oBillBook.type"
+												ng-change="upsertVm.oBillBook.type === 'Gr' || upsertVm.oBillBook.type === 'FPA' && upsertVm.getAllBranch()"
+												ng-options="item as item for item in $user.billBook_type"
+												name="BillBookType"
+												required>
+											<option value=""></option>
+										</select>
+										<span class="error" ng-if="upserForm['BillBookType'].$error.required
+																			&& (upserForm['BillBookType'].$touched
+																			|| upserForm.$submitted)">
+														This Field is Mandatory</span>
+										<span class="error" ng-if="!$user.billBook_type.length > 0">
+							                      you don't have access!! Ask your Admin</span>
+									</div>
+									<div class="col-md-6"
+										 ng-show="upsertVm.editMode">
+										{{upsertVm.oBillBook.type}}
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Auto Book: <span
+										class="req_r">*</span></label>
+									<div class="col-sm-6" ng-hide="upsertVm.oBillBook.centralize ? true : upsertVm.editMode">
+										<div class="fg-line">
+											<label class="checkbox checkbox-inline m-r-20">
+												<input type="checkbox"
+													   ng-model="upsertVm.oBillBook.auto">
+												<i class="input-helper"></i>
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-show="upsertVm.oBillBook.centralize ? true : upsertVm.editMode">
+										{{upsertVm.oBillBook.auto}}
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Format: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   stationary-format
+												   stationary-type="{{upsertVm.oBillBook.type}}"
+												   placeholder="Format"
+												   ng-model="upsertVm.oBillBook.format"
+												   ng-maxlength="16"
+												   ng-readonly="upsertVm.editMode"
+												   name="format"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="upserForm['format'].$error.required
+																			&& (upserForm['format'].$touched
+																			|| upserForm.$submitted)">
+														This Field is Mandatory</span>
+
+										<span class="error" ng-if="upserForm['format'].$error.maxlength">
+														Only 16 Character Allowed.</span>
+										<div class="error" id="showformatError"></div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-hide="upsertVm.editMode">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Select FY: <span
+										class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<select chosen
+												class="form-control"
+												ng-model="upsertVm.fy"
+												ng-change="upsertVm.onChangeFy(upsertVm.fy)"
+												ng-options="item as item for item in upsertVm.fyList"
+												name="selectFy"
+												required>
+											<option value=""></option>
+										</select>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Start Date: <span
+										class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened1 == true }">
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+													<input
+														ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+														type="text"
+														class="form-control"
+														uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+														show-weeks="false"
+														min-date="upsertVm.oBillBook.minDate"
+														max-date="upsertVm.oBillBook.maxDate"
+														ng-model="upsertVm.oBillBook.startDate"
+														is-open="opened1"
+														datepicker-options="upsertVm.DatePicker.dateSettings"
+														close-text="Close"
+														placeholder="Start Date"
+														name="startDate"
+														required
+														style="padding: 0px 4px;height: 34px;"/>
+												</div>
+												<span class="input-group-btn">
+													<button type="button"
+															class="btn btn-default m-t-0 f12"
+															ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</div>
+											<span class="error" ng-if="upserForm['startDate'].$error.required
+																	&& (upserForm['startDate'].$touched
+																	|| upserForm.$submitted)">
+												This Field is Mandatory
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">End Date: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened2 == true }">
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+													<input
+														ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+														type="text"
+														class="form-control"
+														uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+														show-weeks="false"
+														min-date="upsertVm.oBillBook.minDate"
+														max-date="upsertVm.oBillBook.maxDate"
+														ng-model="upsertVm.oBillBook.endDate"
+														is-open="opened2"
+														datepicker-options="upsertVm.DatePicker.dateSettings"
+														close-text="Close"
+														placeholder="End Date"
+														name="endDate"
+														required
+														style="padding: 0px 4px;height: 34px;"/>
+												</div>
+												<span class="input-group-btn">
+													<button type="button"
+															class="btn btn-default m-t-0 f12"
+															ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+											</div>
+											<span class="error" ng-if="upserForm['endDate'].$error.required
+																	&& (upserForm['endDate'].$touched
+																	|| upserForm.$submitted)">
+												This Field is Mandatory
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Min: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   placeholder="Min"
+												   ng-readonly="upsertVm.editMode"
+												   ng-min="1"
+												   ng-max="upsertVm.oBillBook.max"
+												   ng-model="upsertVm.oBillBook.min"
+												   name="min"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="upserForm['min'].$error.required
+																			&& (upserForm['min'].$touched
+																			|| upserForm.$submitted)">
+														This Field is Mandatory</span>
+										<span class="error" ng-if="upserForm['min'].$error.min
+																			&& (upserForm['min'].$touched
+																			|| upserForm.$submitted)">
+														Amount Should be grater than 0</span>
+										<span class="error" ng-if="upserForm['min'].$error.max
+																			&& (upserForm['min'].$touched
+																			|| upserForm.$submitted)">
+														Amount Should be Smaller Than Max(upsertVm.oBillBook.max)</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Max: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   placeholder="Max"
+												   ng-min="upsertVm.oBillBook.min"
+												   ng-model="upsertVm.oBillBook.max"
+												   name="max"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="upserForm['max'].$error.required
+																			&& (upserForm['max'].$touched
+																			|| upserForm.$submitted)">
+														This Field is Mandatory</span>
+										<span class="error" ng-if="upserForm['max'].$error.max
+																			&& (upserForm['max'].$touched
+																			|| upserForm.$submitted)">
+														Amount Should be grater than 0</span>
+										<span class="error" ng-if="upserForm['max'].$error.min
+																			&& (upserForm['max'].$touched
+																			|| upserForm.$submitted)">
+														Amount Should be grater than Min(upsertVm.oBillBook.min)</span>
+										<span class="error"
+											  ng-if="upsertVm.oBillBook.max - upsertVm.oBillBook.min > 10000">
+														Max Amount Limit Exit</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Centralize Book: <span class="req_r">*</span></label>
+									<div class="col-sm-6" ng-hide="upsertVm.editMode">
+										<div class="fg-line">
+											<label class="checkbox checkbox-inline m-r-20">
+												<input type="checkbox"
+													   ng-model="upsertVm.oBillBook.centralize">
+												<i class="input-helper"></i>
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-show="upsertVm.editMode">
+										{{upsertVm.oBillBook.centralize}}
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="col-md-4" ng-if="!upsertVm.oBillBook.centralize && upsertVm.oBillBook.type != 'Bill'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Branch:</label>
+									<div class="col-sm-6">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+												type="text"
+												class="form-control"
+												placeholder="Search branch"
+												ng-model="upsertVm.addBranch"
+												typeahead-wait-ms="10"
+												ng-trim="false"
+												name="branch"
+												typeahead="item as item.name for item in upsertVm.getAllBranch($viewValue) | limitTo:20"
+												typeahead-on-select="upsertVm.onBranchSelect($item);upsertVm.addBranch=null"
+											>
+											<i class="lvh-search-close" ng-click="upsertVm.addBranch=null;">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-8">
+								<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="upsertVm.branchMod.length">
+			                      <span class="btn-lst" ng-repeat="select in upsertVm.branchMod">
+				                      <button class="btn-xs" style="background: black; color: aliceblue;">     {{select.name}}&nbsp;
+				                      <a ng-click="upsertVm.branchMod.splice($index, 1)"> X </a>
+									  </button>&nbsp;&nbsp;
+								  </span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item" ng-show="upsertVm.oBillBook.auto">
+					<span class="booking_list_header">NOTE</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-4">
+								<div class="form-group m-b-0" style="font-weight: bolder;">
+									Allowed Annotations Examples: <br>
+									"YYYY": 2019 (Year)<br>
+									"YY": 19 (Year)<br>
+									"MM": 02 (Month)<br>
+									"MMM": FEB (Month)<br>
+									"MMMM": FEBRUARY (Month)<br>
+									"DD": 09 (Day)<br>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="upsertVm.closePopup()">Close
+		</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	.btn-primary:focus {
+		box-shadow: 0px 0px 13px 2px blue !important;
+	}
+
+	.btn-warning:focus {
+		box-shadow: 0px 0px 13px 2px darkred !important;
+	}
+
+</style>

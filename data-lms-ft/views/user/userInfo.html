@@ -1,0 +1,88 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>User Information</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(Detail View)
+				</span>
+			</span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px" id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<div class="card-body">
+			<form name="userInfo" ng-submit="submit(userInfo)" novalidate>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<span class="booking_list_header">BASIC USER DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Name: </label>
+										<div class="col-sm-6">
+											{{ aUser.full_name}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Father Name: </label>
+										<div class="col-sm-6">
+											{{ aUser.father_name}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">user Id: </label>
+										<div class="col-sm-6">
+											{{ aUser.userId}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label"> User Type:    </label>
+										<div class="col-sm-6">
+											{{ aUser.user_type}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Client Id: </label>
+										<div class="col-sm-6">
+											{{ aUser.clientId}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Account: </label>
+										<div class="col-sm-6">
+											{{ aUser.account}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+</style>
+

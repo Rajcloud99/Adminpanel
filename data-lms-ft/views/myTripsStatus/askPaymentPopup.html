@@ -1,0 +1,175 @@
+<form role="form" name="askPaymentPopUp" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<div class="col-md-12" ng-if="selectedTrip.askPayment.length>0">
+			<div class="detailList">
+				<table class="table table-bordered unresponsive">
+					<thead>
+					<tr>
+						<th>Date</th>
+						<th>Type</th>
+						<th>Amount</th>
+						<th>Settled</th>
+						<th>Remaining</th>
+						<th>Remark</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr data-ng-repeat="oAskPayment in selectedTrip.askPayment"
+						class="pointer selectItem">
+						<td>{{(oAskPayment.date | date: "dd-MMM-yyyy 'at' hh:mm a") || 'NA'}}</td>
+						<td>{{oAskPayment.type || 'NA'}}</td>
+						<td>{{oAskPayment.amount || 'NA'}}</td>
+						<td>{{oAskPayment.settledAmount || '0'}}</td>
+						<td>{{(oAskPayment.amount || 0) - (oAskPayment.settledAmount || 0)}}</td>
+						<td>{{oAskPayment.remark || 'NA'}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="justify col-md-12">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-3 control-label">Pay Type:
+							<span class="req_r">*</span>
+						</label>
+						<div class="col-sm-7">
+							<div class="select">
+								<select chosen
+										class="form-control"
+										ng-model="payType"
+										name="payType"
+										ng-options="item as item for item in $constants.aPayType"
+										required
+										style="background-color: white;">
+									<option value="" selected>Select</option>
+								</select>
+							</div>
+							<span class="error" ng-if="	askPaymentPopUp['payType'].$error.required
+														&& (askPaymentPopUp['payType'].$touched
+															|| askPaymentPopUp.$submitted)">
+													This Field is Mandatory</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Amount:
+							<span class="req_r">*</span>
+						</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number"
+									   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onwheel="return false"
+									   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+									   placeholder="Amount"
+									   ng-model="amount"
+									   class="form-control"
+									   name="Amount"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   required
+									   name="Rate">
+							</div>
+							<span class="error" ng-if="	askPaymentPopUp['Amount'].$error.required
+														&& (askPaymentPopUp['Amount'].$touched
+															|| askPaymentPopUp.$submitted)">
+													This Field is Mandatory</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Date:
+							<span class="req_r">*</span>
+						</label>
+						<div class="col-sm-6">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-init="date = DatePicker.newDate"
+										   ng-model="date"
+										   is-open="opened1"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Date"
+										   name="Date"
+										   required
+										   style="padding: 0px 4px;height: 34px;" />
+								</div>
+								<span class="input-group-btn">
+								  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</div>
+							<span class="error" ng-if="	askPaymentPopUp['Date'].$error.required
+														&& (askPaymentPopUp['Date'].$touched
+															|| askPaymentPopUp.$submitted)">
+								This Field is Mandatory</span>
+						</div>
+					</div>
+				</div>
+				<div style="clear: both"></div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0 p-t-10">
+						<label class="col-sm-3 control-label">Remark:</label>
+						<div class="col-sm-7">
+							<div class="fg-line">
+								<textarea rows="3"
+										  placeholder="Enter Remark"
+										  ng-model="remark"
+										  name="Remark"
+										  class="form-control"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-primary"
+				ng-click="upsertAskPaymet(askPaymentPopUp);"
+				ng-disabled="disableSubmit">Ask Payment</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+
+
+	.modal-dialog {
+		width: 70%;
+		min-height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

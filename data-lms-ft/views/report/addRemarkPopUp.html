@@ -1,0 +1,89 @@
+<form role="form"  name="addRemarkController" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="arVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add Action Remark</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+<!--			<div class="col-md-6" ng-hide="arVm.markDate && arVm.type == 'markSettle'">-->
+<!--				<div class="form-group m-b-0">-->
+<!--					<label class="col-sm-3 control-label">{{arVm.dateLabel}} Date</label>-->
+<!--					<div class="col-sm-7">-->
+<!--						<div class="date-picker input-group dp-blue"-->
+<!--							 ng-class="{ 'is-opened': opened1 == true }">-->
+<!--							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">-->
+<!--								<input ng-click="arVm.DatePicker.openDatePicker(this, $event, 'opened1')"-->
+<!--									   type="text"-->
+<!--									   class="form-control"-->
+<!--									   uib-datepicker-popup="{{arVm.DatePicker.formats[0]}}"-->
+<!--									   show-weeks="false"-->
+<!--									   max-date="sTCVm.DatePicker.newDate"-->
+<!--									   min-date = sTCVm.minDate-->
+<!--									   ng-model="arVm.date"-->
+<!--									   is-open="opened1"-->
+<!--									   datepicker-options="arVm.DatePicker.dateSettings"-->
+<!--									   close-text="Close"-->
+<!--									   placeholder="Settlement Date"-->
+<!--									   name="Settlement Date"-->
+<!--									   required-->
+<!--									   style="padding: 0px 4px;height: 34px;"/>-->
+<!--							</div>-->
+<!--							<span class="input-group-btn">-->
+<!--								<button type="button"-->
+<!--										class="btn btn-default m-t-0 f12"-->
+<!--										ng-click="arVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i-->
+<!--										class="glyphicon glyphicon-calendar"></i></button>-->
+<!--							</span>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<div class="col-md-6" ng-show="arVm.markDate">-->
+<!--				<div class="form-group m-b-0">-->
+<!--					<div class="col-sm-12">-->
+<!--						<b>Date:</b>&nbsp;&nbsp; {{arVm.date | date: "dd-MM-yyyy"}}-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+			<div class="col-md-12">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label">Action Remark</label>
+					<div class="col-sm-7">
+						<div class="fg-line">
+							<input type="text"
+								   placeholder="Action Remark"
+								   class="form-control"
+								   ng-model="arVm.remark"
+								   name="Remark"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="arVm.submit(settleTripCompPopup)">Submit</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="arVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 50%;
+		height: 173px
+	}
+	.exced{
+		margin-top: 20px;margin-left:10px;
+	}
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+	td ,th{
+		text-align:center;
+	}
+	.pac-container.pac-logo{z-index: 9999;}
+</style>

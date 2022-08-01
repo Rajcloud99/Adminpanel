@@ -1,0 +1,1134 @@
+<!-- Controller: addPurchaseBillController-->
+<!-- ControllerAs: pbab-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+			<span class="c-black"><b>Upsert Purchase Bill</b></span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" style="position: absolute;width: 100%;margin-bottom: 65px;overflow: scroll">
+		<form novalidate autocomplete="off" name="addPurchaseBillForm">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<!-- DETAILS -->
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Purchase Bill Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<label class="col-sm-5 control-label">Vendor (Cr. A/c):<span class="req_r">*</span></label>
+									<div class="col-sm-7" style="z-index: 90">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input autocomplete="off"
+												   type="text"
+												   name="vendor"
+												   class="form-control lvhs-input"
+												   placeholder="Select vendor"
+												   ng-model="pbab.vendor"
+												   uib-typeahead="m as m.name for m in pbab.getVendor($viewValue)"
+												   typeahead-wait-ms="10"
+												   typeahead-on-select="pbab.onVendSelect($item, $model, $label)"
+												   ng-change="pbab.aLabRep = []; pbab.aMaterials = [];"
+												   required
+											>
+											<i class="lvh-search-close" ng-click="pbab.vendor=undefined;">×</i>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Branch:<span class="req_r">*</span></label>
+									<div class="col-md-9"  style="z-index: 90">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="Branch Search..."
+													ng-model="pbab.branch"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in pbab.getAllBranch($viewValue) | limitTo:6"
+													typeahead-on-select="pbab.onBranchSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="pbab.branch=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Ref No:<span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Ref Number"
+													ng-model="pbab.refNo"
+													typeahead-wait-ms="10"
+													name="Reference Number"
+													typeahead="item.bookNo as item.bookNo for item in pbab.getRefNo($viewValue)|limitTo:10"
+													typeahead-on-select="pbab.onRefSelect($item, $model, $label)"
+													ng-change="pbab.billnofill();"
+													required>
+												<i class="lvh-search-close" ng-click="pbab.refNo = null;">×</i>
+												<!--<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"-->
+												   <!--style="right: -20px; background: #3096f3;"-->
+												   <!--ng-click="pbab.getAutoStationaryNo(pbab.billDate)"></i>-->
+											</div>
+											<span class="error" ng-if="addPurchaseBillForm['Reference Number'].$error.required
+																	&& !addPurchaseBillForm['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<!-- <div class="col-md-3">
+									<label class="col-sm-4 control-label">Bill Date:</label>
+									<div class="date-picker input-group dp-blue col-sm-8" ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input autocomplete="off" ng-click="pbab.DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   uib-datepicker-popup="{{pbab.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="pbab.billDate"
+												   ng-change="pbab.getTDSRate()"
+												   is-open="opened1"
+												   datepicker-options="pbab.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="Bill Date"
+												   name="Bill_Date"
+												   required
+												   style="padding: 0px 4px;height: 34px;" />
+										</div>
+										<span class="input-group-btn">
+									<button type="button"
+											class="btn btn-default m-t-0 f12"
+											ng-click="pbab.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+									</div>
+								</div> -->
+
+								<div class="col-md-3">
+                                    <div class="form-group m-b-0">
+                                        <label class="col-sm-3 control-label">Bill Date:<span class="req_r">*</span></label>
+                                        <div class="col-sm-9">
+                                            <div class="fg-line">
+												<input fill-date type="text" ng-model="pbab.billDate"
+													max-date="pbab.DatePicker.newDate" ng-blur="pbab.getTDSRate()"
+                                                    name="Bill_Date" class="form-control" placeholder="Bill Date">
+                                            </div>
+                                        </div>
+                                    </div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Actul Date:</label>
+										<div class="col-sm-9">
+											<div class="fg-line">
+												<input fill-date type="text"
+													   ng-model="pbab.actulDate"
+													   max-date="pbab.DatePicker.newDate"
+													   name="Bill_Date"
+													   class="form-control"
+													   placeholder="Actul Date">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Bill No.:<span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												<input type="text" ng-model="pbab.billNo" class="form-control" placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<div class="col-xs-4"><label>Bill Type :<span class="req_r">*</span></label></div>
+										<div class="col-xs-6">
+											<div class="select">
+												<select
+													class="form-control"
+													ng-options="item as item for item in $constants.billType"
+													ng-model="pbab.billType"
+													ng-readonly="opertaionType | operation"
+												>
+													<option value="" selected disabled>Select Bill Type</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<div class="col-xs-5"><label>Voucher Type :</label></div>
+										<div class="col-xs-6">
+											<div class="select">
+												<select
+													class="form-control"
+													ng-model="pbab.vchType"
+													ng-init = "pbab.vchType = pbab.vchType || 'Journal' "
+													ng-options="item as item for item in ['Journal', 'Purchase']"
+													ng-readonly="opertaionType | operation"
+												>
+												<option value="" disabled>Select Vch Type</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<div class="col-xs-5"><label>Purchase Type :</label></div>
+										<div class="col-xs-6">
+											<div class="select">
+												<select
+													class="form-control"
+													ng-options="item as item for item in ['Capex', 'Opex Other', 'Opex Same']"
+													ng-model="pbab.prchType"
+													ng-change="pbab.onPurchaseSelect(pbab.prchType)"
+													ng-readonly="opertaionType | operation"
+												>
+													<option value="" selected disabled>Select Type</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<div class="col-xs-4"><label>Party Type :</label></div>
+										<div class="col-xs-6">
+											<div class="select">
+												<select
+														class="form-control"
+														ng-model="pbab.partyType"
+														ng-change="pbab.calculateSummary()"
+														ng-readonly="opertaionType | operation"
+												>
+													<option value="" selected disabled>Select Bill Type</option>
+													<option value="Registered" selected>Registered</option>
+													<option value="Unregistered" selected>Unregistered</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Remark:</label>
+										<div class="col-sm-9">
+											<div class="fg-line">
+												<input type="text" ng-model="pbab.remark" class="form-control" placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="pbab.partyType == 'Registered' && pbab.taxType === '1'">
+									<label class="col-md-3 control-label">IGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="IGST A/c Search..."
+													ng-model="pbab.igstAcnt"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in pbab.getAllAccount($viewValue, 'IGST Paid') | limitTo:6"
+													typeahead-on-select="pbab.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="pbab.igstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="pbab.partyType == 'Registered' && pbab.taxType === '2'">
+									<label class="col-md-3 control-label">SGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="SGST A/c Search..."
+													ng-model="pbab.sgstAcnt"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in pbab.getAllAccount($viewValue, 'SGST Paid') | limitTo:6"
+													typeahead-on-select="pbab.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="pbab.sgstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="pbab.partyType == 'Registered' && pbab.taxType === '2'">
+									<label class="col-md-3 control-label">CGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="CGST A/c Search..."
+													ng-model="pbab.cgstAcnt"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in pbab.getAllAccount($viewValue, 'CGST Paid') | limitTo:6"
+													typeahead-on-select="pbab.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="pbab.cgstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Discount A/c:</label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear chosen-row-2">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="Discount A/c Search..."
+													ng-model="pbab.discountAcnt"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in pbab.getAllAccount($viewValue, 'Discount') | limitTo:6"
+											>
+											<i class="lvh-search-close" ng-click="pbab.discountAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-3" ng-if="!pbab.showTDSRate && !pbab.applyTcs">
+									<label class="col-md-3 control-label">TDS %:</label>
+									<div class="col-md-9">
+										{{pbab.tdsRate}}
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="pbab.showTDSRate && !pbab.applyTcs">
+									<div class="form-group">
+										<div class="col-xs-3"><label>TDS Rate :</label></div>
+										<div class="col-xs-6">
+											<div class="select">
+												<select
+													class="form-control"
+													ng-options="item as (item + '%') for item in [0,0.5,1,2,5,10,12,15,18,24,28,40]"
+													ng-model="pbab.tdsRate">
+													<option value="" selected disabled>Select TDS Rate</option>d
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">TCS: </label>
+										<div class="col-sm-6">
+											<div class="checkbox">
+												<label>
+													<input
+															type="checkbox"
+															ng-model="pbab.applyTcs"
+															ng-change="pbab.onTcsApply()"
+															value="">
+													<i class="input-helper"></i>
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="pbab.applyTcs">
+									<label class="col-md-3 control-label">TCS A/c:</label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear chosen-row-2">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="tcs A/c Search..."
+													ng-model="pbab.tcsAc"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in pbab.getAllAccount($viewValue) | limitTo:6">
+											<i class="lvh-search-close" ng-click="pbab.tcsAc=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Summary Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<h5 class="col-md-1">Material</h5>
+									<h5 class="col-md-2">Total W/O tax : {{pbab.totalMaterialWithoutTax|roundOff}}</h5>
+									<h5 class="col-md-1">Discount : {{pbab.discountOfMaterial|roundOff}}</h5>
+									<h5 class="col-md-1">Tot A/D : {{(pbab.totalMaterialWithoutTax - pbab.discountOfMaterial)|roundOff}}</h5>
+									<h5 class="col-md-1">CGST : {{pbab.cGSTOfMaterial|roundOff}}</h5>
+									<h5 class="col-md-1">SGST : {{pbab.sGSTOfMaterial|roundOff}}</h5>
+									<h5 class="col-md-1">IGST : {{pbab.iGSTOfMaterial|roundOff}}</h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-2">Total With tax : {{pbab.totalMaterialWithTax|roundOff}}</h5>
+								</div>
+								<div class="col-md-12">
+									<h5 class="col-md-1">Labour/Repair</h5>
+									<h5 class="col-md-2">Total W/O tax : {{pbab.totalLabRepWithoutTax|roundOff}}</h5>
+									<h5 class="col-md-1">Discount : {{pbab.discountOfLabRep|roundOff}}</h5>
+									<h5 class="col-md-1">Tot A/D : {{(pbab.totalLabRepWithoutTax - pbab.discountOfLabRep)|roundOff}}</h5>
+									<h5 class="col-md-1">CGST : {{pbab.cGSTOfLabRep|roundOff}}</h5>
+									<h5 class="col-md-1">SGST : {{pbab.sGSTOfLabRep|roundOff}}</h5>
+									<h5 class="col-md-1">IGST : {{pbab.iGSTOfLabRep|roundOff}}</h5>
+									<h5 class="col-md-1">TDS : {{pbab.tdsAmt|roundOff}}</h5>
+									<h5 class="col-md-2">Total With tax : {{pbab.totalLabRepWithTax|roundOff}}</h5>
+								</div>
+								<div class="col-md-12">
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-2">Total W/O tax : {{pbab.amt|roundOff}}</h5>
+									<h5 class="col-md-1">Discount : {{pbab.totDiscount|roundOff}}</h5>
+									<h5 class="col-md-1">Tot A/D : {{pbab.amount|roundOff}}</h5>
+									<h5 class="col-md-1">CGST : {{pbab.cGST|roundOff}}</h5>
+									<h5 class="col-md-1">SGST : {{pbab.sGST|roundOff}}</h5>
+									<h5 class="col-md-1">IGST : {{pbab.iGST|roundOff}}</h5>
+									<h5 class="col-md-1">TDS : {{pbab.tdsAmt|roundOff}}</h5>
+									<h5 class="col-md-2">Total With tax : {{pbab.totalAmount|roundOff}}</h5>
+								</div>
+								<div class="col-md-12">
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-2"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1">TCS: {{pbab.tcsAmt|roundOff}}</h5>
+									<h5 class="col-md-2">Total With TDS/TCS : {{(pbab.totalAmount + pbab.tdsAmt + pbab.tcsAmt)|roundOff}}</h5>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Adjustment Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Bill Amount:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="pbab.billAmount"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Credit A/c</label>
+									<div class="col-sm-8" style="z-index: 90">
+										{{pbab.vendor.name}}
+										</div>
+									</div>
+								<div class="col-md-3">
+									<label class="col-md-4 control-label">Debit A/c:</label>
+									<div class="col-md-8" style="z-index: 3">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input type="text" autocomplete="off"
+												   class="form-control lvhs-input"
+												   placeholder="Debit Accounts"
+												   ng-model="pbab.adjDebitAc"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in pbab.getAdjAcnt($viewValue)"
+											>
+											<i class="lvh-search-close" ng-click="pbab.adjDebitAc=''">×</i>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Adjustment Amount:</label>
+										<div class="col-sm-6">
+											{{(pbab.adjAmount = pbab.billAmount - pbab.totalAmount)|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header pull-left">Material Details</span>
+						<div class="col-md-4">
+							<label class="col-md-5 control-label">Purchase A/c(Dr. A/c):<span class="req_r">*</span></label>
+							<div class="col-md-7" style="z-index: 88">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text" autocomplete="off"
+										   class="form-control lvhs-input"
+										   placeholder="Purchase Accounts"
+										   ng-model="pbab.from_account"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in pbab.accountmaster($viewValue)"
+									>
+									<i class="lvh-search-close" ng-click="pbab.from_account=''">×</i>
+								</div>
+							</div>
+						</div>
+
+						<div class="pull-right text-right m-t-5">
+							<button class="btn btn-primary" uib-tooltip="Add Material" ng-click="pbab.addMaterial()">
+								<i class="glyphicon glyphicon-plus"></i>
+							</button>
+							<button class="btn btn-danger" uib-tooltip="Delete Material" ng-click="pbab.deleteMaterial()">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</div>
+						<div class="clearfix"></div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">HSN Code:</label>
+										<div class="col-sm-6" style="z-index: 87">
+											<div class="lvh-search ng-scope sear">
+												<input
+														type="text"
+														name="HSN Code"
+														class="form-control lvhs-input"
+														placeholder="Select hsnCode"
+														ng-model="pbab.oMaterial.hsnCode"
+														uib-typeahead="m as m.hsnCode for m in pbab.getHSNCode($viewValue)"
+														typeahead-wait-ms="10"
+														typeahead-on-select="pbab.onMatSelect($item, true)"
+
+												>
+												<i class="lvh-search-close" ng-click="pbab.oMaterial.hsnCode=undefined;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Material:<span class="req_r">*</span></label>
+										<div class="col-sm-6" style="z-index: 86">
+											<div class="ng-scope sear">
+												<input
+													type="text"
+													name="material"
+													class="form-control"
+													placeholder="Select Material"
+													ng-model="pbab.oMaterial.material"
+													empty-typeahead
+													typeahead-wait-ms="10"
+													ng-trim="false"
+													ng-change="pbab.getMaterial(pbab.oMaterial.material)"
+													uib-typeahead="m as m.name for m in pbab.allMaterial"
+													typeahead-on-select="pbab.onMatSelect(pbab.oMaterial.material,true)"
+													required>
+												<i class="lvh-search-close" ng-click="pbab.oMaterial.material=undefined;pbab.oMaterial.hsnCode=undefined">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Quantity:<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="pbab.oMaterial.quantity"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Rate:<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="pbab.oMaterial.rate"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Unit: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select name="unit"
+														class="form-control"
+														ng-model="pbab.oMaterial.unit"
+														ng-options="item as item for item in $constants.aUnits"
+												>
+													<option value="" selected disabled>Select Type</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">TAX %:  <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+												onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   min="0"
+													class="form-control"
+													ng-options="item as (item + '%') for item in [0,5,12,18,28]"
+													ng-model="objMaterialType.gstPercent">
+													<option value="" selected disabled>GST%</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Discount:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="pbab.oMaterial.discount"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">FRGT:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="pbab.oMaterial.frgt"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="pbab.partyType == 'Registered'">
+									<div class="form-group m-b-0">
+										<div class="col-sm-4"><label>FRGT GST %: </label></div>
+										<div class="col-sm-6">
+											<div class="">
+												<input type="number"
+													   ng-model="pbab.oMaterial.frgtGstPercent"
+													   class="form-control"
+													   placeholder="FRGT GST %">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Vehicle No:</label>
+									<div class="col-sm-6" style="z-index: 81">
+										<div class="lvh-search ng-scope sear">
+											<input
+													type="text"
+													name="VehicleNo"
+													class="form-control lvhs-input"
+													placeholder="Vehicle no"
+													ng-model="pbab.oMaterial.vehicle_no"
+													typeahead="person as person.vehicle_reg_no  for person in pbab.getVname($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="pbab.onVehSelect($item)"
+													required
+											>
+											<i class="lvh-search-close" ng-click="pbab.oMaterial.vehicle_no=undefined;">×</i>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Remark:</label>
+										<div class="col-sm-9">
+											<div class="fg-line">
+												<input type="text" ng-model="pbab.oMaterial.remark" class="form-control" placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="card-body">
+									<div class="row" style="margin:5px">
+										<div class="detailsList">
+											<div style="overflow-x: scroll">
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th>&#35;</th>
+														<th>material</th>
+														<th>HSN code</th>
+														<th>Vehicle No</th>
+														<th>Remark</th>
+														<th>UNIT</th>
+														<th>RATE</th>
+														<th>QUANTITY</th>
+														<th>TOTAL</th>
+														<th>Discount</th>
+														<th>tot after Discount</th>
+														<th>CGST RT.</th>
+														<th>CGST AMT.</th>
+														<th>SGST RT.</th>
+														<th>SGST AMT.</th>
+														<th>IGST RT.</th>
+														<th>IGST AMT.</th>
+														<th>FRGT</th>
+														<th>FRGT CGST RT.</th>
+														<th>FRGT CGST AMT.</th>
+														<th>FRGT SGST RT.</th>
+														<th>FRGT SGST AMT.</th>
+														<th>FRGT IGST RT.</th>
+														<th>FRGT IGST AMT.</th>
+														<th>TOTAL WITH TAX</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr class="pointer selectItem"
+														ng-repeat="mat in pbab.aMaterials | orderBy:'':true"
+														ng-click="pbab.onMaterialSelect($index, mat)"
+														ng-class="{'grn': mat.$$hashKey === pbab.oMaterialId}"
+													>
+														<td>{{$index + 1}}</td>
+														<td>{{mat.material}}</td>
+														<td>{{mat.hsnCode}}</td>
+														<td>{{mat.vehicle_no}}</td>
+														<td>{{mat.remark}}</td>
+														<td>{{mat.unit}}</td>
+														<td>{{mat.rate}}</td>
+														<td>{{mat.quantity}}</td>
+														<td>{{mat.totalWithoutTax|roundOff}}</td>
+														<td>{{mat.discount|roundOff}}</td>
+														<td>{{(mat.totalWithoutTax - mat.discount)|roundOff}}</td>
+														<td>{{mat.cGSTPercent}}</td>
+														<td>{{mat.cGST|roundOff}}</td>
+														<td>{{mat.sGSTPercent}}</td>
+														<td>{{mat.sGST|roundOff}}</td>
+														<td>{{mat.iGSTPercent}}</td>
+														<td>{{mat.iGST|roundOff}}</td>
+														<td>{{mat.frgt|roundOff}}</td>
+														<td>{{mat.frgtCGSTPercent}}</td>
+														<td>{{mat.frgtCGST|roundOff}}</td>
+														<td>{{mat.frgtSGSTPercent}}</td>
+														<td>{{mat.frgtSGST|roundOff}}</td>
+														<td>{{mat.frgtIGSTPercent}}</td>
+														<td>{{mat.frgtIGST|roundOff}}</td>
+														<td>{{mat.total|roundOff}}</td>
+													</tr>
+													<tr ng-show="pbab.aMaterials.length"
+														style="border-top: 2px solid black"
+														class="pointer">
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>{{pbab.rateMaterial|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.tableTotalMaterialWithoutTax|roundOff}}</td>
+														<td>{{pbab.discountOfMaterial|roundOff}}</td>
+														<td>{{(pbab.tableTotalMaterialWithoutTax - pbab.discountOfMaterial)|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.tableCGSTOfMaterial|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.tableSGSTOfMaterial|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.tableIGSTOfMaterial|roundOff}}</td>
+														<td>{{pbab.totFrgt|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.frgtCGSTOfMaterial|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.frgtSGSTOfMaterial|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.frgtIGSTOfMaterial|roundOff}}</td>
+														<td>{{pbab.totalMaterialWithTax|roundOff}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="clearfix"></div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header pull-left">Labour/Repair</span>
+
+						<div class="col-md-4">
+							<label class="col-md-5 control-label">Labour/Repair A/c(Dr. A/c):</label>
+							<div class="col-md-7">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text" autocomplete="off"
+										   class="form-control lvhs-input"
+										   placeholder="Labour/Repair A/C"
+										   ng-model="pbab.labourAc"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in pbab.accountmaster($viewValue)"
+									>
+									<i class="lvh-search-close" ng-click="pbab.labourAc=''">×</i>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3" ng-if="!pbab.applyTcs">
+							<label class="col-md-3 control-label">TDS A/c:</label>
+							<div class="col-md-9" style="z-index: 88">
+								<div class="lvh-search ng-scope sear chosen-row-2">
+									<input  type="text"
+											class="form-control lvhs-input"
+											placeholder="tds A/c Search..."
+											ng-model="pbab.tdsAc"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in pbab.getAllAccount($viewValue) | limitTo:6"
+											typeahead-on-select="pbab.onAccountSelect($item, $model, $label)"
+									>
+									<i class="lvh-search-close" ng-click="pbab.tdsAc=null;">×</i>
+								</div>
+							</div>
+						</div>
+
+						<div class="pull-right text-right m-t-5">
+							<button class="btn btn-primary" uib-tooltip="Add Labour/Repair" ng-click="pbab.addLabRep()">
+								<i class="glyphicon glyphicon-plus"></i>
+							</button>
+							<button class="btn btn-danger" uib-tooltip="Delete Labour/Repair" ng-click="pbab.deleteLabRep()">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</div>
+						<div class="clearfix"></div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select name="unit"
+														class="form-control"
+														ng-model="pbab.oLabRep.type"
+														ng-options="item as item for item in ['Labour', 'Repair']">
+													<option value="" selected disabled>Select Type</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">SAC Code:</label>
+										<div class="col-sm-6" style="z-index: 80">
+											<div class="lvh-search ng-scope sear">
+												<input
+														type="text"
+														name="SAC Code"
+														class="form-control lvhs-input"
+														placeholder="Select SAC Code"
+														ng-model="pbab.oLabRep.sacCode"
+														uib-typeahead="m as m.sacCode for m in pbab.getHSNCode($viewValue, 'sacCode')"
+														typeahead-on-select="pbab.onSacCodeChange($item)"
+														typeahead-wait-ms="10"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Quantity: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="pbab.oLabRep.quantity"
+													   class="form-control"
+													   placeholder="Enter quantity...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Amount:<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="pbab.oLabRep.amount"
+													   class="form-control"
+													   placeholder="Enter amount">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="!pbab.applyTcs">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">TDS: </label>
+										<div class="col-sm-6">
+											<div class="checkbox">
+												<label>
+													<input
+														type="checkbox"
+														ng-model="pbab.oLabRep.tds"
+														value="">
+													<i class="input-helper"></i>
+												</label>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+								<!--diksha-->
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">GST %:  <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select
+												onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   min="0"
+													class="form-control"
+													ng-options="item as (item + '%') for item in [0,5,12,18,28]"
+													ng-model="objMaterialType.gstPercent">
+													<option value="" selected disabled>Select GST</option>d
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Discount:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="pbab.oLabRep.discount"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="pbab.oLabRep.type === 'Repair'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vehicle No:<span class="req_r">*</span></label>
+										<div class="col-sm-6" style="z-index: 88">
+											<div class="lvh-search ng-scope sear">
+												<input
+													type="text"
+													name="VehicleNo"
+													class="form-control lvhs-input"
+													placeholder="Vehicle no"
+													ng-model="pbab.oLabRep.vehicle_no"
+													typeahead="person as person.vehicle_reg_no  for person in pbab.getVname($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="pbab.onVehSelect($item)"
+													required
+												>
+												<i class="lvh-search-close" ng-click="pbab.oLabRep.vehicle_no=undefined;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-2"  ng-if="pbab.oLabRep.type === 'Repair'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Vehicle Owner: </label>
+										<div class="col-sm-7">
+										{{pbab.vehOwner}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Remark:</label>
+										<div class="col-sm-9">
+											<div class="fg-line">
+												<input type="text" ng-model="pbab.oLabRep.remark" class="form-control" placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="card-body">
+									<div class="row" style="margin:5px">
+										<div class="detailsList">
+											<div style="overflow-x: scroll">
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th>&#35;</th>
+														<th>type</th>
+														<th>SAC Code</th>
+														<th>vehicle no</th>
+														<th>vehicle Owner</th>
+														<th>Remark</th>
+														<th>QUANTITY</th>
+														<th>amount</th>
+														<th>TOTAL</th>
+														<th>Discount</th>
+														<th>Tot After Discount</th>
+														<th>TDS</th>
+														<th>CGST RT.</th>
+														<th>CGST AMT.</th>
+														<th>SGST RT.</th>
+														<th>SGST AMT.</th>
+														<th>IGST RT.</th>
+														<th>IGST AMT.</th>
+														<th>TOTAL WITH TAX</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr class="pointer selectItem"
+														ng-repeat="labrep in pbab.aLabRep | orderBy:'':true"
+														ng-click="pbab.onlabSelect($index, labrep)"
+														ng-class="{'grn': labrep.$$hashKey === pbab.olabrepId}">
+														<td>{{$index + 1}}</td>
+														<td>{{labrep.type}}</td>
+														<td>{{labrep.sacCode}}</td>
+														<td>{{labrep.vehicle_no}}</td>
+														<td>{{labrep.vehOwnerName}}</td>
+														<td>{{labrep.remark}}</td>
+														<td>{{labrep.quantity}}</td>
+														<td>{{labrep.amount}}</td>
+														<td>{{labrep.totalWithoutTax|roundOff}}</td>
+														<td>{{labrep.discount|roundOff}}</td>
+														<td>{{(labrep.totalWithoutTax - labrep.discount)|roundOff}}</td>
+														<td>{{(labrep.tds ? (((labrep.totalWithoutTax - labrep.discount) * (pbab.tdsRate||0)/100)|roundOff) : 0)}}</td>
+														<td>{{labrep.cGSTPercent}}</td>
+														<td>{{labrep.cGST|roundOff}}</td>
+														<td>{{labrep.sGSTPercent}}</td>
+														<td>{{labrep.sGST|roundOff}}</td>
+														<td>{{labrep.iGSTPercent}}</td>
+														<td>{{labrep.iGST|roundOff}}</td>
+														<td>{{labrep.total|roundOff}}</td>
+													</tr>
+													<tr class="pointer"
+														style="border-top: 2px solid black"
+														ng-show="pbab.aLabRep.length"
+														>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>{{pbab.totalLabRepWithoutTax|roundOff}}</td>
+														<td>{{pbab.discountOfLabRep|roundOff}}</td>
+														<td>{{(pbab.totalLabRepWithoutTax - pbab.discountOfLabRep)|roundOff}}</td>
+														<td>{{pbab.tdsAmt|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.cGSTOfLabRep|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.sGSTOfLabRep|roundOff}}</td>
+														<td></td>
+														<td>{{pbab.iGSTOfLabRep|roundOff}}</td>
+														<td>{{pbab.totalLabRepWithTax|roundOff}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="clearfix"></div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="text-center">
+							<button ng-disabled="pbab.isDisabled"
+									class="btn btn-primary"
+									ng-click="pbab.addBill(true)"
+							>Submit & Approve
+							</button>
+						</div>
+					</li>
+
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+
+
+	error {
+		font-size: 10px;
+		color: red;
+	}
+	color {
+		color: red;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+</style>

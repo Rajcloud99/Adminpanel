@@ -1,0 +1,821 @@
+<!-- Controller: upsertVehicleExpCtrl-->
+<!-- ControllerAs: veuVM-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+			<span class="c-black"><b>Vehicle Expense({{veuVM.mode}})</b></span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 tab-index="-1"
+	 id="messages-main">
+	<div class="card" style="position: absolute;width: 100%;margin-bottom: 65px">
+		<form novalidate autocomplete="off" name="addVehExpenseForm">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">PurchaseBill Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-2">
+									<div class="">
+										<input
+												type="text"
+												class="form-control"
+												ng-model="veuVM.PurchseBillNo"
+												ng-change="veuVM.getPurchseBill()"
+												ng-model-options="{ updateOn: 'blur' }"
+												name="PurchseBillNo"
+												focusable
+												placeholder="Purchase Bill No."
+										>
+										<i class="lvh-search-close"
+										   ng-click="veuVM.PurchseBillNo = '';veuVM.selectedPurBill= '';">×</i>
+									</div>
+									<span class="error" ng-if="veuVM.PurchseBillNo && veuVM.noPurBillFound">No PurchaseBill Found</span>
+								</div>
+								<div class="col-md-3" ng-if="veuVM.selectedPurBill">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">PurchseBill No:</label>
+										<div class="col-sm-6">
+											{{veuVM.selectedPurBill.billNo}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="veuVM.selectedPurBill">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">PurchseBill Date:</label>
+										<div class="col-sm-6">
+											{{veuVM.selectedPurBill.billDate | date: "dd-MM-yyyy"}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="veuVM.selectedPurBill">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">PurchseBill RefNo: </label>
+										<div class="col-sm-6">
+											{{veuVM.selectedPurBill.refNo}}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+<!--								<div class="col-md-3" ng-if="veuVM.selectedPurBill">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-5 control-label">PurchseBill Vendor: </label>-->
+<!--										<div class="col-sm-6">-->
+<!--											{{veuVM.selectedPurBill.account.name}}-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+								<div class="col-md-3" ng-if="veuVM.selectedPurBill">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">PurchseBill Type: </label>
+										<div class="col-sm-6">
+											{{veuVM.selectedPurBill.billType}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="veuVM.selectedPurBill">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">PurchseBill Amount: </label>
+										<div class="col-sm-6">
+											{{veuVM.selectedPurBill.billAmount}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Vouchers Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											{{veuVM.oExpense.vT}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Voucher Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											{{veuVM.oExpense.type}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Date: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+
+											<input
+													fill-date
+													max-date="veuVM.DatePicker.newDate"
+													min-date="'setDate'|dateUtilsFilt:'31/03/2019'"
+													type="text"
+													class="form-control"
+													placeholder="Date"
+													focusable
+													ng-model="veuVM.oExpense.billDate"
+													ng-readonly="veuVM.readOnly"
+											>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Branch Search.."
+														ng-model="veuVM.oExpense.branch"
+														typeahead-wait-ms="10"
+														name="Branch"
+														focusable
+														typeahead="item as item.name for item in veuVM.getAllBranch($viewValue)|limitTo:6"
+														typeahead-on-select="veuVM.oExpense.refNo = '';veuVM.onSelect($item, $model, $label)"
+														required ng-readonly="veuVM.readOnly">
+												<i class="lvh-search-close" ng-if="!veuVM.readOnly"
+												   ng-click="veuVM.oExpense.branch=null;">×</i>
+											</div>
+											<span class="error"
+												  ng-show="!veuVM.oExpense.branch">No Branch Selected</span>
+											<span class="warning"
+												  ng-show="veuVM.oExpense.branch && !veuVM.oExpense.branch.refNoBook">No Ref Book Linked to selected branch</span>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Ref No:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Ref Number"
+														ng-model="veuVM.oExpense.refNo"
+														typeahead-wait-ms="10"
+														name="Reference Number"
+														focusable
+														typeahead="item.bookNo as item.bookNo for item in veuVM.getRefNo(veuVM.oExpense.refNo)|limitTo:10"
+														typeahead-on-select="veuVM.onRefSelect($item, $model, $label)"
+														required ng-readonly="veuVM.readOnly">
+												<i class="lvh-search-close" ng-if="!veuVM.readOnly"
+												   ng-click="veuVM.oExpense.refNo=null;">×</i>
+												<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+												   style="right: -20px; background: #3096f3;" ng-if="!veuVM.readOnly"
+												   ng-click="veuVM.getAutoStationaryNo(veuVM.oExpense.billDate)"></i>
+											</div>
+											<span class="error" ng-if="addVehExpenseForm['Reference Number'].$error.required
+																	&& !addVehExpenseForm['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Mode: </label>
+										<div class="col-sm-6" ng-if="!veuVM.readOnly">
+											<select chosen
+													class="form-control"
+													ng-model="veuVM.oExpense.paymentMode"
+													ng-options="item as item for item in $configs.voucher.aPaymentMode || veuVM.aPaymentMode"
+													name="Payment Mode"
+													focusable
+													ng-readonly="veuVM.readOnly"
+													ng-change="veuVM.oExpense.edited=true">
+												<option value=""></option>
+											</select>
+										</div>
+										<div class="col-sm-6" ng-if="veuVM.readOnly">
+											{{veuVM.oExpense.paymentMode}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3"
+									 ng-if="veuVM.oExpense.paymentMode === 'NEFT' || veuVM.oExpense.paymentMode === 'Cheque'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">UTR NO /Cheque No :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="UTR NO /Cheque No"
+													   ng-model="veuVM.oExpense.chequeNo"
+													   name="UTR NO /Cheque No "
+													   focusable
+													   ng-change="veuVM.oExpense.edited=true"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   ng-readonly="veuVM.readOnly"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Ref:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Payment Ref"
+													   ng-model="veuVM.oExpense.paymentRef"
+													   name="Payment Ref"
+													   focusable
+													   ng-change="veuVM.oExpense.edited=true"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   ng-readonly="veuVM.readOnly"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group">
+										<div class="fg-line">
+											<textarea class="form-control"
+													  rows="2"
+													  focusable
+													  ng-model="veuVM.oExpense.narration"
+													  ng-change="veuVM.oExpense.edited=true"
+													  ng-readonly="veuVM.readOnly"
+													  placeholder="Narration..."></textarea>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Credit A/c:<span
+											class="req_r">*</span></label>
+									<div class="col-md-9" style="z-index: 99">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   focusable
+												   class="form-control lvhs-input"
+												   placeholder="Credit A/c Search..."
+												   ng-model="veuVM.creditAcnt"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in veuVM.getAccount($viewValue) | limitTo:6">
+											<i class="lvh-search-close" ng-click="veuVM.creditAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Gst Type:</label>
+										<div class="col-sm-7">
+											<select chosen
+													focusable
+													class="form-control"
+													ng-model="veuVM.gstType"
+													ng-options="item as item for item in ['IGST', 'CGST & SGST']"
+													name="Gst Type"
+													ng-change="veuVM.applyTax()">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="veuVM.gstType === 'IGST'">
+									<label class="col-md-3 control-label">IGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   focusable
+												   class="form-control lvhs-input"
+												   placeholder="IGST A/c Search..."
+												   ng-model="veuVM.igstAcnt"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in veuVM.getAccount($viewValue, 'IGST Paid') | limitTo:6"
+												   typeahead-on-select="veuVM.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="veuVM.igstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="veuVM.gstType === 'CGST & SGST'">
+									<label class="col-md-3 control-label">CGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   focusable
+												   class="form-control lvhs-input"
+												   placeholder="CGST A/c Search..."
+												   ng-model="veuVM.cgstAcnt"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in veuVM.getAccount($viewValue, 'CGST Paid') | limitTo:6"
+												   typeahead-on-select="veuVM.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="veuVM.cgstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="veuVM.gstType === 'CGST & SGST'">
+									<label class="col-md-3 control-label">SGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   focusable
+												   class="form-control lvhs-input"
+												   placeholder="SGST A/c Search..."
+												   ng-model="veuVM.sgstAcnt"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in veuVM.getAccount($viewValue, 'SGST Paid') | limitTo:6"
+												   typeahead-on-select="veuVM.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="veuVM.sgstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header pull-left">Items</span>
+
+						<div class="pull-right text-right m-t-5">
+							<button class="btn btn-primary" uib-tooltip="Add Items" ng-click="veuVM.addItems()">
+								<i class="glyphicon glyphicon-plus"></i>
+							</button>
+							<button class="btn btn-danger" uib-tooltip="Delete Items" ng-click="veuVM.deleteItems()">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</div>
+						<div class="clearfix"></div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+
+								<div class="col-md-3" ng-if="veuVM.selectedPurBill">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Name:</label>
+										<div class="col-sm-7">
+											<select chosen
+													focusable
+													class="form-control"
+													ng-model="veuVM.oItem.name"
+													ng-options="item as item for item in veuVM.aMaterialList"
+													name="name">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3"  ng-if="!veuVM.selectedPurBill">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Name:<span class="req_r">*</span></label>
+										<div class="col-sm-9">
+											<div class="fg-line">
+												<input
+														type="text"
+														name="Name"
+														class="form-control lvhs-input"
+														placeholder="Enter Name"
+														ng-model="veuVM.oItem.name"
+														typeahead-wait-ms="10"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Unique Id:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="text"
+													   ng-model="veuVM.oItem.uId"
+													   class="form-control"
+													   placeholder="Enter Unique Id...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Quantity:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="veuVM.oItem.qty"
+													   class="form-control"
+													   placeholder="Enter quantity...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Rate:<span class="req_r">*</span></label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="veuVM.oItem.rate"
+													   class="form-control"
+													   placeholder="Enter Rate">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Vehicle:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-9">
+											<div class="lvh-search ng-scope sear">
+												<input
+														type="text"
+														name="VehicleNo"
+														class="form-control lvhs-input"
+														placeholder="Vehicle no"
+														ng-model="veuVM.oItem.vehicle"
+														typeahead="person as person.vehicle_reg_no  for person in veuVM.getAllvehicle($viewValue)"
+														typeahead-wait-ms="10"
+														typeahead-on-select="veuVM.onVehSelect($item)"
+
+												>
+												<i class="lvh-search-close"
+												   ng-click="veuVM.oItem.vehicle=undefined;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<div class="col-sm-4"><label>GST %: </label></div>
+										<div class="col-sm-7">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   min="0"
+												   ng-model="veuVM.oItem.gstPercent"
+												   class="form-control"
+												   placeholder="GST %">
+										</div>
+									</div>
+								</div>
+
+
+								<div class="clearfix"></div>
+
+								<div class="card-body">
+									<div class="row" style="margin:5px">
+										<div class="detailsList">
+											<div style="overflow-x: scroll">
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th>&#35;</th>
+														<th>Name</th>
+														<th>Unique Id</th>
+														<th>vehicle no</th>
+														<th>vehicle ownershipType</th>
+														<th>vehicle Ac</th>
+														<th>QUANTITY</th>
+														<th>Rate</th>
+														<th>TOTAL</th>
+														<th>CGST RT.</th>
+														<th>CGST AMT.</th>
+														<th>SGST RT.</th>
+														<th>SGST AMT.</th>
+														<th>IGST RT.</th>
+														<th>IGST AMT.</th>
+														<th>TOTAL WITH TAX</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr class="pointer selectItem"
+														ng-repeat="item in veuVM.aExpense"
+														ng-click="veuVM.onItemSelect($index, item)"
+														ng-class="{'grn': item._id === veuVM.oItemId}">
+														<td>{{$index + 1}}</td>
+														<td>{{item.name}}</td>
+														<td>{{item.uId}}</td>
+														<td>{{item.vehicleNo}}</td>
+														<td>{{item.ownershipType}}</td>
+														<td>{{item.accountName}}</td>
+														<td>{{item.qty}}</td>
+														<td>{{item.rate}}</td>
+														<td>{{item.amount | roundOff}}</td>
+														<td>{{item.cGSTPercent}}</td>
+														<td>{{item.cGST | roundOff}}</td>
+														<td>{{item.sGSTPercent}}</td>
+														<td>{{item.sGST | roundOff}}</td>
+														<td>{{item.iGSTPercent}}</td>
+														<td>{{item.iGST | roundOff}}</td>
+														<td>{{item.amountWithTax}}</td>
+													</tr>
+													<tr class="pointer"
+														style="border-top: 2px solid black"
+														ng-show="veuVM.aExpense.length"
+													>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>{{veuVM.totalWithoutTax | roundOff}}</td>
+														<td></td>
+														<td>{{veuVM.cGST | roundOff}}</td>
+														<td></td>
+														<td>{{veuVM.sGST | roundOff}}</td>
+														<td></td>
+														<td>{{veuVM.iGST | roundOff}}</td>
+														<td>{{veuVM.totalWithTax | roundOff}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="clearfix"></div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item" ng-hide="true">
+						<span class="booking_list_header pull-left">Labour/Repair</span>
+
+						<div class="col-md-4">
+							<label class="col-md-5 control-label">Labour/Repair A/c(Dr. A/c):</label>
+							<div class="col-md-7">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text" autocomplete="off"
+										   class="form-control lvhs-input"
+										   placeholder="Labour/Repair A/C"
+										   ng-model="veuVM.labourAc"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in veuVM.getAccount($viewValue)"
+									>
+									<i class="lvh-search-close" ng-click="veuVM.labourAc=''">×</i>
+								</div>
+							</div>
+						</div>
+
+						<div class="pull-right text-right m-t-5">
+							<button class="btn btn-primary" uib-tooltip="Add Items" ng-click="veuVM.addLabRep()">
+								<i class="glyphicon glyphicon-plus"></i>
+							</button>
+							<button class="btn btn-danger" uib-tooltip="Delete Items" ng-click="veuVM.deleteLabRep()">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</div>
+						<div class="clearfix"></div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select name="unit"
+														class="form-control"
+														ng-model="veuVM.oLabRep.type"
+														ng-options="item as item for item in ['Labour', 'Repair']">
+													<option value="" selected disabled>Select Type</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Quantity:<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="veuVM.oLabRep.qty"
+													   class="form-control"
+													   placeholder="Enter quantity...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Amount:<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="veuVM.oLabRep.rate"
+													   class="form-control"
+													   placeholder="Enter amount">
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vehicle No:<span class="req_r">*</span></label>
+										<div class="col-sm-6" style="z-index: 88">
+											<div class="lvh-search ng-scope sear">
+												<input
+														type="text"
+														name="VehicleNo"
+														class="form-control lvhs-input"
+														placeholder="Vehicle no"
+														ng-model="veuVM.oLabRep.vehicle"
+														typeahead="person as person.vehicle_reg_no  for person in veuVM.getVname($viewValue)"
+														typeahead-wait-ms="10"
+														typeahead-on-select="veuVM.onVehSelect($item)"
+												>
+												<i class="lvh-search-close" ng-click="veuVM.oLabRep.vehicle_no=undefined;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<div class="col-sm-4"><label>GST %: </label></div>
+										<div class="col-sm-6">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   min="0"
+												   ng-model="veuVM.oLabRep.gstPercent"
+												   class="form-control"
+												   placeholder="GST %">
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="card-body">
+									<div class="row" style="margin:5px">
+										<div class="detailsList">
+											<div style="overflow-x: scroll">
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th>&#35;</th>
+														<th>type</th>
+														<th>vehicle no</th>
+														<th>vehicle Owner</th>
+														<th>QUANTITY</th>
+														<th>amount</th>
+														<th>TOTAL</th>
+														<th>CGST RT.</th>
+														<th>CGST AMT.</th>
+														<th>SGST RT.</th>
+														<th>SGST AMT.</th>
+														<th>IGST RT.</th>
+														<th>IGST AMT.</th>
+														<th>TOTAL WITH TAX</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr class="pointer selectItem"
+														ng-repeat="labrep in veuVM.aLabRep"
+														ng-click="veuVM.onlabSelect($index, labrep)"
+														ng-class="{'grn': labrep._id === veuVM.olabrepId}">
+														<td>{{$index + 1}}</td>
+														<td>{{labrep.type}}</td>
+														<td>{{labrep.vehicleNo}}</td>
+														<td>{{labrep.vehOwnerName}}</td>
+														<td>{{labrep.qty}}</td>
+														<td>{{labrep.rate}}</td>
+														<td>{{labrep.totalWithoutTax|roundOff}}</td>
+														<td>{{labrep.cGSTPercent}}</td>
+														<td>{{labrep.cGST|roundOff}}</td>
+														<td>{{labrep.sGSTPercent}}</td>
+														<td>{{labrep.sGST|roundOff}}</td>
+														<td>{{labrep.iGSTPercent}}</td>
+														<td>{{labrep.iGST|roundOff}}</td>
+														<td>{{labrep.total}}</td>
+													</tr>
+													<tr class="pointer"
+														style="border-top: 2px solid black"
+														ng-show="veuVM.aLabRep.length"
+													>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>{{veuVM.totalLabRepWithoutTax|roundOff}}</td>
+														<td></td>
+														<td>{{veuVM.cGSTOfLabRep|roundOff}}</td>
+														<td></td>
+														<td>{{veuVM.sGSTOfLabRep|roundOff}}</td>
+														<td></td>
+														<td>{{veuVM.iGSTOfLabRep|roundOff}}</td>
+														<td>{{veuVM.totalLabRepWithTax|roundOff}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="clearfix"></div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+
+				</ul>
+			</div>
+			<div class="text-center">
+				<button type="button" ng-click="veuVM.submit(addVehExpenseForm)"
+						focusable
+						class="btn btn-primary">{{veuVM.mode}} Expense
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+
+
+	error {
+		font-size: 10px;
+		color: red;
+	}
+
+	color {
+		color: red;
+	}
+
+	.btn-danger:focus {
+		box-shadow: 0px 0px 13px 2px darkred !important;
+	}
+
+	.btn-primary:focus {
+		box-shadow: 0px 0px 13px 2px blue !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+</style>

@@ -1,0 +1,394 @@
+<form role="form" name="myGRPopUp" autocomplete="off" novalidate>
+    <div class="modal-header">
+        <button type="button" ng-click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	  </button>
+        <h4 class="modal-title" align="center">GR for Trip No. {{trip.trip_no}} for Route {{trip.route_name}}</h4>
+        <h5 class="modal-title" align="center">Branch : {{trip.branch}}</h5>
+    </div>
+    <div class="modal-body">
+        <div class="justify col-md-12">
+
+            <div class="row" style="">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">Trip No.</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="trip.trip_no" placeholder="  " class="form-control" readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">Total Items </label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                {{trip.booking_info.length}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">Vehicle No. </label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="trip.vehicle_no" placeholder=" " class="form-control" readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">Customer Name:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="trip.customer_name" placeholder=" " class="form-control" readonly="true" name="customer name" ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">GR No.:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="trip.gr_no" placeholder=" " class="form-control" name="GR No." ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">GR Date:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                {{trip.gr_date | date: "dd-MM-yyyy"}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">GR Charge:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" ng-model="trip.gr_charges" placeholder=" " class="form-control" name="GR Charge" ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">Loading Charge</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" ng-model="trip.loading_charges" placeholder="" class="form-control" ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">Unloading Charge</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" ng-model="trip.unloading_charges" placeholder=" " class="form-control" ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-4">
+			<div class="form-group m-b-0">
+			  <label class="col-sm-6 control-label">Munshiyana Charge</label>
+			  <div class="col-sm-6">
+				<div class="fg-line">
+				  <input type="number" ng-model="trip.munshiyana_charges" placeholder="" class="form-control" ng-readonly="true">
+				</div>
+			  </div>
+			</div>
+		  </div> -->
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">other Charges</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" ng-model="trip.other_charges" placeholder=" " class="form-control" ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">Fuel Price Hike</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" ng-model="trip.fuel_price_hike" placeholder=" " class="form-control" ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-6 control-label">Total</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" ng-model="trip.total" placeholder=" " class="form-control" ng-readonly="true">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-4">
+			<div class="form-group m-b-0">
+			  <label class="col-sm-6 control-label">Freight</label>
+			  <div class="col-sm-6">
+				<div class="fg-line">
+				  <input type="number" ng-model="trip.freight" placeholder=" " class="form-control" ng-readonly="true">
+				</div>
+			  </div>
+			</div>
+		  </div>
+		  <div class="col-md-4">
+			<div class="form-group m-b-0">
+			  <label class="col-sm-6 control-label">Rate<span>  {{"  x  "+trip.booking_info[0].weight.value +"("+trip.booking_info[0].weight.unit+")"}} </span></label>
+			  <div class="col-sm-6">
+				<div class="fg-line">
+				  <input type="number" ng-model="trip.rate" placeholder=" " class="form-control" ng-readonly="true">
+				</div>
+			  </div>
+			</div>
+		  </div> -->
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Consignor: </label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="trip.consigner" ng-options="item as item.name for item in aConsigner" name="consigner" required>
+								<option value=""></option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Consignee:</label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="trip.consignee" ng-options="item as item.name for item in aConsignee" name="consignee" required>
+								<option value=""></option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" ng-show="exportType">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Invoice No:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" placeholder="Enter Invoice Number" ng-model="trip.factory_invoice_number" class="form-control" name="Invoice Number">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Invoice Value:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" placeholder="Enter Invoice Value" ng-model="trip.factory_invoice_value" class="form-control" name="Invoice Value">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Invoice Date:</label>
+                        <div class="col-sm-6">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+                                    <input ng-click="open($event, 'opened3')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="trip.factory_invoice_date" is-open="opened3" datepicker-options="dateOptions" close-text="Close" placeholder="Invoice Date"
+                                        style="padding: 0px 4px;height: 34px;" />
+                                </div>
+                                <span class="input-group-btn">
+								  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened3')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="importType">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">BOE No:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" placeholder="Enter BOE Number" ng-model="trip.boe_no" class="form-control" name="BOE Value">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">BOE Value:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" placeholder="Enter BOE Value" ng-model="trip.boe_value" class="form-control" name="BOE Value">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">BOE Date:</label>
+                        <div class="col-sm-6">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                                    <input ng-click="open($event, 'opened2')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="trip.boe_date" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="BOE Date" style="padding: 0px 4px;height: 34px;"
+                                    />
+                                </div>
+                                <span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</button>
+								</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<div class="row">
+				<div class="col-md-12" ng-show="configs['GR']['Add']['Show field']['Loading Tare Weight'] || configs['GR']['Add']['Show field']['Loading Gross Weight'] || configs['GR']['Add']['Show field']['Loading Net Weight']">
+					<div class="col-md-12">
+						<span class="booking_list_header">Loading Details</span>
+					</div>
+					<div class="col-md-6" ng-show="configs['GR']['Add']['Show field']['Loading Tare Weight']">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Tare Weight</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number"ng-model="trip.l_tare_w" placeholder=" " class="form-control" ng-readonly="l_tare_w_ReadOnly">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6" ng-show="configs['GR']['Add']['Show field']['Loading Gross Weight']">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Gross Weight</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number" ng-model="trip.l_gross_w" placeholder=" " class="form-control" ng-readonly="l_gross_w_ReadOnly">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6" ng-show="configs['GR']['Add']['Show field']['Loading Net Weight']">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Net Weight</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									{{ trip.l_net_w = trip.l_gross_w - trip.l_tare_w }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12"  ng-show="configs['GR']['Add']['Show field']['Unloading Tare Weight'] || configs['GR']['Add']['Show field']['Unloading Gross Weight'] || configs['GR']['Add']['Show field']['Unloading Net Weight']">
+					<div class="col-md-12">
+						<span class="booking_list_header">Unoading Details</span>
+					</div>
+					<div class="col-md-6" ng-show="configs['GR']['Add']['Show field']['Unloading Tare Weight']">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Gross Weight</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number" ng-model="trip.ul_gross_w" placeholder=" " class="form-control" ng-readonly="{{ul_gross_w_ReadOnly}}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6" ng-show="configs['GR']['Add']['Show field']['Unloading Gross Weight']">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Tare Weight</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number" ng-model="trip.ul_tare_w" placeholder=" " class="form-control" ng-readonly="{{ul_tare_w_ReadOnly}}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6" ng-show="configs['GR']['Add']['Show field']['Unloading Net Weight']">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Net Weight</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									{{ trip.ul_net_w = trip.ul_gross_w - trip.ul_tare_w }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+            <div class="row">
+                <button class="btn btn-success" style="margin-left: 86%;" ng-click="updateGRDetails()">Update</button>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr>
+        <div>
+            <form name="">
+                <div class="table-responsive">
+                    <div ng-if="trip.booking_info.length>0">
+                        <table ng-table="tableParams" class="table table-bordered unresponsive">
+                            <thead>
+                                <tr>
+                                    <!-- <th>Booking No.</th> -->
+                                    <th>Item No./ Container No.</th>
+                                    <th>Weight(MT)</th>
+                                    <th>Rate(Rs.)</th>
+                                    <th>Freight(Rs.)</th>
+                                    <th>Material type</th>
+                                    <!-- <th>Loading Yard</th>
+					<th>Offloading Yard</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="oInfo in trip.booking_info">
+                                    <td>
+                                        <span ng-if="oInfo.item_no">{{oInfo.item_no}}</span>
+                                        <span ng-if="oInfo.container_no">{{oInfo.container_no}}</span>
+                                    </td>
+                                    <td>{{oInfo.weight.value || 'NA'}}</td>
+                                    <td>{{oInfo.rate || 'NA'}}</td>
+                                    <td>{{oInfo.freight || 'NA'}}</td>
+                                    <td>{{oInfo.material_type || 'NA'}}</td>
+                                    <!-- <td>{{oInfo.loading_yard.name || 'NA'}}</td>
+					<td>{{oInfo.offloading_yard.name || 'NA'}}</td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+    </div>
+</form>
+<style type="text/css">
+    .modal-dialog {
+        width: 75%;
+        height: 173px
+    }
+</style>

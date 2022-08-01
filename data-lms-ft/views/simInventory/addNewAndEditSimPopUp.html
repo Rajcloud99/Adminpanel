@@ -1,0 +1,372 @@
+<form role="form" name="addNewAndEditSimPopUp" autocomplete="off" ng-submit="formSubmitHandler()">
+
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">{{modalTitle}}</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+
+			<div class="clearfix"></div>
+			<br>
+
+			<div class="col-md-12">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Sim no <span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="text"
+									   onwheel="return false"
+									   ng-model="simDetail.quantity"
+									   placeholder="Enter sim no."
+									   class="form-control">
+								<span class="req_r" style="font-size: 12px">{{simNoMsg}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Mobile no <span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="text"
+									   onwheel="return false"
+									   ng-model="simDetail.quantity"
+									   placeholder="Enter sim no."
+									   class="form-control">
+								<span class="req_r" style="font-size: 12px">{{simNoMsg}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Purchased from <span class="req_r">*</span> </label>
+						<div class="col-md-8">
+							<div class="lvh-search sear">
+								<input type="text"
+									   class="lvhs-input"
+									   placeholder="Vendor Search..."
+									   ng-model="simDetail.purchased_from"
+									   typeahead-wait-ms="100"
+									   typeahead="item as item.name for item in vendors | limitTo:8"
+									   ng-change="getVendors(simDetail.vendor)"
+									   typeahead-on-select="onSelect($item, $model, $label)"
+									   required>
+								<i class="lvh-search-close" ng-click="clearSearch()">×</i>
+							</div>
+							<!--<select chosen-->
+							<!--class="form-control"-->
+							<!--ng-options="item as item.name for item in customers"-->
+							<!--ng-model="quoteDetail.customer"-->
+							<!--required>-->
+							<!--<option value="" selected>Select</option>-->
+							<!--</select>-->
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Purchase invoice no.<span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="text"
+									   onwheel="return false"
+									   ng-model="simDetail.quantity"
+									   placeholder="Enter sim no."
+									   class="form-control">
+								<span class="req_r" style="font-size: 12px">{{purchaseInvoiceMsg}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<br>
+
+			<div class="col-md-12" style="padding-top:20px">
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label" style="line-height:3">Delivery date<span
+								class="req_r">*</span></label>
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': deliveryDatePopUp }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': deliveryDatePopUp }">
+								<input ng-click="showModal($event, 'deliveryDatePopUp')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{format}}"
+									   show-weeks="false"
+									   ng-model="quoteDetail.possible_delivery_by"
+									   is-open="deliveryDatePopUp"
+									   min-date="minDate"
+									   datepicker-options="dateOptions"
+									   close-text="Close"
+									   placeholder="Date"
+									   required
+									   style="padding: 0px 4px; height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+							  <button type="button" class="btn btn-default m-t-0 f12"
+									  ng-click="showModal($event, 'deliveryDatePopUp')">
+								  <i class="glyphicon glyphicon-calendar"></i>
+							  </button>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label" style="line-height:3">Expiry date <span
+								class="req_r">*</span></label>
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': expiryDatePopUp }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': expiryDatePopUp }">
+								<input ng-click="showModal($event, 'expiryDatePopUp')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{format}}"
+									   show-weeks="false"
+									   ng-disabled="!quoteDetail.possible_delivery_by"
+									   ng-model="quoteDetail.quot_expiry_date"
+									   is-open="expiryDatePopUp"
+									   min-date="quoteDetail.possible_delivery_by"
+									   datepicker-options="dateOptions"
+									   close-text="Close"
+									   placeholder="Date"
+									   required
+									   style="padding: 0px 4px; height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+							  <button type="button"
+									  class="btn btn-default m-t-0 f12"
+									  ng-disabled="!quoteDetail.possible_delivery_by"
+									  ng-click="showModal($event, 'expiryDatePopUp')">
+								  <i class="glyphicon glyphicon-calendar"></i>
+							  </button>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Additional Notes</label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<textarea class="form-control"
+										  rows="2"
+										  ng-model="quoteDetail.additional_notes"
+										  placeholder="Remarks">
+								</textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="clearfix"></div>
+
+			<hr>
+			<h4 class="modal-title" align="center">Item Details</h4>
+			<br>
+
+			<div class="col-md-12">
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Item <span class="req_r">*</span></label>
+						<div class="col-md-8 select">
+							<select chosen
+									class="form-control"
+									ng-options="item as item.name for item in aSpareRoot"
+									ng-model="selectedItem">
+								<option value="" selected> Select</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Quantity <span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="number"
+									   onwheel="return false"
+									   onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+									   ng-change="quantityChangeHandler(10000)"
+									   ng-model="selectedItem.quantity"
+									   placeholder="Enter Quantity"
+									   class="form-control">
+								<span class="req_r" style="font-size: 12px">{{quantityMsg}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Rate <span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="number"
+									   onwheel="return false"
+									   onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+									   ng-model="selectedItem.price_per_unit"
+									   placeholder="Enter Rate"
+									   class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="clearfix"></div>
+			<br>
+
+			<div class="col-md-12">
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Discount(%) <span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="number"
+									   onwheel="return false"
+									   onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+									   ng-model="selectedItem.discount_percent"
+									   ng-change="onDiscountChange(selectedItem.discount_percent)"
+									   placeholder="Enter Discount in %"
+									   class="form-control">
+								<span class="req_r" style="font-size: 12px">{{discMsg}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label">Tax(%) <span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="number"
+									   onwheel="return false"
+									   onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) || console.log('onkeypress',+event.target.value) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+									   ng-model="selectedItem.tax_percent"
+									   ng-change="onTaxChange(selectedItem.tax_percent)"
+									   placeholder="Enter Tax(%)"
+									   class="form-control">
+								<span class="req_r" style="font-size: 12px">{{taxMsg}}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<a class="pointer"
+						   uib-tooltip="Add Item"
+						   tooltip-placement="bottom"
+						   ng-click="addQuotation()">
+							<i class="zmdi zmdi-plus-circle zmdi-hc-3x"></i>
+						</a>
+						<!--<button type="button" class="btn btn-success waves-effect" ng-click="addQuotation()">Add</button>-->
+					</div>
+				</div>
+
+			</div>
+
+			<div class="clearfix"></div>
+			<br>
+
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+					<tr>
+						<th>#</th>
+						<th>Item Name</th>
+						<th>Item Category</th>
+						<th>Quantity</th>
+						<th>Rate</th>
+						<th>Discount (%)</th>
+						<th>Tax (%)</th>
+						<th>Total</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="quoteItem in quoteDetail.items">
+						<td>{{$index + 1}}</td>
+						<td>{{quoteItem.name}}</td>
+						<td>{{quoteItem.category_name}}</td>
+						<td>{{quoteItem.quantity}}</td>
+						<td>{{quoteItem.price_per_unit}}</td>
+						<td>{{quoteItem.discount_percent}}</td>
+						<td>{{quoteItem.tax_percent}}</td>
+						<td>{{quoteItem.total}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<br>
+
+		</div>
+	</div>
+	<div class="modal-footer">
+		<span class="req_r">{{errMsg}}</span>
+		<button type="submit" class="btn btn-success waves-effect">{{submitBtnText}}</button>&nbsp;&nbsp;&nbsp;
+		<button type="button" class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td,
+	th {
+		text-align: center;
+	}
+
+	.modal .modal-header {
+		padding: 10px 23px;
+	}
+
+	.top-table {
+		width: 80%;
+		border: 1px solid #d3d3d3;
+		margin: 0 auto;
+	}
+
+	.top-table > table > thead > tr > th {
+		background: #1dd5ffcc;
+		border-right: 1px solid #ddd;
+	}
+
+	.top-table > table > tbody > tr > td {
+		border-right: 1px solid #ddd;
+	}
+</style>

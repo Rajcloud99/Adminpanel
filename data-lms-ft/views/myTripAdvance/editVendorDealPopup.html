@@ -1,0 +1,235 @@
+<!-- Controller: acknowledgeDealController -->
+<!-- ControllerAs: acknowledgeDealVm -->
+
+<form name="vendorDealForm" ng-submit="acknowledgeDealVm.submit(vendorDealForm)" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="acknowledgeDealVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Trip No. {{acknowledgeDealVm.oTrip.trip_no}}</b>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<div ng-show="acknowledgeDealVm.oTrip.vehicle.ownershipType==='Market'">
+					<li class="list-group-item">
+						<span class="booking_list_header">VENDOR DEAL</span>
+						<div class="row" style="margin:15px">
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Vendor </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{acknowledgeDealVm.oTrip.vendor.name}}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+								<label class="col-md-4 control-label">Deal Date: <span
+										class="req_r">*</span></label>
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened3 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+										<input ng-click="acknowledgeDealVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{acknowledgeDealVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="acknowledgeDealVm.oTrip.vendorDeal.deal_at"
+											   is-open="opened3"
+											   datepicker-options="acknowledgeDealVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Topay Date"
+											   name="Topay Date"
+											   required
+											   style="padding: 0px 4px;height: 34px;"
+										/>
+									</div>
+									<span class="input-group-btn">
+													<button type="button"
+															class="btn btn-default m-t-0 f12"
+															ng-click="acknowledgeDealVm.DatePicker.openDatePicker(this, $event, 'opened3')"><i
+															class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:15px">
+							<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+								<label class="col-md-4 control-label">Advance Due Date </label>
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="acknowledgeDealVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{acknowledgeDealVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="acknowledgeDealVm.oTrip.vendorDeal.advance_due_date"
+											   is-open="opened1"
+											   datepicker-options="acknowledgeDealVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Due Date"
+											   name="Advance Due Date"
+											   required
+											   style="padding: 0px 4px;height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+									  	<button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="acknowledgeDealVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-4 col-md-4 col-lg-4">
+								<label class="col-md-4 control-label">Topay Due Date </label>
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="acknowledgeDealVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{acknowledgeDealVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="acknowledgeDealVm.oTrip.vendorDeal.topay_due_date"
+											   is-open="opened2"
+											   datepicker-options="acknowledgeDealVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Topay Date"
+											   name="Topay Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+													<button type="button"
+															class="btn btn-default m-t-0 f12"
+															ng-click="acknowledgeDealVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+															class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+								</div>
+							</div>
+						</div>
+					</li>
+				</div>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">ACKNOWLEDGEMENT DETAILS</span>
+					<div class="card-body">
+						<div class="row"
+							 ng-if="acknowledgeDealVm.$configs.master.showAccount"
+							 style="margin:15px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Credit A/c: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-8">
+										{{acknowledgeDealVm.oTrip.vendorDeal.lorryAc.name}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">Debit A/c :<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+													type="text"
+													class="form-control"
+													placeholder="To Account"
+													ng-model="acknowledgeDealVm.oTrip.vendorDeal.acknowledge.ackToAc"
+													typeahead-wait-ms="10"
+													name="Debit A/c"
+													typeahead="item as item.name for item in acknowledgeDealVm.getAccount($viewValue, ['Purchase'])|limitTo:6"
+													required>
+											<i class="lvh-search-close" ng-click="acknowledgeDealVm.oTrip.vendorDeal.acknowledge.ackToAc=null;">×</i>
+											<span class="error"
+												  ng-if="'isEmptyObject'|otherUtilsFilt:acknowledgeDealVm.oTrip.vendorDeal.acknowledge.ackToAc">
+														This Field is Mandatory</span><br>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">TDS DETAILS</span>
+					<div class="card-body">
+						<div class="row"
+							 ng-if="acknowledgeDealVm.$configs.master.showAccount"
+							 style="margin:15px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">Credit A/c :<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+													type="text"
+													class="form-control"
+													placeholder="From Account"
+													ng-model="acknowledgeDealVm.oTrip.vendorDeal.tdsFromAc"
+													typeahead-wait-ms="10"
+													name="Debit A/c"
+													typeahead="item as item.name for item in acknowledgeDealVm.getAccount($viewValue, ['Vendor TDS'])|limitTo:6"
+													required>
+											<i class="lvh-search-close" ng-click="acknowledgeDealVm.oTrip.vendorDeal.tdsFromAc=null;">×</i>
+											<span class="error"
+												  ng-if="'isEmptyObject'|otherUtilsFilt:acknowledgeDealVm.oTrip.vendorDeal.tdsFromAc">
+														This Field is Mandatory</span><br>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Debit A/c: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-8">
+										{{acknowledgeDealVm.oTrip.vendorDeal.lorryAc.name}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button ng-disabled="acknowledgeDealVm.isDisable" class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="acknowledgeDealVm.closeModal()">Close
+		</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		/*width: 70%;*/
+		min-height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

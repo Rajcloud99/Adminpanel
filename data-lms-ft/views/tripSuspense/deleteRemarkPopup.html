@@ -1,0 +1,64 @@
+<!-- controller: approvalPopupController as vm-->
+
+<div class="modal-header">
+	<button type="button" ng-click="vm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Why do you want to delete this advance ? </b>
+		</span>
+	</h4>
+
+
+<form name="approvalForm" ng-submit="vm.submitRemark(approvalForm)" novalidate autocomplete="off">
+
+	<div class="modal-body" style="margin-top: 2em;">
+		<div class="justify col-md-12">
+				<div class="col-md-8">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label"> Remark <span
+								class="req_r">*</span> </label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="text"
+									   ng-model="vm.remark"
+									   placeholder="Enter Remark"
+									   required
+									   class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="vm.closeModal()"> Close
+		</button>
+	</div>
+
+</form>
+
+<style>
+
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 55%;
+	}
+	.modal-dialog {
+		height : 40%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

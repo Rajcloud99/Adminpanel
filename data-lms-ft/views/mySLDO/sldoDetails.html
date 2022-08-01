@@ -1,0 +1,50 @@
+<div class="container" ng-controller="sldoCommonController">
+	<div class="card m-b-0" id="messages-main">
+        <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+            <div class="lvh-search ng-scope sear">
+                <input type="text" placeholder="Start typing..." ng-model="sldoName" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.name as person.name for person in sldos" ng-change="getSLDOName(sldoName)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+                <i class="lvh-search-close" ng-click="clearSearch()">×</i>
+            </div>
+            <div class="listview lv-user clk" style="overflow: auto;height:97%;">
+                <div class="lv-item media"  style="border-bottom:2px solid #4285f4" ng-repeat="sldo in sldos" ng-click="selectRoute(sldo,$index)">
+                    <div class="truck-desc">
+                    	<div class="row">
+    	                    <div class="col-md-12 bold" style="text-align: start;">
+    	                    	{{sldo.name | capitalize}}
+    	                    </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pagi" ng-show="total_pages>1">
+                  <pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                </div>
+            </div>
+        </div>
+        <div class="ms-body" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lv-header-alt clearfix">
+                    <div class="lvh-label" ng-if="!wantRegSL">
+                       <span class="c-black"><b>{{sldo.name | capitalize}}</b> &nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                    <div class="lvh-label" ng-if="wantRegSL">
+                       <span class="c-black"><b>Register New SLDO</b> &nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                    <ul class="lv-actions actions">
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.sldoDetails.register" uib-tooltip="Create SLDO" tooltip-placement="bottom"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i></a></li>
+                        <!-- <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="routeDetails.editRoute" uib-tooltip="Edit Route" tooltip-placement="bottom"><i class="zmdi zmdi-edit"></i></a></li>
+                        <li><a href="" uib-tooltip="Delete Route" tooltip-placement="bottom" ng-click=""><i class="zmdi zmdi-delete"></i></a></li> -->
+                        <div class="clearfix"></div>
+                    </ul>
+                </div>
+                <div class="lv-body">
+                	<!-- <ul class="tab-nav tn-justified" ng-if="wantRegSL">
+                        <li class="btn-wave" data-ui-sref-active="active"><a href="">Register New SLDO</a></li>
+                    </ul> -->
+                    <data ui-view></data>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+

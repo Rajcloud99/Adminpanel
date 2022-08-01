@@ -1,0 +1,273 @@
+<div class="card" style="margin:20px;">
+	<div class="card-header">
+	<div class="row m-b-5">
+		<form name="customerRateChart" ng-submit="submit(customerRateChart)" novalidate autocomplete="off">
+			<div class="col-sm-2 form-group">
+				<div class="lvh-search ng-scope sear" style=" z-index: 99">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Customer Search..."
+							ng-model="filterObj.customer"
+							typeahead="c as c.name for c in getCustomers($viewValue)"
+							typeahead-wait-ms="10"
+							name="customer"
+							typeahead-on-select="onCustomerSelect($item, $model, $label)"
+
+					>
+						<i class="lvh-search-close" ng-click="filterObj.customer=undefined; filterObj.onSelect=undefined">×</i>
+				</div>
+				<span class="req_r"
+					  style="font-size: 10px;    padding-left: 40px;"
+					  ng-if="customerRateChart['customer'].$error.required">
+					This Field is Mandatory
+				</span>
+			</div>
+
+			<div class="col-sm-2 form-group">
+				<div class="lvh-search ng-scope sear">
+					<input
+						type="text"
+						class="form-control lvhs-input"
+						placeholder="BillingParty Search..."
+						ng-model="filterObj.billingParty"
+						typeahead="c as c.name for c in getBillingParty($viewValue)"
+						typeahead-wait-ms="10"
+						name="BillingParty"
+						typeahead-on-select="onBillingPartySelect($item, $model, $label)"
+					>
+					<i class="lvh-search-close" ng-click="filterObj.billingParty=undefined">×</i>
+				</div>
+			</div>
+
+			<div class="col-sm-2 form-group">
+				<div class="lvh-search ng-scope sear">
+					<input type="text"
+						   placeholder="Source"
+						   ng-model="filterObj.source"
+						   class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="item.source as item.source for item in getRoute($viewValue, 'source') | limitTo: 5"
+						   class="form-control">
+					<i class="lvh-search-close" ng-click="filterObj.source=''">×</i>
+				</div>
+			</div>
+			<div class="col-sm-2 form-group">
+				<div class="lvh-search ng-scope sear">
+					<input type="text"
+						   placeholder="Destination"
+						   ng-model="filterObj.destination"
+						   class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="item.destination as item.destination for item in getRoute($viewValue, 'destination') | limitTo: 5"
+						   class="form-control">
+					<i class="lvh-search-close" ng-click="filterObj.destination=''">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input
+							 type="text"
+							 class="form-control"
+							 ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+							 uib-datepicker-popup="{{DatePicker.formats[0]}}"
+							 show-weeks="false"
+							 max-date="DatePicker.newDate"
+							 ng-model="filterObj.from"
+							 is-open="opened1"
+							 datepicker-options="DatePicker.dateSettings"
+							 close-text="Close"
+							 placeholder="Rate charts from"
+							 name="from"
+							 style="padding: 0px 4px;height: 34px;"
+						/>
+					</div>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default m-t-0 f12" ng-click="DatePicker.openDatePicker(this, $event, 'opened1')">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input
+							 ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+							 type="text"
+							 class="form-control"
+							 uib-datepicker-popup="{{DatePicker.formats[0]}}"
+							 show-weeks="false"
+							 max-date="DatePicker.newDate"
+							 ng-model="filterObj.to"
+							 is-open="opened2"
+							 datepicker-options="DatePicker.dateSettings"
+							 close-text="Close"
+							 placeholder="Rate charts till"
+							 name="to"
+							 style="padding: 0px 4px;height: 34px;"
+						/>
+					</div>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default m-t-0 f12" ng-click="DatePicker.openDatePicker(this, $event, 'opened2')">
+							<i class="glyphicon glyphicon-calendar"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+			<div class="col-sm-2 form-group">
+				<div class="lvh-search ng-scope sear">
+					<input
+						type="text"
+						class="form-control lvhs-input"
+						placeholder="HSN Code"
+						ng-model="filterObj.hsnCode"
+						name="HsnCode">
+				</div>
+			</div>
+
+			<div class="col-sm-4 form-group">
+				<div class="fg-line text-center">
+
+					<button type="submit" class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+					style="font-size: 15px"
+					uib-tooltip="Search"><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+				
+					<button type="button" class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+					style="font-size: 15px"
+					uib-tooltip="Clear Search" ng-click="filterObj={};clear()"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+
+				
+						
+						<button
+						class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+						style="font-size: 15px"
+								uib-tooltip="Add Rate Chart"
+								tooltip-placement="bottom"
+								ng-click="addRateChart('add')">
+							<i class="zmdi zmdi-file-add zmdi-hc-fw"></i>
+							<span></span>
+						</button>
+						<button ng-hide="filterObj.billingParty"
+						class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+						style="font-size: 15px"
+								uib-tooltip="Edit Rate Chart"
+								tooltip-placement="bottom"
+								ng-click="addRateChart('edit')"
+						>
+							<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+							<span></span>
+						</button>
+						<button
+						class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+						style="font-size: 15px"
+								uib-tooltip="Upload Rate Chart"
+								tooltip-placement="bottom"
+								ng-click="uploadRateChart()"
+						>
+							<i class="zmdi zmdi-cloud-upload zmdi-hc-fw"></i>
+							<span></span>
+						</button>
+						<button ng-if="$role['Rate Chart']['upload']"
+						class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+						style="font-size: 15px"
+							uib-tooltip="Upload Rate"
+							tooltip-placement="bottom"
+							ng-click="uploadRate()"
+						>
+							<i class="zmdi zmdi-cloud-upload zmdi-hc-fw"></i>
+							<span></span>
+						</button>
+						<button ng-if="$role['Rate Chart']['download']"
+						class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+						style="font-size: 15px"
+								ng-click="downloadRate(true)"
+								uib-tooltip="Download Rate"
+								tooltip-placement="bottom">
+							<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+							<span></span>
+						</button>
+						<button
+								ng-hide="filterObj.billingParty"
+								class="btn btn-danger waves-effect primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile;"
+						style="font-size: 15px"
+								uib-tooltip="Delete Rate Chart"
+								tooltip-placement="bottom"
+								ng-click="deleteRateChart()"
+						>
+							<i class="zmdi zmdi-delete zmdi-hc-fw"style="font-size: 15px md-mini"></i>
+							
+						</button>
+						<button
+							ng-show="filterObj.billingParty"
+							class="btn btn-danger waves-effect primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px" 
+							uib-tooltip="Delete Rate"
+							tooltip-placement="bottom"
+							ng-click="deleteRate()"
+						>
+							<i class="zmdi zmdi-delete zmdi-hc-fw"style="font-size: 15px md-mini"></i>
+							<span></span>
+						</button>
+						
+					
+
+
+
+					
+				</div>
+
+			</div>
+
+			<div class="pull-right">
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+					<button type="button"
+							class="btn-primary btn-xs"
+							ng-click="getRateChart(false, true)"
+							uib-tooltip="Download Rate Chart"
+							tooltip-placement="bottom"
+					>
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</div>
+			<!--<div class="pull-right">-->
+				<!--<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">-->
+					<!--<button type="button"-->
+							<!--class="btn-danger btn-xs"-->
+							<!--ng-click=""-->
+							<!--uib-tooltip="Download Rate Chart"-->
+							<!--tooltip-placement="bottom"-->
+					<!--&gt;-->
+						<!--<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+					<!--</button>-->
+				<!--</div>-->
+			<!--</div>-->
+		</form>
+	</div>
+
+	<div class="row" style="margin-right: 1px;">
+		
+	</div>
+
+	<div
+		 ja-table
+		 table-head="tableHead"
+		 table-body="rateCharts"
+		 table-order-by-model='orderBy'
+		 table-order-by-event='getRateChart()'
+		 table-height='500px'
+		 table-load="getRateChart(true)"
+		 table-column-setting="columnSetting"
+		 table-selectable='selectType'
+		 table-api="tableApi"
+		 table-selectable-model="selectedRateChart"
+		 table-row-click-event="selectRateChart()"
+	></div>
+
+</div>
+</div>

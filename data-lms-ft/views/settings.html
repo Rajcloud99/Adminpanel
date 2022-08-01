@@ -1,0 +1,129 @@
+<div id ="div_main_user_form" style="background-color: white;margin:1% 1% 3%;
+    min-height:600px">
+    <div class="card-header">
+        <h2 style="font-size: 18px">Settings</h2>
+    </div>
+    <ul class="tab-nav" style="margin-top: 10px;margin-right: 25px;margin-left: 25px;width: auto">
+        <li ng-class="{active: tab_active_settings===1}">
+            <a href="" ng-click="selectTabSettings(1)">Change Password</a>
+        </li>
+        <li ng-class="{active: tab_active_settings===2}">
+            <a href="" ng-click="selectTabSettings(2)" >Dashboard</a>
+        </li>
+        <li ng-class="{active: tab_active_settings===3}">
+            <a href="" ng-click="selectTabSettings(3)">Alert and MIS</a>
+        </li>
+    </ul>
+
+    <div class="card-body"  style="padding:2% 4%" >
+    <!------------------------------------------------Tab 1 Change Password ------------------------------------------------>
+        <form  ng-show="tab_active_settings===1" name="SettingsFormTab1" class="form-horizontal" novalidate style="margin-left: 30%;margin-top:2%" >
+                <div class="form-group">
+                    <label  class="col-sm-2 control-label">Old Password: </label>
+                    <div class="col-sm-4" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" >
+                            <input  class="form-control
+                                input-sm" type="password" ng-model="objPasswordUpdate.old_password"  style="height: 30px"
+                                   >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-2 control-label">New password: </label>
+                    <div class="col-sm-4" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" >
+                            <input  class="form-control
+                                input-sm" type="password" ng-model="objPasswordUpdate.new_password"  style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-2 control-label">Confirm new password: </label>
+                    <div class="col-sm-4" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" >
+                            <input  class="form-control
+                                input-sm" type="password" ng-model="objPasswordUpdate.confirm_new_password"  style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin: 50px 0px 45px 0px">
+                        <button type="submit" class="btn btn-primary"
+                                ng-click="updatePassword()" style="margin-left:45%">Change Password</button>
+                </div>
+        </form>
+
+
+    <!------------------------------------------Tab 2 Dashboard Apps --------------------------------------------------->
+        <form  ng-show="tab_active_settings===2" name="SettingsFormTab2" class="form-horizontal" novalidate>
+                <table class="table" style="width: 45%;margin-left:2%;display: inline-table">
+                    <thead>
+                    <tr>
+                        <th>App name</th>
+                        <th>Pinned to desktop</th>
+                        <th>Order</th>
+                    </tr>
+                    </thead>
+                    <tbody >
+                    <tr ng-repeat="(key,value) in allowedResources">
+                        <td>{{getResourceNameFromKey(key)}}</td>
+                        <td>
+                            <label class="checkbox checkbox-inline m-r-20">
+                                <input type="checkbox"
+                                       ng-model="objAppsVisible[key]" ng-value="true">
+                                <i class="input-helper"></i>
+                            </label>
+                        </td>
+                        <td>
+                            <div class="col-sm-4">
+                                <div class="fg-line">
+                                    <input type="text" class="input-sm form-control fg-input"
+                                           ng-model="objAppsOrder[key]"
+                                           ng-disabled="!objAppsVisible[key]">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div style="display: inline-block;">
+                    <div class="checkbox m-b-15" style="margin-left:250px;">
+                        <label style="font-size: 16px; font-weight: 500">
+                            <input type="checkbox"  ng-value="true" ng-model = "sideBarVisible">
+                            <i class="input-helper"></i>
+                            Show sidebars
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row" style="margin: 50px 0px 50px 0px">
+                    <button type="submit" class="btn btn-primary"
+                            ng-click="updateDashboardPreferences(SettingsFormTab2)" style="margin-left:91%">Save</button>
+                </div>
+        </form>
+<!---------------------------------------------user preferences for MIS and alerts ------------------------------------>
+        <form name="UserPrefForm" class="form-horizontal" ng-show="tab_active_settings===3">
+            <div class="card-body" ng-repeat="(feature,configs) in $constants.featureConfigMap">
+                <div class="row" style="margin: 30px 0px 10px 0px;font-weight: 600">
+                    {{$constants.featureDesc[feature]}}
+                </div>
+                <div class="row" style="padding:10px">
+                    <label class="checkbox checkbox-inline m-r-20" ng-repeat="config in configs" style="padding-top:0px">
+                        <input type="checkbox"
+                               ng-model="userPref[feature][config]" ng-value="true">
+                        <i class="input-helper"></i>
+                        {{$constants.featureConfigDesc[config]}}
+                    </label>
+                </div>
+            </div>
+            <div class="row" style="margin: 50px 0px 50px 0px">
+                <button type="submit" class="btn btn-primary"
+                        ng-click="saveUserPrefs(UserPrefForm)"
+                        style="margin-left:91%">Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

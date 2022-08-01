@@ -1,0 +1,23 @@
+<div id="div_main_home_common">
+    <header id="header_common" ng-style="{'background-color':client_config.client_theme_color}"
+            data-ng-include="'views/headers/header_common.html'"
+            style = "position: fixed;top: 0;left: 0;width: 100%;height: 44px;z-index: 100;">
+    </header>
+    <aside id="sidebar" ng-if="userLoggedIn.sidebar_visible"
+           style="height: 100%;width: 90px" data-ng-include="'views/sidebars/sidebar_common.html'">
+    </aside>
+
+    <section id="section_main_masters_home" style="margin-top: 53px;"
+             ng-class="{appendSidebarSpace : userLoggedIn.sidebar_visible}"
+             data-ui-view>
+    </section>
+    <footer id="footer" style="padding-left: 0;position: fixed;z-index:100"  data-ng-include="'template/footer.html'"></footer>
+
+	<aside id="filter" data-ng-include="'views/filterSideBar.html'" data-ng-class="{ 'toggled': mactrl.sideFilter.value() }"></aside>
+</div>
+
+<style>
+	#header_common{
+		background-color: #003366;
+	}
+</style>

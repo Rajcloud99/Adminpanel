@@ -1,0 +1,647 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Trip Performance</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(View)
+				</span>
+			</span>
+		</div>
+		<div class="pull-right" style="width:50%;">
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<!--
+							<div class="date-picker input-group dp-blue chosen-row-1"
+								 ng-class="{ 'is-opened': vm.xopened1 == true }">
+								<div ng-class="{ 'fg-toggled': vm.xopened1 == true }">
+									<input
+											type="text"
+											class="form-control"
+											ng-click="vm.DatePicker.openDatePicker(vm, $event, 'xopened1')"
+											datepicker-popup="{{vm.DatePicker.formats[0]}}"
+											show-weeks="false"
+											ng-model="vm.approvedPaymentFilter.startDate"
+											ng-change="vm.approvedPaymentFilter.endDate=undefined;"
+											is-open="vm.xopened1"
+											datepicker-options="vm.DatePicker.dateSettings"
+											close-text="Close"
+											placeholder="Start date"
+									/>
+								</div>
+								<span class="input-group-btn">
+		<button type="button" class="btn btn-default m-t-0 f12"
+				ng-click="vm.DatePicker.openDatePicker(vm, $event, 'xopened1')">
+		<i class="glyphicon glyphicon-calendar"></i>
+		</button>
+		</span>
+							</div>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<!--<div class="date-picker input-group dp-blue chosen-row-1"
+								 ng-class="{ 'is-opened': vm.opened2 == true }">
+								<div ng-class="{ 'fg-toggled': vm.opened2 == true }">
+									<input
+											type="text"
+											class="form-control"
+											ng-click="vm.DatePicker.openDatePicker(vm, $event, 'opened2')"
+											datepicker-popup="{{vm.DatePicker.formats[0]}}"
+											show-weeks="false"
+											ng-model="vm.approvedPaymentFilter.endDate"
+											min-date="vm.approvedPaymentFilter.startDate"
+											max-date="vm.approvedPaymentFilter.endDate|setMaxDate:6"
+											is-open="vm.opened2"
+											datepicker-options="vm.DatePicker.dateSettings"
+											close-text="Close"
+											placeholder="End date"
+									/>
+								</div>
+								<span class="input-group-btn">
+		<button type="button" class="btn btn-default m-t-0 f12"
+				ng-click="vm.DatePicker.openDatePicker(vm, $event, 'opened2')">
+		<i class="glyphicon glyphicon-calendar"></i>
+		</button>
+		</span>
+							</div>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<!--<div class="select">
+					<select class="form-control" ng-model="vm.approvedPaymentFilter.type">
+						<option value="" selected>All</option>
+						<option value="Diesel">Diesel</option>
+						<option value="Happay">Happay</option>
+						<option value="Fasttag">Fasttag</option>
+					</select>
+				</div>-->
+			</div>
+			<!--<div class="col-md-1">-->
+				<!--<button-->
+						<!--class="btn-primary btn-xs"-->
+						<!--ng-click="vm.toggleApprovedPaymentReportUI(vm.approvedPaymentFilter, 'xlsx')"-->
+						<!--uib-tooltip="Download Approved Payment Report"-->
+						<!--tooltip-placement="bottom"-->
+				<!--&gt;-->
+					<!--<i class="zmdi zmdi-download zmdi-hc-fw"></i>-->
+				<!--</button>&nbsp;&nbsp;-->
+			<!--</div>-->
+			<div class="col-md-1">
+				<button
+						class="btn-primary btn-xs"
+						ng-hide = "true"
+						ng-click="vm.toggleApprovedPaymentReportUI(vm.approvedPaymentFilter, 'tally-xml')"
+						uib-tooltip="Download Approved Payment XML"
+						tooltip-placement="bottom"
+				>
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>&nbsp;&nbsp;
+			</div>
+			<div class="col-md-1">
+				<button class="btn-primary btn-xs"
+						type="button"
+						ng-hide = "true"
+						uib-tooltip="Upload Trip Advance"
+						onclick="document.getElementById('toUpload').click();"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+				</button>
+				<input
+						type="file"
+						id="toUpload"
+						name="toUpload"
+						ng-model="toUpload"
+						ng-hide="true"
+						accept="*/*"
+						ngf-select
+						ngf-max-size="10MB"
+						ngf-model-invalid="errorFile"
+						ngf-change="vm.upload($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+				>
+			</div>
+			<div class="col-md-1">
+				<button class="btn-success btn-xs"
+						type="button"
+						ng-hide = "true"
+						ng-click="vm.downloadCsv()"
+						uib-tooltip="Trip Advance sample file"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			</div>
+			<div class="col-md-1">
+				<button class="btn btn-primary p-t-0 p-b-0"
+					type="button" ng-if="vm.oFilter.ownershipType==='Market'"
+					style="margin-bottom: 3px;  font-size: 16px"
+					uib-tooltip="Download Reco Report"
+					ng-click="vm.getTripsRecoRep('onTripRecoReport')"
+					tooltip-placement="bottom">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card card-header">
+		<div class="row">
+			<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="number" ng-model="vm.oFilter.trip_no" name="trip_no"
+						   class="form-control input-sm" placeholder="Trip No"
+						   ng-model-options="{ updateOn: 'blur' }"
+						   style="height: 34px;font-size: 13px;">
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text" ng-model="vm.oFilter.loading_slip" name="loading_slip"
+						   class="form-control input-sm" placeholder="Hire Slip"
+						   ng-model-options="{ updateOn: 'blur' }"
+						   style="height: 34px;font-size: 13px;">
+				</div>
+			</div>
+<!--			<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">-->
+<!--				<div class="fg-line">-->
+<!--					<input type="text" ng-model="vm.oFilter.grNumber" name="gr_no"-->
+<!--						   class="form-control input-sm" placeholder="GR No"-->
+<!--						   ng-model-options="{ updateOn: 'blur' }"-->
+<!--						   style="height: 34px;font-size: 13px;">-->
+<!--				</div>-->
+<!--			</div>-->
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input type="text"
+						   placeholder="Vehicle Search..."
+						   ng-model="vm.oFilter.vehicle_id" class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="person as (person.vehicle_reg_no + (person.vendor_name ? '('+person.vendor_name+')' : '')) for person in vm.getVname($viewValue)"
+						   class="form-control"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.vehicle_id='';vm.getTrips()">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="$configs.trips.routeFilter">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+				<input type="text"
+					   class="form-control lvhs-input"
+					   placeholder="Loading Point..."
+					   ng-model="vm.oFilter.source"
+					   typeahead-wait-ms="10"
+					   typeahead="item as item.c for item in vm.getRoute($viewValue) | limitTo:6">
+				<i class="lvh-search-close" ng-click="vm.oFilter.source=''">×</i>
+				   </div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="$configs.trips.routeFilter">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+					<input type="text"
+						   class="form-control lvhs-input"
+						   placeholder="Unloading Point ..."
+						  ng-model="vm.oFilter.destination"
+						   typeahead-wait-ms="10"
+						   typeahead="item as item.c for item in vm.getRoute($viewValue) | limitTo:6">
+					<i class="lvh-search-close" ng-click="vm.oFilter.destination=''">×</i>
+					   </div>
+					</div>
+
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="!$configs.trips.routeFilter">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input type="text" placeholder="Route Search..."
+						   ng-model="vm.oFilter.route_id"
+						   class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="item as item.name for item in vm.aRoute | filter:$viewValue"
+						   ng-change="vm.getDname(vm.oFilter.route_id)" class="form-control"
+						   >
+					<i class="lvh-search-close" ng-click="vm.oFilter.route_id='';vm.getTrips()">×</i>
+				</div>
+			</div>
+
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Vendor Search..."
+							ng-model="vm.oFilter.vendor"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in vm.getVendorName($viewValue, 'Owner') | limitTo:6"
+							typeahead-on-select="vm.onVendorSelect($item, $model, $label)"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.vendor=null;">×</i>
+				</div>
+			</div>
+
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Broker Search..."
+							ng-model="vm.oFilter.broker"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in vm.getVendorName($viewValue, 'Broker') | limitTo:6"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.broker=null;">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+				<select class="form-control"
+						ng-init="vm.oFilter.dateType =  'Trip started'"
+						ng-model="vm.oFilter.dateType"
+						ng-options="item.value as item.key for item in $constants.tripDateType"
+						style="line-height: 34px;">
+					<option value="" selected> Select Type</option>
+				</select>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-hide="true">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Driver Search..."
+							ng-model="vm.oFilter.driver"
+							typeahead-wait-ms="10"
+							typeahead="item as (item.nameCode || item.name) for item in vm.aDriver | limitTo:6"
+							ng-change="vm.getDriver(vm.oFilter.driver)"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.driver=null;vm.aDriver=null;vm.getTrips()">×</i>
+				</div>
+			</div>
+
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-2">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Branch Search..."
+							ng-model="vm.oFilter.branch"
+							typeahead-wait-ms="10"
+							typeahead="item as (item.name + '('+($configs.client_allowed|filter:{'clientId': item.clientId})[0].name+')') for item in vm.getAllBranch($viewValue) | limitTo:6"
+							typeahead-on-select="vm.onBranchSelect($item, $model, $label)">
+					<i class="lvh-search-close" ng-click="vm.oFilter.branch=null;">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2"  ng-if="$role['Trip Performance']['Customer Filter']">
+				<div class="lvh-search ng-scope sear chosen-row-2">
+					<input
+						type="text"
+						class="form-control lvhs-input"
+						placeholder="Customer Search..."
+						ng-model="vm.oFilter.bookingCustomer"
+						typeahead-wait-ms="10"
+						typeahead="item as item.name for item in vm.getCustomer($viewValue) | limitTo:6"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.bookingCustomer='';">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="vm.DatePicker.newDate"
+							   ng-model="vm.start_date"
+							   ng-change="vm.dateChange('startDate')"
+							   is-open="opened1"
+							   datepicker-options="vm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="From Date"
+							   name="From Date"
+							   required
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+
+			<!-- <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="date-picker input-group dp-blue">
+					<input
+							   fill-date
+					           type="text"
+							   class="form-control"
+							   ng-model="vm.start_date"
+							   ng-change="vm.end_date = undefined"
+							   close-text="Close"
+							   placeholder="From Date"
+							   name="Allocation from"
+							   required
+							   style="padding: 0px 4px;height: 34px;" />
+
+				</div>
+			</div> -->
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dDiesel Budget(ltr)p-blue"
+					 ng-class="{ 'is-opened': opened2 == true }"
+					 style=" ">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="vm.maxEndDate"
+							   ng-model="vm.end_date"
+							   ng-change="vm.dateChange('endDate')"
+							   is-open="opened2"
+							   datepicker-options="vm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="To Date"
+							   name="To Date"
+							   required
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+			<!-- <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="date-picker input-group dp-blue" >
+
+						<input
+							   fill-date
+						       ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   ng-model="vm.end_date"
+							   close-text="Close"
+							   placeholder="To Date"
+							   name="Allocation To"
+							   required
+							   style="padding: 0px 4px;height: 34px;" />
+
+				</div>
+			</div> -->
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-1">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							class="form-control"
+							ng-model="vm.oFilter.segment_type"
+							ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+							name="Segment"
+							required>
+						<option value="" selected>Segment</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-3 pull-right">
+				<div class="form-group m-b-0 text-center">
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Search"
+							ng-click="vm.getTrips()"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Clear All"
+							ng-click="vm.oFilter={};vm.aBranch = [];vm.aVendor = []; vm.getTrips(); vm.start_date=''; vm.end_date='';"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Download Excel"
+							ng-click="vm.getTrips(false, 'onTripAdvance')"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-success p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Download CSV"
+							ng-click="vm.getTrips(false, 'onTripAdvance', true)"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-success p-t-0 p-b-0" ng-if="$configs.TripPerformance.tripHireCSV"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Download Vehicle Profit CSV"
+							ng-click="vm.downloadVehicleProfitCSV(false, 'onTripAdvance')"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-info p-t-0 p-b-0"
+							type="button"
+
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Download Cache CSV"
+							ng-click="vm.downloadCacheCSV()"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Detail View"
+							ng-click="vm.add(vm.aSelectedTrips)"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-assignment zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Multi Vendor Payment"
+							ng-if="(vm.aSelectedTrips[0] || vm.aSelectedTrips).vendor.clientId === selectedClient"
+							ng-disabled="vm.aSelectedTrips.length ? false : vm.aSelectedTrips.ownershipType !== 'Market'"
+							ng-click="vm.multiTripPayment(vm.aSelectedTrips, 'vendor')"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-format-align-justify zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Edit GrNo"
+							ng-click="vm.editGrNumber(vm.aSelectedTrips)"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Upload Documents"
+							ng-if="$role['Trip Performance']['Upload Document'] && vm.aSelectedTrips._id"
+							tooltip-placement="bottom"
+							ng-click="vm.uploadDocs(vm.aSelectedTrips)">
+						<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Preview Documents"
+							ng-if="$role['Trip Performance']['Upload Document'] && vm.aSelectedTrips._id"
+							tooltip-placement="bottom"
+							ng-click="vm.previewDocs(vm.aSelectedTrips)">
+						<i class="zmdi zmdi-view-list zmdi-hc-fw"></i>
+					</button>
+
+					<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['Trip Performance']['Print Builty'] && vm.aSelectedTrips._id"
+							style="font-size: 16px"
+							uib-tooltip="Hire Slip"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="vm.printBuilty()"
+					>
+						<i class="zmdi zmdi-print zmdi-hc-fw fs-16"></i>
+					</button>
+<!--   ng-if="vm.selectedTrip._id"   -->
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+			<!--todo-->
+			<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+				<!--<select chosen class="form-control"-->
+						<!--ng-options="item as item for item in vm.aAdvance"-->
+						<!--ng-model="vm.oFilter.advance"-->
+						<!--style="line-height: 34px;"-->
+				<!--&gt;-->
+					<!--<option value="">Select Advance</option>-->
+				<!--</select>-->
+			<!--</div>-->
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+				<select chosen class="form-control"
+						ng-options="item as item for item in vm.aApproved"
+						ng-model="vm.oFilter.approval"
+						style="line-height: 34px;"
+				>
+					<option value="">Deal</option>
+				</select>
+			</div>
+			<div class="col-md-1">
+				<select chosen
+						ng-model="vm.oFilter.ownershipType"
+						no-results-text="'No Result Found'"
+						placeholder-text-multiple="'Ownership Type'"
+						ng-options="v for v in ['Own', 'Market']">
+					<option value="">All Ownership Type</option>
+				</select>
+			</div>
+			<div class="col-md-1" ng-if="$role['Trip Performance']['Vendor Payment']">
+				<div class="select">
+					<select class="form-control" ng-model="vm.oFilter.vendPaymStatus">
+						<option value="">Vendor Payment Status</option>
+						<option value="Paid">Paid</option>
+						<option value="Unpaid">Unpaid</option>
+						<option value="Balance Pending">Balance Pending</option>
+						<option value="Over Paid">Over Paid</option>
+					 </select>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="form-group m-b-0">
+					<select chosen multiple
+							class="form-control"
+							ng-model="vm.oFilter.category"
+							ng-options="item as item for item in vm.aCategory"
+							name="Category Type">
+						<option value="" ></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							name="categoryLoaded"
+							class="form-control"
+							ng-model="vm.oFilter.categoryLoaded"
+							ng-options="item as item for item in ($configs.master.aTripCategoryType || $constants.aTripCategoryType)"
+					>
+						<option value="" selected>Category</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-2">
+					<input
+						type="text"
+						class="form-control lvhs-input"
+						placeholder="Gr Number"
+						ng-model="vm.oFilter.grData"
+						typeahead-wait-ms="10"
+						typeahead="item as item.grNumber for item in vm.getGr($viewValue) | limitTo:6"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.grData='';">×</i>
+				</div>
+			</div>
+
+			<!--<div class="col-xs-6 col-sm-2 col-md-1 col-lg-1">-->
+				<!--<div class="select">-->
+					<!--<select-->
+							<!--class="form-control"-->
+							<!--ng-options="c.clientId as c.name for c in $constants.client_allowed"-->
+							<!--ng-model="vm.oFilter.bPclientId"-->
+					<!--&gt;-->
+						<!--<option value="" selected>Select client</option>-->
+					<!--</select>-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-if="vm.aBranch.length">
+			  <span class="btn-lst" ng-repeat="select in vm.aBranch">
+				  <button class="btn-xs" style="background: black; color: aliceblue;">     {{select.name}}&nbsp;
+				  <a ng-click="vm.removeBranch(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+			</div>
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-if="vm.aVendor.length">
+			  <span class="btn-lst" ng-repeat="sel in vm.aVendor">
+				  <button class="btn-xs" style="background: black; color: aliceblue;">     {{sel.name}}&nbsp;
+				  <a ng-click="vm.removeVendor(sel,$index)"> X </a></button>&nbsp;&nbsp;</span>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div ja-table
+					 table-body="vm.aTripAdvance"
+					 table-head="vm.tableHead"
+					 table-height='500px'
+					 table-load="vm.getTrips(true)"
+					 table-column-setting="vm.columnSetting"
+					 table-selectable='vm.selectType'
+					 table-api="vm.tableApi"
+					 table-selectable-model="vm.aSelectedTrips"
+				></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.fs-20{
+		font-size: 20px;
+	}
+</style>

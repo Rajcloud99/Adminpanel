@@ -1,0 +1,30 @@
+<form role="form"  name="mapShow" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">{{route.name}}</h4><br>
+  </div>
+  <div class="modal-body">
+    <div class="justify col-md-12">
+      <div class="" style="height: 410px; overflow: auto;padding: 0 15px;">
+        <div class="col-md-12 col-sm-12 col-xs-12 bott">
+          <div class="col-md-8" style="height:400px;border:1px solid;overflow: auto;" id="map_canvas">
+          </div>
+          <div class="col-md-4" id="directions" style="height:400px;border:1px solid;overflow: auto;" >
+          </div>
+        </div> 
+      </div>
+    </div>
+  </div>    
+  <div class="modal-footer">
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>  
+  
+  </form> 
+  <style type="text/css">
+  .modal-dialog {width: 80%;
+        height: 173px
+    }
+  </style>

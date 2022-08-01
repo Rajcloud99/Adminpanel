@@ -1,0 +1,56 @@
+<form role="form"  name="" autocomplete="off" novalidate>
+	<div class="modal-header" style="padding-bottom: 5px;">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Selected Vehicle List</h4><br>
+	</div>
+	<div class="modal-body">
+		<div class="detailsList">
+			<div class="" style="overflow-y: auto; max-height: 400px;">
+				<table class="table table-bordered vehicleAllot" ng-if="aVehicleSelected.length > 0">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>S. No.</th>
+							<th>Vehicle No.</th>
+							<th>Weight(Tonne)</th>
+							<th>Vehicle Type(Group)</th>
+							<th>Status</th>
+							<th>Permit Expiry Date</th>
+							<th>Driver Name</th>
+							<th>Driver Number </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="SelectInt in aVehicleSelected">
+							<td><span class="pointer" ng-click="removeThis(SelectInt,$index)" uib-tooltip="Remove"><i class="zmdi zmdi-delete zmdi-hc-fw"></i></span></td>
+							<td>{{$index+1}}</td>
+							<td style="text-align: initial;">{{SelectInt.vehicle_reg_no}}</td>
+							<td>{{SelectInt.capacity_tonne || 0}}</td>
+							<td>{{SelectInt.veh_type_name}}<span ng-if="SelectInt.veh_group_name">({{SelectInt.veh_group_name}})</span></td>
+							<td>{{SelectInt.last_known.status || "NA"}}</td>
+							<td>{{SelectInt.permit_expiry_date | date:'dd-MM-yyyy'}}</td>
+							<td>{{SelectInt.driver_name}}</td>
+							<td>{{SelectInt.driver_contact_no}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div ng-if="aVehicleSelected.length <= 0" class="ms-body" style=" min-height: 50px;">
+					<h4>No Vehicle Selected !!!!!</h4>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+	}
+</style>
+

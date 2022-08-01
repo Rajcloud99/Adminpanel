@@ -1,0 +1,152 @@
+<div class="container" ng-controller="vehicleProfileCommonController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+			<div class="lvh-search ng-scope sear">
+				<input type="text" placeholder="Start typing..." ng-model="vehicleName" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in vehicleNames" ng-change="getVname(vehicleName)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+				<i class="lvh-search-close" ng-click="clearSearch()">×</i>
+			</div>
+			<div class="listview lv-user clk" style="overflow: auto;height:97%;">
+				<div class="lv-item media" style="border-bottom:2px solid #4285f4" ng-repeat="vehicle in vehicles"
+					 ng-click="selectVehicle(vehicle,$index)">
+					<div class="truck-desc">
+						<div class="row">
+							<div class="col-md-5 bold">
+								{{vehicle.vehicle_reg_no }}
+							</div>
+							<div class="col-md-5 bold">
+								{{vehicle.veh_type_name }}
+							</div>
+							<div ng-if="vehicle.own" class="col-md-2">
+								<p>
+									<i class="zmdi zmdi-shield-check zmdi-hc-fw" uib-tooltip="Own Vehicle"
+									   tooltip-placement="left" style="font-size: 16px;color: #17db17;"></i>
+								</p>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<div class="pagi" ng-show="total_pages>1">
+					<pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page"
+								num-pages="numPages" ng-model="currentPage" max-size="maxSize"
+								class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;"
+								next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+				</div>
+				<div ng-if="vehicles.length == 0" class="lv-body">
+					<h5>You have no Vehicle Registered.</h5>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="ms-body" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label" ng-if="!vehicle.isNew">
+						<span class="c-black"><b>{{vehicle.vehicle_reg_no }} / {{vehicle.veh_type_name}}</b> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>
+					</div>
+					<div ng-if="vehicle.isNew" class="lvh-label">
+						<span class="c-black"><b>New Vehicle Registration </b></span>
+					</div>
+					<div class="lvh-label" style="width:130px">
+						<div class="fg-line">
+							<div class="select">
+								<select class="form-control" placeholder="Vehicles"
+										ng-options="item as item for item in vehicle_type1" ng-model="vehicleType1"
+										ng-change="getVehicleByselect(vehicleType1)" style="height: 34px;">
+									<option value=""> Vehicle Type</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="lvh-label" style="width:130px">
+						<select chosen data-placeholder-text-single="'Vendors'" allow-single-deselect="true"
+								no-results-text="'Could not find any Vendor'" class="form-control" ng-model="vendorName"
+								ng-options="item as item.name for item in aVendors" ng-change="getAllVehiclesList()">
+							<option value=""></option>
+						</select>
+					</div>
+					<div class="lvh-label" style="width:130px">
+						<select chosen data-placeholder-text-single="'Driver'" allow-single-deselect="true"
+								no-results-text="'Could not find any Driver'" class="form-control" ng-model="driver"
+								ng-options="item as item.name for item in aDrivers" ng-change="getAllVehiclesList()">
+							<option value=""></option>
+						</select>
+					</div>
+					<ul class="lv-actions actions">
+						<!-- <li class="btn-wave"><a class="btn btn-primary" uib-tooltip="Search All Vehicle" tooltip-placement="bottom" ng-click="allVehicle()" style="width: auto;"> All Vehicle</a></li>
+                        <li class="btn-wave"><a class="btn btn-primary" uib-tooltip="Search Own Vehicle" tooltip-placement="bottom" ng-click="ownVehicle()" style="width: auto;"> Own Vehicle</a></li> -->
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.vehicle.Register"
+																			 uib-tooltip="Create Vehicle"
+																			 tooltip-placement="bottom"
+																			 ng-click="newVehicleReg()"><i
+								class="zmdi zmdi-account-add zmdi-hc-fw"></i></a></li>
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.vehicle.update"
+																			 uib-tooltip="Edit Vehicle"
+																			 tooltip-placement="bottom"
+																			 ng-click="editVehicle()"><i
+								class="zmdi zmdi-edit"></i></a></li>
+						<li ng-if="!(role_local_data.vehicle.indexOf('edit')==-1)" class="btn-wave"
+							data-ui-sref-active="active"><a ng-click="allocateDriver()" uib-tooltip="Allocate Driver"
+															tooltip-placement="bottom"><i
+								class="glyphicon glyphicon-retweet"></i></a></li>
+						<li><a href="" uib-tooltip="Download Report" tooltip-placement="bottom"
+							   ng-click="downloadReport()"><i class="glyphicon glyphicon-download"></i></a>
+						</li>
+					</ul>
+				</div>
+				<!-- <div class="lv-header-alt clearfix">
+                    <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                        <select chosen data-placeholder-text-single="'All Vehicle'" allow-single-deselect="true" no-results-text="'Could not find any Vehicle'" class="form-control" ng-model="vehicleName" ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in vehicles" ng-change="getAllVehiclesList()" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                        <select chosen data-placeholder-text-single="'Own Vehicle'" allow-single-deselect="true" no-results-text="'Could not find any own Vehicle'" class="form-control" ng-model="vehicleName" ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in vehiclesOwn" ng-change="getAllVehiclesList()" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                        <select chosen data-placeholder-text-single="'Market Vehicle'" allow-single-deselect="true" no-results-text="'Could not find any market Vehicle'" class="form-control" ng-model="vehicleName" ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in vehiclesMarket" ng-change="getAllVehiclesList()" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                        <select chosen data-placeholder-text-single="'All Vehicle'" allow-single-deselect="true" no-results-text="'Could not find any Vehicle'" class="form-control" ng-model="vehicleName" ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in vehicles" ng-change="getAllVehiclesList()" >
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div> -->
+				<!--ng-if="vehicles.length != 0 || vehicle.isNew" -->
+				<div ng-if="vehicles.length == 0 && !vehicle.isNew" class="lv-body">
+					<h3>You have no Vehicle Registered. Please Register First.</h3>
+				</div>
+				<!--ng-if="vehicles.length != 0 || vehicle.isNew" -->
+				<div class="lv-body" ng-if="vehicles.length != 0 || vehicle.isNew">
+					<ul class="tab-nav tn-justified" ng-if="hideThis">
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.vehicle.update">Profile</a>
+						</li>
+						<li class="btn-wave" data-ui-sref-active="active"><a
+								data-ui-sref="masters.vehicle.Identification">Identification</a></li>
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.vehicle.Document">Document</a>
+						</li>
+						<!-- <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="vehicle.Document">Driver Details</a></li> -->
+						<!-- <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="vehicle.DriverDoc">Driver Document</a></li> -->
+					</ul>
+					<data ui-view></data>
+				</div>
+
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.smallPagi > li > a {
+		width: 24px;
+		height: 24px;
+		line-height: 22px;
+		font-size: 13px;
+	}
+</style>

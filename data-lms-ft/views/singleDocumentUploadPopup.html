@@ -1,0 +1,46 @@
+<div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="detailList2">
+				<form name="documentForm">
+					<div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+						<div class="col-sm-12">
+							<label  class="col-sm-3 control-label">{{label}}</label>
+							<div class="col-sm-3">
+								<button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+										onclick="document.getElementById('docToUpload').click();">Select File</button>
+								<input ng-hide="true"
+									   id="docToUpload"
+									   type="file"
+									   accept="image/*,application/pdf,application/msword,application/vnd.ms-excel"
+									   ngf-select
+									   ng-model="docToUpload"
+									   name="docToUpload"
+									   required=""
+									   ngf-max-size="2MB"
+									   ngf-model-invalid="errorFile">
+								<div><i ng-show="documentForm.docToUpload.$error.maxSize" style="color: red">File too large
+									{{errorFile.size / 1000000|number:1}}MB: max 2MB</i></div>
+								<br>
+							</div>
+							<div class="col-sm-5">
+								<img ng-show="fileUploadForm.doc.$valid" ngf-src="docToUpload"
+									 ngf-resize="{width: 100, height: 100}">
+								<button ng-click="docPreview(selectedContract.upload_document)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="selectedContract.upload_document">Preview</button >
+								<button ng-click="docToUpload = null" ng-show="docToUpload" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<button type="submit"
+										class="btn btn-primary"
+										ng-disabled="documentForm.docToUpload.$error.required"
+										ng-click="upload(documentForm)">Upload</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,288 @@
+<div class="card-header">
+	<div class="row m-b-5">
+		<form>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text"
+						   ng-model="filterObj.name"
+						   name="name"
+						   class="form-control input-sm filter-input-height"
+						   placeholder="Name"
+						   ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="">
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text"
+						   ng-model="filterObj.contact_person"
+						   name="contact_person"
+						   class="form-control input-sm filter-input-height"
+						   placeholder="Contact Person"
+						   ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="">
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="number"
+						   ng-model="filterObj.mobile"
+						   name="mobile"
+						   class="form-control input-sm filter-input-height"
+						   placeholder="Mobile"
+						   ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="">
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text"
+						   ng-model="filterObj.pan_no"
+						   name="pan no"
+						   class="form-control input-sm filter-input-height"
+						   placeholder="Pan No"
+						   ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="">
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text"
+						   ng-model="filterObj.category"
+						   name="category"
+						   class="form-control input-sm filter-input-height"
+						   placeholder="Category"
+						   ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="">
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text"
+						   ng-model="filterObj.ownershipType"
+						   name="ownershipType"
+						   class="form-control input-sm filter-input-height"
+						   placeholder="OwnershipType"
+						   ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="">
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<select multiple
+							chosen
+							ng-model="filterObj.rating"
+							no-results-text="'No Result Found'"
+							placeholder-text-multiple="'Rating'"
+							ng-options="r for r in rating">
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+<!--				<div ng-dropdown-multiselect=""-->
+<!--					 ng-init="filterObj.route=[];routes=[]"-->
+<!--					 options="routes"-->
+<!--					 selected-model="filterObj.route"-->
+<!--					 extra-settings="selectSettings"-->
+<!--					 events='selectEvents'-->
+<!--					 translation-texts="{buttonDefaultText: 'Route'}"-->
+<!--					 ja-search-input='inputModel'-->
+<!--					 ja-search-trigger="getRoutes(inputModel)"-->
+<!--				></div>-->
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input type="text"
+						   class="form-control lvhs-input"
+						   placeholder="Route Search..."
+						   ng-model="viewValue"
+						   typeahead-wait-ms="10"
+						   typeahead="item as item.name for item in getRoutes($viewValue) | limitTo:6">
+				</div>
+				</div>
+			</div>
+
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="filterObj.start_date"
+							   min-date="min_date"
+							   is-open="opened1"
+							   datepicker-options="DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="Start Date"
+							   name="Start Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm- col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened2 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="filterObj.end_date"
+							   ng-change="dateChange('endDate')"
+							   is-open="opened2"
+							   datepicker-options="DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="End Date"
+							   name="End Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="fg-line">
+					<select multiple
+							chosen
+							ng-model="filterObj.vehicleType"
+							no-results-text="'No Result Found'"
+							placeholder-text-multiple="'Vehicle Type'"
+							ng-options="v.name for v in vehicleTypes">
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0 text-center">
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							ng-click="getAllVendorsList()"
+							uib-tooltip="Search"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Clear Search"
+							ng-click="filterObj={};getAllVendorsList()"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</div>
+
+
+
+
+
+			<!--<div class="col-sm-2 form-group">-->
+			<!--<div class="fg-line text-center">-->
+			<!--<button class="btn btn-info waves-effect"><span>Search</span></button>-->
+			<!--<button class="btn btn-info waves-effect" ng-click="filterObj={};filterObj.route=[];"><span>Clear All</span></button>-->
+			<!--</div>-->
+			<!--</div>-->
+		</form>
+	</div>
+
+	<div class="row" style="margin-right: 1px;">
+		<div class="col-md-12 text-right">
+
+			<button type="button"
+					ng-hide="true"
+					ng-if="$role['All Vendor']['Edit Client'] && $user.clientAdmin"
+					class="btn-primary btn-xs"
+					ng-click="editClientId(vendor)"
+					uib-tooltip="edit ClientId"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+			</button>
+			<button type="button"
+					class="btn-primary btn-xs"
+					ng-click="downloadExcelReport()"
+					uib-tooltip="Download Excel"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+			</button>
+			<button type="button"
+					class="btn-primary btn-xs"
+					ng-click="add()"
+					ng-if="$role['All Vendor']['Add']"
+					data-ui-sref="masters.vendorRegistration.profile.basicInfo"
+					uib-tooltip="Add New Vendor "
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+			</button>
+			<button type="button"
+					class="btn-primary btn-xs"
+					ng-disabled="vendor.clientId != selectedClient"
+					ng-click="edit()"
+					ng-if="$role['All Vendor']['Update']"
+					uib-tooltip="Edit Vendor"
+					data-ui-sref="masters.vendorRegistration.profile.basicInfo"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-border-color zmdi-hc-fw"></i>
+			</button>
+			<button type="button"
+					class="btn-primary btn-xs"
+					ng-click="show()"
+					uib-tooltip="Show Vendor Detail"
+					data-ui-sref="masters.vendorRegistration.profile.basicInfo"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-assignment zmdi-hc-fw"></i>
+			</button>
+			<button type="button"
+					class="btn-primary btn-xs"
+					ng-click="previewDocs()"
+					uib-tooltip="Preview Documents  "
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i>
+			</button>
+			<button type="button"
+					class="btn-primary btn-xs"
+					ng-click="uploadFiles()"
+					uib-tooltip="Upload Documents  "
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+			</button>
+			<button type="button"
+					class="btn-danger btn-xs"
+					ng-if="$role['All Vendor']['Delete']"
+					ng-click="vendorDelete(vendor)"
+					uib-tooltip="Delete vendor"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+			</button>
+		</div>
+	</div>
+
+	<div ja-table
+		 table-body="vendors"
+		 table-head="tableHead"
+		 table-order-by-model='orderBy'
+		 table-order-by-event='getAllVendorsList()'
+		 table-height='500px'
+		 table-api='tableApi'
+		 table-load="getAllVendorsList(true)"
+		 table-column-setting="columnSetting"
+		 table-selectable='"true"'
+		 table-selectable-model="vendor"
+		 table-row-click-event="selectVendor()"
+	></div>
+</div>

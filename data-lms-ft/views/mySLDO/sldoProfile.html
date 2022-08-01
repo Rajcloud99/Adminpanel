@@ -1,0 +1,38 @@
+<form ng-controller="sldoProfileCtrl">
+	<div ng-if="sldos.length>0" class="row" style="margin: 5px auto;">
+	    <div class="col-md-2">
+	    </div>
+		<div class="col-md-12">
+			<h5 class="profile_h">Shipping Line Details</h5>
+			<div class="detailList">
+				<ul>
+					<li><span>SL Id :</span> {{sldo.shippingLineId || 'NA'}}</li>
+                    <li><span>SL Name :</span>{{sldo.name || 'NA'}}</li>
+                    <li><span>SL Code :</span> {{sldo.code || 'NA'}}</li>
+                    <li><span>SL Details :</span> {{sldo.details || 'NA'}}</li>
+                    <li><span>Mobile :</span> {{sldo.prim_contact_no || 'NA'}}</li>
+                    <li><span>Phone :</span> {{sldo.alt_contact_no1 || 'NA'}}</li>
+                    <li><span>Created Date :</span> {{sldo.created_at | date:'dd-MM-yyyy' || 'NA'}}</li>
+                 </ul>
+			</div>
+		</div>
+		<!-- <div class="col-md-12">
+			<h4 style="margin-left: 19px;">Document Details</h4>
+			<div class="detailList">
+				<ul>
+					<li><span>Driver Photo :</span> {{driver.photo ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Address Proof Front Copy :</span> {{driver.address_proof_front_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Address Proof Back Copy :</span> {{driver.address_proof_back_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Driver License Front Copy :</span> {{driver.license_front_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Driver License Back Copy :</span> {{driver.license_back_copy ? "Uploaded" : "Not Uploaded"}}</li>
+	            </ul>
+			</div>
+		</div> -->
+
+		<div class="col-md-2">
+	    </div>
+	</div>
+	<div ng-show="sldos.length <= 0">
+        <h4 style="text-align: center;color: darkgrey;">You have no SLDO registered. Please Register First.</h4>
+    </div>
+</form>

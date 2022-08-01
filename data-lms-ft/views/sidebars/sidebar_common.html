@@ -1,0 +1,14 @@
+<div class="sidebar-inner c-overflow" style="width: 90px">
+
+    <ul class="main-menu">
+        <li data-ui-sref-active="active" ng-repeat="appSref in apps">
+            <a  style="font-size: 11px;padding: 10px;height: calc(100% - 50px);" data-ui-sref="{{appSref.value}}">{{appSref.key}}</a>
+        </li>
+    </ul>
+</div>
+<style>
+	#sidebar .sidebar-inner {
+		height: calc(100% - 50px);
+		width: 60px;
+	}
+</style>

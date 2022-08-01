@@ -1,0 +1,230 @@
+<!-- Controller: genBillController-->
+<!-- ControllerAs: gbVm -->
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:15px;">
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="gbVm.myFilter.billNo"
+						   name="bill_no"
+						   class="form-control input-sm"
+						   placeholder="Bill No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="lvh-search ng-scope sear">
+							<input type="text"
+								   placeholder="Billing Party..."
+								   ng-model="gbVm.myFilter.billingParty"
+								   class="lvhs-input"
+								   typeahead-wait-ms="10"
+								   typeahead="item as item.name for item in gbVm.getBillingParty($viewValue) | limitTo:6"
+								   class="form-control">
+							<i class="lvh-search-close"
+							   ng-click="gbVm.myFilter.billingParty='';">×</i>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-1">
+				<div class="form-group m-b-0">
+					<div class="fg-line">
+						<div class="select">
+							<select class="form-control"
+									ng-model="gbVm.myFilter.status"
+									style="height: 33px;margin-top: 1px"
+									ng-options="item as item for item in gbVm.abillStatus">
+								<option value="">All Status</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-1">
+				<div class="select">
+					<select class="form-control"
+							ng-model="gbVm.myFilter.dateType"
+							name="Branch Name">
+						<option value="">Select Type</option>
+						<option value="billDate">Bill Date</option>
+						<option value="acknowledge.systemDate">Ack Date</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="gbVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{gbVm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="gbVm.DatePicker.newDate"
+							   ng-model="gbVm.myFilter.start_date"
+							   ng-change="gbVm.dateChange('startDate');"
+							   is-open="opened1"
+							   datepicker-options="gbVm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="Start Date"
+							   name="Start Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="gbVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+					class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				</div>
+			</div>
+
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened2 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="gbVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{gbVm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="gbVm.DatePicker.newDate"
+							   ng-model="gbVm.myFilter.end_date"
+							   ng-change="gbVm.dateChange('endDate');"
+							   is-open="opened2"
+							   datepicker-options="gbVm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="End Date"
+							   name="End Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="gbVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Search"
+						type="submit"
+						ng-click="gbVm.getBills()"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Clear Search"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="gbVm.myFilter={};gbVm.aAccount = [];gbVm.aAccountGroup = [];gbVm.getBills();">
+					<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+				</button>
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						ng-hide="true"
+						uib-tooltip="Download"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="gbVm.getBills(false, true);">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+
+			</div>
+			<div class="clearfix"></div>
+
+		</div>
+	</div>
+
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="form-group m-b-0">
+			<button class="btn btn-primary m-r-10"
+					ng-click="gbVm.upsertBill()"
+					uib-tooltip="Add Bill">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					ng-click="gbVm.upsertBill('edit')"
+					uib-tooltip="Edit Bill"
+					ng-disabled="gbVm.shouldDisableEditing()">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary"
+					ng-click="gbVm.cancelBill('Cancel')"
+					ng-disabled="(gbVm.selectedBill.status == 'Cancelled')"
+					uib-tooltip="Cancel Bill">
+				<i class="zmdi zmdi-close-circle zmdi-hc-fw"></i>
+			</button>
+			<button class="btn btn-primary"
+					ng-click="gbVm.printBill('Preview')"
+					ng-disabled="billIconStatus"
+					uib-tooltip="Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary m-r-10"
+					ng-click="gbVm.billApprove()"
+					uib-tooltip="Bill Approve">
+				<i class="zmdi zmdi-thumb-up zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-10"
+					ng-click="gbVm.unApproveBill()"
+					uib-tooltip="Unapprove">
+				<i class="zmdi zmdi-thumb-down zmdi-hc-fw fs-20"></i>
+			</button>
+
+			<button class="btn btn-danger m-r-10"
+					ng-click="gbVm.remove()"
+					ng-hide="true"
+					uib-tooltip="Delete">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<div ja-table
+				 table-body="gbVm.aBills"
+				 table-head="gbVm.tableHead"
+				 table-height='500px'
+				 table-load="gbVm.getBills(true)"
+				 table-column-setting="gbVm.columnSetting"
+				 table-selectable='"index"'
+				 table-api='gbVm.tableApi'
+				 table-selectable-model="gbVm.selectedBill"
+			></div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+
+	.fs-20{
+		font-size: 20px;
+	}
+	.hideExtraData{
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		height: 45px;
+	}
+</style>

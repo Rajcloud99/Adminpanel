@@ -1,0 +1,74 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="col-md-12"
+				 ng-repeat='oGraph in summary.aData'
+				 ng-dblclick="summary.onClick(oGraph)"
+				 ng-if="$index%3==0"
+				 style="float: left;">
+				<dashboard graph="oGraph"></dashboard>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-12"
+				 ng-repeat='oGraph in summary.aData'
+				 ng-dblclick="summary.onClick(oGraph)"
+				 ng-if="$index%3==1"
+				 style="float: left;">
+				<dashboard graph="oGraph"></dashboard>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-12"
+				 ng-repeat='oGraph in summary.aData'
+				 ng-dblclick="summary.onClick(oGraph)"
+				 ng-if="$index%3==2"
+				 style="float: left;">
+				<dashboard graph="oGraph"></dashboard>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	dashboard .container:not(.ja-containter){
+		width: 100%;
+	}
+
+	.red{
+		color: red;
+	}
+
+	.fs-25{
+		font-size: 25px;
+	}
+
+	.ja-fullscreen{
+		 position: fixed;
+		 z-index: 10;
+		 left: 0;
+		 top: 40px;
+		 width: 100% !important;
+		 margin: 0 !important;
+		 height: 100vh;
+		 background: #0000003d;
+	 }
+
+	.ja-fullscreen .card{
+		height: 80% !important;
+		width: 90%;
+		margin: 30px auto;
+		border-radius: 5px;
+	}
+
+	.nvd3-wrapper{
+		height: calc(100% - 64px) !important;
+		width: 100% !important;
+	}
+
+	nvd3, svg{
+		/*height: calc(100% - 40px) !important;*/
+		height: 100% !important;
+		width: 100% !important;
+	}
+</style>

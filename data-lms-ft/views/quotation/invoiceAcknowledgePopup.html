@@ -1,0 +1,82 @@
+<form role="form" class="form-group"  name="invoiceAcknowledge" autocomplete="off" novalidate>
+<div class="validationError" ng-show="grPopup"><h5 class="c-red">* {{gmsg}}</h5></div>
+<div class="modal-header p-b-0" >
+	<button type="button" ng-click="closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Acknowledge Invoice</h4><br>
+	<!-- <div class="row" style="padding:10px 0;">
+		<div class="col-md-12">
+			<div class="form-group m-b-0">
+				<label class="col-md-2 control-label">Acknowledge By <span class="req_r">*</span></label>
+				<div class="col-md-10">
+					<div class="lvh-search sear">
+						<input type="text"
+							   class="lvhs-input"
+							   placeholder="Acknowledged By..."
+							   ng-model="oSend.acknowledged_by"
+							   typeahead-wait-ms="100"
+							   typeahead="item as item.full_name for item in customers | limitTo:8"
+							   ng-change="getCustomers(oSend.acknowledged_by)"
+							   typeahead-on-select="onSelect($item, $model, $label)"
+							   required>
+						<i class="lvh-search-close" ng-click="clearSearch()">×</i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
+	<div class="row" style="padding:10px 0;">
+		<div class="col-md-6">
+			<p class="c-black col-md-4 f-500 m-b-20">Due Date <span class="req_r">*</span></p>
+			<div class="form-group col-md-8">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="oSend.due_date"
+							   is-open="opened1"
+							   min-date="minDate"
+							   datepicker-options="DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="Booking Date"
+							   name="Booking Date"
+							   style="padding:10px;" 
+							   required
+							   >
+					</div>
+					<span class="input-group-btn">
+						  <button type="button" class="btn btn-default m-t-0 f12"
+								  ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								  class="glyphicon glyphicon-calendar"></i></button>
+					  </span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<p class="c-black col-md-4 f-500 m-b-20">Remark <span class="req_r">*</span></p>
+			<div class="form-group col-md-8">
+				<div class="fg-line">
+					  <textarea class="form-control" rows="2" ng-model="oSend.acknowledge_remark" placeholder="Please Specify the Remark"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-success waves-effect"
+			ng-disabled="!oSend.due_date || !oSend.acknowledge_remark"
+			ng-click="acknowledgeInvoice()">Acknowledge Bill</button>&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-warning"
+			ng-click="closeModal()">Cancel</button>
+</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 45%;
+		height: 173px
+	}
+</style>

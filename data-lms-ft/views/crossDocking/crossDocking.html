@@ -1,0 +1,189 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Cross Docking</b></span>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form ng-submit="getAllCrossDocking()" novalidate>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="number" ng-model="oFilter.trip_no" name="trip_no"
+										   class="form-control input-sm" placeholder="Trip No"
+										   ng-model-options="{ updateOn: 'blur' }" style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="oFilter.grNumber" name="grNumber"
+										   class="form-control input-sm" placeholder="GR No"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-2">
+									<input type="text" class="form-control lvhs-input" placeholder="Vehicle Search..."
+										   ng-model="oFilter.vehicle" typeahead-wait-ms="10"
+										   typeahead="item as item.vehicle_reg_no for item in getVehicle($viewValue) | limitTo:6">
+									<i class="lvh-search-close" ng-click="oFilter.vehicle='';">×</i>
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-2">
+									<input type="text" class="form-control lvhs-input" placeholder="Vendor Search..."
+										   ng-model="oFilter.vendor" typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in getVendorName($viewValue) | limitTo:6">
+									<i class="lvh-search-close" ng-click="oFilter.vendor='';">×</i>
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text" class="form-control lvhs-input" placeholder="Branch Search..."
+										   ng-model="oFilter.branch" typeahead-wait-ms="10"
+										   typeahead="item as (item.name + '('+($configs.client_allowed|filter:{'clientId': item.clientId})[0].name+')') for item in getAllBranch($viewValue) | limitTo:6"
+										   typeahead-on-select="onBranchSelect($item, $model, $label)">
+									<i class="lvh-search-close" ng-click="oFilter.branch='';">×</i>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-2">
+									<input type="text" class="form-control lvhs-input" placeholder="Customer Search..."
+										   ng-model="oFilter.customer" typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in getCustomer($viewValue) | limitTo:6">
+									<i class="lvh-search-close" ng-click="oFilter.customer='';">×</i>
+								</div>
+							</div>
+
+							<div class="col-xs-4 m-b-2 col-sm-1 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-2">
+									<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Billing Search..."
+											ng-model="oFilter.billingParty"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in getBilling($viewValue) | limitTo:6"
+									>
+									<i class="lvh-search-close" ng-click="oFilter.billingParty='';">×</i>
+								</div>
+							</div>
+
+
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened3 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')" type="text" class="form-control"
+											   uib-datepicker-popup="{{DatePicker.formats[0]}}" show-weeks="false"
+											   max-date="DatePicker.newDate" ng-model="oFilter.fromDate"
+											   is-open="opened3" datepicker-options="DatePicker.dateSettings" close-text="Close"
+											   placeholder="From Date" style="padding: 0px 4px;height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+                                        <button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="DatePicker.openDatePicker(this, $event, 'opened3')""><i
+											class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened4')" type="text" class="form-control"
+											   uib-datepicker-popup="{{DatePicker.formats[0]}}" show-weeks="false"
+											   max-date="DatePicker.newDate" ng-model="oFilter.toDate" is-open="opened4"
+											   datepicker-options="DatePicker.dateSettings" close-text="Close"
+											   placeholder="To Date" style="padding: 0px 4px; height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+                                        <button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="DatePicker.openDatePicker(this, $event, 'opened4')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+								</div>
+							</div>
+
+
+							<div class="col-md-2">
+								<div class="form-group m-b-0 ja-text-right">
+									<button class="btn btn-primary p-t-0 p-b-0" type="button"
+											style="margin-bottom: 3px;  font-size: 16px" uib-tooltip="Search"
+											ng-click="getAllCrossDocking()" tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0" type="button"
+											style="margin-bottom: 3px;  font-size: 16px" uib-tooltip="Clear All"
+											ng-click="oFilter={};getAllCrossDocking();" tooltip-placement="bottom">
+										<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+									</button>
+
+
+
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											ng-if="$role['Cross Docking']['Add']"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Add"
+											ng-click="addCrossDocking()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-collection-add zmdi-hc-fw"></i>
+									</button>
+
+								</div>
+							</div>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div ja-table
+									 table-body="aCrossDocking"
+									 table-head="tableHead"
+									 table-height='500px'
+									 table-load="getAllCrossDocking(true)"
+									 table-column-setting="columnSetting"
+									 table-selectable='selectType'
+									 table-api='tableApi'
+									 table-selectable-model="aSelectedDocking">
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.chosen-row-1 {
+		z-index: 89;
+	}
+
+	tbody tr:hover {
+		background: #dbd6d6;
+	}
+
+	.m-t-10 {
+		margin-top: 10px;
+	}
+	.pull-right > span > a {
+		font-size: 22px;
+	}
+</style>

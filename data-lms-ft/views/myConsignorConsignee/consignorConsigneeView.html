@@ -1,0 +1,143 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Consignor Consignee</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(Detail View)
+				</span>
+			</span>
+		</div>
+		<div class="pull-right m-t-5 m-b-5">
+			<button class="btn btn-primary pull-right" ng-if="$role['Consignor Consignee']['Update']"
+					ng-click="upsertConsignorConsignee(oConsignorConsignee)"
+					uib-tooltip="Edit">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>&nbsp;&nbsp;
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px" id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<div class="card-body">
+			<form name="consignorConsignee" ng-submit="submit(consignorConsignee)" novalidate>
+				<ul class="list-group list-group-flush">
+					<!-- BASIC Account DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">BASIC CONSIGNOR/CONSIGNEE DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Name: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.name}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Address: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.address}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Location: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.businessLocation}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">State: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.state}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Type: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.type}}
+										</div>
+									</div>
+								</div>
+											<div class="col-md-4" ng-if="oConsignorConsignee.type === 'Consignee'">
+												<div class="form-group m-b-0">
+													<label class="col-sm-4 control-label">Dealer Code: </label>
+													<div class="col-sm-6">
+													{{oConsignorConsignee.d_code}}
+													</div>
+												</div>
+											</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Contact Person: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.contact_person}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Contact Number: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.contact_number}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="oConsignorConsignee.clientName">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">ClientR: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.clientName}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">GST NO: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.gstin}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Latitude: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.lat}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">longitude: </label>
+										<div class="col-sm-6">
+											{{oConsignorConsignee.lng}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+</style>
+

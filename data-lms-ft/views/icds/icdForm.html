@@ -1,0 +1,131 @@
+<div>
+    <form name="ICDForm">
+        <div class="validationError" ng-show="createIcdmsg"><h5 class="c-red">* {{msg}}</h5></div>
+        <ul ng-show="form_icd=='view'" class="lv-actions actions"
+            style="position:absolute;margin-top: -65px;margin-left:90%;">
+            <li class="btn-wave" data-ui-sref-active="active">
+                <a data-ui-sref="clients.icd.edit"
+                   uib-tooltip="Edit ICD" tooltip-placement="bottom"
+                   ng-click="editICD()" >
+                    <i class="zmdi zmdi-edit">
+                    </i>
+                </a>
+            </li>
+            <li ng-if="!(role_local_data.icd.indexOf('remove')==-1)">
+                <a href="" uib-tooltip="Delete ICD"
+                   tooltip-placement="bottom"
+                   ng-click="deleteICD()">
+                    <i class="zmdi zmdi-delete">
+                    </i>
+                </a>
+            </li>
+        </ul>
+
+        <!-- icd basic info -->
+        <div id="div_icd_info" class="card-body" style="padding-left:10%;padding-right: 10%;margin-top: 80px">
+            <form name="UserForm" class="form-vertical">
+                <div class="row" style="margin-bottom: 15px">
+                        <label class="col-sm-2 control-label">Port name: <span style="color: red;">*</span></label>
+                        <div class="col-sm-3" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input ng-readonly="form_icd_read_only"
+                                       ng-model="objICD.port_name" class="form-control
+                                input-sm" name="port name" required>
+                            </div>
+                        </div>
+                </div>
+                <div class="row" style="margin-bottom: 15px">
+                        <label class="col-sm-2 control-label">Port code: <span style="color: red;">*</span> </label>
+                        <div class="col-sm-3" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input ng-readonly="form_icd_read_only"
+                                       ng-model="objICD.port_code" class="form-control input-sm" ng-readonly="form_icd_read_only" name="port code" required>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="row" style="margin-bottom: 15px">
+                    <label  class="col-sm-2 control-label">Address</label>
+                    <div class="col-sm-8" style="padding-left: 10px;padding-right: 10px;">
+                        <div class="col-xs-6">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input ng-readonly="form_icd_read_only"  class="form-control
+                                    input-sm" ng-model="objICD.address.line1"
+                                        placeholder="Line 1"
+                                       ng-readonly="form_icd_read_only">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input ng-readonly="form_icd_read_only"  class="form-control
+                                    input-sm" ng-model="objICD.address.line2" placeholder="Line 2"
+                                       ng-readonly="form_icd_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 15px">
+                    <label  class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8" style="padding-left: 10px;padding-right: 10px;">
+                        <div class="col-xs-6">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input id ="autoCompleteCity1" ng-readonly="form_icd_read_only"  class="form-control
+                                    input-sm" ng-model="objICD.address.city"
+                                        placeholder="City" ng-readonly="form_icd_read_only">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input ng-readonly="form_icd_read_only"  class="form-control
+                                    input-sm" ng-model="objICD.address.district"
+                                        placeholder="District" ng-readonly="form_icd_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 15px">
+                    <label  class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8" style="padding-left: 10px;padding-right: 10px;">
+                        <div class="col-xs-6">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input ng-readonly="form_icd_read_only"  class="form-control
+                                    input-sm" ng-model="objICD.address.state"
+                                        placeholder="State" ng-readonly="form_icd_read_only">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input ng-readonly="form_icd_read_only"  class="form-control
+                                    input-sm" ng-model="objICD.address.country"
+                                        placeholder="Country" ng-readonly="form_icd_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label  class="col-sm-2 control-label"></label>
+                    <div class="col-sm-8" style="padding-left: 10px;padding-right: 10px;">
+                        <div class="col-xs-6">
+                            <div class="fg-line" ng-readonly="form_icd_read_only">
+                                <input ng-readonly="form_icd_read_only"  class="form-control
+                                    input-sm" ng-model="objICD.address.pincode"
+                                        placeholder="Pincode" ng-readonly="form_icd_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="row" ng-show="!form_icd_read_only" style="margin: 60px 0px 30px 0px">
+            <div style="margin-left: 70%">
+                <button type="submit" class="btn btn-primary"
+                        ng-click="saveICD(ICDForm)" style="margin-bottom: 15px;margin-right:30px">Save</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+          <h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+        </div>
+    </form>
+</div>

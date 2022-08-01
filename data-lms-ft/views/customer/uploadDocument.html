@@ -1,0 +1,111 @@
+<div class="panel-body">
+	<form ng-controller="driverDocumentController" name="DrivDocumentForm">
+		<div class="col-md-4 col-sm-4 col-xs-6">
+			<div class="form-group">
+				<label for="driver_image1">Driver Photo </label> 
+				<input type="file" file-model="driver_image" id="driver_image1"></input>
+			    <div ng-show="driver.driver_image" style="margin:5px">
+			       	<div class="form-group toggle-switch" data-ts-color="blue">
+					   <label for="driver_image" class="ts-label">view image</label>
+				    	<input id="driver_image" type="checkbox" ng-model="driver_image_toggle" hidden="hidden">
+				    	<label for="driver_image" class="ts-helper"></label>
+				    </div>
+	           	</div>
+			 	<div class="fileinput-preview thumbnail" data-trigger="fileinput" ng-if="driver_image_toggle">
+		         	<img ng-src="{{fileURL}}{{driver.driver_image}}" alt="Driver Image">
+			 	</div>
+		 	</div>
+	   	</div>
+	   	<!-- <div class="col-md-4 col-sm-4 col-xs-6">
+			<div class="form-group">
+				<label for="address_proof_doc1">Address Proof Type </label>
+                <div class="select">
+                    <select class="form-control" name="addrProof" id="addrProof" ng-model="addrProof">
+                        <option value="">Select an Option</option>
+                        <option value="Voter ID">Voter ID</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Aadhar Card">Aadhar Card</option>
+                        <option value="Govt. Issued Card">Govt. Issued Card</option>
+                        <option value="Rashan Card">Rashan Card</option>
+                        <option value="Rental Aggrement">Rental Aggrement</option>
+                    </select>
+                </div>
+			</div>
+	   	</div> -->
+		   
+		<div class="col-md-4 col-sm-4 col-xs-6">
+			<div class="form-group">
+				<label for="address_proof_doc1">Address Proof Front Copy </label>
+			 	<input type="file"	file-model="address_proof_front_copy" id="address_proof_doc1"></input>
+			 	<div ng-show="driver.address_proof_front_copy" style="margin:5px">
+			        <div class="form-group toggle-switch" data-ts-color="blue">
+				     	<label for="address_proof_front_copy" class="ts-label">view image</label>
+					    <input id="address_proof_front_copy" type="checkbox" ng-model="address_proof_front_copy_toggle" hidden="hidden">
+					   	<label for="address_proof_front_copy" class="ts-helper"></label>
+					</div>
+	       		</div>
+				<div class="fileinput-preview thumbnail" data-trigger="fileinput" ng-if="address_proof_front_copy_toggle">
+	                <img ng-src="{{fileURL}}{{driver.address_proof_front_copy}}" alt="Driver Address Proof">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-6">
+			<div class="form-group">
+				<label for="address_proof_doc1">Address Proof Back Copy </label>
+			 	<input type="file"	file-model="address_proof_back_copy" id="address_proof_doc1"></input>
+			 	<div ng-show="driver.address_proof_back_copy" style="margin:5px">
+			        <div class="form-group toggle-switch" data-ts-color="blue">
+				     	<label for="address_proof_back_copy" class="ts-label">view image</label>
+					    <input id="address_proof_back_copy" type="checkbox" ng-model="address_proof_back_copy_toggle" hidden="hidden">
+					   	<label for="address_proof_back_copy" class="ts-helper"></label>
+					</div>
+	       		</div>
+				<div class="fileinput-preview thumbnail" data-trigger="fileinput" ng-if="address_proof_back_copy_toggle">
+	                <img ng-src="{{fileURL}}{{driver.address_proof_back_copy}}" alt="Driver Address Proof">
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="col-md-4 col-sm-4 col-xs-6">
+			<div class="form-group">
+				<label for="dr_licence_doc1">Driver License Front Copy </label> <input type="file"
+					file-model="license_front_copy" id="dr_licence_doc1"></input>
+				 <div ng-show="driver.license_front_copy" style="margin:5px">
+			 <div class="form-group toggle-switch" data-ts-color="blue">
+				<label for="license_front_copy" class="ts-label">view image</label>
+				<input id="license_front_copy" type="checkbox" ng-model="license_front_copy_toggle" hidden="hidden">
+				<label for="license_front_copy" class="ts-helper"></label>
+			</div>
+	       </div>
+				<div class="fileinput-preview thumbnail" data-trigger="fileinput" ng-if="license_front_copy_toggle">
+	                <img ng-src="{{fileURL}}{{driver.license_front_copy}}" alt="Driver Licence Image">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 col-sm-4 col-xs-6">
+			<div class="form-group">
+				<label for="dr_licence_doc1">Driver License Back Copy </label> <input type="file"
+					file-model="license_back_copy" id="dr_licence_doc1"></input>
+				 <div ng-show="driver.license_back_copy" style="margin:5px">
+			 <div class="form-group toggle-switch" data-ts-color="blue">
+				<label for="license_back_copy" class="ts-label">view image</label>
+				<input id="license_back_copy" type="checkbox" ng-model="license_back_copy_toggle" hidden="hidden">
+				<label for="license_back_copy" class="ts-helper"></label>
+			</div>
+	       </div>
+				<div class="fileinput-preview thumbnail" data-trigger="fileinput" ng-if="license_back_copy_toggle">
+	                <img ng-src="{{fileURL}}{{driver.license_back_copy}}" alt="Driver Licence Image">
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="row">
+			<div class="col-md-2">
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary"
+						ng-click="uploadDriverDoc(DrivDocumentForm)">Upload</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,146 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div style="min-height: 550px;">
+			<div class="listview lv-message">
+
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span class="c-black">
+							<b>SO</b>
+						</span>
+					</div>
+				</div>
+
+				<div class="lv-body">
+
+					<div class="row hidden-print" style="margin:5px 15px;">
+
+						<div class="col-md-2">
+							<select chosen name="vendor" class="form-control" data-placeholder-text-single="'SO No.'" allow-single-deselect="true" no-results-text="'Could not find any SO Number'"
+							 ng-model="so_number" ng-options="item.so_number as item.so_number for item in aSO" ng-change="getSO()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-2">
+							<select chosen name="vendor" class="form-control" data-placeholder-text-single="'Approved By'" allow-single-deselect="true"
+							 no-results-text="'Could not find'" ng-model="approver" ng-options="item._id as item.full_name for item in aApprover"
+							 ng-change="getSO()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-2">
+							<select name="vendor" class="form-control" chosen data-placeholder-text-single="'By Status'" allow-single-deselect="true"
+							 no-results-text="'Could not find'" ng-model="status" ng-options="item as item for item in aStatus" ng-change="getSO()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-2">
+							<select name="vendor" class="form-control" chosen data-placeholder-text-single="'By Priority'" allow-single-deselect="true"
+							 no-results-text="'Could not find'" ng-model="priority" ng-options="item as item for item in aPriority" ng-change="getSO()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-4" style="text-align: right;">
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Edit" tooltip-placement="bottom"
+							 type="button" ng-click="" ng-disabled="!selectedSO || selectedSO.status !== 'Unapproved'">
+								<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+							</button>
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Approve" tooltip-placement="bottom"
+							 type="button" ng-click="approveSO()" ng-disabled="!selectedSO || selectedSO.status !== 'Unapproved'">
+								<i class="zmdi zmdi-assignment-check zmdi-hc-fw"></i>
+							</button>
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Decline" tooltip-placement="bottom"
+							 type="button" ng-click="declineSO()" ng-disabled="!selectedSO || selectedSO.status !== 'Unapproved'">
+								<i class="zmdi zmdi-close-circle zmdi-hc-fw fs-20"></i>
+							</button>
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Preview" tooltip-placement="bottom"
+							 type="button" ng-click="previewSO()" ng-disabled="!selectedSO">
+								<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+							</button>
+
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Generate Invoice" tooltip-placement="bottom" ng-disabled="!selectedSO || selectedSO.status === 'Unapproved'" type="button" ng-click="redirectForGenerateInvoicePage()">
+								<i class="zmdi zmdi-assignment-o zmdi-hc-fw"></i>
+							</button>
+
+							<button
+								class="btn btn-primary btn-xs p-l-5 p-r-5"
+								style="font-size: 20px"
+								uib-tooltip="Download Report"
+								tooltip-placement="bottom"
+								ng-disabled="!aSO.length"
+								type="button"
+								ng-click="downloadReport()">
+									<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+							</button>
+						</div>	
+
+					</div>
+					<div class="clearfix"></div>
+
+					<div class="row" style="margin: 5px auto;">
+						<div class="col-md-12">
+							<div class="clearfix"></div>
+
+							<div class="detailsList">
+								<div style="overflow-x: scroll">
+									<table class="table table-bordered unresponsive soTable">
+										<thead>
+											<tr>
+												<th>&#35;</th>
+												<th>SO Number</th>
+												<th>Status</th>
+												<th>Created At</th>
+												<th>Approver</th>
+												<th>Customer</th>
+												<th>SO Date</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="pointer selectItem"
+													ng-repeat="so in aSO"
+													ng-click="selectThisRow(so, $index)">
+												<td>{{$index + 1}}</td>
+												<td>{{so.so_number}}</td>
+												<td>{{so.status}}</td>
+												<td>{{so.created_at | date:'dd-MMM-yyyy'}}</td>
+												<td>{{so.approver.full_name}}</td>
+												<td>{{so.customer.name}}</td>
+												<td>{{so.so_date | date:'dd-MMM-yyyy'}}</td>
+											</tr>
+											<tr ng-if="!aSO.length">
+												<td colspan="100">
+													<h4>No SO available !!!</h4>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="pagi" ng-if="pag.total_pages > 1" style="text-align: center;">
+									<uib-pagination ng-change="getQuotations(true)" total-items="pag.totalItems" items-per-page="pag.itemsPerPage" ng-model="pag.currentPage"
+									 max-size="pag.maxSize" class="pagination-sm" boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+									 first-text="&laquo;" last-text="&raquo;">
+									</uib-pagination>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.bg-green {
+		background-color: green;
+		color: white;
+	}
+</style>

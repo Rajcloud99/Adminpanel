@@ -1,0 +1,418 @@
+<!-- Controller: miscCreditNotePopUpController -->
+<!-- ControllerAs: mcnVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="mcnVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Misc Credit Note </b>
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+
+			</span>
+		</span>
+	</h4>
+</div>
+
+
+<form name="miscCreditNoteForm" ng-submit="mcnVm.submit(miscCreditNoteForm, true)" novalidate autocomplete="off">
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- Basic DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">Bill Summary:</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="form-group col-md-3">
+								<label class="col-sm-4 control-label">Bill Number:</label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear">
+										<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Bill Number"
+											ng-model="mcnVm.oCreditNote.billNo"
+											typeahead-wait-ms="10">
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-md-3">
+								<label class="col-sm-4 control-label">Billing Party:  <span
+									class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   placeholder="BillingParty Search..."
+											   ng-model="mcnVm.oCreditNote.billingParty"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in mcnVm.getBillingParty($viewValue) | limitTo:6"
+											   class="form-control"
+										       required>
+										<i class="lvh-search-close" ng-click="mcnVm.oCreditNote.billingParty=undefined">×</i>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">Branch :<span
+										class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+												type="text"
+												class="form-control"
+												placeholder="Branch Search.."
+												ng-model="mcnVm.oCreditNote.branch"
+												typeahead-wait-ms="10"
+												name="Branch"
+												typeahead="item as item.name for item in mcnVm.getAllBranch($viewValue)|limitTo:6"
+												typeahead-on-select="mcnVm.onBranchSelect($item, $model, $label)"
+												required>
+											<i class="lvh-search-close"
+											   ng-click="mcnVm.oCreditNote.branch=null;">×</i>
+										</div>
+										<span class="error"
+											  ng-show="!mcnVm.oCreditNote.branch">No Branch Selected</span>
+										<span class="warning"
+											  ng-show="mcnVm.oCreditNote.branch && !mcnVm.oCreditNote.branch.miscCNBook">No Misc CN Book Linked to selected branch</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">Date: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<input
+											fill-date
+											type="text"
+											class="form-control"
+											placeholder="Date"
+											ng-change="mcnVm.oCreditNote.creditNo = undefined;"
+											ng-model="mcnVm.oCreditNote.date"
+											required
+										>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Credit Note:<span
+										class="req_r">*</span></label></label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear" style="z-index: 1">
+											<input type="text"
+												   placeholder="Credit Note No"
+												   ng-model="mcnVm.oCreditNote.creditNo"
+												   class="lvhs-input"
+												   typeahead-wait-ms="10"
+												   typeahead="item.bookNo as item.bookNo for item in mcnVm.getCnBookNo($viewValue)|limitTo:10"
+												   class="form-control"
+												   required
+												   typeahead-on-select="mcnVm.onCNoteSelect($item, $model, $label)">
+											<i class="lvh-search-close"
+											   ng-click="mcnVm.oCreditNote.creditNo='';">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group">
+									<div class="fg-line">
+											<textarea class="form-control"
+													  rows="2"
+													  ng-model="mcnVm.oCreditNote.narration"
+													  placeholder="Narration..."></textarea>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+						</div>
+					</div>
+				</li>
+
+				<!--VENDOEDEAL DETAILS-->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label">Gst Type:</label>
+								<div class="col-sm-7">
+									<select chosen
+											class="form-control"
+											ng-model="mcnVm.gstType"
+											ng-options="item as item for item in ['IGST', 'CGST & SGST']"
+											ng-change="mcnVm.setAccount()"
+											name="Gst Type">
+										<option value=""></option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<div class="col-sm-4"><label>Tax %: </label></div>
+								<div class="col-sm-6">
+									<div class="select">
+										<select
+											class="form-control"
+											ng-options="item as (item + '%') for item in [0,0.5,1,2,5,10,12,15,18,24,28,40]"
+											ng-model="mcnVm.gstPercent"
+										    ng-change="mcnVm.calculateSummary()">
+											<option value="" selected disabled>Select Tax %</option>d
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						</div>
+
+						<div class="row hidden-print" style="margin:15px;">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">Amount Without Tax:</label>
+									<div class="col-sm-6">
+										{{mcnVm.oCreditNote.amount|roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">CGST ({{mcnVm.oCreditNote.cGSTPercent || 0}}%):</label>
+									<div class="col-sm-6">
+										{{mcnVm.oCreditNote.cGST|roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">SGST ({{mcnVm.oCreditNote.sGSTPercent || 0}}%):</label>
+									<div class="col-sm-6">
+										{{mcnVm.oCreditNote.sGST|roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">IGST ({{mcnVm.oCreditNote.iGSTPercent || 0}}%):</label>
+									<div class="col-sm-6">
+										{{mcnVm.oCreditNote.iGST|roundOff}}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row hidden-print" style="margin:15px;">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">Tot. Amount with Tax:</label>
+									<div class="col-sm-6 bold">
+										{{(mcnVm.oCreditNote.totalAmount || 0) | roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="mcnVm.gstType === 'IGST'">
+								<label class="col-md-3 control-label">IGST A/c:<span class="req_r">*</span></label>
+								<div class="col-md-9" style="z-index: 88">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   class="form-control lvhs-input"
+											   placeholder="IGST A/c Search..."
+											   ng-model="mcnVm.oCreditNote.iGSTAccount"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in mcnVm.getAccount($viewValue, 'IGST Paid') | limitTo:6"
+											   typeahead-on-select="mcnVm.onAccountSelect($item, $model, $label)"
+										>
+										<i class="lvh-search-close"
+										   ng-click="mcnVm.oCreditNote.iGSTAccount=null;">×</i>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-if="mcnVm.gstType === 'CGST & SGST'">
+								<label class="col-md-3 control-label">SGST A/c:<span class="req_r">*</span></label>
+								<div class="col-md-9" style="z-index: 92">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   class="form-control lvhs-input"
+											   placeholder="SGST A/c Search..."
+											   ng-model="mcnVm.oCreditNote.sGSTAccount"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in mcnVm.getAccount($viewValue, 'SGST Paid') | limitTo:6"
+											   typeahead-on-select="mcnVm.onAccountSelect($item, $model, $label)"
+										>
+										<i class="lvh-search-close"
+										   ng-click="mcnVm.oCreditNote.sGSTAccount=null;">×</i>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-if="mcnVm.gstType === 'CGST & SGST'">
+								<label class="col-md-3 control-label">CGST A/c:<span class="req_r">*</span></label>
+								<div class="col-md-9" style="z-index: 92">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   class="form-control lvhs-input"
+											   placeholder="CGST A/c Search..."
+											   ng-model="mcnVm.oCreditNote.cGSTAccount"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in mcnVm.getAccount($viewValue, 'CGST Paid') | limitTo:6"
+											   typeahead-on-select="mcnVm.onAccountSelect($item, $model, $label)"
+										>
+										<i class="lvh-search-close"
+										   ng-click="mcnVm.oCreditNote.cGSTAccount=null;">×</i>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="clearfix"></div>
+					</div>
+				</li>
+
+				<!-- Deduction/Extra Charges -->
+				<li class="list-group-item">
+					<span class="booking_list_header">Deductions: </span>&nbsp;
+					&nbsp;&nbsp;
+					<div class="pull-right">
+						<button type="button" class="btn btn-primary"
+								uib-tooltip="Add Deduction"
+								tooltip-placement="bottom"
+								ng-click="mcnVm.addDeduction()">
+							<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+						</button>&nbsp;&nbsp;
+						<button type="button" class="btn btn-danger"
+								uib-tooltip="Remove Deduction"
+								tooltip-placement="bottom"
+								ng-click="mcnVm.removeDeduction()">
+							<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+						</button>
+					</div>
+					<div class="card-body">
+						<div class="row hidden-print" style="margin:15px;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="p-l-5 p-r-5 p-b-5">
+										<table class="table table-bordered unresponsive">
+											<thead>
+											<tr>
+												<th>Type</th>
+												<th>Account</th>
+												<th>Amount</th>
+												<th>Remark</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat="oDeduction in mcnVm.oCreditNote.grs"
+												ng-class="{grn: mcnVm.selectedDeductionIndex === $index}"
+												class="pointer"
+												ng-click="mcnVm.selectedDeductionIndex = $index">
+
+												<td>
+													<div class="fg-line select">
+														<select class="form-control"
+																name="Select Type"
+																ng-model="oDeduction.deductionType"
+																ng-options="item.name as item.name for item in oDeduction.aDeductionTypeConstant"
+																ng-change="mcnVm.refreshDeduction(); mcnVm.ChargesConfig(oDeduction.deductionType, oDeduction)"
+																required>
+															<option value="" disabled selected> Select</option>
+														</select>
+													</div>
+												</td>
+												<td>
+													<div class="col-md-12">
+														<div class="">
+															<input
+																type="text"
+																class="form-control"
+																placeholder="Account Search.."
+																ng-model="oDeduction.deductionAccount"
+																typeahead-wait-ms="10"
+																name="account"
+																typeahead="item as item.name for item in mcnVm.getAccount($viewValue, ['Receipt Deduction'])"
+																required>
+															<i class="lvh-search-close"
+															   ng-click="oDeduction.deductionAccount = null;">×</i>
+														</div>
+													</div>
+												</td>
+												<td>
+													<input type="number"
+														   ng-model="oDeduction.amount"
+														   placeholder="Number"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   ng-change="mcnVm.calculateSummary()"
+														   name="Number"
+														   class="form-control">
+												</td>
+												<td>
+													<input type="text"
+														   ng-model="oDeduction.remark"
+														   placeholder="Remark"
+														   name="remark"
+														   class="form-control">
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button ng-disabled="mcnVm.isDisabled"
+				class="btn btn-primary">Submit & Approve
+		</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="mcnVm.closeModal()">Close
+		</button>
+	</div>
+</form>
+
+<style>
+	.chosen-row-1 {
+		z-index: 1;
+	}
+
+	.chosen-row-2 {
+		z-index: 0;
+	}
+
+	.chosen-row-3 {
+		z-index: auto;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

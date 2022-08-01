@@ -1,0 +1,131 @@
+<!--Controller:tdsReportController-->
+<!--ControllerAs:tdsrVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+			<span class="c-black"><b>Report</b></span>
+		</div>
+		<div class="col-sm-4 col-md-4 col-lg-2">
+			<div class="select">
+				<select class="form-control" ng-model="tdsrVm.reportType" ng-change="tdsrVm.onReportChange()"
+					style="height: 34px;">
+					<!-- ng-options="item as item for item in ['Ledger', 'Ledger Group', 'Account Balance', 'Account Balance Monthly', 'Group Balance', 'Opening Balance', 'Bill to Bill', 'Trial Balance', 'Branch Expense', 'Ledger Outstanding Report Daywise', 'Ledgers Outstanding Report Period Wise','Group Trial Balance', 'Profit and Loss Detail', 'Profit and Loss Summary']"-->
+
+					<option value="" selected disabled>Report Type</option>
+					<option value="TDS group summary">TDS group summary</option>
+					<option value="Monthly TDS">Monthly TDS</option>
+					<option value="TDS daywise">TDS daywise</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="pull-right">
+			<button ng-click="tdsrVm.downloadReport()" ng-disabled="tdsrVm.aVouchers.length<=0" class="btn btn-primary"
+				style="font-size: 11px; padding: 5px;margin-top: 5px;">
+				Download
+			</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<div class="container" ng-show="tdsrVm.reportType">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 7px">
+
+			<form ng-submit="tdsrVm.getAccountMasters()" novalidate autocomplete="off">
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-hide="tdsrVm.reportType === 'TDS group summary'"
+					ng-if="tdsrVm.aAccountFilter.indexOf(tdsrVm.reportType) != -1">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input type="text" class="form-control lvhs-input" placeholder="Account search"
+							ng-model="tdsrVm.oFilter.account" typeahead-wait-ms="10"
+							typeahead="item as item.name for item in tdsrVm.accountmaster($viewValue, 'false') | limitTo:6">
+						<i class="lvh-search-close" ng-click="tdsrVm.oFilter.account=undefined;">×</i>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="tdsrVm.reportType === 'TDS group summary' "
+					ng-if="tdsrVm.aGroupFilter.indexOf(tdsrVm.reportType) != -1">
+					<div class="lvh-search ng-scope sear">
+						<input type="text" class="form-control lvhs-input" placeholder="Ledger Group search"
+							ng-model="tdsrVm.oFilter.type" typeahead-wait-ms="10"
+							typeahead="item as item.name for item in tdsrVm.accountmaster($viewValue, 'true') | limitTo:6">
+						<i class="lvh-search-close" ng-click="tdsrVm.oFilter.type = undefined;">×</i>
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input fill-date type="text" class="form-control" max-date="tdsrVm.maxDate"
+								ng-model="tdsrVm.oFilter.from" ng-change="tdsrVm.oFilter.to = undefined" placeholder="From" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input fill-date type="text" class="form-control" max-date="tdsrVm.maxDate"
+								ng-model="tdsrVm.oFilter.to" placeholder="To" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile" style="font-size: 15px"
+						uib-tooltip="Search" type="submit" tooltip-placement="bottom"><i
+							class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile" style="font-size: 15px"
+						uib-tooltip="Clear Search" tooltip-placement="bottom" type="submit" ng-click="tdsrVm.oFilter={};"><i
+							class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+				</div>
+				<div class="clearfix"></div>
+			</form>
+
+		</div>
+	<div class="col-md-12 pp" ng-show="tdsrVm.summary" style="background: white;   border: 1px solid #2a96f3;">
+		<ul class="listB" style="list-style-type: none;">
+			<li ng-repeat="(key, value) in tdsrVm.summary">{{key}} : {{value|roundOff|abs}}</li>
+		</ul>
+	</div>
+	<div class="clearfix"></div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div ja-table table-body="tdsrVm.aAccountMaster" table-head="tdsrVm.tableHead"
+				table-order-by-model='tdsrVm.orderBy' table-order-by-event='tdsrVm.getAccountMasters()' table-height='500px'
+				table-load="tdsrVm.getAccountMasters(true)" 
+				table-column-setting="tdsrVm.columnSetting"
+				table-selectable='"true"' table-api="tdsrVm.tableApi" 
+				table-selectable-model="tdsrVm.selectedAccountMaster"
+				table-index="true"></div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20 {
+		font-size: 20px;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+
+	.listB>li {
+		width: 20%;
+		float: left;
+		margin-left: 1%;
+	}
+
+	.pp {
+		list-style-type: none;
+		padding: 20px;
+		font-weight: bold;
+		margin: 10px 0;
+		background-color: white;
+	}
+</style>

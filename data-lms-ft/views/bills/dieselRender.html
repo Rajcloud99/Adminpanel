@@ -1,0 +1,57 @@
+<form role="form"  name="builtyRender" autocomplete="off" novalidate>
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<div col-md-12>
+			<div class="col-md-3">
+				<div ng-show="(aTemplate && aTemplate.length>1)" class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Select Template:</label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control" placeholder="Select Template" ng-options="option as option.name for option in aTemplate" ng-model="dieselTemplate" name="template" ng-change="getTemplate()">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div ng-show="(aDiesel && aDiesel.length>1)" class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Select Diesel:</label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control" placeholder="Select Diesel" ng-options="option as option for option in aDiesel" ng-model="dieselKey" name="template" ng-change="getTemplate()">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<!--<button ng-show="templateKey" class="btn btn-primary" ng-click="getGR(templateKey)" style="margin-bottom: 12px;">Show</button>-->
+				<button ng-show="html" ng-click="printDiv('idDiesel')" class="btn btn-primary glyphicon glyphicon-print" style="margin-bottom: 12px;"> PRINT </button>
+			</div>
+			<div class="col-md-3">
+			</div>
+			<div class="col-md-3">
+			</div>
+		</div>
+		<div class="clearfix"></div>
+
+
+	</div>
+	<div class="clearfix"></div>
+	<div class="modal-body">
+		<div id="idDiesel"  compile="html">
+
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 75%;
+		height: 173px
+	}
+</style>

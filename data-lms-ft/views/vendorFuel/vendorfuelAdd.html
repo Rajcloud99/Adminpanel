@@ -1,0 +1,394 @@
+<form name="VendorFuelForm" ng-controller="fuelVendorAddCtrl">
+    <div class="row" style="margin: 5px auto;">
+        <!-- vendorFuel basic info -->
+        <div id="div_vendorFuel_info" class="card-body" style="padding-left: 25px;padding-right: 25px">
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vendor Name : <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="objVendorFuel.name" class="form-control" name="name" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="col-sm-6">
+					<label class="col-sm-4 control-label">Fuel Company: </label>
+					<div class="col-sm-8 select">
+						<select class="form-control"
+								ng-model="objVendorFuel.fuel_company"
+								ng-options="fCpny as fCpny for fCpny in aFuelCompany">
+							<option value="" selected disabled>Fuel Company</option>
+						</select>
+					</div>
+				</div>
+                <!-- <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">For branch: <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="select">
+                                <select class="form-control" ng-model="objVendorFuel.branch_name" ng-options="branch.name as branch.name for branch in getBranch" ng-change="branchSelected(objVendorFuel.branch_name)" name="branch" required>
+                                    <option value="" selected>Select branch</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+			</div>
+			<div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Primary contact person: <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="objVendorFuel.prim_contact_person" class="form-control" name="primary contact person" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Alternate contact person</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="objVendorFuel.alt_contact_person" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Primary contact no: <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" ng-model="objVendorFuel.prim_contact_no" class="form-control" ng-minlength="10" ng-maxlength="10" name="primaryContactNo" required="">
+                            </div>
+							<span class="error" ng-if="VendorFuelForm['primaryContactNo'].$error.required
+																			&& (VendorFuelForm['primaryContactNo'].$touched
+																			|| VendorFuelForm.$submitted)">
+														This Field is Mandatory</span>
+							<span class="error" ng-if="VendorFuelForm['primaryContactNo'].$error.minlength">
+														InValid Contect Number</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Alternate contact no 1</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input  ng-model="objVendorFuel.alt_contact_no1" type="number" class="form-control" ng-minlength="10" ng-maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Alternate contact no 2</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input  ng-model="objVendorFuel.alt_contact_no2" ng-minlength="10" ng-maxlength="10" type="number" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Primary email: <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="email" ng-model="objVendorFuel.prim_email" class="form-control" name="email" required="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Alternate email</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-model="objVendorFuel.alt_email" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Fax </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-model="objVendorFuel.fax" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Rating</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="objVendorFuel.rating" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Total times rated</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="objVendorFuel.total_times_rated" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label  class="col-sm-4 control-label">Status</label>
+                        <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="radio m-b-15" style="display: inline-block">
+                                <label>
+                                    <input type="radio" name="status" ng-model="objVendorFuel.status" value="Active">
+                                    <i class="input-helper"></i>
+                                    Active
+                                </label>
+                            </div>
+                            <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                                <label>
+                                    <input type="radio" name="status" ng-model="objVendorFuel.status" value="Inactive">
+                                    <i class="input-helper"></i>
+                                    Inactive
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Tin No.</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="objVendorFuel.tin_no" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Fuel Area</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="objStation.area_code" class="input-sm form-control fg-input">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Fuel State</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="objStation.address" class="input-sm form-control fg-input">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+
+        <!--******************* vendorFuel address ************************-->
+        <div class="card-header" >
+            <h2 style="color: #847777;font-size: 16px;">Address </h2>
+        </div>
+
+        <div id="div_vendorFuel_address" class="card-body" style="padding-left: 25px;padding-right: 25px;">
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Address Line 1</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="objVendorFuel.address.line1" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Address Line 2</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="objVendorFuel.address.line2" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">City</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input id ="autoCompleteCity" type="text" ng-model="objVendorFuel.address.city" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">District</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input  ng-model="objVendorFuel.address.district" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">State</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input ng-model="objVendorFuel.address.state" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Country</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input ng-model="objVendorFuel.address.country" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">PIN code</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input ng-model="objVendorFuel.address.pincode" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+        </div>
+
+        <h2 style="color: #847777;font-size: 14px;margin:15px">Account Details</h2>
+		<div class="card-body" style="padding-left: 25px;padding-right: 25px;">
+			<div class="col-md-4" ng-if="$configs.master.showAccount">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4">Account :<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div ng-dropdown-multiselect=""
+							 options="aAccountMaster"
+							 selected-model="objVendorFuel.account"
+							 extra-settings="selectAccountSettings"
+							 ja-search-input='inputModel'
+							 ja-search-trigger="getAccountMasters(inputModel)"
+						></div>
+						<br>
+						<div class="text-center">
+							<button class="btn btn-primary waves-effect"
+									type="button"
+									style="padding: 3px 5px"
+									ng-click="onSelectAccount()"
+									uib-tooltip="Add">
+								<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <h2 style="color: #847777;font-size: 14px;margin:15px">Bank Details</h2>
+        <div class="row" style="margin:15px">
+            <div class="col-sm-2">
+                <div class="form-group fg-float m-b-30">
+                    <div class="fg-line">
+                        <input type="number" ng-model="banking.a_c" class="input-sm form-control fg-input">
+                        <label class="fg-label">A/C No.</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group fg-float m-b-30">
+                    <div class="fg-line">
+                        <input type="text" ng-model="banking.ifsc" class="input-sm form-control fg-input">
+                        <label class="fg-label">IFS Code</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group fg-float m-b-30">
+                    <div class="fg-line">
+                        <input type="text" ng-model="banking.declaration" class="input-sm form-control fg-input">
+                        <label class="fg-label">Declaration</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button ng-click="addBank(banking)" ng-disabled="!(banking.a_c && banking.ifsc && banking.declaration)" class="btn btn-primary waves-effect pointer">
+                    <i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="row" style="margin:15px">
+            <div class="col-md-12 arr_empl"><span>
+                <span class="route_iCity" ng-repeat="oBank in aBanking">{{oBank.a_c +" &nbsp; - &nbsp; "+oBank.ifsc+" &nbsp; - &nbsp; "+oBank.declaration }} <a class="route_iCityRemove" ng-click="removeBank($index)"> x </a></span></span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <button ng-disabled="!(objVendorFuel.name && objVendorFuel.prim_contact_person && objVendorFuel.prim_contact_no && objVendorFuel.prim_email)" type="submit" class="btn btn-primary" ng-click="saveVendorFuel(VendorFuelForm)" style="margin-bottom: 15px;margin-right:30px;float: right;">Save</button>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+<style type="text/css">
+    .fg-float .fg-label{top: 0px;}
+    .arr_empl > span >span {
+        background: red;
+        padding: 1px 7px;
+        color: #fff;
+    }
+</style>

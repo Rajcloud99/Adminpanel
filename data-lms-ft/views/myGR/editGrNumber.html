@@ -1,0 +1,181 @@
+<!-- Controller: editGrNumberController -->
+<!-- ControllerAs: grVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="grVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>GrNumber UpDate</b>
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(Trip No:{{grVm.aTripInfo.trip_no}})
+			</span>
+		</span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<form name="grEditform" novalidate autocomplete="off">
+			<ul class="list-group list-group-flush">
+
+				<!--Table DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">GR DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12" style="overflow: scroll;height: 300px;">
+								<table class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th>SN</th>
+										<th>Branch</th>
+										<th>Gr Date</th>
+										<th>Gr Number</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oSec in grVm.oTripGr"
+										class="pointer">
+										<td>{{$index+1}}</td>
+										<td>
+											<div class="col-md-12">
+												<div class="form-group m-b-0">
+													<div class="col-sm-12">
+														<div class="ng-scope sear chosen-row-3">
+															<input
+																	type="text"
+																	ng-readonly="(oSec.bill || oSec.invToBill)"
+																	class="form-control"
+																	placeholder="Branch Search.."
+																	ng-model="oSec.branch"
+																	typeahead-wait-ms="10"
+																	name="Branch"
+																	ng-change="oSec.grNumber = ''"
+																	typeahead="item as item.name for item in grVm.getAllBranch($viewValue)|limitTo:6"
+																	typeahead-on-select="grVm.onSelect($item, $model, $label)"
+																	required>
+															<i class="lvh-search-close" ng-hide="(oSec.bill || oSec.invToBill)" ng-click="oSec.branch='	'; oSec.grNumber = ''">×</i>
+														</div>
+														<span class="error" ng-show="!oSec.branch">No Branch Selected</span>
+														<span class="warning" ng-show="oSec.branch && !oSec.branch.refNoBook">No Ref Book Linked to selected branch</span>
+													</div>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div class="col-md-12">
+												<div class="form-group m-b-0">
+													<div class="col-sm-12" ng-hide="(oSec.bill || oSec.invToBill)">
+														<div class="date-picker input-group dp-blue"
+															 ng-class="{ 'is-opened': opened1 == true }">
+															<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+																<input ng-click="grVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+																	   type="text"
+																	   class="form-control"
+																	   uib-datepicker-popup="{{grVm.DatePicker.formats[0]}}"
+																	   show-weeks="false"
+																	   ng-model="oSec.grDate"
+																	   max-date="grVm.DatePicker.newDate"
+																	   is-open="opened1"
+																	   datepicker-options="grVm.DatePicker.dateSettings"
+																	   close-text="Close"
+																	   placeholder="Gr Date"
+																	   name="Gr Date"
+																	   required
+																	   style="padding: 0px 4px;height: 34px;"/>
+															</div>
+															<span class="input-group-btn">
+								<button type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-readonly="oSec.bill"
+										ng-click="grVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+														</div>
+													</div>
+													<div class="fg-line"
+														 ng-if="(oSec.bill || oSec.invToBill)">
+														{{oSec.grDate|date:'dd-MM-yyyy'}}
+													</div>
+												</div>
+											</div>
+										</td>
+										<td>
+											<div class="col-md-12">
+												<div class="form-group m-b-0">
+													<div class="col-sm-10">
+														<div class="ng-scope sear chosen-row-3">
+																<input type="text"
+																	   placeholder="Search..."
+																	   ng-readonly="(oSec.bill || oSec.invToBill)"
+																	   name="Gr Number"
+																	   ng-model="oSec.grNumber"
+																	   typeahead-wait-ms="10"
+																	   typeahead="item as item.bookNo for item in grVm.getBillBookNo($viewValue,oSec)|limitTo:10"
+																	   class="form-control"
+																	   required>
+																<i class="lvh-search-close" ng-hide="(oSec.bill || oSec.invToBill)" ng-click="oSec.grNumber = ''">×</i>
+															</div>
+														</div>
+													<div class="col-sm-2" ng-hide="(oSec.bill || oSec.invToBill)">
+														<button class="btn btn-primary"
+																ng-if="$role['GR']['Centralize Book']"
+																ng-click="grVm.getBillBookNo('centrailized', oSec)">
+															<i class="zmdi zmdi-plus-circle zmdi-hc-fw"></i>
+														</button>
+													</div>
+														<span class="error"
+															  ng-show="grEditform['Gr Number'].$error.pattern">Invalid Gr number</span>
+													</div>
+												</div>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-primary"
+			type="button"
+			ng-click="grVm.submit()">SUBMIT</button>
+	<button class="btn btn-warning"
+			type="button"
+			ng-click="grVm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+
+	.chosen-row-1 {
+		z-index: 80;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: auto;
+	}
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

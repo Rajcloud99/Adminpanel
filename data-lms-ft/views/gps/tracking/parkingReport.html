@@ -1,0 +1,160 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Parking Report</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(View)
+				</span>
+			</span>
+		</div>
+		<div class="pull-right">
+			<button class="btn btn-primary p-t-0 p-b-0 m-t-5" style="margin-bottom: 3px;  font-size: 16px"
+				ng-click="prVm.downloadCsv(prVm.aCopyTrSheetDevice)">
+				<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+			</button>
+		</div>
+		<div class="col-sm-2 pull-right">
+			<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4	 == true }">
+				<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+					<input ng-click="prVm.DatePicker.openDatePicker(this, $event, 'opened4')" type="text"
+						class="form-control" uib-datepicker-popup="{{prVm.DatePicker.formats[0]}}"
+						show-weeks="false" max-date="prVm.DatePicker.newDate" ng-model="prVm.oFilter.toDate"
+					    is-open="opened4"
+						datepicker-options="prVm.DatePicker.dateSettings" close-text="Close" placeholder="To Date"
+						style="padding: 0px 4px;height: 34px;" />
+				</div>
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default m-t-0 f12"
+						ng-click="prVm.DatePicker.openDatePicker(this, $event, 'opened4')">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+		<div class="col-sm-2 pull-right">
+			<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened5	 == true }">
+				<div class="fg-line" ng-class="{ 'fg-toggled': opened5 == true }">
+					<input ng-click="prVm.DatePicker.openDatePicker(this, $event, 'opened5')" type="text"
+						class="form-control" uib-datepicker-popup="{{prVm.DatePicker.formats[0]}}"
+						show-weeks="false" max-date="prVm.DatePicker.newDate" ng-model="prVm.oFilter.fromDate"
+					    is-open="opened5"
+						datepicker-options="prVm.DatePicker.dateSettings" close-text="Close" placeholder="From Date"
+						style="padding: 0px 4px;height: 34px;" />
+				</div>
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default m-t-0 f12"
+						ng-click="prVm.DatePicker.openDatePicker(this, $event, 'opened5')">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+<div class="card m-b-0 m-t-10 m-l-10 m-r-0" style="width:98%;">
+	<div class="row" style="margin: 7px">
+		<form name="mapViewForm" action="void:javascript(0)" novalidate>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text" ng-model="prVm.oFilter.vehicle_reg_no" name="vehicle Reg"
+						class="form-control input-sm" ng-change="prVm.triggerDelay()" placeholder="Vehicle No.">
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text" ng-model="prVm.oFilter.veh_group_name" name="vehicle Size"
+						class="form-control input-sm" ng-change="prVm.triggerDelay()" placeholder="Vehicle Size">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="fg-line form-group m-b-0">
+					<input type="text" ng-model="prVm.oFilter.veh_type_name" name="vehicle Type"
+						class="form-control input-sm" ng-change="prVm.triggerDelay()" placeholder="Vehicle Type">
+				</div>
+			</div>
+				<div class="col-md-3">
+					<div class="fg-line form-group m-b-0">
+						<select chosen class="form-control" ng-model="prVm.oFilter.vehicleStatus"
+							ng-options="status as (status+' ('+count+')') for (status, count) in prVm.availabilityStatusCount"
+							ng-change="prVm.applyFilter()" name="Vehicle Delay">
+							<option value="" selected>Availability Status</option>
+						</select>
+					</div>
+				</div>
+			<div class="col-md-2" ng-hide="true">
+				<div class="select">
+					<select class="form-control" ng-model="prVm.sortBy">
+						<option value="" selected>Sort by</option>
+						<option value="vehicle.gr.consignor">Consignor</option>
+						<option value="vehicle.status">Vehicle status</option>
+						<option value="vehicle.segment_type">Segment</option>
+						<option value="vehicle.route_name">Route</option>
+						<option value="distance_travelled">Km</option>
+						<option value="vehicle.gpsData.datetime">Last known date</option>
+						<option value="vehicle.gr.vehicle_arrived_for_loading_status.date">Vehicle Arr for Unloading
+						</option>
+					</select>
+				</div>
+			</div>
+
+
+			<!-- search filter-->
+			<div class="col-md-2">
+				<div class="fg-line form-group m-b-0">
+					<input type="text" ng-model="prVm.oFilter.customer" name="customer" class="form-control input-sm"
+						ng-change="prVm.triggerDelay()" placeholder="Customer  search... ">
+				</div>
+			</div>
+			&nbsp;&nbsp;
+			<button class="btn btn-primary p-t-0 p-b-0 m-t-5"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							ng-click="prVm.oFilter={};prVm.applyFilter(true);"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+			</button>
+			<div class="col-md-1">
+				<div class="col-md-10">
+					<select class="fg-line form-control" ng-model="prVm.live_trip_group_by" ng-hide="true"
+						name="Group By">
+						<option value="" selected disabled>Grouped Report</option>
+						<option value="driver">Driver</option>
+						<option value="segment">Segment</option>
+						<option value="consignor">Consignor</option>
+						<option value="consignee">Consignee</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-t-5 m-r-5 app_tile" style="font-size: 16px"
+					type="button" ng-hide="true" ng-click="prVm.downloadLiveTripReport(prVm.live_trip_group_by)">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="card-body">
+	<div class="row">
+		<div class="col-md-12">
+			<div ja-table table-body="prVm.aCopyTrSheetDevice" table-head="prVm.tableHead" table-height='500px'
+				table-load="prVm.getLivetrackVehicleData()" table-column-setting="prVm.columnSetting"
+				table-selectable='prVm.selectType' table-api="prVm.tableApi" table-selectable-model="prVm.aSelectedVehicle"
+				table-row-dbl-click-event="prVm.addMoreLocation(prVm.aSelectedVehicle)"
+				>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<style>
+	.fs-20 {
+		font-size: 20px;
+	}
+
+	.bgSelected {
+		background-color: #d8d8d8;
+	}
+</style>

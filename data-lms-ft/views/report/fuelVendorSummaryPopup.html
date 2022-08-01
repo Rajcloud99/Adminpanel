@@ -1,0 +1,58 @@
+<div class="modal-header p-b-0" >
+	<button type="button"
+			ng-click="vm.closeModal()"
+			class="close"
+			data-dismiss="modal"
+			aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Summary</h4><br>
+	<div class="row">
+		<div class="detailsList">
+			<div class="" style="overflow-y: auto; max-height: 500px;">
+				<table class="table table-bordered unresponsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Fuel Vendor</th>
+							<th>Fuel Station</th>
+							<th>Quantity(Lts)</th>
+							<th>Amount</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="oSummary in vm.summary" class="pointer selectItem">
+							<td>{{$index+1}}</td>
+							<td>{{oSummary.name || 'NA'}}</td>
+							<td>{{oSummary.station || 'NA'}}</td>
+							<td>{{oSummary.quantity.toFixed(2) || 'NA'}}</td>
+							<td>{{oSummary.amount.toFixed(2) || 'NA'}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div ng-if="vm.summary.length == 0" class="ms-body" style=" min-height: 100px;">
+				<h3>No Data available !!!!!</h3>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-warning"
+			type="button"
+			ng-click="vm.closeModal()">Cancel</button>
+</div>
+
+<style type="text/css">
+	.red{
+		color: red;
+	}
+
+	.modal-dialog {width: 45%;
+		height: 173px
+	}
+
+	i:hover{
+		color: #2196f3;
+	}
+</style>

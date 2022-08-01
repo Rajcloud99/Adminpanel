@@ -1,0 +1,177 @@
+<div class="container" ng-controller="vendorVehicleDetail">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 575px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix" style="padding: 5px;">
+          <div class="clearfix"></div>
+        </div>
+        <div class="lv-body">
+          <div class="col-md-12" style="min-height: 272px;">
+            <div class="detailList">
+              <ul>
+                <li><span>Booking No</span>: {{booking_item.booking_no || "NA"}}</li>
+                <li><span>Booking Date</span>: {{booking_item.booking_date | date:"dd-MMM-yyyy" || 'NA'}}</li>
+                <li><span>Booking Type</span>: {{booking_item.booking_type || "NA"}}</li>
+                <li><span>Branch</span>: {{booking_item.branch || "NA"}}</li>
+                <li><span>Customer Name</span>: {{booking_item.customer_name || "NA"}}</li>
+                <li><span>Customer Invoice</span>: {{booking_item.customer_invoice || "NA"}}</li>
+                <li><span>Route Name</span>: {{booking_item.route.route_name || "NA"}}</li>
+                <li><span>Vehicle Type</span>: {{booking_item.vehicle_type || "NA"}}</li>
+                <li><span>Weight</span>: {{booking_item.weight.value+" ("+booking_item.weight.unit +")" || "NA"}}</li>
+
+              </ul>
+            </div>
+            <br>
+            <div class="clearfix"></div>
+            <div class="detailsList">
+              <div class="" style="overflow-y: auto; max-height: 500px;">
+                <table class="table table-bordered unresponsive">
+                  <thead>
+                    <tr>
+                      <th>Vehicle No.</th>
+                      <th>Vehicle Type</th>
+                      <th>Permit Expiry Date</th>
+                      <th>FC Date</th>
+                      <th>Emisson</th>
+                      <th>Insurance</th>
+                      <th>Body Type</th>
+                      <th>Driver Name</th>
+                      <th>Driver License </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr data-ng-repeat="oRegVehicle in aRegVehicle" class="pointer selectItem" ng-click="passData(oRegVehicle)">
+                        <td>{{oRegVehicle.vehicle_reg_no}}</td>
+                        <td>{{oRegVehicle.veh_type_name}}</td>
+                        <td>{{oRegVehicle.permit_expiry_date | date:'dd-MM-yyyy'}}</td>
+                        <td>{{oRegVehicle.fc_date || 'NA'}}</td>
+                        <td>{{oRegVehicle.emisson || 'NA'}}</td>
+                        <td>{{oRegVehicle.insurance || 'NA'}}</td>
+                        <td>{{oRegVehicle.body_type | uppercase}}</td>
+                        <td>{{oRegVehicle.driver_name}}</td>
+                        <td>{{oRegVehicle.driver_license}}</td>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div ng-if="aRegVehicle.length == 0" class="ms-body" style=" min-height: 100px;">
+              <h3>Not any registered vehicle available for the vendor!</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <div class="lv-body">
+          <form name="regVehicleAlloc">
+            <div class="justify col-md-12" style="min-height: 272px; margin-left: 45px">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Vehicle No. </label>
+                    <div class="col-sm-6">
+                      <div class="fg-line">
+                        <input type="text" ng-model="oReg.vehicle_reg_no" class="form-control" ng-blur="checkVehicle(oReg.vehicle_reg_no)">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="isVehicleRegistered" class="col-md-4">
+                  <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Vehicle Group </label>
+                    <div class="col-sm-6">
+                      <div class="fg-line">
+                        <input type="text" ng-model="oReg.veh_group_name" class="form-control" ng-readonly="true">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="isVehicleRegistered" class="col-md-4">
+                  <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Vehicle Type </label>
+                    <div class="col-sm-6">
+                      <div class="fg-line">
+                        <input type="text" ng-model="oReg.veh_type_name" class="form-control" ng-readonly="true">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="!isVehicleRegistered" class="col-md-4">
+                  <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Vehicle Group </label>
+                    <div class="col-sm-6">
+                      <div class="select">
+                        <select type="text" name="Group type" ng-model="oReg.group_name" placeholder="Select Group" ng-options="option as option.name for option in vehicleGroups" ng-change="getVehicleType(oReg.group_name)" class="form-control" required>
+                        <option value="" style="display: none;"> Select Vehicle Group </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div ng-if="!isVehicleRegistered" class="col-md-4">
+                  <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Vehicle Type </label>
+                    <div class="col-sm-6">
+                      <div class="select">
+                        <select class="form-control" name="vehicle type" ng-model="oReg.veh_type" ng-options="option as option.name for option in vehicleTypes" required>
+                          <option value="" style="display: none;"> Select Vehicle Type </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Driver Name </label>
+                    <div class="col-sm-6">
+                      <div class="fg-line">
+                        <input type="text" ng-model="oReg.driver_name" class="form-control" ng-blur="checkDriver(oReg.driver_name)">
+                      </div>
+                    </div>
+					<div class="col-sm-12">
+					  <input type="checkbox"
+							 ng-model="unknownDriver"
+							 ng-click="setAllocateDriverDetail(unknownDriver)">
+					  <label>Unknown Driver</label>
+					</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Driver Licence </label>
+                    <div class="col-sm-6">
+                      <div class="fg-line">
+                        <input type="text" ng-model="oReg.driver_license" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Driver Contact </label>
+                    <div class="col-sm-6">
+                      <div class="fg-line">
+                        <input type="number" ng-model="oReg.driver_contact_no" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="m-l-30 col-md-10">
+                  <div class="form-group m-b-10 pull-right">
+                    <button type="submit" class="btn btn-primary btn-md" ng-disabled="!(oReg.vehicle_reg_no && (oReg.veh_group_name || oReg.group_name) && (oReg.veh_type_name || oReg.veh_type) && oReg.driver_name && oReg.driver_contact_no && oReg.driver_license)" ng-click="goToAllocate()">Go to allocate</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,215 @@
+<form role="form"  name="myGRPopPrint" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <button id="pdf" type="submit" ng-click="pdf()" class="btn btn-primary" style="margin-bottom: 12px;">Download Pdf</button>
+  </div>
+  <div class="modal-body">
+    
+    <style type="text/css">
+        
+
+        #blank {
+            height: 80px
+        }
+
+        #heading {
+            text-align: center;
+            font-weight: bold
+        }
+
+        #title {
+            font-size: 14px;
+            font-weight: bold
+        }
+
+        #iso {
+            font-size: 9px;
+            font-weight: bold
+        }
+
+        #subtitle {
+            font-size: 10px;
+        }
+
+        #addr {
+            font-size: 9px;
+        }
+
+        .num {
+            font-size: 9px;
+        }
+
+        .centertext= {
+            text-align: center;
+        }
+
+        .header {
+            font-size: 12px;
+            background-color: #d3d3d3
+        }
+
+        .data {
+            font-size: 12px;
+            padding-left: 2px;
+        }
+
+        .ctable,
+        .cth,
+        .ctd {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .ctd {
+            padding-left: 2px;
+        }
+
+        .cthnotop {
+            border: 1px solid black;
+            border-collapse: collapse;
+            border-top: 0;
+        }
+
+        .bold {
+            font-weight: bold
+        }
+
+        .calign {
+            text-align: center
+        }
+        
+    </style>
+
+<div>
+    <div style="width:100%; overflow:hidden;">
+
+        <div style="float:left; width:15%;">
+            <img src={{clientData.logo_url}} alt="logo" style="width:160px;height:70px;">
+        </div>
+
+        <div style="float:left; width:70%; text-align:center;">
+            <div id="title" class="editable">{{clientData.client_full_name}}</div>
+            <div id="iso" class="editable">{{clientData.client_iso}}</div>
+            <div id="subtitle" class="editable">{{clientData.client_subtitle}}</div>
+            <div id="addr" class="editable">{{clientData.address}}</div>
+        </div>
+
+        <div style="float:right;  text-align:center;">
+            <table style="padding-left:5px">
+                <tr>
+                    <td class="num bold">Office : </td>
+                    <td class="num editable">{{clientData.client_primary_contact_no}}</td>
+                </tr>
+                <tr>
+                    <td class="num bold">Fax : </td>
+                    <td class="num editable">{{clientData.client_fax}}</td>
+                </tr>
+                <tr>
+                    <td class="num bold">PAN : </td>
+                    <td class="num editable">{{clientData.client_pan_no}}</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+    <div id="heading">Builty/Delivery Challan</div>
+
+    <div>
+    </div>
+
+
+    <table class="ctable" style="width:100%;">
+        <tr>
+            <th class="header cth" style="width:50%">Consignor</th>
+            <th class="header cth" style="width:50%">Consignee</th>
+        </tr>
+        <tr>
+            <td class="data ctd">
+                <div class="editable" style="font-weight: bold">{{consignor_name}}</div>
+                <div class="editable">{{consignor_address}}</div>
+            </td>
+            <td class="data ctd editable">{{consignee_name}}</td>
+        </tr>
+    </table>
+    <table class="ctable" style="width:100%; border-top: 0;">
+        <tr>
+            <td class="data editable" style="width: 33%">From : {{from}}</td>
+            <td class="data editable" style="width: 34%">To : {{to}}</td>
+            <td class="data editable" style="width: 33%">Date : {{date}}</td>
+        </tr>
+    </table>
+    <table id="t1" class="ctable" style="width:100%; border-top: 0;">
+        <tr>
+            <th class="header cthnotop">Sl No</th>
+            <th class="header cthnotop">Container No</th>
+            <th class="header cthnotop">BOE No/Invoice No/Shipping Bill No</th>
+            <th class="header cthnotop">Value</th>
+            <th class="header cthnotop">Material Name</th>
+            <th class="header cthnotop">Weight</th>
+            <th class="header cthnotop">Rate</th>
+            <th class="header cthnotop">Freight</th>
+        </tr>
+    </table>
+    <div style="border: 1px solid black; border-top: 0; overflow:hidden;">
+        <table style="float:right;">
+            <tr>
+                <td class="data bold" style="padding:2px; padding-right:150px;">GR Charges :</td>
+                <td class="data editable" style="padding:2px">{{gr_charges}}</td>
+            </tr>
+            <tr>
+                <td class="data bold" style="padding:2px">Weightment Charges :</td>
+                <td class="data editable" style="padding:2px">{{weightment_charges}}</td>
+            </tr>
+            <tr>
+                <td class="data bold" style="padding:2px">Chargeable Expenses :</td>
+                <td class="data editable" style="padding:2px">{{chargeable_expenses}}</td>
+            </tr>
+        </table>
+    </div>
+    <div ng-hide="((clientData.clientId=='100002')||(clientData.clientId=='100003'))" style="border: 1px solid black; border-top: 0; overflow:hidden;">
+        <div class="data bold editable" style="float:left;">{{total_expenses_in_words}}</div>
+        <div class="data bold editable" style="float:right;">{{total_expenses}}</div>
+    </div>
+    <table id="t2" class="ctable" style="width:100%; border-top: 0;">
+        <tr>
+            <td class="data cthnotop calign bold">Vehicle No </td>
+            <td class="data cthnotop calign bold">GR No / ManualGRNo</td>
+            <td class="data cthnotop calign bold">Trip No</td>
+            <td class="data cthnotop calign bold">TIN/CST/LST/VAT</td>
+        </tr>
+    </table>
+    <div style="border: 1px solid black; border-top: 0; overflow:hidden;">
+        <div class="data" style="padding-top:10px">Service Tax to be paid by consignee</div>
+        <div class="data" style="padding-top:10px">DELIVERY AT: {{delivery_at}},Beopari is responsible for illegal goods & Octroi</div>
+        <div class="data" style="padding-top:5px; padding-left:87px">I hereby solemnly declare to the company that the particulars mentioned above are correct.</div>
+        <div style="height:50px"></div>
+        <div>
+            <div class="data calign" style="width:33%; float:left">&nbsp;</div>
+            <div class="data calign" style="width:33%; float:left">&nbsp; </div>
+            <div class="data calign" style="width:33%; float:left">{{trip_start.user}}</div>
+        </div>
+        <div>
+            <div class="data calign" style="width:33%; float:left">Signature of the DRIVER/OWNER</div>
+            <div class="data calign" style="width:33%; float:left">CONDITION OVERLEAF </div>
+            <div class="data calign" style="width:33%; float:left">BOOKING CLERK</div>
+        </div>
+    </div>
+    <div class="data bold" style="float:right">{{datetime}}</div>
+</div>
+<!-- </body>
+
+</html> -->
+
+  </div>    
+  <div class="modal-footer">
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>  
+</form> 
+  <style type="text/css">
+  .modal-dialog {width: 75%;
+        height: 173px
+    }
+  </style>

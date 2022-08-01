@@ -1,0 +1,57 @@
+<div class="" ng-controller="costingReportCntrl">
+
+	<div class="container m-b-10" ng-click="jaIndex == 1 ? jaIndex = 0 : jaIndex = 1">
+		<div class="col-md-12 card m-b-0">
+			<div class="lvh-label p-t-5" style="width: 200px">
+				<div class="select">
+					<select class="form-control"
+							ng-options="item as item.name for item in $constants.aCoastingReportTypes track by item.name"
+							ng-model="reportType" style="height: 34px;">
+						<option style="display:none" value="">Report Type</option>
+					</select>
+				</div>
+			</div>
+			<div class="pull-right">
+				<div class="col-md-8" ng-show="reportType.name === 'Trip Expense'">
+					<div class="lvh-label col-md-6">Aggregate By:</div>
+					<div class="select col-md-6">
+						<select class="form-control"
+										ng-options="item.value as item.label for item in aggrs"
+										ng-model="aggregateBy" style="height: 34px;">
+							<option value="" selected>None</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<button
+							ng-disabled="isDownloadBtnDisabled"
+							ng-click="downloadSheet()"
+							class="btn btn-primary hidden-print pull-right"
+							style="font-size: 11px; padding: 5px;margin-top: 5px;">Download</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" ng-include="reportType.path">
+	</div>
+
+</div>
+
+
+
+<style>
+	.listB > li{width: 28%;
+		float: left;margin-left: 1%;}
+	.pp{
+		list-style-type: none;
+		padding: 20px;
+		font-weight: bold;
+		border: 1px solid #2a96f3;
+	}
+
+	.container{
+		margin: auto 14px;
+		width: 98% !important;
+	}
+</style>

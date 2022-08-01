@@ -1,0 +1,197 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div style="min-height: 550px;">
+			<div class="listview lv-message">
+
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span class="c-black"><b>Sim</b></span>
+					</div>
+				</div>
+
+				<div class="lv-body">
+					<div class="row" style="margin: 5px auto;">
+						<div class="col-md-12">
+
+							<div class="clearfix"></div>
+							<form role="form" ng-submit="filter(form)">
+								<!--<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="text" ng-model="oSearchTripFilter.trip_no" name="trip_no"
+											   class="form-control input-sm" placeholder="Trip No"
+											   ng-model-options="{ updateOn: 'blur' }" ng-change="getAllTrip(false,true)"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="fg-line">
+										<div class="select">
+											<select class="form-control" placeholder="Trip Status"
+													ng-options="item as item for item in $constants.aTripStatus"
+													ng-model="oSearchTripFilter.status"
+													ng-change="getAllTrip(false,true)" style="height: 34px;">
+												<option value=""> Trip Status</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear">
+										<input type="text" placeholder="Vehicle Search..."
+											   ng-model="oSearchTripFilter.vehicle_id" class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="person as person.vehicle_reg_no for person in aVehicles | filter:$viewValue"
+											   ng-change="getVname(oSearchTripFilter.vehicle_id)" class="form-control"
+											   typeahead-on-select="onSelect($item, $model, $label)">
+										<i class="lvh-search-close" ng-click="oSearchTripFilter.vehicle_id='';getAllTrip(false,true)">×</i>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear">
+										<input type="text" placeholder="Route Search..."
+											   ng-model="oSearchTripFilter.route_id" class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in aRoute | filter:$viewValue"
+											   ng-change="getDname(oSearchTripFilter.route_id)" class="form-control"
+											   typeahead-on-select="onSelect($item, $model, $label)">
+										<i class="lvh-search-close" ng-click="oSearchTripFilter.route_id='';getAllTrip(false,true)">×</i>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+												   datepicker-popup="{{format}}" show-weeks="false"
+												   ng-model="oSearchTripFilter.start_date" is-open="opened1"
+												   datepicker-options="dateOptions" close-text="Close"
+												   placeholder="From Date" ng-change="getAllTrip(false,true)"
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="open($event, 'opened1')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+									<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+										 style=" ">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+												   datepicker-popup="{{format}}" show-weeks="false"
+												   ng-model="oSearchTripFilter.end_date" is-open="opened2"
+												   datepicker-options="dateOptions" close-text="Close" placeholder="To Date"
+												   ng-change="getAllTrip(false,true)"
+												   style="padding: 0px 4px; height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="open($event, 'opened2')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="form-group m-b-0">
+										<a uib-tooltip="Reset Search" tooltip-placement="bottom" style="font-size: 30px;"
+										   ng-click="getAllTrip(false,false,true)"><i class="zmdi zmdi-search-replace zmdi-hc-fw"></i>
+										</a>
+										<a ng-click="redirectForDetailPage()" uib-tooltip="Detail View" tooltip-placement="bottom" style="font-size: 30px;">
+											<i class="zmdi zmdi-assignment zmdi-hc-fw"></i>
+										</a>
+									</div>
+								</div>-->
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<button class="btn btn-success waves-effect"
+												ng-click="addNewSim()">
+											New
+										</button>
+									</div>
+								</div>
+							</form>
+							<div class="clearfix"></div>
+
+							<div class="detailsList">
+								<div style="overflow-x: scroll">
+									<table class="table table-bordered unresponsive">
+										<thead>
+										<tr>
+											<th>&#35;</th>
+											<th>Mobile No.</th>
+											<th>Sim No.</th>
+											<th>Provider</th>
+											<th>Purchase from</th>
+											<th>Stock status</th>
+											<th>Sold To</th>
+											<th>Active status</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr class="pointer selectItem" ng-repeat="sim in sims">
+											<td>{{$index + 1}}</td>
+											<td>{{sim.mobile_no}}</td>
+											<td>{{sim.sim_no}}</td>
+											<td>{{sim.part_ref?sim.part_ref.name:""}}</td>
+											<td>{{sim.purchased_from?sim.purchased_from.name:""}}</td>
+											<td>{{sim.stock_status}}</td>
+											<td>{{sim.sold_to_customer?sim.sold_to_customer.name:""}}</td>
+											<td>{{sim.active_status}}</td>
+											<td>
+												<ul class="lv-actions actions">
+													<li class="btn-wave">
+														<a class="pointer"
+														   uib-tooltip="Edit Quotation"
+														   tooltip-placement="bottom"
+														   ng-click="editSim(quote)">
+															<i class="zmdi zmdi-edit"></i>
+														</a>
+													</li>
+													<li class="btn-wave">
+														<a class="pointer"
+														   uib-tooltip="View Quotation"
+														   tooltip-placement="bottom"
+														   ng-click="">
+															<i class="zmdi zmdi-eye"></i>
+														</a>
+													</li>
+													<li class="btn-wave">
+														<a class="pointer"
+														   uib-tooltip="Delete Sim"
+														   tooltip-placement="bottom"
+														   ng-click="">
+															<i class="zmdi zmdi-delete"></i>
+														</a>
+													</li>
+												</ul>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+									<!--<div class="ms-body" style=" min-height: 50px;">-->
+									<!--<h3>No any Quotation available !!!!!</h3>-->
+									<!--</div>-->
+								</div>
+
+								<!--<div class="pagi text-center" ng-show="aBookings.length > 0">-->
+								<!--<uib-pagination ng-change="pagination.pageChanged()"-->
+								<!--total-items="pagination.totalItems"-->
+								<!--items-per-page="pagination.items_per_page"-->
+								<!--num-pages="pagination.numPages"-->
+								<!--ng-model="pagination.currentPage" max-size="pagination.maxSize"-->
+								<!--class="pagination-sm smallPagi" boundary-links="true"-->
+								<!--previous-text="&lsaquo;" next-text="&rsaquo;"-->
+								<!--first-text="&laquo;" last-text="&raquo;"></uib-pagination>-->
+								<!--</div>-->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

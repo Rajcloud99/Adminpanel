@@ -1,0 +1,534 @@
+	<!--Controller: voucherController-->
+<!--ControllerAs: pvVm-->
+
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Voucher</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+		<!--<div class="pull-right text-right m-t-5">
+			<button ng-if="pvVm.selectType == 'multiple' && pvVm.aSelectedVouchers.length>0"
+					class="btn-primary btn-xs"
+					uib-tooltip="Create Vouchers"
+					tooltip-placement="bottom"
+					ng-click="pvVm.createVouchers(pvVm.aSelectedVouchers)">
+				<i class="glyphicon glyphicon-edit"></i>
+			</button>
+		</div>-->
+		<!--<div class="pull-right text-right m-t-5 m-r-20">
+			<button class="btn-info btn-xs"
+					uib-tooltip="Create Actual Vouchers"
+					tooltip-placement="bottom"
+					ng-click="pvVm.createVouchersCommon()"
+					ng-disabled="!pvVm.oFilter.from_date || !pvVm.oFilter.to_date || (pvVm.oFilter.voucher !== 'Account not exported')"
+			>
+				<i class="glyphicon glyphicon-edit"></i>
+			</button>
+		</div>-->
+<!--		ng-if="$role['Payment']['Upload Voucher']"-->
+		<div class="pull-right text-right m-t-5 m-r-20">
+			<button class="btn-primary btn-xs" ng-if="$role['Voucher']['Upload Voucher']"
+					type="button"
+					uib-tooltip="Upload Voucher"
+					onclick="document.getElementById('toUpload').click();"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+			</button>
+			<input
+					type="file"
+					id="toUpload"
+					name="toUpload"
+					ng-model="toUpload"
+					ng-hide="true"
+					accept="*/*"
+					ngf-select
+					ngf-max-size="5MB"
+					ngf-model-invalid="errorFile"
+					ngf-change="pvVm.uploadVouchers($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+			>
+			<button class="btn-success btn-xs" ng-if="$role['Voucher']['Upload Voucher']"
+					type="button"
+					uib-tooltip="Voucher sample file"
+					ng-click="pvVm.downloadCsv()"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+			</button>
+			<button class="btn-success btn-xs" ng-if="$role['Voucher']['Upload Voucher']"
+					type="button"
+					uib-tooltip="Voucher Demo file"
+					ng-click="pvVm.downloadDemoCsv()"
+					tooltip-placement="bottom">
+				<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+			</button>
+			<button class="btn-info btn-xs"
+					uib-tooltip="Create Actual Vouchers"
+					tooltip-placement="bottom"
+					ng-click="pvVm.createVouchersCommonIds(pvVm.aSelectedVouchers)"
+					ng-disabled="!pvVm.oFilter.from_date || !pvVm.oFilter.to_date || (pvVm.oFilter.voucher == 'Account imported') || (pvVm.oFilter.voucher == 'Tally exported') || (pvVm.oFilter.voucher == 'Deleted')"
+			>
+				<i class="glyphicon glyphicon-edit"></i>
+			</button>
+		</div>
+	</div>
+</div>
+
+<div class="container" >
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form ng-submit="pvVm.getVouchers()" novalidate>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="pvVm.oFilter.billNo"
+							   name="billNo no"
+							   class="form-control input-sm"
+							   placeholder="billNo. no.">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="pvVm.oFilter.refNo"
+							   name="Ref no"
+							   class="form-control input-sm"
+							   placeholder="Ref. no.">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="pvVm.oFilter.amount"
+							   name="Amount"
+							   class="form-control input-sm"
+							   placeholder="Amount">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="pvVm.oFilter.narration"
+							   name="Narration"
+							   class="form-control input-sm"
+							   placeholder="Narration">
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<select chosen multiple
+								class="form-control"
+								ng-model="pvVm.oFilter.type"
+								ng-options="item as item for item in $constants.aVouchersType"
+								name="Voucher Type">
+							<option value="" ></option>
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Branch Search..."
+								ng-model="pvVm.oFilter.branch"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in pvVm.getAllBranch($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="pvVm.oFilter.branch=null;">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="user"
+								ng-model="pvVm.oFilter.user"
+								typeahead-wait-ms="10"
+								typeahead="item as item.full_name for item in pvVm.getUser($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="pvVm.oFilter.user=null;">×</i>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="pvVm.oFilter={};pvVm.aLedger = [];">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size:12px"
+							uib-tooltip="Excel"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="pvVm.downloadExl('excel');">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size:12px"
+							ng-hide="true"
+							uib-tooltip="TDS Report"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="pvVm.tdsReport(true);">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size:12px"
+							uib-tooltip="Tally XML"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="pvVm.downloadVouchers('tally');">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<button ng-if="$role['Voucher']['Search Deleted']"
+							type="button"
+							class="btn btn-danger p-l-10 p-r-10 app_tile"
+							style="font-size:12px"
+							uib-tooltip="Deleted voucher search"
+							ng-click="pvVm.getVouchers(null,null,true)"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+				</div>
+				<div class="m-b-10" style="clear: both"></div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Ledger"
+								ng-model="pvVm.oFilter.ledger"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in pvVm.accountMaster($viewValue)"
+								typeahead-on-select="pvVm.onLedgerSelect($item, $model, $label)">
+						<i class="lvh-search-close" ng-click="pvVm.oFilter.ledger=null;">×</i>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="$configs.costCenter.show">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Cost Center"
+								ng-model="pvVm.oFilter.cost_center"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in pvVm.costCenter($viewValue)"
+								typeahead-on-select="pvVm.onCostCenterSelect($item, $model, $label)">
+						<i class="lvh-search-close" ng-click="pvVm.oFilter.cost_center=null;">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<select chosen class="form-control"
+							ng-options="item as item for item in pvVm.aVoucher"
+							ng-model="pvVm.oFilter.voucher"
+							style="line-height: 34px;">
+						<option value="">Select Voucher</option>
+					</select>
+				</div>
+				<div class="col-md-2">
+					<div class="select">
+						<select class="form-control"
+								ng-init="pvVm.oFilter.dateType = 'date'"
+								ng-model="pvVm.oFilter.dateType">
+							<option value="" selected>Select Date</option>
+							<option value="created_at">Creation date</option>
+							<option value="last_modified_at">Last Modified date</option>
+							<option value="date">Voucher date</option>
+							<option value="acExp.at">Tally export date</option>
+							<option value="acImp.at">Import date</option>
+						</select>
+					</div>
+				</div>
+				<!--<div class="col-md-2">-->
+					<!--<div class="form-group m-b-0">-->
+						<!--<div class="col-sm-12">-->
+							<!--<div class="fg-line">-->
+								<!--<div class="date-picker input-group dp-blue"-->
+									 <!--ng-class="{ 'is-opened': opened1 == true }">-->
+									<!--<div ng-class="{ 'fg-toggled': opened1 == true }">-->
+										<!--<input ng-click="pvVm.DatePicker.openDatePicker(this, $event, 'opened1')"-->
+											   <!--type="text"-->
+											   <!--class="form-control"-->
+											   <!--datepicker-popup="{{pvVm.DatePicker.formats[0]}}"-->
+											   <!--show-weeks="false"-->
+											   <!--ng-model="pvVm.oFilter.from_date"-->
+											   <!--ng-change="pvVm.oFilter.to_date=undefined;"-->
+											   <!--is-open="opened1"-->
+											   <!--datepicker-options="pvVm.DatePicker.dateSettings"-->
+											   <!--close-text="Close"-->
+											   <!--placeholder="From" />-->
+									<!--</div>-->
+									<!--<span class="input-group-btn">-->
+                		                		<!--<button type="button"-->
+														<!--class="btn btn-default m-t-0 f12"-->
+														<!--ng-click="pvVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i-->
+														<!--class="glyphicon glyphicon-calendar"></i></button>-->
+                		              	  <!--</span>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="From"
+									max-date="pvVm.maxDate"
+									ng-model="pvVm.oFilter.from_date"
+									ng-change="pvVm.oFilter.to_date=undefined;"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									max-date="pvVm.maxDate"
+									class="form-control"
+									placeholder="To"
+									ng-model="pvVm.oFilter.to_date"
+							>
+						</div>
+					</div>
+				</div>
+				<!--<div class="col-md-2">-->
+					<!--<div class="form-group m-b-0">-->
+						<!--<div class="col-sm-12">-->
+							<!--<div class="fg-line">-->
+								<!--<div class="date-picker input-group dp-blue"-->
+									 <!--ng-class="{ 'is-opened': opened2 == true }">-->
+									<!--<div ng-class="{ 'fg-toggled': opened2 == true }">-->
+										<!--<input ng-click="pvVm.DatePicker.openDatePicker(this, $event, 'opened2')"-->
+											   <!--type="text"-->
+											   <!--class="form-control"-->
+											   <!--datepicker-popup="{{pvVm.DatePicker.formats[0]}}"-->
+											   <!--show-weeks="false"-->
+											   <!--ng-model="pvVm.oFilter.to_date"-->
+											   <!--min-date="pvVm.oFilter.from_date"-->
+											   <!--max-date="pvVm.oFilter.from_date|setMaxDate:6"-->
+											   <!--is-open="opened2"-->
+											   <!--datepicker-options="pvVm.DatePicker.dateSettings"-->
+											   <!--close-text="Close"-->
+											   <!--placeholder="To"/>-->
+									<!--</div>-->
+									<!--<span class="input-group-btn">-->
+            		                			<!--<button type="button"-->
+														<!--class="btn btn-default m-t-0 f12"-->
+														<!--ng-click="pvVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i-->
+														<!--class="glyphicon glyphicon-calendar"></i></button>-->
+                		              	  <!--</span>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<select chosen multiple
+							class="form-control"
+							ng-model="pvVm.oFilter.vT"
+							ng-options="item.pType as item.pType for item in $constants.aPaymentTypeComplete"
+							name="Payment Type"
+							required
+					>
+						<option value=""></option>
+					</select>
+				</div>
+				<div class="col-md-2">
+					<div class="select">
+						<select class="form-control" ng-model="pvVm.oFilter.sortBy">
+							<option value="" selected>Sort by</option>
+							<option value="created_at">Creation date</option>
+							<option value="date">Voucher date</option>
+							<option value="acExp.at">Tally export date</option>
+							<option value="acImp.at">Import date</option>
+							<option value="refNo">Reference no.</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="select">
+						<select chosen
+								class="form-control"
+								ng-model="pvVm.oFilter.cheque"
+								ng-options="item as item for item in ['Clear', 'Not Clear']"
+								name="Cheque by"
+						>
+							<option value="">Cheque By</option>
+						</select>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="pvVm.aLedger.length">
+			  <span class="btn-lst" ng-repeat="select in pvVm.aLedger">
+				  <button class="btn-xs" style="background: black; color: aliceblue;">     {{select.name}}&nbsp;
+				  <a ng-click="pvVm.removeLedger(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="col-md-12">
+			<div class="col-md-2 pull-left">
+				<label class="col-sm-6">Tot Amount:</label>
+				<div class="form-group m-b-0">
+					<div class="col-sm-2">
+						{{pvVm.totamt| roundOff}}
+					</div>
+				</div>
+			</div>
+<!--			<pre>{{pvVm.aSelectedVouchers|json}}</pre>-->
+			<button class="btn btn-primary btn-xs p-l5 p-r-5"
+					ng-if="$role['Voucher']['Preview']"
+					style="font-size: 20px"
+					uib-tooltip="Preview"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.printVoucher()"
+			>
+			<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['Voucher']['Clear Cheque']"
+					style="font-size: 20px"
+					ng-if="pvVm.aSelectedVouchers._id && !pvVm.aSelectedVouchers.chequeClear.date"
+					uib-tooltip="Clear Cheque"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.clearCheque()"
+			>
+				<i class="zmdi zmdi-inbox zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger btn-xs p-l-5 p-r-5" ng-if="$role['Voucher']['Reverse Clear Cheque']"
+					style="font-size: 20px"
+					ng-if="pvVm.aSelectedVouchers._id && pvVm.aSelectedVouchers.chequeClear.date"
+					uib-tooltip="Reverse Clear Cheque"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.unclearCheque()"
+			>
+				<i class="zmdi zmdi-inbox zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['Voucher']['TDS Payment']"
+					style="font-size: 20px"
+					uib-tooltip="TDS Payment"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.tdsPayments()">
+				<i class="zmdi zmdi-plus-square zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="View Voucher"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.addVoucher('view')">
+				<i class="zmdi zmdi-assignment zmdi-hc-fw fs-20"></i>
+			</button>
+			<button ng-if="$role['Voucher']['Show Voucher History']"  class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Voucher History"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.showHistry(pvVm.aSelectedVouchers)">
+				<i class="zmdi zmdi-time-restore-setting zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Add Voucher"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.addVoucher('add')">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['Voucher']['Edit']"
+					style="font-size: 20px"
+					uib-tooltip="Edit Voucher"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.addVoucher('edit')"
+					ng-disabled="pvVm.shouldDisableEditing()"
+			>
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button ng-if="$role['Voucher']['Reverse']"
+					class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Reverse"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.reverseVoucher()"
+					ng-disabled="!pvVm.aSelectedVouchers.length || pvVm.oFilter.voucher !== 'Account imported'"
+			>
+				<i class="zmdi zmdi-time-restore zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger btn-xs p-l-5 p-r-5" ng-if="$role['Voucher']['Delete']"
+					style="font-size: 20px"
+					uib-tooltip="Delete Voucher"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="pvVm.deleteVoucher($role['Voucher']['Delete'])"
+					ng-disabled="pvVm.shouldDisableEditing()"
+			>
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+			<div ja-table
+				 table-body="pvVm.aVouchers"
+				 table-head="pvVm.tableHead"
+				 table-height='500px'
+				 table-load="pvVm.getVouchers(true)"
+				 table-column-setting="pvVm.columnSetting"
+				 table-selectable='pvVm.selectType'
+				 table-api='pvVm.tableApi'
+				 table-selectable-model="pvVm.aSelectedVouchers"
+				 table-row-click-event="pvVm.selectedVoucher()"
+			></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+	.container{
+		width: 98% !important;
+	}
+</style>

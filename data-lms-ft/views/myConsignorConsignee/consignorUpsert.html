@@ -1,0 +1,355 @@
+<form name="consignorConsignee" ng-submit="submit(consignorConsignee)" novalidate autocomplete="off">
+
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Consignor Consignee</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+							({{operationType}})
+						</span>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC ConsignorConsignee DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">BASIC CONSIGNOR CONSIGNEE DETAILS</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Name:  <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter  Name"
+												   ng-model="oConsignorConsignee.name"
+												   name="Name"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="consignorConsignee['Name'].$error.required
+																			&& (consignorConsignee['Name'].$touched
+																			|| consignorConsignee.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Address: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Address"
+												   ng-model="oConsignorConsignee.address"
+												   name="Address"
+												   class="form-control"
+												   >
+										</div>
+										<span class="error" ng-if="consignorConsignee['Address'].$error.required
+																			&& (consignorConsignee['Address'].$touched
+																			|| consignorConsignee.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Location: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Location"
+												   ng-model="oConsignorConsignee.businessLocation"
+												   name="Location"
+												   class="form-control"
+												   required
+												   >
+										</div>
+										<span class="error" ng-if="consignorConsignee['Location'].$error.required
+																			&& (consignorConsignee['Location'].$touched
+																			|| consignorConsignee.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">State:<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select chosen class="form-control"
+													ng-options="item.state as item.state for item in aStates"
+													ng-model="oConsignorConsignee.state"
+													ng-model-option="{updateOn: 'blur'}"
+											        required>
+												<option value="" disabled style="display: none;">State</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">type: <span class="req_r">*</span> </label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select chosen
+													class="form-control"
+													placeholder="Type"
+													ng-options="item as item for item in $constants.aConsignorConsigneeTypes"
+													ng-model="oConsignorConsignee.type"
+													name="Category Type"
+													ng-model-option="{updateOn: 'blur'}"
+													required>
+
+												<option value="" disabled selected>Select Type </option>
+											</select>
+										</div>
+										<span class="error" ng-if="consignorConsignee['Category Type'].$error.required
+																			&& (consignorConsignee['Category Type'].$touched
+																			|| consignorConsignee.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Contact Person:  </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Name"
+												   ng-model="oConsignorConsignee.contact_person"
+												   name="Contact Person"
+												   class="form-control"
+											>
+										</div>
+										<span class="error" ng-if="consignorConsignee['Contact Person'].$error.required
+																			&& (consignorConsignee['Contact Person'].$touched
+																			|| consignorConsignee.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Contact Number:  </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Number"
+												   ng-model="oConsignorConsignee.contact_number"
+												   name="Contact Number"
+												   class="form-control"
+											>
+										</div>
+										<span class="error" ng-if="consignorConsignee['Contact Number'].$error.required
+																		&& (consignorConsignee['Contact Number'].$touched
+																		|| consignorConsignee.$submitted)">
+													This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+<!--							customer-->
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Customer:</label>
+									<div class="col-sm-6">
+										<div class="ng-scope sear chosen-row-1">
+											<input
+													type="text"
+													class="form-control"
+													placeholder=" Search Customer"
+													ng-model="oConsignorConsignee.customer"
+													typeahead-wait-ms="10"
+													name="Customer"
+													typeahead="item as item.name for item in getCustomer($viewValue) | limitTo:6"
+											>
+											<i class="lvh-search-close" ng-click="oConsignorConsignee.customer=null;">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-3" ng-if="oConsignorConsignee.type === 'Consignor'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Loading Manager: </label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select chosen
+													class="form-control"
+													placeholder="Loading Manger"
+													ng-options="item._id as item.full_name for item in aUsers"
+													ng-model="oConsignorConsignee.loadingManager"
+													name="loading manager">
+												<option value="" disabled selected>
+													Select Type
+												</option>
+											</select>
+										</div>
+										<span class="error" ng-if="consignorConsignee['loading manager'].$error.required
+																			&& (consignorConsignee['loading manager'].$touched
+																			|| consignorConsignee.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="oConsignorConsignee.type === 'Consignee'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Dealer Code: </label>
+									<div class="col-sm-6">
+											<input type='text'
+											 class="form-control"
+											 placeholder="dealer code"
+											  ng-model="oConsignorConsignee.d_code"
+												name="dealer code">
+										</div>
+									</div>
+								</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">GSTIN: <span ng-if="!$configs.master.consignorConsignee.required.gstin" class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter GST no"
+												   ng-model="oConsignorConsignee.gstin"
+												   name="gstin"
+												   class="form-control"
+												   ng-required="!$configs.master.consignorConsignee.required.gstin">
+										</div>
+										<span class="error" ng-if="consignorConsignee['GST no'].$error.required
+																			&& (consignorConsignee['GST no'].$touched
+																			|| consignorConsignee.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<!--<div class="col-md-3">-->
+								<!--<div class="form-group m-b-0">-->
+									<!--<label class="col-sm-4 control-label">ClientR: </label>-->
+									<!--<div class="col-sm-6">-->
+										<!--<div class="select">-->
+											<!--<select chosen-->
+													<!--multiple-->
+													<!--class="form-control"-->
+													<!--placeholder="Select ClientR"-->
+													<!--ng-options="item.lms_id as item.name for item in $configs.clientR"-->
+													<!--ng-model="oConsignorConsignee.clientR"-->
+													<!--name="ClientR">-->
+												<!--<option value="" disabled>-->
+													<!--Select Clients-->
+												<!--</option>-->
+											<!--</select>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">latitude:  </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Latitude"
+												   ng-model="oConsignorConsignee.lat"
+												   name="latitude"
+												   class="form-control"
+												   >
+										</div>
+										<!--<span class="error" ng-if="consignorConsignee['latitude'].$error.required-->
+																	<!--&& (consignorConsignee['latitude'].$touched-->
+																	<!--|| consignorConsignee.$submitted)">-->
+												<!--This Field is Mandatory</span>-->
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">longitude: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter logngitude"
+												   ng-model="oConsignorConsignee.lng"
+												   name="longitude"
+												   class="form-control"
+												   >
+										</div>
+										<!--<span class="error" ng-if="consignorConsignee['longitude'].$error.required-->
+																<!--&& (consignorConsignee['longitude'].$touched-->
+																<!--|| consignorConsignee.$submitted)">-->
+											<!--This Field is Mandatory</span>-->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item">
+					<span class="booking_list_header">MAP DETAILS</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3 m-b-10" style="z-index: 1001;">
+								<div class="col-sm-12">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   placeholder="Search Location..."
+											   ng-model="search"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.formattedAddress for item in aLocations"
+											   typeahead-on-select="onSelect($item, $model, $label)"
+											   ng-change="searchLocation(search)"
+											   name="search"
+											   class="form-control">
+										<i class="lvh-search-close" ng-click="search=''">×</i>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div id="mapForConsignorConsignee" style="width:100%; height:400px;"></div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="closeModal()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+
+	form .col-md-3{
+		height: 50px;
+	}
+
+	.container{
+		width: 98% !important;
+	}
+
+	.modal-dialog{
+		width: 90%;
+	}
+
+</style>

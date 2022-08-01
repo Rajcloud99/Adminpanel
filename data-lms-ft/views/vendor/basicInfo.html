@@ -1,0 +1,640 @@
+<div class="row" style="margin: 5px auto;">
+
+	<button class="btn btn-primary waves-effect pull-right" ng-if="$role['All Vendor']['Update']"
+			data-ui-sref="masters.vendorRegistration.profile.basicInfo"
+			ng-click="editInfo()"
+			ng-if="opertaionType === 'show'"
+	><i class="zmdi zmdi-border-color zmdi-hc-fw"></i> <span>Edit Vendor</span></button>
+
+	<div class="col-md-12" ng-hide="opertaionType|operation" style="padding: 20px">
+		<form name="SaveForm" ng-submit="submitForm()" autocomplete="off">
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Vendor Name <span style="color: red">*</span>:</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="Name" ng-model="vendor.name" ng-change="bindContactPerson()" ng-readonly="opertaionType | operation" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<div class="col-md-4 m-b-5" ng-if="$configs.master.showAccount">-->
+				<!--<div class="form-group m-b-0">-->
+					<!--<label class="col-sm-5 control-label">Account :<span class="req_r">*</span></label>-->
+					<!--<div class="col-sm-6">-->
+						<!--<div ng-dropdown-multiselect=""-->
+							 <!--options="aAccountMaster"-->
+							 <!--selected-model="vendor.account"-->
+							 <!--extra-settings="selectAccountSettings"-->
+							 <!--ja-search-input='inputModel'-->
+							 <!--ja-search-trigger="getAccountMasters(inputModel)"-->
+						<!--&gt;</div>-->
+						<!--<br>-->
+						<!--<div class="text-center" style="position: absolute;">-->
+							<!--<button class="btn btn-primary waves-effect"-->
+									<!--type="button"-->
+									<!--style="padding: 3px 5px"-->
+									<!--ng-click="addNewAccount()"-->
+									<!--uib-tooltip="Add">-->
+								<!--<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>-->
+							<!--</button>-->
+							<!--<button class="btn btn-danger waves-effect"-->
+									<!--type="button"-->
+									<!--style="padding: 3px 5px"-->
+									<!--ng-click="onDelinkAccount()"-->
+									<!--uib-tooltip="Delink"-->
+									<!--ng-disabled="!vendor.account._id">-->
+								<!--<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>-->
+							<!--</button>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<label class="col-xs-6">Ownership Type: <span style="color: red">*</span>:</label></label>
+					<div class="col-sm-6">
+						<select chosen
+								class="form-control"
+								ng-init="vendor.ownershipType = vendor.ownershipType || 'Market'"
+								ng-options="item as item for item in $constants.aOwnershipVendor"
+								ng-model="vendor.ownershipType"
+								name="Ownership Type"
+								ng-readonly="opertaionType | operation"
+								required>
+							<option value="" disabled>
+								Select Ownership Type
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<label class="col-xs-6">Category: <span style="color: red">*</span>:</label></label>
+					<div class="col-sm-6">
+						<select chosen
+								multiple
+								class="form-control"
+								ng-options="item as item for item in $constants.aVendorCategory"
+								ng-model="vendor.category"
+								name="category"
+								ng-readonly="opertaionType | operation"
+					        	required>
+							<option value="" disabled>
+								Select Category
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Email :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="email" class="form-control input-sm" placeholder="Email" ng-model="vendor.email" ng-readonly="opertaionType | operation">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Area :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="Area" ng-model="vendor.ho_address.line1" ng-readonly="opertaionType | operation">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>City :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="City" ng-model="vendor.ho_address.city" ng-readonly="opertaionType | operation" required>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>State :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-sm-6">
+						<select chosen
+								ng-model="vendor.ho_address.state"
+								class="form-control"
+								ng-change="setStateCode(vendor.ho_address.state)"
+								ng-options="item.state as item.state for item in aGSTstates" ng-readonly="opertaionType | operation" required>
+							<option value="" disabled>
+								Select State
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>State Code :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="State Code" ng-model="vendor.ho_address.state_code" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Country :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="Country" ng-model = "vendor.ho_address.country" ng-readonly="opertaionType | operation" required>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>PAN :<span class="req_r">*</span></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" ng-pattern="/^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$/" placeholder="PAN" name="pan_no" ng-model="vendor.pan_no" ng-readonly="((vendor.account && vendor.account.length && vendor.account.pan_no) || opertaionType | operation)" required>
+							<span style="color:red" ng-show="SaveForm.pan_no.$dirty && SaveForm.pan_no.$invalid">PAN no is incorrect.</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>PAN Verify :</label></div>
+					<div class="col-xs-6">
+						<label class="checkbox checkbox-inline m-r-20">
+							<input type="checkbox"
+								   ng-model="vendor.panVerify">
+							<i class="input-helper"></i>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>PAN Holder Name :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm"  placeholder="PAN Holder Name"  name="PAN Holder Name" ng-model="vendor.phn" ng-readonly="opertaionType | operation" required>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--<div class="col-md-4 m-b-5">-->
+				<!--<div class="form-group">-->
+					<!--<label class="col-xs-6">Operation Company: </label>-->
+					<!--<div class="col-sm-6">-->
+						<!--<select chosen-->
+								<!--multiple-->
+								<!--class="form-control"-->
+								<!--placeholder="Select ClientR"-->
+								<!--ng-options="item.clientId as item.name for item in aClientR"-->
+								<!--ng-model="vendor.clientR"-->
+								<!--name="ClientR"-->
+								<!--ng-readonly="opertaionType | operation">-->
+							<!--<option value="" disabled>-->
+								<!--Select Clients-->
+							<!--</option>-->
+						<!--</select>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+
+
+			<div class="clearfix"></div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>TDS Verify :</label></div>
+					<div class="col-xs-6" ng-hide="isHide">
+						<label class="checkbox checkbox-inline m-r-20">
+							<input type="checkbox"
+								   ng-model="vendor.tdsVerify"
+								   ng-readonly="isDisable">
+							<i class="input-helper"></i>
+						</label>
+					</div>
+					<div class="col-xs-6" ng-hide="!isHide">
+						{{vendor.tdsVerify}}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>GSTIN :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="GSTIN" ng-model="vendor.gstn" ng-readonly="opertaionType | operation">
+						</div>
+					</div>
+				</div>
+			</div>
+<!--			<div class="col-md-4 m-b-5" ng-if="vendor.ownershipType === 'Associate' && $configs.master.vendor.showFactor">-->
+<!--				<div class="form-group">-->
+<!--					<div class="col-xs-6"><label>FPA Factor :</label></div>-->
+<!--					<div class="col-xs-6">-->
+<!--						<div class="fg-line">-->
+<!--							<input type=number-->
+<!--								   placeholder="factor %"-->
+<!--								   ng-model="vendor.factor"-->
+<!--								   maxlength="90"-->
+<!--								   minlength="1"-->
+<!--								   class="form-control"-->
+<!--								   >-->
+<!--						</div>-->
+<!--						<span class="error" ng-show="SaveForm['factor'].$error.maxlength">Factor should not be Greater than 90.</span>-->
+<!--						<span class="error" ng-show="SaveForm['factor'].$error.minlength">Factor should not be Less than 1.</span>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+			<div class="clearfix"></div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Contact Person :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="Contact Person" ng-model="vendor.contact_person_name" ng-readonly="opertaionType | operation" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Vendor Mobile : <span style="color: red">*</span>:</label></label></div>
+<!--					<div class="col-xs-6">-->
+<!--						<div class="fg-line">-->
+<!--							<input type="number" class="form-control input-sm" placeholder="Contact Num" ng-model="vendor.prim_contact_no" ng-readonly="opertaionType | operation" required>-->
+<!--						</div>-->
+<!--					</div>-->
+					<div class="col-md-6">
+						<div class="fg-line">
+							<input type="number"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+								   placeholder="Enter Mobile Number"
+								   ng-model="vendor.prim_contact_no"
+								   name="Mobile Number"
+								   ng-minlength="10"
+								   ng-maxlength="10"
+								   class="form-control"
+								   ng-readonly="opertaionType | operation"
+								   required
+							>
+						</div>
+						<span class="error" ng-if="SaveForm['Mobile Number'].$error.required
+																			&& (SaveForm['Mobile Number'].$touched
+																			|| SaveForm.$submitted)">
+														This Field is Mandatory</span>
+						<span class="error" ng-if="	(SaveForm['Mobile Number'].$error.minlength
+																				|| SaveForm['Mobile Number'].$error.maxlength)
+																			&& (SaveForm['Mobile Number'].$touched
+																				|| SaveForm.$submitted)">
+													Invalid Mobile Number</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Secondary Contact No :</label></div>
+<!--					<div class="col-xs-6">-->
+<!--						<div class="fg-line">-->
+<!--							<input type="number" class="form-control input-sm" placeholder="Contact Num" ng-model="vendor.alt_contact_no1" ng-readonly="opertaionType | operation">-->
+<!--						</div>-->
+<!--					</div>-->
+					<div class="col-md-6">
+						<div class="fg-line">
+							<input type="number"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+								   placeholder="Enter Mobile Number"
+								   ng-model="vendor.alt_contact_no1"
+								   name="alt Number"
+								   ng-minlength="10"
+								   ng-maxlength="10"
+								   class="form-control"
+								   ng-readonly="opertaionType | operation"
+							>
+						</div>
+						<span class="error" ng-if="	(SaveForm['alt Number'].$error.minlength
+																				|| SaveForm['alt Number'].$error.maxlength)
+																			&& (SaveForm['alt Number'].$touched
+																				|| SaveForm.$submitted)">
+													Invalid Mobile Number</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Address Proof Type :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="Address Proof Type" ng-model="vendor.address_proof_type" ng-readonly="opertaionType | operation">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Address Proof No :</label></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="Address Proof No" ng-model="vendor.address_proof_no" ng-readonly="opertaionType | operation">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>No Of Vehicle :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="number"
+								   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+								   onwheel="return false"
+								   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+								   class="form-control input-sm"
+								   placeholder="No Of Vehicle"
+								   ng-model="vendor.noOfVehilce"
+								   required
+								   ng-readonly="opertaionType | operation">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Exempted Valid From :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							{{vendor.exeFrom  | date: "dd-MM-yyyy"}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Exempted Valid To :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							{{vendor.exeTo  | date: "dd-MM-yyyy"}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Exempted Slab Rate :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							{{vendor.exeRate}}
+						</div>
+					</div>
+				</div>
+			</div>
+<!--			ng-change="rateValidaton(vendor.exeRate)"-->
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Bill Type :</label></div>
+					<div class="col-xs-6">
+						<div class="select">
+							<select
+									class="form-control"
+									ng-options="item as item for item in $constants.billType"
+									ng-model="vendor.billType"
+									ng-readonly="opertaionType | operation"
+							>
+								<option value="" selected disabled>Select Bill Type</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Ratings :</label></div>
+					<div class="col-xs-6">
+						<div class="select">
+							<select
+									class="form-control"
+									ng-options="item as item for item in $constants.aRatings"
+									ng-model="vendor.vendor_rating"
+									ng-readonly="opertaionType | operation"
+							>
+								<option value="" selected disabled>Give Ratings</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Comment : </label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm"  placeholder="Comment"  name="remark" ng-model="vendor.remark">
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>TDS Category :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="tdsCategory" ng-model="vendor.tdsCategory" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>TDS Sources :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="tdsSources" ng-model="vendor.tdsSources" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>TDS Section :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="tdsSources" ng-model="vendor.tdsSection" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3" ng-if="$configs.master.showAccount && (obj.clientId === selectedClient || vendor.ownershipType === 'Associate')" ng-repeat="obj in client_allowed">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label"><b>{{obj.name}}:</b></label>
+					<div class="col-sm-8">
+						<div class="ng-scope sear chosen-row-3">
+							<input type="text"
+								   placeholder="{{obj.name}} Account"
+								   name="Account"
+								   ng-readonly="readonlyAc"
+								   ng-model="obj.vendorAccountObj"
+								   typeahead-wait-ms="10"
+								   typeahead="item as item.name for item in getAccount($viewValue, obj.clientId)"
+								   typeahead-on-select="onAccountSelect(obj.vendorAccountObj ,obj.clientId)"
+								   class="form-control">
+							<i class="lvh-search-close" ng-click="obj.vendorAccountObj=null;" ng-hide="readonlyAc">×</i>
+						</div>
+						<div class="text-center">
+<!--							<button class="btn btn-primary waves-effect" ng-if="obj.clientId === selectedClient"-->
+<!--									type="button"-->
+<!--									style="padding: 3px 5px"-->
+<!--									ng-click="upsertAccountMaster(obj.vendorAccountObj)"-->
+<!--									uib-tooltip="Edit">-->
+<!--								<i class="zmdi zmdi-edit zmdi-hc-fw"></i>-->
+<!--							</button>-->
+							<button class="btn btn-primary waves-effect" ng-if="obj.clientId === selectedClient"
+									type="button"
+									ng-disabled="readonlyAc"
+									style="padding: 3px 5px"
+									ng-click="addNewAccount(obj, 'bpCheck')"
+									uib-tooltip="Add">
+								<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+							</button>
+							<!-- <button class="btn btn-danger waves-effect"
+							type="button"
+							style="padding: 3px 5px"
+							ng-click="onDelinkAccount(obj.vendorAccountObj)"
+							uib-tooltip="Delink"
+							ng-disabled="!obj.vendorAccountObj">
+							<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+							</button> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+
+			<div class="col-md-12">
+				<h4 style="color: black;margin:15px"><b>Bank Details</b></h4>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<div class="fg-line">
+							<input type="text" ng-model="banking.a_c" class="input-sm form-control fg-input" placeholder="A/C No.">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<div class="fg-line">
+							<input type="text" ng-model="banking.ifsc" class="input-sm form-control fg-input" placeholder="IFS Code">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<div class="fg-line">
+							<input type="text" ng-model="banking.declaration" class="input-sm form-control fg-input" placeholder="Declaration">
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<button ng-click="addBank(banking,SaveForm)" ng-disabled="!(banking.a_c && banking.ifsc)" class="btn btn-primary waves-effect pointer">
+						<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+					</button>
+				</div>
+				<div class="col-sm-2">
+					<button ng-click="uploadCheque($event)" ng-show="(vendor.banking_details.length>0)" class="btn btn-primary waves-effect pointer">
+						<i class="glyphicon glyphicon-upload"></i>
+					</button>
+				</div>
+				<div class="col-sm-12" style="margin:15px">
+					<div class="col-md-12">
+						<ul>
+							<li class="" ng-repeat="oBank in vendor.banking_details"> {{oBank.a_c +" - "+oBank.ifsc+" - "+oBank.declaration}}
+								<a class="route_iCityRemove" style="background: #dadada" ng-click="removeBank($index,SaveForm)">x</a>
+								<button ng-click="$event.preventDefault();preview(oBank.cancelled_cheque)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-show="oBank.cancelled_cheque">Preview Cheque</button >
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 m-b-5">
+				<div class="form-group">
+					<button class="btn btn-primary" ng-disabled="!(vendor.name)">Save</button>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<div class="col-md-12" ng-show="opertaionType|operation">
+		<div class="detailList">
+			<ul>
+				<li><span>Vendor Name :</span> {{vendor.name || 'NA'}}</li>
+				<li ng-if="$configs.master.showAccount"><span>Account :</span> {{vendor.account.name || 'NA'}}</li>
+				<li><span>Ownership Type :</span> {{vendor.ownershipType || 'NA'}}</li>
+				<li><span>Category :</span> {{vendor.category || 'NA'}}</li>
+				<li><span>Email :</span> {{vendor.email || 'NA'}}</li>
+				<li><span>PAN :</span> {{vendor.pan_no || 'NA'}}</li>
+				<li><span>GSTIN :</span> {{vendor.gstn || 'NA'}}</li>
+				<li><span>Branch :</span> {{vendor.branch || 'NA'}}</li>
+				<li><span>No Of Vehicle :</span> {{vendor.noOfVehilce || 'NA'}}</li>
+				<li ng-if="vendor.clientName"><span>ClientR :</span> {{vendor.clientName}}</li>
+				<li><span>Area :</span> {{vendor.ho_address.line1 || 'NA'}}</li>
+				<li><span>City :</span>{{vendor.ho_address.city || 'NA'}}</li>
+				<li><span>State :</span> {{vendor.ho_address.state || 'NA'}}</li>
+				<li><span>Country :</span> {{vendor.ho_address.country || 'NA'}}</li>
+				<li><span>Contact Person :</span> {{vendor.contact_person_name || 'NA'}}</li>
+				<li><span>Contact Num:</span> {{vendor.prim_contact_no || 'NA'}}</li>
+
+				<li><span>Address Proof Type</span>{{vendor.address_proof_type || 'NA'}}</li>
+				<li><span>Address Proof No </span>{{vendor.address_proof_no || 'NA'}}</li>
+
+				<li><span>Created Date</span>{{vendor.created_at | date: "dd-MM-yyyy"}}</li>
+				<li><span>Created By :</span> {{vendor.created_by.full_name || 'NA'}}</li>
+				<li><span>Updated By :</span> {{vendor.last_modified_by.full_name || 'NA'}}</li>
+			</ul>
+		</div>
+
+		<div class="col-md-12">
+			<h4 style="margin-left: 19px;">Bank Details</h4>
+			<table ng-show="vendor.banking_details.length" ng-table="tableParams" class="table">
+				<tr ng-repeat="vBank in vendor.banking_details track by $index">
+					<td style="width: 300px;" data-title="'Acount No '">{{vBank.a_c || 'NA'}}</td>
+					<td data-title="'IFSC '">{{vBank.ifsc || 'NA'}}</td>
+					<td data-title="'Declaration '">{{vBank.declaration || 'NA'}}</td>
+					<td data-title="'Cancel Cheque '">
+						<button ng-click="$event.preventDefault();preview(vBank.cancelled_cheque)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-show="vBank.cancelled_cheque">Preview Cheque</button >
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+<style type="text/css">
+	.bxx1 {
+		border: 1px solid #c6c5c5;
+		padding: 0px 10px;
+	}
+</style>

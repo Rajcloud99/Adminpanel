@@ -1,0 +1,330 @@
+<form ng-controller="courierProfileCtrl">
+    <div ng-if="selectedCourierVendorData" class="row" style="margin: 5px auto;">
+        <div class="col-md-12">
+            <div class="card-header" >
+                <h2 style="color: #847777;font-size: 16px;">Basic info</h2>
+            </div>
+            <!-- vendorCourier basic info -->
+            <div id="div_vendorCourier_info" class="card-body" style="padding-left: 25px;padding-right: 25px">
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Vendor Name :</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedCourierVendorData.name" class="form-control" name="name" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">For branch:</label>
+                            <div class="col-sm-6">
+                                <input type="text" ng-model="selectedCourierVendorData.branch_name" class="form-control" ng-readonly=true>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Primary contact person:</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedCourierVendorData.prim_contact_person" class="form-control" name="primary contact person" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Alternate contact person:</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedCourierVendorData.alt_contact_person" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Primary contact no:</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="number" ng-model="selectedCourierVendorData.prim_contact_no" class="form-control" name="primary contact number" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Alternate contact no 1</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input  ng-model="selectedCourierVendorData.alt_contact_no1" type="number" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Alternate contact no 2</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input  ng-model="selectedCourierVendorData.alt_contact_no2" type="number" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Primary email:</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="email" ng-model="selectedCourierVendorData.prim_email" class="form-control" name="email" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <div class="form-group m-b-0">
+                                <label class="col-sm-4 control-label">Alternate email</label>
+                                <div class="col-sm-6">
+                                    <div class="fg-line">
+                                        <input ng-model="selectedCourierVendorData.alt_email" class="form-control" ng-readonly=true>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <div class="form-group m-b-0">
+                                <label class="col-sm-4 control-label">Fax </label>
+                                <div class="col-sm-6">
+                                    <div class="fg-line">
+                                        <input ng-model="selectedCourierVendorData.fax" class="form-control" ng-readonly=true>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Rating</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedCourierVendorData.rating" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Total times rated</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedCourierVendorData.total_times_rated" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label  class="col-sm-4 control-label">Status</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    {{selectedCourierVendorData.status}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			<div class="card-header" ng-if="$configs.master.showAccount">
+				<h2 style="color: #847777;font-size: 16px;">Account Detail </h2>
+			</div>
+
+			<div class="card-body" style="padding-left: 25px;padding-right: 25px;" ng-if="$configs.master.showAccount">
+				<div class="row" style="margin:5px">
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Name: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedCourierVendorData.account.name" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Branch: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedCourierVendorData.account.branch.name" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Type: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedCourierVendorData.account.type" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Limit: </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="selectedCourierVendorData.account.limit" class="form-control" ng-readonly=true>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+            <!--******************* vendorCourier address ************************-->
+            <div class="card-header" >
+                <h2 style="color: #847777;font-size: 16px;">Address </h2>
+            </div>
+
+            <div id="div_vendorCourier_address" class="card-body" style="padding-left: 25px;padding-right: 25px;">
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Address Line 1</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedCourierVendorData.address.line1" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Address Line 2</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectedCourierVendorData.address.line2" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">City</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input id ="autoCompleteCity" type="text" ng-model="selectedCourierVendorData.address.city" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">District</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input  ng-model="selectedCourierVendorData.address.district" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">State</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-model="selectedCourierVendorData.address.state" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Country</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-model="selectedCourierVendorData.address.country" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:5px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">PIN code</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-model="selectedCourierVendorData.address.pincode" class="form-control" ng-readonly=true>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--vendorCourier address 1-->
+        <div class="card-header" >
+            <h2 style="color: #847777;font-size: 16px;">Courier Office</h2>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Address</th>
+                        <!-- <th>City (State)</th> -->
+                        <th>Contact Person</th>
+                        <th>Contact Num.</th>
+                        <!-- <th>Email.</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="office in aCourierOffices">
+                        <td>{{office.branch_name}}</td>
+                        <td>{{office.address}}</td>
+                        <!-- <td>{{office.city}}({{office.state}})</td> -->
+                        <td>{{office.contact_person}}</td>
+                        <td>{{office.contact_prime}}</td>
+                        <!-- <td>{{office.e-mail_prime}}</td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div ng-if="!selectedCourierVendorData">
+        <h4>No courier Vendor Found !!!</h4>
+    </div>
+</form>

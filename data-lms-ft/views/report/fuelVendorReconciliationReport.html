@@ -1,0 +1,152 @@
+<div ng-controller="fuelVendorReconciliationCtrl as vm">
+	<div class="card m-b-10" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 0px">
+			<form role="form" ng-submit="">
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input type="text"
+							   placeholder="Fuel Vendor Search..."
+							   ng-model="vm.fuelVendor"
+							   class="lvhs-input"
+							   typeahead-wait-ms="10"
+							   typeahead="person as person.name for person in vm.aFuelVendor | filter:$viewValue"
+							   ng-change="vm.getAllFuelVendor(vm.fuelVendor)"
+							   class="form-control">
+						<i class="lvh-search-close" ng-click="vm.fuelVendor='';">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-1 col-lg-1">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="vm.from"
+								   is-open="opened1"
+								   datepicker-options="vm.DatePicker.dateSettings"
+								   close-text="Close"
+								   ng-change="vm.to = ''; vm.setTime()"
+								   placeholder="From"
+								   style="padding: 0px 4px;height: 34px;" />
+						</div>
+						<span class="input-group-btn">
+							  <button type="button" class="btn btn-default m-t-0 f12"
+									  ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+									  class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-1 col-lg-1">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="vm.to"
+								   ng-disabled="!vm.from"
+								   min-date="vm.from"
+								   ng-change="vm.setTime()"
+								   is-open="opened2"
+								   datepicker-options="vm.DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="to"
+								   style="padding: 0px 4px;height: 34px;" />
+						</div>
+						<span class="input-group-btn">
+							  <button type="button" class="btn btn-default m-t-0 f12"
+									  ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+									  class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+					<button ng-disabled="!(vm.from && vm.to)" ng-click="vm.getAllCostingReport()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">Search</button>
+				</div>
+				<div class="pull-right p-r-5">
+					<button type='button' ng-click="vm.showSummary()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">Summary</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="col-md-12 pp" ng-show="aCostingReport.length>0">
+							<ul class="listB" style="list-style-type: none;">
+								<li>Name: {{summary.name}}</li>
+								<li>Date: {{summary.date | date:'dd-MM-yyyy'}}</li>
+								<li>Net hire charges: {{summary.netHireAmt}}</li>
+								<li>Deductions: {{summary.deductions}}</li>
+								<li>Detension to add: {{summary.detention_to_add}}</li>
+								<li>Total to be paid: {{summary.total_to_paid}}</li>
+								<li>Actual advance paid: {{summary.actual_advance_paid}}</li>
+								<li>Balance amount paid: {{summary.balance_amount_paid}}</li>
+								<li>Total paid till date: {{summary.total_paid_till_date}}</li>
+								<li>Net: {{summary.netPaid}}</li>
+							</ul>
+						</div>
+						<div class="clearfix"></div>
+						<br>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>#</th>
+										<th>Trip No</th>
+										<th>Vehicle </th>
+										<th>Route</th>
+										<th>Allocation Date</th>
+										<th>Fuel Vendor</th>
+										<th>Fuel Station</th>
+										<th>Fuel Type</th>
+										<th>Rates</th>
+										<th>Quantity(Lts)</th>
+										<th>Amount</th>
+										<th>Date</th>
+										<th>Reference No.</th>
+										<th>Remarks</th>
+										<th>Entry Date</th>
+										<th>Person</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oReport in vm.aCostingReport" class="pointer selectItem">
+										<td>{{$index+1}}</td>
+										<td>{{oReport.trip_no}}</td>
+										<td>{{oReport.trip.vehicle_no}}</td>
+										<td>{{oReport.trip.route_name}}</td>
+										<td>{{oReport.trip.allocation_date | date: 'dd-MMM-yyyy'}}</td>
+										<td>{{oReport.diesel_info.vendor.name || 'NA'}}</td>
+										<td>{{oReport.diesel_info.station.fuel_company || 'NA'}}</td>
+										<td>{{oReport.diesel_info.station.fuel_type || 'NA'}}</td>
+										<td>{{oReport.diesel_info.rate.toFixed(2) || 'NA'}}</td>
+										<td>{{oReport.diesel_info.litre.toFixed(2) || 'NA'}}</td>
+										<td>{{oReport.amount.toFixed(2) || 'NA'}}</td>
+										<td>{{(oReport.date | date: 'dd-MMM-yyyy') || 'NA'}}</td>
+										<td>{{oReport.reference_no || 'NA'}}</td>
+										<td>{{oReport.remark || 'NA'}}</td>
+										<td>{{(oReport.created_at | date: 'dd-MMM-yyyy') || 'NA'}}</td>
+										<td>{{oReport.person || 'NA'}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div ng-if="vm.aCostingReport.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any costing report available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

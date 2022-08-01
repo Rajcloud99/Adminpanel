@@ -1,0 +1,487 @@
+<!-- Controller: createTripController-->
+<!-- ControllerAs: ctVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+			<span class="c-black"><b>Create Trip</b></span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 20px auto;padding-bottom: 10px"
+	 tab-index="-1"
+	 id="messages-main">
+	<div class="card" style="position: absolute;width: 100%;margin-bottom: 65px">
+		<div class="card-body">
+			<ul class="list-group list-group-flush">
+				<!-- DETAILS -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="col-md-2">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 c-black control-label">Vehicle Type:</label>
+								<div class="col-sm-7">
+									<div class="select">
+										<select class="form-control"
+												ng-model="ctVm.filterObj.vehicle_type"
+												ng-change="ctVm.showDetails = false; ctVm.aVehicleSelected = []; ctVm.filterObj.vehicle='';ctVm.showTable = false"
+												ng-options="v for v in $constants.aVehicleProvider">
+											<option value="" disabled selected>Select</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-3 c-black control-label">Vehicle No:</label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Vehicle Search..."
+												ng-model="ctVm.filterObj.vehicle"
+												typeahead-wait-ms="10"
+												typeahead="item as (item.vehicle_reg_no  + ' (' + item.ownershipType[0] + ')') for item in ctVm.getVehicles($viewValue) | limitTo:6"
+												typeahead-on-select="ctVm.onVehSelect($item, $model, $label)"
+										>
+										<i class="lvh-search-close" ng-click="ctVm.filterObj.vehicle='';">×</i>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="col-md-7 m-b-5 col-sm-3">
+							<button type="button" class="btn btn-primary waves-effect f16"
+									ng-click="ctVm.getAllRegVehicle()"
+									uib-tooltip="Search">
+								<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+							</button>
+							<button class="btn btn-primary waves-effect f16"
+									ng-click="ctVm.filterObj ={};ctVm.showTable = false;ctVm.showDetails = false; ctVm.aVehicleSelected = []"
+									uib-tooltip="Clear Search">
+								<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+							</button>
+							<a class="btn btn-primary pull-right" ng-show="ctVm.filterObj.vehicle_type === 'Market' "  ng-click="ctVm.AddMvehicle()">Add New Vehicle</a>
+						</div>
+
+
+					</div>
+				</li>
+
+				<div class="clearfix"></div>
+
+				<li class="list-group-item" ng-if="ctVm.showTable">
+					<span class="booking_list_header">Vehicle Details</span>
+					<div class="card-body">
+						<div class="row" style="margin: 15px">
+							<div class="col-sm-12">
+								<!-- Input Filter -->
+								<!--<div class="row m-b-5">-->
+									<!--<form ng-submit="ctVm.getAllRegVehicle()">-->
+										<!--<div class="col-sm-2 form-group">-->
+											<!--<div class="fg-line">-->
+												<!--<select chosen-->
+														<!--ng-model="ctVm.filterObj.vehicleSts"-->
+														<!--no-results-text="'No Result Found'"-->
+														<!--placeholder-text-multiple="'Vehicle Status'"-->
+														<!--ng-options="v for v in $constants.aVehicleStatus">-->
+													<!--<option value="">All</option>-->
+												<!--</select>-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--<div class="col-sm-2 form-group">-->
+											<!--<div class="fg-line">-->
+												<!--<select multiple-->
+														<!--chosen-->
+														<!--ng-model="ctVm.filterObj.veh_type"-->
+														<!--no-results-text="'No Result Found'"-->
+														<!--placeholder-text-multiple="'Vehicle Type'"-->
+														<!--ng-options="v.name for v in ctVm.aVehicleTypes">-->
+													<!--<option value="">Not Selected</option>-->
+												<!--</select>-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2 form-group">-->
+											<!--<div class="lvh-search ng-scope sear">-->
+												<!--<input type="text"-->
+													   <!--placeholder="Vehicle No...."-->
+													   <!--class="lvhs-input"-->
+													   <!--ng-model="ctVm.filterObj.vehicleNum"-->
+													   <!--ng-change="ctVm.getVname(ctVm.filterObj.vehicleNum)"-->
+													   <!--class="form-control"-->
+												<!--&gt;-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2 form-group"-->
+											 <!--ng-if="ctVm.vehicle_type !== 'Own'">-->
+											<!--<div class="lvh-search ng-scope sear">-->
+												<!--<input type="text"-->
+													   <!--placeholder="Vendor Search..."-->
+													   <!--ng-model="ctVm.filterObj.vendor"-->
+													   <!--class="lvhs-input"-->
+													   <!--typeahead-wait-ms="10"-->
+													   <!--typeahead="vendor as (vendor.name + (vendor.pan_no ? '(' + vendor.pan_no + ')' : '')) for vendor in ctVm.getVendor($viewValue)"-->
+													   <!--typeahead-on-select="ctVm.onVendorSelect($item, $model, $label)"-->
+													   <!--class="form-control"-->
+												<!--&gt;-->
+												<!--<i class="lvh-search-close"-->
+												   <!--ng-click="ctVm.filterObj.vendor='';ctVm.onVendorSelect('');">×</i>-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--<div class="col-xs-6 m-b-5 col-sm-3 col-md-1 col-lg-1">-->
+											<!--<button class="btn btn-primary waves-effect f16" uib-tooltip="Search">-->
+												<!--<i class="zmdi zmdi-search zmdi-hc-fw"></i>-->
+											<!--</button>-->
+											<!--<button class="btn btn-primary waves-effect f16"-->
+													<!--ng-click="ctVm.clearAllSearchFilterVehicle()"-->
+													<!--uib-tooltip="Clear Search">-->
+												<!--<i class="zmdi zmdi-close zmdi-hc-fw"></i>-->
+											<!--</button>-->
+										<!--</div>-->
+									<!--</form>-->
+								<!--</div>-->
+
+								<div class="card-body">
+									<div class="row" style="margin:5px">
+										<div class="col-md-12">
+											<div class="col-md-12">
+												<div ja-table
+													 table-body="ctVm.aVehicle"
+													 table-head="ctVm.tableHead"
+													 table-height='100px'
+													 table-column-setting="ctVm.columnSetting"
+													 table-api="ctVm.tableApi"
+													 table-load="ctVm.getAllRegVehicle(true)"
+													 table-selectable='ctVm.selectType'
+													 table-selectable-model="ctVm.selectedVehicle"
+													 table-row-click-event="ctVm.selectedRow()"
+												></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-xs-12 text-right" ng-if="ctVm.selectedVehicle">
+										<button type="button" ng-click="ctVm.next()" class="btn btn-primary">Allocate
+											Gr
+										</button>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item" ng-if="ctVm.showDetails">
+					<div class="clearfix"></div>
+					<div class="card-body">
+						<form novalidate name="allocate" autocomplete="off">
+							<div class="row" style="margin: 15px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Branch Search.."
+														ng-model="ctVm.branch"
+														typeahead-wait-ms="10"
+														name="Branch"
+														typeahead="item as item.name for item in ctVm.getAllBranch($viewValue)|limitTo:6"
+														required>
+												<i class="lvh-search-close" ng-click="ctVm.branch=null;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Loading Manager: </label>
+										<div class="col-sm-7">
+											<div class="">
+												<select
+														chosen
+														class="form-control"
+														placeholder="Loading Manager"
+														ng-model="ctVm.loading_babu"
+														ng-options="item._id as item.full_name for item in ctVm.aLoadingBabus"
+														style="line-height:33px;"
+														required
+												>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Trip Manager :</label>
+										<div class="col-sm-7">
+											<div class="">
+												<select chosen placeholder="Manager" class="form-control"
+														ng-model="ctVm.trip_manager"
+														ng-options="item._id as item.full_name for item in ctVm.aUsers"
+														style="line-height: 33px;"
+														required>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+									<label class="col-sm-6 control-label">Allocation Date:<span
+											class="req_r">*</span></label>
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="ctVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   uib-datepicker-popup="{{ctVm.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="ctVm.DatePicker.newDate"
+												   ng-model="ctVm.allocation_date"
+												   is-open="opened1"
+												   datepicker-options="ctVm.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="Allocation Date"
+												   name="Allocation Date"
+												   required
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="ctVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+								<br>
+
+								<div class="col-md-12" style="min-height: 200px;" ng-if="ctVm.aVehicleSelected.length">
+									<div class="col-md-12" ng-repeat="veh in ctVm.aVehicleSelected">
+										<div class="card" style="border: 1px solid #ddd">
+											<h4>
+												<div class="col-md-3">
+													{{veh.vehicle_reg_no}}&nbsp;&nbsp;
+													<span ng-show="veh.driver_name">Driver : {{veh.driver_name}}<span
+															ng-show="veh.driver_contact_no">({{veh.driver_contact_no}})</span></span>&nbsp;&nbsp;
+													<span>Capacity: {{veh.capacity_tonne || veh.veh_type.capacity || 0}}</span>&nbsp;&nbsp;
+												</div>
+
+												<div class="form-group col-md-3">
+													<label class="col-sm-5 control-label">Loading Point :<span
+															class="req_r">*</span></label>
+													<div class="col-sm-7">
+														<input type="text" placeholder="Source Search..."
+															   ng-model="veh.ld"
+															   class="form-control" typeahead-wait-ms="10"
+															   typeahead="item as item.c for item in ctVm.getSources($viewValue) | limitTo: 10"
+															   class="form-control"
+															   typeahead-on-select="ctVm.onSelectSource($item, $model, $label)"
+															   name="Loading Point" required>
+														<i class="lvh-search-close" ng-click="veh.ld=''">×</i>
+													</div>
+												</div>
+
+												<div class="form-group col-md-3">
+													<label class="col-sm-5 control-label">Unloading Point :<span
+															class="req_r">*</span></label>
+													<div class="col-sm-7">
+														<input type="text" placeholder="Dest Search..."
+															   ng-model="veh.uld"
+															   class="form-control" typeahead-wait-ms="10"
+															   typeahead="item as item.c  for item in ctVm.getSources($viewValue) | limitTo: 10"
+															   class="form-control"
+															   typeahead-on-select="ctVm.onSelectDest($item, $model, $label)"
+															   name="Unloading Point" required>
+														<i class="lvh-search-close" ng-click="veh.uld=''">×</i>
+													</div>
+												</div>
+
+												<div class="col-md-3">
+													<label class="col-sm-3 control-label">Km:<span
+															class="req_r">*</span></label>
+													<div class="col-sm-6">
+														<input type="number" class="form-control" placeholder="Enter Km"
+															   ng-model="veh.rKm">
+													</div>
+												</div>
+
+
+												<div class="clearfix"></div>
+
+												<div class="col-md-12">
+													<div class="col-md-1">
+														<span class="booking_list_header">Add GRs: </span>
+													</div>
+													<div class="col-md-5">
+														<!--<div class="col-md-4">-->
+															<!--<div class="fg-line form-group m-b-0">-->
+																<!--<input type="text"-->
+																	   <!--ng-model="ctVm.myFilter.gr"-->
+																	   <!--name="Gr Number"-->
+																	   <!--class="form-control input-sm"-->
+																	   <!--placeholder="Gr Number"-->
+																	   <!--ng-model-options="{ updateOn: 'blur' }">-->
+															<!--</div>-->
+														<!--</div>-->
+														<div class="col-md-1">
+															<button class="btn btn-primary"
+																	uib-tooltip="Search GR"
+																	tooltip-placement="bottom"
+																	type="button"
+																	ng-click="ctVm.grSearch(veh, $index)">
+																<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+															</button>&nbsp;&nbsp;
+														</div>
+													</div>
+													<div class="col-md-5">
+														<div class="pull-right">
+															<button class="btn btn-primary" ng-show="ctVm.selectedVendorInfo && ctVm.filterObj.vehicle_type === 'Market'"
+																	uib-tooltip="Add Vendor Deal"
+																	ng-click="ctVm.vendorDealPopUp(veh, $index)">
+																<i class="zmdi zmdi-collection-add zmdi-hc-fw"></i>
+															</button>&nbsp;&nbsp;
+															<button class="btn btn-primary"
+																	uib-tooltip="Add Gr"
+																	tooltip-placement="bottom"
+																	ng-click="ctVm.addMoreGr($index)">
+																<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+															</button>&nbsp;&nbsp;
+															<button class="btn btn-danger"
+																	uib-tooltip="Remove Vehicle"
+																	tooltip-placement="bottom"
+																	ng-click="ctVm.aVehicleSelected.splice($index, 1)">
+																<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+															</button>
+														</div>
+														<div class="checkbox pull-right" style="margin: 8px;" ng-hide="veh.driver_name">
+															<label>
+																<input type="checkbox" ng-model="veh.unknown_driver"
+																	   ng-change="ctVm.setUnknownDriver(veh, $index)" value="">
+																<i class="input-helper"></i>
+																Unknown Driver
+															</label>
+														</div>
+													</div>
+												</div>
+											</h4>
+											<div>
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th ng-if="$configs.vehAlloc.skipBooking">#</th>
+														<th>Gr No.</th>
+														<th>Gr Date.</th>
+														<th>Customer</th>
+														<th>Weight</th>
+														<th ng-if="$role['Vehicle Allocation']['GR']">Gr Info</th>
+														<th ng-show="veh.veh_type_name=='20 Feet' || veh.veh_type_name=='40 Feet'">
+															Container
+														</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr data-ng-repeat="oSelBookVeh in veh.gr"
+														class="pointer selectItem"
+														ng-click="selectBookVeh(oSelBookVeh, $index)">
+														<td ng-if="$configs.vehAlloc.skipBooking">
+									      <span class="pointer"
+												ng-click="veh.gr.splice($index, 1);"
+												uib-tooltip="Remove"><i
+												  class="zmdi zmdi-delete zmdi-hc-fw"></i></span>
+														</td>
+														<td>{{oSelBookVeh.grNumber}}</td>
+														<td>{{oSelBookVeh.grDate | date: "dd/MM/yyyy"}}</td>
+														<td>{{oSelBookVeh.customer.name}}</td>
+														<td>
+															<input type="number"
+																   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+																   onwheel="return false"
+																   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+																   placeholder="weight"
+																   step="0.001"
+																   min="0"
+																   name="weight"
+																   class="form-control"
+																   ng-model="oSelBookVeh.weight"
+																   ng-change="ctVm.weightValidaton(veh,$index)">
+														</td>
+														<td ng-if="$role['Vehicle Allocation']['GR']">
+															<a ng-hide="oSelBookVeh._id" ng-click="ctVm.grDetailPopup(veh, $index)"> &nbsp;&nbsp;
+																Gr
+																Details</a>
+														</td>
+														<td ng-show="veh.veh_type_name=='20 Feet' || veh.veh_type_name=='40 Feet'">
+															<span ng-repeat="c in oSelBookVeh.container">{{c.number}},</span>
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-xs-12 text-right">
+										<button ng-disabled="ctVm.disableSubmit || !(ctVm.allocation_date)" type="button" ng-click="ctVm.submit()"
+												class="btn btn-success">Allocate
+											Vehicle
+										</button>
+									</div>
+								</div>
+							</div>
+
+						</form>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+</div>
+
+<style>
+
+
+	error {
+		font-size: 10px;
+		color: red;
+	}
+
+	color {
+		color: red;
+	}
+
+	.btn-danger:focus {
+		box-shadow: 0px 0px 13px 2px darkred !important;
+	}
+
+	.btn-primary:focus {
+		box-shadow: 0px 0px 13px 2px blue !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+</style>

@@ -1,0 +1,270 @@
+<!-- Controller: TripAdvanceUpsertController-->
+<!-- ControllerAs: upsertVm-->
+
+<div class="container m-b-10">
+    <div class="col-md-12 card m-b-0">
+        <div class="lvh-label">
+            <span class="c-black"><b>Booking No:</b>
+                <span style="margin-left: 10px; color: rgb(183, 183, 183);">
+                    {{receivedIdData.booking_no}}
+                </span>
+            </span>&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="c-black"><b>Booking Date:</b>
+                <span style="margin-left: 10px; color: rgb(183, 183, 183);">
+                    {{receivedIdData.booking_date | date}}
+                </span>
+            </span>&nbsp;&nbsp;
+            <span class="c-black"><b>Route:</b>
+                <span style="margin-left: 10px; color: rgb(183, 183, 183);">
+                    {{receivedIdData.rName || 'NA'}}
+                </span>
+            </span>&nbsp;&nbsp;
+            <span class="c-black"><b>Service Type:</b>
+                <span style="margin-left: 10px; color: rgb(183, 183, 183);">
+                    {{receivedIdData.sr || 'NA'}}
+                </span>
+            </span>&nbsp;&nbsp;
+            <span class="c-black"><b>Category:</b>
+                <span style="margin-left: 10px; color: rgb(183, 183, 183);">
+                    {{receivedIdData.cat || 'NA'}}
+                </span>
+            </span>&nbsp;&nbsp;
+
+        </div>
+    </div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+    id="messages-main">
+    <div class="card">
+        <!--Form starts here -->
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <!-- BASIC Trip DETAILS -->
+                <li class="list-group-item">
+                    <div class="col-md-12">
+                        <span class="booking_list_header">QUOTATION PLANNING</span>
+                        <div class="card-body">
+                            <div class="row" style="margin:5px">
+                                <div class="col-md-9">
+                                    <div class="col-md-3">
+                                        <div class="lvh-search ng-scope sear chosen-row-2">
+                                            <input type="text" class="form-control lvhs-input" placeholder="Vendor Search..."
+                                            typeahead-wait-ms="10" ng-model="oFilter.vendor"
+                                            typeahead="item as item.name for item in getVendorName($viewValue) | limitTo:6"
+                                            >
+                                            <i class="lvh-search-close" ng-click="oFilter.vendor=null;">×</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group m-b-0">
+                                            <label class="col-sm-4 control-label">Start Dt:</label>
+                                            <div class="col-sm-8">
+                                                <input
+                                                    fill-date
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="Start date"
+                                                    ng-model="oFilter.frmdt"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group m-b-0">
+                                            <label class="col-sm-4 control-label">End Dt:</label>
+                                            <div class="col-sm-8">
+                                                <input
+                                                    fill-date
+                                                    type="text"
+                                                    class="form-control"
+                                                    placeholder="End date"
+                                                    ng-model="oFilter.todt"
+                                                >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="col-md-2">
+                                            <button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size: 12px" uib-tooltip="Search"
+                                                type="submit" tooltip-placement="bottom"
+                                                ng-click="getQuotationData(storeParamid)">
+                                                <i class="zmdi zmdi-search zmdi-hc-fw"></i>
+                                            </button>
+                                            <button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size: 12px"
+                                                uib-tooltip="Clear Search" tooltip-placement="bottom" type="button"
+                                                ng-click="oFilter={};getQuotationData(storeParamid)">
+                                                <i class="zmdi zmdi-close zmdi-hc-fw"></i>
+                                            </button>
+											<button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size: 12px"
+                                                uib-tooltip="Download" tooltip-placement="bottom" type="button"
+                                                ng-click="downloadQuot(storeParamid)">
+                                                <i class="zmdi zmdi-download zmdi-hc-fw"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <button ng-if="$role['Bookings']['Add']" class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px"
+                                        uib-tooltip="Add Quotation" tooltip-placement="bottom" type="button"
+                                        ng-click="addQuotation()">
+                                        <i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+                                    </button>
+                                    <button ng-if="$role['Bookings']['Update']" class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px"
+                                        uib-tooltip="Edit Quotation" tooltip-placement="bottom" type="button"
+                                        ng-click="EditQuotation()">
+                                        <i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+                                    </button>
+
+                                    <button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px"
+                                        uib-tooltip="Final Quotation" tooltip-placement="bottom" type="button"
+                                        ng-click="finalQuotation()">
+                                        <i class="zmdi zmdi-thumb-up zmdi-hc-fw fs-20"></i>
+                                    </button>
+
+                                    <button class="btn btn-danger btn-xs p-l-5 p-r-5" style="font-size: 20px"
+                                        uib-tooltip="Revert Final Quotation" tooltip-placement="bottom" type="button"
+                                        ng-click="revertFinalQuotation()">
+                                        <i class="zmdi zmdi-thumb-down zmdi-hc-fw fs-20"></i>
+                                    </button>
+
+                                    <button class="btn btn-danger btn-xs p-l-5 p-r-5" style="font-size: 20px"
+                                        uib-tooltip="Delete Quotation" tooltip-placement="bottom" type="button"
+                                        ng-click="deleteQuotation()">
+                                        <i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+                                    </button>
+									<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px"
+                                        uib-tooltip="Quotation Remark" tooltip-placement="bottom" type="button"
+                                        ng-click="closingReason()">
+                                        <i class="zmdi zmdi-comment-edit zmdi-hc-fw fs-20"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <div style="clear:both;"></div>
+                    <div class="row" style="margin:5px">
+                        <div class="" style="overflow-y: auto; max-height: 500px;">
+                            <table class="table table-bordered vehicleAllot">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Vendor</th>
+                                    <th>Vehicle</th>
+                                    <th>Final Quotation(Yes/No)</th>
+                                    <th>PAYMENT TYPE</th>
+                                    <th>PAYMENT Basis</th>
+                                    <th>Status</th>
+                                    <th>closing Reason</th>
+                                    <th>Date</th>
+                                    <th>Advance</th>
+                                    <th>Rate</th>
+                                    <th>To Pay</th>
+                                    <th>Total</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="quot in receivedQuotation"
+                                    class="pointer"
+                                    ng-class="{grn: selectedRowVal._id === quot._id}"
+                                    ng-click="someFun(quot)">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{quot.vendor.name}}</td>
+                                    <td>{{quot.vehicleType}}</td>
+                                    <td>{{quot.finalised.status ? 'Yes' : 'No'}}</td>
+                                    <td>{{quot.payment_type}}</td>
+                                    <td>{{quot.weight_type}}</td>
+                                    <td>{{quot.status}}</td>
+                                    <td>{{quot.closedReason}}</td>
+                                    <td>{{quot.date|date:'dd-MMM-yyyy'}}</td>
+                                    <td>{{quot.advance}}</td>
+                                    <td>{{quot.rate}}</td>
+                                    <td>{{quot.toPay}}</td>
+                                    <td>{{quot.total}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </li>
+
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<style type="text/css">
+    .fg-float .fg-label {
+        top: 0px;
+    }
+
+    .detailList ul li {
+        width: 22%;
+    }
+
+    .tbl-sm thead tr th {
+        padding: 2px !important;
+        font-size: 10px;
+        color: #fff;
+        background: #2196f3;
+    }
+
+    .tbl-sm tbody tr td {
+        padding: 0 !important;
+        font-size: 9px;
+    }
+
+    .tbl-sm tbody tr td button {
+        font-size: 7px;
+        padding: 4px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .col-md-12.form-group {
+        margin-bottom: 10px;
+    }
+
+    form.tab-form-demo .tab-pane {
+        margin: 20px 20px;
+    }
+
+    .nav-tabs>li.active {
+        background: #2196f5;
+    }
+
+    .nav-tabs>li.active>a {
+        color: #fff !important;
+    }
+
+    .nav-tabs>li.active>a,
+    .nav-tabs>li.active>a:hover,
+    .nav-tabs>li.active>a:focus {
+        border: 1px solid #2196f5;
+    }
+
+    .list_border_background {
+        border: 2px solid blue !important;
+        background: #47d6c9;
+    }
+
+    .deduction {
+        background-color: lightcoral;
+    }
+
+    ul li .col-md-5 {
+        font-weight: bold;
+    }
+</style>

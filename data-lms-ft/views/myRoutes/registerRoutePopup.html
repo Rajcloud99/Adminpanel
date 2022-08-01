@@ -1,0 +1,99 @@
+
+	<form  role="form" name="newroute"  novalidate>
+		<div class="modal-header" >
+			<button type="button" ng-click="Ntr.closeModal()" class="close"
+					data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h3 class="modal-title" align="center">Add New  Route</h3><hr>
+		</div>
+		<style type="text/css">
+			.modal-backdrop.in{z-index:9 !important;}
+			.modal-open .modal{z-index:99 !important;}
+		</style>
+
+		<div class="modal-body">
+			<div class="justify col-md-12">
+				<div class="row" style="margin:15px">
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Source: <span style="color: red;">*</span> </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" placeholder="Source Search..." ng-model="Ntr.source"
+										   on-select="Ntr.onSelectSource($item)" class="form-control" place-autocomplete
+
+										   name="LoadingPoint" required>
+									<i
+									   class="lvh-search-close" ng-click="Ntr.source=''">×</i>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Destination: <span style="color: red;">*</span>  </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" placeholder="Destination Search..." ng-model="Ntr.destination"
+										   place-autocomplete class="form-control" typeahead-wait-ms="10"
+										   on-select="Ntr.onSelectSource($item)"
+
+										   name="UnloadingPoint" required>
+									<i
+									   class="lvh-search-close" ng-click="Ntr.destination=''">×</i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin:15px">
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Route Name<span style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+<!--									<input type="text" ng-disabled="true" ng-model="Ntr.rName">-->
+									<span>{{Ntr.rName}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Km: <span style="color: red;">*</span></label>
+							<div class="col-sm-6">
+
+								<div class="fg-line">
+									<input type="number" class="form-control" placeholder="Enter Km"
+										   ng-model="Ntr.rKm">
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-6">
+				<h5 style="color: red;">* Mandatory Field....</h5>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<div class=" text-right">
+						<button type="submit" class="btn btn-primary"
+								ng-click="Ntr.submit(newroute)" style="">Save</button>&nbsp;&nbsp;&nbsp;
+						<button class="btn btn-warning" ng-click="Ntr.closeModal()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<style type="text/css">
+	.md-dialog-container{z-index: 9999;    }
+	.modal-content{
+		width: 700px;
+	}
+</style>

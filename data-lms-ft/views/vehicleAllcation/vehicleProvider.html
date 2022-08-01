@@ -1,0 +1,38 @@
+<div class="row" style="margin:15px">
+	<div class="col-md-4">
+		<div class="form-group m-b-0">
+			<label class="col-sm-6 control-label">Select Type Of Vehicle:</label>
+			<div class="col-sm-6">
+				<div class="select">
+					<select class="form-control"
+							ng-model="formDataSelected.vehicle_type"
+							ng-change="vTypeChange(formDataSelected.vehicle_type)"
+							ng-options="v for v in $constants.aVehicleProvider">
+						<option value="" disabled selected>Select</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4"></div>
+</div>
+
+
+<br>
+<br>
+<br>
+<div class="form-group row">
+	<div class="col-xs-6 col-xs-offset-3">
+		<a ng-click="getAllRegVehicle()"
+		   ng-show="formDataSelected.vehicle_type"
+		   ui-sref="booking_manage.vehicleAlollcation.vehicleDriver" class="btn btn-block btn-info">
+			Vehicle & Driver Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
+		</a>
+	</div>
+</div>
+
+
+
+<style>
+	.selectItem:hover{background: #dddddd;}
+</style>

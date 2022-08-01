@@ -1,0 +1,315 @@
+<!-- Controller: crossDockingAddController -->
+<!-- ControllerAs: acdVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="acdVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Cross Docking</b>
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+			</span>
+		</span>
+	</h4>
+</div>
+
+
+<form name="CrossDockingForm" novalidate autocomplete="off">
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- Basic DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">BASIC DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-3 control-label">Vehicle: <span class="req_r">*</span></label>
+								<div class="col-md-9">
+									<div class=" ng-scope sear">
+										<input type="text"
+											   placeholder="Vehicle Search..."
+											   ng-model="acdVm.oGrData.vehicle"
+											   class="lvhs-input form-control"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.vehicle_reg_no for item in acdVm.getAllVehicle($viewValue)"
+											   typeahead-on-select="acdVm.onVehicleSelect(acdVm.oGrData.vehicle)"
+											   required>
+										<i class="lvh-search-close" ng-click="acdVm.oGrData.vehicle=undefined;">×</i>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-3 control-label">Driver: <span class="req_r">*</span></label>
+								<div class="col-md-9">
+									<div class=" ng-scope sear">
+										<input type="text"
+											   placeholder="Driver Search..."
+											   ng-model="acdVm.oGrData.driver"
+											   class="lvhs-input form-control"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in acdVm.getAllDriver($viewValue)"
+											   required>
+										<i class="lvh-search-close" ng-click="acdVm.oGrData.driver=undefined;">×</i>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-3 control-label">Branch: <span class="req_r">*</span></label>
+								<div class="col-md-9">
+									<div class=" ng-scope sear">
+										<input type="text"
+											   placeholder="Branch Search..."
+											   ng-model="acdVm.oGrData.branch"
+											   class="lvhs-input form-control"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in acdVm.getAllBranch($viewValue)"
+											   required>
+										<i class="lvh-search-close" ng-click="acdVm.oGrData.branch=undefined;">×</i>
+									</div>
+								</div>
+
+							</div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Source<span class="req_r">*</span></label>
+										<div class="col-sm-9">
+											<div class="lvh-search ng-scope sear">
+												<input type="text"
+													   placeholder="Source"
+													   ng-model="acdVm.oGrData.ld"
+													   class="lvhs-input"
+													   typeahead-wait-ms="10"
+													   typeahead="item as item.c for item in acdVm.getRoute($viewValue) | limitTo: 15"
+													   class="form-control"
+													   name="Source"
+													   ng-required="true">
+												<i class="lvh-search-close"
+												   ng-click="acdVm.oGrData.ld=''">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Destination<span class="req_r">*</span></label>
+										<div class="col-sm-9">
+											<div class="lvh-search ng-scope sear">
+												<input type="text"
+													   placeholder="Destination"
+													   ng-model="acdVm.oGrData.uld"
+													   class="lvhs-input"
+													   typeahead-wait-ms="10"
+													   typeahead="item as item.c for item in acdVm.getRoute($viewValue) | limitTo: 15"
+													   class="form-control"
+													   name="Destination"
+													   ng-required="true">
+												<i class="lvh-search-close"
+												   ng-click="acdVm.oGrData.ld=''">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-3 control-label">KM: </label>
+								<div class="col-sm-9">
+									<div class="fg-line">
+										<input type="Number"
+											   ng-model="acdVm.oGrData.km"
+											   name="km"
+											   class="form-control input-sm"
+											   placeholder="km">
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-3 control-label">Vendor: </label>
+								<div class="col-sm-9">
+									<div class="fg-line">
+										{{acdVm.oGrData.vehicle.vendor_name}}
+									</div>
+								</div>
+							</div>
+
+							</div>
+						</div>
+				</li>
+
+				<!-- GR DETAILS -->
+				<li class="list-group-item">
+					<div class="pull-left">
+						<span class="booking_list_header">Add GR</span>
+					</div>
+					<div class="row hidden-print" style="margin:15px;">
+						<div class="col-md-2">
+							<div class="form-group m-b-0">
+								<input type="text"
+									   ng-model="acdVm.filter.grNo"
+									   name="GR No"
+									   class="form-control input-sm"
+									   placeholder="GR No">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group m-b-0">
+								<input type="text"
+									   ng-model="acdVm.filter.shipmentNo"
+									   name="Shipment No"
+									   class="form-control input-sm"
+									   placeholder="Shipment/Invoice No">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group m-b-0">
+								<input type="Number"
+									   ng-model="acdVm.filter.tripNo"
+									   name="Trip No"
+									   class="form-control input-sm"
+									   placeholder="Trip No">
+							</div>
+						</div>
+<!--						<div class="col-md-1">-->
+<!--							<div class="form-group m-b-0">-->
+<!--								<input-->
+<!--										fill-date-->
+<!--										type="text"-->
+<!--										class="form-control"-->
+<!--										placeholder="From"-->
+<!--										ng-model="vm.filter.from"-->
+<!--										ng-change="vm.filter.to=undefined;"-->
+<!--								>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--						<div class="col-md-1">-->
+<!--							<div class="form-group m-b-0">-->
+<!--								<input-->
+<!--										fill-date-->
+<!--										type="text"-->
+<!--										class="form-control"-->
+<!--										placeholder="To"-->
+<!--										ng-model="vm.filter.to"-->
+<!--								>-->
+<!--							</div>-->
+<!--						</div>-->
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<button class="btn btn-primary p-t-0 p-b-0"
+										style="margin-top: 10px;  font-size: 16px"
+										type="button"
+										ng-click="acdVm.getGr()"
+										ng-enabled="!acdVm.filter.grNo && !acdVm.filter.shipmentNo && !acdVm.filter.tripNo"
+										uib-tooltip="Search"
+										tooltip-placement="bottom">
+									<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+								</button>
+								<button class="btn btn-danger p-t-0 p-b-0"
+										style="margin-top: 10px;  font-size: 16px"
+										uib-tooltip="Remove Gr"
+										tooltip-placement="bottom"
+										type="button"
+										ng-click="acdVm.removeGr(acdVm.selectedGrIndex)">
+									<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row hidden-print" style="margin:15px;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="" style="overflow-y: auto; max-height: 500px;">
+										<table class="table table-bordered unresponsive">
+											<thead>
+											<tr>
+												<th style="min-width: 55px;">Trip No.</th>
+												<th style="min-width: 80px;">GR Date</th>
+												<th style="min-width: 55px;">GR No</th>
+												<th style="min-width: 100px;">Vehicle No.</th>
+												<th style="min-width: 100px;">Route</th>
+												<th style="min-width: 200px;">Consignor</th>
+												<th style="min-width: 200px;">Consignee</th>
+												<th style="min-width: 65px;">Freight</th>
+												<th style="min-width: 120px;">Total Freight</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr data-ng-repeat="oItem in acdVm.aItems"
+												ng-click="acdVm.selectedGrIndex = $index ;acdVm.selectedGr = oItem"
+												ng-class="{grn: acdVm.selectedGrIndex === $index}"
+												class="pointer">
+												<td>{{oItem.trip_no || 'NA'}}</td>
+												<td>{{(oItem.grDate | date : "dd-MM-y") || 'NA'}}</td>
+												<td>{{oItem.grNumber || 'NA'}}</td>
+												<td>{{oItem.vehicle_no || oItem.vehicle.vehicle_reg_no ||
+												'NA'}}
+												</td>
+												<td>{{(oItem.acknowledge.source ||
+														oItem.acknowledge.billedSource) +
+												' to ' + (oItem.acknowledge.destination ||
+														oItem.acknowledge.billedDestination) +
+												(oItem.route.route_distance ? '('+
+														oItem.route.route_distance
+														+')' : '')}}
+												</td>
+												<td>{{oItem.consignor.name || 'NA'}}</td>
+												<td>{{oItem.consignee.name || 'NA'}}</td>
+												<td>{{(oItem.basicFreight).toFixed(2) || 0}}</td>
+												<td>{{(oItem.totalFreight).toFixed(2) || 0}}</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button ng-disabled="acdVm.isDisable"
+				type="button"
+				class="btn btn-primary"
+				ng-click="acdVm.submit(CrossDockingForm)">SUBMIT
+		</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="acdVm.closeModal()">Close
+		</button>
+	</div>
+</form>
+
+<style>
+	.chosen-row-1 {
+		z-index: 1;
+	}
+
+	.chosen-row-2 {
+		z-index: 0;
+	}
+
+	.chosen-row-3 {
+		z-index: auto;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

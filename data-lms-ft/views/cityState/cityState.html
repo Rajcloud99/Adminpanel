@@ -1,0 +1,151 @@
+ <!--Controller:cityStateController-->
+ <!--cityStateControllerAs:vm-->
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>City State</b></span>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)" autocomplete="off">
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<input type="text"
+									   ng-model="vm.oFilter.city"
+									   name="name"
+									   class="form-control input-sm"
+									   placeholder="city"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<input type="text"
+									   ng-model="vm.oFilter.pinCode"
+									   name="name"
+									   class="form-control input-sm"
+									   placeholder="pinCode"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<input type="text"
+									   ng-model="vm.oFilter.district"
+									   name="name"
+									   class="form-control input-sm"
+									   placeholder="district"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<input type="text"
+									   ng-model="vm.oFilter.zone"
+									   name="name"
+									   class="form-control input-sm"
+									   placeholder="zone"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<select chosen
+										class="form-control"
+										placeholder="State Name"
+										ng-options="item.state as item.state for item in $constants.aGSTstates"
+										ng-model="vm.oFilter.state"
+										name="state_name">
+									<option value="">State Name</option>
+								</select>
+							</div>
+
+							<div class="col-md-2">
+								<div class="form-group m-b-0 text-center">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Search"
+											ng-click="vm.getAllCity()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Clear All"
+											ng-click="vm.oFilter={};vm.getAllCity()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Download"
+											ng-click="vm.downloadCity(true)"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="pull-right text-right m-t-5">
+
+							<button class="btn-primary btn-xs"
+									ng-click="vm.addPlace()"
+									uib-tooltip="Add Place"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+							</button>
+							&nbsp;&nbsp;
+							<button class="btn-primary btn-xs"
+									ng-click="vm.addPlace('edit')"
+									uib-tooltip="Edit Place"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+							</button>
+							&nbsp;&nbsp;
+							<button class="btn-danger btn-xs"
+								ng-click="vm.delPlace()"
+								uib-tooltip="Delete Place"
+								tooltip-placement="bottom">
+								<i class="zmdi zmdi-delete zmdi-hc-fw "></i>
+							</button>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div ja-table
+									 table-body="vm.aCity"
+									 table-head="vm.tableHead"
+									 table-height='500px'
+									 table-load="vm.getAllCity(true)"
+									 table-column-setting="vm.columnSetting"
+									 table-selectable='vm.selectType'
+									 table-api='vm.tableApi'
+									 table-selectable-model="vm.aSelectedCity"
+								></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.chosen-row-1{
+		z-index: 89;
+	}
+	tbody tr:hover{background: #dbd6d6;}
+	.m-t-10{margin-top: 10px;}
+</style>
+

@@ -1,0 +1,277 @@
+<!--Controller: shipmentTrackingController-->
+<!--controllerAs: sTVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Shipment Tracking</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(View)
+				</span>
+			</span>
+		</div>
+		<div class="pull-right" style="width:50%;">
+
+			<div class="col-md-1 pull-right">
+				<button class="btn-primary btn-xs"
+						type="button"
+						ng-if="$role['Shipment Tracking']['Sync Event']"
+						ng-click="sTVm.syncStatus(sTVm.selectedGr)"
+						uib-tooltip="Sync Event"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-share zmdi-hc-fw"></i>
+				</button>&nbsp;&nbsp;
+				<button class="btn-success btn-xs"
+						type="button"
+						ng-if="$role['Shipment Tracking']['Sync by Admin']"
+						ng-click="sTVm.syncStatus(sTVm.selectedGr)"
+						uib-tooltip="Sync Event By admin"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-share zmdi-hc-fw"></i>
+				</button>&nbsp;&nbsp;
+<!--				<button class="btn-primary btn-xs"-->
+<!--						type="button"-->
+<!--						ng-click="sTVm.downloadExl(true)"-->
+<!--						uib-tooltip="Download Exl"-->
+<!--						tooltip-placement="bottom">-->
+<!--					<i class="zmdi zmdi-download zmdi-hc-fw"></i>-->
+<!--				</button>-->
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style="min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix" style="padding: 5px;">
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<div class="col-md-12">
+							<form role="form">
+
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="text" ng-model="sTVm.oFilter.shipmentNo" name="Shipment No"
+											   class="form-control input-sm" placeholder="Shipment No"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="text" ng-model="sTVm.oFilter.grNumber" name="grNumber"
+											   class="form-control input-sm" placeholder="GR No"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Vehicle Search..."
+											ng-model="sTVm.oFilter.vehicle_no"
+											typeahead-wait-ms="10"
+											typeahead="item as item.vehicle_reg_no for item in sTVm.getVehicles($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="sTVm.oFilter.vehicle_no='';">×</i>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="sTVm.oFilter.status">
+											<option value="">Event Status</option>
+											<option value="Vehicle Arrived for loading">Arrived(Vehicle Arrived for loading)</option>
+											<option value="Loading Ended">Picked Up(Loading Ended)</option>
+											<option value="Vehicle Arrived for unloading">Arrived at Terminal Location(Vehicle Arrived for unloading)</option>
+											<option value="Unloading Ended">Delivered(Unloading Ended)</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="sTVm.oFilter.delivered">
+											<option value="">Delivered Status</option>
+											<option value="true">Delivered</option>
+											<option value="false">Not Delivered</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="sTVm.oFilter.sync">
+											<option value="">sync Status</option>
+											<option value="true">sync</option>
+											<option value="false">Not sync</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control"
+												ng-model="sTVm.oFilter.dateType">
+											<option value="">Select Date</option>
+											<option value="grDate">Gr Date</option>
+											<option value="statuses.date">Event Date</option>
+											<option value="statuses.syncDate">Sync Date</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-2 col-md-2 col-lg-1">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="sTVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   uib-datepicker-popup="{{sTVm.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="sTVm.DatePicker.newDate"
+												   ng-model="sTVm.oFilter.from"
+												   is-open="opened1"
+												   datepicker-options="sTVm.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="From Date"
+												   name="From Date"
+												   required
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="sTVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened2 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="sTVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+												   type="text" class="form-control"
+												   datepicker-popup="{{sTVm.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="sTVm.DatePicker.newDate"
+												   min-date="sTVm.oFilter.from"
+												   ng-model="sTVm.oFilter.to"
+												   is-open="opened2"
+												   datepicker-options="sTVm.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="To Date"
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+											  <button type="button" class="btn btn-default m-t-0 f12"
+													  ng-click="sTVm.DatePicker.openDatePicker(this, $event, 'opened2')">
+												  <i class="glyphicon glyphicon-calendar"></i>
+											  </button>
+										</span>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="text-center">
+										<button class="btn btn-primary p-t-0 p-b-0" ng-disabled="buttonDisable"
+												type="button"
+												style="font-size: 16px"
+												uib-tooltip="Search"
+												ng-click="sTVm.getAllGR()"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0"
+												style="font-size: 16px"
+												uib-tooltip="Clear Search"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="sTVm.oFilter={}; buttonDisable = false;">
+											<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0"
+												type="button"
+												style="font-size: 16px"
+												uib-tooltip="Download Report(xlsx)"
+												ng-click="sTVm.getAllGR(false, true)"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0"
+												type="button"
+												style="font-size: 16px"
+												uib-tooltip="Download Report(csv)"
+												ng-click="sTVm.getAllGR(false, 'csv')"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+							</form>
+
+						</div>
+
+						<div class="clearfix"></div>
+
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-12">
+										<div ja-table
+											 table-body="sTVm.aShipment"
+											 table-head="sTVm.tableHead"
+											 table-column-setting="sTVm.columnSetting"
+											 table-load="sTVm.getAllGR(true, false)"
+											 table-height='700px'
+											 table-Uid="'uKey'"
+											 table-selectable="'multiple'"
+											 table-api="sTVm.tableApi"
+											 table-selectable-model="sTVm.selectedGr"
+										></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+
+	.pull-right.ng-scope a {
+		font-size: 22px;
+	}
+	.color1{
+		background: rgb(30, 175, 20);
+		color: white;
+	}
+	.color2{
+		background: rgb(199, 194, 32);
+		color: white;
+	}
+</style>

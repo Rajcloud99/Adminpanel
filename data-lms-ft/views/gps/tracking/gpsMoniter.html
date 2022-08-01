@@ -1,0 +1,103 @@
+<!--controller: gMcVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0" >
+		<div class="col-md-2">
+			<div class="fg-line form-group m-b-0">
+				<select chosen
+						class="form-control"
+						ng-model="gMcVm.segmentType"
+						ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+						ng-change="gMcVm.getData(); gMcVm.setKpi(gMcVm.vehicleWiseData);"
+						ng-disabled="!gMcVm.vehicleWiseData"
+						name="Consignor">
+					<option value="" selected>Select Segment Type</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-12">
+				<div class="col-md-3"
+					 ng-if="gMcVm.aStatusDataValue.length"
+					 ng-repeat="oStatus in gMcVm.aStatusData">
+					<dashboard graph="oStatus"
+							   api="api"
+							   graph-data="gMcVm.aStatusDataValue[$index]"></dashboard>
+				</div>
+			</div>
+			<!-- TODO below graph has to be extended and currently ist put on hold-->
+			<!--<div class="col-md-12">-->
+				<!--<div class="col-md-12"-->
+					 <!--ng-if="gMcVm.aVehData.length">-->
+					<!--<dashboard graph-data="gMcVm.aVehData"-->
+							   <!--graph="gMcVm.aCurrentETAData"></dashboard>-->
+				<!--</div>-->
+				<!--&lt;!&ndash;<div class="col-md-4"&ndash;&gt;-->
+					 <!--&lt;!&ndash;ng-if="gMcVm.data">&ndash;&gt;-->
+					<!--&lt;!&ndash;<dashboard graph="gMcVm.aVehAnalysisData"></dashboard>&ndash;&gt;-->
+				<!--&lt;!&ndash;</div>&ndash;&gt;-->
+			<!--</div>-->
+		</div>
+	</div>
+</div>
+
+<style>
+	dashboard .container:not(.ja-containter){
+		width: 100%;
+	}
+
+	.ja-back{
+		position: absolute;
+		right: 40px;
+		top: 10px;
+		z-index: 1;
+	}
+
+	.red{
+		color: red;
+	}
+
+	.fs-25{
+		font-size: 25px;
+	}
+
+	.ja-fullscreen{
+		position: fixed;
+		z-index: 10;
+		left: 0;
+		top: 40px;
+		width: 100% !important;
+		margin: 0 !important;
+		height: 100vh;
+		background: #0000003d;
+	}
+
+	.ja-fullscreen .card{
+		height: 80% !important;
+		width: 90%;
+		margin: 30px auto;
+		border-radius: 5px;
+	}
+
+	.nvd3-wrapper{
+		height: calc(100% - 100px) !important;
+		width: 100% !important;
+	}
+
+	nvd3, svg{
+		/*height: calc(100% - 40px) !important;*/
+		height: 100% !important;
+		width: 100% !important;
+	}
+
+	.unresponsive thead tr th{
+		min-width: 0 !important;
+		max-width: none !important;
+		padding: 5px 10px !important;
+	}
+</style>

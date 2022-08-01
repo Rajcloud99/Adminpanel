@@ -1,0 +1,118 @@
+<!--controllre: updateTripRoutePopupCtrl-->
+<!--controllreAs: utrVm-->
+<!--******** For MMP*********-->
+<form role="form"  name="TripRouteUpdatePopUp" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="utrVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Trip No. {{trip.trip_no}}</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="row">
+
+				<div class="form-group col-md-6" ng-if="($configs.trips.updateRoute)">
+					<label class="col-sm-4 control-label">Loading Point :<span
+							class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<input type="text"
+							   placeholder="Source Search..."
+							   ng-model="utrVm.ld"
+							   on-select="utrVm.onSelectSource($item)"
+							   class="form-control"
+							   place-autocomplete
+							   name="Loading Point"
+							   required>
+						<i class="lvh-search-close" ng-click="utrVm.ld=''">×</i>
+						<span class="error" ng-if="TripRouteUpdatePopUp['Loading Point'].$error.required
+									&& (TripRouteUpdatePopUp['Loading Point'].$touched
+										|| TripRouteUpdatePopUp.$submitted)">
+									This Field is Mandatory</span>
+					</div>
+				</div>
+				<div class="form-group col-md-6" ng-if="($configs.trips.updateRoute)">
+					<label class="col-sm-4 control-label">Unloading Point :<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<input type="text"
+							   placeholder="Dest Search..."
+							   ng-model="utrVm.uld"
+							   place-autocomplete
+							   class="form-control"
+							   typeahead-wait-ms="10"
+							   on-select="utrVm.onSelectDest($item)"
+							   name="Unloading Point"
+							   required>
+						<i class="lvh-search-close" ng-click="utrVm.uld=''">×</i>
+						<span class="error" ng-if="TripRouteUpdatePopUp['Unloading Point'].$error.required
+									 	 && (TripRouteUpdatePopUp['Unloading Point'].$touched
+										  || TripRouteUpdatePopUp.$submitted)">
+									  This Field is Mandatory</span>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label"> Km :<span
+								class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number"
+									   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onwheel="return false"
+									   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+									   placeholder="Enter Total Km"
+									   ng-model="utrVm.rKm"
+									   step="0.001"
+									   class="form-control"
+									   max="5000"
+									   name="Route Km"
+									   required>
+							</div>
+							<span class="error" ng-if="	(TripRouteUpdatePopUp['Route Km'].$error.required
+																			&& (TripRouteUpdatePopUp['Route Km'].$touched
+																				|| TripRouteUpdatePopUp.$submitted))">
+												This Field is Mandatory
+											</span>
+							<span class="error col-sm-12" ng-if="TripRouteUpdatePopUp['Route Km'].$error.max">Max 5000 Km allowed</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Remark <span class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<input type="text" class="form-control" ng-model="utrVm.remark" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<br>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-disabled="!(utrVm.remark)" ng-click="utrVm.submit()">Update Route</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="utrVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 50%;
+		height: 173px
+	}
+	.exced{
+		margin-top: 20px;margin-left:10px;
+	}
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+	td ,th{
+		text-align:center;
+	}
+	.pac-container.pac-logo{z-index: 9999;}
+</style>

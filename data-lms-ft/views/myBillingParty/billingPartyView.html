@@ -1,0 +1,127 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Billing Party</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(Detail View)
+				</span>
+			</span>
+		</div>
+		<div class="pull-right m-t-5 m-b-5">
+			<button class="btn btn-primary pull-right" ng-if="$role['Billing Party']['Update']"
+					ng-disabled="oBillingParty.clientId != selectedClient"
+					ng-click="upsertBillingParty(oBillingParty)"
+					uib-tooltip="Edit">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>&nbsp;&nbsp;
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px" id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<div class="card-body">
+			<form name="billingParty" ng-submit="submit(billingParty)" novalidate>
+				<ul class="list-group list-group-flush">
+					<!-- BASIC BillingParty DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">BASIC Billing Party DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Name: </label>
+										<div class="col-sm-6">
+											{{oBillingParty.name}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Address: </label>
+										<div class="col-sm-6">
+											{{oBillingParty.address}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Type:    </label>
+										<div class="col-sm-6">
+											{{oBillingParty.category}}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Contact person: </label>
+										<div class="col-sm-6">
+											{{oBillingParty.contact_person}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Contact Number: </label>
+										<div class="col-sm-6">
+											{{oBillingParty.contact_number}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">GSTIN: </label>
+										<div class="col-sm-6">
+											{{oBillingParty.gstin}}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">State Code: </label>
+										<div class="col-sm-6">
+											{{oBillingParty.state_code}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="$configs.master.showAccount">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Account: </label>
+										<div class="col-sm-6">
+											{{oBillingParty.account.name || 'NA'}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="$configs.master.showAccount">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Account Ledger: </label>
+										<div class="col-sm-6">
+											{{oBillingParty.account.ledger_name || oBillingParty.account.name|| 'NA'}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	label{
+		font-weight: bold !important;
+	}
+
+</style>
+

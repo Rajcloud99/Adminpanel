@@ -1,0 +1,343 @@
+<!-- Controller: grReceivePopUpCtrl -->
+
+
+<form role="form" name="upReceive" autocomplete="off" novalidate>
+	<div class="validationError" ng-show="grPopup"><h5 class="c-red">* {{gmsg}}</h5></div>
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Gr received for Trip No. {{gr.trip.trip_no}}, for Route: {{route ||
+			gr.route.name}}</h4><br>
+		<h5 class="modal-title" align="center">Branch : {{gr.branch.name}}</h5><br>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!--Approval DETAILS-->
+				<li class="list-group-item">
+					<div class="row" style="">
+
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label"><b>Dispatch By :</b></label>
+								<div class="col-sm-8">
+									<div class="select">
+										<select class="form-control"
+												ng-model="grReceive.type"
+												ng-options="option as option for option in aDispatched_by"
+												ng-init="(!grReceive.type) ?grReceive.type = aDispatched_by[0]: grReceive.type "
+												ng-change="dispatch(grReceive)">
+											<option value="" disabled> Select</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3" ng-if="grReceive.type === 'Courier'">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label"><b>Courier Name :</b></label>
+								<div class="col-sm-8">
+									<div class="select">
+										<select class="form-control"
+												ng-model="grReceive.courier"
+												ng-options="option._id as option.name for option in aCourier"
+										>
+											<option value="" disabled>Select Name</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-6 m-b-5 col-sm-3 col-md-3 col-lg-3" ng-if="grReceive.type === 'Driver'">
+							<div class="lvh-search ng-scope sear">
+								<input
+									type="text"
+									class="form-control lvhs-input"
+									placeholder="Driver Search..."
+									ng-model="grReceive.driver"
+									typeahead-wait-ms="10"
+									typeahead="option as (option.nameCode || option.name) for option in aDriver | limitTo:6"
+									ng-change="getDriver(grReceive.driver)"
+									typeahead-on-select="onSelectDriver($item, $model, $label)"
+								>
+								<i class="lvh-search-close" ng-click="grReceive.driver=null;aDriver=null">×</i>
+							</div>
+						</div>
+						<div class="col-md-3" ng-if="grReceive.type === 'By Hand'">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label"><b>Person :</b></label>
+								<div class="col-sm-8">
+									<div class="fg-line">
+										<input type="text"
+											   ng-model="grReceive.person" class="form-control">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label"><b>AR No. :</b></label>
+								<div class="col-sm-8">
+									<div class="fg-line">
+										<input type="text"
+											   ng-model="arNo" class="form-control">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label"><b>AR Remark :</b></label>
+								<div class="col-sm-8">
+									<div class="fg-line">
+										<input type="text"
+											   ng-model="arRemark" class="form-control">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="">
+
+						<div class="col-md-3">
+							<label class="col-sm-4 control-label"><b>Loading Arrival:</b></label>
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   min-date="gr.grDate"
+										   ng-model="gr.pod.loadingArrivalTime"
+										   is-open="opened1"
+										   ng-change="loadingArrivalTimeModel= gr.pod.loadingArrivalTime"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Loding Arrival Date"
+										   name="Loding Arrival"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+							</div>
+
+							<div class="col-md-1">
+
+								<timepicker ng-show="gr.pod.loadingArrivalTime"
+											ng-model="loadingArrivalTimeModel"
+											show-spinners="false"
+											show-meridian="false">
+								</timepicker>
+
+							</div>
+
+						</div>
+						<div class="col-md-3">
+							<label class="col-sm-4 control-label"><b>Loading End:</b></label>
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened5 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened5 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened5')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="gr.pod.billingLoadingTime"
+										   is-open="opened5"
+										   min-date="gr.pod.loadingArrivalTime || gr.grDate"
+										   ng-change="billingLoadingTimeModel=gr.pod.billingLoadingTime "
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Loding End Date"
+										   name="Loding End"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened5')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+							</div>
+
+							<div class="col-md-1">
+
+								<timepicker ng-show="gr.pod.billingLoadingTime"
+											ng-model="billingLoadingTimeModel"
+											show-spinners="false"
+											show-meridian="false">
+								</timepicker>
+
+							</div>
+
+						</div>
+						<div class="col-md-3">
+							<label class="col-sm-4 control-label"><b>Unloding Arrival:</b></label>
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened4 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened4')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   min-date="gr.pod.billingLoadingTime || gr.pod.loadingArrivalTime || gr.grDate"
+										   ng-model="gr.pod.unloadingArrivalTime"
+										   is-open="opened4"
+										   ng-change="unloadingArrivalTimeModel=gr.pod.unloadingArrivalTime"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="UnLoding Arrival Date"
+										   name="UnLoding ArrivalTime"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+			    <button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened4')"><i
+					class="glyphicon glyphicon-calendar"></i></button>
+			 </span>
+							</div>
+							<div class="col-md-1">
+
+								<timepicker ng-show="gr.pod.unloadingArrivalTime"
+											ng-model="unloadingArrivalTimeModel"
+											show-spinners="false"
+											show-meridian="false">
+								</timepicker>
+
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label class="col-sm-4 control-label"><b>Unloding End :</b></label>
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened2 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   min-date="gr.pod.unloadingArrivalTime || gr.pod.billingLoadingTime || gr.pod.loadingArrivalTime || gr.grDate"
+										   ng-model="gr.pod.billingUnloadingTime"
+										   is-open="opened2"
+										   ng-change="billingUnloadingTimeModel=gr.pod.billingUnloadingTime"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="UnLoding End Date"
+										   name="UnLoding End"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+							</div>
+							<div class="col-md-1">
+
+								<timepicker ng-show="gr.pod.billingUnloadingTime"
+											ng-model="billingUnloadingTimeModel"
+											show-spinners="false"
+											show-meridian="false">
+								</timepicker>
+
+							</div>
+						</div>
+					</div>
+					<div class="row" style="">
+
+						<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+							<label class="col-sm-4 control-label"><b>AR Date :</b></label>
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened3 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="arDate"
+										   min-date="ar_MinDate"
+										   is-open="opened3"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="arDate"
+										   name="arDate"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+							</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="col-md-4"><b>Gr No :</b></div>
+							<div class="col-md-8">{{gr.grNumber}}</div>
+						</div>
+						<div class="col-md-2">
+							<div class="col-md-4"><b>Gr Date :</b></div>
+							<div class="col-md-8">{{gr.grDate | date: 'dd-MMMM-yyyy'}}</div>
+						</div>
+
+						<div class="col-md-2">
+							<div class="col-md-4"><b>Gr Type :</b></div>
+							<div class="col-md-8">{{gr.gr_type}}</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-3 control-label"><b>AR Branch</b></label>
+								<div class="col-sm-9">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   placeholder="AR Branch"
+											   ng-model="branch"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item.name as item.name for item in getARBranch($viewValue) | limitTo: 5"
+											   class="form-control"
+												ng-init="(!branch && $configs.tripMemo.arbrchAutoFill) ? branch = 'Gurgaon Office': branch "
+											   name="AR Branch">
+										<i class="lvh-search-close"
+										   ng-click="branch=''">×</i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="update(upReceive)">Submit</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+
+
+	<div class="col-md-12">
+		<h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 75%;
+		height: 173px
+	}
+</style>

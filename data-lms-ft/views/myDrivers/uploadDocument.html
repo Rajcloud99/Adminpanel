@@ -1,0 +1,106 @@
+<div class="panel-body">
+	<form ng-controller="driverDocumentController" name="DrivDocumentForm">
+	    <div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">    
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Driver Photo </label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('photo').click();">Select File</button>
+                    <input ng-hide="true" id="photo" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="photo" name="photo"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.photo.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.photo.$valid" ngf-src="photo"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="driverPreview(driver.photo)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="driver.photo && !photo">Preview</button >
+                    <button ng-click="photo = null" ng-show="photo" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Address Proof Front Copy</label>
+            <div class="col-sm-9">
+                <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                        onclick="document.getElementById('address_proof_front_copy').click();">Select File</button>
+                <input ng-hide="true" id="address_proof_front_copy" type="file" accept="image/*,application/pdf"
+                       ngf-select ng-model="address_proof_front_copy" name="address_proof_front_copy"
+                       ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                <i ng-show="myForm.address_proof_front_copy.$error.maxSize">File too large
+                    {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                <img ng-show="fileUploadForm.address_proof_front_copy.$valid" ngf-src="address_proof_front_copy"
+                     ngf-resize="{width: 100, height: 100}">
+                <button ng-click="driverPreview(driver.address_proof_front_copy)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="driver.address_proof_front_copy && !address_proof_front_copy">Preview</button >
+                <button ng-click="address_proof_front_copy = null" ng-show="address_proof_front_copy" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                <br>
+            </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Address Proof Back Copy </label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('address_proof_back_copy').click();">Select File</button>
+                    <input ng-hide="true" id="address_proof_back_copy" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="address_proof_back_copy" name="address_proof_back_copy"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.address_proof_back_copy.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.address_proof_back_copy.$valid" ngf-src="address_proof_back_copy"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="driverPreview(driver.address_proof_back_copy)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="driver.address_proof_back_copy && !address_proof_back_copy">Preview</button >
+                    <button ng-click="address_proof_back_copy = null" ng-show="address_proof_back_copy" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Driver License Front Copy</label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('license_front_copy').click();">Select File</button>
+                    <input ng-hide="true" id="license_front_copy" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="license_front_copy" name="license_front_copy"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.license_front_copy.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.license_front_copy.$valid" ngf-src="license_front_copy"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="driverPreview(driver.license_front_copy)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="driver.license_front_copy && !license_front_copy">Preview</button >
+                    <button ng-click="license_front_copy = null" ng-show="license_front_copy" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+		
+        <div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Driver License Back Copy</label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('license_back_copy').click();">Select File</button>
+                    <input ng-hide="true" id="license_back_copy" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="license_back_copy" name="license_back_copy"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.license_back_copy.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.license_back_copy.$valid" ngf-src="license_back_copy"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="driverPreview(driver.license_back_copy)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="driver.license_back_copy && !license_back_copy">Preview</button >
+                    <button ng-click="license_back_copy = null" ng-show="license_back_copy" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+        <div class="row" style="margin-left: 16%;">
+			<div class="col-md-12">
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary"
+						ng-click="uploadDriverDoc(DrivDocumentForm)">Upload</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

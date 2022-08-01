@@ -1,0 +1,116 @@
+  <div class="modal-header p-b-0" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Gr Detail</h4><br>
+	  <div class="row">
+		  <div class="col-md-12">
+			  <span class="booking_list_header">General Detail</span>
+		  </div>
+		  <div class="col-md-6">
+			  <p class="col-md-6 m-b-0"><b>Gr Number:</b></p>
+			  <p class="col-md-6 m-b-0">{{gr.grNumber}}</p>
+		  </div>
+		  <div class="col-md-6">
+			  <p class="col-md-6 m-b-0"><b>Gr Date:</b></p>
+			  <p class="col-md-6 m-b-0">{{gr.grDate | date:'dd-MMMM-yyyy'}}</p>
+		  </div>
+		  <div class="col-md-6">
+			  <p class="col-md-6 m-b-0"><b>Trip No:</b></p>
+			  <p class="col-md-6 m-b-0">{{gr.trip.trip_no}}</p>
+		  </div>
+		  <div class="col-md-6">
+			  <p class="col-md-6 m-b-0"><b>Vehicle No.:</b></p>
+			  <p class="col-md-6 m-b-0">{{gr.trip.vehicle_no}}</p>
+		  </div>
+		  <div class="col-md-6">
+			  <p class="col-md-6 m-b-0"><b>Vehicle Type:</b></p>
+			  <p class="col-md-6 m-b-0">{{gr.trip.vehicle.veh_type.name}}</p>
+		  </div>
+		  <div class="col-md-6">
+			  <p class="col-md-6 m-b-0"><b>Route:</b></p>
+			  <p class="col-md-6 m-b-0">{{gr.trip.route.name}}</p>
+		  </div>
+		  <div class="col-md-12 m-t-10">
+			  <span class="booking_list_header"><b>Weight Details</b></span>
+		  </div>
+		  <div class="col-md-4" ng-show="configs['GR']['Add']['Show field']['Loading Tare Weight']">
+			  <p class="col-md-10 m-b-0"><b>Loading Tare Weight:</b></p>
+			  <p class="col-md-2 m-b-0">{{gr.l_tare_w}}</p>
+		  </div>
+		  <div class="col-md-4" ng-show="configs['GR']['Add']['Show field']['Loading Gross Weight']">
+			  <p class="col-md-10 m-b-0"><b>Loading Gross Weight:</b></p>
+			  <p class="col-md-2 m-b-0">{{gr.l_gross_w}}</p>
+		  </div>
+		  <div class="col-md-4" ng-show="configs['GR']['Add']['Show field']['Loading Net Weight']">
+			  <p class="col-md-10 m-b-0"><b>Loading Net Weight:</b></p>
+			  <p class="col-md-2 m-b-0">{{gr.l_net_w}}</p>
+		  </div>
+		  <div class="col-md-4" ng-show="configs['GR']['Add']['Show field']['Unloading Tare Weight']">
+			  <p class="col-md-10 m-b-0"><b>Unoading Gross Weight:</b></p>
+			  <p class="col-md-2 m-b-0">{{gr.ul_gross_w}}</p>
+		  </div>
+		  <div class="col-md-4" ng-show="configs['GR']['Add']['Show field']['Unloading Gross Weight']">
+			  <p class="col-md-10 m-b-0"><b>Unoading Tare Weight:</b></p>
+			  <p class="col-md-2 m-b-0">{{gr.ul_tare_w}}</p>
+		  </div>
+		  <div class="col-md-4" ng-show="configs['GR']['Add']['Show field']['Unloading Net Weight']">
+			  <p class="col-md-10 m-b-0"><b>Unoading Net Weight:</b></p>
+			  <p class="col-md-2 m-b-0">{{gr.ul_net_w}}</p>
+		  </div>
+		  <div class="col-md-4">
+			  <p class="col-md-6 m-b-0"><b>Weight:</b></p>
+			  <p class="col-md-6 m-b-0">{{gr.weight}}</p>
+		  </div>
+		  <div class="col-md-12 m-t-10">
+			  <span class="booking_list_header">Bill Details</span>
+		  </div>
+		  <div class="col-md-12">
+			  <p class="col-md-3 m-b-0"><b>Bills:</b> </p>
+			  <p class="col-md-9 m-b-0">
+				  <span ng-repeat="bill in grBillDetail.bills">
+					 <span
+							 ng-class="bill.cancelled ? 'strikeThrough' : (bill.approve.status ? 'activeBill' : '')"
+							 ng-click="printBill(bill)"
+							 class="pointer">&nbsp;&nbsp;Bill{{bill.billNo}}&nbsp;&nbsp;</span>
+					  <span ng-hide="grBillDetail.bills.length === $index+1">,</span>
+				  </span>
+				  <span ng-if="grBillDetail.bills.length === 0">
+					  No Bill Generated
+				  </span>
+			  </p>
+		  </div>
+		  <div class="col-md-12">
+			  <p class="col-md-3 m-b-0"><b>Provisional Bills:</b> </p>
+			  <p class="col-md-9 m-b-0">
+				  <span ng-repeat="provisionalBill in grBillDetail.provisionalBills">
+					  <span
+							  ng-class="provisionalBill.cancelled ? 'strikeThrough' : (provisionalBill.approve.status ? 'activeBill' : '')"
+							  class="pointer"
+							  ng-click="printBill(provisionalBill)">&nbsp;&nbsp;Bill-{{provisionalBill.billNo}}&nbsp;&nbsp;</span>
+					  <span ng-hide="grBillDetail.provisionalBills.length === $index+1">,</span>
+				  </span>
+				  <span ng-if="grBillDetail.provisionalBills.length === 0">
+					  No Provisional Bill Generated
+				  </span>
+			  </p>
+		  </div>
+	  </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning"
+			ng-click="closeModal()">Close</button>
+  </div>
+  <style type="text/css">
+  .modal-dialog {width: 45%;
+        height: 173px
+    }
+	  .strikeThrough{
+		  text-decoration: line-through;
+	  }
+
+	  .activeBill{
+		  background-color: #9af019;
+	  }
+  </style>

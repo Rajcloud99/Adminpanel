@@ -1,0 +1,139 @@
+<div class="panel-body">
+	<form ng-controller="vehicle_Document" name="DocumentForm">
+	    <div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Vehicle Photo </label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('vehicle_image').click();">Select File</button>
+                    <input ng-hide="true" id="vehicle_image" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="vehicle_image" name="vehicle_image"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.vehicle_image.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.vehicle_image.$valid" ngf-src="vehicle_image"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="preview(vehicle.vehicle_image)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="vehicle.vehicle_image && !vehicle_image">Preview</button >
+                    <button ng-click="vehicle_image = null" ng-show="vehicle_image" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Permit Doc</label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('permit_doc').click();">Select File</button>
+                    <input ng-hide="true" id="permit_doc" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="permit_doc" name="permit_doc"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.permit_doc.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.permit_doc.$valid" ngf-src="permit_doc"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="preview(vehicle.permit_doc)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="vehicle.permit_doc && !permit_doc">Preview</button >
+                    <button ng-click="permit_doc = null" ng-show="permit_doc" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Fitness Certificate</label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('fitness_certificate_doc').click();">Select File</button>
+                    <input ng-hide="true" id="fitness_certificate_doc" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="fitness_certificate_doc" name="fitness_certificate_doc"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.fitness_certificate_doc.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.fitness_certificate_doc.$valid" ngf-src="fitness_certificate_doc"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="preview(vehicle.fitness_certificate_doc)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="vehicle.fitness_certificate_doc && !fitness_certificate_doc">Preview</button >
+                    <button ng-click="fitness_certificate_doc = null" ng-show="fitness_certificate_doc" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Chassis Trace</label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('chassis_trace').click();">Select File</button>
+                    <input ng-hide="true" id="chassis_trace" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="chassis_trace" name="chassis_trace"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.chassis_trace.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.chassis_trace.$valid" ngf-src="chassis_trace"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="preview(vehicle.chassis_trace)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="vehicle.chassis_trace && !chassis_trace">Preview</button >
+                    <button ng-click="chassis_trace = null" ng-show="chassis_trace" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+		<div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Insuarance Copy</label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('insurance_doc').click();">Select File</button>
+                    <input ng-hide="true" id="insurance_doc" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="insurance_doc" name="insurance_doc"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.insurance_doc.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.insurance_doc.$valid" ngf-src="insurance_doc"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="preview(vehicle.insurance_doc)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="vehicle.insurance_doc && !insurance_doc">Preview</button >
+                    <button ng-click="insurance_doc = null" ng-show="insurance_doc" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">Road Tax</label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('road_tax_doc').click();">Select File</button>
+                    <input ng-hide="true" id="road_tax_doc" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="road_tax_doc" name="road_tax_doc"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.road_tax_doc.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.road_tax_doc.$valid" ngf-src="road_tax_doc"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="preview(vehicle.road_tax_doc)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="vehicle.road_tax_doc && !road_tax_doc">Preview</button >
+                    <button ng-click="road_tax_doc = null" ng-show="road_tax_doc" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+            <div class="col-sm-6">
+                <label  class="col-sm-3 control-label">RC Book</label>
+                <div class="col-sm-9">
+                    <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                            onclick="document.getElementById('rc_book_doc').click();">Select File</button>
+                    <input ng-hide="true" id="rc_book_doc" type="file" accept="image/*,application/pdf"
+                           ngf-select ng-model="rc_book_doc" name="rc_book_doc"
+                           ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                    <i ng-show="myForm.rc_book_doc.$error.maxSize">File too large
+                        {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                    <img ng-show="fileUploadForm.rc_book_doc.$valid" ngf-src="rc_book_doc"
+                         ngf-resize="{width: 100, height: 100}">
+                    <button ng-click="preview(vehicle.rc_book_doc)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="vehicle.rc_book_doc && !rc_book_doc">Preview</button >
+                    <button ng-click="rc_book_doc = null" ng-show="rc_book_doc" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;">Remove</button>
+                    <br>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-left: 16%;">
+			<div class="col-md-12">
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary"
+						ng-click="upload_documents(DocumentForm)">Upload</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,47 @@
+<div class="container" ng-controller="vehicleAllcateController">
+  <div class="card m-b-0" id="messages-main">
+        <div class="" style=" min-height: 575px;">
+            <div class="listview lv-message">
+				<div class="" style="margin: 5px;border-bottom: 1px solid #ddd;">
+					<!-- the links to our nested states using relative paths -->
+					<!-- add the active class if the state matches our ui-sref -->
+					<ul class="nav nav-tabs">
+						<li><a ui-sref-active="active" class="active" ui-sref="booking_manage.vehicleAlollcation.vehicleProvider">Vehicle Provider</a></li>
+						<li>
+							<a ng-show="(formDataSelected.vehicle_type && (formDataSelected.vehicle_type === 'Market')?(selectedVendorInfo.vendorId):formDataSelected.vehicle_type)" ui-sref-active="active" ng-click="getAllRegVehicle()" ui-sref="booking_manage.vehicleAlollcation.vehicleDriver">Vehice & Driver</a>
+							<a ng-hide="(formDataSelected.vehicle_type && (formDataSelected.vehicle_type === 'Market')?(selectedVendorInfo.vendorId):formDataSelected.vehicle_type)" ui-sref-active="active">Vehice & Driver</a>
+						</li>
+						<li>
+							<a ng-show="aVehicleSelected.length > 0" ui-sref-active="active" ui-sref="booking_manage.vehicleAlollcation.bookingList" ng-click="getBookingForThisTab()">Booking List</a>
+							<a ng-hide="aVehicleSelected.length > 0" ui-sref-active="active">Booking List</a>
+						</li>
+						<li>
+							<a ng-show="aVehicleSelected[0].gr.length>0" ui-sref-active="active" ui-sref="booking_manage.vehicleAlollcation.allocate">Final Step</a>
+							<a ng-hide="aVehicleSelected[0].gr.length>0" ui-sref-active="active">Final Step</a>
+						</li>
+					</ul>
+				</div>
+
+				<!-- use ng-submit to catch the form submission and use our Angular function -->
+				<form id="signup-form" ng-submit="processAllocationForm()">
+					<!-- our nested state views will be injected here -->
+					<div id="form-views" ui-view></div>
+				</form>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+  .red {
+      background-color: rgb(255, 0, 0);
+      color: #fefefe;
+  }
+  .gray {
+      background-color: gray;
+      color: #ffffff;
+  }
+  .green {
+      background-color: rgba(0, 196, 6, 0.84);
+      color: white;
+  }
+</style>

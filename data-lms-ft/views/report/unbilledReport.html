@@ -1,0 +1,190 @@
+<div class="container" ng-controller="UnbilledReportController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<select chosen data-placeholder-text-single="'Report Type'" search-contains="true" allow-single-deselect="true"
+										no-results-text="'Could not find any Report Type'" class="form-control"
+										ng-model="reportType" ng-options="item as item for item in aStatus"
+										ng-change="downloadReport()">
+									<option value=""></option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="trip_no" name="trip_no" class="form-control input-sm"
+										   placeholder="Trip No" ng-model-options="{ updateOn: 'blur' }"
+										   ng-change="downloadReport()" style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="boe_no" name="boe_no" class="form-control input-sm"
+										   placeholder="BOE NO" ng-model-options="{ updateOn: 'blur' }"
+										   ng-change="downloadReport()" style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<!-- <select chosen data-placeholder-text-single="'Search Vehicle'"
+										allow-single-deselect="true" search-contains="true" no-results-text="'Could not find any Vehicle'"
+										class="form-control" ng-model="vehicle_no"
+										ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aVehicles"
+										ng-change="downloadReport()">
+									<option value=""></option>
+								</select> -->
+								<div class="lvh-search ng-scope sear">
+		                          <input type="text" placeholder="Vehicle Search..." ng-model="vehicle_no" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue" ng-change="getVname(vehicle_no)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+		                          <i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+		                        </div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<!-- <select chosen data-placeholder-text-single="'Search Route'"
+										allow-single-deselect="true" search-contains="true" no-results-text="'Could not find any Route'"
+										class="form-control" ng-model="route"
+										ng-options="item as item.name for item in aRoute" ng-change="downloadReport()">
+									<option value=""></option>
+								</select> -->
+								<div class="lvh-search ng-scope sear">
+		                            <input type="text" placeholder="Route Search..." ng-model="route" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aRoute | filter:$viewValue" ng-change="getDname(route)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+		                            <i class="lvh-search-close" ng-click="clearSearch('route')">×</i>
+		                        </div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<!-- <select chosen data-placeholder-text-single="'Search Customer'"
+										allow-single-deselect="true" search-contains="true" no-results-text="'Could not find any Customer'"
+										class="form-control" ng-model="customer"
+										ng-options="item as item.name for item in aCustomer"
+										ng-change="downloadReport()">
+									<option value=""></option>
+								</select> -->
+								<div class="lvh-search ng-scope sear">
+		                            <input type="text" placeholder="Customer Search..." ng-model="customer" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aCustomer | filter:$viewValue" ng-change="getCname(customer)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+		                            <i class="lvh-search-close" ng-click="clearSearch('customer')">×</i>
+		                        </div>
+							</div>
+							<!-- <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+                                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                                    <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                                        <input ng-click="open($event, 'opened1')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date" is-open="opened1" datepicker-options="dateOptions" close-text="Close" placeholder="From Date" ng-change="downloadReport()" style="padding: 0px 4px;height: 34px;" />
+                                    </div>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+                                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }" style=" ">
+                                    <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                                        <input ng-click="open($event, 'opened2')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="To Date" ng-change="downloadReport()" style="padding: 0px 4px; height: 34px;" />
+                                    </div>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                </div>
+                            </div> -->
+							<button ng-disabled="billingReportlength == 0" ng-click="downloadReport(true)"
+									class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Download
+							</button>
+							<button ng-click="downloadReport()" class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;margin-right:10px;">Search
+							</button>
+
+						</form>
+						<div class="clearfix"></div>
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>Sl No.</th>
+										<th>Bill No</th>
+										<th>Trip No</th>
+										<th>Trip Start Time</th>
+										<th>Trip End Time</th>
+										<th>Vehicle No.</th>
+										<th>Customer Name</th>
+										<th>Billing Party</th>
+										<th>Route Name</th>
+										<th>GR Type</th>
+										<th>GR No.</th>
+										<th>BOE No.</th>
+										<th>Container No</th>
+										<th>Container Type</th>
+										<th>Payment Basis</th>
+										<th>Weight(Tonne)</th>
+										<th>Rate</th>
+										<th>Frieght</th>
+										<th>GR Charges</th>
+										<th>Loading Charges</th>
+										<th>Unloading Charges</th>
+										<th>Weightman Charges</th>
+										<th>Fuel Price Hike</th>
+										<th>Other Charges</th>
+										<th>Over Weight Charges</th>
+										<th>Detaintion Charge</th>
+										<th>Extra Running</th>
+										<th>Total</th>
+										<th>Advance</th>
+										<th>Balance</th>
+										<th>Billed By</th>
+										<th>Remark</th>
+									</tr>
+									</thead>
+									<tbody>
+									<!-- <tr style="background:#f2da97">
+                                        <td colspan="37" style="text-align: start; font-weight: bold;">{{ name }}
+                                        </td>
+                                    </tr> -->
+									<tr ng-repeat="value in billingReport">
+										<td>{{$index+1}}</td>
+										<td>{{value.bill_no}}</td>
+										<td>{{value.trip_no}}</td>
+										<td>{{value.trip_start_time | date:'dd-MM-yyyy h:mm a'}}</td>
+										<td>{{value.trip_end_time | date:'dd-MM-yyyy h:mm'}}</td>
+										<td>{{value.veh_no}}</td>
+										<td>{{value.customer_name}}</td>
+										<td>{{value.billing_party_name}}</td>
+										<td>{{value.route}}</td>
+										<td>{{value.gr_type}}</td>
+										<td>{{value.gr_no}}</td>
+										<td>{{value.boe_no.join(', ')}}</td>
+										<td>{{value.container_no.join(', ')}}</td>
+										<td>{{value.container_size.join(', ')}}</td>
+										<td>{{value.payment_basis}}</td>
+										<td>{{value.weight}}</td>
+										<td>{{value.rate || 0}}</td>
+										<td>{{value.freight || 0}}</td>
+										<td>{{value.gr_charges || 0}}</td>
+										<td>{{value.loading_charges || 0}}</td>
+										<td>{{value.unloading_charges || 0}}</td>
+										<td>{{value.weightman_charges || 0}}</td>
+										<td>{{value.fuel_price_hike || 0}}</td>
+										<td>{{value.other_charges || 0}}</td>
+										<td>{{value.ovr_wt_chrgs || 0}}</td>
+										<td>{{value.dtn_amt || 0}}</td>
+										<td>{{value.othr_exp || 0}}</td>
+										<td>{{value.total || 0}}</td>
+										<td>{{value.advance || 0}}</td>
+										<td>{{value.balance || 0}}</td>
+										<td>{{value.billed_by.name}}</td>
+										<td>{{value.remarks}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div ng-if="billingReport.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any Report available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,111 @@
+<form name="VendorFuelForm" ng-controller="fuelVendorAddStationCtrl">
+    <div class="row" style="margin: 5px auto;">
+        <!--*************** Fuel prices ***************-->
+
+        <!--vendorFuel address 1-->
+        <div class="card-header" >
+            <h2 style="color: #847777;font-size: 16px;">Fuel Stations</h2>
+        </div>
+
+        <div class="card-body" style="padding-left: 25px;padding-right: 25px;">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="select">
+                        <select class="form-control" ng-model="objStation.fuel_type" ng-options="fType as fType for fType in aFuelType">
+                            <option value="" selected>Fuel type</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="select">
+                        <select class="form-control" ng-model="objStation.fuel_company" ng-options="fCompany as fCompany for fCompany in aFuelCompany">
+                            <option value="" selected>Fuel company</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="number" ng-model="objStation.fuel_price" class="input-sm form-control fg-input">
+                            <label class="fg-label">Fuel Price</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" ng-model="objStation.area_code" class="input-sm form-control fg-input">
+                            <label class="fg-label">Area</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group fg-float m-b-30">
+                        <div class="fg-line">
+                            <input type="text" ng-model="objStation.address" class="input-sm form-control fg-input">
+                            <label class="fg-label">State</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2" ng-show="vendorData">
+                    <a ng-click="addStation()" class="btn btn-primary waves-effect pointer">
+                        <i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fuel Type</th>
+                                    <th>Fuel Company</th>
+                                    <th>Fuel Price</th>
+                                    <th>Area</th>
+                                    <th>State</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="station in aFuelStationsAdd">
+                                    <td><input type="text" ng-model="station.fuel_type" class="form-control" ng-readonly="editMode"></td>
+                                    <td><input type="text" ng-model="station.fuel_company" class="form-control" ng-readonly="editMode"></td>
+                                    <td><input type="text" ng-model="station.fuel_price" class="form-control" ng-readonly="editMode"></td>
+                                    <td><input type="text" ng-model="station.area_code" class="form-control" ng-readonly="editMode"></td>
+                                    <td><input type="text" ng-model="station.address" class="form-control" ng-readonly="editMode"></td>
+                                    <td>
+                                        <a ng-click="updateStation(station)" class="btn btn-success waves-effect pointer" ng-show="savebtn">
+                                            <i class="zmdi zmdi-check-all zmdi-hc-fw"></i>
+                                        </a>
+                                        <a ng-click="editStation(station)" class="btn btn-primary waves-effect pointer" ng-hide="savebtn">
+                                            <i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+                                    <td>sds</td>
+                                    <td>sdsf</td>
+                                    <td>sdfsdf</td>
+                                    <td>sdfsdf</td>
+                                    <td>sdfsddf</td>
+                                    <td>
+                                        <a ng-click="updateStation(station)" class="btn btn-success waves-effect pointer" ng-show="savebtn">
+                                            <i class="zmdi zmdi-check-all zmdi-hc-fw"></i>
+                                        </a>
+                                        <a ng-click="editStation()" class="btn btn-primary waves-effect pointer" ng-hide="savebtn">
+                                            <i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+                                        </a>
+                                    </td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<style type="text/css">
+    .fg-float .fg-label{top: 0px;}
+</style>

@@ -1,0 +1,42 @@
+<form ng-controller="spareMsProfileCtrl">
+    <div ng-if="aSpareRoot.length>0" class="row" style="margin: 5px auto;">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-12">
+            <h5 class="profile_h">Spare Details</h5>
+            <div class="detailList">
+                <ul>
+                    <li><span>Name </span>{{sSpare.name || 'NA'}}</li>
+                    <li><span>Spare Code </span>{{sSpare.code || 'NA'}}</li>
+                    <li><span>Category Name </span> {{sSpare.category_name || 'NA'}}</li>
+                    <li><span>Category Code </span> {{sSpare.category_code || 'NA'}}</li>
+                    <li><span>Min. Requirment </span> {{sSpare.min_buffer || 'NA'}}</li>
+                    <li><span>Max. Requirment </span> {{sSpare.max_buffer || 'NA'}}</li>
+                    <li><span>Unit of Measure </span> {{sSpare.uom || 'NA'}}</li>
+                    <li><span>Active Status </span> {{sSpare.active_status || 'NA'}}</li>
+                 </ul>
+            </div>
+        </div>
+        <div class="col-md-12">
+              <h5 class="profile_h">Location</h5>
+              <div class="detailList">
+                  <ul>
+                    <li><span>Room </span> {{sSpare.room || 'NA'}}</li>
+                    <li><span>Shelf </span> {{sSpare.shelf || 'NA'}}</li>
+                    <li><span>Rack </span> {{sSpare.rack || 'NA'}}</li>
+                  </ul>
+            </div>
+        </div>
+        <!--<div class="col-md-12">
+          <h5 class="profile_h">Supported Vehicle Models </h5>
+          <div class="detailList">
+              <ul>
+                <li ng-repeat="mdl in sSpare.vehicle_models"> {{mdl}} </li>
+             </ul>
+          </div>
+        </div>-->
+      </div>
+      <div ng-show="aSpareRoot.length === 0">
+          <h4 style="text-align: center;color: darkgrey;">You have no spare registered. Please Register First.</h4>
+      </div>
+</form>

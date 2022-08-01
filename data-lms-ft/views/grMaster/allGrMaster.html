@@ -1,0 +1,82 @@
+<div class="card-body table-responsive" ng-controller="allGrMasterCtrl">
+  <div class="">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-right">
+      <div class="col-sm-3 ">
+        <div class="input-group input-group-sm" style="border: 1px solid #E8E8E8;padding: 6px; width:100%;">
+          <span class="glyphicon glyphicon-search" id="sizing-addon3"></span>
+          <input type="text" ng-model="grNum" placeholder="Search By GR No." title="Please Enter GR No." aria-describedby="sizing-addon3" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllMasterGr()" style="border: none;width:90%;">
+        </div>
+      </div>
+      <div class="col-sm-3 ">
+        <!--<div class="select" style="border: 1px solid #E8E8E8;">
+          <select class="form-control" placeholder="Search By Branch" ng-options="branch.name as branch.name for branch in aBranches" ng-model="branch_name" ng-change="getAllMasterGr()" style="height: 34px;">
+          <option value="" ng-click="getAllMasterGr()"> Select Branch </option> </select>
+        </div>-->
+		  <select chosen data-placeholder-text-single="'Search By Branch'" search-contains="true"
+				  allow-single-deselect="true" no-results-text="'Could not find any Customer'"
+				  class="form-control" ng-model="branch_name"
+				  ng-options="branch.name as branch.name for branch in aBranches" ng-change="getAllMasterGr()">
+			  <option value=""></option>
+		  </select>
+      </div>
+      <div class="col-sm-3 ">
+        <div class="input-group input-group-sm" style="border: 1px solid #E8E8E8;padding: 6px; width:100%;">
+          <span class="glyphicon glyphicon-search" id="sizing-addon2"></span>
+          <input type="text" ng-model="book_year" placeholder="Search By Year" title="Please Enter Year" aria-describedby="sizing-addon2" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllMasterGr()" style="border: none;width:90%;text-transform: uppercase;">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-12" style="margin-top: 5px;">
+    <div class="detailsList">
+      <div class="" style="overflow-y: auto;max-height: 400px;">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+			  			<th style="color:#fff;background: #2196f3;">S. No.</th>
+              <th style="color:#fff;background: #2196f3;">Branch Name</th>
+              <th style="color:#fff;background: #2196f3;">Format</th>
+              <th style="color:#fff;background: #2196f3;">Start</th>
+              <th style="color:#fff;background: #2196f3;">End</th>
+              <th style="color:#fff;background: #2196f3;">Book No.</th>
+              <th style="color:#fff;background: #2196f3;">Year</th>
+              <th style="color:#fff;background: #2196f3;">Added On</th>
+              <th style="color:#fff;background: #2196f3;">Added By</th>
+              <th style="color:#fff;background: #2196f3;">Description</th>
+              <th style="color:#fff;background: #2196f3;">Operate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-ng-repeat="oGrList in aAllGrMasterList" class="pointer selectItem" >
+			  <td>{{$index+1}}</td>
+              <td>{{oGrList.branch_name || 'NA'}}</td>
+              <td>{{oGrList.format || 'NA'}}</td>
+              <td>{{oGrList.gr_no_start || 'NA'}}</td>
+              <td>{{oGrList.gr_no_end || 'NA'}}</td>
+              <td>{{oGrList.book_no || 'NA'}}</td>
+              <td>{{oGrList.book_year || 'NA'}}</td>
+							<td>{{oGrList.created_at | date:'dd-MMM-yyyy'}}</td>
+							<td>{{oGrList.created_by_full_name || 'NA'}}</td>
+							<td>{{oGrList.remark || 'NA'}}</td>
+              <td><button>
+								<a
+										uib-tooltip="Edit Gr"
+										ng-click="editGrM(oGrList)"
+										tooltip-placement="top"
+								>
+									<i class="zmdi zmdi-edit"></i>
+								</a></button>
+							</td>
+						</tr>
+          </tbody>
+        </table>
+        <div class="pagi" ng-show="total_pages>1">
+          <pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+        </div>
+      <div ng-if="aAllGrMasterList.length == 0" class="ms-body" style=" min-height: 50px;">
+        <h3>No any GR book entry available !!!!!</h3>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

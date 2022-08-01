@@ -1,0 +1,254 @@
+<!--ng-controller="billBookController as billBookVm"-->
+
+<div class="container">
+<div class="card" style="margin:20px;">
+	<div class="card-header">
+		<div class="row m-b-5">
+			<form name='filterFrom' ng-submit="billBookVm.submit(filterFrom)" novalidate autocomplete="off">
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="billBookVm.oFilter.name"
+							   name="Name"
+							   class="form-control input-sm"
+							   placeholder="Name">
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="billBookVm.oFilter.type"
+								ng-options="item as item for item in $user.billBook_type"
+								placeholder-text-single ="'Stationary Type'"
+								name="Type">
+							<option value="" disabled></option>
+						</select>
+						<span class="error" ng-if="!$user.billBook_type.length > 0">
+							you don't have access!! Ask your Admin</span>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="number"
+							   ng-model="billBookVm.oFilter.range"
+							   name="Range"
+							   class="form-control input-sm"
+							   placeholder="Range">
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Branch Search..."
+								ng-model="billBookVm.oFilter.branch"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in billBookVm.getAllBranch($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="billBookVm.oFilter.branch=null;">×</i>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="billBookVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{billBookVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="billBookVm.DatePicker.newDate"
+											   ng-model="billBookVm.oFilter.start_date"
+											   min-date="billBookVm.min_date"
+											   is-open="opened1"
+											   datepicker-options="billBookVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From">
+									</div>
+									<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="billBookVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i>
+												</button>
+                		            </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="billBookVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{billBookVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="billBookVm.DatePicker.newDate"
+											   ng-model="billBookVm.oFilter.end_date"
+											   ng-change="billBookVm.dateChange('endDate')"
+											   is-open="opened2"
+											   datepicker-options="billBookVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To">
+									</div>
+									<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="billBookVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="submit"
+							ng-click="billBookVm.oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+
+					<button type="button"
+							class="btn-primary btn-xs"
+							ng-click="billBookVm.get(null, true)"
+							uib-tooltip="Download Stationary"
+							tooltip-placement="bottom"
+					>
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				   </button>
+					<button type="button"
+							class="btn-primary btn-xs"
+							ng-click="billBookVm.missingStationary(null, true)"
+							uib-tooltip="Missing Documents report"
+							tooltip-placement="bottom"
+					>
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+
+		<div class="row" style="margin-right: 1px;">
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<select chosen
+							class="form-control"
+							ng-model="billBookVm.oFilter.deleted"
+							ng-options="item as item for item in ['Yes', 'No']"
+							placeholder-text-single ="'Deleted Book'"
+							name="Type">
+						<option value="" disabled></option>
+					</select>
+
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<select chosen
+							class="form-control"
+							ng-model="billBookVm.oFilter.bookType"
+							ng-options="item as item for item in ['auto', 'centralize']"
+							placeholder-text-single ="'Book Type'"
+							name="Type">
+						<option value="" disabled></option>
+					</select>
+
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="select">
+					<select class="form-control"
+							ng-model="billBookVm.oFilter.dateType">
+						<option value="">Select Date</option>
+						<option value="created_at">Creation Date</option>
+						<option value="startDate">Start Date</option>
+					</select>
+				</div>
+			</div>
+			<div class="pull-right">
+
+				<button
+					class="btn btn-primary waves-effect"
+					type="button"
+					uib-tooltip="Stationery Modification"
+					ng-click="billBookVm.stModify('Modify')">+</button>
+
+
+				<button
+						class="btn btn-primary waves-effect"
+						uib-tooltip="Add Book"
+						tooltip-placement="bottom"
+						ng-click="billBookVm.upsert()"
+				>
+					<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+				</button>
+
+
+				<button
+						class="btn btn-primary waves-effect"
+						uib-tooltip="Edit Book"
+						tooltip-placement="bottom"
+						ng-click="billBookVm.upsert('edit')"
+				>
+					<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+				</button>
+				<button
+						class="btn btn-danger waves-effect" ng-if="$role['Stationery']['Delete Book']"
+						uib-tooltip="Delete Book"
+						tooltip-placement="bottom"
+						ng-click="billBookVm.deleteBillBook()"
+				>
+					<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+					<span></span>
+				</button>
+				<button
+						class="btn btn-danger waves-effect" ng-if="$role['Stationery']['Soft Delete']"
+						uib-tooltip="Delete"
+						tooltip-placement="bottom"
+						ng-click="billBookVm.deleteBillBook('softDelete')"
+				>
+					<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+					<span></span>
+				</button>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div
+						ja-table
+						table-head="billBookVm.tableHead"
+						table-body="billBookVm.aBillBook"
+						table-height='300px'
+						table-load="billBookVm.get(true)"
+						table-column-setting="billBookVm.columnSetting"
+						table-selectable='"true"'
+						table-api='billBookVm.tableApi'
+						table-selectable-model="billBookVm.oBillBook"
+				></div>
+			</div>
+		</div>
+	</div>
+
+
+</div>
+</div>

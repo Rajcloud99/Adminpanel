@@ -1,0 +1,178 @@
+<!-- controller: debitNoteController -->
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width: 100%; margin-right: -23px">
+		<div class="row hidden-print" style="margin: 15px">
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text" ng-model="vm.myFilter.debitNo" name="debitNo" class="form-control input-sm"
+						placeholder="Debit No" ng-model-options="{ updateOn: 'blur' }" />
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text" ng-model="vm.myFilter.purBillRefNo" name="bill_no" class="form-control input-sm"
+						placeholder="Purchase Bill No." ng-model-options="{ updateOn: 'blur' }" />
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input type="text"
+							class="form-control lvhs-input"
+							placeholder="Vendor Search..."
+							ng-model="vm.myFilter.vendor"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in vm.aVendor | limitTo:6"
+							ng-change="vm.getVendorName(vm.myFilter.vendor)">
+					<i class="lvh-search-close" ng-click="vm.myFilter.vendor='';">×</i>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="select">
+					<select class="form-control" ng-model="vm.myFilter.dateType">
+						<option value="">Select Date</option>
+						<option value="created_at">Entry Date</option>
+						<option value="date">Debit Note Date</option>
+					</select>
+				</div>
+			</div>
+			<!-- approved / unapproved -->
+			<div class="col-sm-1">
+				<div class="select">
+					<select class="form-control" ng-model="vm.myFilter.voucher">
+						<option value="">Select Approved</option>
+						<option value="approve">Approved</option>
+						<option value="unApprove">Un Approved</option>
+						<option value="Both">Both</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+								<div ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')" type="text"
+										class="form-control" datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										show-weeks="false" max-date="vm.DatePicker.newDate"
+										ng-model="vm.myFilter.start_date" is-open="opened1"
+										datepicker-options="vm.DatePicker.dateSettings" close-text="Close"
+										placeholder="Start Date" />
+								</div>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+										ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+								<div ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')" type="text"
+										class="form-control" datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										show-weeks="false" max-date="vm.DatePicker.newDate"
+										ng-model="vm.myFilter.end_date" min-date="vm.myFilter.start_date"
+										is-open="opened2" datepicker-options="vm.DatePicker.dateSettings"
+										close-text="Close" placeholder="End Date" />
+								</div>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12"
+										ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size: 16px" uib-tooltip="Search"
+					type="submit" ng-click="vm.getDebitNote()" tooltip-placement="bottom">
+					<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+				</button>
+
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size: 16px"
+					uib-tooltip="Clear Search" tooltip-placement="bottom" type="button"
+					ng-click="vm.myFilter={};vm.getDebitNote();">
+					<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+				</button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile m-l-5" style="font-size: 16px"
+							uib-tooltip="Download" ng-disabled="" tooltip-placement="bottom" type="button"
+							ng-click="vm.getDebitNote(false, true);">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+
+			</div>
+
+			<!-- <div class="pull-right">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile" style="font-size: 16px"
+					uib-tooltip="Deduction Monthly" ng-disabled="true" tooltip-placement="bottom" type="button"
+					ng-click="vm.rptDownload('dedRpt');">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			</div> -->
+		</div>
+	</div>
+
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="form-group m-b-0">
+			<button class="btn btn-primary m-r-5" ng-click="vm.debitNoteUpsert('add')" uib-tooltip="Add Debit Note">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-5" ng-hide="vm.oSelectedDebitNo.isMiscDebitNote"
+				ng-click="vm.debitNoteUpsert('edit')" uib-tooltip="edit Debit Note">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button ng-show="vm.oSelectedDebitNo.voucher" class="btn btn-danger m-r-5" ng-click="vm.unapprove()" uib-tooltip="Unapprove">
+				<i class="zmdi zmdi-assignment-check zmdi-hc-fw fs-20"></i>
+			</button>
+			<button ng-hide="vm.oSelectedDebitNo.voucher"  class="btn btn-success m-r-5" ng-click="vm.approve()" uib-tooltip="Approve">
+				<i class="zmdi zmdi-assignment-check zmdi-hc-fw fs-20"></i>
+			</button>
+			<!-- <button class="btn btn-danger m-r-5"
+					ng-if="$role['Credit Note']['MiscDelete'] && vm.oSelectedCreditNo.isMiscCreditNote"
+					ng-click="vm.deleteMisc()"
+					uib-tooltip="Delete Misc CN">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button> -->
+			<button class="btn btn-danger m-r-5" ng-click="vm.remove()" uib-tooltip="Remove">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-5" type="button" ng-click="vm.printBill()"
+				uib-tooltip="Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="detailsList">
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-12">
+						<div ja-table table-body="vm.aDebitNote" table-head="vm.tableHead" table-height="500px"
+							table-load="vm.getDebitNote(true)" table-column-setting="vm.columnSetting"
+							table-selectable="vm.selectType" table-api="vm.tableApi"
+							table-selectable-model="vm.oSelectedDebitNo"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20 {
+		font-size: 20px;
+	}
+</style>

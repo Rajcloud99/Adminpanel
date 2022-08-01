@@ -1,0 +1,171 @@
+<!-- Controller: mapGrPopupController -->
+<!-- ControllerAs: mgVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="mgVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Map Gr To Trip</b>
+		</span>
+		<span>({{mgVm.selectedGr.grNumber}})
+		</span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<form name="form" novalidate autocomplete="off">
+			<ul class="list-group list-group-flush">
+				<!-- Basic DETAILS -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="number" ng-model="mgVm.oFilter.trip_no" name="trip_no"
+										   class="form-control input-sm" placeholder="Trip No"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="mgVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{mgVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="mgVm.oFilter.from"
+											   is-open="opened1"
+											   datepicker-options="mgVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From Date"
+											   name="From Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="mgVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="mgVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{mgVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="mgVm.oFilter.to"
+											   is-open="opened2"
+											   datepicker-options="mgVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To Date"
+											   name="To Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="mgVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+
+							<div class="col-md-1">
+								<div class="form-group m-b-0 text-center">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Search Trip"
+											ng-click="mgVm.getTrips()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+							<div class="pull-right text-right m-t-5">
+								<button
+										class="btn-primary btn-xs"
+										uib-tooltip="Map Gr"
+										tooltip-placement="bottom"
+										ng-click="mgVm.mapGrIntoTrip(mgVm.selectedTrip)">
+									<i class="glyphicon glyphicon-export"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</li>
+				<!--Table DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">TRIP DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12">
+								<div class="col-md-12">
+									<div ja-table
+										 table-body="mgVm.aTrip"
+										 table-head="mgVm.tableHead"
+										 table-height='300px'
+										 table-column-setting="mgVm.columnSetting"
+										 table-api="mgVm.tableApi"
+										 table-selectable='"single"'
+										 table-selectable-model="mgVm.selectedTrip"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-warning"
+			type="button"
+			ng-click="mgVm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+
+	.chosen-row-1 {
+		z-index: 8;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: 98;
+	}
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

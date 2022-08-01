@@ -1,0 +1,97 @@
+<div class="container" ng-controller="combineBillsController" style="">
+    <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <div class="row hidden-print" style="margin:15px;">
+
+            <div class="col-md-3">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Start Date</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                                <div ng-class="{ 'fg-toggled': opened1 == true }">
+                                    <input ng-click="open($event, 'opened1')" type="text" ng-change="getInvoice()" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date" is-open="opened1" datepicker-options="dateOptions" close-text="Close" placeholder="Start Date" />
+                                </div>
+                                <span class="input-group-btn">
+    		                			<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+    		              	  </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">End Date</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                                <div ng-class="{ 'fg-toggled': opened2 == true }">
+                                    <input ng-click="open($event, 'opened2')"  ng-change="getInvoice()" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="End Date" />
+                                </div>
+                                <span class="input-group-btn">
+    		                			<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+    		              	  </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Customer</label>
+
+                    <div class="col-sm-6">
+                        <select chosen data-placeholder-text-single="'Search Customer'" allow-single-deselect="true" no-results-text="'Could not find any Customer'" class="form-control" ng-model="customer" ng-options="item as item.name for item in aCustomers" ng-change="onCustomerSelect(customer);getInvoice()" >
+                              <option value=""></option>
+                            </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" ng-click="getBillPDFDATA()" ng-disabled="combine_invoice.length<2"  class="btn btn-primary hidden-print" style="margin-bottom: 12px;">Combine</button>
+            </div>
+        </div>
+    </div>
+    <br>
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<table class="table table-bordered unresponsive">
+				<thead id='my_fixable_table_header' fix-head>
+              <tr>
+                <th>Select</th>
+                <th>Invoice No.</th>
+                <th>Trip No.</th>
+                <th>BOE No.</th>
+                <th>Date</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <!-- class="pointer selectItem" -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-ng-repeat="selectInVoice in allInvoive" >
+                <td> <input type="checkbox" name="combineMe" ng-model="combine" ng-click="combineCheck($index,combine,selectInVoice.booking_info)">
+                </td>
+                <td>{{selectInVoice.invoice_no}}</td>
+                <td>
+                    {{selectInVoice.booking_info[0].trip_no}}
+                </td>
+
+                <td>{{selectInVoice.booking_info[0].boe_no  || 'NA'}}</td>
+                <td>{{selectInVoice.datetime | date:"dd-MM-yyyy"  || 'NA'}} </td>
+                <td>{{selectInVoice.total_expenses || 'NA'}}</td>
+                <td>{{selectInVoice.status || 'NA'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        <div ng-if="allInvoive == 0" class="ms-body" style=" min-height: 50px;">
+          <h3>No any Invoice available for the Customer!!!!!</h3>
+        </div>
+        </div>
+    </div>
+    <!-- <div ui-view ng-show="show_bill"></div> -->
+
+</div>

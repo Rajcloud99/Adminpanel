@@ -1,0 +1,149 @@
+<!--vendorFuel address 1-->
+<form ng-controller="fuelProfileCtrl">
+	<div class="row" style="margin: 5px auto;" ng-show="selectedFuelVendorData">
+		<div class="card-header">
+			<!--*************** Fuel prices ***************-->
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="oFilter.start_date"
+							   is-open="opened1"
+							   datepicker-options="DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="From"
+							   name="Start Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm- col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened2 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   ng-model="oFilter.end_date"
+							   is-open="opened2"
+							   datepicker-options="DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="End Date"
+							   name="To"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0 text-center">
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							ng-click="getFuelStation()"
+							uib-tooltip="Search"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Clear Search"
+							ng-click="oFilter={};getFuelStation()"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-t-0 p-b-0"
+							type="button"
+							style="margin-bottom: 3px;  font-size: 16px"
+							uib-tooltip="Download RateChart"
+							ng-click="getFuelStation(false, true)"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<!--<button class="btn btn-primary p-t-0 p-b-0"-->
+							<!--type="button"-->
+							<!--style="margin-bottom: 3px;  font-size: 16px"-->
+							<!--uib-tooltip="Upload Rate Chart"-->
+							<!--tooltip-placement="bottom"-->
+							<!--ng-click="uploadRateChart()">-->
+						<!--<i class="zmdi zmdi-cloud-upload zmdi-hc-fw"></i>-->
+						<!--<span></span>-->
+					<!--</button>-->
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<br>
+			<!--<h2 class="pull-left" style="color: #847777;font-size: 16px;">Fuel Stations</h2>-->
+			<!--<button class="btn btn-primary pull-right"-->
+					<!--uib-tooltip="Show History"-->
+					<!--tooltip-placement="bottom"-->
+					<!--ng-click="showHistory(aFuelStations[index])">-->
+				<!--<i class="zmdi zmdi-assignment zmdi-hc-fw"></i>-->
+			<!--</button>-->
+			<!--<div class="clear-fix"></div>-->
+		</div>
+
+		<ul class="list-group list-group-flush">
+		<li class="list-group-item">
+			<span class="booking_list_header">Fuel Stations</span>
+			<div class="pull-right text-right m-t-5">
+				<button class="btn-primary btn-xs"
+						ng-click="updateStation()"
+						uib-tooltip="Add Station"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+				<button class="btn-danger btn-xs"
+						ng-click="updateStation('delete')"
+						uib-tooltip="Delete Station"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp
+			</div>
+			<div class="card-body">
+				<div class="row" style="margin:5px">
+					<div class="col-md-12">
+						<div class="col-md-12">
+							<div ja-table
+								 table-body="aFuelStations"
+								 table-head="tableHead"
+								 table-column-setting="columnSetting"
+								 table-load="getFuelStation(true)"
+								 table-height='300px'
+								 table-apt='tableApi'
+								 table-selectable='selectType'
+								 table-selectable-model="aSelectedStation"
+							></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+		</ul>
+
+	</div>
+	<div class="" ng-if="!selectedFuelVendorData">
+		<h3>No any fuel vendor register !!!</h3>
+	</div>
+</form>

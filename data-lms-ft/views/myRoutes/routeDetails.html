@@ -1,0 +1,187 @@
+<div class="container" ng-controller="routeCommonController">
+	<div class="card m-b-0" id="messages-main">
+        <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+            <div class="lvh-search ng-scope sear">
+                <input type="text" placeholder="Start typing..." ng-model="routeName" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.name as person.name for person in routes" ng-change="getVname(routeName)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+                <i class="lvh-search-close" ng-click="clearSearch()">×</i>
+            </div>
+            <div class="listview lv-user clk" style="overflow: auto;height:97%;">
+                <div class="lv-item media"  style="border-bottom:2px solid #4285f4" ng-repeat="route in routes" ng-click="selectRoute(route,$index)">
+                    <div class="truck-desc">
+                    	<div class="row">
+    	                    <div class="col-md-7 bold" style="text-align: start;">
+    	                    	{{route.name | capitalize}}
+    	                    </div>
+                            <div class="col-md-2 bold" style="text-align: start;">
+                               {{route.route_distance_text}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pagi" ng-show="total_pages>1">
+                  <pagination ng-change="pageChanged()"
+							  total-items="totalItems"
+							  items-per-page="items_per_page"
+							  num-pages="numPages"
+							  ng-model="currentPage"
+							  max-size="maxSize"
+							  class="pagination-sm smallPagi"
+							  boundary-links="true"
+							  previous-text="&lsaquo;"
+							  next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                </div>
+            </div>
+        </div>
+        <div class="ms-body" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lv-header-alt clearfix">
+<!--                 <button><div class="lvh-label" ng-if="!wantRegRout">-->
+<!--                       <span class="c-black"><b>{{route.name | capitalize}}</b> ({{route.route_distance}}&nbsp;KM)</span>-->
+<!--				</div></button>-->
+<!--                    <div class="lvh-label" ng-if="wantRegRout">-->
+<!--                       <span class="c-black"><b>New Route Registration </b></span>-->
+<!--                    </div>-->
+					<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened1 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="DatePicker.newDate"
+									   ng-model="oFilter.start_date"
+									   min-date="min_date"
+									   is-open="opened1"
+									   datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="From Date"
+									   name="Start Date"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+						</div>
+					</div>
+					<div class="col-xs-6 col-sm- col-md-2 col-lg-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="DatePicker.newDate"
+									   ng-model="oFilter.end_date"
+									   ng-change="dateChange('endDate')"
+									   is-open="opened2"
+									   datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="End Date"
+									   name="To"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group m-b-0 text-center">
+							<button class="btn btn-primary p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									ng-click="getAllRoutes()"
+									uib-tooltip="Search"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+							</button>
+							<button class="btn btn-primary p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Clear Search"
+									ng-click="oFilter={};getAllRoutes()"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+							</button>
+						</div>
+					</div>
+
+					<ul class="lv-actions actions" ng-if="hideBtns">
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.routeDetails.allRoutes" uib-tooltip="Show Route" tooltip-placement="bottom"><i class="zmdi zmdi-menu zmdi-hc-fw"></i></a></li>
+						<div class="clearfix"></div>
+					</ul>
+					<ul class="lv-actions actions" ng-if="!hideBtns">
+                        <li class="btn-wave" data-ui-sref-active="active" ng-if="$role['Transport Route']['Add']"><a data-ui-sref="masters.routeDetails.register" ng-click="newRReg()" uib-tooltip="Create Route" tooltip-placement="bottom"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i></a></li>
+                        <li ng-show="routes.length>0" class="btn-wave" data-ui-sref-active="active" ng-if="$role['Transport Route']['Update']"><a data-ui-sref="masters.routeDetails.editRoute" uib-tooltip="Edit Route" tooltip-placement="bottom" ng-click="editRoute()"><i class="zmdi zmdi-edit"></i></a></li>
+						<li ng-show="routes.length>0" class="btn-wave" data-ui-sref-active="active" ng-if="$role['Transport Route']['Delete']"><a  uib-tooltip="Delete Route" tooltip-placement="bottom" ng-click="routeDelete()"><i class="zmdi zmdi-delete"></i></a></li>
+						<li><a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"><i class="zmdi zmdi-download"></i></a></li>
+						<li ng-if="$role['Transport Route']['Upload Excel']">
+							<a href="" uib-tooltip="Upload Excel"
+							   tooltip-placement="bottom"
+							   onclick="document.getElementById('toUpload').click();">
+								<i class="zmdi zmdi-upload"></i>
+							</a>
+						</li>
+						<input
+								type="file"
+								id="toUpload"
+								name="toUpload"
+								ng-model="toUpload"
+								ng-hide="true"
+								accept="*/*"
+								ngf-select
+								ngf-max-size="5MB"
+								ngf-model-invalid="errorFile"
+								ngf-change="uploadReport($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+						>
+                        <!-- <li><a href="" uib-tooltip="Delete Route" tooltip-placement="bottom" ng-click=""><i class="zmdi zmdi-delete"></i></a></li> -->
+                        <div class="clearfix"></div>
+                    </ul>
+                </div>
+
+
+				<div class="lv-body">
+					<ul class="tab-nav tn-justified" ng-if="wantThis2" >
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.routeDetails.allRoutes">Profile</a></li>
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.routeDetails.tracking">Tracking</a></li>
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.routeDetails.budgeting">Budgeting</a></li>
+
+					</ul>
+					<ul class="tab-nav tn-justified" ng-if="wantThis" >
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="masters.routeDetails.routeEditProfile">Profile</a></li>
+					</ul>
+					<data ui-view></data>
+				</div>
+
+<!--				<div class="lv-body" ng-if="!editEnableRoute">-->
+<!--					<ul class="tab-nav tn-justified">-->
+<!--						<li class="btn-wave" data-ui-sref-active="active"><a  data-ui-sref="masters.routeDetails.routeProfile">Profile</a></li>-->
+<!--						<li class="btn-wave" data-ui-sref-active="active"><a  data-ui-sref="masters.routeDetails.tracking">Tracking</a></li>-->
+<!--					</ul>-->
+<!--				</div>-->
+
+<!--				<div class="lv-body" ng-if="editEnableRoute">-->
+<!--                	<ul class="tab-nav tn-justified">-->
+<!--                        <li class="btn-wave" data-ui-sref-active="active"><a  data-ui-sref="masters.routeDetails.editRoute">Profile</a></li>-->
+<!--                        <li class="btn-wave" data-ui-sref-active="active"><a  data-ui-sref="masters.routeDetails.routeRates">Rates</a></li>-->
+<!--						&lt;!&ndash;<li class="btn-wave" data-ui-sref-active="active"><a  data-ui-sref="masters.routeDetails.routeVehicle">Vehicle Type</a></li>&ndash;&gt;-->
+<!--                    </ul>-->
+<!--&lt;!&ndash;                    <data ui-view></data>&ndash;&gt;-->
+<!--                </div>-->
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+

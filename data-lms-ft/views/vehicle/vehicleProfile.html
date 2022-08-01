@@ -1,0 +1,102 @@
+<form name="VehicleProfile" ng-controller="vehicleReadController">
+	<div class="row" style="margin: 5px auto;">
+		<div class="col-md-12">
+		    <h4 style="margin-left: 19px;">Profile Details</h4>
+			<div class="detailList">
+				<ul>
+					<!-- <li><span>Registration Num :</span> {{vehicle.vehicle_reg_no || 'NA'}}</li>
+                    <li><span>Vehicle Type :</span>{{vehicle.veh_type_name || 'NA'}}</li> -->
+                    <li><span>Owner Name :</span> {{vehicle.supervisor_name || 'NA'}}</li>
+                    <li><span>Owner Mobile :</span> {{vehicle.supervisor_contact_no || 'NA'}}</li>
+                    <li><span>Vehicle Status :</span> {{vehicle.last_known.status || 'NA'}}</li>
+                    <li ng-if="vehicle.last_known.status=='Booked' || vehicle.last_known.status =='Journey'"><span>Trip No. :</span> {{vehicle.last_known.trip_no || 'NA'}}</li>
+					<!-- <li><span>Body type :</span> {{vehicle.body_type || 'NA'}}</li> -->
+					<li><span>Capacity(Ton) :</span>{{vehicle.capacity || 'NA'}}</li>
+                    <li><span>Model </span> {{vehicle.model || 'NA'}}</li>
+                    <li><span>Category </span> {{vehicle.category || 'NA'}}</li>
+					<li><span>Owner Group </span> {{vehicle.owner_group || 'NA'}}</li>
+					<li><span>Manufacturer :</span> {{vehicle.manufacturer || 'NA'}}</li>
+                    <li><span>Make Year:</span> {{vehicle.make_year || 'NA'}}</li>
+                    <li><span>Driver Name :</span> {{vehicle.driver_name || 'NA'}}</li>
+                    <li><span>Driver Mobile :</span> {{vehicle.driver_contact_no || 'NA'}}</li>
+                    <li><span>Height(Feet)</span>{{vehicle.height_ft || 'NA'}}</li>
+                    <li><span>Width(Feet) :</span> {{vehicle.width_ft || 'NA'}}</li>
+                    <!-- <li><span>Refrigeration :</span> {{vehicle.refrigeration || 'NA'}}</li> -->
+                    <li><span>Length(Feet) :</span> {{vehicle.length_ft || 'NA'}}</li>
+                    <li><span>Axel Type :</span> {{vehicle.Axel || 'NA'}}</li>
+                    <!-- <li><span>SMS Language :</span> {{vehicle.language || 'NA'}}</li> -->
+                    <li><span>Permit :</span> {{vehicle.natioal_permit || 'NA'}}</li>
+                    <li><span>Permit Expiry Date :</span> {{vehicle.permit_expiry_date | date:dd/MM/yyyy}}</li>
+                    <li><span>SAP Id :</span> {{vehicle.sap_id || 'NA'}}</li>
+                    <li><span>Own Vehicle :</span> {{vehicle.own || 'NA'}}</li>
+                    <li><span>Created By :</span> {{vehicle.created_by_name || 'NA'}}</li>
+                    <li><span>Created Date :</span> {{vehicle.created_at | date:'dd-MM-yyyy HH:mm:ss'}}</li>
+
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-12">
+		    <h4 style="margin-left: 19px;">Identification Details</h4>
+			<div class="detailList">
+				<ul>
+					<li><span>Chasis Number :</span> {{vehicle.chassis_no || 'NA'}}</li>
+                    <li><span>Engine Number :</span> {{vehicle.engine_no || 'NA'}}</li>
+                    <li><span>Insurance Company</span> {{vehicle.insurance_company || 'NA'}}</li>
+                    <li><span>Insurance Number:</span> {{vehicle.insurance_no || 'NA'}}</li>
+                    <li><span>Insurance Value:</span> {{vehicle.insurance_value || 'NA'}}</li>
+                    <li><span>Insurance Expiry:</span> {{vehicle.insurance_expiry_date || 'NA'}}</li>
+                    <li><span>Insurance Price:</span> {{vehicle.insurance_price || 'NA'}}</li>
+                    <li><span>Fitness Expiry:</span> {{vehicle.fitness_expiry_date || 'NA'}}</li>
+                    <li><span>Road Tax Expiry:</span> {{vehicle.road_tax_expiry_date || 'NA'}}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-12">
+		    <h4 style="margin-left: 19px;">Allocated Driver Details</h4>
+			<div class="detailList">
+				<ul>
+					<li><span>Name :</span> {{vehicle.driver_name || 'NA'}}</li>
+                    <li><span>Employee Code :</span> {{vehicle.driver_employee_code || 'NA'}}</li>
+                    <li><span>Contact No. :</span> {{vehicle.driver_contact_no || 'NA'}}</li>
+                </ul>
+			</div>
+		</div>
+		<div class="col-md-12">
+		    <h4 style="margin-left: 19px;">Allocated Vendor Details</h4>
+			<div class="detailList">
+				<ul>
+					<li><span>Name :</span> {{vehicle.vendor_name || 'NA'}}</li>
+                    <li><span>Contact No. :</span> {{vehicle.vendor_mobile || 'NA'}}</li>
+                </ul>
+			</div>
+		</div>
+		<!-- <div class="col-md-2">
+	    </div> -->
+
+		<div class="col-md-12">
+		    <h4 style="margin-left: 19px;">Document</h4>
+			<!-- <div class="detailList">
+				<ul>
+					<li><span>Vehicle Photo :</span> {{vehicle.body_type || 'NA'}}</li>
+                    <li><span>Permit :</span> {{vehicle.length || 'NA'}}</li>
+                    <li><span>Fitness Certificate :</span> {{vehicle.Axel || 'NA'}}</li>
+                    <li><span>Chassis Trace :</span> {{vehicle.language || 'NA'}}</li>
+                    <li><span>Insuarance Copy :</span> {{vehicle.natioal_permit || 'NA'}}</li>
+                    <li><span>Road Tax :</span> {{vehicle.permit || 'NA'}}</li>
+                    <li><span>RC Book :</span> {{vehicle.owner_name || 'NA'}}</li>
+				</ul>
+			</div> -->
+		</div>
+
+		<div class="col-md-12">
+		    <h4 style="margin-left: 19px;">Created By</h4>
+			<div class="detailList">
+				<ul>
+					<li><span>Name :</span> {{vehicle.created_by_name || 'NA'}}</li>
+					<li><span>Date :</span> {{vehicle.created_at | date:'dd-MM-yyyy HH:mm:ss' || 'NA'}}</li>
+
+				</ul>
+			</div>
+		</div>
+	</div>
+</form>

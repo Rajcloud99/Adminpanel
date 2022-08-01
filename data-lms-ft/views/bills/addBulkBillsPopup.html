@@ -1,0 +1,162 @@
+<!-- Controller: addBulkBillsPopupController -->
+<!-- ControllerAs: abVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="abVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Add bills</b></span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<form name="form" novalidate autocomplete="off">
+			<ul class="list-group list-group-flush">
+				<!-- Basic DETAILS -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+
+							<div class="col-md-2">
+								<label class="col-sm-6 control-label">Billing Party :</label>
+								<div class="col-sm-4">
+									{{abVm.oMoneyReceipt.billingParty.name}}
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="abVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{abVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="abVm.oFilter.from"
+											   is-open="opened1"
+											   datepicker-options="abVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From Date"
+											   name="From Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="abVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="abVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{abVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="abVm.oFilter.to"
+											   is-open="opened2"
+											   datepicker-options="abVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To Date"
+											   name="To Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="abVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+
+							<div class="col-md-1">
+								<div class="form-group m-b-0 text-center">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Search Bill"
+											ng-click="abVm.getBills(abVm.selectedBills)"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<!--Table DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">Bill DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12">
+								<div class="col-md-12">
+									<div ja-table
+										 table-body="abVm.bill"
+										 table-head="abVm.tableHead"
+										 table-height='300px'
+										 table-load="abVm.getBills(true)"
+										 table-column-setting="abVm.columnSetting"
+										 table-api="abVm.tableApi"
+										 table-selectable='"multiple"'
+										 table-selectable-model="abVm.selectedBills"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-primary"
+			type="button"
+			ng-click="abVm.addBills()">Add Bills
+	</button>
+	<button class="btn btn-warning"
+			type="button"
+			ng-click="abVm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+
+	.chosen-row-1 {
+		z-index: 8;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: 98;
+	}
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

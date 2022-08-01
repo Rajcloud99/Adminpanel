@@ -1,0 +1,63 @@
+<!-- controler: updateKmPopupCtrl -->
+<!-- controlerAs: vm -->
+<div class="modal-header">
+	<button type="button" ng-click="vm.closeModal()" class="close pull-right"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h3 class="text-center">Update Route KM</h3>
+</div>
+
+<form name="updateKm" novalidate ng-submit="vm.submit(updateKm)">
+
+	<div class="container modal-body">
+		<!--		<ul class="list-group list-group-flush">-->
+		<!--			<li class="list-group-item">-->
+		<div class="col-md-6">
+			<div class="form-group m-b-0">
+				<label class="col-sm-4 control-label">Route Km:  <span style="color: red;">*</span></label>
+				<div class="col-sm-8">
+					<div class="fg-line">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+							   onwheel="return false"
+							   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   ng-model="vm.oRoute.route_distance"
+							   class="form-control"
+							   required
+							   name="Route km">
+					</div>
+				</div>
+				<span class="error" style="padding-left: 100px"
+					  ng-if="updateKm['Route km'].$error.required
+								&& (updateKm['Route km'].$touched
+									|| updateKm.$submitted)">This Field is Mandatory</span>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group m-b-0">
+				<label class="col-sm-4 control-label">Remark:  <span style="color: red;">*</span></label>
+				<div class="col-sm-8">
+					<div class="fg-line">
+						<input type="text"
+							   ng-model="vm.oRoute.remark"
+							   class="form-control"
+							   name="Remark"
+							   required>
+					</div>
+				</div>
+				<span class="error" style="padding-left: 100px"
+					  ng-if="updateKm['Remark'].$error.required
+								&& (updateKm['Remark'].$touched
+									|| updateKm.$submitted)">This Field is Mandatory</span>
+			</div>
+		</div>
+		<!--		    </li>-->
+		<!--		</ul>-->
+	</div>
+
+
+	<div class="modal-footer">
+		<button ng-disabled="!vm.oRoute.route_distance || !vm.oRoute.remark" class="btn btn-primary">Submit</button>
+	</div>
+</form>

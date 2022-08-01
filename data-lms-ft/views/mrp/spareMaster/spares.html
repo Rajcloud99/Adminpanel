@@ -1,0 +1,51 @@
+<div class="container" ng-controller="spareMsCommonController">
+    <div class="card m-b-0" id="messages-main">
+        <div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+            <div class="lvh-search ng-scope sear">
+                <input type="text" placeholder="Start typing..." ng-model="getSearch" class="lvhs-input" class="form-control" ng-change="getSearchClick(getSearch)">
+                <i class="lvh-search-close" ng-click="resetSearch()">×</i>
+                <!-- <input type="text" ng-model="selSpareSearch" placeholder="Start typing..." typeahead-wait-ms="10" typeahead="selected as selected.name for selected in searchSpareList | filter:selSpareSearch" ng-change="getSpareSearch(selSpareSearch)" class="lvhs-input form-control">
+                <i class="lvh-search-close" ng-click="resetSearch()">×</i> -->
+            </div>
+            <div class="listview lv-user clk" style="overflow: auto;height:97%;">
+                <div class="lv-item media"  style="border-bottom:2px solid #4285f4" ng-repeat="ssSpare in aSpareRoot" ng-click="selectSpare(ssSpare,$index)">
+                    <div class="truck-desc">
+                        <div class="row">
+                            <div class="col-md-12 bold" style="text-align: start;">
+                                {{ssSpare.name | capitalize}} - {{ssSpare.code | capitalize}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pagi" ng-show="total_pages>1">
+                  <pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+                </div>
+            </div>
+        </div>
+        <div class="ms-body" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lv-header-alt clearfix">
+                    <div class="lvh-label" ng-if="!wantRegSL22">
+                       <span class="c-black"><b>{{sSpare.name | capitalize}}</b> &nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                    <div class="lvh-label" ng-if="wantRegSL22">
+                       <span class="c-black"><b>Register New Spare</b> &nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                    <ul class="lv-actions actions">
+                        <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="MRP_master.spares.register" uib-tooltip="Add Spare" tooltip-placement="bottom"><i class="zmdi zmdi-plus zmdi-hc-fw"></i></a></li>
+                        <li ng-hide="aSpareRoot.length === 0" class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="MRP_master.spares.editSpare" uib-tooltip="Edit Spare" tooltip-placement="bottom"><i class="zmdi zmdi-edit"></i></a></li>
+                        <li ng-hide="aSpareRoot.length === 0"><a href="" uib-tooltip="Delete Spare" tooltip-placement="bottom" ng-click=""><i class="zmdi zmdi-delete"></i></a></li>
+                        <div class="clearfix"></div>
+                    </ul>
+                </div>
+                <div class="lv-body">
+                    <!-- <ul class="tab-nav tn-justified" ng-if="wantRegSL22">
+                        <li class="btn-wave" data-ui-sref-active="active"><a href="">Register New SLDO</a></li>
+                    </ul> -->
+                    <data ui-view></data>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

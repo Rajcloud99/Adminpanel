@@ -1,0 +1,274 @@
+<!--Controller: duesController-->
+<!--ControllerAs: dsVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Dues</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form ng-submit="dsVm.getDues()" novalidate>
+
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="dsVm.oFilter.refNo"
+							   name="Ref no"
+							   class="form-control input-sm"
+							   placeholder="Ref. no.">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="dsVm.oFilter.invoiceNo"
+							   name="Invoice no"
+							   class="form-control input-sm"
+							   placeholder="Invoice No">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="dsVm.oFilter.chqueno"
+							   name="Cheque No"
+							   class="form-control input-sm"
+							   placeholder="Cheque No">
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<select chosen multiple
+								class="form-control"
+								ng-model="dsVm.oFilter.duesType"
+								ng-options="item as item for item in ['Fitness Worksheet', 'Good and Token Tax', 'Sale Deed', 'Insurance', 'Permit', 'EMI', 'Calibration', 'Miscellaneous','PUC']"
+								name="Dues Type">
+							<option value="" ></option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Ledger"
+							ng-model="dsVm.oFilter.ledger"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in dsVm.accountMaster($viewValue)">
+						<i class="lvh-search-close" ng-click="dsVm.oFilter.ledger=null;">×</i>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="vehicle Search..."
+								ng-model="dsVm.oFilter.vehicle"
+								typeahead-wait-ms="10"
+								typeahead="item as item.vehicle_reg_no for item in dsVm.getAllVehicle($viewValue)"
+						>
+						<i class="lvh-search-close" ng-click="dsVm.oFilter.vehicle=null;">×</i>
+					</div>
+                </div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="dsVm.oFilter.reportType"
+								ng-options="item as item for item in ['Insurance', 'Permit', 'Other']"
+								name="Dues Report Type">
+							<option value="" >Report Type</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="dsVm.oFilter={};dsVm.getDues();">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="dues report"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="dsVm.downloadDues(true);">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>&nbsp;
+					<!--					<button class="btn btn-primary p-l-10 p-r-10 app_tile"-->
+					<!--							style="font-size: 12px"-->
+					<!--							uib-tooltip="Insurance report"-->
+					<!--							tooltip-placement="bottom"-->
+					<!--							type="button"-->
+					<!--							ng-click="dsVm.downloadInsurance(true);">-->
+					<!--						<i class="zmdi zmdi-download zmdi-hc-fw"></i>-->
+					<!--					</button>-->
+					<button ng-if="$role['Dues']['Summary Report']"  class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Dues summary report"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="dsVm.downloadDuesSmry(true);">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size:12px"
+							ng-hide="true"
+							uib-tooltip="Excel"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="dsVm.downloadDues('excel');">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+				</div>
+
+				<div class="clearfix"></div>
+
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+					<select class="form-control"
+							ng-model="dsVm.oFilter.dateType"
+							ng-options="item.value as item.key for item in dsVm.dateType"
+							style="line-height: 34px;">
+						<option value="" selected> Select Type</option>
+					</select>
+				</div>
+
+                <div class="col-md-1">
+                        <div class="form-group m-b-0">
+                            <div class="col-sm-12">
+                                <input
+                                        fill-date
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="From"
+										max-date="dsVm.maxDate"
+                                        ng-model="dsVm.oFilter.from"
+                                        ng-change="dsVm.oFilter.to=undefined;"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+				<div class="col-md-1">
+                            <div class="form-group m-b-0">
+                                <div class="col-sm-12">
+                                    <input
+                                            fill-date
+                                            type="text"
+                                            class="form-control"
+                                            placeholder="To"
+											max-date="dsVm.maxDate"
+                                            ng-model="dsVm.oFilter.to"
+                                    >
+                                </div>
+                            </div>
+                  </div>
+				  <div ng-if="$role['Dues']['Summary Report']" class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="As on date"
+									ng-model="dsVm.oFilter.asOnDate"
+							>
+						</div>
+					</div>
+		  		</div>
+
+                <div class="m-b-10" style="clear: both"></div>
+			</form>
+		</div>
+	</div>
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="col-md-12">
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Add Dues"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="dsVm.upsertDues('add')">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Edit Dues"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="dsVm.upsertDues('edit')">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+
+			<button class="btn btn-danger btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Delete Voucher"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="dsVm.deleteDues()">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+			<div ja-table
+				 table-body="dsVm.aDues"
+				 table-head="dsVm.tableHead"
+				 table-height='500px'
+				 table-load="dsVm.getDues(true)"
+				 table-column-setting="dsVm.columnSetting"
+				 table-selectable='dsVm.selectType'
+				 table-api='dsVm.tableApi'
+				 table-selectable-model="dsVm.aSelectedDues"
+			></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+	.container{
+		width: 98% !important;
+	}
+</style>

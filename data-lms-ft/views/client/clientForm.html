@@ -1,0 +1,1064 @@
+<div id ="div_main_client_form" style="background-color: white">
+    <ul class="tab-nav" ng-show="clients.length || form_client==='add'"
+        style="margin-top: 10px;margin-right: 25px;margin-left: 25px;width: auto">
+        <li ng-class="{active: tab_active_client===1}">
+            <a href="" ng-click="selectTabClient(1)">Client Basic Info.</a>
+        </li>
+        <li ng-class="{active: tab_active_client===2}">
+            <a href="" ng-click="selectTabClient(2)" >Client Contact Info.</a>
+        </li>
+        <li ng-class="{active: tab_active_client===3}" >
+            <a href="" ng-click="selectTabClient(3)" >Vendor Info.</a>
+        </li>
+        <li ng-class="{active: tab_active_client===4}" >
+            <a href="" ng-click="selectTabClient(4)" >Billing/Payment Info</a>
+        </li>
+        <li ng-class="{active: tab_active_client===5}" >
+            <a href="" ng-click="selectTabClient(5)">Documents</a>
+        </li>
+    </ul>
+
+            <ul ng-show="form_client==='view'" class="lv-actions actions"
+                style="position:absolute;margin-top: -45px;margin-left:85%;">
+                <li class="btn-wave" data-ui-sref-active="active">
+                    <a
+                       uib-tooltip="Edit Client" tooltip-placement="bottom"
+                       ng-click="editClient()" >
+                        <i class="zmdi zmdi-edit">
+                        </i>
+                    </a>
+                </li>
+                <li ng-if="!(role_local_data.client_manage.indexOf('remove')==-1)" class="btn-wave" data-ui-sref-active="active">
+                    <a href="" uib-tooltip="Delete Client" tooltip-placement="bottom"
+                       ng-click="deleteClient()">
+                        <i class="zmdi zmdi-delete">
+                        </i>
+                    </a>
+                </li>
+                <li class="btn-wave" data-ui-sref-active="active">
+                    <a uib-tooltip="Add Vehicle Type" tooltip-placement="bottom" ng-click="addVehicletype()" ><i class="zmdi zmdi-plus"></i></a>
+                </li>
+            </ul>
+
+        <div class="card-body card-padding" style="margin-right: 15%">
+<!-------------------------------------------------------tab 1 -------------------------------------------------->
+            <form name="ClientForm" class="form-horizontal" novalidate>
+                <div class="validationError" ng-show="ClientShow"><h5 class="c-red">* {{Cmsg}}</h5></div>
+                <div ng-show="tab_active_client===1">
+                    <div class="form-group" ng-show="form_client==='view'">
+                        <label class="col-sm-4 control-label">Client ID</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"
+                                       ng-model="objClient.clientId" class="form-control
+                                input-sm" style="height: 30px" readonly >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Full name: <span style="color: red;">*</span></label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only" ng-model="objClient.client_full_name" class="form-control
+                                input-sm" style="height: 30px" name="full name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Display name: <span style="color: red;">*</span></label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control input-sm" ng-model="objClient.client_display_name" style="height: 30px" name="display name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!--div class="form-group" ng-if="show_password_button">
+                        <label  class="col-sm-4 control-label">Password: <span style="color: red;">*</span></label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control input-sm"
+                                       ng-model="objClient.password" style="height: 30px" name="password" required>
+                            </div>
+                        </div>
+                    </div-->
+                    <!--div class="form-group">
+                        <label  class="col-sm-4 control-label">Role (For client admin user) <span style="color: red;">*</span></label>
+                        <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg_line">
+                                <div class="select" ng-show="(form_client=='view' && objClient.role) ||
+                                            form_client=='add' || form_client=='edit'"
+                                     ng-readonly="form_client_read_only">
+                                    <select class="form-control" ng-model="objClient.role"
+                                            ng-readonly="form_client_read_only"
+                                            style="height:35px"
+                                            ng-required="form_client_required_active"
+                                            ng-disabled="form_client_read_only"
+                                            ng-options="role.role as role.role for role in rolesTrim" required>
+                                        <option value="" disabled selected>Select role</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div-->
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Employee strength:</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input type="number" ng-readonly=" form_client_read_only"
+                                       class="form-control input-sm" ng-model="objClient.client_employee_strength" style="height: 30px" name="employee strength" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Customer base</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_customer_base" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Approx annual turnover (in Rs):</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_approx_turnover" style="height: 30px"
+                                name="approx annual turnover">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Client type: </label>
+                        <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg_line">
+                                <div class="select" ng-show="(form_client=='view' && objClient.client_type.length) ||
+                                            form_client=='add' || form_client=='edit'"
+                                     ng-readonly="form_client_read_only">
+                                    <select class="form-control"
+                                            ng-readonly="form_client_read_only" style="height:35px"
+                                            ng-disabled="form_client_read_only" ng-model="objClient.client_type" name="client type" >
+                                        <option value="" disabled selected>Select Client Type</option>
+                                        <option ng-repeat="x in $constants.clientTypes" ng-disabled="form_client_read_only"
+                                                value="{{x}}">{{x}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="objClient.client_type ==='Company'">
+                        <label  class="col-sm-4 control-label">Company type</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                                <!--input  class="form-control
+                                input-sm" ng-model="objClient.company_type" style="height: 30px"-->
+                                <div class="col-sm-6">
+                                    <div class="select"
+                                         ng-show="(form_client=='view' && objClient.client_type.length) ||
+                                            form_client=='add' || form_client=='edit'"
+                                         ng-readonly="form_client_read_only">
+                                        <select class="form-control" style ="height:35px"
+                                                ng-model="objClient.client_company_type"
+                                                ng-readonly="form_client_read_only" style="height:35px"
+                                                ng-disabled="form_client_read_only" >
+                                            <option value="" disabled selected>Select Company type</option>
+                                            <option ng-repeat = "x in $constants.companyTypes"
+                                                    ng-disabled="form_client_read_only">{{x}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">PAN no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control input-sm" ng-model="objClient.client_pan_no" minlength="10" maxlength="10" pattern="[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">TIN no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_tin_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+					<div class="form-group">
+						<label  class="col-sm-4 control-label">GSTIN no.</label>
+						<div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+							<div class="fg-line" ng-readonly="form_client_read_only">
+								<input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.gstin_no" style="height: 30px"
+								>
+							</div>
+						</div>
+					</div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Service tax no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_service_tax_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Client theme color</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_theme_color" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Website URL</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_website_url" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Android app link</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_android_app_link" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">IOS app link</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_ios_app_link" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form_client=='edit'">
+                        <label  class="col-sm-4 control-label">Status</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="radio m-b-15" style="display: inline-block">
+                                <label>
+                                    <input type="radio" ng-readonly="form_client_read_only"
+                                           name="status" ng-model="objClient.client_status" value="Active">
+                                    <i class="input-helper"></i>
+                                    Active
+                                </label>
+                            </div>
+                            <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                                <label>
+                                    <input type="radio" ng-readonly="form_client_read_only"
+                                           name="status" ng-model="objClient.client_status" value="Inactive">
+                                    <i class="input-helper"></i>
+                                    Inactive
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--div class="row" >
+                        <p class="c-black f-500 m-b-20" style="margin-left: 15%;margin-top: 20px">Apps accessible</p>
+                        <div class="checkbox m-b-15" style="margin-left: 30%">
+                            <label ng-disabled="form_client_read_only"
+                                   ng-readonly="form_client_read_only">
+                                <input type="checkbox" ng-value="$constants.appShortHandKeys[0]"
+                                       ng-disabled="form_client_read_only"
+                                       ng-readonly="form_client_read_only"
+                                       ng-model="apps_accessible[$constants.appShortHandKeys[0]]">
+                                <i class="input-helper"></i>
+                                {{$constants.appList[0]}}
+                            </label>
+                        </div>
+                        <div class="checkbox m-b-15" style="margin-left: 30%">
+                            <label ng-disabled="form_client_read_only"
+                                   ng-readonly="form_client_read_only">
+                                <input type="checkbox" ng-value="$constants.appShortHandKeys[1]"
+                                       ng-disabled="form_client_read_only"
+                                       ng-readonly="form_client_read_only"
+                                       ng-model="apps_accessible[$constants.appShortHandKeys[1]]">
+                                <i class="input-helper"></i>
+                                {{$constants.appList[1]}}
+                            </label>
+                        </div>
+                        <div class="checkbox m-b-15" style="margin-left: 30%">
+                            <label ng-disabled="form_client_read_only"
+                                   ng-readonly="form_client_read_only">
+                                <input type="checkbox" ng-value="$constants.appShortHandKeys[2]"
+                                       ng-disabled="form_client_read_only"
+                                       ng-readonly="form_client_read_only"
+                                       ng-model="apps_accessible[$constants.appShortHandKeys[2]]">
+                                <i class="input-helper"></i>
+                                {{$constants.appList[2]}}
+                            </label>
+                        </div>
+                        <div class="checkbox m-b-15" style="margin-left: 30%">
+                            <label ng-disabled="form_client_read_only"
+                                   ng-readonly="form_client_read_only">
+                                <input type="checkbox" ng-value="$constants.appShortHandKeys[3]"
+                                       ng-disabled="form_client_read_only"
+                                       ng-readonly="form_client_read_only"
+                                       ng-model="apps_accessible[$constants.appShortHandKeys[3]]">
+                                <i class="input-helper"></i>
+                                {{$constants.appList[3]}}
+                            </label>
+                        </div>
+                        <div class="checkbox m-b-15" style="margin-left: 30%">
+                            <label ng-disabled="form_client_read_only"
+                                   ng-readonly="form_client_read_only">
+                                <input type="checkbox" ng-value="$constants.appShortHandKeys[4]"
+                                       ng-disabled="form_client_read_only"
+                                       ng-readonly="form_client_read_only"
+                                       ng-model="apps_accessible[$constants.appShortHandKeys[4]]">
+                                <i class="input-helper"></i>
+                                {{$constants.appList[4]}}
+                            </label>
+                        </div>
+                        <div class="checkbox m-b-15" style="margin-left: 30%">
+                            <label ng-disabled="form_client_read_only"
+                                   ng-readonly="form_client_read_only">
+                                <input type="checkbox" ng-value="$constants.appShortHandKeys[5]"
+                                       ng-disabled="form_client_read_only"
+                                       ng-readonly="form_client_read_only"
+                                       ng-model="apps_accessible[$constants.appShortHandKeys[5]]">
+                                <i class="input-helper"></i>
+                                {{$constants.appList[5]}}
+                            </label>
+                        </div>
+                        <div class="checkbox m-b-15" style="margin-left: 30%">
+                            <label ng-disabled="form_client_read_only"
+                                   ng-readonly="form_client_read_only">
+                                <input type="checkbox" ng-value="$constants.appShortHandKeys[6]"
+                                       ng-disabled="form_client_read_only"
+                                       ng-readonly="form_client_read_only"
+                                       ng-model="apps_accessible[$constants.appShortHandKeys[6]]">
+                                <i class="input-helper"></i>
+                                {{$constants.appList[6]}}
+                            </label>
+                        </div>
+                    </div-->
+                    <div class="row" ng-hide="form_client_read_only" style="margin: 30px 0px 45px 0px">
+                        <div style="float: right;">
+                            <button class="btn btn-default" ng-disabled="(form_client=='edit'
+                            ||(form_client=='add' && !(ClientForm.$dirty)))"
+                                    ng-click="clearForm()" style="margin-right:30px"> Clear</button>
+                            <button type="submit" class="btn btn-primary" ng-click="saveClient(ClientForm)" style="margin-right:30px">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+    <!-------------------------------------------------------------tab 2 ------------------------------------------------------->
+                <div ng-show="tab_active_client===2">
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_primary_contact_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_alternate_contact_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary email</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_primary_email" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate email</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_alt_email" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Fax</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_fax" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact person</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_prim_contact_person" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact person designation</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_prim_contact_designation" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact person no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_prim_contact_person_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact person email</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_prim_contact_person_email" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact person </label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_alt_contact_person" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact person designation</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_alt_contact_person_designation" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact person no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_alt_contact_person_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact person email</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_alt_contact_person_email" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">IT administrator name</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only" class="form-control
+                                input-sm" ng-model="objClient.client_it_administrator_name" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">IT administrator contact no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_it_administrator_contact_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">IT administrator email</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_it_administrator_email" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Address</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="col-xs-6">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_address.line1"
+                                        style="height: 30px" placeholder="Line 1">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_address.line2"
+                                        style="height: 30px" placeholder="Line 2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="col-xs-6">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_address.city"
+                                        style="height: 30px" placeholder="City">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_address.district"
+                                        style="height: 30px" placeholder="District">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label  class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="col-xs-6">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_address.state"
+                                        style="height: 30px" placeholder="State">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.client_address.country"
+                                        style="height: 30px" placeholder="Country">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="form_client_read_only || !objClient._id" style="margin: 30px 0px 45px 0px">
+                        <div style="float: right;">
+                            <button class="btn btn-primary" ng-disabled="(form_client=='edit'
+                            ||(form_client=='add' && !(ClientForm.$dirty)))"
+                                    ng-click="clearForm()" style="margin-right:30px"> Clear</button>
+                            <button type="submit" class="btn btn-primary" ng-disabled="!(ClientForm.$dirty)"
+                                    ng-click="saveClient()" style="margin-right:30px">Save</button>
+                        </div>
+                    </div>
+                </div>
+    <!------------------------------------------tab 3 Vendor Info---------------------------------------------------->
+                <div ng-show="tab_active_client===3">
+                    <div class="form-group" ng-show="form_client_read_only">
+                        <label class="col-sm-4 control-label">Vendor name</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input readonly class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact person</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.ft_primary_contact_person" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact person designation</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.ft_primary_contact_person_designation" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact person no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.ft_primary_contact_person_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Primary contact person email</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.ft_primary_contact_person_email" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact person </label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.ft_alt_contact_person" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact person designation</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.ft_alt_contact_person_designation" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact person no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.ft_alt_contact_person_no" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Alternate contact person email</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.ft_alt_contact_person_email" style="height: 30px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form_client_read_only">
+                        <label  class="col-sm-4 control-label">PAN no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.pan_no" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form_client_read_only">
+                        <label  class="col-sm-4 control-label">TIN no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.tin_no" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form_client_read_only">
+                        <label  class="col-sm-4 control-label">Service tax no.</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input class="form-control
+                                input-sm"  ng-model="objFTData.service_tax_no" style="height: 30px" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Address-->
+                    <div class="form-group" ng-show="form_client_read_only">
+                        <label  class="col-sm-4 control-label">Address</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="col-xs-6">
+                                <div class="fg-line" ng-readonly="form_client_read_only">
+                                    <input class="form-control
+                                    input-sm"
+                                           ng-model="objFTData.line1"
+                                           style="height: 30px" placeholder="Line 1" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="fg-line" ng-readonly="form_client_read_only">
+                                    <input class="form-control
+                                    input-sm"
+                                           ng-model="objFTData.line2"
+                                           style="height: 30px" placeholder="Line 2" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form_client_read_only">
+                        <label  class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="col-xs-6">
+                                <div class="fg-line" ng-readonly="form_client_read_only">
+                                    <input class="form-control
+                                    input-sm" ng-model="objFTData.city"
+                                           style="height: 30px" placeholder="City" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="fg-line" ng-readonly="form_client_read_only">
+                                    <input class="form-control
+                                    input-sm" ng-model="objFTData.district"
+                                           style="height: 30px" placeholder="District" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form_client_read_only">
+                        <label  class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="col-xs-6">
+                                <div class="fg-line" ng-readonly="form_client_read_only">
+                                    <input class="form-control
+                                    input-sm" ng-model="objFTData.state"
+                                           style="height: 30px" placeholder="State" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="fg-line" ng-readonly="form_client_read_only">
+                                    <input class="form-control
+                                    input-sm" ng-model="objFTData.country"
+                                           style="height: 30px" placeholder="Country" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 30px;">
+                        <label  class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="col-xs-6">
+                                <div class="fg-line" ng-readonly="form_client_read_only">
+                                    <input class="form-control
+                                    input-sm" ng-model="objFTData.pincode"
+                                           style="height: 30px" placeholder="Pincode" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Buttons-->
+                    <div class="row" ng-hide="form_client_read_only || !objClient._id" style="margin: 30px 0px 45px 0px">
+                        <div style="float: right;">
+                            <button class="btn btn-primary" ng-disabled="(form_client=='edit'
+                        ||(form_client=='add' && !(ClientForm.$dirty)))"
+                                    ng-click="clearForm()" style="margin-right:30px"> Clear</button>
+                            <button type="submit" class="btn btn-primary" ng-disabled="!(ClientForm.$dirty)"
+                                    ng-click="saveClient(ClientForm)" style="margin-right:30px">Save</button>
+                        </div>
+                    </div>
+                </div>
+    <!------------------------------------------tab 4 Billing terms -------------------------------------------------->
+                <div ng-show="tab_active_client===4">
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Billing Frequency</label>
+                        <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg_line">
+                                <div class="select" ng-show="(form_client=='view' && objClient.billing_frequency.length) ||
+                                            form_client=='add' || form_client=='edit'"
+                                     ng-readonly="form_client_read_only">
+                                    <select class="form-control"
+                                            ng-readonly="form_client_read_only" style="height:35px"
+                                            ng-disabled="form_client_read_only" ng-model="objClient.billing_frequency">
+                                        <option value="" disabled selected>Select billing frequency</option>
+                                        <option ng-repeat="x in $constants.billingFrequencyClient" ng-disabled="form_client_read_only"
+                                                value="{{x}}">{{x}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="objClient.billing_frequency!='One time'">
+                        <label  class="col-sm-4 control-label">Billing amount monthly(in Rs.)</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.bill_amount_monthly" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="objClient.billing_frequency!='One time'">
+                        <label  class="col-sm-4 control-label">Service tax monthly (in Rs.)</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.service_tax_monthly" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="objClient.billing_frequency!='One time'">
+                        <label  class="col-sm-4 control-label">Total amount monthly (in Rs.)</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.total_amount_monthly" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Overall amount (in Rs.)</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.overall_amount" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">SMS Limit</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.sms_limit" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Email limit</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <input ng-readonly="form_client_read_only"  class="form-control
+                                input-sm" ng-model="objClient.email_limit" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Payment Terms</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <textarea class="form-control" ng-model="objClient.payment_terms"
+                                          style="padding: 10px" rows="5" placeholder="Payment terms"
+                                          ng-readonly="form_client_read_only"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-4 control-label">Billing Terms</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <textarea class="form-control" ng-model="objClient.billing_terms"
+                                          style="padding: 10px" rows="5" placeholder="Billing Terms"
+                                          ng-readonly="form_client_read_only"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 30px">
+                        <label  class="col-sm-4 control-label">Remarks</label>
+                        <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="form_client_read_only">
+                                <textarea class="form-control" ng-model="objClient.remarks_billing"
+                                          style="padding: 10px" rows="5" placeholder="Remarks"
+                                          ng-readonly="form_client_read_only"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="form_client_read_only || !objClient._id" style="margin: 0px 0px 30px 0px">
+                        <div style="float: right;">
+                            <button class="btn btn-default" ng-disabled="(form_client=='edit'
+                            ||(form_client=='add' && !(ClientForm.$dirty)))"
+                                    ng-click="clearForm()" style="margin-bottom: 15px;margin-right:30px"> Clear</button>
+                            <button type="submit" class="btn btn-primary" ng-disabled="!(ClientForm.$dirty)"
+                                    ng-click="saveClient(ClientForm)" style="margin-bottom: 15px;margin-right:30px">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+<!-------------------------------------------------tab 5 Documents -------------------------------------------------------->
+            <div ng-show="tab_active_client===5">
+                <form name="fileUploadForm">
+                    <!--Company logo-->
+                    <div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+                        <div class="col-sm-3">
+                            <p class="f-500 c-black m-b-20" style="display: inline-block">Company logo</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <button ng-hide="form_client_read_only" class="btn btn-sm btn-primary"
+                                    onclick="document.getElementById('client_logo').click();">Select File</button>
+                            <input ng-hide="true" id="client_logo" type="file" accept="image/*,application/pdf"
+                                   ngf-select ng-model="client_logo" name="client_logo"
+                                   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                            <i ng-show="myForm.client_logo.$error.maxSize">File too large
+                                {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                             <!-- <img ng-show="fileUploadForm.client_logo.$valid" ngf-src="client_logo"
+                                 ngf-resize="{width: 100, height: 100}"> -->
+                            <!-- <img ng-if ="img2"
+                                 src="{{img1}}"
+                                 ngf-resize="{width: 100, height: 100}"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button ng-click="preview(client_logo)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="client_logo">Preview</button >
+                            <button ng-click="callPreview(objClient.client_logo)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="objClient.client_logo && !client_logo">Preview</button >
+
+                            <!-- <button ng-click="client_logo = null"
+                                    ng-show="client_logo">Remove</button> -->
+                            <br>
+                        </div>
+                    </div>
+                    <!--Favicon document -->
+                    <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                        <div class="col-sm-3">
+                            <p class="f-500 c-black m-b-20" style="display: inline-block">Website favicon</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <button ng-hide="form_client_read_only" class="btn btn-sm btn-primary"
+                                    onclick="document.getElementById('client_favicon').click();">Select File</button>
+                            <input ng-hide="true" id="client_favicon" type="file" accept="image/*,application/pdf"
+                                   ngf-select ng-model="client_favicon" name="client_favicon"
+                                   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                            <i ng-show="fileUploadForm.client_favicon.$error.maxSize">File too large
+                                {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                            <!--<img ng-show="fileUploadForm.client_favicon.$valid" ngf-src="client_favicon"
+                                 ngf-resize="{width: 100, height: 100}">
+                             <img ng-show="objClient.client_favicon && form_client_read_only"
+                                 ngf-src="{{fileURLClient}}{{objClient.client_favicon}}"
+                                 ngf-resize="{width: 100, height: 100}"> -->&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button ng-click="preview(client_favicon, objClient)" ng-show="client_favicon" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;"  ng-if="client_favicon">Preview</button>
+                            <button ng-click="preview(objClient.client_favicon, objClient)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="objClient.client_favicon && !client_favicon">Preview</button >
+                            <!-- <button ng-click="client_favicon = null"
+                                    ng-show="client_favicon">Remove</button> -->
+                        </div>
+                    </div>
+                    <!--Billing Document-->
+                    <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                        <div class="col-sm-3">
+                            <p class="f-500 c-black m-b-20" style="display: inline-block">Billing document</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <button ng-hide="form_client_read_only" class="btn btn-sm btn-primary"
+                                    onclick="document.getElementById('client_billing_doc').click();">Select File</button>
+                            <input ng-hide="true" id="client_billing_doc" type="file" ngf-select
+                                   accept="image/*,application/pdf"  ng-model="client_billing_doc" name="client_billing_doc"
+                                   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                            <!--<i ng-show="fileUploadForm.client_billing_doc.$error.maxSize">File too large
+                                {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                             <img ng-show="fileUploadForm.client_billing_doc.$valid" ngf-src="client_billing_doc"
+                                 ngf-resize="{width: 100, height: 100}"> -->&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button ng-click="preview(client_billing_doc, objClient)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;"
+                                    ng-show="client_billing_doc" ng-if="client_billing_doc">Preview</button>
+                            <button ng-click="preview(objClient.client_billing_doc, objClient)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="objClient.client_billing_doc && !client_billing_doc">Preview</button >
+                            <!-- <button ng-click="client_billing_doc = null"
+                                    ng-show="client_billing_doc">Remove</button> -->
+                        </div>
+                    </div>
+                    <!--Tin document-->
+                    <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                        <div class="col-sm-3">
+                            <p class="f-500 c-black m-b-20" style="display: inline-block">Company TIN Document</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <button ng-hide="form_client_read_only" class="btn btn-sm btn-primary"
+                                    onclick="document.getElementById('client_tin_doc').click();">Select File</button>
+                            <input ng-hide="true" id="client_tin_doc" accept="image/*,application/pdf"
+                                   type="file" ngf-select ng-model="client_tin_doc" name="client_tin_doc"
+                                   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                            <!--<i ng-show="fileUploadForm.client_tin_doc.$error.maxSize">File too large
+                                {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                             <img ng-show="fileUploadForm.client_tin_doc.$valid" ngf-src="client_tin_doc"
+                                 ngf-resize="{width: 100, height: 100}">
+                            <button ng-click="client_tin_doc = null"
+                                    ng-show="client_tin_doc">Remove</button> -->
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button ng-click="preview(client_tin_doc, objClient)"style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;"
+                                    ng-show="client_tin_doc" ng-if="client_tin_doc">Preview</button>
+                            <button ng-click="preview(objClient.client_tin_doc, objClient)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="objClient.client_tin_doc && !client_tin_doc">Preview</button >
+                        </div>
+                    </div>
+                    <!--Pan Document -->
+                    <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                        <div class="col-sm-3">
+                            <p class="f-500 c-black m-b-20" style="display: inline-block">Company PAN Document</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <button ng-hide="form_client_read_only" class="btn btn-sm btn-primary"
+                                    onclick="document.getElementById('client_pan_doc').click();">Select File</button>
+                            <input ng-hide="true" id="client_pan_doc" accept="image/*,application/pdf"
+                                   type="file" ngf-select ng-model="client_pan_doc" name="company_logo"
+                                   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                            <i ng-show="fileUploadForm.client_pan_doc.$error.maxSize">File too large
+                                {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                            <!--<img ng-show="fileUploadForm.client_pan_doc.$valid" ngf-src="client_pan_doc"
+                                 ngf-resize="{width: 100, height: 100}">
+                             <img ng-show="objClient.client_pan_doc && form_client_read_only"
+                                 ngf-src="{{}}{{objClient.client_pan_doc}}"
+                                 ngf-resize="{width: 100, height: 100}">
+                            <button ng-click="client_pan_doc = null"
+                                    ng-show="client_pan_doc">Remove</button> -->
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button ng-click="preview(client_pan_doc, objClient)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;"
+                                    ng-show="client_pan_doc" ng-if="client_pan_doc">Preview</button>
+                            <button ng-click="preview(objClient.client_pan_doc, objClient)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-if="objClient.client_pan_doc && !client_pan_doc">Preview</button >
+                        </div>
+                    </div>
+                    <!-- <div class="row" style="margin-bottom: 5%;margin-left: 15%" ng-show="form_client_read_only">
+                        <div class="col-sm-3">
+                            <p class="f-500 c-black m-b-20" style="display: inline-block">Vendor TIN Document</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <img ng-show="form_client_read_only" ngf-src="//source to FT TIN Document"
+                                 ngf-resize="{width: 100, height: 100}">
+                        </div>
+                        &nbsp;&nbsp;
+                            <button ng-click="preview(client_logo, objClient)"
+                                    ng-show="client_logo">Preview</button>
+                    </div> -->
+                    <!-- <div class="row" style="margin-bottom: 5%;margin-left: 15%" ng-show="form_client_read_only">
+                        <div class="col-sm-3" >
+                            <p class="f-500 c-black m-b-20" style="display: inline-block">Vendor PAN Document</p>
+                        </div>
+                        <div class="col-sm-9">
+                            <img ng-show="form_client_read_only" ngf-src="//Source to FT PAN Document"
+                                 ngf-resize="{width: 100, height: 100}">
+                        </div>
+                        &nbsp;&nbsp;
+                            <button ng-click="preview(client_logo, objClient)"
+                                    ng-show="client_logo">Preview</button>
+                    </div> -->
+
+                    <div class="row" ng-hide="form_client_read_only || !objClient._id" style="margin: 0px 0px 30px 0px">
+                        <div style="float: right;">
+                            <button type="submit" class="btn btn-primary"
+                                    ng-click="saveClient(ClientForm)" style="margin-bottom: 15px;margin-right:30px">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </form>
+</div>

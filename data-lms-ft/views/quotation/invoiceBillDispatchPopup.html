@@ -1,0 +1,213 @@
+<form role="form"  name="dispatchPop" autocomplete="off">
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add Dispatch Detail for Invoice No. {{bill.invoice_no}}</h4><br>
+		<!-- <Span ng-if="selectedBookingItem.container_no">{{selectedBookingItem.container_no}}</Span> -->
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<!-- <div class="row" style=""> -->
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Dispatched via</label>
+					<div class="col-sm-7">
+						<div class="select">
+							<select
+								class="form-control"
+								ng-init="bill.dispatched_via = aDispatched_via[0]"
+								ng-model="bill.dispatched_via"
+								ng-options="option as option for option in aDispatched_via"
+								ng-change="DispatchedFunc(bill.dispatched_via)">
+									<option selected disabled>Select</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Dispatched by <span class="req_r">*</span></label>
+					<div class="col-sm-7">		
+						<div class="fg-line">
+							<input type="text" ng-model="bill.dispatched_by" class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Dispatched date <span class="req_r">*</span></label>
+					<div class="col-sm-7">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened4')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   ng-model="bill.dispatched_by_date"
+									   is-open="opened4"
+									   uib-datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="Select Date"
+								/>
+							</div>
+							<span class="input-group-btn">
+                   		 		<button
+                   		 			type="button"
+                   		 			class="btn btn-default m-t-0 f12"
+                   		 			ng-click="DatePicker.openDatePicker(this, $event, 'opened4')">
+                   		 				<i class="glyphicon glyphicon-calendar"></i>
+                   		 		</button>
+                  			</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div ng-show="show_me" class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Courier Name <span class="req_r">*</span></label>
+					<div class="col-sm-7">
+						<div class="select">
+							<select class="form-control" ng-model="bill.courier" ng-options="option as option.name for option in aCourier" ng-change="CourierFunc(bill.courier_name)">
+								<option selected disabled>Select Name</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div ng-show="show_me" class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Courier Office <span class="req_r">*</span></label>
+					<div class="col-sm-7">
+						<div class="select">
+							<select
+								class="form-control"
+								ng-model="bill.courier_office"
+								ng-options="option as option.branch_name+' (' + option.address + ')' for option in aCourierOfc"
+								ng-disabled="!bill.courier_name"
+							>
+								<option selected disabled>Select Office</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<!-- </div> -->
+
+			<!-- <div class="row" style=""> -->
+			<div ng-show="show_me" class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Courier Date <span class="req_r">*</span></label>
+					<div class="col-sm-7">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   ng-model="bill.courier_date"
+									   is-open="opened2"
+									   uib-datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="Select Date"
+								/>
+							</div>
+							<span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- </div> -->
+
+			<!-- <div class="row" style=""> -->
+			
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Branch <span class="req_r">*</span></label>
+					<div class="col-sm-7">
+						<div class="select">
+							<select
+								class="form-control"
+								ng-model="bill.branch"
+								ng-options="option as option.name for option in aBranch">
+									<option selected disabled>Select</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- <div ng-if="!show_me" class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Driver Name</label>
+					<div class="col-sm-7">
+						<div class="select">
+							<select class="form-control" ng-model="bill.driver_name" ng-options="option as option.name for option in aDriver">
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Due Date</label>
+					<div class="col-sm-7">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   ng-model="bill.due_date"
+									   is-open="opened3"
+									   uib-datepicker-options="DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="Select Date"
+								/>
+							</div>
+							<span class="input-group-btn">
+	                    		<button type="button" class="btn btn-default m-t-0 f12" ng-click="DatePicker.openDatePicker(this, $event, 'opened3')">
+	                    			<i class="glyphicon glyphicon-calendar"></i>
+	                    		</button>
+                  			</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-5 control-label">Place</label>
+					<div class="col-sm-7">
+						<div class="fg-line">
+							<input type="text" ng-model="bill.place" placeholder=" " class="form-control">
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<!-- </div> -->
+			<hr>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="dispatchInvoice()">Add</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 50%;
+		height: 173px
+	}
+</style>

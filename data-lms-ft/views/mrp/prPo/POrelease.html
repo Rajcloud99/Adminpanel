@@ -1,0 +1,139 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin: 5px 15px;">
+			<div class="col-md-1">
+				<select name="ponumder" class="form-control" chosen data-placeholder-text-single="'PO Number'"
+						allow-single-deselect="true" no-results-text="'Could not find any PO Number'"
+						ng-model="ponumder" ng-options="item.ponumder as item.ponumder for item in aPO"
+						ng-change="getAllPOserv()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<select name="vendor" class="form-control" chosen data-placeholder-text-single="'Vendor'"
+						allow-single-deselect="true" no-results-text="'Could not find any Vendor'"
+						ng-model="vendor_name" ng-options="item.name as item.name for item in aPOvendor"
+						ng-change="getAllPOserv()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-1">
+				<select name="status" class="form-control" chosen data-placeholder-text-single="'status'"
+						allow-single-deselect="true" no-results-text="'Could not find any status'" ng-model="status"
+						ng-options="item as item for item in aStatus" ng-change="getAllPOserv()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+								   datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date"
+								   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+								   placeholder="start date" ng-change="getAllPOserv()"
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened12 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened12 == true }">
+							<input ng-click="open($event, 'opened12')" type="text" class="form-control"
+								   datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+								   min-date="start_date" is-open="opened12" datepicker-options="dateOptions"
+								   close-text="Close" placeholder="end date" ng-change="getAllPOserv()"
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened12')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="lvh-search ng-scope sear">
+					<input type="text" placeholder="Search..." ng-model="findText" class="lvhs-input" class="form-control">
+					<i class="lvh-search-close" ng-click="clearSearch('findText')">×</i>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<button ng-disabled="!findText" ng-click="searchAll()" class="btn btn-primary">Search</button>
+			</div>
+			<div class="btns">
+				<a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"
+				   style="font-size: 18px;"><i class="glyphicon glyphicon-download"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto;">
+			<table class="table table-bordered override-table-bordered">
+				<thead>
+				<tr>
+					<th>S. No.</th>
+					<th>PO No.</th>
+					<th>Vendor</th>
+					<th>Status</th>
+					<th>Freight Terms</th>
+					<th>Payment Terms</th>
+					<th>Date</th>
+					<th>Created By</th>
+					<th>Approved By</th>
+					<th>Total</th>
+					<th>Action</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="objPO in aPOlists">
+					<td>{{$index+1}}</td>
+					<td>{{objPO.ponumder}}</td>
+					<td>{{objPO.vendor_name || 'NA'}}</td>
+					<td>{{objPO.status || 'NA'}}</td>
+					<td>{{objPO.freightTerms || 'NA'}}</td>
+					<td>{{objPO.payment_terms || 'NA'}}</td>
+					<td>{{objPO.created_at | date:'dd-MM-yyyy'}}</td>
+					<td>{{objPO.created_by_name || 'NA'}}</td>
+					<td>{{objPO.approver.name || 'NA'}}</td>
+					<td>{{objPO.total || 'NA'}}</td>
+					<td>
+						<!-- <i class="zmdi zmdi-edit pointer" tooltip="Edit" ng-click="editPO(objPO, $index)"></i>&nbsp;&nbsp; -->
+						<i class="zmdi zmdi-open-in-browser pointer"
+						   ng-click="actionWithVendorData(objPO, $index, previewPO)" tooltip="Preview"></i>&nbsp;&nbsp;
+						<i class="zmdi zmdi-shield-check pointer"
+						   ng-click="actionWithVendorData(objPO, $index, releasePO)" tooltip="Release"
+						   ng-if="objPO.status == 'Approved'"></i>&nbsp;&nbsp;
+						<i class="zmdi zmdi-shield-check pointer" tooltip="Already Released"
+						   ng-if="objPO.status == 'Released'"></i>&nbsp;&nbsp;
+						<i class="zmdi zmdi-shield-check pointer" tooltip="Already Inwarded"
+						   ng-if="objPO.status == 'Inwarded'"></i>&nbsp;&nbsp;
+						<i class="zmdi zmdi-download pointer" ng-click="printPODetail(objPO)"
+						   tooltip="Download"></i>&nbsp;&nbsp;
+						<i ng-hide="true" class="zmdi zmdi-undo zmdi-hc-fw pointer" ng-click="actionWithVendorData(objPO, $index, UnApprovePO)"
+						   tooltip="Unapproved"></i>&nbsp;&nbsp;
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<div class="pagi text-center" ng-show="total_pages>1">
+				<pagination ng-change="pageChanged()"
+							total-items="totalItems"
+							items-per-page="itemsPerPage" num-pages="numPages"
+							ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+							boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+							first-text="&laquo;" last-text="&raquo;">
+				</pagination>
+			</div>
+			<div ng-if="aPOlists.length == 0" class="ms-body" style=" min-height: 50px;">
+				<h3>PO not available !!!!!</h3>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,63 @@
+<!-- Controller: tripDetailsPopUpController -->
+<!-- ControllerAs: thVm -->
+<div class="modal-header">
+	<button type="button" ng-click="thVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Trip Details({{thVm.vehicle.vehicle.vehicle_reg_no}})</b></span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<ul class="list-group list-group-flush">
+			<!--Table DETAILS-->
+			<li class="list-group-item">
+				<span class="booking_list_header">Last Trip </span>
+
+				<div class="card-body">
+					<div class="row" style="margin:5px">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<div ja-table
+									 table-body="thVm.aTrip"
+									 table-head="thVm.tableHead"
+									 table-column-setting="thVm.columnSetting"
+									 table-load="thVm.getAllTrips(true)"
+									 table-height='200px'
+									 table-selectable='thVm.selectType'
+									 table-api="thVm.tableApi"
+									 table-selectable-model="thVm.selectedTrip"
+								></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-warning"
+			ng-click="thVm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>
+

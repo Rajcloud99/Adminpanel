@@ -1,0 +1,97 @@
+<div class="modal-header">
+	<button type="button" ng-click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<div class="clearfix"></div>
+
+<div class="modal-body">
+
+	<form role="form"  name="multiGrEditPopup" autocomplete="off" novalidate>
+
+		<div class="form-group col-md-4">
+			<label class="col-sm-3 control-label">Estimated Moisture</label>
+			<div class="col-sm-9" style="padding-left: 15px;padding-right: 15px;">
+				<div class="fg-line">
+					<input type="number"
+						   onwheel="return false"
+						   ng-min="5"
+						   ng-max="15.99"
+						   class="form-control"
+						   ng-model="estimated_moisture"
+						   name="Estimated Moisture"
+						   placeholder="Enter Estimated Moisture">
+				</div>
+				<span class="error" ng-if="	(multiGrEditPopup['Estimated Moisture'].$error.max
+												|| multiGrEditPopup['Estimated Moisture'].$error.min)
+											&& (multiGrEditPopup['Estimated Moisture'].$touched
+												|| bookingForm.$submitted)">
+					The value should be between 5.00 to 15.99
+				</span>
+			</div>
+		</div>
+
+		<div class="form-group col-md-4">
+			<label class="col-sm-3 control-label">Actual Moisture</label>
+			<div class="col-sm-9" style="padding-left: 15px;padding-right: 15px;">
+				<div class="fg-line">
+					<input type="number"
+						   onwheel="return false"
+						   ng-min="5"
+						   ng-max="15.99"
+						   class="form-control"
+						   ng-model="actual_moisture"
+						   name="Actual Moisture"
+						   placeholder="Enter Actual Moisture">
+				</div>
+				<span class="error" ng-if="	(multiGrEditPopup['Actual Moisture'].$error.max
+												|| multiGrEditPopup['Actual Moisture'].$error.min)
+											&& (multiGrEditPopup['Actual Moisture'].$touched
+												|| bookingForm.$submitted)">
+					The value should be between 5.00 to 15.99
+				</span>
+			</div>
+		</div>
+
+		<div class="form-group col-md-4">
+			<label class="col-sm-3 control-label">Internal Rate</label>
+			<div class="col-sm-9" style="padding-left: 15px;padding-right: 15px;">
+				<input style="padding:10px" type="number" min="1" ng-model="internal_rate" name="internal_rate" class="form-control input-sm"
+					   placeholder="Enter Internal rate">
+			</div>
+		</div>
+
+	</form>
+</div>
+<div class="clearfix"></div>
+
+<div class="modal-footer">
+	<button class="btn btn-success waves-effect" ng-disabled="!actual_moisture || !estimated_moisture || moistureBtnEnabled"
+	 ng-click="addMoisture(multiGrEditPopup)">
+		Add Moisture
+	</button>
+	<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+</div>
+
+<style type="text/css">
+	.modal-dialog {
+		width: 75%;
+		height: 173px
+	}
+
+	.ja-table {}
+
+	.fs-12 {
+		font-size: 11px;
+	}
+
+	.text-center {
+		text-align: center;
+	}
+
+	.ja-table>tbody>tr>td {
+		border: 1px solid #000000;
+		padding: 2px 5px !important;
+		border-spacing: 0px;
+	}
+</style>

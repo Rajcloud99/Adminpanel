@@ -1,0 +1,60 @@
+<form role="form"  name="" autocomplete="off" novalidate>
+	<div class="modal-header" style="padding-bottom: 5px;">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add Booking In Vehicle</h4><br>
+	</div>
+	<div class="modal-body">
+		<div class="row" style="margin:15px">
+			<!--<div class="col-md-12">
+				<div class="form-group m-b-0">
+					<div ng-repeat="veh in aVehicleSelected" ng-click="pushBooking(veh,$index)" class="pointer">
+						<h4 ng-show="veh.show">{{veh.vehicle_reg_no}}</h4>
+					</div>
+				</div>
+			</div>-->
+			<div class="col-md-12">
+				<div class="detailsList">
+					<div class="" style="overflow-y: auto; max-height: 400px;">
+						<table class="table table-bordered unresponsive">
+							<thead>
+							<tr>
+								<th>Vehicle No.</th>
+								<th>Booking Added(Booking Number)</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr data-ng-repeat="veh in aVehicleSelected" class="pointer selectItem" ng-click="pushBooking(veh,$index)" ng-class="{green :  veh.gr.length>0}">
+								<td ng-show="veh.show">{{veh.vehicle_reg_no}}</td>
+								<td ng-show="veh.show"><span ng-repeat="b in veh.gr">{{b.booking_no}}, </span></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px"></div>
+
+	</div>
+	<div class="modal-footer">&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Cancel</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 54%;
+	}
+	.pointer{
+		border: 1px solid #ddd;
+		text-align: center;
+	}
+	.pointer:hover{
+		background:#eee;
+		border-color: #000;
+	}
+</style>
+

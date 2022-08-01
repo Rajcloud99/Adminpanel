@@ -1,0 +1,63 @@
+<form role="form"  name="builtyRender" autocomplete="off" novalidate>
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<div col-md-12>
+			<div class="col-md-4">
+				<div ng-show="(aTemplate && aTemplate.length>1)" class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Select Template:</label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control"
+									placeholder="Select Template"
+									ng-options="option as option.name for option in aTemplate"
+									ng-model="templateKey"
+									name="template"
+									ng-change="getGR(templateKey.key)">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<!--<button ng-show="templateKey" class="btn btn-primary" ng-click="getGR(templateKey)" style="margin-bottom: 12px;">Show</button>-->
+				<button ng-show="html" ng-click="printDiv('idOne')" class="btn btn-primary glyphicon glyphicon-print" style="margin-bottom: 12px;"> PRINT </button>
+				<button ng-show="html && downloadExcel|typeOfFilter:'function'" ng-click="downloadExcel('idOne')" class="btn btn-primary glyphicon glyphicon-download-alt" style="margin-bottom: 12px;"> Excel </button>
+			</div>
+			<div class="col-md-4">
+			</div>
+		</div>
+		<div class="clearfix"></div>
+
+
+	</div>
+	<div class="clearfix"></div>
+	<div class="modal-body">
+		<div class="ja-table-layout" id="idOne" compile="html" style="overflow: scroll"></div>
+	</div>
+	<div class="modal-footer">
+		<button ng-if="showSubmitButton" class="btn btn-primary" ng-click="submit()">Submit</button>
+		<button ng-if="showSubmitAndApproveButton" class="btn btn-primary" ng-click="submit(true)">Submit And Approve</button>
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 90%;
+		height: 173px
+	}
+	.ja-table-layout table{
+		table-layout: auto !important;
+		width: 100% !important;
+	}
+
+	@media all {
+		/*.page-break  { display: none; }*/
+	}
+
+	@media print {
+		/*.page-break  { display: block; page-break-before: always; }*/
+	}
+
+</style>

@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="card m-b-0" style="padding: 1px 5px 0px 5px;">
+      <wallop-slider
+					data-images="images"
+          data-animation="rotate"
+          data-current-item-index="index"
+          data-on-previous="updateTsPrevious()"
+          data-on-next="updateTsNext()">
+			</wallop-slider>
+  </div>
+</div>
+
+<style>
+
+  .wallop-slider {
+    height: 600px;
+  }
+
+  ul.wallop-slider__list{
+    padding: 0;
+  }
+
+  ul.wallop-slider__list,
+  ul.wallop-slider__list li,
+  ul.wallop-slider__list li img{
+    height: 100%;
+  }
+
+</style>

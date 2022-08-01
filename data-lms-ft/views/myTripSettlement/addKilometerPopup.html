@@ -1,0 +1,58 @@
+<!-- Controller: addKilometerPopupCtrl -->
+<!-- ControllerAs: aKVm -->
+
+<form role="form"  name="addKilometerPopUp" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="aKVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add Kilometer</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="col-md-10">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label">Kilometer</label>
+					<div class="col-sm-7">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : (event.charCode >= 45 && event.charCode <= 57)"
+							   onwheel="return false"
+							   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   placeholder="Kilometer"
+							   class="form-control"
+							   ng-model="aKVm.selectedTrip.extraKm"
+							   name="kilometer"
+							   ng-max="aKVm.max"
+							   ng-min="aKVm.min"
+							   required>
+						<span class="error" ng-show="addKilometerPopUp['kilometer'].$error.required">This field is required</span>
+						<span class="error" ng-show="addKilometerPopUp['kilometer'].$error.min">Value should be Grater than {{aKVm.min}}</span>
+						<span class="error" ng-show="addKilometerPopUp['kilometer'].$error.max">Value should be Smaller than {{aKVm.max}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="aKVm.submit(addKilometerPopUp)">Acknowledge</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="aKVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 50%;
+		height: 173px
+	}
+	.exced{
+		margin-top: 20px;margin-left:10px;
+	}
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+	td ,th{
+		text-align:center;
+	}
+	.pac-container.pac-logo{z-index: 9999;}
+</style>

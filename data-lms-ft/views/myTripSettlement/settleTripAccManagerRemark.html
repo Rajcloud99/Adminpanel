@@ -1,0 +1,60 @@
+<!-- Controller: accountManagerRemarkPopupCtrl -->
+<!-- ControllerAs: sTAmr -->
+
+<form role="form"  name="accountManagerRemarkPopup" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="sTAmr.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Account Manager Remark</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			
+			<div class="col-md-4" ng-show="sTAmr.currentDate">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<b>Date:</b>&nbsp;&nbsp; {{sTAmr.currentDate | date: "dd-MM-yyyy"}}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label">Remark</label>
+					<div class="col-sm-7">
+						<div class="fg-line">
+							<input type="text"
+								   placeholder="Remark"
+								   class="form-control"
+								   ng-model="sTAmr.remark"
+								   name="Remark"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="sTAmr.submit(accountManagerRemarkPopup)">Submit</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="sTAmr.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 50%;
+		height: 173px
+	}
+	.exced{
+		margin-top: 20px;margin-left:10px;
+	}
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+	td ,th{
+		text-align:center;
+	}
+	.pac-container.pac-logo{z-index: 9999;}
+</style>

@@ -1,0 +1,330 @@
+<form role="form"  name="invoiceUpdate" autocomplete="off" novalidate>
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+		data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Edit Booking Info</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">SL No:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<!-- <input type="number" ng-model="upadateData.sl_no" class="form-control" ng-readonly="true"> -->
+								{{upadateData.sl_no || "NA"}}
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Trip No:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<!-- <input type="number" ng-model="upadateData.trip_no" class="form-control" ng-readonly="true"> -->
+								{{upadateData.trip_no || "NA"}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 checkbox checkbox-inline">Market Builty:
+						</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="checkbox" ng-model="upadateData.isMarketVehicle">
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="row">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">GR No:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="upadateData.gr_no" class="form-control" >
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">GR Date:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{upadateData.gr_date | date:"dd-MM-yyyy"}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Vehicle No:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<!-- <input type="number" ng-model="upadateData.veh_no" class="form-control" ng-readonly="true"> -->
+								{{upadateData.veh_no || "NA"}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Vehicle Type:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<!-- <input type="number" ng-model="upadateData.veh_type" class="form-control" ng-readonly="true"> -->
+								{{upadateData.veh_type || "NA"}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Route:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<!-- <input type="number" ng-model="upadateData.route" class="form-control" ng-readonly="true"> -->
+								{{upadateData.route || "NA"}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Container(s):</label>
+						<div class="col-sm-6">
+							<span ng-repeat="a in upadateData.container_no">{{a}},</span>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Weight{{"("+upadateData.weight_unit+")"}}:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.weight" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Payment Type:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{upadateData.payment_type || "NA"}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Payment Basis:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{upadateData.payment_basis || "NA"}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Previous Rate:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.previous_rate" class="form-control" ng-readonly="true">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div  class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Previous Freight:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.previous_freight" class="form-control" ng-readonly="true">
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Rate:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.rate" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Freight:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.freight" class="form-control" ng-readonly="true">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">GR Charges:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.gr_charges" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Loading Charges:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.loading_charges" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Unloading Charges:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.unloading_charges" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Fuel Price Hike:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.fuel_price_hike" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Over Weight Charges:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.ovr_wt_chrgs" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Detention Charges:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.dtn_amt" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Weightman Charges</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.weightman_charges" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Other Charges:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.other_charges" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Extra Running:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.othr_exp" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-show="(upadateData.isTransporter && upadateData.payment_type.includes('Advance'))" class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Advance:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.totalAdvance" class="form-control">
+							</div>
+							<span ng-hide="advanceIsOk" style="color: #cc0000">Advance should less or equal to Freight!!</span>
+						</div>
+					</div>
+				</div>
+				<div ng-show="upadateData.isTransporter" class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">{{upadateData.payment_type.includes('pay')?"To Pay":"Balance"}}:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="upadateData.totalBalance" class="form-control" ng-readonly="true">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Total:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-init="upadateData.toCalc=upadateData.total" ng-model="upadateData.toCalc" class="form-control" ng-readonly="true">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<textarea class="form-control" rows="3" ng-model="upadateData.remarks"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+
+		</div>
+	</div>
+	<br>
+	<hr>
+	<div class="modal-footer">
+		<button style="margin-top: 2%" class="btn btn-success waves-effect" ng-disabled="!advanceIsOk"  ng-click="updateInvoice()">Upadate</button>&nbsp;&nbsp;&nbsp;
+		<button style="margin-top: 2%" class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+	<style type="text/css">
+	.modal-dialog {width: 70%;
+				height: 179px
+		}
+	</style>

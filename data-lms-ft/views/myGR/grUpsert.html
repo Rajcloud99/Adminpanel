@@ -1,0 +1,3852 @@
+<!-- Controller: grUpsertController-->
+<!-- ControllerAs: grUVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+			<!--<span class="c-black"><b>Gr Details</b></span>-->
+			<span class="c-black"><b>Trip No:</b>
+				<span style="margin-left: 10px; color: rgb(25, 6, 18);">
+					 {{grUVm.selectedGr.trip.trip_no || 'NA'}}
+				</span>
+			</span>&nbsp;&nbsp;&nbsp;&nbsp;
+			<span class="c-black"><b>Route(Distance):</b>
+				<span style="margin-left: 10px; color: rgb(25, 6, 18);">
+					 {{grUVm.selectedGr.trip.route_name || 'NA'}}
+				</span>
+			</span>&nbsp;&nbsp;
+			<span class="c-black"><b>Vehicle No:</b>
+				<span style="margin-left: 10px; color: rgb(25, 6, 18);">
+					 {{grUVm.selectedGr.trip.vehicle_no || 'NA'}}
+				</span>
+			</span>
+			<span class="c-black"><b>Vehicle Model:</b>
+				<span style="margin-left: 10px; color: rgb(25, 6, 18);">
+					 {{grUVm.selectedGr.trip.vehicle.model || 'NA'}}
+				</span>
+			</span>&nbsp; &nbsp;
+
+			<span class="c-black"><b>Bill No:</b>
+				<span style="margin-left: 10px; color: rgb(25, 6, 18);">
+					 {{grUVm.selectedGr.bill.billNo || 'NA'}}
+				</span>
+			</span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0 form-wrapper" ng-class="{readonly: grUVm.readonly}" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" style="position: absolute;width: 100%;margin-bottom: 65px">
+		<form name="grUpset" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<!-- Gr DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">Gr Details: </span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="clearfix"></div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.branch.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">
+											{{grUVm.__FormList.branch.label || 'Branch'}}: <span class="req_r" ng-if="!grUVm.readonly">*</span>
+										</label>
+										<div class="col-sm-6" style="z-index: 91"
+											 ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill) && grUVm.__FormList.branch.editable|hdlUdf:true">
+											<div ng-dropdown-multiselect=""
+												 options="grUVm.aBranch"
+												 selected-model="grUVm.selectedGr.branch"
+												 extra-settings="grUVm.selectSettings"
+												 events='grUVm.onBranchSelectEvents'
+												 ja-search-input='inputModel'
+												 ja-search-trigger="grUVm.getAllBranch(inputModel)"
+											></div>
+											<span class="error"
+												  ng-if="grUVm.selectedGr.branch && !grUVm.selectedGr.branch.grBook">No GR Book Linked to selected branch</span>
+										</div>
+										<div class="col-sm-6"
+											 ng-if="(grUVm.readonly || grUVm.selectedGr.invToBill) || !(grUVm.__FormList.branch.editable|hdlUdf:true)">
+											{{grUVm.selectedGr.branch.name}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.grDate.visible|hdlUdf:true">
+									<div class="col-md-12 form-group m-b-5" style="z-index: 90">
+										<label class="col-sm-5">{{grUVm.__FormList.grDate.label || 'Gr Date:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line"
+												 ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill)&& grUVm.__FormList.grDate.editable|hdlUdf:true">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened1 == true }">
+													<input
+														ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+														max-date="grUVm.DatePicker.newDate"
+														min-date="grUVm.selectedGr.trip.allocation_date"
+														type="text"
+														ng-init="grUVm.selectedGr.grDate = ('toDateObj'|dateUtilsFilt:grUVm.selectedGr.grDate)"
+														uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+														show-weeks="false"
+														ng-model="grUVm.selectedGr.grDate"
+														class="form-control"
+														is-open="opened1"
+														uib-datepicker-options="grUVm.DatePicker.dateSettings"
+														close-text="Close"
+														ng-change="grUVm.calculateIncentive();grUVm.getRates();grUVm.calday(); grUVm.grNumberModel = undefined;"
+														ng-required="grUVm.__FormList.grDate.req|hdlUdf:true"
+														name="GR Date">
+													<span class="input-group-btn">
+														<button type="button" class="btn btn-default m-t-0 f12"
+																ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened1')">
+															<i class="glyphicon glyphicon-calendar"></i>
+														</button>
+													</span>
+												</div>
+											</div>
+											<div class="fg-line"
+												 ng-if="(grUVm.readonly || grUVm.selectedGr.invToBill)|| !(grUVm.__FormList.grDate.editable|hdlUdf:true)">
+												{{grUVm.selectedGr.grDate|date:'dd-MM-yyyy'}}
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.grNumber.visible|hdlUdf:true">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-4">{{grUVm.__FormList.grNumber.label || 'Gr No.:'}} </label>
+										<div class="col-sm-8">
+											<div class="fg-line chosen-row-1" style="display: inline-flex" ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill)&& grUVm.__FormList.grDate.editable|hdlUdf:true">
+												<div style="z-index: 1; position: relative;">
+													<input type="text"
+														   placeholder="Search..."
+														   name="Gr Number"
+														   ng-model="grUVm.grNumberModel"
+														   typeahead-wait-ms="10"
+														   typeahead="item as item.bookNo for item in grUVm.getBillBookNo($viewValue)|limitTo:10"
+														   ng-readonly="(grUVm.readonly || grUVm.selectedGr.invToBill) ? true : $role['GR']['Edit Gr Number'] ? false : grUVm.selectedGr.gr_type === 'Centralized' ? true : false"
+														   class="form-control"
+														   style="width: calc( 100% - 27px);"
+														   ng-required="grUVm.__FormList.grNumber.req|hdlUdf:true">
+													<i class="lvh-search-close" ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill)"
+													   ng-click="grUVm.grNumberModel = '';">×</i>
+													<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw" ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill)"
+													   style="right: -20px; background: #3096f3;"
+													   uib-tooltip="Auto"
+													   ng-click="grUVm.getBillBookNo('auto')"></i>
+													<i class="lvh-search-close zmdi zmdi-plus-circle zmdi-hc-fw" ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill) && $role['GR']['Centralize Book']"
+													   style="right: -45px; background: #3096f3;"
+													   uib-tooltip="Centrailized"
+													   ng-click="grUVm.getBillBookNo('centrailized')"></i>
+												</div>
+<!--												<div>-->
+<!--													<button class="btn btn-primary" ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill)"-->
+<!--															ng-if="$role['GR']['Centralize Book']"-->
+<!--															ng-click="grUVm.getBillBookNo('centrailized')">-->
+<!--														<i class="zmdi zmdi-plus-circle zmdi-hc-fw"></i>-->
+<!--													</button>-->
+<!--												</div>-->
+											</div>
+											<div class="fg-line"
+												ng-if="(grUVm.readonly || grUVm.selectedGr.invToBill)|| !(grUVm.__FormList.grNumber.editable|hdlUdf:true)">
+												{{grUVm.selectedGr.grNumber}}
+											</div>
+											<span class="error"
+												  ng-show="upsertGrForm['GR No.'].$error.pattern">Invalid Gr number</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.grRemarks.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{grUVm.__FormList.grRemarks.label || 'GR Remark'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Gr Remark"
+													   class="form-control"
+													   ng-model="grUVm.selectedGr.remarks"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.grRemarks.editable|hdlUdf: true)"
+													   ng-required="grUVm.__FormList.grRemarks.req|hdlUdf:false"
+													   name="Remark"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<!-- Customer Details-->
+					<li class="list-group-item">
+						<div class="row">
+							<div class="col-md-3 form-group" ng-if="grUVm.__FormList.customer.visible|hdlUdf:true">
+								<div class="text-center booking_list_header m-t-5 label"><u><b>{{grUVm.__FormList.customer.label
+									|| 'Customer'}}</b></u></div>
+								<div class="col-md-2"></div>
+								<div class="col-md-8"
+									 ng-if="!grUVm.readonly && grUVm.__FormList.customer.editable|hdlUdf:true">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   placeholder="Customer Search..."
+											   ng-model="grUVm.selectedGr.customer"
+											   class="lvhs-input form-control"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in grUVm.getCustomers($viewValue)"
+											   typeahead-on-select="grUVm.onCustomerSelect($item, $model, $label); grUVm.getRates(); grUVm.getDPHRate();"
+											   ng-required="grUVm.__FormList.customer.req|hdlUdf:false">
+										<i class="lvh-search-close" ng-click="grUVm.selectedGr.customer='';">×</i>
+									</div>
+								</div>
+								<div class="col-md-12" style="margin-top: 5px;margin-left: 50px;margin-bottom: 25px;">
+									<b>
+										{{grUVm.selectedGr.customer.name || 'NA'}}</b>
+								</div>
+								<!--<div class="col-md-12">-->
+								<!--{{grUVm.selectedGr.customer.prim_contact_name || 'NA'}}-->
+								<!--</div>-->
+								<!--<div class="col-md-12">-->
+								<!--{{(grUVm.selectedGr.customer.address|formatAddress) || 'NA'}}-->
+								<!--</div>-->
+							</div>
+							<div class="col-md-3 form-group" ng-if="grUVm.__FormList.consignor.visible|hdlUdf:true">
+								<div class="text-center booking_list_header m-t-5 label"><u><b>{{grUVm.__FormList.consignor.label || 'Consignor'}}</b></u></div>
+								<div class="col-md-2"></div>
+								<div class="col-md-8"
+									 ng-if="!grUVm.readonly && grUVm.__FormList.consignor.editable|hdlUdf:true">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input type="text"
+											   placeholder="Consignor Search..."
+											   ng-model="grUVm.selectedGr.consignor"
+											   class="lvhs-input form-control"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in grUVm.getConsignor($viewValue, grUVm.selectedGr.customer._id)"
+											   ng-required="grUVm.__FormList.consignor.req|hdlUdf:false">
+										<i class="lvh-search-close" ng-click="grUVm.selectedGr.consignor='';">×</i>
+									</div>
+								</div>
+								<div class="col-md-12" style="margin-top: 5px;margin-left: 50px;margin-bottom: 25px;">
+									<b>
+
+										{{grUVm.selectedGr.consignor.name || 'NA'}}</b>
+
+										<!--{{grUVm.selectedGr.consignor.name || 'NA' }} {{" "}}--> ({{grUVm.selectedGr.consignor.businessLocation || 'NA' }})</b>
+
+								</div>
+								<!--<div class="col-md-12">-->
+								<!--{{grUVm.selectedGr.consignor.contact_number || 'NA'}}-->
+								<!--</div>-->
+								<!--<div class="col-md-12">-->
+								<!--{{(grUVm.selectedGr.consignor.address |formatAddress) || 'NA'}}-->
+								<!--</div>-->
+							</div>
+							<div class="col-md-3 form-group" ng-if="grUVm.__FormList.consignee.visible|hdlUdf:true">
+								<div class="text-center booking_list_header m-t-5 label"><u><b>{{grUVm.__FormList.consignee.label
+									|| 'Consignee'}}</b></u></div>
+								<div class="col-md-2"></div>
+								<div class="col-md-8"
+									 ng-if="!grUVm.readonly && grUVm.__FormList.consignee.editable|hdlUdf:true">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input type="text"
+											   placeholder="Consignee Search..."
+											   ng-model="grUVm.selectedGr.consignee"
+											   class="lvhs-input form-control"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in grUVm.getConsignee($viewValue, grUVm.selectedGr.customer._id)"
+											   ng-required="grUVm.__FormList.consignee.req|hdlUdf:false"
+											   typeahead-on-select="grUVm.onSelect($item, $model, $label)">
+										<i class="lvh-search-close" ng-click="grUVm.selectedGr.consignee='';">×</i>
+									</div>
+								</div>
+								<div class="col-md-12" style="margin-top: 5px;margin-left: 50px;margin-bottom: 25px;">
+									<b>
+
+										{{grUVm.selectedGr.consignee.name || 'NA'}}</b>
+
+										<!--{{grUVm.selectedGr.consignee.name || 'NA'}} {{" "}}--> ({{grUVm.selectedGr.consignee.businessLocation || 'NA'}})</b>
+
+								</div>
+								<!--<div class="col-md-12">-->
+								<!--{{grUVm.selectedGr.consignee.contact_number || 'NA'}}-->
+								<!--</div>-->
+								<!--<div class="col-md-12">-->
+								<!--{{(grUVm.selectedGr.consignee.address |formatAddress) || 'NA'}}-->
+								<!--</div>-->
+							</div>
+							<div class="col-md-3 form-group" ng-if="grUVm.__FormList.billingParty.visible|hdlUdf:true">
+								<div class="text-center booking_list_header m-t-5 label"><u><b>{{grUVm.__FormList.billingParty.label
+									|| 'BillingParty'}}</b></u>
+								</div>
+								<div class="col-md-2"></div>
+								<div class="col-md-8"
+									 ng-if="!grUVm.readonly && grUVm.__FormList.billingParty.editable|hdlUdf:true">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input type="text"
+											   placeholder="BillingParty Search..."
+											   ng-model="grUVm.selectedGr.billingParty"
+											   class="lvhs-input form-control"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in grUVm.getBillingParty($viewValue, grUVm.selectedGr.customer._id)"
+											   typeahead-on-select="grUVm.onBillingPartySelect($item, $model, $label)"
+											   ng-required="grUVm.__FormList.billingParty.req|hdlUdf:false"
+											   >
+										<i class="lvh-search-close" ng-click="grUVm.selectedGr.billingParty='';">×</i>
+									</div>
+								</div>
+								<div class="col-md-12" style="margin-top: 5px;margin-left: 50px;margin-bottom: 25px;">
+									<b>
+										{{grUVm.selectedGr.billingParty.name || 'NA'}}</b>
+								</div>
+								<div class="col-md-12" style="margin-top: -25px;margin-left: 50px;">
+									({{grUVm.selectedGr.billingParty.clientName || 'NA'}})
+								</div>
+								<!--<div class="col-md-12">-->
+								<!--{{(grUVm.selectedGr.billingParty.address |formatAddress) || 'NA'}}-->
+								<!--</div>-->
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-md-3" ng-if="(!($configs.tripMemo.show) && (grUVm.__FormList.source.visible|hdlUdf:true))">
+								<div class="form-group m-b-0">
+								   <label class="col-sm-4 control-label">{{grUVm.__FormList.source.label ||
+								   'Source:'}}</label>
+								   <div class="col-sm-8">
+									  <div class="lvh-search ng-scope sear"
+										 ng-if="!grUVm.readonly && grUVm.__FormList.source.editable|hdlUdf:true">
+										 <input type="text"
+											placeholder="Source"
+											ng-model="grUVm.selectedGr.acknowledge.source"
+											class="lvhs-input lvhs-input"
+											typeahead-wait-ms="10"
+											typeahead="item.c as (item.c + '('+item.s+')') for item in grUVm.getRoute($viewValue, 'source') | limitTo: 15"
+											class="form-control"
+											typeahead-on-select="grUVm.getRates();grUVm.selectedGr.acknowledge.billedSource=grUVm.selectedGr.acknowledge.source"
+											name="Source"
+											ng-required="grUVm.__FormList.source.req|hdlUdf:true">
+										 <i class="lvh-search-close"
+											ng-click="grUVm.selectedGr.acknowledge.source=''">×</i>
+									  </div>
+									  <span class="error" ng-if="grUpset['Source'].$error.required
+										 && (grUpset['Source'].$touched
+										 || grUpset.$submitted)">
+									  This Field is Mandatory</span>
+									  <span ng-if="grUVm.readonly || !(grUVm.__FormList.source.editable|hdlUdf:true)">{{grUVm.selectedGr.acknowledge.source}}</span>
+								   </div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="(($configs.tripMemo.show) && (grUVm.__FormList.source.visible|hdlUdf:true))">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label">{{grUVm.__FormList.source.label ||
+								'Source:'}}</label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear"
+										ng-if="!grUVm.readonly && grUVm.__FormList.source.editable|hdlUdf:true">
+										<input type="text"
+										placeholder="Source"
+										ng-model="grUVm.selectedGr.acknowledge.source"
+										class="lvhs-input"
+										typeahead-wait-ms="10"
+										typeahead="item.c as item.c for item in grUVm.getRoute($viewValue) | limitTo: 15"
+										class="form-control"
+										typeahead-on-select="grUVm.selectedGr.acknowledge.billedSource=grUVm.selectedGr.acknowledge.source"
+										name="Source"
+										ng-required="grUVm.__FormList.source.req|hdlUdf:true">
+										<i class="lvh-search-close"
+										ng-click="grUVm.selectedGr.acknowledge.source=''">×</i>
+									</div>
+									<span class="error" ng-if="grUpset['Source'].$error.required
+										&& (grUpset['Source'].$touched
+										|| grUpset.$submitted)">
+									This Field is Mandatory</span>
+									<span ng-if="grUVm.readonly || !(grUVm.__FormList.source.editable|hdlUdf:true)">{{grUVm.selectedGr.acknowledge.source}}</span>
+								</div>
+							</div>
+							</div>
+							<div class="col-md-3" ng-if="(!($configs.tripMemo.show) && (grUVm.__FormList.destination.visible|hdlUdf:true))">
+							<div class="form-group m-b-0">
+								<label class="col-sm-4 control-label">{{grUVm.__FormList.destination.label
+								|| 'Destination:'}}</label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear"
+										ng-if="!grUVm.readonly && grUVm.__FormList.destination.editable|hdlUdf:true">
+										<input type="text"
+										placeholder="Destination"
+										ng-model="grUVm.selectedGr.acknowledge.destination"
+										class="lvhs-input"
+										typeahead-wait-ms="10"
+										typeahead="item.c as (item.c + '('+item.s+')') for item in grUVm.getRoute($viewValue, 'destination') | limitTo: 15"
+										class="form-control"
+										typeahead-on-select="grUVm.getRates();grUVm.selectedGr.acknowledge.billedDestination=grUVm.selectedGr.acknowledge.destination"
+										name="Destination"
+										ng-required="grUVm.__FormList.destination.req|hdlUdf:true">
+										<i class="lvh-search-close"
+										ng-click="grUVm.selectedGr.acknowledge.destination=''">×</i>
+									</div>
+									<span class="error" ng-if="grUpset['Destination'].$error.required
+										&& (grUpset['Destination'].$touched
+										|| grUpset.$submitted)">
+									This Field is Mandatory</span>
+									<span
+										ng-if="grUVm.readonly || !(grUVm.__FormList.destination.editable|hdlUdf:true)">{{grUVm.selectedGr.acknowledge.destination}}</span>
+								</div>
+							</div>
+							</div>
+							<div class="col-md-3" ng-if="(($configs.tripMemo.show) && (grUVm.__FormList.destination.visible|hdlUdf:true))">
+								<div class="form-group m-b-0">
+								   <label class="col-sm-4 control-label">{{grUVm.__FormList.destination.label
+								   || 'Destination:'}}</label>
+								   <div class="col-sm-8">
+									  <div class="lvh-search ng-scope sear"
+										 ng-if="!grUVm.readonly && grUVm.__FormList.destination.editable|hdlUdf:true">
+										 <input type="text"
+											placeholder="Destination"
+											ng-model="grUVm.selectedGr.acknowledge.destination"
+											class="lvhs-input"
+											typeahead-wait-ms="10"
+											typeahead="item.c as item.c for item in grUVm.getRoute($viewValue) | limitTo: 15"
+											class="form-control"
+											typeahead-on-select="grUVm.selectedGr.acknowledge.billedDestination=grUVm.selectedGr.acknowledge.destination"
+											name="Destination"
+											ng-required="grUVm.__FormList.destination.req|hdlUdf:true">
+										 <i class="lvh-search-close"
+											ng-click="grUVm.selectedGr.acknowledge.destination=''">×</i>
+									  </div>
+									  <span class="error" ng-if="grUpset['Destination'].$error.required
+										 && (grUpset['Destination'].$touched
+										 || grUpset.$submitted)">
+									  This Field is Mandatory</span>
+									  <span
+										 ng-if="grUVm.readonly || !(grUVm.__FormList.destination.editable|hdlUdf:true)">{{grUVm.selectedGr.acknowledge.destination}}</span>
+								   </div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="grUVm.__FormList.billedSource.visible|hdlUdf:true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">{{grUVm.__FormList.billedSource.label ||
+										'Billed Source:'}}</label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear"
+											 ng-if="!grUVm.readonly && grUVm.__FormList.billedSource.editable|hdlUdf:true">
+											<input type="text"
+												   placeholder="Billed Source"
+												   ng-model="grUVm.selectedGr.acknowledge.billedSource"
+												   class="lvhs-input"
+												   typeahead-wait-ms="10"
+												   typeahead="item.c as (item.c + '('+item.s+')') for item in grUVm.getRoute($viewValue, 'source') | limitTo: 15"
+												   class="form-control"
+												   typeahead-on-select="grUVm.getRates()"
+												   name="Billed Source"
+												   ng-required="grUVm.__FormList.billedSource.req|hdlUdf:false">
+											<i class="lvh-search-close"
+											   ng-click="grUVm.selectedGr.acknowledge.billedSource=''">×</i>
+										</div>
+										<span class="error" ng-if="grUpset['Billed Source'].$error.required
+																			&& (grUpset['Billed Source'].$touched
+																			|| grUpset.$submitted)">
+														This Field is Mandatory</span>
+										<span
+											ng-if="grUVm.readonly || !(grUVm.__FormList.billedSource.editable|hdlUdf:true)">{{grUVm.selectedGr.acknowledge.billedSource}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="grUVm.__FormList.billedDestination.visible|hdlUdf:true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">{{grUVm.__FormList.billedDestination.label
+										|| 'Destination:'}}</label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear"
+											 ng-if="!grUVm.readonly && grUVm.__FormList.billedDestination.editable|hdlUdf:true">
+											<input type="text"
+												   placeholder="Billed Destination"
+												   ng-model="grUVm.selectedGr.acknowledge.billedDestination"
+												   class="lvhs-input"
+												   typeahead-wait-ms="10"
+												   typeahead="item.c as (item.c + '('+item.s+')') for item in grUVm.getRoute($viewValue, 'destination') | limitTo: 15"
+												   class="form-control"
+												   typeahead-on-select="grUVm.getRates()"
+												   name="Billed Destination"
+												   ng-required="grUVm.__FormList.billedDestination.req|hdlUdf:true">
+											<i class="lvh-search-close"
+											   ng-click="grUVm.selectedGr.acknowledge.billedDestination=''">×</i>
+										</div>
+										<span class="error" ng-if="grUpset['Billed Destination'].$error.required
+																			&& (grUpset['Billed Destination'].$touched
+																			|| grUpset.$submitted)">
+														This Field is Mandatory</span>
+										<span
+											ng-if="grUVm.readonly || !(grUVm.__FormList.billedDestination.editable|hdlUdf:true)">{{grUVm.selectedGr.acknowledge.billedDestination}}</span>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</li>
+
+					<!-- Items Detail-->
+					<li class="list-group-item">
+						<div class="col-md-12">
+							<div class="col-md-2">
+								<span class="booking_list_header">Item's Detail</span>
+							</div>
+							<div class="col-md-8">
+								<div class="col-md-4">
+									<div class="form-group m-b-0" ng-if="grUVm.__FormList.totQty.visible|hdlUdf:true">
+										<label class="col-sm-7 control-label">{{grUVm.__FormList.totQty.label || 'Trip
+											Total Qty:'}}</label>
+										<div class="col-sm-5">
+											{{((grUVm.nonSelectedGr.totalQty +
+											(grUVm.selectedGr.invoices|getArrayElementSum:'billingNoOfUnits'))|roundOff)
+											||
+											((grUVm.nonSelectedGr.totalWeight +
+											(grUVm.selectedGr.invoices|getArrayElementSum:'billingWeightPerUnit'))|roundOff)}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0"
+										 ng-if="grUVm.__FormList.totFreight.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-7 control-label">{{grUVm.__FormList.totFreight.label ||
+												'Trip Total Freight:'}}</label>
+											<div class="col-sm-5">
+												{{(grUVm.nonSelectedGr.freight +
+												grUVm.selectedGr.basicFreight)|roundOff}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="grUVm.__FormList.totFreightWithCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-7 control-label">
+											{{grUVm.__FormList.totFreight.label || 'Trip TotFreight with Charges'}} : </label>
+										<div class="col-sm-5">
+											{{(grUVm.nonSelectedGr.totalFreight +
+											grUVm.selectedGr.totalFreight)|roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2 text-right m-t-5" ng-if="!grUVm.readonly">
+								<button class="btn-primary btn-xs"
+										ng-click="grUVm.getRates()"
+										uib-tooltip="Refresh Rate"
+										tooltip-placement="bottom">
+									<i class="zmdi zmdi-search-for zmdi-hc-fw"></i>
+								</button>&nbsp;
+								<button class="btn-primary btn-xs"
+										ng-click="grUVm.getDPH()"
+										button-spinner="loading"
+										uib-tooltip="Refresh DPH"
+										tooltip-placement="bottom">
+									<i class="zmdi zmdi-search-for zmdi-hc-fw"></i>
+								</button>&nbsp;&nbsp;
+								<button class="btn-primary btn-xs"
+										ng-hide="!(grUVm.selectedInvoiceRow>=0)"
+										ng-click="grUVm.SelectRateChart(grUVm.selectedInvoiceRow)"
+										uib-tooltip="Select Rate Chart"
+										tooltip-placement="bottom">
+									<i class="zmdi zmdi-attachment-alt zmdi-hc-fw"></i>
+								</button>
+								&nbsp;&nbsp;
+								<button class="btn-primary btn-xs"
+										ng-click="grUVm.selectedGr.invoices.push({})"
+										uib-tooltip="Add Item"
+										tooltip-placement="bottom">
+									<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+								</button>
+								&nbsp;&nbsp;
+								<button class="btn-danger btn-xs"
+										ng-click="grUVm.selectedGr.invoices.splice(grUVm.selectedInvoiceRow, 1)"
+										uib-tooltip="Delete Item"
+										tooltip-placement="bottom">
+									<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+								</button>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="card-body">
+							<div class="row" style="margin:5px" ng-class="{'o-auto': grUVm.readonly}">
+								<div class="col-md-12" style="overflow: scroll;height: 300px;">
+									<table class="table table-bordered unresponsive">
+										<thead>
+										<tr>
+											<th style="min-width: 40px">#</th>
+											<th style="min-width: 50px"
+												ng-if="grUVm.__FormList.showOnBill.visible|hdlUdf:true">
+												{{grUVm.__FormList.showOnBill.label || 'Show'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.showOnBill.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th ng-if="grUVm.__FormList.materialName.visible|hdlUdf:true">
+												{{grUVm.__FormList.materialName.label || 'MATERIAL'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.materialName.req && !grUVm.readonly">*</span>
+											</th>
+											<th ng-if="grUVm.__FormList.materialUnit.visible|hdlUdf:false">
+												{{grUVm.__FormList.materialUnit.label || 'MATERIAL UNIT'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.materialUnit.req && !grUVm.readonly">*</span>
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.invoiceNo.visible|hdlUdf:true">
+												{{grUVm.__FormList.invoiceNo.label || 'INVOICE NO.'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.invoiceNo.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.invoiceRate.visible|hdlUdf:false">
+												{{grUVm.__FormList.invoiceRate.label || 'INVOICE Rate'}}
+											</th>
+											<span class="req_r"
+												  ng-if="grUVm.__FormList.invoiceRate.req && !grUVm.readonly">*</span>
+
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.dphRate.visible|hdlUdf:false">
+												{{grUVm.__FormList.dphRate.label || 'DPH Rate'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.dphRate.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.invoiceAmt.visible|hdlUdf:true">
+												{{grUVm.__FormList.invoiceAmt.label || 'INVOICE AMOUNT'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.invoiceAmt.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th ng-if="grUVm.__FormList.invoiceDate.visible|hdlUdf:true">
+												{{grUVm.__FormList.invoiceDate.label || 'INVOICE DATE'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.invoiceDate.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.insurRate.visible|hdlUdf:false">
+												{{grUVm.__FormList.insurRate.label || 'Insurance Rate'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.insurRate.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.insurVal.visible|hdlUdf:false">
+												{{grUVm.__FormList.insurVal.label || 'Insurance Value'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.insurVal.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:120px"
+												ng-if="grUVm.__FormList.loadRefNumber.visible|hdlUdf:true">
+												{{grUVm.__FormList.loadRefNumber.label || 'LOAD REF. NUMBER'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.loadRefNumber.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:80px"
+												ng-if="grUVm.__FormList.routeDistance.visible|hdlUdf:true">
+												{{grUVm.__FormList.routeDistance.label || 'KM'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.routeDistance.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th ng-if="grUVm.__FormList.weightPerUnit.visible|hdlUdf:true">
+												{{grUVm.__FormList.weightPerUnit.label || 'ACTUAL WEIGHT PER UNIT'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.weightPerUnit.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th ng-if="grUVm.__FormList.capacity.visible|hdlUdf:false">
+												{{grUVm.__FormList.capacity.label || 'CAPACITY'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.capacity.req && !grUVm.readonly">*</span>
+											</th>
+											<th style="min-width:80px"
+												ng-if="grUVm.__FormList.noOfUnits.visible|hdlUdf:true">
+												{{grUVm.__FormList.noOfUnits.label || 'Actual Unit'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.noOfUnits.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:80px"
+												ng-if="grUVm.__FormList.billingWeightPerUnit.visible|hdlUdf:true">
+												{{grUVm.__FormList.billingWeightPerUnit.label || 'BILLING WEIGHT PER UNIT'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.billingWeightPerUnit.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:80px"
+												ng-if="grUVm.__FormList.billingNoOfUnits.visible|hdlUdf:true">
+												{{grUVm.__FormList.billingNoOfUnits.label || 'Billing Unit'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.billingNoOfUnits.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th ng-if="grUVm.__FormList.rate.visible|hdlUdf:true">
+												{{grUVm.__FormList.rate.label || 'RATE'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.rate.req && !grUVm.readonly">*</span>
+											</th>
+											<th ng-if="grUVm.__FormList.billingRate.visible|hdlUdf:true">
+												{{grUVm.__FormList.billingRate.label || 'Billing Rate'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.billingRate.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th ng-if="grUVm.__FormList.freight.visible|hdlUdf:true">
+												{{grUVm.__FormList.freight.label || 'FREIGHT'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.freight.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th ng-if="grUVm.__FormList.invPayBasis.visible|hdlUdf:true">
+												{{grUVm.__FormList.invPayBasis.label || 'Pay. Basis'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.invPayBasis.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.ref1.visible|hdlUdf:true">
+												{{grUVm.__FormList.ref1.label || 'Item Ref 1'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.ref1.req && !grUVm.readonly">*</span>
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.ref2.visible|hdlUdf:true">
+												{{grUVm.__FormList.ref2.label || 'ITEM REF 2'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.ref2.req && !grUVm.readonly">*</span>
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.ref3.visible|hdlUdf:false">
+												{{grUVm.__FormList.ref3.label || 'Item Ref 3'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.ref3.req && !grUVm.readonly">*</span>
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.ref4.visible|hdlUdf:false">
+												{{grUVm.__FormList.ref4.label || 'ITEM REF 4'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.ref4.req && !grUVm.readonly">*</span>
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.ref5.visible|hdlUdf:false">
+												{{grUVm.__FormList.ref5.label || 'Item Ref 5'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.ref5.req && !grUVm.readonly">*</span>
+											</th>
+											<th style="min-width:130px"
+												ng-if="grUVm.__FormList.ref6.visible|hdlUdf:false">
+												{{grUVm.__FormList.ref6.label || 'Item Ref 6'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.ref6.req && !grUVm.readonly">*</span>
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.num1.visible|hdlUdf:false">
+												{{grUVm.__FormList.num1.label || 'Num 1'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.ref2.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:150px"
+												ng-if="grUVm.__FormList.num2.visible|hdlUdf:false">
+												{{grUVm.__FormList.num2.label || 'Num 2'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.num2.req && !grUVm.readonly">*</span>
+
+											</th>
+											<th style="min-width:130px"
+												ng-if="grUVm.__FormList.num3.visible|hdlUdf:false">
+												{{grUVm.__FormList.num3.label || 'Num 3'}}
+												<span class="req_r"
+													  ng-if="grUVm.__FormList.num3.req && !grUVm.readonly">*</span>
+
+											</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-repeat="invoice in grUVm.selectedGr.invoices"
+											ng-click="grUVm.selectedInvoiceRow = $index"
+											class="pointer"
+											ng-class="{grn: grUVm.selectedInvoiceRow === $index}">
+											<td>{{$index+1}}</td>
+											<td ng-if="grUVm.__FormList.showOnBill.visible|hdlUdf:true">
+												<label class="checkbox checkbox-inline m-r-20"
+													   ng-if="!grUVm.readonly && grUVm.__FormList.showOnBill.editable|hdlUdf:true">
+													<input type="checkbox"
+														   ng-init="invoice.showOnBill = true"
+														   ng-model="invoice.showOnBill">
+													<i class="input-helper"></i>
+												</label>
+												<span
+													ng-if="grUVm.readonly || !(grUVm.__FormList.showOnBill.editable|hdlUdf:true)">
+														<span> {{grUVm.selectedGr.invoices.showOnBill ? 'True' : 'False'}}</span>
+													</span>
+											</td>
+											<td ng-if="grUVm.__FormList.materialName.visible|hdlUdf:true">
+												<div
+													ng-if="!grUVm.readonly && grUVm.__FormList.materialName.editable|hdlUdf:true"
+													style="max-width: 160px;">
+													<!--<div ng-dropdown-multiselect=""-->
+													<!--options="grUVm.aMaterialGroup"-->
+													<!--selected-model="invoice.materialObj"-->
+													<!--extra-settings="grUVm.selectSettings"-->
+													<!--events='selectMaterialEvents'-->
+													<!--ja-search-input='inputModel'-->
+													<!--ja-search-trigger="grUVm.getMaterialGroup(inputModel)"-->
+													<!--&gt;</div>-->
+													<select chosen
+															class="form-control"
+															ng-init="invoice.materialObj = {_id: invoice.material.groupId}"
+															ng-model="invoice.materialObj"
+															ng-options="item as (item.name === item.code ? item.name : (item.name + '(' + item.code + ')')) for item in grUVm.aMaterialGroup track by item._id"
+															name="Material Type[{{$index}}]"
+															ng-change="grUVm.updateInvoiceMaterialObj(invoice, invoice.materialObj); grUVm.getRates(invoice)"
+															ng-required="grUVm.__FormList.materialName.req|hdlUdf:true">
+														<option value="" disabled selected> Select Material</option>
+													</select>
+												</div>
+												<span
+													ng-if="grUVm.readonly || !(grUVm.__FormList.materialName.editable|hdlUdf:true)">{{invoice.material.groupCode}}</span>
+											</td>
+
+											<td ng-if="grUVm.__FormList.materialUnit.visible|hdlUdf:false">
+												<div class="select"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.materialUnit.editable|hdlUdf:false"
+													 style="max-width: 160px;">
+													<select class="form-control"
+															ng-init="invoice.materialUnit = invoice.materialUnit ?  invoice.materialUnit : undefined"
+															ng-model="invoice.materialUnit"
+															ng-options="item as item for item in invoice.material.unit"
+															name="Material Unit[{{$index}}]"
+															ng-required="grUVm.__FormList.materialUnit.req|hdlUdf:false">
+														<option value="" disabled> Select
+															{{grUVm.__FormList.materialUnit.label}}
+														</option>
+													</select>
+												</div>
+												<span
+													ng-if="grUVm.readonly || !(grUVm.__FormList.materialUnit.editable|hdlUdf:false)">{{invoice.materialUnit}}</span>
+
+											</td>
+
+											<td ng-if="grUVm.__FormList.invoiceNo.visible|hdlUdf:true">
+												<input type="text"
+													   placeholder="Invoice No."
+													   ng-model="invoice.invoiceNo"
+													   ng-readonly="grUVm.readonly  || !(grUVm.__FormList.invoiceNo.editable|hdlUdf:true)"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.invoiceNo.req|hdlUdf:false"
+													   name="Invoice Number">
+
+											</td>
+											<td ng-if="grUVm.__FormList.invoiceRate.visible|hdlUdf:false">
+												<span ng-if="grUVm.__FormList.invoiceRate.evalExp">
+													{{invoice.invoiceRate = (grUVm.__FormList.invoiceRate.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.invoiceRate.req|hdlUdf:false"
+													   name="invoiceRate">
+											</td>
+											<td ng-if="grUVm.__FormList.dphRate.visible|hdlUdf:false">
+												<!-- <span ng-if="grUVm.__FormList.dphRate.evalExp">
+													{{invoice.dphRate = (grUVm.__FormList.dphRate.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span> -->
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.dphRate"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.dphRate.editable|hdlUdf:true)"
+													   placeholder="DPH Rate"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.dphRate.req|hdlUdf:false"
+													   name="dphRate">
+											</td>
+
+											<td ng-if="grUVm.__FormList.invoiceAmt.visible|hdlUdf:true">
+												<span ng-if="grUVm.__FormList.invoiceAmt.evalExp">
+													{{invoice.invoiceAmt = (grUVm.__FormList.invoiceAmt.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.invoiceAmt.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.invoiceAmt"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.invoiceAmt.editable|hdlUdf:true)"
+													   placeholder="Invoice Amount"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.invoiceAmt.req|hdlUdf:false"
+													   name="invoiceAmt">
+											</td>
+											<td ng-if="grUVm.__FormList.invoiceDate.visible|hdlUdf:true">
+												<div class="fg-line"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.invoiceDate.editable|hdlUdf:true">
+													<input
+														fill-date
+														type="text"
+														class="form-control"
+														name="Invoice Date[{{$index}}]"
+														placeholder="Invoice Date"
+														ng-init="invoice.invoiceDate = ('toDateObj'|dateUtilsFilt:invoice.invoiceDate)"
+														ng-required="grUVm.__FormList.invoiceDate.req|hdlUdf:false"
+															ng-model="invoice.invoiceDate">
+												</div>
+												<span
+													ng-if="grUVm.readonly || !(grUVm.__FormList.invoiceDate.editable|hdlUdf:true)">{{invoice.invoiceDate|date: 'dd-MM-yyyy'}}</span>
+											</td>
+											<td ng-if="grUVm.__FormList.insurRate.visible|hdlUdf:false">
+												<span ng-if="grUVm.__FormList.insurRate.evalExp">
+													{{invoice.insurRate = (grUVm.__FormList.insurRate.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.insurRate.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.insurRate"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.insurRate.editable|hdlUdf:true)"
+													   placeholder="Insurance Rate"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.insurRate.req|hdlUdf:false"
+													   name="insurRate">
+											</td>
+											<td ng-if="grUVm.__FormList.insurVal.visible|hdlUdf:false">
+												<span ng-if="grUVm.__FormList.insurVal.evalExp">
+													{{invoice.insurVal = (grUVm.__FormList.insurVal.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.insurVal.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.insurVal"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.insurVal.editable|hdlUdf:true)"
+													   placeholder="Insurance Value"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.insurVal.req|hdlUdf:false"
+													   name="insurVal">
+											</td>
+
+
+											<!--<td ng-if="grUVm.__FormList.invoiceDate.visible|hdlUdf:true">-->
+											<!--<div class="fg-line"-->
+											<!--ng-if="!grUVm.readonly && grUVm.__FormList.invoiceDate.editable|hdlUdf:true">-->
+											<!--<div class="date-picker input-group dp-blue"-->
+											<!--ng-class="{ 'is-opened': invoice.opened }">-->
+											<!--<input ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'invoice.opened')"-->
+											<!--type="text"-->
+											<!--uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"-->
+											<!--show-weeks="false"-->
+											<!--ng-init="invoice.invoiceDate = ('toDateObj'|dateUtilsFilt:invoice.invoiceDate)"-->
+											<!--ng-model="invoice.invoiceDate"-->
+											<!--placeholder="Invoice Date"-->
+											<!--class="form-control"-->
+											<!--is-open="invoice.opened"-->
+											<!--uib-datepicker-options="grUVm.DatePicker.dateSettings"-->
+											<!--close-text="Close"-->
+											<!--name="Invoice Date[{{$index}}]">-->
+											<!--<span class="input-group-btn">-->
+											<!--<button type="button"-->
+											<!--class="btn btn-default m-t-0 f12"-->
+											<!--ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'invoice.opened')">-->
+											<!--<i class="glyphicon glyphicon-calendar"></i>-->
+											<!--</button>-->
+											<!--</span>-->
+											<!--</div>-->
+											<!--</div>-->
+											<!--<span ng-if="grUVm.readonly || !(grUVm.__FormList.invoiceDate.editable|hdlUdf:true)">{{invoice.invoiceDate|date: 'dd-MM-yyyy'}}</span>-->
+											<!--</td>-->
+											<td ng-if="grUVm.__FormList.loadRefNumber.visible|hdlUdf:true">
+												<input type="text"
+													   ng-model="invoice.loadRefNumber"
+													   ng-readonly="grUVm.readonly  || !(grUVm.__FormList.loadRefNumber.editable|hdlUdf:true)"
+													   placeholder="Load Ref Number"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.loadRefNumber.req|hdlUdf:false"
+													   name="Invoice Number">
+											</td>
+											<td ng-if="grUVm.__FormList.routeDistance.visible|hdlUdf:true">
+												<span ng-if="grUVm.__FormList.routeDistance.evalExp">
+													{{invoice.routeDistance = (grUVm.__FormList.routeDistance.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.routeDistance.evalExp"
+													   ng-model="invoice.routeDistance"
+													   placeholder="Route Distance"
+													   class="form-control"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.routeDistance.editable|hdlUdf:true)"
+													   ng-required="grUVm.__FormList.routeDistance.req|hdlUdf:false"
+													   name="routeDistance">
+											</td>
+											<td ng-if="grUVm.__FormList.weightPerUnit.visible|hdlUdf:true">
+												<span ng-if="grUVm.__FormList.weightPerUnit.evalExp">
+													{{invoice.weightPerUnit = (grUVm.__FormList.weightPerUnit.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.weightPerUnit.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.weightPerUnit"
+													   ng-change="invoice.billingWeightPerUnit = invoice.weightPerUnit;"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.weightPerUnit.editable|hdlUdf:true)"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.weightPerUnit.req|hdlUdf:false"
+													   name="weightPerUnit">
+											</td>
+											<td ng-if="grUVm.__FormList.capacity.visible|hdlUdf:false">
+												<div class="select"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.capacity.editable|hdlUdf:true"
+													 style="max-width: 160px;">
+													<select class="form-control"
+															ng-init="invoice.dummyCapacityObj = {label: invoice.baseValueLabel}; invoice.baseValue && (invoice.dummyCapacityObj.baseVal = invoice.baseValue)"
+															ng-model="invoice.dummyCapacityObj"
+															ng-options="item as item.label for item in invoice.aCapacity track by item.label"
+															name="capacity[{{$index}}]"
+															ng-change="grUVm.calculateRate(invoice)"
+															ng-required="grUVm.__FormList.capacity.req|hdlUdf:true">
+														<option value="" disabled> Select
+															{{grUVm.__FormList.capacity.label}}
+														</option>
+													</select>
+												</div>
+												<span
+													ng-if="grUVm.readonly || !(grUVm.__FormList.capacity.editable|hdlUdf:true)">{{invoice.baseValueLabel}}</span>
+
+											</td>
+											<td ng-if="grUVm.__FormList.noOfUnits.visible|hdlUdf:true">
+												<span ng-if="grUVm.__FormList.noOfUnits.evalExp">
+													{{invoice.noOfUnits = (grUVm.__FormList.noOfUnits.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.noOfUnits.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.noOfUnits"
+													   ng-change="invoice.billingNoOfUnits = invoice.noOfUnits; grUVm.calculateRate(invoice)"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.noOfUnits.editable|hdlUdf:true)"
+													   placeholder="No. of Unit"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.noOfUnits.req|hdlUdf:false"
+													   name="noOfUnits">
+											</td>
+											<td ng-if="grUVm.__FormList.billingWeightPerUnit.visible|hdlUdf:true">
+												<span ng-if="grUVm.__FormList.billingWeightPerUnit.evalExp">
+													{{invoice.billingWeightPerUnit = (grUVm.__FormList.billingWeightPerUnit.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.billingWeightPerUnit.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.billingWeightPerUnit"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.billingWeightPerUnit.editable|hdlUdf:true)"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.billingWeightPerUnit.req|hdlUdf:false"
+													   name="billingWeightPerUnit">
+											</td>
+											<td ng-if="grUVm.__FormList.billingNoOfUnits.visible|hdlUdf:true">
+												<span ng-if="grUVm.__FormList.billingNoOfUnits.evalExp">
+													{{invoice.billingNoOfUnits = (grUVm.__FormList.billingNoOfUnits.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.billingNoOfUnits.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 	40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.billingNoOfUnits"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.billingNoOfUnits.editable|hdlUdf:true)"
+													   placeholder="No. of Unit"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.billingNoOfUnits.req|hdlUdf:false"
+													   name="billingNoOfUnits">
+											</td>
+											<td ng-if="grUVm.__FormList.rate.visible|hdlUdf:true">
+												<span ng-if="grUVm.__FormList.rate.evalExp">
+													{{invoice.rate = (grUVm.__FormList.rate.evalExp ? (grUVm.__FormList.rate.evalExp|formulaEvaluate:this:'grUpset'|roundOff) : invoice.rate)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.rate.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.rate"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.rate.editable|hdlUdf:true)"
+													   placeholder="Rate"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.rate.req|hdlUdf:true"
+													   name="rate">
+											</td>
+											<td ng-if="grUVm.__FormList.billingRate.visible|hdlUdf:true">
+												<span ng-if="grUVm.__FormList.billingRate.evalExp">
+													{{invoice.billingRate = (grUVm.__FormList.billingRate.evalExp ? (grUVm.__FormList.billingRate.evalExp|formulaEvaluate:this:'grUpset'|roundOff) : invoice.billingRate)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.billingRate.evalExp"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="invoice.billingRate"
+													   ng-readonly="true"
+													   placeholder="Billing Rate"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.billingRate.req|hdlUdf:false"
+													   name="billingRate">
+											</td>
+											<td ng-if="grUVm.__FormList.freight.visible|hdlUdf:true">
+												<span ng-hide="true">{{noOfUnit = invoice.billingNoOfUnits|| invoice.noOfUnits || 1}}</span>
+
+												{{
+												(
+												grUVm.readonly
+												? invoice.freight
+												:
+												(invoice.freight = ((
+												((invoice.paymentBasis.toLowerCase() || '') == 'fixed')
+												? invoice.rate
+												: (grUVm.__FormList.freight.evalExp
+												? (grUVm.__FormList.freight.evalExp|formulaEvaluate:this:'grUpset')
+												: (invoice.rate))) || 0 )
+												)
+												)|roundOff
+												}}
+											</td>
+											<td ng-if="grUVm.__FormList.invPayBasis.visible|hdlUdf:true">
+												{{invoice.paymentBasis ? ' - ' + invoice.paymentBasis : ''}}
+											</td>
+											<td ng-if="grUVm.__FormList.ref1.visible|hdlUdf:true">
+												<input type="text"
+													   ng-model="invoice.ref1"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.ref1.editable|hdlUdf:true)"
+													   placeholder="item ref1"
+													   class="form-control"
+													   ng-model-option="{updateOn: 'blur'}"
+													   ng-change="grUVm.calDuration(invoice, $index)"
+													   is-shipment-num-valid="grUpset"
+													   customer="grUVm.selectedGr.customer"
+													   ng-required="grUVm.__FormList.ref1.req|hdlUdf:false"
+													   name="ref 1">
+
+											</td>
+											<td ng-if="grUVm.__FormList.ref2.visible|hdlUdf:true">
+												<input type="text"
+													   ng-model="invoice.ref2"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.ref2.editable|hdlUdf:true)"
+													   placeholder="item ref2"
+													   ng-change="grUVm.calDuration(invoice, $index)"
+													   ng-model-option="{updateOn: 'blur'}"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.ref2.req|hdlUdf:false"
+													   name="ref 2">
+											</td>
+											<td ng-if="grUVm.__FormList.ref3.visible|hdlUdf:false">
+												<input type="text"
+													   ng-model="invoice.ref3"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.ref3.editable|hdlUdf:false)"
+													   placeholder="item ref3"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.ref3.req|hdlUdf:false"
+													   name="ref 3">
+											</td>
+											<td ng-if="grUVm.__FormList.ref4.visible|hdlUdf:false">
+												<input type="text"
+													   ng-model="invoice.ref4"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.ref4.editable|hdlUdf:false)"
+													   placeholder="item ref4"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.ref4.req|hdlUdf:false"
+													   name="ref 4">
+											</td>
+											<td ng-if="grUVm.__FormList.ref5.visible|hdlUdf:false">
+												<input type="text"
+													   ng-model="invoice.ref5"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.ref5.editable|hdlUdf:false)"
+													   placeholder="item ref5"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.ref5.req|hdlUdf:false"
+													   name="ref 5">
+																							</td>
+											<td ng-if="grUVm.__FormList.ref6.visible|hdlUdf:false">
+												<input type="text"
+													   ng-model="invoice.ref6"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.ref6.editable|hdlUdf:false)"
+													   placeholder="item ref6"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.ref6.req|hdlUdf:false"
+													   name="ref 6">
+											</td>
+											<td ng-if="grUVm.__FormList.num1.visible|hdlUdf:false">
+												<span ng-if="grUVm.__FormList.num1.evalExp">
+													{{invoice.num1 = (grUVm.__FormList.num1.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.num1.evalExp"
+													   ng-model="invoice.num1"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.num1.editable|hdlUdf:false)"
+													   placeholder="item num1"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.num1.req|hdlUdf:false"
+													   name="num1">
+											</td>
+											<td ng-if="grUVm.__FormList.num2.visible|hdlUdf:false">
+												<span ng-if="grUVm.__FormList.num2.evalExp">
+													{{invoice.num2 = (grUVm.__FormList.num2.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.num2.evalExp"
+													   ng-model="invoice.num2"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.num2.editable|hdlUdf:false)"
+													   placeholder="item num2"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.num2.req|hdlUdf:false"
+													   name="num2">
+											</td>
+											<td ng-if="grUVm.__FormList.num3.visible|hdlUdf:false">
+												<span ng-if="grUVm.__FormList.num3.evalExp">
+													{{invoice.num3 = (grUVm.__FormList.num3.evalExp|formulaEvaluate:this:'grUpset'|roundOff)}}
+												</span>
+												<input type="number"
+													   ng-hide="grUVm.__FormList.num3.evalExp"
+													   ng-model="invoice.num3"
+													   ng-readonly="grUVm.readonly || !(grUVm.__FormList.num3.editable|hdlUdf:false)"
+													   placeholder="item num3"
+													   class="form-control"
+													   ng-required="grUVm.__FormList.num3.req|hdlUdf:false"
+													   name="num3">
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</li>
+
+
+					<!-- Billing Details-->
+					<li class="list-group-item">
+						<div class="pull-left">
+							<span class="booking_list_header">Billing Detail</span>
+						</div>
+						<div class="pull-left m-l-20"
+							 ng-if="grUVm.__FormList.isGrBillable.visible|hdlUdf:true"
+							 style="padding: 5px 0px;">
+							<div class="form-group m-b-0">
+								<label class="checkbox checkbox-inline m-r-20"
+									   ng-if="!grUVm.readonly && grUVm.__FormList.isGrBillable.editable|hdlUdf:true">
+									<input type="checkbox"
+										   ng-model="grUVm.selectedGr.isGrBillable">
+									<i class="input-helper"></i>
+									{{grUVm.__FormList.isGrBillable.label || 'Is Gr Billable'}}
+								</label>
+								<span ng-if="grUVm.readonly || !(grUVm.__FormList.isGrBillable.editable|hdlUdf:true)">
+									<label>{{grUVm.__FormList.isGrBillable.label || 'Is Gr Billable'}}:</label>
+									<span> {{grUVm.selectedGr.isGrBillable ? 'True' : 'False'}}</span>
+								</span>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<div class="col-md-3 form-group m-b-5"
+										 ng-if="grUVm.__FormList.payment_basis.visible|hdlUdf:true">
+										<label class="col-sm-6 control-label">{{grUVm.__FormList.payment_basis.label ||
+											'Payment Basis'}}:</label>
+										<div class="col-sm-6">
+											<select class="form-control"
+													ng-if="!grUVm.readonly && grUVm.__FormList.payment_basis.editable|hdlUdf:true"
+													ng-options="item as item for item in $constants.aWeightTypes"
+													ng-change="grUVm.setPaymentBasis(grUVm.selectedGr.payment_basis)"
+													ng-model="grUVm.selectedGr.payment_basis"
+													ng-required="grUVm.__FormList.payment_basis.req|hdlUdf:true">
+												<option value="" disabled style="display: none;"> Payment Basis</option>
+											</select>
+											<span
+												ng-if="grUVm.readonly || !(grUVm.__FormList.payment_basis.editable|hdlUdf:true)">{{grUVm.selectedGr.payment_basis}}</span>
+										</div>
+									</div>
+									<div class="col-md-3 form-group m-b-5"
+										 ng-if="grUVm.__FormList.payment_type.visible|hdlUdf:true">
+										<label class="col-sm-6 control-label">{{grUVm.__FormList.payment_type.label ||
+											'Payment Type:'}}</label>
+										<div class="col-sm-6">
+											<select class="form-control"
+													ng-if="!grUVm.readonly && grUVm.__FormList.payment_type.editable|hdlUdf:true"
+													chosen
+													ng-model="grUVm.selectedGr.payment_type"
+													ng-required="grUVm.__FormList.payment_type.req|hdlUdf:true"
+													ng-options="item as item for item in $constants.paymentType">
+												<option value="" disabled>Payment type</option>
+												<span
+													ng-if="grUVm.readonly || !(grUVm.__FormList.payment_type.editable|hdlUdf:true)">{{grUVm.selectedGr.payment_type}}</span>
+											</select>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.internal_rate.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">{{grUVm.__FormList.internal_rate.label
+												|| 'Internal Rate:'}}</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.internal_rate"
+														   placeholder="Internal Rate"
+														   ng-readonly="grUVm.readonly || !(grUVm.__FormList.internal_rate.editable|hdlUdf:true)"
+														   name="Internal Rate"
+														   ng-required="grUVm.__FormList.internal_rate.req|hdlUdf:false"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="$configs.GR.advanceAmt">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5 control-label" style="color: red">Advance Amount :</label>
+											<div class="col-sm-7">
+												<div class="fg-line">
+													<input type="number" style="color: red"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.advanceAmt"
+														   class="form-control"
+														   placeholder="Advance Amount"
+														   name="Advance Amount"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.loadingArrivalTime.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{grUVm.__FormList.loadingArrivalTime.label
+												|| 'Loading Arrival:'}}</label>
+											<div class="col-sm-6">
+												<div class="fg-line"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.loadingArrivalTime.editable|hdlUdf:true">
+													<div class="date-picker timepicker input-group dp-blue"
+														 ng-class="{ 'is-opened': opened6 == true }">
+														<input
+															ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened6')"
+															type="text"
+															uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+															show-weeks="false"
+															ng-model="grUVm.selectedGr.pod.loadingArrivalTime"
+															min-date="grUVm.loadingMinDate"
+															max-date="grUVm.selectedGr.pod.billingLoadingTime || grUVm.DatePickernewDate"
+															ng-change="grUVm.loadingArrivalTimeModel = grUVm.selectedGr.pod.loadingArrivalTime; grUVm.calDetentionFormula()"
+															class="form-control"
+															is-open="opened6"
+															uib-datepicker-options="grUVm.DatePicker.dateSettings"
+															close-text="Close"
+															ng-required="grUVm.__FormList.loadingArrivalTime.req|hdlUdf:false"
+															   name="Loading Arrival">
+														<span class="input-group-btn">
+															<button type="button"
+																	class="btn btn-default m-t-0 f12"
+																	ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened6')">
+																<i class="glyphicon glyphicon-calendar"></i>
+															</button>
+														</span>
+													</div>
+													<div class="col-md-1"
+														 ng-if="grUVm.selectedGr.pod.loadingArrivalTime">
+														<timepicker ng-model="grUVm.selectedGr.pod.loadingArrivalTime"
+																	show-spinners="false"
+																	show-meridian="false"></timepicker>
+
+													</div>
+												</div>
+												<div class="fg-line"
+													 ng-if="grUVm.readonly || !(grUVm.__FormList.loadingArrivalTime.editable|hdlUdf:true)">
+													{{grUVm.selectedGr.pod.loadingArrivalTime|date: "dd-MMM-yyyy 'at'h:mma"}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.billingLoadingTime.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{grUVm.__FormList.billingLoadingTime.label
+												|| 'Loading End Date:'}}</label>
+											<div class="col-sm-6">
+												<div class="fg-line"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.billingLoadingTime.editable|hdlUdf:true">
+													<div class="date-picker input-group dp-blue"
+														 ng-class="{ 'is-opened': opened4 == true }">
+														<input
+															ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened4')"
+															type="text"
+															uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+															show-weeks="false"
+															ng-model="grUVm.selectedGr.pod.billingLoadingTime"
+															max-date="grUVm.selectedGr.pod.unloadingArrivalTime || grUVm.DatePickernewDate"
+															min-date="grUVm.selectedGr.pod.loadingArrivalTime || grUVm.selectedGr.grDate"
+															ng-change="grUVm.billingLoadingTimeModel = grUVm.selectedGr.pod.billingLoadingTime; grUVm.calDetentionFormula()"
+															class="form-control"
+															is-open="opened4"
+															uib-datepicker-options="grUVm.DatePicker.dateSettings"
+															close-text="Close"
+															ng-required="grUVm.__FormList.billingLoadingTime.req|hdlUdf:false"
+															   name="Loading End">
+														<span class="input-group-btn">
+															<button type="button"
+																	class="btn btn-default m-t-0 f12"
+																	ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened4')">
+																<i class="glyphicon glyphicon-calendar"></i>
+															</button>
+														</span>
+													</div>
+													<div class="col-md-1">
+														<timepicker ng-if="grUVm.selectedGr.pod.billingLoadingTime"
+																	ng-model="grUVm.selectedGr.pod.billingLoadingTime"
+																	show-spinners="false"
+																	show-meridian="false"></timepicker>
+
+													</div>
+												</div>
+												<div class="fg-line"
+													 ng-if="grUVm.readonly || !(grUVm.__FormList.billingLoadingTime.editable|hdlUdf:true)">
+													{{grUVm.selectedGr.pod.billingLoadingTime|date: "dd-MMM-yyyy 'at' h:mma"}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.unloadingArrivalTime.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{grUVm.__FormList.unloadingArrivalTime.label
+												|| 'Unloading Arrival:'}}</label>
+											<div class="col-sm-6">
+												<div class="fg-line"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.unloadingArrivalTime.editable|hdlUdf:true">
+													<div class="date-picker timepicker input-group dp-blue"
+														 ng-class="{ 'is-opened': opened7 == true }">
+														<input
+															ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened7')"
+															type="text"
+															uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+															show-weeks="false"
+															ng-model="grUVm.selectedGr.pod.unloadingArrivalTime"
+															max-date="grUVm.selectedGr.pod.billingUnloadingTime || grUVm.DatePickernewDate"
+															min-date="grUVm.selectedGr.pod.billingLoadingTime || grUVm.selectedGr.grDate"
+															ng-change="grUVm.unloadingArrivalTimeModel = grUVm.selectedGr.pod.unloadingArrivalTime; grUVm.calDetentionFormula()"
+															class="form-control"
+															is-open="opened7"
+															uib-datepicker-options="grUVm.DatePicker.dateSettings"
+															ng-required="grUVm.__FormList.unloadingArrivalTime.req|hdlUdf:false"close-text="Close"
+															name="Unloading Arrival">
+														<span class="input-group-btn">
+															<button type="button"
+																	class="btn btn-default m-t-0 f12"
+																	ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened7')">
+																<i class="glyphicon glyphicon-calendar"></i>
+															</button>
+														</span>
+													</div>
+													<div class="col-md-1">
+														<timepicker ng-if="grUVm.selectedGr.pod.unloadingArrivalTime"
+																	ng-model="grUVm.selectedGr.pod.unloadingArrivalTime"
+																	show-spinners="false"
+																	show-meridian="false"></timepicker>
+
+													</div>
+												</div>
+												<div class="fg-line"
+													 ng-if="grUVm.readonly || !(grUVm.__FormList.unloadingArrivalTime.editable|hdlUdf:true)">
+													{{grUVm.selectedGr.pod.unloadingArrivalTime|date: "dd-MMM-yyyy 'at' h:mma"}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.billingUnloadingTime.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{grUVm.__FormList.billingUnloadingTime.label
+												|| 'Unloading End Date:'}}</label>
+											<div class="col-sm-6">
+												<div class="fg-line"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.billingUnloadingTime.editable|hdlUdf:true">
+													<div class="date-picker input-group dp-blue"
+														 ng-class="{ 'is-opened': opened5 == true }">
+														<input
+															ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened5')"
+															type="text"
+															uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+															show-weeks="false"
+															ng-model="grUVm.selectedGr.pod.billingUnloadingTime"
+															max-date="grUVm.DatePickernewDate"
+															min-date="grUVm.selectedGr.pod.unloadingArrivalTime || grUVm.selectedGr.grDate"
+															ng-change="grUVm.billingUnloadingTimeModel = grUVm.selectedGr.pod.billingUnloadingTime; grUVm.calDetentionFormula()"
+															class="form-control"
+															is-open="opened5"
+															uib-datepicker-options="grUVm.DatePicker.dateSettings"
+															close-text="Close"
+															ng-required="grUVm.__FormList.billingUnloadingTime.req|hdlUdf:false"
+															   name="Unloading End">
+														<span class="input-group-btn">
+															<button type="button"
+																	class="btn btn-default m-t-0 f12"
+																	ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened5')">
+																<i class="glyphicon glyphicon-calendar"></i>
+															</button>
+														</span>
+													</div>
+													<div class="col-md-1">
+														<timepicker ng-if="grUVm.selectedGr.pod.billingUnloadingTime"
+																	ng-model="grUVm.selectedGr.pod.billingUnloadingTime"
+																	show-spinners="false"
+																	show-meridian="false"></timepicker>
+
+													</div>
+												</div>
+												<div class="fg-line"
+													 ng-if="grUVm.readonly || !(grUVm.__FormList.billingUnloadingTime.editable|hdlUdf:true)">
+													{{grUVm.selectedGr.pod.billingUnloadingTime|date:"dd-MMM-yyyy 'at' h:mma"}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.transitTime.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">{{grUVm.__FormList.transitTime.label
+												|| 'Transit Time:'}}</label>
+											<div class="col-sm-6">
+												{{grUVm.selectedGr.transitTime =
+												('calDays'|dateUtilsFilt:grUVm.selectedGr.pod.unloadingArrivalTime:grUVm.selectedGr.pod.billingLoadingTime)||0}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.standardDays.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">{{grUVm.__FormList.standardDays.label
+												|| 'Standard Time:'}}</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.standardTime"
+														   placeholder="Standard Time"
+														   ng-readonly="grUVm.readonly || !(grUVm.__FormList.standardDays.editable|hdlUdf:true)"
+														   name="standardDays"
+														   ng-required="grUVm.__FormList.standardDays.req|hdlUdf:false"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.chargeableDays.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">{{grUVm.__FormList.chargeableDays.label
+												|| 'Chargeable Time:'}}</label>
+											<div class="col-sm-6">
+												{{grUVm.selectedGr.chargeableTime = ((grUVm.selectedGr.transitTime -
+												grUVm.selectedGr.standardTime) < 0 ? 0 :(grUVm.selectedGr.transitTime -
+												grUVm.selectedGr.standardTime) ) || 0}}
+											</div>
+										</div>
+									</div>
+
+									<div class="clearfix"></div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">AR No:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   placeholder="arNo"
+														   class="form-control"
+														   ng-model="grUVm.selectedGr.pod.arNo"
+														   ng-readonly="grUVm.readonly"
+														   name="arNo">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">AR Date:</label>
+											<div class="col-sm-6">
+												<div class="fg-line" ng-if="!grUVm.readonly">
+													<div class="date-picker input-group dp-blue"
+														 ng-class="{ 'is-opened': opened3 == true }">
+														<input
+															ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+															max-date="grUVm.arMaxDate"
+															type="text"
+															uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+															show-weeks="false"
+															ng-model="grUVm.selectedGr.pod.date"
+															class="form-control"
+															is-open="opened3"
+															uib-datepicker-options="grUVm.DatePicker.dateSettings"
+															close-text="Close"
+															name="AR Date">
+														<span class="input-group-btn">
+														<button type="button" class="btn btn-default m-t-0 f12"
+																ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened3')">
+															<i class="glyphicon glyphicon-calendar"></i>
+														</button>
+													</span>
+													</div>
+												</div>
+												<span ng-if="grUVm.readonly">{{grUVm.selectedGr.pod.date | date:"dd-MM-yyyy"}}</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">AR Remark:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   placeholder="POD Remark"
+														   class="form-control"
+														   ng-model="grUVm.selectedGr.pod.arRemark"
+														   ng-readonly="grUVm.readonly"
+														   name="Remark">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3 form-group m-b-5"
+										 ng-if="grUVm.__FormList.destinationState.visible|hdlUdf:true">
+										<label class="col-sm-6 control-label">{{grUVm.__FormList.destinationState.label
+											||
+											'Destination State'}}:</label>
+										<div class="col-sm-6">
+											<select chosen class="form-control"
+													ng-if="!grUVm.readonly && grUVm.__FormList.destinationState.editable|hdlUdf:true"
+													ng-options="item.state as item.state for item in grUVm.aStates"
+													ng-model="grUVm.selectedGr.acknowledge.destinationState"
+													ng-required="grUVm.__FormList.destinationState.req|hdlUdf:false"
+													ng-model-option="{updateOn: 'blur'}">
+												<option value="" disabled style="display: none;">Destination State
+												</option>
+											</select>
+											<span
+												ng-if="grUVm.readonly || !(grUVm.__FormList.destinationState.editable|hdlUdf:true)">{{grUVm.selectedGr.acknowledge.destinationState}}</span>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Vehicle2</label>
+											<div class="col-sm-8">
+												<div class="lvh-search ng-scope sear" ng-if="!grUVm.readonly">
+													<input type="text"
+														   placeholder="Vehicle 2"
+														   ng-model="grUVm.selectedGr.vehicle2"
+														   class="lvhs-input form-control"
+														   typeahead-wait-ms="10"
+														   typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in grUVm.getVname(grUVm.selectedGr.vehicle2) | limitTo: 5"
+														   name="Vehicle 2">
+													<i class="lvh-search-close"
+													   ng-click="grUVm.selectedGr.vehicle2=''">×</i>
+												</div>
+												<span ng-if="grUVm.readonly">{{grUVm.selectedGr.vehicle2}}</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">AR Branch</label>
+											<div class="col-sm-8" style="z-index: 2">
+												<div class="lvh-search ng-scope sear" ng-if="!grUVm.readonly">
+													<input type="text"
+														   placeholder="AR Branch"
+														   ng-model="grUVm.selectedGr.pod.branch"
+														   class="lvhs-input form-control"
+														   typeahead-wait-ms="10"
+														   typeahead="item.name as item.name for item in grUVm.getARBranch($viewValue) | limitTo: 5"
+														   name="AR Branch">
+													<i class="lvh-search-close"
+													   ng-click="grUVm.selectedGr.pod.branch=''">×</i>
+												</div>
+												<span ng-if="grUVm.readonly">{{grUVm.selectedGr.pod.branch}}</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.container.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{grUVm.__FormList.container.label}}:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   placeholder="Container"
+														   class="form-control"
+														   ng-model="grUVm.selectedGr.container"
+														   gr-form-formula="grUVm.__FormList.container"
+														   name="container">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-6" ng-if="grUVm.__FormList.gateoutDate.visible|hdlUdf:false">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-3 control-label">{{grUVm.__FormList.gateoutDate.label || 'GATE OUT DATE'}}</label>
+											<div class="col-sm-3">
+												<div class="fg-line" ng-if="!grUVm.readonly&& grUVm.__FormList.gateoutDate.editable|hdlUdf:true">
+													<div class="date-picker input-group dp-blue"
+														 ng-class="{ 'is-opened': opened8 == true }">
+														<input
+															ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened8')"
+															max-date="grUVm.DatePicker.newDate"
+															min-date="grUVm.selectedGr.trip.allocation_date"
+															date-disabled="disabled(date, mode)"
+															type="text"
+															uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+															show-weeks="false"
+															ng-required="grUVm.__FormList.gateoutDate.req|hdlUdf:false"
+															ng-init="grUVm.selectedGr.gateoutDate  = ('toDateObj'|dateUtilsFilt:grUVm.selectedGr.gateoutDate)"
+															ng-model="grUVm.selectedGr.gateoutDate"
+															class="form-control"
+															is-open="opened8"
+															uib-datepicker-options="grUVm.DatePicker.dateSettings"
+															ng-change ="grUVm.getDPHRate()"
+															close-text="Close"
+															name="Gateout Date">
+														<span class="input-group-btn">
+														<button type="button" class="btn btn-default m-t-0 f12"
+																ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened8')">
+															<i class="glyphicon glyphicon-calendar"></i>
+														</button>
+													</span>
+													</div>
+												</div>
+												<span ng-if="grUVm.selectedGr.gateoutDate<grUVm.selectedGr.trip.allocation_date"></span>
+												<span ng-if="grUVm.readonly || !(grUVm.__FormList.gateoutDate.editable|hdlUdf:true)">{{grUVm.selectedGr.gateoutDate | date:"dd-MM-yyyy"}}</span>
+											</div>
+											<label class="col-sm-1 control-label">HH</label>
+											<div class="col-sm-1">
+												<div class="select">
+													<select ng-model="grUVm.gateOuthourSel"
+														ng-options="sAlert as sAlert for sAlert in grUVm.aHours"
+														class="form-control" ng-change="changeTime1(grUVm.hourSel1)">
+													</select>
+												</div>
+											</div>
+											<label style="margin-left: 2px;" class="col-sm-1 control-label">MM</label>
+											<div class="col-sm-1">
+												<div class="select">
+													<select ng-model="grUVm.gateOutminuteSel"
+														ng-options="sAlert as sAlert for sAlert in grUVm.aMinutes"
+														class="form-control" ng-change="changeTime2(grUVm.minuteSel1)">
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-6" ng-if="grUVm.__FormList.gatePassDate.visible|hdlUdf:false">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-3">{{grUVm.__FormList.gatePassDate.label || 'GATE PASS DATE'}}</label>
+											<div class="col-sm-3">
+												<div class="fg-line" ng-if="!grUVm.readonly && grUVm.__FormList.gatePassDate.editable|hdlUdf:true">
+													<div class="date-picker input-group dp-blue"
+														 ng-class="{ 'is-opened': opened9 == true }">
+														<input
+															ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened9')"
+															max-date="grUVm.DatePicker.newDate"
+															min-date="grUVm.selectedGr.trip.allocation_date"
+															type="text"
+															uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+															show-weeks="false"
+															ng-required="grUVm.__FormList.gatePassDate.req|hdlUdf:false"
+															ng-init="grUVm.selectedGr.gatePassDate  = ('toDateObj'|dateUtilsFilt:grUVm.selectedGr.gatePassDate)"
+															ng-model="grUVm.selectedGr.gatePassDate"
+															class="form-control"
+															is-open="opened9"
+															uib-datepicker-options="grUVm.DatePicker.dateSettings"
+															close-text="Close"
+															name="Gate Pass Date">
+														<span class="input-group-btn">
+														<button type="button" class="btn btn-default m-t-0 f12"
+																ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'opened9')">
+															<i class="glyphicon glyphicon-calendar"></i>
+														</button>
+													</span>
+													</div>
+												</div>
+												<span ng-if="grUVm.selectedGr.gateoutDate<grUVm.selectedGr.trip.allocation_date" ></span>
+												<span ng-if="grUVm.readonly || !(grUVm.__FormList.gatePassDate.editable|hdlUdf:true)">{{grUVm.selectedGr.gatePassDate | date:"dd-MM-yyyy"}}</span>
+											</div>
+
+											<label style="margin-left: 5px;" class="col-sm-1 control-label">HH</label>
+											<div class="col-sm-1">
+												<div class="select">
+													<select ng-model="grUVm.gatePasshourSel"
+														ng-options="sAlert as sAlert for sAlert in grUVm.aHours"
+														class="form-control" ng-change="changeTime1(grUVm.hourSel1)">
+													</select>
+												</div>
+											</div>
+											<label style="margin-left: 2px;" class="col-sm-1 control-label">MM</label>
+											<div class="col-sm-1">
+												<div class="select">
+													<select ng-model="grUVm.gatePassminuteSel"
+														ng-options="sAlert as sAlert for sAlert in grUVm.aMinutes"
+														class="form-control" ng-change="changeTime2(grUVm.minuteSel1)">
+													</select>
+												</div>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<!-- OTHER DETAILS -->
+					<li class="list-group-item podDetail">
+						<span class="booking_list_header">POD DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.num4.visible|hdlUdf:false">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Base Value 1 :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.num4"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.num4"
+													   class="form-control"
+													   name="num4"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.num5.visible|hdlUdf:false">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Base Value 2 :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.num5"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.num5"
+													   class="form-control"
+													   name="num5"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.num6.visible|hdlUdf:false">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Base Value 3 :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.num6"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.num6"
+													   class="form-control"
+													   name="num6"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.loading_amount.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Loading Amount :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.loading_amount"
+													   ng-change="grUVm.getRates()"
+													   class="form-control"
+													   name="loading_amount"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.loading_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Loading Charges :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.loading_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.loading_charges"
+													   class="form-control"
+													   name="loading_charges"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.unloading_amount.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Unloading Amount :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.unloading_amount"
+													   ng-change="grUVm.getRates()"
+													   class="form-control"
+													   name="unloading_amount"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.unloading_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Unloading Charges :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.unloading_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.unloading_charges"
+													   class="form-control"
+													   name="unloading_charges"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.dala_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Dala Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.dala_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.dala_charges"
+													   name="dala_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.kanta_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Kanta Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.kanta_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.kanta_charges"
+													   name="kanta_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.toll_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Toll Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.toll_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.toll_charges"
+													   name="toll_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.grCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">GR Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.grCharges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.grCharges"
+													   name="grCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.incentivePercent.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Incentive Percent :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.incentivePercent"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.incentivePercent"
+													   ng-change="grUVm.calculateIncentive(true)"
+													   name="incentivePercent"
+													   class="form-control">
+
+												{{grUVm.selectedGr.incentivePercent}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.incentive.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label"
+											   ng-class="{notApplyTax: (grUVm.__FormList.incentive.notApplyTax|hdlUdf:false)}">
+											{{grUVm.__FormList.incentive.label || 'Incentive:'}}</label>
+										<div class="col-sm-6"
+											 style="display: inline-flex; justify-content: space-between;">
+											<span>{{(grUVm.selectedGr.charges.incentive || 0)|roundOff}}</span>
+											<button class="btn btn-primary btn-xs"
+													style="margin-left: 50px"
+													type="button"
+													uib-tooltip="Calculate Incentive"
+													tooltip-placement="bottom"
+													ng-click="grUVm.calculateIncentive(true)"
+													ng-hide="grUVm.readonly">
+												<i class="zmdi zmdi-search-for zmdi-hc-fw"></i>
+											</button>
+											<button class="btn btn-danger btn-xs"
+													type="button"
+													uib-tooltip="clear"
+													tooltip-placement="bottom"
+													ng-click="grUVm.clearIncentive()"
+													ng-hide="grUVm.readonly">
+												<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.green_tax.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Green Tax :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.green_tax"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.green_tax"
+													   name="green_tax"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.twoPtDelivery.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label"
+											   style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis;">Two Point Delivery :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.twoPtDelivery"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.twoPtDelivery"
+													   name="twoPtDelivery"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.diesel_index.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Diesel Index :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.diesel_index"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.diesel_index"
+													   ng-change="grUVm.selectedGr.charges.diesel_charges = (grUVm.selectedGr.basicFreight * grUVm.selectedGr.diesel_index/100)"
+													   name="diesel_index"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.diesel_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Diesel Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.diesel_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.diesel_charges"
+													   name="diesel_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.surCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Surcharge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.surCharges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.surCharges"
+													   name="surCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.cartageCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Cartage Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.cartageCharges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.cartageCharges"
+													   name="cartageCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.labourCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Labour Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.labourCharges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.labourCharges"
+													   name="labourCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.prevFreightCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Prev Freight Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.prevFreightCharges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.prevFreightCharges"
+													   name="prevFreightCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.other_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Other Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.other_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.other_charges"
+													   name="other_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.weightman_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Weightman Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.weightman_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.weightman_charges"
+													   name="weightman_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.overweight_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Overweight Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.overweight_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.overweight_charges"
+													   name="overweight_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.extra_running.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Extra Running:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.extra_running"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.extra_running"
+													   name="extra_running"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.factory_halt.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Factory Halt:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.factory_halt"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.factory_halt"
+													   name="factory_halt"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.company_halt.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Company Halt:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.company_halt"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.charges.company_halt"
+													   name="company_halt"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.detentionLoading.visible|hdlUdf:false">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{grUVm.__FormList.detentionLoading.label}}</label>
+										<div class="col-sm-6">
+											{{grUVm.selectedGr.charges.detentionLoading =
+											grUVm.selectedGr.detentionLoading}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.detentionUnloading.visible|hdlUdf:false">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{grUVm.__FormList.detentionUnloading.label}}</label>
+										<div class="col-sm-6">
+											{{grUVm.selectedGr.charges.detentionUnloading =
+											grUVm.selectedGr.detentionUnloading}}
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.penalty.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Penalty:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.penalty"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.deduction.penalty"
+													   name="penalty"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.shortage.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Shortage Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.shortage"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.deduction.shortage"
+													   name="shortage"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.damage.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Damage Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.damage"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.deduction.damage"
+													   name="damage"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.discount.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Discount:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.discount"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.deduction.discount"
+													   name="discount"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.advance_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Advance Charges :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.advance_charges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.deduction.advance_charges"
+													   name="advance_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.ttDelay.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">TT Delay :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.ttDelay"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.deduction.ttDelay"
+													   name="ttDelay"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Total Charges:</label>
+										<div class="col-sm-6">
+											{{(grUVm.selectedGr.totalCharges =
+											(grUVm.selectedGr.charges|sumOfGrChargesWithTax:grUVm.__FormList))|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Total Deduction:</label>
+										<div class="col-sm-6">
+											{{(grUVm.selectedGr.totalDeduction =
+											(grUVm.selectedGr.deduction|sumOfGrChargesWithTax:grUVm.__FormList))|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-show="grUVm.__FormList.basicFreight.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Basic Freight:</label>
+										<div class="col-sm-6">
+											<span>{{(grUVm.selectedGr.basicFreight = (grUVm.selectedGr.invoices|getArrayElementSum:'freight'))|roundOff}}</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.freightWithDiesel.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{grUVm.__FormList.freightWithDiesel.label
+											|| 'Basic Freight(Diesel)'}}:</label>
+										<div class="col-sm-6">
+											{{(grUVm.selectedGr.basicFreight +
+											grUVm.selectedGr.charges.diesel_charges)|roundOff }}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Total Freight:</label>
+										<div class="col-sm-6" ng-hide="true">
+											{{(grUVm.selectedGr.totalFreight = (grUVm.selectedGr.basicFreight +
+											grUVm.selectedGr.totalCharges - grUVm.selectedGr.totalDeduction))|roundOff}}
+										</div>
+										<div class="col-sm-6">
+											{{grUVm.totalFreight = (grUVm.selectedGr.basicFreight +
+											grUVm.selectedGr.totalCharges - grUVm.selectedGr.totalDeduction)|roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<!-- Non-Billable Charges -->
+					<li class="list-group-item podDetail">
+						<span class="booking_list_header">Non-Billable Charges</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbLoading.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Loading Charges :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbLoading"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.loading_charges"
+													   class="form-control"
+													   name="loading_charges"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbUnLoading.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Unloading Charges :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbUnLoading"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.unloading_charges"
+													   class="form-control"
+													   name="unloading_charges"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbDala.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Dala Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbDala"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.dala_charges"
+													   name="dala_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbKanta.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Kanta Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbKanta"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.kanta_charges"
+													   name="kanta_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbToll.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Toll Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbToll"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.toll_charges"
+													   name="toll_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbGrCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">GR Charge :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbGrCharges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.grCharges"
+													   name="grCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbGreen_tax.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Green Tax :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbGreen_tax"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.green_tax"
+													   name="green_tax"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbTwoPtDelivery.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label"
+											   style="overflow: hidden;white-space: nowrap; text-overflow: ellipsis;">Two Point Delivery :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbTwoPtDelivery"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.twoPtDelivery"
+													   name="twoPtDelivery"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbLabourCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Labour Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbLabourCharges"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.labourCharges"
+													   name="labourCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="grUVm.__FormList.nbOther.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Other Charge:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   gr-form-formula="grUVm.__FormList.nbOther"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.nbCharges.other_charges"
+													   name="other_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Tot NBCharges:</label>
+										<div class="col-sm-6">
+											{{(grUVm.selectedGr.tnbCharges =
+												(grUVm.selectedGr.nbCharges|sumOfObject:grUVm.__FormList))|roundOff}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<!-- DETENTION DETAILS -->
+					<li class="list-group-item"
+						ng-if="grUVm.__FormList.detentionLoading.visible
+								|| grUVm.__FormList.detentionUnloading.visible
+								|| grUVm.__FormList.suppDetentionLoading.visible
+								|| grUVm.__FormList.suppDetentionUnloading.visible || true">
+						<span class="booking_list_header">DETENTION DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12" style="overflow-y: scroll;max-height: 150px;">
+									<table class="table table-bordered unresponsive">
+										<thead>
+										<tr>
+											<th>Type</th>
+											<th>In Date</th>
+											<th>Out Date</th>
+											<th>Days</th>
+											<th ng-if="grUVm.dayDiff > 1">Day 1</th>
+											<th ng-if="grUVm.dayDiff > 2">Day 2</th>
+											<th ng-if="grUVm.dayDiff > 3">Day 3</th>
+											<th ng-if="!grUVm.dayWise">Rate</th>
+											<th>Amount</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr>
+											<th>Loading Detention</th>
+											<td>
+												{{grUVm.selectedGr.pod.loadingArrivalTime | date:"dd-MMM-yyyy"}}
+											</td>
+											<td>
+												{{grUVm.selectedGr.pod.billingLoadingTime | date:"dd-MMM-yyyy"}}
+											</td>
+											<td>
+												{{grUVm.lDays =
+												('calDetentionDays'|dateUtilsFilt:grUVm.selectedGr.pod.billingLoadingTime:grUVm.selectedGr.pod.loadingArrivalTime)
+												|| 0}}
+											</td>
+											<td ng-if="grUVm.dayDiff > 1">
+												<input class="form-control"
+													   name="Loading Detention Amount1"
+													   ng-change="grUVm.calDetentionDayWiseAmt();"
+													   ng-model="grUVm.selectedGr.detentionLoadingD1"
+													   ng-readonly="grUVm.isReadonly || grUVm.lDays <=1"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   placeholder="Day1 Amount"
+													   type="number">
+											</td>
+											<td ng-if="grUVm.dayDiff > 2">
+												<input class="form-control"
+													   name="Loading Detention Amount2"
+													   ng-change="grUVm.calDetentionDayWiseAmt();"
+													   ng-model="grUVm.selectedGr.detentionLoadingD2"
+													   ng-readonly="grUVm.isReadonly || grUVm.lDays <=2"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   placeholder="Day2 Amount"
+													   type="number">
+											</td>
+											<td ng-if="grUVm.dayDiff > 3">
+												<input class="form-control"
+													   name="Loading Detention Amount3"
+													   ng-change="grUVm.calDetentionDayWiseAmt();"
+													   ng-model="grUVm.selectedGr.detentionLoadingD3"
+													   ng-readonly="grUVm.isReadonly || grUVm.lDays <=3"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   placeholder="Day3 Amount"
+													   type="number">
+											</td>
+											<td ng-if="!grUVm.dayWise">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.loadingDetentionRate"
+													   ng-change="grUVm.calDetentionAmt();"
+													   ng-readonly="grUVm.isReadonly"
+													   placeholder="Detention Rate"
+													   class="form-control"
+													   name="Loading Detention Rate">
+											</td>
+											<td>
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.detentionLoading"
+													   ng-readonly="grUVm.isReadonly"
+													   placeholder="Detention Amount"
+													   class="form-control"
+													   name="Loading Detention Amount">
+											</td>
+										</tr>
+										<tr>
+											<th>Unloading Detention</th>
+											<td>
+												{{grUVm.selectedGr.pod.unloadingArrivalTime | date:"dd-MMM-yyyy"}}
+											</td>
+											<td>
+												{{grUVm.selectedGr.pod.billingUnloadingTime | date:"dd-MMM-yyyy"}}
+											</td>
+											<td>
+												{{grUVm.ulDays =
+												('calDetentionDays'|dateUtilsFilt:grUVm.selectedGr.pod.billingUnloadingTime:grUVm.selectedGr.pod.unloadingArrivalTime)
+												|| 0}}
+											</td>
+											<td ng-if="grUVm.dayDiff > 1">
+												<input class="form-control"
+													   name="unLoading Detention Amount1"
+													   ng-change="grUVm.calDetentionDayWiseAmt();"
+													   ng-model="grUVm.selectedGr.detentionUnloadingD1"
+													   ng-readonly="grUVm.isReadonly || grUVm.ulDays <=1"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   placeholder="Day1 Amount"
+													   type="number">
+											</td>
+											<td ng-if="grUVm.dayDiff > 2">
+												<input class="form-control"
+													   name="unLoading Detention Amount2"
+													   ng-change="grUVm.calDetentionDayWiseAmt();"
+													   ng-model="grUVm.selectedGr.detentionUnloadingD2"
+													   ng-readonly="grUVm.isReadonly || grUVm.ulDays <=2"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   placeholder="Day2 Amount"
+													   type="number">
+											</td>
+											<td ng-if="grUVm.dayDiff > 3">
+												<input class="form-control"
+													   name="unLoading Detention Amount3"
+													   ng-change="grUVm.calDetentionDayWiseAmt();"
+													   ng-model="grUVm.selectedGr.detentionUnloadingD3"
+													   ng-readonly="grUVm.isReadonly || grUVm.ulDays <=3"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   placeholder="Day3 Amount"
+													   type="number">
+											</td>
+											<td ng-if="!grUVm.dayWise">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.unloadingDetentionRate"
+													   ng-change="grUVm.calDetentionAmt();"
+													   ng-readonly="grUVm.isReadonly"
+													   placeholder="Detention Rate"
+													   class="form-control"
+													   name="Unloading Detention Rate">
+											</td>
+											<td>
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="grUVm.selectedGr.detentionUnloading"
+													   ng-readonly="grUVm.isReadonly"
+													   placeholder="Detention Amount"
+													   class="form-control"
+													   name="Unloading Detention Amount">
+											</td>
+										</tr>
+										<tr><td colspan="4" ng-if="!grUVm.dayWise"></td>
+											<td colspan="3" ng-if="grUVm.dayWise"></td>
+											<td ng-if="grUVm.dayDiff > 1"></td>
+											<td ng-if="grUVm.dayDiff > 2"></td>
+											<td ng-if="grUVm.dayDiff > 3"></td>
+											<td>Total Amount</td>
+											<td>
+												{{(grUVm.selectedGr.detentionLoading +
+												grUVm.selectedGr.detentionUnloading) || 0}}
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<!-- Eway bill Details-->
+					<li class="list-group-item"
+						ng-if="grUVm.__FormList.eWayBillNum.visible|hdlUdf:true && grUVm.__FormList.eWayBillExp.visible|hdlUdf:true">
+						<span class="booking_list_header">EWAY BILL DETAILS</span>
+						<div class="pull-right"
+							 ng-if="!grUVm.readonly">
+							<div class="form-group m-b-0">
+								<button class="btn-xs btn-primary"
+										ng-disabled="grUpset|validateFormArray: ['eBill', 'Bill Expiry']: grUVm.selectedGr.eWayBills.length"
+										ng-click="grUVm.selectedGr.eWayBills.push({expiry: grUVm.selectedGr.eWayBills[0].expiry});">
+									<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+								</button>&nbsp;&nbsp;
+								<button class="btn-danger btn-xs"
+										ng-click="grUVm.selectedGr.eWayBills.splice(grUVm.selectedEwayBillRow, 1)"
+										uib-tooltip="Delete Item"
+										tooltip-placement="bottom">
+									<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<table class="table table-bordered unresponsive">
+										<thead>
+										<tr>
+											<th>#</th>
+											<th ng-if="grUVm.__FormList.eWayBillNum.visible|hdlUdf:true">
+												{{grUVm.__FormList.eWayBillNum.label || 'Eway Bill'}}
+											</th>
+											<th ng-if="grUVm.__FormList.eWayBillExp.visible|hdlUdf:true">
+												{{grUVm.__FormList.eWayBillExp.label || 'Eway Bill Expiry'}}
+											</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-repeat="bill in grUVm.selectedGr.eWayBills"
+											ng-click="grUVm.selectedEwayBillRow = $index"
+											class="pointer"
+											ng-class="{grn: grUVm.selectedEwayBillRow === $index}">
+											<td>{{$index+1}}</td>
+											<td ng-if="grUVm.__FormList.eWayBillNum.visible|hdlUdf:true">
+												<div class="fg-line"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.eWayBillNum.editable|hdlUdf:true">
+													<input type="text"
+														   placeholder="Eway Bill"
+														   ng-model="bill.number"
+														   ng-maxlength="12"
+														   name="eBill[{{$index}}]"
+														   ng-required="grUVm.__FormList.eWayBillNum.req|hdlUdf:true"
+														   class="form-control">
+												</div>
+												<span class="error" ng-if=" (grUpset['eBill'+'['+ $index +']'].$error.maxlength || (grUpset['eBill'+'['+ $index + ']'].$error.maxlength
+										 &&  grUpset.$submitted))">
+									  Eway Bill No  should be less than or equal to 12 digit </span>
+												<span
+													ng-if="grUVm.readonly || !(grUVm.__FormList.eWayBillNum.editable|hdlUdf:true)">
+														{{bill.number}}
+													</span>
+											</td>
+											<td ng-if="grUVm.__FormList.eWayBillExp.visible|hdlUdf:true">
+												<div class="date-picker input-group dp-blue"
+													 ng-if="!grUVm.readonly && grUVm.__FormList.eWayBillExp.editable|hdlUdf:true"
+													 ng-class="{ 'is-opened': bill.opened == true }">
+													<input
+														ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'bill.opened')"
+														type="text"
+														uib-datepicker-popup="{{grUVm.DatePicker.formats[0]}}"
+														show-weeks="false"
+														ng-init="bill.expiry = ('toDateObj'|dateUtilsFilt:bill.expiry)"
+														ng-model="bill.expiry"
+														max-date="grUVm.selectedGr.grDate|setMaxDate:3"
+														min-date="grUVm.selectedGr.grDate"
+														class="form-control"
+														is-open="bill.opened"
+														uib-datepicker-options="grUVm.DatePicker.dateSettings"
+														placeholder="Eway Bill Expiry"
+														close-text="Close"
+														ng-required="grUVm.__FormList.eWayBillExp.req|hdlUdf:true"
+														name="Bill Expiry[{{$index}}]">
+													<span class="input-group-btn">
+															<button type="button"
+																	class="btn btn-default m-t-0 f12"
+																	ng-click="grUVm.DatePicker.openDatePicker(this, $event, 'bill.opened')">
+																<i class="glyphicon glyphicon-calendar"></i>
+															</button>
+														</span>
+												</div>
+												<span
+													ng-if="grUVm.readonly || !(grUVm.__FormList.eWayBillExp.editable|hdlUdf:true)">{{bill.expiry|date:'dd-MMM-yyyy'}}</span>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<!-- TAX DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">TAX DETAILS:</span>
+						<button class="btn btn-primary btn-xs"
+								style="margin-left: 50px"
+								type="button"
+								uib-tooltip="Calculate GST"
+								tooltip-placement="bottom"
+								ng-click="grUVm.calculateGst(grUVm.selectedGr.billingParty._id)"
+								ng-hide="grUVm.readonly">
+							<i class="zmdi zmdi-search-for zmdi-hc-fw"></i>
+						</button>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Gst Percent:</label>
+										<div class="col-sm-6">
+											{{grUVm.gstPercentToApply}}
+											<!--<div class="fg-line select">-->
+											<!--<select class="form-control"-->
+											<!--placeholder="GST Percent"-->
+											<!--ng-model=""-->
+											<!--ng-change="grUVm.getGstType()"-->
+											<!--ng-options="item as item for item in $constants.aPercent"-->
+											<!--name="Gst Percent"-->
+											<!--&gt;-->
+											<!--<option value="" disabled>Select Type</option>-->
+											<!--</select>-->
+											<!--</div>-->
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Gst Type:</label>
+										<div class="col-sm-6">
+											{{grUVm.gstPercentType}}
+											<!--<div class="fg-line select">-->
+											<!--<select class="form-control"-->
+											<!--placeholder="GST Type"-->
+											<!--ng-model="grUVm.gstPercentType"-->
+											<!--ng-options="item as item for item in grUVm.aGstType"-->
+											<!--ng-change="grUVm.getGstType()"-->
+											<!--name="Gst Percent"-->
+											<!--&gt;-->
+											<!--<option value="" disabled>Select Type</option>-->
+											<!--</select>-->
+											<!--</div>-->
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-show="grUVm.gstPercentType === 'CGST & SGST'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">CGST:</label>
+										<div class="col-sm-6">
+											<div class="fg-line" ng-hide="true">
+												{{(grUVm.selectedGr.cGST = (grUVm.selectedGr.totalFreight *
+												grUVm.selectedGr.cGST_percent/100) || 0).toFixed(2)}}
+											</div>
+											<div class="fg-line">
+												{{grUVm.cGst = ((grUVm.selectedGr.totalFreight *
+												grUVm.selectedGr.cGST_percent/100 || 0) |roundOff)}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-show="grUVm.gstPercentType === 'CGST & SGST'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">SGST:</label>
+										<div class="col-sm-6">
+											<div class="fg-line" ng-hide="true">
+												{{(grUVm.selectedGr.sGST = (grUVm.selectedGr.totalFreight *
+												grUVm.selectedGr.sGST_percent/100) || 0).toFixed(2)}}
+											</div>
+											<div class="fg-line">
+												{{grUVm.sGst = ((grUVm.selectedGr.totalFreight *
+												grUVm.selectedGr.sGST_percent/100 || 0) |roundOff)}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-show="grUVm.gstPercentType === 'IGST'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">IGST:</label>
+										<div class="col-sm-6">
+											<div class="fg-line" ng-hide="true">
+												{{(grUVm.selectedGr.iGST = (grUVm.selectedGr.totalFreight *
+												grUVm.selectedGr.iGST_percent/100) || 0) |roundOff}}
+											</div>
+											<div class="fg-line">
+												{{grUVm.iGst = ((grUVm.selectedGr.totalFreight *
+												grUVm.selectedGr.iGST_percent/100 || 0) |roundOff)}}
+											</div>
+										</div>
+									</div>
+								</div>
+<!--								<div class="clearfix m-b-10"></div>-->
+								<div class="col-md-3" ng-show="grUVm.selectedGr.totalChargesWithoutTax">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Total Charges W/o Tax:</label>
+										<div class="col-sm-6">
+											{{(grUVm.selectedGr.totalChargesWithoutTax =
+											(grUVm.selectedGr.charges|sumOfGrChargesWithoutTax:grUVm.__FormList) -
+											(grUVm.selectedGr.deduction|sumOfGrChargesWithoutTax:grUVm.__FormList) || 0)|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Total Amount:</label>
+										<div class="col-sm-6">
+											<div class="fg-line" ng-hide="true">
+												{{(grUVm.selectedGr.totalAmount =
+												grUVm.selectedGr.totalChargesWithoutTax + grUVm.selectedGr.totalFreight
+												+ grUVm.selectedGr.iGST + grUVm.selectedGr.cGST +
+												grUVm.selectedGr.sGST).toFixed(2)}}
+											</div>
+											<div class="fg-line" ng-hide="true">
+												{{grUVm.totalAmount = ((grUVm.totalFreight + grUVm.iGst + grUVm.cGst +
+												grUVm.sGst) | roundOff)}}
+											</div>
+											<div class="fg-line">
+												{{grUVm.totalAmt = (grUVm.totalAmount | roundOff)}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--													for dph -->
+								<div class="col-md-3" ng-if="grUVm.__FormList.dphRate.visible|hdlUdf:false">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">DPH</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												{{grUVm.dph = (((grUVm.selectedGr.invoices[0].rate * grUVm.selectedGr.invoices[0].dphRate)/100) || 0) | roundOff}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.dphRate.visible|hdlUdf:false">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">DPH Including IGST</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												{{grUVm.dphwithgst = (((grUVm.dph+grUVm.selectedGr.invoices[0].rate)* grUVm.gstPercentToApply)/100 || 0) | roundOff}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="grUVm.__FormList.dphRate.visible|hdlUdf:false">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Total Amt.With DPH:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												{{(grUVm.dph + grUVm.dphwithgst  + grUVm.selectedGr.invoices[0].rate) | roundOff}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--								end dph-->
+
+							</div>
+						</div>
+					</li>
+
+					<!-- supplementaryBill DETAILS -->
+					<li class="list-group-item">
+						<div class="pull-left">
+							<span class="booking_list_header">SUPPLEMENTARYBILL DETAILS</span>
+						</div>
+						<div class="pull-left m-l-20"
+							 ng-if="grUVm.__FormList.isSupplementaryShow.visible|hdlUdf:true"
+							 style="padding: 5px 0px;">
+							<div class="form-group m-b-0">
+								<label class="checkbox checkbox-inline m-r-20"
+									   ng-if="!grUVm.supplyReadonly && grUVm.__FormList.isSupplementaryShow.editable|hdlUdf:true">
+									<input type="checkbox"
+										   ng-model="grUVm.selectedGr.isSupplementaryShow">
+									<i class="input-helper"></i>
+									{{grUVm.__FormList.isSupplementaryShow.label || 'Is Supplementary Show'}}
+								</label>
+								<span
+									ng-if="grUVm.supplyReadonly || !(grUVm.__FormList.isSupplementaryShow.editable|hdlUdf:true)">
+									<label>{{grUVm.__FormList.isSupplementaryShow.label || 'Is Supplementary Show'}}:</label>
+									<span> {{grUVm.selectedGr.isSupplementaryShow ? 'True' : 'False'}}</span>
+								</span>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12" ng-if="grUVm.selectedGr.isSupplementaryShow">
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppLoading_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Loading Charges :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppLoading_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.loading_charges"
+														   class="form-control"
+														   name="suppLoading_charges"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppUnloading_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Unloading Charges :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppUnloading_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.unloading_charges"
+														   class="form-control"
+														   name="suppUnloading_charges"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppIncentivePercent.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Incentive Percent :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppIncentivePercent"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.incentivePercent"
+														   name="suppIncentivePercent"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppIncentive.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">
+												{{grUVm.__FormList.suppIncentive.label || 'Supp Incentive:'}}</label>
+											<div class="col-sm-6"
+												 style="display: inline-flex; justify-content: space-between;">
+												<span>{{grUVm.selectedGr.supplementaryBill.charges.incentive || 0}}</span>
+												<button class="btn btn-primary btn-xs"
+														style="margin-left: 50px"
+														type="button"
+														uib-tooltip="Calculate Incentive"
+														tooltip-placement="bottom"
+														ng-click="grUVm.getSuppIncentive()"
+														ng-hide="grUVm.supplyReadonly">
+													<i class="zmdi zmdi-search-for zmdi-hc-fw"></i>
+												</button>
+												<button class="btn btn-danger btn-xs"
+														type="button"
+														uib-tooltip="clear"
+														tooltip-placement="bottom"
+														ng-click="grUVm.clearSuppIncentive()"
+														ng-hide="grUVm.supplyReadonly">
+													<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppAdvance_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Advance Charges :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppAdvance_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.deduction.advance_charges"
+														   name="suppAdvance_charges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppDala_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Dala Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppDala_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.dala_charges"
+														   name="suppDala_charges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppKanta_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Kanta Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppKanta_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.kanta_charges"
+														   name="suppKanta_charges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppToll_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Toll Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppToll_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.toll_charges"
+														   name="suppToll_charges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppGrCharges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp GR Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppGrCharges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.grCharges"
+														   name="suppGrCharges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppDiesel_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Diesel Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppDiesel_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.diesel_charges"
+														   name="suppDiesel_charges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppDiscount.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Discount :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppDiscount"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.deduction.discount"
+														   name="suppDiscount"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppLabourCharges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Labour Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppLabourCharges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.labourCharges"
+														   name="suppLabourCharges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppOther_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Other Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppOther_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.other_charges"
+														   name="suppOther_charges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppSurCharges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Surcharge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppSurCharges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.surCharges"
+														   name="suppSurCharges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppTtDelay.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp TT Delay :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppTtDelay"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.deduction.ttDelay"
+														   name="suppTtDelay"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppGreen_tax.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Green Tax :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppGreen_tax"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.green_tax"
+														   name="suppGreen_tax"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppCartageCharges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Cartage Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppCartageCharges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.cartageCharges"
+														   name="suppCartageCharges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppPrevFreightCharges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Prev Freight Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppPrevFreightCharges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.prevFreightCharges"
+														   name="suppPrevFreightCharges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppTwoPtDelivery.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Two Point Delivery :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppTwoPtDelivery"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.twoPtDelivery"
+														   name="suppTwoPtDelivery"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppWeightman_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Weightman Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppWeightman_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.weightman_charges"
+														   name="suppWeightman_charges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppOverweight_charges.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Overweight Charge:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppOverweight_charges"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.overweight_charges"
+														   name="suppOverweight_charges"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppDamage.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Damage Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppDamage"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.deduction.damage"
+														   name="suppDamage"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppPenalty.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Penalty :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppPenalty"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.deduction.penalty"
+														   name="suppPenalty"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppExtra_running.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Extra Running :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppExtra_running"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.extra_running"
+														   name="suppExtra_running"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppShortage.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Shortage Charge :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppShortage"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.deduction.shortage"
+														   name="suppShortage"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppFactory_halt.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Factory Halt :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppFactory_halt"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.factory_halt"
+														   name="suppFactory_halt"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="grUVm.__FormList.suppCompany_halt.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Company Halt:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppCompany_halt"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.charges.company_halt"
+														   name="suppCompany_halt"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppDetentionLoading.visible|hdlUdf:false">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{grUVm.__FormList.suppDetentionLoading.label
+												|| 'Supp Loading Detention'}}:</label>
+											<div class="col-sm-6">
+												{{grUVm.selectedGr.supplementaryBill.charges.detentionLoading =
+												grUVm.selectedGr.detentionLoading}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppDetentionUnloading.visible|hdlUdf:false">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{grUVm.__FormList.suppDetentionUnloading.label
+												|| 'Supp Unloading Detention'}}:</label>
+											<div class="col-sm-6">
+												{{grUVm.selectedGr.supplementaryBill.charges.detentionUnloading =
+												grUVm.selectedGr.detentionUnloading}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppRate.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Supp Rate :</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   gr-form-formula="grUVm.__FormList.suppRate"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.rate"
+														   ng-change="grUVm.selectedGr.supplementaryBill.basicFreight = ((grUVm.selectedGr.supplementaryBill.routeDistance || 0) * grUVm.selectedGr.supplementaryBill.rate)"
+														   name="suppRate"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-if="grUVm.__FormList.suppRouteDistance.visible|hdlUdf:true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">{{grUVm.__FormList.suppRouteDistance.label
+												|| 'Supp Route Distance'}}:</label>
+											<div class="col-sm-6">
+												{{grUVm.selectedGr.supplementaryBill.routeDistance =
+												(grUVm.selectedGr.invoices[0].routeDistance || 0)}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label" style="color: green">Total
+												SuppCharges:</label>
+											<div class="col-sm-6" style="color: green">
+												{{(grUVm.selectedGr.supplementaryBill.totalCharges =
+												(grUVm.selectedGr.supplementaryBill.charges|sumOfObject))|roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label" style="color: green">Total
+												SuppDeduction:</label>
+											<div class="col-sm-6" style="color: green">
+												{{(grUVm.selectedGr.supplementaryBill.totalDeduction =
+												(grUVm.selectedGr.supplementaryBill.deduction|sumOfObject))|roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label" style="color: green">Basic
+												Freight:</label>
+											<div class="col-sm-6" style="color: green">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   ng-model="grUVm.selectedGr.supplementaryBill.basicFreight"
+														   placeholder="Supp Basic Freight"
+														   ng-change="grUVm.updateIncentive(grUVm.selectedGr.supplementaryBill.basicFreight)"
+														   ng-readonly="grUVm.supplyReadonly"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   name="suppBasicFreight"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label" style="color: green">Total
+												Freight:</label>
+											<div class="col-sm-6" style="color: green">
+												{{(grUVm.selectedGr.supplementaryBill.totalFreight =
+												(grUVm.selectedGr.supplementaryBill.basicFreight || 0) +
+												(grUVm.selectedGr.supplementaryBill.totalCharges || 0) -
+												(grUVm.selectedGr.supplementaryBill.totalDeduction || 0))}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+
+						<div class="text-center">
+							<button class="btn btn-primary"
+									ng-if="!grUVm.supplyReadonly || !grUVm.readonly"
+										ng-click="grUVm.submit(grUpset)">Submit
+							</button>
+						</div>
+					</li>
+					<li></li>
+
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1 {
+		z-index: 89;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: 98;
+	}
+
+	.error {
+		font-size: 10px;
+		color: red;
+	}
+
+	.color {
+		color: red;
+	}
+
+	.notApplyTax {
+		color: coral;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+	.podDetail div.col-md-3 {
+		height: 40px;
+	}
+
+	.form-wrapper:not(readonly) label.req::after,
+	.form-wrapper:not(readonly) .label.req::after
+	{
+		content: "*";
+		color: red;
+	}
+
+</style>

@@ -1,0 +1,128 @@
+
+<div class="container" >
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" >
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <div class="lvh-search ng-scope sear chosen-row-2">
+                                    <input type="text" class="form-control lvhs-input" placeholder="Fleet Search..."
+                                        ng-model="oFilter.fleet" typeahead-wait-ms="10"
+                                        typeahead="item as item.name for item in getFleet($viewValue)"
+                                        typeahead-on-select="onSelectFleet($item, $model, $label)">
+                                    <i class="lvh-search-close" ng-click="oFilter.fleet=null;">×</i>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+                                <div class="fg-line form-group m-b-0">
+                                    <select chosen
+                                        data-placeholder="Select Segment" 
+                                            class="form-control"
+                                            ng-model="oFilter.segment_type"
+                                            ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+                                            name="Segment"
+                                            multiple="multiple">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <div class="lvh-search ng-scope sear chosen-row-2">
+                                    <input type="text" class="form-control lvhs-input" placeholder="vehicle Search..."
+                                        ng-model="oFilter.vehicle" typeahead-wait-ms="10"
+                                        typeahead="item as item.vehicle_reg_no for item in getAllVehicle($viewValue)"
+                                        typeahead-on-select="onSelectVehicle($item, $model, $label)">
+                                    <i class="lvh-search-close" ng-click="oFilter.vehicle=null;">×</i>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" >
+                                <div class="lvh-search ng-scope sear chosen-row-2">
+                                    <input
+                                        type="text"
+                                        class="form-control lvhs-input"
+                                        placeholder="Customer Search..."
+                                        ng-model="oFilter.customer"
+                                        typeahead-wait-ms="10"
+                                        typeahead="item as item.name for item in getCustomer($viewValue) | limitTo:6"
+                                        typeahead-on-select="onSelectCustomer($item, $model, $label)"
+                                        >
+                                    <i class="lvh-search-close" ng-click="oFilter.customer=null;">×</i>
+                                </div>
+                            </div>
+
+
+							<div class="col-md-2 pull-right">
+								<div class="form-group m-b-0 text-center">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Clear All"
+											ng-click="oFilter={};aVehicle=[];aFleet=[];aCustomer=[]"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Download"
+											ng-click="downloadReport(true)"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+                            <div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="aFleet.length">
+                                Fleet:
+                                <span class="btn-lst" ng-repeat="select in aFleet">
+                                   <button class="btn-xs" style="background: black; color: aliceblue;">     {{select.name}}&nbsp;
+                                    <a ng-click="removeFleet(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+                              </div>
+							<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="aVehicle.length">
+                                Vehicle:
+			                  <span class="btn-lst" ng-repeat="select in aVehicle">
+				                 <button class="btn-xs" style="background: black; color: aliceblue;">     {{select.vehicle_reg_no}}&nbsp;
+				                  <a ng-click="removeVehicle(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+                            </div>
+                            <div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="aCustomer.length">
+                                Customer:
+                                <span class="btn-lst" ng-repeat="select in aCustomer">
+                                   <button class="btn-xs" style="background: black; color: aliceblue;">     {{select.name}}&nbsp;
+                                    <a ng-click="removeCustomer(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+                              </div>
+							<div class="m-b-10" style="clear: both"></div>
+							
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.listB > li{width: 28%;
+		float: left;margin-left: 1%;}
+	.pp{
+		list-style-type: none;
+		padding: 20px;
+		font-weight: bold;
+		border: 1px solid #2a96f3;
+	}
+
+	.container{
+		margin: auto 14px;
+		width: 98% !important;
+	}
+
+	.table.table-bordered.unresponsive{
+		margin-top: -50px !important;
+	}
+</style>

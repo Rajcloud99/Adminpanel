@@ -1,0 +1,160 @@
+<div class="container" ng-controller="profitReportCntrl">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="fg-line">
+									<input type="text" ng-model="trip_no" name="trip_no" class="form-control input-sm"
+										   placeholder="Search By Trip No" ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<!-- <div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+                              <div class="fg-line">
+                                  <input type="text" ng-model="boe_no" name="boe_no" class="form-control input-sm"  placeholder="BOE NO" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllCostingReport()" style="height: 34px;font-size: 13px;">
+                              </div>
+                            </div> -->
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                    <!-- <select chosen data-placeholder-text-single="'Search Vehicle'" search-contains="true" allow-single-deselect="true" no-results-text="'Could not find any Vehicle'" class="form-control" ng-model="vehicle_no" ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aVehicles" ng-change="getAllCostingReport()" >
+                                      <option value=""></option>
+                                    </select> -->
+                                    <div class="lvh-search ng-scope sear">
+			                          <input type="text" placeholder="Vehicle Search..." ng-model="vehicle_no" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue" ng-change="getVname(vehicle_no)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+			                          <i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+			                        </div>
+                            </div>
+							<!-- <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                    <select chosen data-placeholder-text-single="'Search Route'" allow-single-deselect="true" no-results-text="'Could not find any Route'" class="form-control" ng-model="route_id" ng-options="item._id as item.name for item in aRoute" ng-change="getAllCostingReport()" >
+                                      <option value=""></option>
+                                    </select>
+                            </div> -->
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<!-- <select chosen data-placeholder-text-single="'Search Customer'"
+										allow-single-deselect="true" no-results-text="'Could not find any Customer'"
+										class="form-control" ng-model="tripCustomer" search-contains="true"
+										ng-options="item as item.name for item in aCustomer">
+									<option value=""></option>
+								</select> -->
+								<div class="lvh-search ng-scope sear">
+		                            <input type="text" placeholder="Customer Search..." ng-model="tripCustomer" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aCustomer | filter:$viewValue" ng-change="getCname(tripCustomer)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+		                            <i class="lvh-search-close" ng-click="clearSearch('customer')">×</i>
+		                        </div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{format}}"
+											   show-weeks="false"
+											   ng-model="start_date"
+											   max-date="end_date"
+											   is-open="opened1"
+											   ng-change="setStartDate()"
+											   datepicker-options="dateOptions"
+											   close-text="Close"
+											   placeholder="From Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened1')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{format}}"
+											   show-weeks="false"
+											   ng-model="end_date"
+											   min-date="start_date"
+											   is-open="opened2"
+											   datepicker-options="dateOptions"
+											   ng-change="setEndDate()"
+											   close-text="Close"
+											   placeholder="To Date"
+											   style="padding: 0px 4px; height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened2')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<button ng-click="getProfitReport()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">Search</button>
+							</div>
+							<button ng-disabled="aProfitReport.length == 0" ng-click="downloadProfitability()"
+									class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Download
+							</button>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>S. No.</th>
+										<th>Trip No.</th>
+										<th>Customer</th>
+										<th>Vendor</th>
+										<th>Vehicle</th>
+										<th>Date</th>
+										<th>Branch</th>
+										<th>Trip Manager</th>
+										<th>Customer Pay</th>
+										<th>Costing</th>
+										<th>Profit</th>
+										<th>% Profit</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oTripExp in aProfitReport" class="pointer selectItem">
+										<td>{{$index+1}}</td>
+										<td>{{oTripExp.trip_no}}</td>
+										<td>{{oTripExp.customers || 'NA'}}</td>
+										<td>{{oTripExp.vendor_name || 'NA'}}</td>
+										<td>{{oTripExp.vehicle_no || 'NA'}}</td>
+										<td>{{oTripExp.datetime || 'NA'}}</td>
+										<td>{{oTripExp.branch || "NA"}}</td>
+										<td>{{oTripExp.trip_manager.name || "NA"}}</td>
+										<td>{{oTripExp.invoiceTotal || "NA"}}</td>
+										<td>{{oTripExp.total_expences || "NA"}}</td>
+										<td>{{oTripExp.profitability || "NA"}}</td>
+										<td>{{oTripExp.profitability_percent || "NA"}}</td>
+									</tr>
+									</tbody>
+								</table>
+								<div class="pagi" ng-show="total_pages>1">
+									<pagination ng-change="pageChanged()" total-items="totalItems"
+												items-per-page="items_per_page" num-pages="numPages"
+												ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+												boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+												first-text="&laquo;" last-text="&raquo;"></pagination>
+								</div>
+							</div>
+							<div ng-if="aProfitReport.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any costing report available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,356 @@
+<!--suppress HtmlUnknownAttribute -->
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+     id="messages-main">
+    <div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
+        <div class="lvh-search ng-scope sear">
+            <input type="text" placeholder="Start typing..." ng-model="getSearch" class="lvhs-input" class="form-control" ng-change="getSearchClick(getSearch)">
+            <i class="lvh-search-close" ng-click="resetSearch()">×</i>
+        </div>
+        <div class="listview lv-mechanic clk" style="overflow: auto;height:97%;">
+            <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)"
+                 ng-repeat="maintenanceVendor in maintenanceVendors"
+                 ng-click="selectMaintenanceVendorAtIndex($index,maintenanceVendor)">
+                <div class="truck-desc">
+                    <div class="row">
+                        <div class="col-md-8 bold">
+                            {{maintenanceVendor.name}}
+                        </div>
+                        <div class="col-md-4 bold">
+                            {{maintenanceVendor.vendorId}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagi" ng-show="totalPages>1" style="position: absolute;bottom:0;margin-left: 20%">
+                <pagination ng-change="pageChanged()" total-items="totalItems"
+                            items-per-page="itemsPerPage" num-pages="numPages"
+                            ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi"
+                            boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;"></pagination>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="min-height: 600px;margin-left:20%;overflow: auto">
+        <div class="card-header">
+            <h2 style="font-size: 18px">
+                <span style="margin-left:10px;">{{selectedMaintenanceVendor.name}}
+                    </span>
+                <span style="margin-left:10px;color:#B7B7B7"
+                      ng-hide="maintenanceVendors.length===0 && (currentMode==='view' || currentMode==='edit')">
+                    ({{currentMode.substring(0,1).toUpperCase()+ currentMode.substring(1)}})
+                </span>
+            </h2>
+        </div>
+        <button class="btn btn-primary waves-effect"
+                style="margin-top:-45px;float: right;margin-right: 20px;"
+                ng-click="addNewMaintenanceVendorClicked()" ng-show="currentMode ==='view'">
+            Add New Maintenance Vendor
+        </button>
+
+        <div class="separator" style="width: 100%;height:1px;background-color: #EAEAEA"></div>
+
+        <div class="card-header" style="margin: 0 auto;" ng-show="maintenanceVendors.length===0 && currentMode==='view'">
+            <h2 style="color: grey">
+                Maintenance vendor not found
+            </h2>
+        </div>
+
+        <!--Form starts here -->
+        <div class="card-body" ng-hide="maintenanceVendors.length===0 && (currentMode==='view' || currentMode==='edit')">
+            <ul ng-show="currentMode==='view'" class="lv-actions actions"
+                style="position:absolute;margin-top:-30px;margin-left:90%;">
+                <li ng-hide="$loginUserRoleData.maintenanceVendor.indexOf('edit')===-1"
+                    class="btn-wave" data-ui-sref-active="active">
+                    <a href=""  uib-tooltip="Edit MaintenanceVendor" tooltip-placement="bottom"
+                       ng-click="editMaintenanceVendorClicked()" >
+                        <i class="zmdi zmdi-edit">
+                        </i>
+                    </a>
+                </li>
+                <li ng-hide="$loginUserRoleData.maintenanceVendor.indexOf('remove')===-1">
+                    <a href="" uib-tooltip="Delete MaintenanceVendor"
+                       tooltip-placement="bottom"
+                       ng-click="deleteMaintenanceVendorClicked()">
+                        <i class="zmdi zmdi-delete">
+                        </i>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="card-body" style="padding-left:7%;padding-right: 7%;margin-top: 40px">
+                <form name="MaintenanceVendorForm" class="form-vertical">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-4 control-label">Vendor Id: <span style="color: red;">*</span></label>
+                                <div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view' || currentMode === 'edit'">
+                                        <input  ng-readonly="currentMode==='view' || currentMode === 'edit'" ng-model="selectedMaintenanceVendor.vendorId" class="form-control input-sm" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-4 control-label">Name: <span style="color: red;">*</span></label>
+                                <div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input ng-readonly="currentMode==='view'"
+                                               ng-model="selectedMaintenanceVendor.name" class="form-control
+                                    input-sm"  required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-4 control-label">Branch</label>
+                                <div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg_line">
+                                        <div class="select" ng-show="(currentMode=='view'
+                                        && selectedMaintenanceVendor.branch_name.length>0) ||
+                                                currentMode=='add' || currentMode=='edit'"
+                                             ng-readonly="currentMode==='view'">
+                                            <select name="branch" required class="form-control" ng-model="selectedBranch"
+                                                     ng-readonly="currentMode==='view'"
+                                                     ng-disabled="currentMode==='view'"
+                                                     ng-options="branch as branch.name for branch in branches">
+                                                <option value="" disabled>Select branch</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-4 control-label">Contact person 1</label>
+                                <div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input ng-readonly="currentMode==='view'"
+                                               ng-model="selectedMaintenanceVendor.prim_contact_person" class="form-control
+                                    input-sm"  >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-4 control-label">Contact person 2</label>
+                                <div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input ng-readonly="currentMode==='view'"
+                                               ng-model="selectedMaintenanceVendor.alt_contact_person" class="form-control
+                                    input-sm"  >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-4 control-label">Contact no. 1</label>
+                                <div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input ng-readonly="currentMode==='view'"
+                                               ng-model="selectedMaintenanceVendor.prim_contact_no" class="form-control
+                                    input-sm"  >
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-4 control-label">Contact no. 2</label>
+                                <div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input ng-readonly="currentMode==='view'"
+                                               ng-model="selectedMaintenanceVendor.alt_contact_no" class="form-control
+                                    input-sm"  >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-4 control-label">Email</label>
+                                <div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input ng-readonly="currentMode==='view'"
+                                               ng-model="selectedMaintenanceVendor.email" class="form-control
+                                    input-sm"  >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-3 control-label">Tin No.</label>
+                                <div class="col-sm-9" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input ng-readonly="currentMode==='view'"
+                                               ng-model="selectedMaintenanceVendor.tin_no" class="form-control input-sm" placeholder="Enter here..." >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-3 control-label">Address </label>
+                                <div class="col-sm-9" >
+                                    <div class="col-xs-6">
+                                        <input ng-readonly="currentMode==='view'"  class="form-control
+                                    input-sm" ng-model="selectedMaintenanceVendor.address.line1"
+                                               style="height: 30px" placeholder="Line 1">
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <input ng-readonly="currentMode==='view'"  class="form-control
+                                    input-sm" ng-model="selectedMaintenanceVendor.address.line2"
+                                               style="height: 30px" placeholder="Line 2">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-3 control-label"></label>
+                                <div class="col-sm-9">
+                                    <div class="col-xs-6">
+                                        <input id ="autoCompleteCity1" ng-readonly="currentMode==='view'"  class="form-control
+                                    input-sm" ng-model="selectedMaintenanceVendor.address.city"
+                                               style="height: 30px" placeholder="City">
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <input ng-readonly="currentMode==='view'"  class="form-control
+                                    input-sm" ng-model="selectedMaintenanceVendor.address.district"
+                                               style="height: 30px" placeholder="District">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-3 control-label"></label>
+                                <div class="col-sm-9" >
+                                    <div class="col-xs-6">
+                                        <input ng-readonly="currentMode==='view'"  class="form-control
+                                    input-sm" ng-model="selectedMaintenanceVendor.address.state"
+                                               style="height: 30px" placeholder="State">
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <input ng-readonly="currentMode==='view'"  class="form-control
+                                    input-sm" ng-model="selectedMaintenanceVendor.address.country"
+                                               style="height: 30px" placeholder="Country">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-3 control-label"></label>
+                                <div class="col-sm-9" >
+                                    <div class="col-xs-6">
+                                        <input ng-readonly="currentMode==='view'"  class="form-control
+                                    input-sm" ng-model="selectedMaintenanceVendor.address.pincode"
+                                               style="height: 30px" placeholder="Pincode">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 style="color: #847777;font-size: 14px;margin:15px">Bank Details</h2>
+                    <div class="row" ng-hide="currentMode==='view'" style="margin:15px">
+                        <div class="col-sm-2">
+                            <div class="form-group fg-float m-b-30">
+                                <div class="fg-line">
+                                    <input type="number" ng-model="banking.a_c" class="input-sm form-control fg-input">
+                                    <label class="fg-label">A/C No.</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group fg-float m-b-30">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="banking.ifsc" class="input-sm form-control fg-input">
+                                    <label class="fg-label">IFS Code</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="form-group fg-float m-b-30">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="banking.declaration" class="input-sm form-control fg-input">
+                                    <label class="fg-label">Declaration</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <button ng-click="addBank(banking)" ng-disabled="!(banking.a_c && banking.ifsc && banking.declaration)" class="btn btn-primary waves-effect pointer">
+                                <i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" style="margin:15px">
+                        <div class="col-md-12 arr_empl"><span>
+                            <span class="route_iCity" ng-repeat="oBank in aBanking" tooltip="A/C No., IFSC code, and Declaration">{{oBank.a_c +" &nbsp; - &nbsp; "+oBank.ifsc+" &nbsp; - &nbsp; "+oBank.declaration }} <a class="route_iCityRemove" ng-click="removeBank($index)"> x </a>&nbsp;<br></span> &nbsp;</span>
+                        </div>
+                    </div>
+
+                    <!--Save button -->
+                    <div class="row" ng-hide="currentMode==='view'" style="margin: 60px 0px 30px 0px">
+                        <button type="submit" class="btn btn-primary" ng-disabled="!(selectedMaintenanceVendor.vendorId && selectedMaintenanceVendor.name)"
+                                ng-click="saveMaintenanceVendor(MaintenanceVendorForm)"
+                                style="margin-bottom: 15px;margin-left: 80%;margin-right:30px">Save</button>
+                    </div>
+
+                    <!--Empty space for bottom absolute footer -->
+                    <div class="empty_space_for_footer" ng-show="currentMode==='view'">
+                    </div>
+
+                    <!--Bottom footer -->
+                    <div ng-show="currentMode==='view'" style="position:absolute;width:80%;bottom:50px">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="col-sm-6 control-label">Created by</label>
+                                <div class="col-sm-6">
+                                    <div class="fg-line" readonly>
+                                        <input readonly
+                                               ng-model="selectedMaintenanceVendor.created_by_name" class="form-control
+                                    input-sm redundantFields" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-6 control-label">Last modified by</label>
+                                <div class="col-sm-6">
+                                    <div class="fg-line" readonly>
+                                        <input readonly
+                                               ng-model="selectedMaintenanceVendor.last_modified_by_name" class="form-control
+                                    input-sm redundantFields"  >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-6 control-label">Created at</label>
+                                <div class="col-sm-6">
+                                    <!-- <div class="fg-line" readonly>
+                                        <input ui-datetimeformat ormat readonly
+                                               ng-model="selectedMaintenanceVendor.created_at" class="form-control
+                                    input-sm redundantFields"  >
+                                    </div> -->
+                                    <label>{{selectedMaintenanceVendor.created_at | date:'dd-MM-yyyy'}}</label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="col-sm-6 control-label">Last modified at</label>
+                                <div class="col-sm-6">
+                                    <!-- <div class="fg-line" readonly>
+                                        <input ui-datetimeformat readonly
+                                               ng-model="selectedMaintenanceVendor.last_modified_at" class="form-control
+                                    input-sm redundantFields"  >
+                                    </div> -->
+                                    <label>{{selectedMaintenanceVendor.last_modified_at | date:'dd-MM-yyyy'}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .fg-float .fg-label{top: 0px;}
+    .arr_empl > span >span {
+        background: red;
+        padding: 1px 7px;
+        color: #fff;
+        line-height: 25px;
+    }
+</style>

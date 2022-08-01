@@ -1,0 +1,141 @@
+<style>
+	.modal .modal-content{
+		width: 850px;
+	}
+</style>
+
+<div class="modal-header">
+	<button type="button" ng-click="closeModal()" class="close pull-right"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h3 class="text-center">{{mode}} Rates</h3>
+</div>
+<div class="container modal-body">
+	<form name="detentionSetDateRangeForm"
+		  ng-submit="submit(detentionSetDateRangeForm)"
+		  novalidate ng-if="mode != 'View'">
+		  <div class="col-sm-2">
+			<select class="form-control"
+					placeholder="Service Type"
+					ng-options="item as item for item in $configs.master.aServiceType || ['Normal', 'Express', 'Empty']"
+					ng-model="budget.serviceTyp"
+					name="service"
+					required
+					style="height: 34px;">
+				<option value="" disabled>Service Type</option>
+			</select>
+			<span class="error"
+				  ng-if="detentionSetDateRangeForm['service'].$error.required
+								&& (detentionSetDateRangeForm['service'].$touched
+									|| detentionSetDateRangeForm.$submitted)">Mandatory Field</span>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Rate/Km:  <span style="color: red;">*</span></label>
+				<div class="col-sm-5">
+					<div class="fg-line">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+							   onwheel="return false"
+							   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   ng-model="budget.rpk"
+							   class="form-control"
+							   ng-model-options="{ updateOn: 'blur' }"
+							   required
+							   name="Rate per km">
+					</div>
+				</div>
+				<span class="error"
+					  ng-if="detentionSetDateRangeForm['Rate per km'].$error.required
+								&& (detentionSetDateRangeForm['Rate per km'].$touched
+									|| detentionSetDateRangeForm.$submitted)">This Field is Mandatory</span>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Mileage:  <span style="color: red;">*</span></label>
+				<div class="col-sm-5">
+					<div class="fg-line">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+							   onwheel="return false"
+							   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   ng-model="budget.mileage"
+							   class="form-control"
+							   ng-model-options="{ updateOn: 'blur' }"
+							   required
+							   name="mileage">
+					</div>
+				</div>
+				<span class="error"
+					  ng-if="detentionSetDateRangeForm['mileage'].$error.required
+								&& (detentionSetDateRangeForm['mileage'].$touched
+									|| detentionSetDateRangeForm.$submitted)">This Field is Mandatory</span>
+			</div>
+		</div>
+		<div class="col-md-2">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Advance:  <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+							   onwheel="return false"
+							   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   ng-model="budget.adv"
+							   class="form-control"
+							   ng-model-options="{ updateOn: 'blur' }"
+							   required
+							   name="adv">
+					</div>
+				</div>
+				<span class="error"
+					  ng-if="detentionSetDateRangeForm['adv'].$error.required
+								&& (detentionSetDateRangeForm['adv'].$touched
+									|| detentionSetDateRangeForm.$submitted)">Mandatory Field</span>
+			</div>
+		</div>
+		<div class="col-md-1">
+			<div class="form-group m-b-10 text-center">
+				<button type="submit"
+						class="btn btn-primary"
+						style="margin-bottom: 12px;text-transform: capitalize; margin-right: -120px;">Add Charges</button>
+			</div>
+		</div>
+	</form>
+	<div class="col-md-12">
+		<div class="detailList">
+			<table class="table table-bordered unresponsive">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Service</th>
+						<th>RPK</th>
+						<th>Mileage</th>
+						<th>Advance</th>
+						<th ng-if="mode === 'View'">Added By</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr	ng-repeat="budget in oVehicle.budgetV2"
+						   class="pointer selectItem">
+						<td>{{((budget.date || budget.created_at) | date:"dd-MMM-yyyy 'at' hh:mm a") || 'NA'}}</td>
+						<td>{{budget.serviceTyp}}</td>
+						<td>{{budget.rpk}}</td>
+						<td>{{budget.mileage}}</td>
+						<td>{{budget.adv}}</td>
+						<td ng-if="mode === 'View'">{{budget.user.full_name || budget.userName}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button type="button" class="btn btn-warning" ng-click="closeModal()">Close</button>
+</div>
+
+

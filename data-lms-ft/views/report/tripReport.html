@@ -1,0 +1,312 @@
+<div class="container" ng-controller="TripReportController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<select chosen data-placeholder-text-single="'Report Type'" allow-single-deselect="true"
+										no-results-text="'Could not find any Report Type'" search-contains="true" class="form-control"
+										ng-model="reportType" ng-options="item as item for item in aStatus">
+<!--									<option disabled value="">Report Type</option>-->
+<!--									<option  value="Incomplete Trip">Incomplete Trip</option>-->
+<!--									<option  value="Allocation Report">Allocation Report</option>-->
+<!--									<option  value="Dispatch Report">Dispatch Report</option>-->
+<!--									<option  value="Trip Complete Report">Trip Complete Report</option>-->
+<!--									<option  value="Trip Cancel Report">Trip Cancel Report</option>-->
+<!--									<option  value="Trip Profitability Report" ng-if="$role['Trip Report']['Trip Profitability Report']">Trip Profitability Report</option>-->
+
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="trip_no" name="trip_no" class="form-control input-sm"
+										   placeholder="Trip No" ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="tsNo" name="tsNo" class="form-control input-sm"
+										   placeholder="RT No." ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Driver Search..."
+											ng-model="driver"
+											typeahead-wait-ms="10"
+											typeahead="item as (item.nameCode || item.name) for item in getDriver($viewValue) | limitTo:10"
+											typeahead-on-select="onSelect($item, $model, $label)"
+									>
+									<i class="lvh-search-close" ng-click="driver='';selectType='index'">×</i>
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="boe_no" name="boe_no" class="form-control input-sm"
+										   placeholder="BOE NO" ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<!-- <select chosen data-placeholder-text-single="'Search Vehicle'"
+										allow-single-deselect="true" no-results-text="'Could not find any Vehicle'"
+										class="form-control" ng-model="vehicle_no" search-contains="true"
+										ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aVehicles">
+									<option value=""></option>
+								</select> -->
+								<div class="lvh-search ng-scope sear">
+		                          <input type="text" placeholder="Vehicle Search..." ng-model="vehicle_no" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue" ng-change="getVname(vehicle_no)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+		                          <i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+		                        </div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<!-- <select chosen data-placeholder-text-single="'Search Route'"
+										allow-single-deselect="true" no-results-text="'Could not find any Route'"
+										class="form-control" ng-model="route_id" search-contains="true"
+										ng-options="item._id as item.name for item in aRoute">
+									<option value=""></option>
+								</select> -->
+								<div class="lvh-search ng-scope sear">
+		                            <input
+																		type="text"
+																		placeholder="Route Search..."
+																		ng-model="route"
+																		class="lvhs-input"
+																		typeahead-wait-ms="10"
+																		typeahead="item as item.name for item in aRoute | filter:$viewValue"
+																		ng-change="getDname(route)"
+																		class="form-control"
+																		typeahead-on-select="onSelect($item, $model, $label)"
+																>
+		                            <i class="lvh-search-close" ng-click="clearSearch('route')">×</i>
+		                        </div>
+							</div>
+							<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								&lt;!&ndash; <select chosen data-placeholder-text-single="'Search Customer'"
+										allow-single-deselect="true" no-results-text="'Could not find any Customer'"
+										class="form-control" ng-model="tripCustomer" search-contains="true"
+										ng-options="item as item.name for item in aCustomer">
+									<option value=""></option>
+								</select> &ndash;&gt;
+								<div class="lvh-search ng-scope sear">
+										<input
+												type="text"
+												placeholder="Vendor Search..."
+												ng-model="tripCustomer"
+												class="lvhs-input"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in aCustomer | filter:$viewValue"
+												ng-change="getCname(tripCustomer)"
+												class="form-control"
+												typeahead-on-select="onSelect($item, $model, $label)"
+										>
+										<i class="lvh-search-close" ng-click="clearSearch('customer')">×</i>
+		             </div>
+							</div>-->
+							<div class="clearfix"></div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+											   datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date" max-date="end_date"
+											   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="From Date" ng-change="dateChange()"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened1')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+											   datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date" min-date="start_date"="end_date" max-date="mxDate"
+											   is-open="opened2" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="To Date" ng-disabled="!start_date"
+											   style="padding: 0px 4px; height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened2')" ng-disabled="!start_date"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<button ng-click="getAllTrip()" ng-disabled="!start_date || !end_date"
+										class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+									Search
+								</button>
+							</div>
+							<!-- <a ng-hide="aTrip.length == 0" href="{{report_download}}" traget="_blank" class="btn btn-primary hidden-print pull-right" tooltip="Download Trip Report" style="font-size: 11px; padding: 5px;margin-top: 5px;">Download</a> -->
+
+							<button ng-disabled="aTrip.length == 0 || !start_date || !end_date" ng-click="getAllTrip(true)"
+									class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Download
+							</button>
+
+							<div class="col-md-2 pull-right" ng-if="reportType == 'Trip Comparison Report'">
+								<div class="lvh-label col-md-5" style="padding-left:0;padding-right:0;">Aggre By:</div>
+								<div class="select col-md-6">
+									<select
+											class="form-control"
+											ng-init="$parent.rptType = 'monthwise'"
+											ng-model="$parent.rptType" style="width:120%;height:34px;"
+									>
+										<option  value="monthwise" > Monthwise </option>
+										<option  value="daywise" > Daywise </option>
+									</select>
+								</div>
+							</div>
+						</form>
+						<div class="clearfix"></div>
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 480px;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<!--<th>Sl No.</th>-->
+										<th>Branch</th>
+										<!--<th>Allocation DateTime</th>-->
+										<th>Dispatch DateTime</th>
+										<th>Dispatch Delay(Hrs.)</th>
+										<!--<th>Trip No.</th>-->
+										<th>Booking No.</th>
+										<th>Booking Type</th>
+										<th>BOE No.</th>
+										<!--<th>GR Type</th>-->
+										<th>GR No.</th>
+										<th>Customer</th>
+										<th>CHA</th>
+										<th>Billing Party</th>
+										<th>Vehicle No.</th>
+										<th>Vehicle Type</th>
+										<th>Driver</th>
+										<th>Container No</th>
+										<th>Container Type</th>
+										<!--<th>Container Line</th>-->
+										<th>Route Name</th>
+										<th>Route Distance in Masters</th>
+										<th>Weight(Tonne)</th>
+										<th>Rate</th>
+										<th>Frieght</th>
+										<th>Diesel(Ltr.)</th>
+										<th>Diesel Rate(/Ltr.)</th>
+										<th>Diesel Cost(Rs.)</th>
+										<!--<th>Diesel Cash(Adv.)</th>-->
+										<th>Driver Cash(Adv.)</th>
+										<th>Trip Cash(Adv.)</th>
+										<th>Trip Starter</th>
+										<!--<th>Model/Type</th>
+										<th>Sub-Group</th>
+										<th>Group</th>-->
+									</tr>
+									</thead>
+									<tbody ng-repeat="oTrip in aTrip">
+									<tr style="background:#f2da97">
+										<td colspan="32" style="text-align: start; font-weight: bold;">{{ oTrip.trip_no }}
+										</td>
+									</tr>
+									<tr ng-repeat="oGR in oTrip.gr" class="pointer selectItem">
+										<!--<td>{{$index+1}}</td>-->
+										<td>{{oGR.branch.name}}</td>
+										<!--<td>{{oGR.allocation_date | date:'dd-MM-yyyy' || 'NA'}}</td>-->
+										<td>{{oTrip.trip_start.time | date:'dd-MM-yyyy' || 'NA'}}</td>
+										<td>{{timediff(oTrip.allocation_date,oTrip.trip_start.time) | number: 2}}</td>
+										<!--<td>{{oTrip.trip_no}}</td>-->
+										<td>{{oGR.booking && oGR.booking.booking_no}}</td>
+										<td>{{oGR.booking && oGR.booking.booking_type}}</td>
+										<td>{{oGR.booking && oGR.booking.boe_no}}</td>
+										<!--<td>{{oTrip.gr_type || "NA"}}</td>-->
+										<td>{{oGR.grNumber}}</td>
+										<td>{{oGR.booking && oGR.booking.customer.name}}</td>
+										<td>{{oGR.booking && oGR.booking.cha.name}}</td>
+										<td>{{oGR.booking && oGR.booking.billing_party.name}}</td>
+										<td>{{oGR.trip.vehicle.vehicle_reg_no || "NA"}}</td>
+										<td>{{oGR.trip.vehicle.veh_type && oGR.trip.vehicle.veh_type.name || "NA"}}</td>
+										<td>{{oGR.trip.vehicle.driver_name || 'NA'}}</td>
+										<td><span ng-repeat="c in oGR.container">{{c.number}},&nbsp;</span></td>
+										<td><span ng-repeat="t in oGR.container">{{t.type_of_container}},&nbsp;</span></td>
+										<!--<td><span ng-repeat="l in oGR.container">{{l.line}},&nbsp;</span></td>-->
+
+										<td>{{oGR.trip.route.name || "NA"}}</td>
+										<td>{{oGR.trip.route.route_distance || 0}}</td>
+
+										<td>{{oGR.weight || 0}}</td>
+										<td>{{oGR.booking && oGR.booking.rate || 0}}</td>
+										<td>{{oGR.freight = (oGR.weight || 0) * (oGR.booking && oGR.booking.rate || 0)}}</td>
+										<td>{{oGR.trip.vendorDeal.diesel.quantity}}</td>
+										<td>{{oGR.trip.vendorDeal.diesel.rate}}</td>
+										<td>{{oGR.trip.vendorDeal.diesel.amount}}</td>
+										<!--<td>{{oGR.trip.vendorDeal.diesel_cash_advance}}</td>-->
+										<td>{{oGR.trip.vendorDeal.driver_cash}}</td>
+										<td>{{oGR.trip.vendorDeal.advance}}</td>
+
+										<td>{{oGR.created_by_full_name || "NA"}}</td>
+										<!--<td>{{oGR.type_mode || "NA"}}</td>
+										<td>{{oGR.sub_group || "NA"}}</td>
+										<td>{{oGR.group || "NA"}}</td>-->
+
+									</tr>
+									</tbody>
+								</table>
+
+								<!-- ****** Idle Houre Trip Report*******-->
+								<!--<table ng-if="reportType == 'Idle Hour Report'"
+									   class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th>Sl No.</th>
+										<th>Vehicle No.</th>
+										<th>Trip No.</th>
+										<th>Customer</th>
+										<th>Route Name</th>
+										<th>Trip Start Date</th>
+										<th>Last Trip End Date</th>
+										<th>Idle hours</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oTrip in aTrip" class="pointer selectItem">
+										<td>{{$index+1}}</td>
+										<td>{{oTrip.vehicle.vehicle_reg_no || "NA"}}</td>
+										<td>{{oTrip.trip_no}}</td>
+										<td>{{(oTrip.aCustomer && oTrip.aCustomer.length>0)?oTrip.aCustomer.join(',
+											'):"NA"}}
+										</td>
+										<td>{{oTrip.route.route_name || "NA"}}</td>
+										<td>{{oTrip.trip_start.time | date:'dd-MM-yyyy' || "NA"}}</td>
+										<td>{{oTrip.lastTripD.trip_end.time | date:'dd-MM-yyyy' || "NA"}}</td>
+										<td>{{oTrip.idle_hour || "NA"}}</td>
+
+									</tr>
+									</tbody>
+								</table>-->
+							</div>
+							<div ng-if="aTrip.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any Trip available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

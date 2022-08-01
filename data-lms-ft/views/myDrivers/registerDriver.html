@@ -1,0 +1,520 @@
+<form name="DriverReg" ng-controller="registerDriverController" novalidate ng-submit="saveDriverDetails(DriverReg)">
+	<div class="validationError" ng-show="createDrivererrormsg"><h5 class="c-red">* {{dmsg}}</h5></div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Driver Name: <span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.name" class="form-control" name="driver name"
+							   required>
+					</div>
+					<span class="error" ng-if="	DriverReg['driver name'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Code: <span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.employee_code" class="form-control" name="code" required>
+					</div>
+					<span class="error" ng-if="	DriverReg['Code'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">License No: <span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.license_no" class="form-control" name="license num"
+							   required>
+					</div>
+					<span class="error" ng-if="	DriverReg['license num'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Father Name: <span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.father_name" class="form-control" name="father name"
+							   required>
+					</div>
+					<span class="error" ng-if="	DriverReg['father name'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+				<!-- <div ng-messages="DriverProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Mobile Number: <span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="regDriverNew.prim_contact_no" id="MobileNumberID1"
+							   class="form-control" name="mobile number" ng-minlength="10" ng-maxlength="10"
+							   name="mobile" required>
+					</div>
+					<span class="error" ng-if="	DriverReg['mobile number'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+					<span class="error" ng-if="	(DriverReg['mobile number'].$error.minlength
+													|| DriverReg['mobile number'].$error.maxlength)
+													&& (DriverReg['mobile number'].$touched
+													|| DriverReg.$submitted)">
+						Invalid Mobile Number</span>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Secondary Mobile Number: </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="regDriverNew.alt_contact_no1" id="MobileNumberID2"
+							   class="form-control" name="mobile number sec" ng-minlength="10" ng-maxlength="10"
+							   name="mobile sec">
+					</div>
+					<!--
+										<span class="error" ng-if="	DriverReg['mobile number'].$error.required
+																&& DriverReg.$submitted">
+												This Field is Mandatory</span>
+										<span class="error" ng-if="	(DriverReg['mobile number'].$error.minlength
+																		|| DriverReg['mobile number'].$error.maxlength)
+																		&& (DriverReg['mobile number'].$touched
+																		|| DriverReg.$submitted)">
+											Invalid Mobile Number</span>
+					-->
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+
+		<div class="col-md-4" ng-if="$configs.master.showAccount">
+			<div class="form-group m-b-0">
+				<label class="col-sm-4">Account :</label>
+				<div class="col-sm-6">
+					<div ng-dropdown-multiselect=""
+						 options="aAccountMaster"
+						 selected-model="regDriverNew.account"
+						 extra-settings="selectAccountSettings"
+						 ja-search-input='inputModel'
+						 ja-search-trigger="getAccountMasters(inputModel)"
+					></div>
+					<br>
+					<div class="text-center">
+						<button class="btn btn-primary waves-effect"
+								type="button"
+								style="padding: 3px 5px"
+								ng-click="onSelectAccount()"
+								uib-tooltip="Add">
+							<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Employee Status <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" name="employee status" id="addrProof"
+								ng-model="regDriverNew.employee_status" required>
+							<option value="" disabled selected>Select Status</option>
+							<option value="Temporary">Temporary</option>
+							<option value="Permanent">Permanent</option>
+						</select>
+					</div>
+					<span class="error" ng-if="	DriverReg['employee status'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Driver Age</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="regDriverNew.age" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Mother Name</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.mother_name" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">E-mail Id</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="email" name="emailId" type="email" ng-model="regDriverNew.email_id"
+							   class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LNameID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Insurance Company</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.insurance_company" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Insurance Policy No.</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.insurance_policy_number" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Insurance Amount </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="regDriverNew.insured_amount" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Gross Fixed Salary</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="regDriverNew.gross_fixed_salary" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Education: <span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" name="education" id="education"
+								ng-model="regDriverNew.educationTypes" name="education" required>
+							<option value="" disabled selected>Select Education</option>
+							<option value="Primary">Primary</option>
+							<option value="Secondary">Secondary</option>
+							<option value="Senior secondary">Senior Secondary</option>
+							<option value="Graduate">Graduate</option>
+							<option value="Post graduate">Post Graduate</option>
+							<option value="Diploma">Diploma</option>
+							<option value="Doctorate">Doctorate</option>
+						</select>
+					</div>
+					<span class="error" ng-if="	DriverReg['education'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Join Date</label>
+				<div class="col-sm-6">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false"
+								   ng-model="regDriverNew.date_of_joining" is-open="opened1"
+								   uib-datepicker-options="dateOptions" close-text="Close" placeholder="Select Date"/>
+						</div>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default m-t-0 f12"
+									ng-click="open($event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Leave Date</label>
+				<div class="col-sm-6">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false"
+								   ng-model="regDriverNew.date_of_leaving" is-open="opened2"
+								   uib-datepicker-options="dateOptions" close-text="Close" placeholder="Select Date"/>
+						</div>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default m-t-0 f12"
+									ng-click="open($event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Leave Reason</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.leave_reason" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.LicenseNoID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Religion: <span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" name="religion" id="religion" ng-model="regDriverNew.religion"
+								name="religion" required>
+							<option value="" disabled selected>Select Religion</option>
+							<option value="Hinduism">Hinduism</option>
+							<option value="Islam">Islam</option>
+							<option value="Sikhism">Sikhism</option>
+							<option value="Christianity">Christianity</option>
+							<option value="Buddhism">Buddhism</option>
+							<option value="Jainism">Jainism</option>
+							<option value="Judaism">Judaism</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+					<span class="error" ng-if="	DriverReg['religion'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Gender: <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" ng-model="regDriverNew.gender" name="gender" required>
+							<option value="" disabled selected>Select Gender</option>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+							<option value="Other">Other</option>
+						</select>
+					</div>
+					<span class="error" ng-if="	DriverReg['gender'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Marital Status : <span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" ng-model="regDriverNew.marital_status" name="marital status"
+								required>
+							<option value="" disabled selected>Select Marital Status</option>
+							<option value="Married">Married</option>
+							<option value="Single">Single</option>
+							<option value="Widow">Widow</option>
+							<option value="Widower">Widower</option>
+						</select>
+					</div>
+					<span class="error" ng-if="	DriverReg['marital status'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Blood Group <span style="color: red">*</span> </label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" ng-model="regDriverNew.blood_group" name="blood group" required>
+							<option value="" disabled selected>Select Blood Group</option>
+							<option value="A+">A+</option>
+							<option value="B+">B+</option>
+							<option value="O+">O+</option>
+							<option value="AB+">AB+</option>
+							<option value="A-">A-</option>
+							<option value="B-">B-</option>
+							<option value="AB-">AB-</option>
+						</select>
+					</div>
+					<span class="error" ng-if="	DriverReg['blood group'].$error.required
+											&& DriverReg.$submitted">
+							This Field is Mandatory</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">SAP Id</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.sap_id" class="form-control">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">DOB</label>
+				<div class="col-sm-6">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened5 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened5 == true }">
+							<input ng-click="open($event, 'opened5')" type="text" class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="regDriverNew.dob"
+								   is-open="opened5" uib-datepicker-options="dateOptions" close-text="Close"
+								   placeholder="Select Date"/>
+						</div>
+						<span class="input-group-btn">
+								<button type="button" class="btn btn-default m-t-0 f12"
+										ng-click="open($event, 'opened5')"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Nominee</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="regDriverNew.nominee" placeholder="Nominee" class="form-control">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">DDC From</label>
+				<div class="col-sm-6">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened6 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened6 == true }">
+							<input ng-click="open($event, 'opened6')" type="text" class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="regDriverNew.ddcFrom"
+								   is-open="opened6" uib-datepicker-options="dateOptions" close-text="Close"
+								   placeholder="Select Date"/>
+						</div>
+						<span class="input-group-btn">
+								<button type="button" class="btn btn-default m-t-0 f12"
+										ng-click="open($event, 'opened6')"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">DDC To</label>
+				<div class="col-sm-6">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened7 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened7 == true }">
+							<input ng-click="open($event, 'opened7')" type="text" class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="regDriverNew.ddcTo"
+								   is-open="opened7" uib-datepicker-options="dateOptions" close-text="Close"
+								   placeholder="End Date"/>
+						</div>
+						<span class="input-group-btn">
+								<button type="button" class="btn btn-default m-t-0 f12"
+										ng-click="open($event, 'opened7')"><i class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-5">Passport No: </label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text"
+							   placeholder="Passport No"
+							   ng-model="regDriverNew.passportNo"
+							   name="Passport No"
+							   class="form-control"
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-10">
+				<button type="submit" class="btn btn-primary"
+						ng-disabled="disableSubmit" style="margin-bottom: 12px;">Save
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+	</div>
+</form>
+
+
+<style>
+	span.error {
+		color: red;
+		font-size: 10px;
+	}
+</style>

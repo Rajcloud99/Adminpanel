@@ -1,0 +1,118 @@
+<form role="form"  name="upRemark" autocomplete="off" novalidate>
+	<div class="validationError" ng-show="grPopup"><h5 class="c-red">* {{gmsg}}</h5></div>
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add Remark for Trip No. {{gr.trip.trip_no}} for Route {{gr.trip.route.name}}</h4><br>
+		<h5 class="modal-title" align="center">Branch : {{gr.branch.name}}</h5><br>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="row" style="">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Reason: <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="select">
+								<select chosen class="form-control" ng-model="pendingRemark.reason" ng-options="item as item for item in aReason" placeholder-text-single="Select Reason">
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="pendingRemark.remark" placeholder=" " class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<br>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Place:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="pendingRemark.place" placeholder=" " class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Expected Arrival:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+									<input ng-click="open($event, 'opened1')" min-date="minDate"
+										   type="text" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="pendingRemark.expected_arrival" class="form-control" is-open="opened1" uib-datepicker-options="dateOptions" close-text="Close">
+									<span class="input-group-btn">
+                    					<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                  					</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="row m-b-10">
+				<div class="col-md-3">
+					<div class="col-md-4"><b>Gr Number :</b></div>
+					<div class="col-md-8">{{gr.grNumber}}</div>
+				</div>
+				<div class="col-md-3">
+					<div class="col-md-4"><b>Gr Date :</b></div>
+					<div class="col-md-8">{{gr.grDate | date: 'dd-MMMM-yyyy'}}</div>
+				</div>
+				<div class="col-md-3">
+					<div class="col-md-4"><b>Gr Type :</b></div>
+					<div class="col-md-8">{{gr.gr_type}}</div>
+				</div>
+				<div class="col-md-12 m-t-10">
+					<table class="table table-bordered unresponsive">
+						<thead>
+						<tr>
+							<th>Remark</th>
+							<th>Reason</th>
+							<th>Place</th>
+							<th>Expected Arrival</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr data-ng-repeat="oRemark in gr.pendingRemark"
+							class="pointer selectItem">
+							<td>{{oRemark.remark || 'NA'}}</td>
+							<td>{{oRemark.reason || 'NA'}}</td>
+							<td>{{oRemark.place || 'NA'}}</td>
+							<td>{{(oRemark.expected_arrival | date: 'dd-MMMM-yyyy') || 'NA'}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect"  ng-click="updateRemark(upRemark)">Add GR</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+
+
+	<div class="col-md-12">
+		<h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 75%;
+		height: 173px
+	}
+</style>

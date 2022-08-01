@@ -1,0 +1,508 @@
+<!-- Controller: multiPaymentReceiptCtrl -->
+<!-- ControllerAs: mprVm -->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<div class="lvh-label">
+			<span class="c-black"><b>Multi Payment Receipt</b>
+			</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<form novalidate name="PaymentReceipt" autocomplete="off">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div class="pull-right text-right m-t-5" ng-if="$role['Trip Memo']['Delete Receipt']">
+							<button class="btn btn-danger p-t-0 p-b-0" type="button"
+									style="margin-bottom: 3px;  font-size: 16px" uib-tooltip="Delete Receipt"
+									ng-click="mprVm.deleteReceipt()"
+									ng-disabled="!mprVm.isRefNoSearched || mprVm.isDeleteDisable"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-2">
+									<div class="">
+										<input autofocus
+											   type="text"
+											   class="form-control"
+											   ng-model="mprVm.filter.refNo"
+											   ng-change="mprVm.prepareRefFilter()"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   name="reference"
+											   placeholder="Ref. No."
+										>
+										<i class="lvh-search-close" ng-click="mprVm.reset();">×</i>
+									</div>
+									<span class="error" ng-if="mprVm.filter.refNo && mprVm.noRefNoFound">No Ref. No. Found</span>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">General Info: </span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Mode: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="mprVm.paymentMode"
+													ng-options="item as item for item in mprVm.aPaymentMode"
+													name="Payment Mode"
+													ng-change="mprVm.setAccount(mprVm.paymentMode)"
+													required>
+												<option value=""></option>
+											</select>
+											<span class="error"
+												  ng-show="!mprVm.paymentMode">No PaymentMode Selected</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Date: </label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="Payment Date"
+													ng-model="mprVm.paymentDate">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Ref:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Payment Ref"
+													   ng-model="mprVm.paymentRef"
+													   name="Payment Ref"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Debit A/c :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Debit A/c Search.."
+														ng-model="mprVm.toAccount"
+														typeahead-wait-ms="10"
+														name="Debit A/c"
+														typeahead="item as item.name for item in mprVm.getAc($viewValue, mprVm.aToGroup)|limitTo:6"
+														required>
+												<i class="lvh-search-close" ng-click="mprVm.toAccount=null;">×</i>
+											</div>
+											<span class="error"
+												  ng-if="'isEmptyObject'|otherUtilsFilt:mprVm.toAccount">
+													This Field is Mandatory</span><br>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Branch Search.."
+														ng-model="mprVm.branch"
+														typeahead-wait-ms="10"
+														name="Branch"
+														typeahead="item as item.name for item in mprVm.getAllBranch($viewValue)|limitTo:6"
+														typeahead-on-select="mprVm.onBranchSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close" ng-click="mprVm.branch=null;">×</i>
+											</div>
+											<span class="error" ng-show="!mprVm.branch">No Branch Selected</span>
+											<span class="warning" ng-show="mprVm.branch && !(mprVm.branch.refNoBook && mprVm.branch.refNoBook.length)">No Ref Book Linked to selected branch</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="mprVm.paymentType"
+													ng-options="item as item for item in mprVm.aPaymentType"
+													name="Payment Type"
+													ng-change="mprVm.otherCal(true)"
+													required>
+												<option value=""></option>
+											</select>
+											<span class="error"
+												  ng-show="!mprVm.paymentType">No PaymentType Selected</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-5">Amount: <span class="req_r">*</span></label>
+										<div class="col-sm-6 p-t-5">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Amount"
+													   ng-model="mprVm.receivedAmt"
+													   name="Amount"
+													   class="form-control"
+													   required>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Ref No:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-9">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Ref Number"
+														ng-model="mprVm.refNo"
+														typeahead-wait-ms="10"
+														name="Reference Number"
+														typeahead="item.bookNo as item.bookNo for item in mprVm.getRefNo(mprVm.refNo)|limitTo:10"
+														typeahead-on-select="mprVm.onRefNoSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close" ng-click="mprVm.refNo=null;">×</i>
+											</div>
+											<span class="error" ng-if="PaymentReceipt['Reference Number'].$error.required
+																	&& !PaymentReceipt['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<!--<button class="btn btn-primary p-t-0 p-b-0"-->
+											<!--type="button"-->
+											<!--style="margin-bottom: 3px;  font-size: 16px"-->
+											<!--uib-tooltip="Auto"-->
+											<!--ng-click="mprVm.getAutoStationaryNo('auto')"-->
+											<!--tooltip-placement="bottom">-->
+										<!--<i class="zmdi zmdi-refresh zmdi-hc-fw"></i>-->
+									<!--</button>-->
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Centrailized"
+											ng-click="mprVm.getAutoStationaryNo('centrailized')"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-plus-circle zmdi-hc-fw"></i>
+									</button>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">remark:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="remark"
+													   ng-model="mprVm.remark"
+													   name="remark"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Tot Amount:</label>
+										<div class="col-sm-6">
+											{{mprVm.aGrs|sumObjKey:'receivedAmt'}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">TRIPMEMO RECEIVAL &nbsp;(Tot Remaining Amt.: {{(mprVm.vendorDealAmt = (mprVm.aGrs|getArrayElementSum:'remainingAmount') | roundOff) || '0'}})</b></span>
+<!--						<div class="pull-right">-->
+<!--							<button class="btn btn-danger p-t-0 p-b-0"-->
+<!--									type="button"-->
+<!--									style="margin-bottom: 3px;  font-size: 16px"-->
+<!--									uib-tooltip="Remove"-->
+<!--									ng-click="mprVm.removeTrip()"-->
+<!--									tooltip-placement="bottom">-->
+<!--								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+<!--							</button>-->
+<!--						</div>-->
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<div class="col-md-2">
+										<div class="col-md-12 form-group m-b-5">
+											<div class="fg-line">
+												<input type="text"
+													   ng-model="mprVm.filter.tMNo"
+													   name="TRIP MEMO NO"
+													   class="form-control input-sm"
+													   placeholder="TRIP Memo No"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   style="height: 34px;font-size: 13px;">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="col-md-12 form-group m-b-5">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   placeholder="Enter Amount"
+													   ng-model="mprVm.filter.amount"
+													   class="form-control"
+													   name="Amount">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="col-md-12 form-group m-b-5">
+											<button
+													class="btn btn-primary" type="button" uib-tooltip="Add"
+													ng-click="mprVm.prepareFilter()">+
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="row">
+										<div class="table-responsive" style="margin:15px">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>#</th>
+													<th>Start Date</th>
+													<th>Credit A/c(BP)</th>
+													<th>Trip Memo No</th>
+													<th>Amount</th>
+													<th>Paid Amt</th>
+													<th>Payable Amt</th>
+													<th>Remaining Amt</th>
+													<th>Charges</th>
+													<th>Deduction</th>
+													<th>Advance</th>
+													<th>Advance Paid</th>
+													<th>Advance Rem</th>
+													<th>Balance</th>
+													<th>Balance Paid</th>
+													<th>Balance Rem</th>
+													<th>Total amt</th>
+													<th>Munshiyana</th>
+													<th>Total With Munshiyana</th>
+													<th>Customer</th>
+													<th>BillingParty</th>
+													<th>Trip No</th>
+													<th>Vehicle No</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr ng-repeat="oGr in mprVm.aGrs"
+													ng-click="mprVm.oSelectedTrip = oGr"
+													class="pointer"
+													ng-class="{grn: mprVm.oSelectedTrip._id === oGr._id}">
+													<td>{{$index+1}}</td>
+													<td>{{((oGr.trip.statuses | filter:{"status": "Trip started"})[0].date
+															| date:"dd-MM-yyyy") || 'NA'}}
+													</td>
+													<td>
+														{{oGr.billingParty.account.name}}
+													</td>
+													<td>{{oGr.tMemo.tMNo}}</td>
+													<td>
+														<div class="fg-line">
+															<input type="number"
+																   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+																   onwheel="return false"
+																   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+																   placeholder="Amount"
+																   ng-min="1"
+																   ng-max="oGr.maxAmount"
+																   ng-model="oGr.receivedAmt"
+																   name="recivedAmt{{$index}}"
+																   class="form-control"
+																   required>
+														</div>
+														<span class="error" ng-if="PaymentReceipt['recivedAmt'+$index].$error.required
+																			&& (PaymentReceipt['recivedAmt'+$index].$touched
+																			|| PaymentReceipt.$submitted)">
+														This Field is Mandatory</span>
+														<span class="error"
+															  ng-if="PaymentReceipt['recivedAmt'+$index].$error.min">
+														Amount Should be Grater than 0</span>
+														<span class="error"
+															  ng-if="PaymentReceipt['recivedAmt'+$index].$error.max">
+														Amount Should be Less than Remaining {{mprVm.paymentType ? mprVm.paymentType : 'amt'}}</span>
+													</td>
+
+													<td>{{oGr.totReceipt|roundOff:0}}</td>
+													<td>{{(oGr.payable = oGr.totalFreight)|roundOff:0}}</td>
+<!--													<td>{{(oGr.payable = ((oGr.tMemo.total || 0) +-->
+<!--															(oGr.tMemo.totalCharges || 0) - -->
+<!--															(oGr.tMemo.totalDeduction || 0) - -->
+<!--															(oGr.tMemo.tdsAmount || 0) - -->
+<!--															(oGr.tMemo.charges|sumObjKey:'tdsAmount') || 0) ) |-->
+<!--													roundOff}}-->
+<!--													</td>-->
+													<td>{{(oGr.remainingAmount = oGr.payable -
+														oGr.totReceipt)|roundOff:0}}
+													</td>
+													<td>{{(oGr.totalCharges || 0)|roundOff}}</td>
+													<td>{{(oGr.deduction | sumOfObject)|roundOff}}</td>
+<!--													<td>{{(oGr.tMemo.tdsAmount || 0)|roundOff}}</td>-->
+													<td>{{(oGr.tMemo.advance || 0)|roundOff}}</td>
+													<td>{{(oGr.advPaid || 0)|roundOff}}</td>
+													<td>{{((oGr.tMemo.advance || 0)- (oGr.advPaid ||
+															0))|roundOff}}</td>
+													<td>{{(oGr.tMemo.toPay || 0)|roundOff}}</td>
+													<td>{{(oGr.balPaid || 0)|roundOff}}</td>
+													<td>{{((oGr.tMemo.toPay || 0)- (oGr.balPaid ||
+															0))|roundOff}}</td>
+													<td>{{(oGr.tMemo.rate || 0)|roundOff}}</td>
+													<td>{{(oGr.tMemo.munshiyana || 0)|roundOff}}</td>
+													<td>{{(oGr.tMemo.total || 0)|roundOff}}</td>
+													<td>{{oGr.customer.name}}</td>
+													<td>{{oGr.billingParty.name}}</td>
+													<td>{{oGr.trip_no}}</td>
+													<td>{{oGr.vehicle_no}}</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12 text-right">
+									<label class="checkbox checkbox-inline">
+										<input type="checkbox"
+											   ng-model="mprVm.dataPreserve">
+										<i class="input-helper"></i>
+										Preserve Data
+									</label>&nbsp;&nbsp;
+									<button class="btn btn-primary"
+											type="button"
+											style="font-size: 14px"
+											ng-disabled="mprVm.isDisable"
+											ng-click="mprVm.submit(PaymentReceipt)">
+										Submit
+									</button>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<style>
+
+	input[type=text]:focus {
+		border: 1px solid black;
+		border-color: rgb(40, 137, 194);
+		outline-style: solid !important;
+		outline-color: #89cde045 !important;
+		outline-width: medium;
+	}
+
+	input[type=number]:focus {
+		border: 1px solid black;
+		border-color: rgb(40, 137, 194);
+		outline-style: solid !important;
+		outline-color: #89cde045 !important;
+		outline-width: medium;
+	}
+
+	input[type=checkbox]:focus {
+		border: 1px solid black;
+		border-color: rgb(40, 137, 194);
+		outline-style: solid !important;
+		outline-color: #89cde045 !important;
+		outline-width: medium;
+	}
+
+
+	.btn-danger:focus {
+		border: 1px solid black;
+		outline-style: solid;
+		outline-color: #b9323245;
+		outline-width: medium;
+	}
+
+	.btn-primary:focus {
+		border: 1px solid black;
+		outline-style: solid !important;
+		outline-color: #89cde045 !important;
+		outline-width: medium;
+	}
+
+	table thead tr th {
+		text-align: center;
+		color: #fff !important;
+		background: #2196f3 !important;
+	}
+
+	table tbody tr td {
+		text-align: center;
+	}
+</style>

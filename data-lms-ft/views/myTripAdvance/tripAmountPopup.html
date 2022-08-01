@@ -1,0 +1,152 @@
+<!-- ControllerAs: tripAmountVm -->
+
+<form name="tripAmountForm" ng-submit="tripAmountVm.submit(tripAmountForm)" novalidate>
+
+	<div class="modal-header" >
+		<button type="button" ng-click="tripAmountVm.closePopup()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>{{tripAmountVm.name}}</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183); text-transform: capitalize">
+							({{tripAmountVm.type}})
+						</span>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Account DETAILS -->
+				<li class="list-group-item">
+					<!--<span class="booking_list_header">Advance DETAILS</span>-->
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Advance Type: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6" >{{tripAmountVm.oAdvance.advanceType}}</div>
+								</div>
+							</div>
+							<!--<div class="col-md-4" ng-if="tripAmountVm.oAdvance.advanceType !== 'Diesel'">-->
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Amount:  <span class="req_r" ng-if="!($configs.tripSettlement.settleLitreWise && tripAmountVm.oAdvance.advanceType === 'Diesel')">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   placeholder="Amount"
+												   min="1"
+												   ng-model="tripAmountVm.oAdvance.amount"
+												   name="Amount"
+												   class="form-control"
+												   ng-required="!($configs.tripSettlement.settleLitreWise && tripAmountVm.oAdvance.advanceType === 'Diesel')">
+										</div>
+										<span class="error" ng-if="tripAmountForm['Amount'].$error.required
+																			&& (tripAmountForm['Amount'].$touched
+																			|| tripAmountForm.$submitted)">
+														This Field is Mandatory</span>
+										<span class="error" ng-if="tripAmountForm['Amount'].$error.min
+																			&& (tripAmountForm['Amount'].$touched
+																			|| tripAmountForm.$submitted)">
+														Amount Should be grater than 0</span>
+										<!--<span class="error" ng-if="tripAmountForm['Amount'].$error.max-->
+										<!--&& (tripAmountForm['Amount'].$touched-->
+										<!--|| tripAmountForm.$submitted)">-->
+										<!--Amount Should be less than Topay/Balance</span>-->
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4" ng-if="$configs.tripSettlement.settleLitreWise && tripAmountVm.oAdvance.advanceType === 'Diesel'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Liter:  <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   placeholder="Liter"
+												   ng-model="tripAmountVm.oAdvance.diesel_info.litre"
+												   name="Liter"
+												   min="1"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="tripAmountForm['Liter'].$error.required
+																			&& (tripAmountForm['Liter'].$touched
+																			|| tripAmountForm.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<!--<div class="col-md-4" ng-if="tripAmountVm.oAdvance.advanceType === 'Diesel'">-->
+								<!--<div class="form-group m-b-0">-->
+									<!--<label class="col-sm-4 control-label">Rate:  <span class="req_r">*</span></label>-->
+									<!--<div class="col-sm-6">-->
+										<!--<div class="fg-line">-->
+											<!--<input type="number"-->
+												   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+												   <!--onwheel="return false"-->
+												   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--placeholder="Liter"-->
+												   <!--ng-model="tripAmountVm.oAdvance.dieseInfo.rate"-->
+												   <!--name="Rate"-->
+												   <!--min="1"-->
+												   <!--class="form-control"-->
+												   <!--required>-->
+										<!--</div>-->
+										<!--<span class="error" ng-if="tripAmountForm['Liter'].$error.required-->
+																			<!--&& (tripAmountForm['Liter'].$touched-->
+																			<!--|| tripAmountForm.$submitted)">-->
+														<!--This Field is Mandatory</span>-->
+										<!--<span class="error" ng-if="tripAmountForm['Liter'].$error.min-->
+																			<!--&& (tripAmountForm['Liter'].$touched-->
+																			<!--|| tripAmountForm.$submitted)">-->
+														<!--Amount Should be grater than 0</span>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Remark: </label>
+									<div class="col-sm-6">
+											<textarea class="form-control"
+													  rows="2"
+													  ng-model="tripAmountVm.oAdvance.remark"
+													  placeholder="Please Specify the Remark"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="tripAmountVm.closePopup()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.modal-dialog{
+		width: 90%;
+	}
+
+</style>

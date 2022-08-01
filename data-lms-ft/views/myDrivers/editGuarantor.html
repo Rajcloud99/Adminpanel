@@ -1,0 +1,126 @@
+<form name="GuarantorReference" autocomplete="off">
+
+	 <div class="row" style="margin:15px">
+	  <h5 style="margin-top: -3px;">Guarantor Details</h5>
+	   <hr>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Guarantor Name</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.guarantor_name" ng-readonly="(mode=='View')"
+						 class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Guarantor Address</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" ng-readonly="(mode=='View')" rows="2" ng-model="driver.guarantor_address" class="form-control"></textarea>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+        <div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Guarantor Contact Number</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-readonly="(mode=='View')" ng-model="driver.guarantor_contact_no" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Photo Id No</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-readonly="(mode=='View')" ng-model="driver.guarantor_photo_id_no" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	  <div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Proof No</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-readonly="(mode=='View')" ng-model="driver.guarantor_address_proof_no" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+	  <h5>Previous Company Details</h5>
+	   <hr>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Previous Company Name</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-readonly="(mode=='View')" ng-model="driver.verif_prev_company_name"
+						 class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Previous Company Contact Name</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-readonly="(mode=='View')" ng-model="driver.verif_prev_contact_name" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Previous Company Contact Number</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-readonly="(mode=='View')" ng-model="driver.verif_prev_contact_no" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Previous Company Contact Address</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-readonly="(mode=='View')" ng-model="driver.verif_prev_contact_address"
+						 class="form-control"></textarea>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+	<div class="row" ng-hide="true">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-0">
+				<button type="submit" class="btn btn-primary" ng-disabled="!(GuarantorReference.$dirty)" style="margin-bottom: 3%;"
+					ng-click="saveDriverDetails(GuarantorReference)">Save</button>
+			</div>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,372 @@
+<form name="VehicleProfile" ng-controller="vehicleUpdateController" novalidate>
+    <div class="validationError" ng-show="updateVehicleErrMsg"><h5 class="c-red">* {{VUmsg}}</h5></div>
+    <div class="row" style="margin:15px">
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Registration Number: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="text" ng-model="vehicle.vehicle_reg_no" placeholder="Enter Name"
+                               class="form-control" name="registration num" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Group Type: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                    <!-- <div class="select"> -->
+                    <select chosen type="text" ng-model="vehicle.group_name" placeholder="Select Group"
+                            ng-options="option as option.name for option in vehicleUGroups"
+                            ng-change="getGroupUNames(vehicle.group_name)" class="form-control" name="group type"
+                            required>
+                        <option value=""></option>
+                    </select>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Vehicle Type: <span style="color: red;">*</span> </label>
+                <div class="col-sm-6">
+                    <!-- <div class="select"> -->
+                    <select chosen type="text" class="form-control" ng-model="vehicle.veh_type"
+                            ng-options="option as option.name for option in vehicleUTypes" name="vehicle type" required>
+                        <option value=""></option>
+                    </select>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin:15px">
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Vehicle Owner Name: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="text" id="" ng-model="vehicle.supervisor_name" class="form-control"
+                               placeholder="Owner Name" name="vehicle owner name" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Vehicle Owner Mobile: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" id="" ng-model="vehicle.supervisor_contact_no" class="form-control"
+                               placeholder="Owner Mobile" ng-minlength="10" ng-maxlength="10"
+                               name="vehicle owner mobile" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Owner Group:<span style="color: red;">*</span></label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control"
+								ng-model="vehicle.owner_group"
+								ng-options="item as item for item in aOwners" required>
+							<option value="" selected disabled> Select Group</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Vehicle Category:<span style="color: red;">*</span> </label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control"
+								ng-model="vehicle.category"
+								ng-options="item as item for item in aCatVehStructure" required>
+							<option value="" selected disabled> Select Category</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Vehicle Structure: </label>
+                <div class="col-sm-6">
+                    <div class="select">
+                        <select class="form-control"
+                                ng-model="vehicle.structure"
+                                ng-options="item as item.structure_name for item in structuresObjArr">
+                            <option value="" selected disabled> Select Structure</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Manufacturer</label>
+                <div class="col-sm-6">
+                    <div class="select">
+                        <select class="form-control"
+                                ng-model="vehicle.manufacturer"
+                                ng-options="key as key for (key , value) in vehModelMatrix">
+                            <option value="" selected disabled> Select Manufacturer</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+	</div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Model:</label>
+				<div class="col-sm-6">
+					<div class="select">
+						<select class="form-control" name="vehicle model"
+								ng-model="vehicle.model"
+								ng-options="model.model as model.model for model in vehModels">
+							<!-- <option value="" style="display: none;"> Select Vehicle Type </option> -->
+							<option value="" selected>Select Vehicle model</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Carrying Capacity(Ton)</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" id="truck_capacity" ng-model="vehicle.capacity_tonne" class="form-control"
+                               placeholder="In Tonnes">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Body type</label>
+                  <div class="col-sm-6">
+                    <div class="fg-line">
+                        <div class="radio m-b-15">
+                            <label>
+                                <input type="radio" name="bodyTypeID" value="open" ng-model="vehicle.body_type">
+                                <i class="input-helper"></i>
+                                Open
+                            </label>
+                            <label>
+                                <input type="radio" name="bodyTypeID" value="close" ng-model="vehicle.body_type">
+                                <i class="input-helper"></i>
+                                Close
+                            </label>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+        </div> -->
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Axel Type</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <div class="select">
+                            <select class="form-control" ng-model="vehicle.Axel">
+                                <option value="" selected> Select Axel Type</option>
+                                <option value="Single">Single</option>
+                                <option value="Multi">Multi</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Permit Expiry Date</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+							<div ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+									   datepicker-popup="{{format}}" show-weeks="false"
+									   ng-model="vehicle.permit_expiry_date" is-open="opened1" min-date="minDate"
+									   datepicker-options="dateOptions" close-text="Close"
+									   placeholder="Permit Expiry Date"/>
+							</div>
+							<span class="input-group-btn">
+		                			<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="open($event, 'opened1')"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+		              	  </span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Height in Feet</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="vehicle.height_ft" class="form-control"
+                               placeholder="Height In Feet">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Width in Feet </label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="vehicle.width_ft" class="form-control"
+                               placeholder="Width In Feet">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Length in Feet</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="number" ng-model="vehicle.length_ft" class="form-control" placeholder="In Feet">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Driver Name</label>
+                <div class="col-sm-6">
+                    <!-- <div class="select"> -->
+                    <select chosen type="text" ng-model="vehicle.driver_name" placeholder="Select Name"
+                            ng-options="option as option.name for option in selectedDrivers"
+                            ng-change="getDriverUMobile(vehicle.driver_name)" class="form-control">
+                        <option value=""></option>
+                    </select>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Driver Mobile</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="vehicle.driver_contact_no" placeholder="Enter Mobile.."
+                               class="form-control" ng-minlength="10" ng-maxlength="10">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Vendor Name</label>
+				<div class="col-sm-6">
+					<!-- <div class="select"> -->
+					<select chosen type="text" ng-model="vehicle.vendor_name" placeholder="Select Name"
+							ng-options="option as option.name for option in aVendors"
+							ng-change="getVendorMobile(vehicle.vendor_name)" class="form-control">
+						<option value=""></option>
+					</select>
+					<!-- </div> -->
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Vendor Mobile</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="vehicle.vendor_mobile" placeholder="Enter Mobile.."
+                               class="form-control" ng-minlength="10" ng-maxlength="10">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Vehicle Status</label>
+                <div class="col-sm-6">
+                    <div class="select">
+                        <select data-placeholder-text-single="'Select Status'" allow-single-deselect="true"
+                                no-results-text="'Could not find any Route'" class="form-control"
+                                ng-model="vehicle.status" ng-change="onStatusChange()" ng-options=" item for item in aStatus">
+                            <option value="" selected>Select Status</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" ng-if="vehicle.last_known.status=='Booked' || vehicle.last_known.status =='Journey'">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Trip No.</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="vehicle.last_known.trip_no" placeholder="Enter Trip No.."
+                               class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">SAP Id:</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="text" ng-model="vehicle.sap_id" class="form-control"
+                               placeholder="SAP Id">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" ng-show="showOwn == '100002'">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Own Vehicle:</label>
+                <div class="col-sm-6">
+                    <!--<label class="checkbox checkbox-inline m-r-20">
+                        <input type="checkbox" ng-model="vehicle.own">
+                        <i class="input-helper"></i>
+                    </label>-->
+					<div class="select">
+						<select class="form-control" ng-model="vehicle.own" required>
+							<option value="" selected> Select Vehicle Type</option>
+							<option value="yes">Own</option>
+							<option value="no">Market</option>
+						</select>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="m-l-30 col-md-10">
+            <div class="form-group m-b-10">
+                <button type="submit" class="btn btn-primary"
+                        ng-click="saveVehicleDetails(VehicleProfile)" style="margin-bottom: 12px;">Save
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+    </div>
+</form>

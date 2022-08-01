@@ -1,0 +1,177 @@
+<form role="form" name="myForm" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">{{oUploadData.uploadText || "Upload Files"}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="row" ng-show="aDoc">
+				<div class="col-md-12">
+					<table class="table table-bordered unresponsive">
+						<tbody>
+						<tr>
+							<th>Sr.No.</th>
+							<th>Uploaded Document Name</th>
+						</tr>
+						<tr ng-repeat="doc in aDoc">
+							<td>{{$index+1}}</td>
+							<<td data-title="'File Name '">{{doc.category}}</td>
+						</tr>
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+<!--			modelName: "RegisteredVehicle"-->
+			<div class="row" ng-if="oUploadData.modelName === 'RegisteredVehicle'">
+				<div class="col-md-5">
+					<div class="form-group m-b-0">
+						<label class="col-sm-3 control-label">Vehicle :</label>
+						<div class="col-sm-9">
+							<div class="ng-scope sear chosen-row-1">
+								<input
+									type="text"
+									class="form-control"
+									placeholder="Vehicle Search.."
+									ng-model="vehicle"
+									typeahead-wait-ms="10"
+									name="Vehicle"
+									typeahead="item as item.vehicle_reg_no for item in getVname($viewValue)|limitTo:6"
+									typeahead-on-select="onSelect($item, $model, $label)">
+								<i class="lvh-search-close" ng-click="vehicle=null;">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><hr>
+			<div class="row" ng-show="aFiles.length==4">
+				<div class="col-md-12 text-danger">Sorry! You can upload 4 file at a time.</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">File</label>
+						<div class="col-sm-6">
+							<div class="select">
+								<select class="form-control" ng-model="selectedName" ng-options="item as item.name for item in uploadDocOpt"
+										style="background-color: white;" ng-change="$event.preventdefault();fileName=selectedName; selectCat(selectedName)">
+									<option value="" disabled selected>Select File Name</option>
+								</select>
+<!--								<div ng-if="count" class="col-md-12 text-danger">you can upload only {{count}} file.</div>-->
+							</div>
+						</div>
+<!--						<div class="col-sm-6" ng-if="hideSelect">-->
+<!--							{{fileName.name}}-->
+<!--						</div>-->
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<label class="col-sm-6 control-label">Select </label>
+					<div class="col-sm-6">
+						<button ng-show="limit" class="btn btn-sm btn-primary" onclick="document.getElementById('toGRUpl').click()" >Select File</button>
+						<input multiple
+                                ng-hide="true"
+								id="toGRUpl"
+								type="file"
+								accept="image/* , application/pdf"
+								ngf-select
+								ng-model="toGRUpl"
+								name="toGRUpl"
+								ngf-max-size="10MB"
+								ngf-model-invalid="errorFile"
+								ngf-change="compressFile($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+						>
+						<i ng-show="myForm.toGRUpl.$error.maxSize">File too large {{errorFile.size / 1000000|number:1}}MB: max 10M</i>
+						<div ng-repeat="doc in aCompressFile">
+						<iframe
+								ngf-src="doc.fileValue"
+								ngf-resize="{width: 150, height: 150}"
+								width="150"
+								height="150"
+						>
+						</iframe>
+							<i ng-if="doc.fileError" class="col-md-12 text-danger"> {{doc.fileStatus}}!! {{doc.fileError}}</i>
+						</div>
+						<br>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div ng-show="(selectedName==='Other')" class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">File Name</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="fileName" class="input-sm form-control fg-input" placeholder="Type File Name">
+								<span style="color:red" ng-show="fileName=='Other'">Please provide the document name!</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<button ng-click="$event.preventdefault();pushFileToUpload(toGRUpl)" ng-disabled="!(toGRUpl && selectedName)" class="btn btn-primary waves-effect pointer">
+						<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</div>
+
+			<div class="row" ng-show="aFiles.length>0">
+				<h4 style="margin-left: 19px;">Selected Files</h4>
+				<table ng-table="tableParams" class="table">
+					<tr ng-repeat="f in aFiles track by $index">
+						<td data-title="'File Name '">{{f.name}}</td>
+						<td data-title="'File View '">
+							<iframe
+								ngf-src="f.fileValue"
+								ngf-resize="{width: 150, height: 150}"
+								width="150"
+								height="150"
+							>
+							</iframe>
+						</td>
+						<td data-title="'Remove'" ng-if="$role['Registered Vehicle']['Delete Document']">
+							<button ng-click="$event.preventdefault();popFileFromUpload($index)" class="btn btn-primary waves-effect pointer">
+								<i class="zmdi zmdi-minus zmdi-hc-fw"></i>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-disabled="!(aFiles.length>0)"
+				ng-click="saveClick()">Upload
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 50%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

@@ -1,0 +1,125 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12">
+						<div class="clearfix"></div>
+						<div class="col-md-2">
+							<div class="lvh-search ng-scope sear">
+								<input
+										type="text"
+										class="form-control lvhs-input"
+										placeholder="Branch Search..."
+										ng-model="vm.oFilter.branch"
+										typeahead-wait-ms="10"
+										typeahead="item as item.name for item in vm.getAllBranch($viewValue) | limitTo:6"
+								>
+								<i class="lvh-search-close" ng-click="vm.oFilter.branch=null;">×</i>
+							</div>
+						</div>
+						<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+							<div class="lvh-search ng-scope sear chosen-row-1">
+								<input
+										type="text"
+										class="form-control lvhs-input"
+										placeholder="Ledger"
+										ng-model="vm.oFilter.ledger"
+										typeahead-wait-ms="10"
+										typeahead="item as item.name for item in vm.accountMaster($viewValue)">
+								<i class="lvh-search-close" ng-click="vm.oFilter.ledger=null;">×</i>
+							</div>
+						</div>
+						<div class="col-xs-6 col-sm-1 col-md-1 col-lg-2">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="vm.oFilter.from"
+										   max-date="vm.oFilter.to"
+										   ng-change="vm.dateChange('startDate')"
+										   is-open="opened1"
+										   ng-change="vm.oFilter.from > vm.oFilter.to ? (vm.oFilter.to = null) : ('add'|dateUtilsFilt:vm.oFilter.to:-6:'month') > vm.oFilter.from && (vm.oFilter.to = null) "
+										   datepicker-options="vm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="From Date" style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+				                      <button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+				                    </span>
+							</div>
+						</div>
+						<div class="col-xs-6 col-sm-1 col-md-1 col-lg-2">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+								 style=" ">
+								<div class="fg-line"
+									 ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="vm.oFilter.to"
+										   min-date="vm.oFilter.from"
+										   max-date="'add'|dateUtilsFilt:vm.oFilter.from:6:'month'"
+										   ng-change="vm.dateChange('endDate')"
+										   is-open="opened2"
+										   datepicker-options="vm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="To Date"
+										   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+			                      <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+							</div>
+						</div>
+						<div class="col-md-2 text-center">
+							<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+									style="font-size: 16px"
+									uib-tooltip="Search"
+									type="button"
+									ng-click=""
+									tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+							<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+									style="font-size: 16px"
+									uib-tooltip="Clear Search"
+									tooltip-placement="bottom"
+									type="submit"
+									ng-click="vm.oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+							<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+									style="font-size: 16px"
+									uib-tooltip="Download report"
+									tooltip-placement="bottom"
+									type="submit"
+									ng-click="vm.downloadReport();"><i class="zmdi zmdi-download zmdi-hc-fw"></i></button>
+						</div>
+					</div>
+
+					</form>
+					<div class="clearfix"></div>
+
+					<div class="detailsList">
+						<!--Place table here-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	/*.unresponsive tbody tr td{
+		min-width: 85px;
+		padding: 5px 1px;
+		text-align: center;
+	}*/
+</style>

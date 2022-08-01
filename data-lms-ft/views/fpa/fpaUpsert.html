@@ -1,0 +1,654 @@
+<!-- Controller: fpaController -->
+<!-- ControllerAs: vm -->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>FPA</b>
+				</span>
+		</div>
+		<div class="pull-right text-right m-t-5">
+
+<!--			<span>-->
+<!--				<button class="btn-danger btn-xs"-->
+<!--						ng-hide="true"-->
+<!--						ng-click="vm.deleteFpa()"-->
+<!--						ng-show="vm.showDelete"-->
+<!--						uib-tooltip="Delete FPA"-->
+<!--						tooltip-placement="bottom">-->
+<!--					<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+<!--				</button>-->
+<!--				&nbsp;&nbsp;-->
+<!--			</span>-->
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="m-b-0" id="messages-main">
+		<form name="fpaForm" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-2">
+									<div class="">
+										<input
+												type="text"
+												class="form-control"
+												ng-model="vm.filter.refNo"
+												ng-change="vm.prepareRefFilter();"
+												ng-model-options="{ updateOn: 'blur' }"
+												name="fpa No"
+												placeholder="Ref No."
+										>
+										<i class="lvh-search-close" ng-click="vm.filter.refNo = undefined;">×</i>
+									</div>
+									<span class="error" ng-if="vm.filter.refNo && vm.noRefNoFound">No Ref. No. Found</span>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<!--<span class="booking_list_header">Gr Details: </span>-->
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear" style=" z-index: 99" autocomplete="off";>
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Branch Search.."
+														ng-model="vm.oVoucher.branch"
+														typeahead-wait-ms="10"
+														name="Branch"
+														typeahead="item as item.name for item in vm.getAllBranch($viewValue)|limitTo:6"
+														typeahead-on-select="vm.onBranchSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close"
+												   ng-click="vm.oVoucher.branch = '';">×</i>
+											</div>
+											<span class="error"
+												  ng-show="!vm.oVoucher.branch">No Branch Selected</span>
+											<span class="warning"
+												  ng-show="vm.oVoucher.branch && !vm.oVoucher.branch.fpaBook">No Ref Book Linked to selected branch</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Date: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="Date"
+													ng-change="vm.filter.refNo = undefined;getFpaRate()"
+													ng-model="vm.oVoucher.date"
+													required>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">FPA No:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1" style=" z-index: 99;">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="FPA Number"
+														ng-model="vm.oVoucher.refNo"
+														typeahead-wait-ms="10"
+														name="Reference Number"
+														typeahead="item.bookNo as item.bookNo for item in vm.getRefNo(vm.oVoucher.refNo)|limitTo:10"
+														typeahead-on-select="vm.onRefNoSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close"
+												   ng-click="vm.oVoucher.refNo=null;">×</i>
+											</div>
+											<span class="error" ng-if="fpaForm['Reference Number'].$error.required
+																	&& !fpaForm['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Advice Amt :</label>
+									<div class="col-sm-4">
+										{{vm.totReceivedAmount = ((vm.aItems | sumObjKey:'amt').toFixed(0)) || 0}}
+									</div>
+								</div>
+
+								<div style="clear: both"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Mode: </label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="vm.oVoucher.paymentMode"
+													ng-options="item as item for item in vm.aPaymentMode"
+													name="Payment Mode">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Ref:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Payment Ref"
+													   ng-model="vm.oVoucher.paymentRef"
+													   name="Payment Ref"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!--<div class="col-md-3">-->
+									<!--<div class="form-group m-b-0">-->
+										<!--<label class="col-sm-5 control-label">Payment Date: <span-->
+												<!--class="req_r">*</span></label>-->
+										<!--<div class="col-sm-6">-->
+											<!--<input-->
+													<!--fill-date-->
+													<!--type="text"-->
+													<!--class="form-control"-->
+													<!--placeholder="Payment Date"-->
+													<!--ng-model="vm.oVoucher.paymentDate"-->
+													<!--required>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+
+								<div class="col-md-3" ng-hide="true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Narration: </label>
+										<div class="col-sm-8">
+											<input type="text"
+												   onwheel="return false"
+												   ng-model="vm.oVoucher.narration"
+												   ng-model-options="{updateOn: 'blur'}"
+												   name="Narration"
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Vendor (Cr. A/c):<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="cr Account"
+												   ng-model="vm.oVoucher.crAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getVendorName($viewValue) | limitTo:6"
+												   typeahead-on-select="vm.onVendorSelect($item, $model, $label)"
+												   required>
+											<i class="lvh-search-close"
+											   ng-click="vm.oVoucher.crAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Dr A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="Dr Account"
+												   ng-model="vm.oVoucher.drAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAllAccount($viewValue) | limitTo:6"
+												   required>
+											<i class="lvh-search-close"
+											   ng-click="vm.oVoucher.drAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+								<div style="clear: both"></div>
+
+							</div>
+						</div>
+					</li>
+
+					<!-- FPA Filter -->
+					<li class="list-group-item">
+						<span class="booking_list_header">Selection Pattern: </span>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">From Date: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="From Date"
+													ng-model="vm.myFilter.from_date">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">To Date: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="To Date"
+													ng-model="vm.myFilter.to_date">
+										</div>
+									</div>
+								</div>
+
+								<!--<div class="col-md-3">-->
+									<!--<div class="form-group m-b-0">-->
+										<!--<label class="col-sm-5 control-label">Branch :<span-->
+												<!--class="req_r">*</span></label>-->
+										<!--<div class="col-sm-6">-->
+											<!--<div class="ng-scope sear" style=" z-index: 99";>-->
+												<!--<input-->
+														<!--type="text"-->
+														<!--class="form-control"-->
+														<!--placeholder="Branch Search.."-->
+														<!--ng-model="vm.myFilter.branch"-->
+														<!--typeahead-wait-ms="10"-->
+														<!--name="Branch"-->
+														<!--typeahead="item as item.name for item in vm.getAllBranch($viewValue)|limitTo:6"-->
+														<!--&gt;-->
+												<!--<i class="lvh-search-close"-->
+												   <!--ng-click="vm.myFilter.branch = '';">×</i>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Billing Party :</label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Billing Party Search.."
+														ng-model="vm.myFilter.billingParty"
+														typeahead-wait-ms="10"
+														name="Billing Party"
+														typeahead="item as item.name for item in vm.getAllBillingParty($viewValue)|limitTo:6"
+														>
+												<i class="lvh-search-close"
+												   ng-click="vm.myFilter.billingParty = '';">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">VehicleNo :</label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="vehicle Search.."
+														ng-model="vm.myFilter.vehicleNo"
+														typeahead-wait-ms="10"
+														name="vehicle"
+														typeahead="item as item.vehicle_reg_no for item in vm.getAllVehicle($viewValue ,vm.oVoucher.crAccount._id)|limitTo:6"
+												>
+												<i class="lvh-search-close"
+												   ng-click="vm.myFilter.vehicleNo = '';">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div style="clear: both"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Factor<span class="req_r">*</span>(%):</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="Number"
+													   placeholder="Factor %"
+													   ng-model="vm.factor"
+													   name="EnterFactor{{$index}}"
+													   ng-min="1"
+													   ng-max="100"
+													   class="form-control">
+											</div>
+											<span class="error"
+												  ng-if="fpaForm['EnterFactor'+$index].$error.max">
+														Factor Should be less than 100</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<button class="btn btn-primary"
+												uib-tooltip="Add"
+												tooltip-placement="bottom"
+												ng-click="vm.getGr()">
+											Add
+										</button>&nbsp;&nbsp;
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<!-- Settlement Details-->
+					<li class="list-group-item" >
+						<span class="booking_list_header">GR's: </span>
+						<div class="pull-right m-b-10">
+
+														<button class="btn btn-danger"
+																uib-tooltip="Remove Gr"
+																tooltip-placement="bottom"
+																ng-click="vm.aItems.splice(vm.selectedIndex, 1);">
+															<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+														</button>&nbsp;&nbsp;
+
+						</div>
+
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5" style="overflow-y: auto;">
+											<table class="table table-bordered unresponsive"
+												   style="min-height: 100px;">
+												<thead>
+												<tr>
+													<th>#</th>
+													<th>Date</th>
+													<th>Gr No</th>
+													<th>Bill No</th>
+													<th>Vehicle No</th>
+													<th>Branch</th>
+													<th>Route</th>
+													<th>Billing Party</th>
+													<th>Total Freight</th>
+													<th>Factor</th>
+													<th ng-if="$role['FPA Gr']['Deduction']">Deduction</th>
+													<th>Amount</th>
+													<th>Link Mr</th>
+													<th>Remark</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr ng-repeat="oItem in vm.aItems"
+													ng-click="vm.onSelect(oItem);vm.selectedIndex = $index; vm.selectedGr = oItem"
+													class="pointer"
+													ng-class="{grn: vm.selectedGr._id === oItem._id && vm.selectedIndex === $index}">
+
+													<td>{{$index + 1}}</td>
+													<td>{{oItem.grDate| date: 'dd-MM-yyyy'}}</td>
+													<td>{{oItem.grNumber}}</td>
+													<td>{{oItem.bill.billNo}}</td>
+													<td>{{oItem.vehicle_no || oItem.trip.vehicle_no}}</td>
+													<td>{{oItem.branch.name}}</td>
+													<td>{{oItem.trip.route_name}}</td>
+													<td>{{oItem.billingParty.name}}</td>
+													<td>{{(oItem.totalFreight|roundOff) || 0}}</td>
+													<td>
+														<input type="number"
+															   ng-model="oItem.factor"
+															   name="Factor{{$index}}"
+															   placeholder="Factor %"
+															   ng-max="100"
+															   ng-min="1"
+															   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+															   onwheel="return false"
+															   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+															   ng-model-options="{updateOn: 'blur'}"
+															   class="form-control input-sm">
+														<span class="error"
+															  ng-if="fpaForm['Factor'+$index].$error.max">
+														Factor Should be less than 100</span>
+													</td>
+													<!--((oItem.amt)| roundOff) ||-->
+													<td ng-if="$role['FPA Gr']['Deduction']">
+														{{oItem.dedAmt || 0}}
+													</td>
+													<td ng-if="oItem.factor">{{(oItem.amt= ((oItem.totalFreight - (oItem.totalFreight*(oItem.factor || 0))/100) - (oItem.dedAmt || 0)) |roundOff) || 0}}</td>
+													<td ng-if="!oItem.factor">{{(oItem.amt|roundOff) || 0}}</td>
+													<td>
+														<label class="checkbox checkbox-inline m-r-20">
+															<input type="checkbox"
+																   ng-model="oItem.linkMr">
+															<i class="input-helper"></i>
+														</label>
+													</td>	<td>
+														<input type="text"
+															   placeholder="remark"
+															   ng-model="oItem.rmk"
+															   name="remark"
+															   ng-model-options="{ updateOn: 'blur' }"
+															   class="form-control">
+													</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<!-- Deduction/Extra Charges -->
+					<li class="list-group-item">
+						<span class="booking_list_header">Deductions: </span>
+
+						<button class="btn btn-primary"
+								ng-show="!!vm.selectedGr"
+								uib-tooltip="Hide Deduction"
+								tooltip-placement="bottom"
+								ng-click="vm.selectedGr = false; vm.selectedGrIndex = 0;">
+							<i class="zmdi zmdi-eye-off zmdi-hc-fw"></i>
+						</button>
+						<button class="btn btn-primary"
+								uib-tooltip="Show All Deduction"
+								ng-hide="!!vm.selectedGr"
+								tooltip-placement="bottom"
+								ng-click="vm.selectBill(0,0);">
+							<i class="zmdi zmdi-eye zmdi-hc-fw"></i>
+						</button>&nbsp;&nbsp;
+						&nbsp;&nbsp;
+						<div class="pull-right">
+							<button class="btn btn-primary"
+									uib-tooltip="Add Deduction"
+									tooltip-placement="bottom"
+									ng-click="vm.addDeduction(vm.selectedGr)">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-danger"
+									uib-tooltip="Remove Deduction"
+									tooltip-placement="bottom"
+									ng-click="vm.removeDeduction(vm.selectedGr, vm.selectedDeductionIndex)">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>Gr No</th>
+													<th>Type</th>
+													<th>Account</th>
+													<th>Amount</th>
+													<th>Remark</th>
+												</tr>
+												</thead>
+												<tbody>
+
+												<tr ng-repeat-start="oItem in vm.aItems"
+													ng-show="vm.selectedGr._id ? (vm.selectedGr._id === oItem._id) : true">
+													<td rowspan="{{oItem.aDeduction.length+1}}"
+														style="vertical-align: middle;">{{oItem.grNumber || 'NA'}}
+													</td>
+												</tr>
+												<tr ng-repeat-end ng-repeat="oDeduction in oItem.aDeduction"
+													ng-class="{grn: vm.dedSelectedItem._id === oItem._id && vm.selectedDeductionIndex === $index}"
+													ng-show="vm.selectedGr._id ? (vm.selectedGr._id === oItem._id) : true"
+													class="pointer"
+													ng-click="vm.dedSelectedItem = oItem; vm.selectedDeductionIndex = $index">
+													<!--<td>- - - {{oItem.gr.grNumber}}</td>-->
+													<td>
+														<div class="fg-line select" ng-if="vm.selectedGr">
+															<select class="form-control"
+																	name="Select Type"
+																	ng-model="oDeduction.typ"
+																	ng-options="item as item.name for item in vm.aDeductionType"
+																	ng-change="vm.DeductionConfig(oDeduction.typ, oDeduction)"
+																	>
+																<option value="" disabled selected> Select</option>
+															</select>
+														</div>
+														<div  class="fg-line" ng-if="!vm.selectedGr">
+															{{oDeduction.typ.name}}
+														</div>
+													</td>
+													<td>
+														<div class="col-md-12">
+															<div class="">
+																<input
+																		type="text"
+																		class="form-control"
+																		placeholder="Account Search.."
+																		ng-model="oDeduction.from"
+																		typeahead-wait-ms="10"
+																		name="account"
+																		ng-readonly="!vm.selectedGr"
+																		typeahead="item as item.name for item in vm.getAccount($viewValue)"
+																		>
+																<i class="lvh-search-close"
+																   ng-hide="!vm.selectedGr"
+																   ng-click="oDeduction.from = null;">×</i>
+															</div>
+														</div>
+													</td>
+													<td>
+														<input type="number"
+															   ng-model="oDeduction.amount"
+															   placeholder="Number"
+															   ng-model-options="{ updateOn: 'blur' }"
+															   ng-change="vm.calculateAmount()"
+															   name="Number"
+															   ng-readonly="!vm.selectedGr"
+															   class="form-control">
+													</td>
+													<td>
+														<input type="text"
+															   ng-model="oDeduction.narration"
+															   placeholder="Remark"
+															   name="narration"
+															   ng-readonly="!vm.selectedGr"
+															   class="form-control">
+													</td>
+												</tr>
+												<tr ng-repeat-end>
+													<!--<td>display: hidden</td>-->
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="text-right p-10">
+											&nbsp;&nbsp;
+											<button class="btn btn-primary"
+													style="font-size: 14px"
+													ng-disabled="vm.disableSubmit"
+													ng-click="vm.submit(fpaForm)"
+													type="button">
+												Submit
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+
+	.red {
+		color: red;
+	}
+
+	.chosen-row-1 {
+		z-index: 89;
+	}
+
+	.border-red {
+		border: 2px solid #ff000080 !important;
+	}
+
+	.container:not(.ja-containter) {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+</style>

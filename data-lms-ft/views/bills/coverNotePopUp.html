@@ -1,0 +1,306 @@
+<!-- Controller: billsCoverNoteController -->
+<!-- ControllerAs: cnVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="cnVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>CoverNote</b></span>
+	</h4>
+</div>
+<form name="CoverNoteform" ng-submit="cnVm.submit(CoverNoteform)" novalidate autocomplete="off">
+<div class="modal-body">
+	<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- Basic DETAILS -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<div class="col-sm-12">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   placeholder="Billing Party..."
+												   ng-model="cnVm.billingParty"
+												   class="lvhs-input"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in cnVm.aBillingParty"
+												   ng-change="cnVm.getBillingPartyName(cnVm.billingParty)"
+												   class="form-control"
+												   typeahead-on-select="cnVm.onSelect($item, $model, $label)">
+											<i class="lvh-search-close"
+											   ng-click="cnVm.billingParty='';cnVm.show = false">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+							       <div class="col-sm-12">
+								      <b>Customer:</b>&nbsp;&nbsp; {{cnVm.customer.name}}
+									   <i class="lvh-search-close"
+										  ng-click="cnVm.reset()">×</i>
+							       </div>
+							    </div>
+							</div>
+
+							<div class="container m-b-5 m-t-5 text-right">
+								<div class="form-group m-b-0">
+									<button class="btn btn-primary"
+											type="button"
+											ng-show="cnVm.showPrintBtn"
+											ng-click="cnVm.printBill()"
+											uib-tooltip="Preview">
+										<i class="zmdi zmdi-print zmdi-hc-fw"></i></i>
+									</button>&nbsp;&nbsp;
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<!--Table DETAILS-->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> CoverNote No <span class="req_r">*</span></label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="cnVm.cnObj.cnNo"
+														   placeholder="Enter CN No"
+														   class="form-control"
+														   name="CoverNote No"
+														   required>
+												</div>
+												<span class="error" ng-if="CoverNoteform['CoverNote No'].$error.required
+																			&& (CoverNoteform['CoverNote No'].$touched
+																			|| CoverNoteform.$submitted)">
+														This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> PO  Number </label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="cnVm.cnObj.poNo"
+														   placeholder="Enter PO No"
+														   class="form-control"
+														   name="PO No"
+														   >
+												</div>
+												<span class="error" ng-if="CoverNoteform['PO No'].$error.required
+																			&& (CoverNoteform['PO No'].$touched
+																			|| CoverNoteform.$submitted)">
+														This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Remark <span class="req_r">*</span></label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="cnVm.cnObj.remark"
+														   placeholder="Enter Remark"
+														   class="form-control"
+														   name="Remark"
+														   required>
+												</div>
+												<span class="error" ng-if="CoverNoteform['Remark'].$error.required
+																			&& (CoverNoteform['Remark'].$touched
+																			|| CoverNoteform.$submitted)">
+														This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+										<label class="col-md-4 control-label"> Date:</label>
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened1 == true }">
+											<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+												<input ng-click="cnVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+													   type="text"
+													   class="form-control"
+													   uib-datepicker-popup="{{cnVm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   max-date="cnVm.DatePicker.newDate"
+													   ng-model="cnVm.cnObj.date"
+													   is-open="opened1"
+													   datepicker-options="cnVm.DatePicker.dateSettings"
+													   close-text="Close"
+													   placeholder="date"
+													   name="Cover Note Date"
+													   style="padding: 0px 4px;height: 34px;"/>
+											</div>
+											<span class="input-group-btn">
+												<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="cnVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+											</span>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<!--<span class="booking_list_header">Bill DETAIL</span>-->
+					<div class="col-md-1">
+						<div class="fg-line form-group m-b-0">
+							<input type="text"
+								   ng-model="cnVm.myFilter.bill_no"
+								   name="bill_no"
+								   class="form-control input-sm"
+								   placeholder="Bill No."
+								   ng-model-options="{ updateOn: 'blur' }">
+						</div>
+					</div>
+
+					<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="cnVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{cnVm.DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="cnVm.DatePicker.newDate"
+									   ng-model="cnVm.myFilter.start_date"
+									   is-open="opened2"
+									   datepicker-options="cnVm.DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="From Date"
+									   name="from"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+								<button type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-click="cnVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+					</div>
+
+					<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened3 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+								<input ng-click="cnVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{cnVm.DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="cnVm.DatePicker.newDate"
+									   ng-model="cnVm.myFilter.end_date"
+									   is-open="opened3"
+									   datepicker-options="cnVm.DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="To Date"
+									   name="from"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+								<button type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-click="cnVm.DatePicker.openDatePicker(this, $event, 'opened3')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+					</div>
+
+					<div class="col-md-1">
+						<div class="form-group m-b-0 text-center">
+							<button class="btn btn-primary p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Search"
+									ng-click="cnVm.getCoverNoteBills()"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+							</button>
+							<button class="btn btn-primary p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Search"
+									ng-click="cnVm.myFilter={}"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+							</button>
+						</div>
+					</div>
+					<div class="pull-right" style="width: 200px">
+						<div class="form-group m-b-0">
+							<label class="col-sm-9 control-label">Selected CoverNote:</label>
+							<div class="col-sm-2">
+								{{cnVm.coverNoteBill.length}}
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12">
+								<div class="col-md-12">
+											<div ja-table
+												 table-body="cnVm.aBills"
+												 table-head="cnVm.tableHead"
+												 table-column-setting="cnVm.columnSetting"
+												 table-load="cnVm.getCoverNoteBills(true)"
+												 table-row-click-event="cnVm.matchCustomer()"
+												 table-height='300px'
+												 table-selectable='"multiple"'
+												 table-api="cnVm.tableApi"
+												 table-select-preserve="'true'"
+												 table-selectable-model="cnVm.coverNoteBill">
+											</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="cnVm.closeModal()">Close
+		</button>
+	</div>
+
+</form>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

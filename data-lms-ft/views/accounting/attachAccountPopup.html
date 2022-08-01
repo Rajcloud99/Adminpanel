@@ -1,0 +1,65 @@
+<div class="modal-header mh1">
+	<button type="button" ng-click="closeModal()" class="close pull-right"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h3 class="text-center">{{title}}</h3>
+</div>
+<div class="container modal-body">
+	<div class="row m-0">
+		<div class="col-md-12">
+			<div class="col-md-6">
+				<div class="col-md-4">
+					Select Account:
+				</div>
+				<div class="col-sm-8">
+					<div ng-dropdown-multiselect=""
+						 options="aAccount"
+						 selected-model="account"
+						 extra-settings="selectAccountSettings"
+						 ja-search-input='inputModel'
+						 ja-search-trigger="getAccounts(inputModel)"
+					></div>
+					<div>
+						<button class="btn btn-primary waves-effect"
+								type="button"
+								style="padding: 3px 5px"
+								ng-click="addNewAccount()"
+								uib-tooltip="Add">
+							<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12 m-t-10">
+			<table class="table table-bordered unresponsive invoiceDetail">
+				<thead>
+				<tr>
+					<th>#</th>
+					<th>Account</th>
+					<th>Assigned Date</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr data-ng-repeat="data in history"
+					class="pointer">
+					<td>{{$index+1}}</td>
+					<td>{{data.tagAccount.name}}</td>
+					<td>{{(data.ass_date | date: 'dd-MMM-yyyy \'at\' h:mm') || 'NA'}}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button type="button"
+			ng-disabled="!account"
+			class="btn btn-primary"
+			ng-click="submit()">Attach</button>
+</div>
+
+

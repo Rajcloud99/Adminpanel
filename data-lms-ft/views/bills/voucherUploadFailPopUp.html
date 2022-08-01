@@ -1,0 +1,106 @@
+<!-- Controller: voucherUploadFailctrl -->
+<!-- ControllerAs: vuVm -->
+
+<div class="modal-header card-body">
+	<button type="button" ng-click="vuVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Invalid Voucher</b>
+		</span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<form name="form" novalidate autocomplete="off">
+			<ul class="list-group list-group-flush">
+				<!--Table DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">VOUCHER DETAIL</span>
+					<div class="pull-right text-right m-t-5">
+						<button
+							class="btn-primary btn-xs"
+							uib-tooltip="download CSV"
+							tooltip-placement="bottom"
+							ng-click="vuVm.downloadCsv(vuVm.aVch)">
+							<i class="glyphicon glyphicon-download"></i>
+						</button>
+					</div>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="detailsList">
+								<div style="overflow-x: scroll">
+									<table class="table table-bordered unresponsive">
+										<thead>
+										<tr>
+											<th>&#35;</th>
+											<th>PAYMENT TYPE</th>
+											<th>VOUCHER TYPE</th>
+											<th>DATE</th>
+											<th>BRANCH</th>
+											<th>REFERENCE NO</th>
+											<th>PAYMENT MODE</th>
+											<th>PAYMENT REFERENCE NO</th>
+											<th>Amount</th>
+											<th>NARRATION</th>
+											<th>ERROR</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr class="pointer selectItem"
+											ng-repeat="veh in vuVm.aVch"
+											ng-class="{'grn': veh.veh_no === vuVm.selectdId}">
+											<td>{{$index + 1}}</td>
+											<td>{{veh.vT}}</td>
+											<td>{{veh.type}}</td>
+											<td>{{veh.date | date: "dd-MM-yyyy"}}</td>
+											<td>{{veh.branch.name}}</td>
+											<td>{{veh.refNo}}</td>
+											<td>{{veh.paymentMode}}</td>
+											<td>{{veh.paymentRef}}</td>
+											<td>{{veh.amount}}</td>
+											<td>{{veh.narration}}</td>
+											<td>{{(veh.error) ? veh.error[0]: ''}}</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+						</div>
+
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+
+<div class="modal-footer">
+	<button class="btn btn-warning"
+			type="button"
+			ng-click="vuVm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+
+	.container {
+		width: 88% !important;
+	}
+
+	.modal-dialog {
+		width: 88%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

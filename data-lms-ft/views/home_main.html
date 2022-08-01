@@ -1,0 +1,23 @@
+<div id="div_main_app_home" xmlns="http://www.w3.org/1999/html">
+    <header id="header_home"
+			ng-style="{'background-color':client_config.client_theme_color}"
+            data-ng-include="'views/headers/header_home_main.html'">
+    </header>
+
+    <section id="section_main_home" data-ui-view>
+    </section>
+    <footer id="footer"
+            style="padding-left: 0;" data-ng-include="'template/footer.html'"></footer>
+</div>
+
+
+<style>
+
+	#header_home{
+		position: fixed;
+		width: 100%;
+		z-index: 999;
+		background-color: #003366;
+	}
+
+</style>

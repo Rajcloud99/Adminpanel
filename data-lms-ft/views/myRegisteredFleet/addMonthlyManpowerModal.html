@@ -1,0 +1,57 @@
+<div class="modal-header">
+	<h4 class="modal-title text-center" id="modal-title">{{vehicleObj.type}} Monthly Manpower</h4>
+</div>
+<div class=" m-b-20" id="modal-body" style="margin-top: 20px">
+	<form name="addMonthlyManpower" class="form-horizontal">
+		<div class="col-md-6 text-center">
+			<div class="form-group">
+				<label class="col-sm-4 control-label">Select Month:<span class="req_r">*</span></label>
+				<div class="col-sm-7">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+								   class="form-control"
+								   uib-datepicker-popup="MMMM-yyyy"
+								   show-weeks="false"
+								   ng-model="month"
+								   is-open="opened1"
+								   datepicker-options="DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="Month-Year"
+								   ng-disabled="vehicleObj.editObj"
+								   name="Month"
+								   required
+								   style="padding: 0px 4px;height: 34px;" />
+						</div>
+						<span class="input-group-btn">
+					  <button type="button" class="btn btn-default m-t-0 f12"
+							  ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+							  class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label class="col-sm-4 control-label">Amount: <span class="req_r">*</span></label>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="fg-line">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57" onwheel="return false" onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   placeholder="Amount"
+							   ng-model="amount"
+							   class="form-control"
+							   required
+							   name="amount">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 m-t-20 m-b-20 text-right">
+			<button class="btn btn-default" type="button" ng-click="closeModal()">Cancel</button>
+			<button class="btn btn-primary" style="width: 60px" ng-disabled="!addMonthlyManpower.amount.$dirty" ng-click="updateManpower()">Save</button>
+		</div>
+	</form>
+</div>
+<div style="clear: both"></div>

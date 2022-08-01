@@ -1,0 +1,113 @@
+<div class="container" ng-controller="vendorPaymentCtrl" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<form role="form" ng-submit="filter(form)">
+			<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text" ng-model="trip" name="trip" class="form-control input-sm" placeholder="Trip No."
+						   ng-model-options="{ updateOn: 'blur' }" ng-change="getvendorPayment()"
+						   style="height: 34px;font-size: 13px;">
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<select chosen data-placeholder-text-single="'Vendors'" allow-single-deselect="true"
+						no-results-text="'Could not find any Vendor'" search-contains="true" class="form-control" ng-model="vendorName"
+						ng-options="item as item.name for item in aVendors" ng-change="getvendorPayment()">
+					<option value=""></option>
+				</select>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<!-- <select chosen data-placeholder-text-single="'Search Customer'" allow-single-deselect="true"
+						no-results-text="'Could not find any Customer'" search-contains="true" class="form-control" ng-model="Customer"
+						ng-options="item as item.name for item in aCustomers" ng-change="getvendorPayment()">
+					<option value=""></option>
+				</select> -->
+				<div class="lvh-search ng-scope sear">
+	              <input type="text" placeholder="Customer Search..." ng-model="Customer" class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aCustomer" ng-change="getCname(Customer)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+	              <i class="lvh-search-close" ng-click="clearSearch()">×</i>
+	            </div>
+			</div>
+			<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                <select chosen data-placeholder-text-single="'Search Branch'" allow-single-deselect="true" no-results-text="'Could not find any Branch'" class="form-control" ng-model="branch" ng-options="item.name as item.name for item in getBranch" ng-change="getBooking()" required>
+                  <option value="" ></option>
+                </select>
+            </div> -->
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+							   datepicker-popup="{{format}}" show-weeks="false" ng-model="sdate" is-open="opened1"
+							   datepicker-options="dateOptions" close-text="Close" placeholder="From Date"
+							   ng-change="getvendorPayment()" style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+						  class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }" style=" ">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+							   datepicker-popup="{{format}}" show-weeks="false" ng-model="edate" is-open="opened2"
+							   datepicker-options="dateOptions" close-text="Close" placeholder="To Date"
+							   ng-change="getvendorPayment()" style="padding: 0px 4px; height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i
+						  class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+				</div>
+			</div>
+			<a class="pull-right" href="" uib-tooltip="Download Report" tooltip-placement="bottom"
+			   ng-click="downloadReport()"><i class="glyphicon glyphicon-download"></i></a>
+		</form>
+		<div class="clearfix"></div>
+		<div class="detailsList">
+			<div class="" style="overflow-y: auto; max-height: 500px;">
+				<table class="table table-bordered unresponsive">
+					<thead id='my_fixable_table_header' fix-head>
+					<tr>
+						<!-- <th>Invoice No.</th> -->
+						<th>Trip No.</th>
+						<th>Vendor Name</th>
+						<th>Customer</th>
+						<th>Route Name</th>
+						<th>Vehicle No.</th>
+						<th>Total Amount</th>
+						<th>Paid</th>
+						<th>Unpaid</th>
+						<th>Trip End Date</th>
+						<th>Outstanding</th>
+						<th>Created By</th>
+						<th>Created On</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr data-ng-repeat="selectInVoice in avendorTrip" class="pointer selectItem"
+						ng-click="getmyVendorDetailInfo(selectInVoice, $index)">
+						<!-- <td>{{selectInVoice.invoice_no}}</td> -->
+						<td>
+							{{selectInVoice.trip_no}}
+						</td>
+						<td>{{selectInVoice.vendor_name || 'NA'}}</td>
+						<td>{{selectInVoice.customer_name || 'NA'}}</td>
+						<td>{{selectInVoice.route_name || 'NA'}}</td>
+						<td>{{selectInVoice.vehicle_no}}</td>
+						<td>{{selectInVoice.total_expense | number:2 || 'NA'}}</td>
+						<td>{{formatfindVendorRemainAmount(selectInVoice) || 'NA'}}</td>
+						<td>{{ramainingAmountforVendor | number:2 || 'NA'}}</td>
+						<td>{{selectInVoice.trip_end.time | date:"dd-MM-yyyy 'at' h:mma" || 'NA'}}</td>
+						<td>{{selectInVoice.outstanding || 'NA'}}</td>
+						<td>{{selectInVoice.trip_start.user || 'NA'}}</td>
+						<td>{{selectInVoice.trip_start.time | date:"dd-MM-yyyy 'at' h:mma" || 'NA'}}</td>
+					</tr>
+					</tbody>
+				</table>
+				<div ng-if="avendorTrip == 0" class="ms-body" style=" min-height: 50px;">
+					<h3>No any data available !!!!!</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

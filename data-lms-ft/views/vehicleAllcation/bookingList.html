@@ -1,0 +1,345 @@
+<div class="row" style="margin: 15px">
+	<form novalidate name="bookingList" autocomplete="off">
+		<div class="col-sm-12">
+			<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text" ng-model="sFilter.booking" name="booking" class="form-control input-sm"
+						   placeholder="booking No." ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="getBooking()" style="height: 34px;font-size: 13px;">
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+				<div class="fg-line">
+					<input type="text" ng-model="sFilter.boe_no" name="boe_no" class="form-control input-sm"
+						   placeholder="BOE NO" ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="getBooking()" style="height: 34px;font-size: 13px;">
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="fg-line">
+					<!-- <input type="text" ng-model="bookingType" name="bookingType" class="form-control input-sm"  placeholder="booking Type" ng-model-options="{ updateOn: 'blur' }" ng-change="getBooking()" style=" height: 27px;"> -->
+					<div class="select">
+						<select class="form-control" placeholder="booking Type"
+								ng-options="item as item for item in $constants.aBookingTypes"
+								ng-model="sFilter.bookingType" ng-change="getBooking()" style="height: 34px;">
+							<option value="" ng-click="getBooking()"> Booking Type</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<!-- <select chosen data-placeholder-text-single="'Search Customer'" allow-single-deselect="true"
+						no-results-text="'Could not find any Customer'" class="form-control"
+						ng-model="bookingCustomer" ng-options="item as item.name for item in aCustomer"
+						ng-change="getBooking()">
+					<option value=""></option>
+				</select> -->
+				<div class="lvh-search ng-scope sear">
+					<input type="text" placeholder="Cutomer Search..." ng-model="sFilter.bookingCustomer"
+						   class="lvhs-input" typeahead-wait-ms="10" typeahead="item as item.name for item in aCustomer"
+						   ng-change="getCname(sFilter.bookingCustomer)" class="form-control"
+						   typeahead-on-select="getBooking()">
+					<i class="lvh-search-close" ng-click="clearSearch()">×</i>
+				</div>
+			</div>
+<!--			<div ng-if="$configs.booking && $configs.booking.sourceDestiFiltr">-->
+<!--			     <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+<!--			       	<div class="fg-line">-->
+<!--				       	<input type="text"-->
+<!--									   placeholder="Source Search..."-->
+<!--									   ng-model="sFilter.s"-->
+<!--									   on-select="onSelectSource($item);getBooking();"-->
+<!--									   class="form-control"-->
+<!--									   place-autocomplete-->
+<!--									   name="source"-->
+<!--									   required >-->
+<!--			    	 <i class="lvh-search-close" ng-click="sFilter.s='';getBooking();">×</i>-->
+<!--				   </div>-->
+<!--		        </div>-->
+<!--		       <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+<!--			       <div class="fg-line">-->
+<!--				        <input type="text"-->
+<!--									   placeholder="Destination Search..."-->
+<!--									   ng-model="sFilter.d"-->
+<!--									   place-autocomplete-->
+<!--									   class="form-control"-->
+<!--									   typeahead-wait-ms="10"-->
+<!--									   on-select="onSelectDest($item); getBooking();"-->
+<!--									   name="destination" required>-->
+<!--					   <i class="lvh-search-close" ng-click="sFilter.d='';getBooking();">×</i>-->
+<!--				   </div>-->
+<!--			     </div>-->
+<!--			</div>-->
+<!--			route filter -->
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="$configs.booking && $configs.booking.sourceDestiFiltr">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input type="text"
+						   class="form-control lvhs-input"
+						   placeholder="Route Search..."
+						   ng-model="sFilter.route_id"
+						   typeahead-wait-ms="10"
+						   typeahead="item as item.name for item in getAllRoute($viewValue) | limitTo:6"
+						   typeahead-on-select="getBooking()"
+					>
+					<i class="lvh-search-close" ng-click="sFilter.route_id='';getBooking();">×</i>
+				</div>
+			</div>
+<!--			route filter end-->
+
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<select chosen data-placeholder-text-single="'Search Branch'" allow-single-deselect="true"
+						no-results-text="'Could not find any Branch'" class="form-control" ng-model="sFilter.branch"
+						ng-options="item.name as item.name for item in aBranches" ng-change="getBooking()"
+						required>
+					<option value=""></option>
+				</select>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+							   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="sFilter.start_date"
+							   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+							   placeholder="From Date" ng-change="getBooking()"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+                      <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+						  class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+					 style=" ">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+							   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="sFilter.end_date"
+							   is-open="opened2" datepicker-options="dateOptions" close-text="Close"
+							   placeholder="To Date" ng-change="getBooking()"
+							   style="padding: 0px 4px; height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+                      <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i
+						  class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+				</div>
+			</div>
+
+			<div class="lv-body">
+				<div class="row" style="margin: 5px auto;">
+					<div class="col-md-12" style="min-height: 200px;">
+						<div class="clearfix"></div>
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto;max-height: 250px;">
+								<table class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th style="min-width: 100px;">B. No.</th>
+										<th style="min-width: 200px;">B. Type</th>
+										<th style="min-width: 350px;">Customer</th>
+										<th style="min-width: 260px;">Route(Distance)</th>
+										<th ng-if="($configs.booking.showRoute)">Total Km</th>
+										<th ng-if="($configs.booking.showRoute)">Source City</th>
+										<th ng-if="($configs.booking.showRoute)">Destination City</th>
+										<th style="min-width: 200px;">Contract</th>
+										<th style="min-width: 120px;">Invoice</th>
+										<th>Progress</th>
+										<!--
+										<th style="min-width: 320px;">Preferred Vehicle</th>
+										-->
+										<th style="min-width: 180px;">Material</th>
+										<th>Actual Weight (Tonne)</th>
+										<th>Served Weight (Tonne)</th>
+										<th>Remaining Weight (Tonne)</th>
+										<th>Date</th>
+										<th style="min-width: 150px;">Remark</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tbody>
+									<tr data-ng-repeat="oBooking in aBookings" class="pointer selectItem"
+										ng-click="selectBookingFromList(oBooking, $index)"
+										ng-init="oBooking.remaining_weight = oBooking.total_weight - (oBooking.served.servedWeight || 0)">
+										<td>{{oBooking.booking_no}}</td>
+										<td>{{oBooking.booking_type}}</td>
+										<td>{{oBooking.customer.name}}{{$configs.booking.showCustId ? " ("+oBooking.customer.customerId+")" :''}}</td>
+<!--										<td>{{oBooking.rName ? oBooking.rName : ((oBooking.route | filterRoute) | mergeString:', ') || 'NA'}}</td>-->
+										<td>{{oBooking.route[0]?(((oBooking.route | filterRoute) | mergeString:', ') || 'NA'):oBooking.rName}}</td>
+										<td ng-if="($configs.booking.showRoute)">{{oBooking.rKm || 0}}</td>
+										<td ng-if="($configs.booking.showRoute)">{{oBooking.ld.c || 'NA'}}</td>
+										<td ng-if="($configs.booking.showRoute)">{{oBooking.uld.c || 'NA'}}</td>
+										<td>{{oBooking.contract_id.name || 'NA'}}</td>
+										<td>{{oBooking.factory_invoice_number || 'NA'}}</td>
+										<td>
+											{{oBooking | calculateProgress}}%
+											<uib-progressbar class="progress-striped active"
+															 value="oBooking | calculateProgress"
+															 type="success"><b>{{(oBooking | calculateProgress) |
+												roundOff}}%</b>
+											</uib-progressbar>
+										</td>
+										<!--
+										<td>{{(oBooking.preference | preferredVehicleArrayToArrayOfString:'name') |
+											mergeString:', '}}
+										</td>
+										-->
+										<td>{{oBooking.material_type.name}}
+											({{oBooking.material_type.group_name}})
+										</td>
+										<td>{{(oBooking.total_weight || 0) | roundOff}}</td>
+										<td>{{(oBooking.served.servedWeight || 0) | roundOff}}</td>
+										<td>{{(oBooking.total_weight - oBooking.served.servedWeight) | roundOff}}
+										</td>
+										<td>{{oBooking.booking_date | date:'dd-MMM-yyyy'}}</td>
+										<td>{{oBooking.remark || 'NA'}}</td>
+									</tr>
+									</tbody>
+								</table>
+								<div class="pagi" ng-show="aBookings.length > 0">
+									<uib-pagination ng-change="getBooking(true)"
+													total-items="bookingPagination.totalItems"
+													items-per-page="bookingPagination.items_per_page"
+													num-pages="bookingPagination.numPages"
+													ng-model="bookingPagination.currentPage"
+													max-size="bookingPagination.maxSize"
+													class="pagination-sm smallPagi" boundary-links="true"
+													previous-text="&lsaquo;" next-text="&rsaquo;"
+													first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+								</div>
+								<div ng-if="aBookings == 0" class="ms-body" style=" min-height: 50px;">
+									<h3>No any Booking available !!!!!</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12" style="min-height: 200px;">
+						<div class="col-md-12" ng-repeat="veh in aVehicleSelected">
+							<div class="card" style="border: 1px solid #ddd">
+								<h4>
+									{{veh.vehicle_reg_no}} &nbsp;&nbsp;&nbsp;
+									<span>Type: {{veh.veh_type.name || "NA"}}</span>&nbsp;&nbsp;&nbsp;
+									<span>Capacity: {{veh.capacity_tonne || 0}}</span>&nbsp;&nbsp;&nbsp;
+									<span>Loaded: {{veh.loadedWeight || 0}}</span>&nbsp;&nbsp;&nbsp;
+									<span>Overload Allowed: {{veh.overloadAllowed || 0}}</span>&nbsp;&nbsp;&nbsp;
+									<span ng-show="veh.veh_type.trailer">Length Used: {{veh.lengthUsed || 0}}</span>&nbsp;&nbsp;&nbsp;
+
+									<span style="float: right;margin-right: 5px;">
+									<span class="pointer" ng-click="aVehicleSelected.splice($index, 1)"
+										  uib-tooltip="Remove Vehicle" tooltip-placement="left">
+										<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+									</span>
+								</span>
+									<!--<span ng-show="selectedVendorInfo && formDataSelected.vehicle_type === 'Market'" style="float: right;margin-right: 5px;">
+										<a ng-click="vendorDealPopup(veh, $index)" ng-class="{green : veh.vendorDeal.doneDeal}">Vendor Deal</a>
+									</span>-->
+								</h4>
+								<div style="overflow-y: auto;max-height: 100px;">
+									<table class="table table-bordered unresponsive">
+										<thead>
+										<tr>
+											<th>#</th>
+											<th>B. No.</th>
+											<th>Customer</th>
+											<th>Weight</th>
+											<th ng-if="$role['Vehicle Allocation']['GR']">GR</th>
+											<th ng-show="veh.veh_type.trailer">Container</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr data-ng-repeat="oSelBookVeh in (veh.oldGr || veh.gr)" class="pointer selectItem"
+											ng-click="selectBookVeh(oSelBookVeh, $index)">
+											<td>
+												<span class="pointer"
+													  ng-click="veh.gr.splice($index, 1); changeWeight(veh,$index);"
+													  uib-tooltip="Remove"><i
+													class="zmdi zmdi-delete zmdi-hc-fw"></i></span>
+											</td>
+											<td>
+												{{oSelBookVeh.booking_no}}
+											</td>
+											<td>{{oSelBookVeh.customer.name}}</td>
+											<td>
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="weight"
+													   name="weight"
+													   class="form-control"
+													   ng-model="oSelBookVeh.weight"
+													   ng-change="changeWeight(veh,$index)">
+											</td>
+											<td ng-if="$role['Vehicle Allocation']['GR']">
+												<input type="number" class="form-control"
+													   ng-init="oSelBookVeh.noOfGr = oSelBookVeh.noOfGr || 1"
+													   ng-model="oSelBookVeh.noOfGr"
+													   ng-change="GrCount(veh,$index)"
+													   ng-min="1"
+													   name="GrCount{{$index}}"
+													   required>
+												<span class="error" ng-if="bookingList['GrCount'+$index].$error.min">
+														Gr Count Should be Grater than 0</span>
+											</td>
+											<td ng-show="veh.veh_type.trailer">{{clickedItem}}
+												<!--<input type="text" class="form-control" ng-model="oSelBookVeh.container">-->
+												<!--<span ng-repeat="c in oSelBookVeh.container">{{c.number}},</span>-->
+												<div class="select" style="float: left;width: 130px;">
+													<select class="form-control"
+															ng-options="item as item.number+' - '+item.length+' Feet' disable when item.used for item in oSelBookVeh.allContainer"
+															ng-change="onSelectContainer(clickedItem,veh,oSelBookVeh); clickedItem=undefined;"
+															ng-model="clickedItem">
+														<!--<option ng-repeat="item in oSelBookVeh.allContainer" ng-disabled="item.used">{{item.number}} - {{item.length}} {{item.used}} Feet</option>-->
+														<option value="" disabled> Select Container</option>
+
+														<!--oSelBookVeh.container-->
+													</select>
+												</div>
+												<div class="box">
+													<ul>
+														<li ng-repeat="container in oSelBookVeh.container">
+															<span>{{container.number}} - {{container.length}} Feet</span>
+															<span
+																ng-click="removeContainer(oSelBookVeh,$index,veh)">X</span>
+														</li>
+													</ul>
+												</div>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="form-group">
+		<div class="col-xs-6 col-xs-offset-3">
+			<a ng-show="aVehicleSelected[0].gr.length>0" ng-click="grCount(aVehicleSelected)"
+			   ui-sref="booking_manage.vehicleAlollcation.allocate" class="btn btn-block btn-info">
+				Final Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
+			</a>
+		</div>
+	</div>
+</div>
+
+<style>
+	.box ul li {
+		list-style: none;
+		width: 165px;
+		float: left;
+		background: #eee;
+		padding: 2px;
+		margin-left: 10px;
+	}
+
+	.box ul li span:nth-child(2) {
+		background: red;
+		padding: 1px 6px;
+		border-radius: 50%;
+		color: #fff;
+	}
+</style>

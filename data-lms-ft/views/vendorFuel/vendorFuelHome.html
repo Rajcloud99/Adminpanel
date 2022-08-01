@@ -1,0 +1,61 @@
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+     id="messages-main">
+    <div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
+        <div class="lvh-search ng-scope sear">
+            <input type="text" placeholder="Search Fuel Vendor ..."
+                   ng-model="vendorFuelTypeAheadValue" class="lvhs-input"
+                   typeahead="vendorFuel.name as vendorFuel.name for vendorFuel in vendorFuelNames"
+                   typeahead-min-length="2" ng-change="getVendorFuelNames(vendorFuelTypeAheadValue)"
+                   typeahead-on-select="onVendorFuelTypeAheadSelect($item, $model, $label)" >
+            <i class="lvh-search-close" ng-click="resetVendorFuelName()">×</i>
+        </div>
+        <div class="listview lv-vendorFuel clk" style="overflow: auto;height:97%;">
+            <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)"
+                 ng-repeat="vendorFuel in vendorFuels"
+                 ng-click="selectVendorFuel(vendorFuel,$index)">
+                <div class="truck-desc">
+                    <div class="row">
+                        <div class="col-md-8 bold">
+                            {{vendorFuel.name}}
+                        </div>
+                        <div class="col-md-4 bold">
+                            {{vendorFuel.vendorId}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagi" ng-show="total_pages>1">
+                <pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="min-height: 600px;margin-left:20%;overflow: auto">
+        <div class="card-header">
+            <h2 style="font-size: 18px">Fuel Vendor
+                    <span ng-show="vendorFuelName.length" style="margin-left:10px;">{{vendorFuelName}}
+                    </span>
+                    <span ng-show="vendorFuel_action_tag.length " style="margin-left:10px;
+                    color:#B7B7B7">({{vendorFuel_action_tag}})
+                    </span> </h2>
+        </div>
+
+        <button class="btn btn-primary waves-effect"
+                style="margin-top:-45px;float: right;margin-right: 20px;"
+                ng-click="addVendorFuel()" ng-show="vendorFuel_show_add_button">
+            Add New Fuel Vendor
+        </button>
+
+        <div class="separator" style="width: 100%;height:1px;background-color: #EAEAEA"></div>
+        <div class="card-header" style="margin: 0 auto;"
+             ng-show="(vendorFuel_show_no_data && !vendorFuels.length)">
+            <h2 style="color: grey">
+                No fuel vendors found
+            </h2>
+        </div>
+
+        <div class="card-body">
+            <data ui-view value=""></data>
+        </div>
+    </div>
+</div>

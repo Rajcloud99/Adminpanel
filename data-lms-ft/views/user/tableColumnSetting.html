@@ -1,0 +1,52 @@
+<ul class="list-group list-group-flush">
+	<li class="list-group-item">
+		<div class="card-body">
+			<div class="row" style="margin:5px">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Table Column Setting:</label>
+						<div ng-hide="(roleInputMode == 'Edit')" class="col-sm-6">
+							<select chosen class="form-control" ng-change="userLoggedIn.userId === '000000' ? getAllTableCoumumnSetting(oUser._id,'TABLE COLUMN SETTING'): prepTable()"
+									ng-model="tableView.colSetting" ng-options="tb as tb for tb in tbAcc" search-contains="true"
+									name="TableSetting">
+								<option value="" disabled selected></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4" style="text-align: right" ng-show="aHeader">
+					<button type="button" class="btn btn-primary" ng-click="saveTableCol(colSeitting)" style="">Save
+					</button>
+				</div>
+			</div>
+		</div>
+	</li>
+	<li class="list-group-item">
+		<div class="card-body"><!--ng-checked="h.checked"-->
+			<div class="row" style="margin:5px">
+				<ul class="list-unstyled" ng-show="aHeader.length">
+					<p><input type="text" placeholder="Search Column Header" ng-model="search"></p>
+					<ja-sortable ng-show="userLoggedIn.userId === '000000' ">
+					<li ng-repeat="head in aHeader | filter:search">
+						<label class="checkbox checkbox-inline m-r-20" style="padding-top: 5px;">
+							<input type="checkbox" ng-model="head.checked"/>
+							<i class="input-helper"></i>
+							<span>{{head.label}}</span>
+						</label>
+						<input  type="text" ng-model="head.header">
+					</li>
+					</ja-sortable>
+					<li ng-hide ="userLoggedIn.userId === '000000' " ng-repeat="head in aHeader | filter:search">
+						<label class="checkbox checkbox-inline m-r-20" style="padding-top: 5px;">
+							<input type="checkbox" ng-model="head.checked"/>
+							<i class="input-helper"></i>
+							<span>{{head.label}}</span>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</li>
+</ul>
+
+

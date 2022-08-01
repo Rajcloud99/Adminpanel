@@ -1,0 +1,167 @@
+<form role="form"  name="myTripPopUp" autocomplete="off">
+  <div class="validationError" ng-show="create"><h5 class="c-red">* {{dmsg}}</h5></div>
+  <div class="modal-header">
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Trip No. {{selectedvendorPayment.trip_no}}</h4>
+    <h5 class="modal-title" align="center">{{heading_value}}</h5>
+    
+    <!-- <Span ng-if="selectedBookingItem.container_no">{{selectedBookingItem.container_no}}</Span> -->
+  </div>  
+  <div class="modal-body">
+      <div class="justify col-md-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Key<span class="req_r">*</span></label>
+              <div class="col-sm-6">
+                  <div class="select">
+                  <!-- <input class="form-control" type="text" placeholder="Enter Key name" ng-model="expenseOption.key" style="background-color: white;"> -->
+                    <select class="form-control" ng-change="keyChange()" ng-model="expenseOption.key" ng-options="option as option for option in aKey">
+                      <option value="" disabled="true"> Select Key</option>
+                    </select>
+                </div>
+              </div>
+              <div ng-if="other" class="col-sm-6">
+                <input class="form-control" type="text" ng-model="oData.myKey" placeholder="Other Key Name" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Amount<span class="req_r">*</span></label>
+              <div class="col-sm-6">
+                <input class="form-control" type="number" placeholder="Amount" ng-model="expenseOption.amount" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+        <!-- </div>
+        <div class="row"> -->
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Status<span class="req_r">*</span></label>
+              <div class="col-sm-6">
+                <div class="select">
+                  <select class="form-control" ng-model="expenseOption.status" ng-change="statusChange()" ng-options="o for o in statusSet" style="background-color: white;">
+                      <option value="" disabled selected>Set Status</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ng-if="statusMode" class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Mode</label>
+              <div class="col-sm-6">
+                  <!-- <input class="form-control" type="text" placeholder="Reference No." ng-model="expenseOption.reference_no" style="background-color: white;"> -->
+                  <div class="select">
+                    <select class="form-control" ng-model="expenseOption.mode" ng-change="modeFunction()" ng-options="o for o in modePayment" style="background-color: white;">
+                        <option value="" disabled selected>Set Mode</option>
+                    </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        <!-- </div>
+        <div class="row"> -->
+          <div ng-if="(modeshow && statusMode)" class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">{{expenseOption.mode}} No.</label>
+              <div class="col-sm-6">
+                  <input class="form-control" type="text" ng-model="expenseOption.reference_no" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Person Name</label>
+              <div class="col-sm-6">
+                  <input class="form-control" type="text" placeholder="Person Name" ng-model="expenseOption.person" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+          
+        <!-- </div>
+        <div class="row"> -->
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Remark</label>
+              <div class="col-sm-6">
+                  <input class="form-control" placeholder="Remark" ng-model="expenseOption.remark" style="background-color: white;">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Scheduled Date</label>
+              <div class="col-sm-6">
+                <div class="input-group date">
+                    <datetimepicker ng-model="expenseOption.scheduled_date" date-format="dd-MMM-yyyy" hidden-time="true" date-options="dateOptions" show-button-bar="false" style="background-color: white;">
+                    </datetimepicker>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group m-b-0">
+              <label class="col-sm-6 control-label">Payment Date</label>
+              <div class="col-sm-6">
+                <div class="input-group date">
+                    <datetimepicker ng-model="expenseOption.payment_date" date-format="dd-MMM-yyyy" hidden-time="true" date-options="dateOptions" show-button-bar="false" style="background-color: white;">
+                    </datetimepicker>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div ng-if="(heading_value=='Vendor Payment')&&(statusMode)&&(modeshow)" class="col-md-12">
+            <uib-accordion>
+              <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+              <div uib-accordion-group class="panel-default" heading="Bank Detail" is-open="status.open">
+                
+                <table class="table table-bordered unresponsive">
+                  <thead>
+                      <tr>
+                        <th>Select Bank</th>
+                        <th>Account No.</th>
+                        <th>IFSC</th>
+                        <th>Declaration</th>
+                       </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="oBank in aBank">
+                        <td><input type="radio" name="pageSetN" ng-model="pageSet" ng-change="bankSelect(oBank)" ng-value="oBank"/></td>
+                        <td>{{oBank.a_c}}</td>
+                        <td>{{oBank.ifsc || 'NA'}}</td>
+                        <td>{{oBank.declaration || 'NA'}}</td>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
+            </uib-accordion>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success waves-effect" ng-disabled="!(expenseOption.amount && expenseOption.key && expenseOption.status)" ng-click="addExpenseInfo(expenseOption)">Update</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div> 
+</form> 
+<style type="text/css">
+.modal-dialog {width: 50%;
+      height: 173px
+  }
+  .exced{
+margin-top: 20px;margin-left:10px;
+  }
+  .exced div div .control-label {
+    font-weight: bolder;
+}
+td ,th{
+   text-align:center;
+}
+.pac-container.pac-logo{z-index: 9999;}
+</style>

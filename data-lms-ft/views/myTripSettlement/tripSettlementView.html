@@ -1,0 +1,1251 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black" ng-if="vm.aTrips[0].advSettled.tsNo"><b>RT No:</b>
+				<span style="margin-left: 10px; color: rgb(23, 0, 0);">
+					 {{vm.aTrips[0].advSettled.tsNo}}
+				</span>
+			</span>&nbsp;&nbsp;&nbsp;&nbsp;
+			<span class="c-black" ng-if="vm.aTrips[0].markSettle.isSettled"><b>Settlement Date:</b>
+				<span style="margin-left: 10px; color: rgb(23, 0, 0);">
+					 {{vm.aTrips[0].markSettle.date | date:'dd-MM-yyyy'}}
+				</span>
+			</span>&nbsp;&nbsp;&nbsp;&nbsp;
+			<span class="c-black"  ng-if="vm.aTrips[0].advSettled.isCompletelySettled"><b>Audit Date:</b>
+				<span style="margin-left: 10px; color: rgb(23, 0, 0);">
+					 {{vm.aTrips[0].advSettled.date | date:'dd-MM-yyyy'}}
+				</span>
+			</span>&nbsp;
+			<span class="c-black" ng-if="vm.aTrips[0].advSettled.tsNo"><b>RT DATE PERIOD:</b>
+				<span style="margin-left: 10px; color: rgb(23, 0, 0);">
+					{{vm.aTrips[0].tripStarted | date:'dd-MM-yyyy'}}
+					{{vm.aTrips.slice(-1)[0].tripEnded ? 'To' : ''}}
+					{{vm.aTrips.slice(-1)[0].tripEnded | date:'dd-MM-yyyy'}}
+				</span>
+			</span>&nbsp;&nbsp;&nbsp;
+		</div>
+		<div class="pull-right p-5">
+			<span ng-if="!vm.aTrips[0].advSettled.isCompletelySettled">
+				<button class="btn-primary btn-xs"
+						ng-if="$role['Trip Settlement']['Driver Association'] && !vm.aTrips[0].advSettled.isCompletelySettled"
+						ng-click="vm.associateDriver()"
+						uib-tooltip="Driver Association"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-arrow-merge zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="$role['Trip Settlement']['Edit'] && !vm.aTrips[0].advSettled.isCompletelySettled && vm.aTrips[0].advSettled.tsNo">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.driverPayment()"
+						uib-tooltip="Driver Payment"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-layers zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="!vm.aTrips[0].advSettled.isCompletelySettled">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.addKilometer()"
+						ng-if="$role['Trip Settlement']['Add Km']"
+						uib-tooltip="Add Km"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-turning-sign zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="vm.aTrips.slice(-1)[0].tripEnded && !vm.aTrips[0].advSettled.isCompletelySettled && vm.aTrips[0].advSettled.tsNo">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.markTripSettled('markSettle')"
+						ng-if="$role['Trip Settlement']['Mark Settle']"
+						uib-tooltip="Mark Settled"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-tag zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="$role['Trip Settlement']['Account Manager Remark'] && !vm.aTrips[0].advSettled.isCompletelySettled && vm.aTrips[0].advSettled.tsNo">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.accountManagerRemark()"
+						uib-tooltip="Account Manager Remark"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-tag zmdi-comment-more"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="$role['Trip Settlement']['Revert Completely Settled'] && vm.aTrips[0].advSettled.isCompletelySettled && vm.aTrips[0].advSettled.tsNo && vm.aTrips[0].markSettle.isSettled">
+				<button class="btn-danger btn-xs"
+						ng-click="vm.revertSettleTripCompletely()"
+						uib-tooltip="Revert Completely Settled Trip"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-show="$role['Trip Settlement']['Edit'] && !vm.aTrips[0].advSettled.isCompletelySettled && vm.aTrips[0].advSettled.tsNo && vm.aTrips[0].markSettle.isSettled">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.settleTripCompletely()"
+						uib-tooltip="Completely Settled"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-thumb-up zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="!vm.aTrips[0].advSettled.isCompletelySettled">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.showAdvances()"
+						uib-tooltip="Show All Advances"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-view-day zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="!vm.aTrips[0].advSettled.isCompletelySettled">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.showSuspense()"
+
+						uib-tooltip="Show All Suspense"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-view-comfy zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="vm.tsNo">
+				<button class="btn-primary btn-xs"
+						uib-tooltip="Print RT Summary"
+						tooltip-placement="bottom"
+						ng-click='vm.printRTSummary()'>
+					<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="vm.tsNo">
+				<button class="btn-primary btn-xs"
+						uib-tooltip="Print RT Detailed Summary"
+						tooltip-placement="bottom"
+						ng-click='vm.printRTDetailedSummary()'>
+					<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+
+			<span ng-if="$role['Trip Settlement']['Grossprofit Preview'] && vm.tsNo">
+				<button class="btn-primary btn-xs"
+						uib-tooltip="Grossprofit Preview"
+						tooltip-placement="bottom"
+						ng-click="vm.previewSettlement('Preview')">
+					<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+
+			<span ng-if="$role['Trip Settlement']['Tripsheet Preview'] && vm.tsNo">
+				<button class="btn-primary btn-xs"
+						uib-tooltip="Tripsheet Preview"
+						tooltip-placement="bottom"
+						ng-click="vm.previewSettlement('tripsheet_Preview')">
+					<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<!--<button class="btn-primary btn-xs"-->
+					<!--ng-if="vm.tsNo"-->
+					<!--uib-tooltip="Print Summary"-->
+					<!--tooltip-placement="bottom"-->
+					<!--ja-print='vm.printSummary()'>-->
+				<!--<i class="zmdi zmdi-print zmdi-hc-fw"></i>-->
+			<!--</button>&nbsp;&nbsp;-->
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<div class="card-body">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Trip DETAILS -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Vehicle No: </label>
+									<div class="col-sm-6 p-t-5">
+										{{vm.vehicle || 'NA'}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Dr. Details: </label>
+									<div class="col-sm-6 p-t-5">
+										{{(vm.aDriver|mergeString:', ') || 'NA'}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Dr. Status & DL Expiry: </label>
+									<div class="col-sm-6 p-t-5">
+										{{vm.aDriverStatus}} & {{vm.aDriver_expiry | date:'dd-MM-yyyy'}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Dr. opening balance: </label>
+									<div class="col-sm-6 p-t-5">
+										{{((vm.summary.openCloseBal.driver.opening +
+										vm.summary.openCloseBal.fastag.opening + vm.summary.openCloseBal.happay.opening
+										+ vm.summary.openCloseBal.vendor.opening) || 0)|roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3"
+								 ng-if="vm.aTrips[0].advSettled.creation.date">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">RT Creation Date: </label>
+									<div class="col-sm-6 p-t-5">
+										{{vm.aTrips[0].advSettled.creation.date | date:'dd-MM-yyyy'}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3"
+								 ng-if="vm.aTrips[0].advSettled.creation.user">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">RT Created By: </label>
+									<div class="col-sm-6 p-t-5">{{vm.aTrips[0].advSettled.creation.user}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Dr Security(deposit): </label>
+									<div class="col-sm-6 p-t-5">
+										{{vm.summary.totDrSecurity || 0}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">RT Prediction:</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Budgeted Diesel (Ltr): </label>
+									<div class="col-sm-6 p-t-5">
+										{{(vm.summary.dieselBudget|roundOff) || 0}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Budgeted Advance: </label>
+									<div class="col-sm-6 p-t-5">
+										{{(vm.summary.netBudget|roundOff) || 0}}
+									</div>
+								</div>
+							</div>
+							<div ng-if="$configs.tripSettlement && $configs.tripSettlement.custwiseBudgeting" class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Budgeted Toll: </label>
+									<div class="col-sm-6 p-t-5">
+										{{(vm.summary.netToll|roundOff) || 0}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li class="list-group-item">
+					<span class="booking_list_header">SUMMARY</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Diesel Advance (Ltr): </label>
+									<div class="col-sm-6 p-t-5">
+										{{(vm.summary.dieselGivLit|roundOff)|| 0}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Over Due Diesel(Ltr): </label>
+									<div class="col-sm-6 p-t-5">
+										{{(vm.summary.dieselGivLit - vm.summary.dieselBudget).toFixed(2) || 0}}
+									</div>
+								</div>
+							</div>
+							<!--<div class="col-md-3">-->
+								<!--<div class="col-md-12 form-group m-b-5">-->
+									<!--<label class="col-sm-5">Total Balance: </label>-->
+									<!--<div class="col-sm-6 p-t-5">-->
+										<!--{{((vm.summary.netAdvance + vm.summary.netExpense)||0)|roundOff}}-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--<div class="col-md-4">-->
+								<!--<div class="col-md-12 form-group m-b-5">-->
+									<!--<label class="col-sm-5">Net Budget: </label>-->
+									<!--<div class="col-sm-6 p-t-5">-->
+										<!--{{vm.summary.netBudget|roundOff}}-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Net Advance: </label>
+									<div class="col-sm-6 p-t-5">
+										{{(vm.summary.netAdvance|roundOff)||0}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Net Suspense: </label>
+									<div class="col-sm-6 p-t-5">
+										{{(vm.aggrOfSupense|roundOff)||0}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Net Advance with Suspense: </label>
+									<div class="col-sm-6 p-t-5">
+										{{((vm.aggrOfSupense + vm.summary.netAdvance)|roundOff)||0}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-7">Over Due(Net Advance - Net Budget): </label>
+									<div class="col-sm-4 p-t-5">
+										{{(vm.summary.overDue|roundOff) || 0}}
+									</div>
+								</div>
+							</div>
+							<!--<div class="col-md-3"-->
+								 <!--style="height: 33px"-->
+								 <!--ng-if="!isAdvanceVoucherGen">-->
+								<!--<div class="col-md-12 form-group m-b-5 text-center">-->
+									<!--<span style="color: red;">A/c Import Not Done</span>-->
+								<!--</div>-->
+							<!--</div>-->
+							<div class="col-md-3" ng-if="vm.aTrips[0].markSettle.remark">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-7">Settlement Remark: </label>
+									<div class="col-sm-4 p-t-5">
+										{{vm.aTrips[0].markSettle.remark}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="vm.aTrips[0].advSettled.remark">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-7">Audit Remark: </label>
+									<div class="col-sm-4 p-t-5">
+										{{vm.aTrips[0].advSettled.remark}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-1">Route: </label>
+									<div class="col-sm-8 p-t-5">
+										{{(vm.aTrips|arrayOfObjectToArray:'route_name'|mergeString:', ')|| (vm.aTrips|arrayOfObjectToArray:'rName'|mergeString:', ') || 'NA'}}
+									</div>
+								</div>
+							</div>
+				 <div ng-if="$configs.booking && $configs.booking.odometer">
+							      <div class="col-md-3">
+							         	<div class="col-md-12 form-group m-b-5">
+								           	<label class="col-sm-7">Oddometer KM: </label>
+								              	<div class="col-sm-4 p-t-5">
+									           	{{vm.totalodometerkm|| 0}}
+									        </div>
+								       </div>
+								  </div></div>
+						   	   <div class="col-md-3" ng-if="$configs.tripSettlement && $configs.tripSettlement.gpsKm">
+								       <div class="col-md-12 form-group m-b-5">
+								      	   <label class="col-sm-7">GPS KM: </label>
+								             	<div class="col-sm-4 p-t-5">
+									           	{{vm.totalgpskm.toFixed(2) || 0}}
+								          	</div>
+							         	</div>
+							      </div>
+				<!-- </div> -->
+							<div class="clearfix"></div>
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">RT Details</span>
+						<div class="row" style="margin: 5px">
+							<div class="table-responsive" style="margin:15px">
+								<table class="table">
+									<thead>
+									<tr>
+										<th>Trip Km</th>
+										<th>Extra Km</th>
+										<th>Total Km</th>
+										<th>Total Advance</th>
+										<th>Total Expense</th>
+										<th>Driver Payment</th>
+										<th>Trip Balance</th>
+										<th>Dr. Closing Balance</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td>{{((vm.summary.totalKm - vm.summary.totalExtraKm) |roundOff) || 0}}</td>
+										<td>{{vm.summary.totalExtraKm || '0'}}</td>
+										<td>{{(vm.summary.totalKm|roundOff) || '0'}}</td>
+										<td ng-if="!$configs.tripSettlement.settleLitreWise">{{(vm.summary.netAdvance|roundOff)||0}}</td>
+										<td ng-if="$configs.tripSettlement.settleLitreWise">{{((vm.summary.netAdvObj.driverCash + vm.summary.netAdvObj.happay)|roundOff)||0}}</td>
+										<td>{{(vm.summary.netExpense|roundOff) ||0}}</td>
+										<td>{{(vm.summary.driverPayment|roundOff) || 0}}</td>
+										<td ng-if="!$configs.tripSettlement.settleLitreWise">{{((vm.summary.netAdvance - vm.summary.netExpense - vm.summary.driverPayment)|roundOff)||0}}</td>
+										<td ng-if="$configs.tripSettlement.settleLitreWise">{{((vm.summary.netAdvObj.driverCash + vm.summary.netAdvObj.happay - vm.summary.netExpense - vm.summary.driverPayment)|roundOff)||0}}</td>
+										<td>{{(vm.summary.openCloseBal.driver.closing +
+											vm.summary.openCloseBal.fastag.closing +
+											vm.summary.openCloseBal.happay.closing +
+											vm.summary.openCloseBal.vendor.closing).toFixed(2) || 0}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+				</li>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">RT Performance</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Advance Per KM: </label>
+									<div class="col-sm-6 p-t-5">
+										{{((vm.summary.netAdvance ||0) /(vm.summary.totalKm||1))|roundOff}}
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Fastag Per KM: </label>
+									<div class="col-sm-6 p-t-5">
+										{{((vm.advSummary['Fastag'].amt ||0) /(vm.summary.totalKm||1))|roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Expense Per KM: </label>
+									<div class="col-sm-6 p-t-5">
+										{{((vm.summary.netExpense || 0) /(vm.summary.totalKm||1))|roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Balance Per Km: </label>
+									<div class="col-sm-6 p-t-5">
+										{{((((vm.summary.netAdvance || 0) - vm.summary.netExpense ||0) || 0)/ (vm.summary.totalKm ||1))|roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Suspense Remark: </label>
+									<div class="col-sm-6 p-t-5">
+										{{vm.susRemark}}
+									</div>
+								</div>
+							</div>
+							<!--<div class="col-md-3">-->
+								<!--<div class="col-md-12 form-group m-b-5">-->
+									<!--<label class="col-sm-5">Driver Penalty: </label>-->
+									<!--<div class="col-sm-6 p-t-5">-->
+										<!--{{vm.summary.driverPenalty || 'NA'}}-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<div class="row">
+						<div class="col-md-6">
+							<form name="advanceForm" novalidate>
+								<span class="booking_list_header">Advances Summary</span>
+								<div class="pull-right text-right m-t-5">
+									<button class="btn-primary btn-xs"
+											ng-hide="true"
+											ng-click="vm.advanceOper()"
+											uib-tooltip="Add Advance"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+									</button>
+									&nbsp;&nbsp;
+								</div>
+
+								<div class="card-body">
+									<div class="row" style="margin:5px">
+										<div class="col-md-12" style="overflow-y: scroll;max-height: 150px;">
+											<table class="table table-bordered unresponsive">
+												<thead fix-head>
+												<tr>
+													<th>Type</th>
+													<!--<th>Current Adv(Amt/Lit.)</th>-->
+													<th>Total Adv(Amt/Lit.)</th>
+													<!-- TODO Don't Remove @Atul <th>Total Settlement(Amt/Lit.)</th>-->
+												</tr>
+												</thead>
+												<tbody>
+												<tr class="pointer"
+													ng-repeat="(key, value) in vm.advSummary"
+													ng-class="{grn: vm.selectedAdvType === key}"
+												>
+													<!--TODO remove row selection -> ng-dblclick="vm.showAdvances(key)"-->
+													<td>{{key}}</td>
+													<!--<td>-->
+														<!--{{(vm.selectedTrip.segAdvBudget[key]|roundOff) || 0}}-->
+														<!--<span ng-if="key === 'Diesel'">/ {{(vm.selectedTrip.dieselGivenLtr|roundOff) || 0}} (L)</span>-->
+													<!--</td>-->
+													<td>
+														{{value.amt.toFixed(2)}}
+														<span ng-if="key === 'Diesel'">/ {{(vm.summary.dieselGivLit|roundOff) || 0}} (L)</span>
+													</td>
+													<!-- TODO Don't Remove @Atul
+													 <td>-->
+														<!--{{value.settleAmt.amt.toFixed(2)}}-->
+														<!--&lt;!&ndash;<span ng-if="key === 'Diesel'">/ {{(value.settleAmt.lit|roundOff) || 0}} (L)</span>&ndash;&gt;-->
+													<!--</td>-->
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="col-md-6">
+							<span class="booking_list_header">Settle Summary</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-12" style="overflow-y: scroll;max-height: 150px;">
+										<table class="table table-bordered unresponsive">
+											<thead fix-head>
+											<tr>
+												<th>Type</th>
+												<!--<th>Current Settlement (Amt/Lit.)</th>-->
+												<th>Total Settlement (Amt/Lit.)</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat="(key, value) in vm.settleSummary">
+												<td>{{key}}</td>
+												<!--<td>-->
+													<!--{{(vm.selectedTrip.segSettlement[key]|roundOff) || 0}}-->
+													<!--<span ng-if="key === 'Diesel'">/ {{(vm.selectedTrip.dieselSettledLtr|roundOff) || 0}} (L)</span>-->
+												<!--</td>-->
+												<td>
+													{{(value.amt || 0).toFixed(2)}}
+													<span ng-if="key === 'Diesel'">/ {{(value.lit|roundOff) || 0}} (L)</span>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">TRIP DETAIL</span>
+					<div class="pull-right">
+						<button class="btn-primary btn-xs"
+								ng-if="$role['Trip Settlement']['Add Trip']"
+								ng-hide="vm.selectedTrip.advSettled.isCompletelySettled || vm.payments"
+								ng-click="vm.addTrip()"
+								uib-tooltip="Add Trip"
+								tooltip-placement="bottom">
+							<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+						</button>
+						&nbsp;&nbsp;
+						<button class="btn-danger btn-xs"
+								ng-if="$role['Trip Settlement']['Remove Trip']"
+								ng-hide="vm.selectedTrip.advSettled.isCompletelySettled || vm.payments"
+								ng-click="vm.removeTrip()"
+								uib-tooltip="Remove Trip"
+								tooltip-placement="bottom">
+							<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+						</button>
+						&nbsp;&nbsp;
+					</div>
+					<div class="card-body" id="settlementForm">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12">
+								<div class="col-md-12">
+									<div ja-table
+										 table-body="vm.aTrips"
+										 table-head="vm.tableHead"
+										 table-column-setting="vm.columnSetting"
+										 table-selectable='"single"'
+										 table-selectable-model="vm.selectedTrip"
+										 table-api="vm.tableApi"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<li class="list-group-item" ng-if="vm.selectedTrip.vehicle.ownershipType == 'Market'">
+					<span class="booking_list_header" ng-if="vm.selectedTrip.vendorDeal">VENDOR DEAL</span>
+					<div class="card-body">
+						<div ng-if="vm.selectedTrip.vendorDeal" class="col-md-12"
+							 style="margin-top: 13px;margin-left: 12px;">
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<li ng-if="vm.selectedTrip.vendor && vm.selectedTrip.vendor.name">
+
+											<div class="col-md-5 bold">Vendor</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendor.name}}</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendor && vm.selectedTrip.vendor.prim_contact_no">
+											<div class="col-md-5 bold">Vendor Contact</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendor.prim_contact_no}}</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal && vm.selectedTrip.vendorDeal.payment_type">
+											<div class="col-md-5 bold">Payment Type</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.payment_type |
+												date:'dd-MM-yyyy'}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal && vm.selectedTrip.vendorDeal.weight_type">
+											<div class="col-md-5 bold">Payment Basis</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.weight_type |
+												date:'dd-MM-yyyy'}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal && vm.selectedTrip.vendorDeal.munshiyana">
+											<div class="col-md-5 bold">Munshiyana</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.munshiyana}}</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<li>
+											<div class="col-md-5 bold">Total Amt Payable</div>
+											<div class="col-md-6">: {{upsertVm.paymentAmt - upsertVm.total_deduction
+												}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal && vm.selectedTrip.vendorDeal.total_expense">
+											<div class="col-md-5 bold">Total Expense</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.total_expense}}</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal && vm.selectedTrip.vendorDeal.advance">
+											<div class="col-md-5 bold">Advance</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.advance}}</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal && vm.selectedTrip.vendorDeal.advance_due_date">
+											<div class="col-md-5 bold">Adv. Due Date</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.advance_due_date |
+												date:'dd-MM-yyyy'}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal && vm.selectedTrip.vendorDeal.toPay">
+											<div class="col-md-5 bold">ToPay/Balance</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.toPay}}</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal && vm.selectedTrip.vendorDeal.topay_due_date">
+											<div class="col-md-5 bold">ToPay Due Date</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.topay_due_date |
+												date:'dd-MM-yyyy'}}
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<li ng-hide="true">
+											<div class="col-md-5 bold">Purchase Amt</div>
+											{{
+											upsertVm.paymentAmt = ((vm.selectedTrip.vendorDeal.other_charges || 0) +
+											(vm.selectedTrip.vendorDeal.detention_charge || 0) +
+											(vm.selectedTrip.vendorDeal.oveloading_charge || 0) +
+											(vm.selectedTrip.vendorDeal.loading_charges || 0) +
+											(vm.selectedTrip.vendorDeal.unloading_charges || 0) +
+											(vm.selectedTrip.vendorDeal.chalan_charges || 0) +
+											(vm.selectedTrip.vendorDeal.total_expense || 0))
+											}}
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.detention_charge">
+											<div class="col-md-5 bold">Detention Charges</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.detention_charge}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.oveloading_charge">
+											<div class="col-md-5 bold">Overload Charges</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.oveloading_charge}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.loading_charges">
+											<div class="col-md-5 bold">Loading Charges</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.loading_charges}}</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.unloading_charges">
+											<div class="col-md-5 bold">Unloading Charges</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.unloading_charges}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.unloading_charges">
+											<div class="col-md-5 bold">Unloading Charges</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.chalan_charges}}</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.other_charges">
+											<div class="col-md-5 bold">Other Charges</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.other_charges}}</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<!--all deduction-->
+
+										<li ng-if="vm.selectedTrip.vendorDeal.tds_deduction">
+											<div class="col-md-5 bold">TDS Detention</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.tds_deduction}}</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.damage_deduction">
+											<div class="col-md-5 bold">Damage Detention</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.damage_deduction}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.penalty_deduction">
+											<div class="col-md-5 bold">Penalty Detention</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.penalty_deduction}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.other_deduction">
+											<div class="col-md-5 bold">Other Detention</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.other_deduction}}</div>
+										</li>
+										<li ng-hide="true">{{ upsertVm.total_deduction =
+											(vm.selectedTrip.vendorDeal.tds_deduction || 0) +
+											(vm.selectedTrip.vendorDeal.damage_deduction || 0) +
+											(vm.selectedTrip.vendorDeal.penalty_deduction || 0) +
+											(vm.selectedTrip.vendorDeal.other_deduction || 0) }}
+										</li>
+
+										<!--upsertVm.paymentAmt-->
+
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<li ng-if="vm.selectedTrip.vendorDeal.acknowledge.status">
+											<div class="col-md-5 bold">Ack. By</div>
+											<div class="col-md-6">:
+												{{vm.selectedTrip.vendorDeal.acknowledge.user.full_name}}
+											</div>
+										</li>
+										<li ng-if="vm.selectedTrip.vendorDeal.acknowledge.status">
+											<div class="col-md-5 bold">Ack. Date</div>
+											<div class="col-md-6">: {{vm.selectedTrip.vendorDeal.acknowledge.date |
+												date:'dd-MM-yyyy'}}
+											</div>
+										</li>
+
+										<li>
+											<div class="col-md-5 bold">Loading Slip</div>
+											<button ng-click="$event.preventDefault();preview(vm.selectedTrip.vendorDeal.loading_slip)"
+													style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;"
+													ng-show="vm.selectedTrip.vendorDeal.loading_slip">Preview Slip
+											</button>
+											<div ng-hide="vm.selectedTrip.vendorDeal.loading_slip">
+												<form role="form" name="myForm" autocomplete="off">
+													<button class="btn btn-sm btn-primary"
+															onclick="document.getElementById('loading_slip').click();">
+														Select File
+													</button>
+													<input ng-hide="true" id="loading_slip" type="file"
+														   accept="image/*,application/pdf"
+														   ngf-select ng-model="loading_slip" name="loading_slip"
+														   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+													<i ng-show="myForm.loading_slip.$error.maxSize">File too large
+														{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+													<img ng-show="myForm.loading_slip.$valid" ngf-src="loading_slip"
+														 ngf-resize="{width: 100, height: 100}">
+													<button ng-click="$event.preventdefault();vm.uploadLoadingSlip(loading_slip)"
+															ng-show="(loading_slip && myForm.loading_slip.$valid)"
+															class="btn btn-primary waves-effect pointer">
+														<i class="glyphicon glyphicon-upload"></i>
+													</button>
+												</form>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div ng-show="vm.selectedTrip.vendorData.banking_details.length>0" class="col-sm-6">
+									<table style="border: 1px solid #ddd;margin-left: 15px;"
+										   class="table table-bordered">
+										<thead>
+										<th>Bank A/C</th>
+										<th>IFSC</th>
+										<th>Declaration</th>
+										<th>Cancel Cheque</th>
+										</thead>
+										<tbody>
+										<tr ng-style="{ 'background-color': vm.selectedTrip.vendorData.vendorDeal.bankingDetail.a_c == bank.a_c ? '#5ce260' : 'white' }"
+											ng-repeat="bank in vm.selectedTrip.vendorData.banking_details">
+											<td>{{bank.a_c}}</td>
+											<td>{{bank.ifsc}}</td>
+											<td>{{bank.declaration}}</td>
+											<td>
+												<button title="Preview" class="btn btn-warning"
+														ng-click="$event.preventDefault();preview(bank.cancelled_cheque)"
+														ng-show="bank.cancelled_cheque">
+													<span class="glyphicon glyphicon-eye-open"
+														  aria-hidden="true"></span>
+												</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">SETTLE</span>
+					<!-- TODO settlement common form-->
+					<!--<div class="pull-right text-right m-t-5">-->
+					<!--<button class="btn-primary btn-xs"-->
+					<!--ng-click=""-->
+					<!--uib-tooltip="Add Settled"-->
+					<!--tooltip-placement="bottom">-->
+					<!--<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>-->
+					<!--</button>-->
+					<!--&nbsp;&nbsp;-->
+					<!--<button class="btn-primary btn-xs"-->
+					<!--ng-click=""-->
+					<!--uib-tooltip="Edit Settled"-->
+					<!--tooltip-placement="bottom">-->
+					<!--<i class="zmdi zmdi-edit zmdi-hc-fw"></i>-->
+					<!--</button>-->
+					<!--&nbsp;&nbsp;-->
+					<!--<button class="btn-danger btn-xs"-->
+					<!--ng-click=""-->
+					<!--uib-tooltip="Delete Settled"-->
+					<!--tooltip-placement="bottom">-->
+					<!--<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+					<!--</button>-->
+					<!--&nbsp;&nbsp;-->
+					<!--</div>-->
+					<div class="card-body">
+						<form name="tripSetttleForm"
+							  ng-if="vm.selectedTrip._id  && !vm.selectedTrip.advSettled.isCompletelySettled"
+							  ng-submit="vm.addExpense(tripSetttleForm, vm.oSettle)"
+							  novalidate>
+							<div class="row" style="margin:5px">
+								<!-- TODO Don't Remove @Atul
+								<div class="col-md-4 exced" style="">-->
+									<!--<div class="form-group m-b-0">-->
+										<!--<label class="col-md-4 control-label">Advance Type <span-->
+												<!--class="req_r">*</span></label>-->
+										<!--<div class="col-md-6">-->
+											<!--<select class="form-control"-->
+													<!--ng-model="vm.oSettle.advanceType"-->
+													<!--name="Select Type"-->
+													<!--ng-change="vm.rowSelect(vm.oSettle.advanceType)"-->
+													<!--ng-options="item as item for item in vm.advanceTyp"-->
+													<!--required>-->
+												<!--<option value="" disabled selected> Select</option>-->
+											<!--</select>-->
+											<!--&lt;!&ndash;{{vm.oSettle.advanceType}}&ndash;&gt;-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+								<div class="col-md-4 exced" style="">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label">Select Type <span
+												class="req_r">*</span></label>
+										<div class="col-md-6">
+											<div class="fg-line">
+												<!--{{vm.oSettle.type}}-->
+												<select class="form-control"
+														ng-model="vm.oSettle.type"
+														name="Select Type"
+														ng-options="item.name as item.name for item in ($configs.master.settlementObj || $constants.settlementObj)|filterSettleType:vm.selectedTrip:vm.aSettle"
+														required>
+													<option value="" disabled selected> Select</option>
+												</select>
+											</div>
+
+											<span class="error" ng-if="tripSetttleForm['Select Type'].$error.required
+																				&& (tripSetttleForm['Select Type'].$touched
+																				|| tripSetttleForm.$submitted)">
+															This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<!--TODO Temporarily comment the content until we find how we will maintain settlement liter -->
+								<!--<div class="col-md-12 exced" ng-if="vm.oSettle.type=='Diesel'">-->
+								<!--<div class="col-md-2">-->
+								<!--<div class="form-group m-b-0">-->
+								<!--<label class="control-label"> Rate </label>-->
+								<!--<div class="fg-line">-->
+								<!--<input type="number"-->
+								<!--onwheel="return false"-->
+								<!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+								<!--onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+								<!--ng-model="vm.oSettle.diesel_info.rate"-->
+								<!--placeholder=""-->
+								<!--class="form-control">-->
+								<!--</div>-->
+								<!--</div>-->
+								<!--</div>-->
+								<!--<div class="col-md-1">-->
+								<!--<div class="form-group m-b-0">-->
+								<!--<label class="control-label"> Litres </label>-->
+								<!--<div class="fg-line">-->
+								<!--<input type="number"-->
+								<!--onwheel="return false"-->
+								<!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+								<!--onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+								<!--ng-model="vm.oSettle.diesel_info.litre"-->
+								<!--ng-change="vm.calLiter(vm.oSettle.diesel_info)"-->
+								<!--placeholder=" "-->
+								<!--class="form-control">-->
+								<!--</div>-->
+								<!--</div>-->
+								<!--</div>-->
+								<!--</div>-->
+								<!--<div class="clearfix"></div>-->
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Person <span class="req_r">*</span>
+											</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="vm.oSettle.person"
+														   placeholder="Enter Person Name "
+														   class="form-control"
+														   name="Person"
+														   required>
+												</div>
+
+												<span class="error" ng-if="tripSetttleForm['Person'].$error.required
+																				&& (tripSetttleForm['Person'].$touched
+																				|| tripSetttleForm.$submitted)">
+															This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Amount<span class="req_r" ng-if="!($configs.tripSettlement.settleLitreWise && vm.oSettle.type === 'Diesel')">*</span>
+											</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="number"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   ng-model="vm.oSettle.amount"
+														   ng-change=""
+														   name="Amount"
+														   placeholder="Enter Amount"
+														   class="form-control"
+														   max="{{$configs.tripSettlement.tripExpenseAmt || $constants.tripExpenseAmt}}"
+														   ng-required="!($configs.tripSettlement.settleLitreWise && vm.oSettle.type === 'Diesel')">
+												</div>
+
+												<span class="error" ng-if="tripSetttleForm['Amount'].$error.required
+																				&& (tripSetttleForm['Amount'].$touched
+																				|| tripSetttleForm.$submitted)">
+															This Field is Mandatory</span>
+												<span class="error" ng-show="tripSetttleForm['Amount'].$error.max">Value should be Smaller than {{$configs.tripSettlement.tripExpenseAmt || $constants.tripExpenseAmt}}</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-if="$configs.tripSettlement.settleLitreWise && vm.oSettle.type === 'Diesel'">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Litres:<span class="req_r">*</span>
+											</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="number"
+														   onwheel="return false"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 45 && event.charCode <= 57"
+														   ng-model="vm.oSettle.diesel_info.litre"
+														   class="form-control"
+														   name="Litres"
+														   required>
+												</div>
+
+												<span class="error" ng-if="tripSetttleForm['Litres'].$error.required
+																				&& (tripSetttleForm['Litres'].$touched
+																				|| tripSetttleForm.$submitted)">
+															This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Reference No </label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="vm.oSettle.reference_no"
+														   placeholder="Enter Reference No"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label"> Remark</label>
+											<div class="col-md-8">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="vm.oSettle.remark"
+														   placeholder="Enter Remark"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-show="vm.trip.isMarketVehicle">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">Paid To Vendor</label>
+											<div class="col-sm-6">
+												<div class="checkbox">
+													<label>
+														<input type="checkbox"
+															   ng-model="vm.oSettle.paidToVendor"
+															   value="">
+														<i class="input-helper"></i>
+														Paid To Vendor
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="hd2">
+									<button type="button"
+											ng-disabled="vm.disableSubmit"
+											class="btn btn-success waves-effect pull-right m-r-10"
+											ng-click="vm.submit()" ng-if="$role['Trip Settlement']['Add']" >Submit
+									</button>
+									&nbsp;&nbsp;
+									<button class="btn btn-primary waves-effect pull-right m-r-10"
+											ng-if="$role['Trip Settlement']['Add']">Add</button>
+								</div>
+								<div class="clearfix"></div>
+								<!--******************************-->
+								<div class="pull-right  m-t-10">
+									<button class="btn-primary btn-xs"
+											ng-if="$role['Trip Settlement']['Edit']"
+											type="button"
+											ng-click="vm.editSettle()"
+											uib-tooltip="Edit Settle"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+									</button>
+									<button class="btn-danger btn-xs"
+											ng-if="!vm.selectedTrip.advSettled.isCompletelySettled && $role['Trip Settlement']['Expense Delete']"
+											ng-click="vm.removeSettlementTrip(vm.selectedSettle._id)"
+											uib-tooltip="Remove Settlement Trip Expense"
+											type="button"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+									</button>
+								</div>
+								<!--								********-->
+							</div>
+						</form>
+						<div class="row" style="margin: 5px">
+							<div class="table-responsive" style="margin:15px">
+								<table class="table">
+									<thead>
+									<tr>
+										<th>Trip No.</th>
+										<th>Type</th>
+										<!--TODO Don't Remove @Atul <th>Advance Type</th>-->
+										<th>Person</th>
+										<th>Date</th>
+										<th>Amount</th>
+										<th ng-if="$configs.tripSettlement.settleLitreWise">Liter</th>
+										<!--<th>Rate</th>-->
+										<th>Created Date</th>
+										<th>Created By</th>
+										<th>Remark</th>
+										<th>Voucher Created</th>
+										<th></th>
+									</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="oSettle in vm.aSettle track by $index">
+											<td>{{oSettle.trip_no}}</td>
+											<td>{{oSettle.type}}</td>
+											<!--TODO Don't Remove @Atul <td>{{oSettle.advanceType}}</td>-->
+											<td>{{oSettle.person}}</td>
+											<td>{{oSettle.date | date:'dd-MM-yyyy'}}</td>
+											<td>{{oSettle.amount}}</td>
+											<td ng-if="$configs.tripSettlement.settleLitreWise">{{oSettle.diesel_info.litre || 'NA'}}</td>
+											<!--<td>{{oSettle.diesel_info.rate || 'NA'}}</td>-->
+											<td>{{oSettle.created_at | date:'dd-MM-yyyy'}}</td>
+											<td>{{$user.full_name}}</td>
+											<td>{{oSettle.remark}}</td>
+											<td></td>
+											<td>
+												<i class="zmdi zmdi-delete zmdi-hc-fw pointer" style="font-size: 16px"
+												   ng-click="vm.aSettle.splice($index,1);"></i>
+											</td>
+										</tr>
+									</tbody>
+									<tbody ng-repeat="oTrips in vm.aTrips track by $index">
+										<tr ng-repeat="oExpense in oTrips.trip_expenses track by $index"
+											class="pointer"
+											ng-class="{grn: vm.selectedSettle._id === oExpense._id}"
+											ng-click="vm.selectedSettle = oExpense; vm.selectedSettleTrip = oTrips">
+											<td>{{oExpense.trip_no}}</td>
+											<td>{{oExpense.type}}</td>
+											<!--TODO Don't Remove @Atul <td>{{oExpense.advanceType}}</td>-->
+											<td>{{oExpense.person}}</td>
+											<td>{{oExpense.date | date:'dd-MM-yyyy' || 'NA'}}</td>
+											<td>{{oExpense.amount}}</td>
+											<td ng-if="$configs.tripSettlement.settleLitreWise">{{oExpense.diesel_info.litre || 'NA'}}</td>
+											<!--<td>{{oExpense.diesel_info.rate || 'NA'}}</td>-->
+											<td>{{oExpense.created_at | date:'dd-MM-yyyy'}}</td>
+											<td>{{oExpense.user}}</td>
+											<td>{{oExpense.remark}}</td>
+											<td>{{oExpense.voucher ? 'Yes' : 'No'}}</td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	.fg-float .fg-label {
+		top: 0px;
+	}
+
+	.table thead tr th {
+		background: #62b6ff;
+	}
+
+	.detailList ul li {
+		width: 22%;
+	}
+
+	.tbl-sm thead tr th {
+		padding: 2px !important;
+		font-size: 10px;
+		color: #fff;
+		background: #2196f3;
+	}
+
+	.tbl-sm tbody tr td {
+		padding: 0 !important;
+		font-size: 9px;
+	}
+
+	.tbl-sm tbody tr td button {
+		font-size: 7px;
+		padding: 4px;
+	}
+
+	.bold {
+		font-weight: bold !important;
+	}
+
+	label {
+		font-weight: bold !important;
+		margin-top: 5px;
+	}
+
+	.col-md-12.form-group {
+		margin-bottom: 10px;
+	}
+
+	form.tab-form-demo .tab-pane {
+		margin: 20px 20px;
+	}
+
+	.nav-tabs > li.active {
+		background: #2196f5;
+	}
+
+	.nav-tabs > li.active > a {
+		color: #fff !important;
+	}
+
+	.r {
+		color: red;
+	}
+
+	.nav-tabs > li.active > a,
+	.nav-tabs > li.active > a:hover,
+	.nav-tabs > li.active > a:focus {
+		border: 1px solid #2196f5;
+	}
+
+	.list_border_background {
+		border: 2px solid blue !important;
+		background: #47d6c9;
+	}
+
+	#settlementForm form[name="tableForm"] {
+		height: auto !important;
+	}
+
+</style>

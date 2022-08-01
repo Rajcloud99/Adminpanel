@@ -1,0 +1,123 @@
+<form name="VehicleProfile">
+	<div class="">
+
+		<div class="modal-footer">
+			<button ng-hide="selectedTrip.isCancelled" class="btn btn-success waves-effect" ng-click="addRemark(selectedTrip)">Add Remark</button>
+			<button ng-hide="selectedTrip.isCancelled" class="btn btn-success waves-effect" ng-click="addMoreGR(selectedTrip)">add more gr</button>
+			<button ng-if="$role['Trip']['Admin Edit'] && !selectedTrip.isCancelled && !selectedTrip.payments.length"
+					class="btn btn-success waves-effect"
+					ng-click="updateStatus(selectedTrip)">Update Status
+			</button>
+			<button ng-if="$role['Trip']['Vehicle Edit'] && !selectedTrip.isCancelled"
+					class="btn btn-success waves-effect"
+					ng-click="updateVehicle(selectedTrip)">Update Vehicle
+			</button>
+			<button ng-if="$role['Trip']['EwayBill Edit'] && !selectedTrip.isCancelled && selectedTrip.category != 'Empty'"
+					class="btn btn-success waves-effect"
+					ng-click="updateEwayBill(selectedTrip)">Update EwayBill Date
+			</button>
+			<!--<button ng-hide="isCancelled" class="btn btn-success waves-effect" ng-click="askPayment(selectedTrip)">Ask Payment</button>-->
+			<button ng-hide="selectedTrip.isCancelled" class="btn btn-success waves-effect" ng-click="transShipment(selectedTrip)">Trip transShipment</button>
+			<button ng-hide="selectedTrip.isCancelled || selectedTrip.ownershipType != 'Market'" class="btn btn-success waves-effect" ng-click="vendorDealPopUp(selectedTrip)" ng-if="$role['Trip Performance']['Vendor Deal']">Vendor Deal</button>
+			 <button ng-hide="!selectedTrip.start_date || selectedTrip.isCancelled || selectedTrip.payments.length || selectedTrip.advSettled.isCompletelySettled" class="btn btn-success waves-effect" ng-click="changeDriver(selectedTrip)">Change Driver</button>
+			<button ng-hide="selectedTrip.isCancelled || selectedTrip.payments.length || $configs.trips.updateRoute" class="btn btn-success waves-effect" ng-click="routeUpdate(selectedTrip)">Change Route</button>
+                  <!--for MMP-->
+			<button ng-hide="selectedTrip.isCancelled || selectedTrip.payments.length || !$configs.trips.updateRoute" class="btn btn-success waves-effect" ng-click="updateTripRoute(selectedTrip)">Change Route</button>
+			<button ng-hide="selectedTrip.isCancelled || selectedTrip.status === 'Trip ended'"
+					class="btn btn-success waves-effect"
+					ng-click="myTripUpdate(selectedTrip, aStatusChange[aStatusChange.indexOf(selectedTrip.status)+1])">
+				{{aStatusChange[aStatusChange.indexOf(selectedTrip.status)+1]}}
+			</button>
+			<button ng-click="addIMDs(selectedTrip)" class="btn btn-success waves-effect">
+				Add Imds
+			</button>
+			<button ng-if="$role['Trip']['Trip Cancel']" ng-disabled="selectedTrip.vendorDeal.acknowledge.status" ng-hide="selectedTrip.isCancelled || selectedTrip.payments.length" class="btn btn-danger waves-effect" ng-click="cancelTrip(selectedTrip)">Cancel Trip</button>
+			<button ng-if="$role['Trip']['Trip Playback']"  class="btn btn-success waves-effect" ng-show=" selectedTrip.start_date && (selectedTrip.vehicle && selectedTrip.vehicle.device_imei) || ( selectedTrip.device && selectedTrip.device.imei )" ng-click="playbackTrip(selectedTrip)">PLAYBACK</button>
+			<button ng-if="$role['Trip']['Trip Itinerary']" class="btn btn-success waves-effect" ng-show=" selectedTrip.start_date && (selectedTrip.vehicle && selectedTrip.vehicle.device_imei) || ( selectedTrip.device && selectedTrip.device.imei )" ng-click="itineraryTrip(selectedTrip)">ITINERARY</button>
+			<button ng-if="$role['Trip']['Trip Analytics']" class="btn btn-success waves-effect" ng-show=" selectedTrip.start_date && (selectedTrip.vehicle && selectedTrip.vehicle.device_imei) || ( selectedTrip.device && selectedTrip.device.imei )" ng-click="analyticsTrip(selectedTrip)">ANALYTICS</button>
+		</div>
+		<hr>
+		<h4 class="pull-left">GR Status</h4>
+		<div class="col-md-12">
+			<div class="detailsList">
+				<div class="" style="overflow-y: auto; max-height: 500px;">
+					<table class="table table-bordered unresponsive">
+						<thead>
+						<tr>
+							<th>Gr Status</th>
+							<th>Gr No.</th>
+							<th>Gr Date</th>
+<!--							<th>Gr Type</th>-->
+							<th>Customer Name</th>
+							<!--<th>Branch</th>
+							<th>Bookings Number</th>
+							<th>Weight(Tonnes)</th>
+							-->
+							<th>Last Updated</th>
+							<th>Update Status</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr
+								ng-repeat="oGr in selectedTrip.gr"
+								class="pointer selectItem">
+							<td>{{oGr.status || 'GR not done'}}</td>
+							<td>{{oGr.grNumber}}</td>
+							<td>{{oGr.grDate | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+<!--							<td>{{oGr.gr_type}}</td>-->
+							<td>{{oGr.customer.name || 'NA'}}</td>
+							<!--<td>{{oGr.booking.branch_id.name || 'NA'}}</td>
+							<td>{{oGr.booking.booking_no}}</td>
+							<td>{{oGr.booking.total_weight || 'NA'}}</td>
+							-->
+							<td>{{oGr.last_modified_at | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+							<td>
+								<a href="" ng-hide="selectedTrip.status=='Trip not started'" uib-tooltip="status update" ng-click="myTripGrUpdate(selectedTrip, oGr, $index)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>&nbsp;&nbsp;
+								<a href="" ng-hide="selectedTrip.status=='Trip not started'" uib-tooltip="Refresh" ng-click="getTrip(selectedTrip._id)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-refresh"></span>
+								</a>
+							</td>
+						</tr>
+						</tbody>
+					</table>
+					<div class="pagi" ng-show="total_pages>1">
+						<pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+									last-text="&raquo;"></pagination>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<br>
+		<h4>Trip Status History</h4>
+		<div class="col-md-12">
+			<div class="detailsList">
+				<div class="" style="overflow-y: auto; max-height: 500px;">
+					<table class="table table-bordered unresponsive">
+						<thead>
+						<tr>
+							<th>Trip Status</th>
+							<th>Remark</th>
+							<th>Date</th>
+							<th>System Date</th>
+							<th>Update By</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="oStatus in tripHistory | orderBy: 'date'" class="pointer selectItem">
+							<td>{{oStatus.status || 'NA'}}</td>
+							<td>{{oStatus.remark || 'NA'}}</td>
+							<td>{{oStatus.date | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+							<td>{{oStatus.systemDate | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</td>
+							<td>{{oStatus.user_full_name || 'NA'}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</form>

@@ -1,0 +1,451 @@
+<form novalidate name="allocate" autocomplete="off">
+		<div class="row col-md-12" style="margin: 5px">
+
+			<div class="col-sm-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-10 control-label">Branch:<span class="req_r">*</span></label>
+					<div class="col-sm-10">
+						<div class="ng-scope sear chosen-row-1">
+							<input type="text" class="form-control" placeholder="Search  Search..."
+								ng-init="formDataSelected.branch = aVehicleSelected[0].gr[0].branch_id"
+								ng-model="formDataSelected.branch" typeahead-wait-ms="10" name="Branch"
+								typeahead="item as item.name for item in getAllBranch($viewValue)|limitTo:6" required>
+							<i class="lvh-search-close" ng-click="formDataSelected.branch=null;">×</i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--<div class="col-sm-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Route: <span style="color: red;">*</span></label>
+					<div class="col-sm-8">
+						<div class="">
+							<select chosen placeholder="Route"
+									class="form-control"
+									ng-model="formDataSelected.route"
+									ng-options="item._id as item.name for item in selectedBookingInfo.route"
+									style="line-height: 33px;"
+									required>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>-->
+			<div class="col-sm-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-10 control-label">Loading Manager:</label>
+					<div class="col-sm-10">
+
+						<select chosen class="form-control" placeholder="Loading Manager"
+							ng-model="formDataSelected.loading_babu"
+							ng-options="item._id as item.full_name for item in aLoadingBabus" style="line-height:33px;"
+							required>
+						</select>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-10 control-label">Trip Manager:</label>
+					<div class="col-sm-10">
+
+							<select chosen placeholder="Manager" class="form-control"
+								ng-model="formDataSelected.trip_manager"
+								ng-options="item._id as item.full_name for item in aUsers" style="line-height: 33px;"
+								required>
+							</select>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-12 control-label">Allocation Date & Time<span style="color: red;">*</span>:</label>
+					<div class="col-sm-5">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')" type="text"
+									class="form-control" uib-datepicker-popup="{{DatePicker.formats[0]}}" show-weeks="false"
+									ng-model="formDataSelected.allocation_date" is-open="opened2"
+									datepicker-options="DatePicker.dateSettings" close-text="Close" max-date="dt"
+									placeholder="Allocation date" style="padding: 0px 4px; height: 34px;" required>
+							</div>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-default m-t-0 f12"
+									ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+					</div>
+
+
+					<label class="col-sm-1 control-label">HH</label>
+					<div class="col-sm-2">
+						<div class="select">
+							<select ng-model="time.hourSel1" ng-options="sAlert as sAlert for sAlert in time.aHours"
+								class="form-control" ng-change="changeTime1(time.hourSel1)">
+							</select>
+						</div>
+					</div>
+					<label style="margin-left: 2px;" class="col-sm-1 control-label">MM</label>
+					<div class="col-sm-2">
+						<div class="select">
+							<select ng-model="time.minuteSel1" ng-options="sAlert as sAlert for sAlert in time.aMinutes"
+								class="form-control" ng-change="changeTime2(time.minuteSel1)">
+							</select>
+						</div>
+					</div>
+
+
+				</div>
+
+			</div>
+
+		</div>
+		<div class="clearfix"></div>
+		<br>
+		<div class="row col-md-12" style="margin: 5px">
+			<div class="col-md-4">
+				<b>Trip Start : {{(aVehicleSelected[0].trip_start | date:'dd-MM-yyyy \'at\' HH:mm:ss') || ''}}</b>
+			</div>
+			<div class="col-md-4">
+				<b>Trip End : {{(aVehicleSelected[0].trip_end | date:'dd-MM-yyyy \'at\' HH:mm:ss') || ''}}</b>
+			</div>
+		</div>
+
+		<div class="clearfix"></div>
+		<br>
+		<div class="row col-md-12" style="margin: 5px">
+			<div class="col-md-12" ng-repeat="veh in aVehicleSelected">
+				<div class="card" style="border: 1px solid #ddd">
+
+						<div class="col-md-4">
+							{{veh.vehicle_reg_no}}&nbsp;&nbsp;
+							<span ng-show="veh.driver_name">Driver : {{veh.driver_name}}<span
+									ng-show="veh.driver_contact_no">({{veh.driver_contact_no}})</span></span>&nbsp;&nbsp;
+							<span>Capacity: {{veh.capacity_tonne || 0}}</span>&nbsp;&nbsp;
+						</div>
+						<div class="col-md-2" ng-if="veh.gpsTripConf">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label"><b>{{veh.gpsTripConf[0].label}}:</b></label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="text" placeholder="{{veh.gpsTripConf[0].label}}"
+											ng-model="veh.ctrip" name="{{veh.gpsTripConf[0].label}}"
+											ng-model-options="{ updateOn: 'blur' }" class="form-control">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2" ng-if="veh.gpsTripConf">
+							<div class="form-group m-b-0">
+								<label class="col-sm-5 control-label"><b>{{veh.gpsTripConf[1].label}}:</b></label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="text" placeholder="{{veh.gpsTripConf[1].label}}"
+											ng-model="veh.corder" name="{{veh.gpsTripConf[1].label}}"
+											ng-model-options="{ updateOn: 'blur' }" class="form-control">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3" ng-if="!($configs.booking.showRoute || $configs.booking.showGoogleRoute)">
+							<div class="form-group m-b-0" ng-init="setRouteForVehicle(veh)">
+								<label class="col-sm-5 control-label">Route <span style="color: red;">*</span>:</label>
+								<div class="col-sm-7">
+									<div class="" ng-if="!$configs.vehAlloc.skipBooking">
+										<select chosen placeholder="Manager" class="form-control" ng-model="veh.route"
+											ng-options="item as item.name for item in veh.aGrRoute"
+											ng-change="veh.route_name = veh.route.name" style="line-height: 33px;"
+											required>
+										</select>
+									</div>
+									<div class="lvh-search ng-scope sear chosen-row-1"
+										ng-if="$configs.vehAlloc.skipBooking">
+										<input type="text" placeholder="Route Search..." ng-model="veh.route"
+											class="lvhs-input" typeahead-wait-ms="10"
+											typeahead="item as item.name for item in aRoute | filter:$viewValue"
+											ng-change="getRoute(veh.route)" class="form-control"
+											typeahead-on-select="onSelect($item, veh)">
+										<i class="lvh-search-close" ng-click="veh.route='';">×</i>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-8"
+							ng-if="($configs.booking.showRoute) && (tripMemoBookType === 'skipBooking')">
+							<div class="form-group col-md-4">
+								<label class="col-sm-4 control-label">Loading Point :<span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<input type="text" placeholder="Source Search..." ng-model="formDataSelected.ld"
+										class="form-control" typeahead-wait-ms="10"
+										typeahead="item as item.c + ' ' + '(' + item.d + ')' + ' (' + item.sf + ')' for item in getSources($viewValue) | limitTo: 10"
+										class="form-control" typeahead-on-select="onSelectSource($item, $model, $label)"
+										name="Loading Point" required>
+									<i ng-if="(editBooking|typeOfFilter:'undefined') ? true : (!!editBooking)"
+										class="lvh-search-close" ng-click="formDataSelected.ld=''">×</i>
+								</div>
+							</div>
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-4 control-label">Unloading Point :<span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<input type="text" placeholder="Dest Search..." ng-model="formDataSelected.uld"
+										class="form-control" typeahead-wait-ms="10"
+										typeahead="item as item.c + ' ' + '(' + item.d + ')' + ' (' + item.sf + ')'  for item in getUnloadingPoint($viewValue) | limitTo: 10"
+										class="form-control" typeahead-on-select="onSelectDest($item, $model, $label)"
+										name="Unloading Point" required>
+									<i ng-if="(editBooking|typeOfFilter:'undefined') ? true : (!!editBooking)"
+										class="lvh-search-close" ng-click="formDataSelected.uld=''">×</i>
+									<span class="error" ng-if="bookingForm['Unloading Point'].$error.required
+									  && (bookingForm['Unloading Point'].$touched
+									  || bookingForm.$submitted)">
+										This Field is Mandatory</span>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-md-8"
+							ng-if="($configs.booking.showGoogleRoute) && (tripMemoBookType === 'skipBooking')">
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-4 control-label">Loading Point :<span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<input type="text" placeholder="Source Search..." ng-model="formDataSelected.ld"
+										on-select="onSelectSource($item)" class="form-control" place-autocomplete
+										ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+										name="Loading Point" required>
+									<i ng-if="(editBooking|typeOfFilter:'undefined') ? true : (!!editBooking)"
+										class="lvh-search-close" ng-click="formDataSelected.ld=''">×</i>
+								</div>
+							</div>
+
+							<div class="form-group col-md-4">
+								<label class="col-sm-4 control-label">Unloading Point :<span
+										class="req_r">*</span></label>
+								<div class="col-sm-6">
+									<input type="text" placeholder="Dest Search..." ng-model="formDataSelected.uld"
+										place-autocomplete class="form-control" typeahead-wait-ms="10"
+										on-select="onSelectDest($item)"
+										ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+										name="Unloading Point" required>
+									<i ng-if="(editBooking|typeOfFilter:'undefined') ? true : (!!editBooking)"
+										class="lvh-search-close" ng-click="formDataSelected.uld=''">×</i>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-md-3"
+							ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute) && (tripMemoBookType === 'skipBooking')">
+							<label class="col-sm-3 control-label">Km:</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" placeholder="Enter Km"
+									ng-model="formDataSelected.rKm">
+							</div>
+						</div>
+
+						<div class="col-md-4"
+							ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute) && (tripMemoBookType === 'booking')">
+							<label class="col-sm-4 control-label">Route :<span class="req_r">*</span></label>
+							<input type="text" ng-disabled="true" ng-model="selBookData.rName">
+						</div>
+						<div class="col-md-4"
+							ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute) && (tripMemoBookType === 'booking') && selBookData.imd.length">
+							<label class="col-sm-4 control-label">Intermittent Point :<span
+									class="req_r">*</span></label>
+							<input type="text" ng-disabled="true" value="{{inMedRoute | mergeString:', '}}">
+						</div>
+						<div class="col-md-4"
+							ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute) && (tripMemoBookType === 'skipBooking')">
+							<label class="col-sm-4 control-label">Intermittent Point </label>
+							<div class="col-sm-6">
+								<input type="text" placeholder="Intermittent Search..." ng-model="formDataSelected.imp"
+									class="form-control" typeahead-wait-ms="10"
+									typeahead="item as item.c + ' ' + '(' + item.d + ')' + ' (' + item.s + ')' for item in getIntermediatePoint($viewValue) | limitTo:8"
+									class="form-control"
+									typeahead-on-select="onSelectIntermediate($item, $model, $label)">
+								<i class="lvh-search-close" ng-click="formDataSelected.imp=''">×</i>
+							</div>
+						</div>
+						<div class="col-md-4"
+							ng-if="((intermediateRoute.length) && ($configs.tripMemo && $configs.tripMemo.show))">
+							<span class="btn-lst" ng-repeat="select in intermediateRoute">
+								<button class="btn-xs" style="background: black; color: aliceblue;"> {{select.c}}
+									({{select.d}}) ({{select.s}})&nbsp;
+									<div ng-if="(editBooking|typeOfFilter:'undefined') ? true : (!!editBooking)"
+										ng-click="removeIntermediate(select,$index)"> X </div>
+								</button>&nbsp;&nbsp;</span>
+						</div>
+						<div ng-if="$configs && $configs.booking">
+							<div ng-if="$configs.booking && $configs.booking.odometer">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Start Odometer</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="number" ng-model="formDataSelected.startOdo"
+													placeholder="Enter Start Reading" class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+<!--					 trip service type-->
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">Service Type: </label>
+							<div class="col-sm-6">
+								<div class="select">
+									<select class="form-control"
+											ng-init="veh.serviceTyp = aVehicleSelected[0].gr[0].sr || $configs.master.aServiceType[0] || $constants.serviceType[0]"
+											placeholder="Select Type"
+											ng-options="item as item for item in ($configs.master.aServiceType || $constants.serviceType)"
+											ng-model="veh.serviceTyp"
+											name="Service Type">
+										<option value="" disabled selected style="display: none;">
+											Select Service Type
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+						<span style="float: right;margin-right: 5px;">
+							<span ng-if="$configs.vehAlloc.skipBooking" class="pointer" ng-click="addMoreGr($index)"
+								uib-tooltip="Add Gr">
+								<i style="font-size:20px" class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</span>
+							<span class="pointer" ng-click="aVehicleSelected.splice($index, 1)"
+								uib-tooltip="Remove Vehicle">
+								<i style="font-size:20px" class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</span>
+						</span>
+						<span style="float: right;margin-right: 5px;" ng-hide="veh.driver_name">
+							<div class="checkbox" style="margin: 0px;">
+								<label>
+									<input type="checkbox" ng-model="veh.unknown_driver"
+										ng-change="setUnknownDriver(veh, $index)" value="">
+									<i class="input-helper"></i>
+									Unknown Driver
+								</label>
+							</div>
+						</span>
+						<span ng-show="selectedVendorInfo && formDataSelected.vehicle_type === 'Market'"
+							style="float: right;margin-right: 5px;">
+							<a ng-click="vendorDealPopUp(veh, $index)"
+								ng-class="{green : veh.vendorDeal.doneDeal}">Vendor Deal</a>
+						</span>
+
+					<div>
+						<table class="table table-bordered unresponsive">
+							<thead>
+								<tr>
+									<th ng-if="$configs.vehAlloc.skipBooking">#</th>
+									<th>B. No.</th>
+									<th>Customer</th>
+									<th>Weight</th>
+									<th ng-if="!($configs.booking.showRoute || $configs.booking.showGoogleRoute)">Route
+									</th>
+									<th ng-if="$role['Vehicle Allocation']['GR'] && $configs.vehAlloc.grDetailView || (($configs.tripMemo && $configs.tripMemo.show)
+									? (tripMemoBookType === 'skipBooking') : true)">Gr Info</th>
+									<th ng-if="(($configs.tripMemo && $configs.tripMemo.show) && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
+										ng-click="openTripMemoModal(oSelBookVeh)">Trip Memo</th>
+									<th ng-if="(($configs.brokerMemo && $configs.brokerMemo.show) && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
+										ng-click="openBrokerMemoModal(oSelBookVeh)">Broker Memo</th>
+									<th ng-show="veh.veh_type_name=='20 Feet' || veh.veh_type_name=='40 Feet'">Container
+									</th>
+									<th ng-if="veh.isShowShipmentNo">Shipment No</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr data-ng-repeat="oSelBookVeh in veh.gr" class="pointer selectItem"
+									ng-click="selectBookVeh(oSelBookVeh, $index)">
+									<td ng-if="$configs.vehAlloc.skipBooking">
+										<span class="pointer" ng-click="veh.gr.splice($index, 1);"
+											uib-tooltip="Remove"><i class="zmdi zmdi-delete zmdi-hc-fw"></i></span>
+									</td>
+									<td>{{oSelBookVeh.booking_no}}</td>
+									<td>{{oSelBookVeh.customer.name}}</td>
+									<td>
+										<input type="number"
+											onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											onwheel="return false"
+											onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+											placeholder="weight" step="0.001" min="0" name="weight" class="form-control"
+											ng-model="oSelBookVeh.weight" ng-change="weightValidaton(veh,$index)">
+									</td>
+									<td ng-if="!($configs.booking.showRoute || $configs.booking.showGoogleRoute)">
+										<div class="col-md-12">
+											<div class="form-group m-b-0">
+												<div class="col-sm-12">
+													<div class="ng-scope sear chosen-row-3">
+														<input type="text" placeholder="Search Route..." name="Route"
+															ng-model="oSelBookVeh.route"
+															ng-change="getRoutes(oSelBookVeh.route)"
+															typeahead-wait-ms="10"
+															typeahead="item as item.name for item in aRoute | limitTo:6"
+															class="form-control">
+														<i class="lvh-search-close"
+															ng-click="oSelBookVeh.route=null; aVendor=null; getAllTrip(false,true);">×</i>
+													</div>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td ng-if="$role['Vehicle Allocation']['GR'] && $configs.vehAlloc.grDetailView || (($configs.tripMemo && $configs.tripMemo.show)
+									? (tripMemoBookType === 'skipBooking') : true)">
+										<a ng-click="grDetailPopup(veh, $index)"> &nbsp;&nbsp; Gr Details</a>
+									</td>
+									<td ng-if="(($configs.tripMemo && $configs.tripMemo.show) && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
+										ng-click="openTripMemoModal(oSelBookVeh)">
+										<a>Trip Memo Info </a>
+									</td>
+
+									<td ng-if="(($configs.brokerMemo && $configs.brokerMemo.show) && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
+										ng-click="openBrokerMemoModal(oSelBookVeh)">
+										<a>Broker Memo Info </a>
+									</td>
+
+									<td ng-show="veh.veh_type_name=='20 Feet' || veh.veh_type_name=='40 Feet'">
+										<span ng-repeat="c in oSelBookVeh.container">{{c.number}},</span>
+									</td>
+									<td
+										ng-if="oSelBookVeh.customer.shipperEnterprise && oSelBookVeh.customer.shipperOrganization">
+										<input type="text" class="form-control" is-shipment-num-valid="allocate"
+											customer="oSelBookVeh.customer" ng-model="oSelBookVeh.shipmentNo"
+											placeholder="Shipment No" name="Shipment No">
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+	</div>
+</form>
+
+
+<div class="form-group">
+	<div class="col-xs-12 text-right">
+		<button ng-disabled="disableSubmit || !(formDataSelected.allocation_date)" type="submit"
+			class="btn btn-success">Allocate
+			Vehicle
+		</button>
+	</div>
+</div>
+
+
+<style>
+	.chosen-row-3 {
+		z-index: auto;
+	}
+</style>

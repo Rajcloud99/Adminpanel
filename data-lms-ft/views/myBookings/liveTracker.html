@@ -1,0 +1,135 @@
+<div class="container">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 575px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix" style="padding: 5px;">
+          <div class="clearfix"></div>
+        </div>
+
+        <div class="lv-body">
+          <div class="col-md-12" style="min-height: 272px;">
+
+            <form name="liveTrackForm" ng-submit="liveTrip()" novalidate>
+              <div class="col-sm-1">
+                <div class="fg-line">
+                  <input type="text"
+                         ng-model="filterObj.trip_no"
+                         name="trip_no"
+                         class="form-control input-sm filter-input-height"
+                         placeholder="Trip No"
+                         ng-model-options="{ updateOn: 'blur' }"
+                  >
+                </div>
+              </div>
+              <div class="col-sm-1">
+                <div class="fg-line">
+                  <input type="text"
+                         ng-model="filterObj.vehicle_no"
+                         name="vehicle_no"
+                         class="form-control input-sm filter-input-height"
+                         placeholder="Vehicle No"
+                         ng-model-options="{ updateOn: 'blur' }"
+                  >
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                  <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+                           type="text"
+                           class="form-control"
+                           uib-datepicker-popup="{{DatePicker.formats[0]}}"
+                           show-weeks="false"
+                           ng-model="filterObj.startDate"
+                           is-open="opened1"
+                           datepicker-options="DatePicker.dateSettings"
+                           close-text="Close"
+                           placeholder="Start Date"
+                           name="Start Date"
+                           style="padding: 0px 4px;height: 34px;"
+                    />
+                  </div>
+                  <span class="input-group-btn">
+                    <button
+                        type="button"
+                        class="btn btn-default m-t-0 f12"
+                        ng-click="DatePicker.openDatePicker(this, $event, 'opened1')">
+                      <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                  <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+                           type="text"
+                           class="form-control"
+                           uib-datepicker-popup="{{DatePicker.formats[0]}}"
+                           show-weeks="false"
+                           ng-model="filterObj.endDate"
+                           is-open="opened2"
+                           datepicker-options="DatePicker.dateSettings"
+                           close-text="Close"
+                           placeholder="End Date"
+                           name="End Date"
+                           style="padding: 0px 4px;height: 34px;"
+                    />
+                  </div>
+                  <span class="input-group-btn">
+                    <button
+                        type="button"
+                        class="btn btn-default m-t-0 f12"
+                        ng-click="DatePicker.openDatePicker(this, $event, 'opened2')">
+                      <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="fg-line">
+                  <button
+                      type="submit"
+                      class="btn btn-success waves-effect"
+                  >
+                    Search
+                  </button>
+                  <button
+                    type="button"
+                    class="btn"
+                    ng-click="redirectForDetailPage()"
+                    style="display: inline-block"
+                    ng-disabled="!sT"
+                  >
+                    <i class="zmdi zmdi-assignment zmdi-hc-fw"></i>
+                    Detail View
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <div class="clearfix"></div>
+
+            <div
+                ja-table
+                table-body="tableBody"
+                table-head="tableHead"
+                table-height='500px'
+                table-load="liveTrip(true)"
+                table-order-by-model='orderBy'
+                table-order-by-event='liveTrip()'
+                table-column-setting="columnSetting"
+                table-selectable='"true"'
+                table-api='tableApi'
+                table-selectable-model="selectedVehicle"
+                table-row-click-event="onVehicleSelect()"
+            >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

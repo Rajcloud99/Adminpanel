@@ -1,0 +1,636 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Map View</b></span>
+		</div>
+		<div class="pull-right">
+			<button class="btn btn-primary p-t-0 p-b-0 m-t-5"
+					style="margin-bottom: 3px;  font-size: 16px"
+					ng-click="mvcVm.downloadCsv(mvcVm.aCopyTrSheetDevice)"
+			>
+				<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+			</button>
+			&nbsp;&nbsp;
+			<button class="btn btn-primary p-t-0 p-b-0 m-t-5"
+					style="margin-bottom: 3px;  font-size: 16px"
+					ng-click="mvcVm.tableView = mvcVm.tableView ? false : true;"
+			>
+				<i class="zmdi zmdi-view-column zmdi-hc-fw"></i>
+			</button>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0 m-t-10 m-l-10 m-r-0" style="width:98%;">
+	<div class="row" style="margin: 7px">
+		<form name="mapViewForm"
+			  action="void:javascript(0)"
+			  novalidate>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="mvcVm.oFilter.vehicle_reg_no"
+						   name="vehicle Reg"
+						   class="form-control input-sm"
+						   ng-change="mvcVm.triggerDelay()"
+						   placeholder="Vehicle No.">
+				</div>
+			</div>
+			<div class="col-md-7">
+				<!--<div class="col-md-3">-->
+					<!--<div class="fg-line form-group m-b-0">-->
+						<!--<select chosen-->
+								<!--class="form-control"-->
+								<!--ng-model="mvcVm.oFilter.grStatus"-->
+								<!--ng-options="item as item for item in mvcVm.aGrStatus"-->
+								<!--ng-change="mvcVm.applyFilter()"-->
+								<!--name="Vehicle Delay">-->
+							<!--<option value="" selected>Select Gr Status</option>-->
+						<!--</select>-->
+					<!--</div>-->
+				<!--</div>-->
+				<div class="col-md-4">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="mvcVm.oFilter.status"
+								ng-options="status as (status+' ('+count+')') for (status, count) in mvcVm.tripStatusCount"
+								ng-change="mvcVm.applyFilter()"
+								name="Vehicle Status">
+							<option value="" selected>All Trip Status</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="mvcVm.oFilter.delay"
+								ng-options="status as (status+' ('+count+')') for (status, count) in mvcVm.timeStatusCount"
+								ng-change="mvcVm.applyFilter()"
+								name="Vehicle Delay">
+							<option value="" selected>All Time Status</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="mvcVm.oFilter.vehicleStatus"
+								ng-options="status as (status+' ('+count+')') for (status, count) in mvcVm.availabilityStatusCount"
+								ng-change="mvcVm.applyFilter()"
+								name="Vehicle Delay">
+							<option value="" selected>Availability Status</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							class="form-control"
+							ng-model="mvcVm.oFilter.dateBy"
+							ng-options="item.value as item.name for item in mvcVm.aDateBy"
+							ng-change="mvcVm.applyFilter()"
+							name="Vehicle Delay">
+						<option value="" selected disabled>Date By</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3	 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+						<input ng-click="mvcVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{mvcVm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="mvcVm.DatePicker.newDate"
+							   ng-model="mvcVm.oFilter.commomDate"
+							   ng-change="mvcVm.applyFilter()"
+							   is-open="opened3"
+							   datepicker-options="mvcVm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="Date"
+							   style="padding: 0px 4px;height: 34px;" />
+					</div>
+					<span class="input-group-btn">
+						<button
+								type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="mvcVm.DatePicker.openDatePicker(this, $event, 'opened3')">
+						  <i class="glyphicon glyphicon-calendar"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							multiple
+							placeholder-text-multiple="'Select Segments'"
+							class="form-control"
+							ng-model="mvcVm.oFilter.segment_type"
+							ng-options="item as item for item in (($user.segment_type.length && $user.segment_type) || $configs.master.aSegmentType || $constants.aSegmentType)"
+							ng-change="mvcVm.applyFilter()"
+							name="Segment">
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							multiple
+							placeholder-text-multiple="'Select Fleet'"
+							class="form-control"
+							ng-model="mvcVm.oFilter.owner_group"
+							ng-options="item.name as item.name for item in mvcVm.aOwners"
+							ng-change="mvcVm.applyFilter()"
+							name="Fleet Group">
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2" ng-hide="true">
+				<div class="select">
+					<select class="form-control" ng-model="mvcVm.sortBy">
+						<option value="" selected>Sort by</option>
+						<option value="vehicle.gr.consignor">Consignor</option>
+						<option value="vehicle.status">Vehicle status</option>
+						<option value="vehicle.segment_type">Segment</option>
+						<option value="vehicle.route_name">Route</option>
+						<option value="distance_travelled">Km</option>
+						<option value="vehicle.gpsData.datetime">Last known date</option>
+						<option value="vehicle.gr.vehicle_arrived_for_loading_status.date">Vehicle Arr for Unloading</option>
+					</select>
+				</div>
+			</div>
+
+
+			<div class="col-md-2">
+				<div class="lvh-search ng-scope sear chosen-row-2">
+					<input type="text"
+						   placeholder="Search Location"
+						   ng-model="mvcVm.location"
+						   class="form-control lvhs-input ja"
+						   typeahead-wait-ms="10"
+						   typeahead="suggestion as suggestion.formatted_address for suggestion in mvcVm.cities($viewValue)"
+						   typeahead-on-select="mvcVm.onSelect($item, $model, $label)">
+					<i class="lvh-search-close" ng-click="mvcVm.clearLocation(); mvcVm.location={formatted_address:null}; mvcVm.applyFilter();">×</i>
+				</div>
+			</div>
+			<div class="col-md-1 m-t-5" ng-init="mvcVm.radius=20">
+					<div class="fg-line" >
+						<input
+								type="number"
+								class="form-control"
+								placeholder="Radius"
+								min="0"
+								ng-model="mvcVm.radius"
+								ng-change="mvcVm.applyFilter()">
+					</div>
+			</div>
+			<!-- search filter-->
+			<div class="col-md-2">
+				<div class="fg-line form-group m-b-0">
+					<input type="text" ng-model="mvcVm.oFilter.customer" name="customer" class="form-control input-sm"
+						ng-change="mvcVm.triggerDelay()" placeholder="Customer  search... ">
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="col-md-10">
+					<select
+					  class="fg-line form-control"
+					  ng-model="mvcVm.live_trip_group_by"
+					  ng-hide="true"
+					  name="Group By"
+					>
+						<option value="" selected disabled>Grouped Report</option>
+						<option value="driver">Driver</option>
+						<option value="segment">Segment</option>
+						<option value="consignor">Consignor</option>
+						<option value="consignee">Consignee</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<button
+						class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-t-5 m-r-5 app_tile"
+						style="font-size: 16px"
+						type="button"
+						ng-hide="true"
+						ng-click="mvcVm.downloadLiveTripReport(mvcVm.live_trip_group_by)">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			</div>
+			<div class="pull-right" style="line-height: 35px;">
+
+				<b>Total Vehicle :</b> {{mvcVm.aCopyTrSheetDevice.length}}&nbsp;&nbsp;
+
+				<span class="glyphicon glyphicon-check g"></span>&nbsp;<b>Total Vehicle With GPS :</b> {{mvcVm.tripStatusCount.running+mvcVm.tripStatusCount.stopped+mvcVm.tripStatusCount.offline}}
+				&nbsp;&nbsp;
+				<span class="glyphicon glyphicon-map-marker g"></span>&nbsp;<b>Running :</b> {{mvcVm.tripStatusCount.running}}
+				&nbsp;&nbsp;
+				<span class="glyphicon glyphicon-map-marker r"></span>&nbsp;<b>Stopped :</b> {{mvcVm.tripStatusCount.stopped}}
+				&nbsp;&nbsp;
+				<span class="glyphicon glyphicon-map-marker"></span>&nbsp;<b>Offline :</b> {{mvcVm.tripStatusCount.offline}}
+				&nbsp;&nbsp;&nbsp;
+				<!--<b>Inactive :</b> {{mvcVm.inactive}}-->
+				&nbsp;&nbsp;&nbsp;
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="card m-b-0 m-t-10 m-l-10 m-r-0"
+	 ng-hide="mvcVm.tableView"
+	 style="background: none;box-shadow: none;width:98%;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="ms-menu"
+		 ja-lazy-load-repeat-name="ACopyTrSheetDevice"
+		 ja-lazy-load-repeat="{{mvcVm.aCopyTrSheetDevice || []}}"
+		 style="width:30%;height: 600px;padding-bottom: 60px; overflow: scroll" >
+		<div class="col-md-12 card m-5 p-5" style="width: calc(100% - 10px);"
+			 ng-class="{bgSelected: $index === selectedIndex}"
+			 ng-repeat="vehicle in jaArrACopyTrSheetDevice">
+			<div class="col-md-12"
+				 ng-dblclick="mvcVm.showDetailVehicleView(vehicle, $index);">
+				<div class="pointer"
+					 ng-click="mvcVm.focusOnMap(vehicle)">
+					<div class="pull-right capitalize">
+						<span>
+							<i class="glyphicon glyphicon-plus" ng-click="mvcVm.showTripDetailPopup(vehicle)"></i>
+						</span>&nbsp;&nbsp;
+						<span>
+							<i class="glyphicon glyphicon-plus-sign p-l-5" ng-click="mvcVm.vehicleDetailView(vehicle)"></i>
+						</span>&nbsp;&nbsp;
+						<span>
+							<i class="glyphicon glyphicon-list-alt p-l-5" ng-click="mvcVm.detailView(vehicle)"></i>
+						</span>&nbsp;&nbsp;
+						<span ng-class="mvcVm.getColor(vehicle.vehicle.gpsData.status)">
+							{{vehicle.vehicle.gpsData.status}}
+							<i class="glyphicon glyphicon-road"></i>
+						</span>
+						<span ng-if="vehicle.vehicle.trip._id">
+							 {{mvcVm.ACopyTrSheetDevice}}
+							<i class="glyphicon glyphicon-edit p-l-5" ng-click="mvcVm.remarkUpdate(vehicle, 'Remark')"></i>
+						</span>
+						<span ng-if="vehicle.vehicle.trip._id && $role['Map View']['Update Mobile No']">
+							 {{mvcVm.ACopyTrSheetDevice}}
+							<i class="glyphicon glyphicon-pencil p-l-5" ng-click="mvcVm.remarkUpdate(vehicle, 'Owner_Mobile_No')"></i>
+						</span>
+						<a target="_blank"
+						   class="p-l-5"
+						   style="font-size: 18px"
+						   ng-href="{{'https://www.google.com/maps/place/'+vehicle.vehicle.gpsData.lat+','+vehicle.vehicle.gpsData.lng+'/data=!5m1!1e1'}}">
+							<i class="zmdi zmdi-traffic zmdi-hc-fw"></i>
+						</a>
+						<span postion-top="mvcVm.placeMarker(vehicle)"
+							  address="vehicle.vehicle.gpsData.address"
+							  ng-if="vehicle.vehicle.gpsData"
+							  class="glyphicon glyphicon-info-sign p-l-5">
+						</span>
+					</div>
+					<div class="fs-18"
+						 ng-class="mvcVm.getColor(vehicle.vehicle.gpsData.status)">
+						<b>{{vehicle.vehicle.vehicle_reg_no}}</b>
+						<span ng-if="vehicle.vehicle.gpsData.vendor_name"
+							style="font-size: small">
+							({{vehicle.vehicle.gpsData.vendor_name}})
+						</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div>
+					<h5>
+						Driver Mobile :	{{vehicle.vehicle.driver_contact_no || vehicle.vehicle.trip.driver.prim_contact_no ||  'NA'}},
+						Fleet: {{vehicle.vehicle.owner_group}}
+					</h5>
+				</div>
+				<h5>
+					<div>Status: {{vehicle.vehicle.status}}</div>
+				</h5>
+				<h5>
+					<div>Segment: {{vehicle.vehicle.segment_type}}</div>
+				</h5>
+				<h5>
+					<div>Vehicle Type: {{vehicle.vehicle.veh_type_name}}</div>
+				</h5>
+				<h5>
+					<div>Last Speed: {{(vehicle.vehicle.gpsData.speed | typeOfFilter: "number") ? (vehicle.vehicle.gpsData.speed + 'km/h') : 'NA'}}</div>
+					<div ng-if="vehicle.vehicle.gpsData.status !== 'running'">Halt Time: {{vehicle.vehicle.gpsData.status !== 'running'? vehicle.vehicle.gpsData.stoppage_time : '0 min'}}</div>
+					<div>Position Time: {{(vehicle.vehicle.gpsData.datetime | date:"dd-MMM-yy h:mma") || 'NA'}}</div>
+				</h5>
+				<div class="dif" ng-if="(vehicle.vehicle.gr.customer.name || vehicle.vehicle.gr.booking && vehicle.vehicle.gr.booking.customer.name)">
+					Customer	: &nbsp;<h4 style="color: #0000ff;">{{vehicle.vehicle.gr.customer.name || vehicle.vehicle.gr.booking && vehicle.vehicle.gr.booking.customer.name}}</h4>
+				</div>
+				<div class="dif" ng-if="(vehicle.vehicle.gr.consignor.name || vehicle.vehicle.gr.booking && vehicle.vehicle.gr.booking.consigner.name) && !$role['Map View']['Hide Fields']">
+					Consignor	: &nbsp;<h4 style="color: #0000ff;">{{vehicle.vehicle.gr.consignor.name || vehicle.vehicle.gr.booking && vehicle.vehicle.gr.booking.consigner.name}}</h4>
+				</div>
+				<div class="dif" ng-if="(vehicle.vehicle.gr.consignee.name || vehicle.vehicle.gr.booking && vehicle.vehicle.gr.booking.consignee.name) && !$role['Map View']['Hide Fields']">
+					Consignee	:  &nbsp;<h4 style="color: #0000ff;">{{vehicle.vehicle.gr.consignee.name || vehicle.vehicle.gr.booking && vehicle.vehicle.gr.booking.consignee.name}}</h4>
+				</div>
+				<div class="dif" ng-if="vehicle.vehicle.gr.loading_ended_status.date">
+					Loading End Time	:  &nbsp;<h4 style="color: #0000ff;">{{vehicle.vehicle.gr.loading_ended_status.date | date: "dd-MMMM-yy h:mma"}}</h4>
+				</div>
+				<div class="dif" ng-if="vehicle.vehicle.route_name">
+					Route 				:  &nbsp;<h4 style="color: #0000ff;">{{vehicle.vehicle.route_name +' ('+(vehicle.vehicle.rKm || (vehicle.vehicle.route && vehicle.vehicle.route.route_distance))+' km)' }}</h4></div>
+					<h4 style="color: #0000ff;" ng-if="vehicle.current_delay_in_ms">{{vehicle.t_status}}</h4>
+				<h5><div ng-if="vehicle.distance_travelled">
+					Trip KM Covered 	:  &nbsp;<b>{{vehicle.distance_travelled}}</b></div>
+				<div ng-if="vehicle.vehicle.route.route_distance - vehicle.distance_travelled">
+					Trip KM Remaining 	: <b style="color: #f49542;">
+					<!--{{'max'|NumberUtilFilter:(vehicle.vehicle.route.route_distance - vehicle.distance_travelled):0}}-->
+					{{ vehicle.vehicle.route.route_distance - vehicle.distance_travelled }}
+				</b></div>
+				</h5>
+				<div ng-if="vehicle.vehicle.trip && vehicle.vehicle.trip.tat_hr">
+					<b>TAT Hour  :  {{vehicle.vehicle.trip.tat_hr}}</b></div>
+				<div class="dif" ng-if="vehicle.current_delay_in_ms">
+					Expected ETA		:  &nbsp;<h4 style="color: #0000ff;">{{vehicle.expected_eta | date: "dd-MMMM-yy h:mma"}}</h4></div>
+				<h5>
+					<div ng-if="vehicle.current_eta">
+						Predicted ETA 		: <b>{{vehicle.current_eta | date : "dd-MM-yyyy h:mma"}}</b>
+					</div>
+					<div ng-if="vehicle.vehicle.gr && vehicle.vehicle.gr.vehicle_arrived_for_unloading_status">
+						Unloading Arrival  		: <b>{{vehicle.vehicle.gr.vehicle_arrived_for_unloading_status.date | date : "dd-MM-yyyy h:mma"}}</b>
+					</div>
+					<div>
+						Address 			: <b>{{vehicle.vehicle.gpsData.addr || vehicle.vehicle.gpsData.address || 'NA'}}</b>
+					</div>
+					<div ng-if="vehicle.vehicle.trip.rmk || (vehicle.vehicle.mTrack && vehicle.vehicle.mTrack.remarks)">
+						Remark 			: <b>{{vehicle.vehicle.trip.rmk || vehicle.vehicle.mTrack.remarks ||  'NA'}}</b>
+					</div>
+				</h5>
+
+			</div>
+		</div>
+		<div class="col-md-12 card m-5 p-5 text-center fs-18"
+			 ng-if="!mvcVm.aCopyTrSheetDevice.length"
+			 style="width: calc(100% - 10px);">
+			No Vehicle Found!
+		</div>
+	</div>
+	<div class="card" style="height: 600px;margin-left:30%;overflow: scroll">
+		<div style="position: relative; height: 100%">
+			<div ng-if="!showMap"
+				  style="height: 100%;"
+				  ui-view>
+			</div>
+			<div style="height: 100%;" ng-show="showMap">
+				<div class="card-body" id="mapViewTracking" style="width:100%; height: 100%; z-index: 1;"></div>
+
+				<div class="card-body absolutePosi zoomCtrls">
+					<div class="pointer icon-wrapper"
+						 style="border-bottom: 1px solid #80808038"
+						 ng-click="mvcVm.zoomIn()">
+						<i class="glyphicon glyphicon glyphicon-plus" ></i>
+					</div>
+					<div class="pointer icon-wrapper"
+						 ng-click="mvcVm.zoomOut()">
+						<i class="glyphicon glyphicon glyphicon-minus" ></i>
+					</div>
+				</div>
+			</div>
+			<div class="absolutePosi pointer icon-wrapper"
+				 ng-if="!showMap"
+				 ng-click="$parent.showMap=true; $parent.selectedIndex = null"
+				 style="right: 0px;top: 0px;z-index: 1;font-size: 24px;margin: 5px; padding: 0px">
+				<i class="zmdi zmdi-close-circle-o zmdi-hc-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0 m-t-0 m-l-10 m-r-0"
+	 style="margin-top: -20px !important; background: none;box-shadow: none; padding-bottom: 10px; width: 98%;"
+	 ng-if="mvcVm.tableView;">
+	<div class="card">
+		<div class="col-md-12 p-0"
+			 ja-lazy-load-repeat-name="ACopyTrSheetDeviceTable"
+			 ja-lazy-load-repeat="{{mvcVm.aCopyTrSheetDevice || []}}"
+			 style="overflow-x: scroll; max-height: 400px;">
+			<table class="table table-bordered unresponsive" ja-fix-head>
+				<thead>
+					<tr>
+						<th style="min-width: 70px; max-width:70px;" >Map</th>
+						<th style="min-width: 70px; max-width:70px;">Trip No.</th>
+						<th style="min-width: 120px; max-width:120px;">V. No.</th>
+						<th style="min-width: 80px; max-width:80px;">V. Status</th>
+						<th style="min-width: 120px; max-width:120px;">Consignor</th>
+						<th style="min-width: 80px; max-width:80px;">Segment</th>
+						<th style="min-width: 150px; max-width:150px;">Route</th>
+						<th style="min-width: 110px; max-width:110px;">Intermittent Point</th>
+						<th style="min-width: 70px; max-width:70px;">KM. covered</th>
+						<th style="min-width: 70px; max-width:70px;">KM. left</th>
+						<th style="min-width: 100px; max-width:100px;">Loading D&amp;T</th>
+						<!--<th>Unloading D&amp;T</th>-->
+						<th style="min-width: 80px; max-width:80px;">Status</th>
+						<!--<th>Trip Distance</th>-->
+						<th style="min-width: 80px; max-width:80px;">Location</th>
+						<th style="min-width: 110px; max-width:110px;">Last Known D&amp;T</th>
+						<th style="min-width: 80px; max-width:80px;">Acc. ETA</th>
+						<th style="min-width: 80px; max-width:80px;">Cur. ETA</th>
+						<!--<th>Vehicle Arrival - Loading</th>-->
+						<th style="min-width: 170px; max-width:170px;">Vehicle Arrival - Unloading</th>
+						<th style="min-width: 160px; max-width:160px;">Trip Start D&T</th>
+						<!--<th>Trip End D&T</th>-->
+						<th style="min-width: 90px; max-width:90px;">Fleet</th>
+						<th style="min-width: 120px; max-width:120px;">Remark</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="oVehicle in jaArrACopyTrSheetDeviceTable | orderBy:mvcVm.sortBy" class="pointer">
+						<td>
+							<span postion-top="mvcVm.placeMarker(oVehicle)"
+								  address="oVehicle.vehicle.gpsData.address"
+								  ng-if="oVehicle.vehicle.gpsData">
+								<i class="zmdi zmdi-map zmdi-hc-fw"></i>
+							</span>
+						</td>
+						<td>{{oVehicle.vehicle.trip.trip_no || 'NA'}}</td>
+						<td>{{oVehicle.vehicle.vehicle_reg_no || 'NA'}}</td>
+						<td>{{oVehicle.vehicle.status || 'NA'}}</td>
+						<td>{{oVehicle.vehicle.gr.consignor.name || oVehicle.vehicle.gr.booking && oVehicle.vehicle.gr.booking.consigner.name || 'NA'}}</td>
+						<td>{{oVehicle.vehicle.segment_type || 'NA'}}</td>
+						<td>
+							{{oVehicle.vehicle.route_name || 'NA'}}
+							{{ oVehicle.vehicle.route.name ? '('+ oVehicle.vehicle.route.route_distance +')' : ''}}
+						</td>
+						<td>{{(oVehicle.vehicle.trip | arrayOfIntermitPoint) || 'NA'}}</td>
+						<td>{{(oVehicle.distance_travelled | toString) || '0'}}</td>
+						<td>{{((oVehicle.vehicle.route && oVehicle.vehicle.route.name) ? (oVehicle.vehicle.route.route_distance - (oVehicle.distance_travelled ? (oVehicle.distance_travelled | toString) : '0')) : '0')}}</td>
+						<td>{{(oVehicle.vehicle.gr.loading_ended_status.date|date:'dd-MMM-yyyy') || ((oVehicle.vehicle.trip.statuses | filter:{"status": "Trip started"})[0].date | date:"dd-MMM-yyyy") || 'NA' }}</td>
+						<!--<td>{{(oVehicle.vehicle.gr.unloading_ended_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>-->
+						<td>{{oVehicle.t_status || 'NA'}}</td>
+						<!--<td>{{(oVehicle.vehicle.gpsData.datetime|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>-->
+						<td>
+							<div>
+								{{oVehicle.vehicle.gpsData.address || 'NA'}}
+							</div>
+						</td>
+						<td>{{(oVehicle.vehicle.gpsData.datetime|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+						<td>{{(oVehicle.expected_eta|date:'dd-MMM-yyyy') || 'NA'}}</td>
+						<td>{{(oVehicle.current_eta|date:'dd-MMM-yyyy') || 'NA'}}</td>
+						<!--<td>{{(oVehicle.vehicle.gr.vehicle_arrived_for_loading_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>-->
+						<td>{{(oVehicle.vehicle.gr.vehicle_arrived_for_unloading_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+						<td>{{(oVehicle.vehicle.trip.trip_start_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+						<!--<td>{{(oVehicle.vehicle.trip.trip_end_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>-->
+						<td>{{oVehicle.vehicle.owner_group || 'NA'}}</td>
+						<td>{{oVehicle.vehicle.trip.rmk || 'NA'}}</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+
+</div>
+
+<div id="toolTipDiv" class="mapToolTipDiv hideIt"></div>
+
+<div id="toolTipDivMapWrapper"
+	 style="diplay: none; z-index: 11"
+	 class="mapViewPopup">
+	<div class="addr" style="font-size: 12px;color: black;font-weight: bold;"></div>
+</div>
+
+<style>
+	.fs-18{
+		font-size: 18px;
+	}
+
+	.mapToolTipDiv{
+		width: 298px;
+		background: #edecec;
+		height: 298px;
+		border-radius: 6px;
+		visibility: hidden;
+	}
+
+	.hideIt{
+		visibility: hidden;
+		position: absolute !important;
+		left: 0px;
+		top: 0px;
+	}
+
+	.showIt{
+		visibility: visible;
+		position: relative;
+	}
+
+	.mapViewPopup{
+		display: none;
+		width: 300px;
+		background: #edecec;
+		height: 300px;
+		text-align: center;
+		border-radius: 6px;
+		border: 1px solid black;
+		/*padding: 5px 0;*/
+		position: absolute;
+		left: 5px;
+		z-index: 1;
+	}
+
+	.ja-green{
+		color: #00aa22;
+	}
+	.ja-red{
+		color: red;
+	}
+	.ja-grey{
+		color: grey;
+	}
+
+	.g {
+		color: #08E008;
+	}
+
+	.r {
+		color: #F10505;
+	}
+
+	.capitalize{
+		text-transform: capitalize;
+	}
+
+	.absolutePosi{
+		position: absolute;
+	}
+
+	.icon-wrapper{
+		padding: 5px;
+		background: white;
+	}
+
+	.zoomCtrls{
+		z-index: 2;
+		top: 5px;
+		left: 5px;
+	}
+
+	.zoomCtrls span{
+		margin-top: 5px;
+		background: whitesmoke;
+		padding: 10px;
+	}
+
+	.tooltip {
+		position: relative;
+		display: inline-block;
+		border-bottom: 1px dotted black;
+	}
+
+	.tooltip .tooltiptext {
+		visibility: hidden;
+		width: 250px;
+		background-color: white;
+		border: 1px solid #00000030;
+		height: 200px;
+		color: #000;
+		border-radius: 6px;
+		position: absolute;
+		left: -75%;
+		z-index: 1;
+	}
+
+	.bgSelected{
+		background-color: #d8d8d8;
+	}
+
+	.tooltip:hover .tooltiptext {
+		visibility: visible;
+	}
+
+	/* .unresponsive thead tr th:nth-child(14){
+		min-width: 150px;
+	}
+
+	.unresponsive thead tr th:nth-child(13){
+		min-width: 150px;
+	}
+
+	.unresponsive thead tr th:nth-child(12){
+		min-width: 150px;
+	}
+
+	.unresponsive thead tr th:nth-child(10){
+		min-width: 160px;
+	}
+
+	.unresponsive thead tr th:nth-child(11){
+		min-width: 220px;
+	} */
+
+	.dif{
+		display: inline-flex;
+	}
+	.dif h4{
+		margin: 0px !important;
+	}
+
+</style>

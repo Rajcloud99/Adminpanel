@@ -1,0 +1,299 @@
+<div class="container m-b-15 m-l-5" ng-controller="billAnalyticsCtrl as vm">
+	<div class="card m-b-0" id="messages-main" style="width:100%; height: fit-content; margin-right: -23px;">
+		<div class="col-md-12">
+			<h3 class="pull-left"><u>Billing Analytics</u></h3>
+			<button type="button"
+					class="close p-t-10 p-r-5"
+					data-dismiss="modal"
+					ng-if="!vm.isFullscreenActive"
+					uib-tooltip="Show FullScreen"
+					tooltip-placement="bottom"
+					ng-click="vm.showFullscreen()"
+					aria-label="Close">
+				<i class="zmdi zmdi-fullscreen-alt zmdi-hc-fw fs-20"></i>
+			</button>
+			<button type="button"
+					ng-click="vm.hideFullscreen(vm.filter)"
+					ng-if="vm.isFullscreenActive"
+					class="close p-10"
+					data-dismiss="modal"
+					aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="col-md-12 p-t-5 p-b-5">
+			<div class="col-sm-3">
+				<div class="form-group m-b-0">
+					<select chosen
+							class="form-control"
+							disable-search=true
+							ng-model="vm.filter.aggregateByValue"
+							ng-change="vm.getAnalytics()"
+							ng-options="item as item for item in vm.aAggregatedBy track by item">
+						<option value="" selected disabled>Aggregated By</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-2" >
+				<div class="form-group m-b-0">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="vm.filter.from"
+								   is-open="opened1"
+								   datepicker-options="vm.DatePicker.dateSettings"
+								   ng-change="vm.setMaxDate()"
+								   close-text="Close"
+								   placeholder="From"
+								   required
+								   style="padding: 0px 4px;height: 34px;" />
+						</div>
+						<span class="input-group-btn">
+										<button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')">
+											<i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="form-group m-b-0">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="vm.filter.to"
+								   ng-disabled="!vm.filter.from"
+								   min-date="vm.filter.from"
+								   max-date="vm.maxDate"
+								   ng-change="vm.getAnalytics()"
+								   is-open="opened2"
+								   datepicker-options="vm.DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="To"
+								   required
+								   style="padding: 0px 4px;height: 34px;" />
+						</div>
+						<span class="input-group-btn">
+										<button type="button" class="btn btn-default m-t-0 f12"
+												ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')">
+											<i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+					</div>
+				</div>
+			</div>
+			<!--<div class="col-sm-3">-->
+			<!--<div class="form-group m-b-0">-->
+			<!--<select chosen-->
+			<!--class="form-control"-->
+			<!--disable-search=true-->
+			<!--ng-model="vm.selectedCustomer"-->
+			<!--ng-options="item as item for item in vm.aCustomer track by item"-->
+			<!--ng-change="">-->
+			<!--<option value="" selected disabled>Customer</option>-->
+			<!--</select>-->
+			<!--</div>-->
+			<!--</div>-->
+			<div class="col-sm-2" ng-if="vm.filter.aggregateByValue === 'Date Wise'">
+				<div class="form-group m-b-0">
+					<select chosen
+							class="form-control"
+							disable-search=true
+							ng-model="vm.filter.levelValue"
+							ng-options="item as item for item in vm.aLevel track by item"
+							ng-change="vm.getAnalytics()">
+						<option value="" selected disabled>Level</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 nvd3-wrapper">
+			<nvd3 options="vm.options" data="vm.data" api="vm.api"></nvd3>
+		</div>
+	</div>
+</div>
+
+
+<style>
+	.modal-dialog{
+		height: 90%;
+		width: 90%;
+	}
+	.modal-dialog .modal-content{
+		height: 100%;
+		width: 100%;
+	}
+	.modal-dialog .container,
+	.modal-dialog .container .card,
+	.modal-dialog .container .card .nvd3-wrapper, nvd3,
+	.modal-dialog .container .card .nvd3-wrapper, nvd3, svg{
+		height: 100% !important;
+		width: 100% !important;
+	}
+	.modal-dialog .container .card .nvd3-wrapper{
+		width: 100% !important;
+		height: calc(100% - 50px) !important;
+	}
+
+	.fs-20{
+		font-size: 20px;
+	}
+</style>
+
+
+
+<!--<div class="container m-b-15 m-l-5" ng-controller="billAnalyticsCtrl as vm">-->
+	<!--<div class="card m-b-0" id="messages-main" style="width:100%; height: fit-content; margin-right: -23px;">-->
+		<!--<div class="col-md-12">-->
+			<!--<h3><u>{{view.name}}</u></h3>-->
+		<!--</div>-->
+		<!--<div class="col-md-12 p-t-5 p-b-5">-->
+			<!--<div class="col-sm-3">-->
+				<!--<div class="form-group m-b-0">-->
+					<!--<select chosen-->
+							<!--class="form-control"-->
+							<!--disable-search=true-->
+							<!--ng-model="vm.aggregateByValue"-->
+							<!--ng-change="vm.getAnalytics()"-->
+							<!--ng-options="item as item for item in vm.aAggregatedBy track by item">-->
+						<!--<option value="" selected disabled>Aggregated By</option>-->
+					<!--</select>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="col-sm-2" >-->
+				<!--<div class="form-group m-b-0">-->
+					<!--<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">-->
+						<!--<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">-->
+							<!--<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"-->
+								   <!--type="text"-->
+								   <!--class="form-control"-->
+								   <!--uib-datepicker-popup="{{DatePicker.formats[0]}}"-->
+								   <!--show-weeks="false"-->
+								   <!--ng-model="vm.from"-->
+								   <!--is-open="opened1"-->
+								   <!--datepicker-options="vm.DatePicker.dateSettings"-->
+								   <!--ng-change="vm.setMaxDate()"-->
+								   <!--close-text="Close"-->
+								   <!--placeholder="From"-->
+								   <!--required-->
+								   <!--style="padding: 0px 4px;height: 34px;" />-->
+						<!--</div>-->
+						<!--<span class="input-group-btn">-->
+										<!--<button type="button" class="btn btn-default m-t-0 f12"-->
+												<!--ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')">-->
+											<!--<i class="glyphicon glyphicon-calendar"></i></button>-->
+									<!--</span>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="col-sm-2">-->
+				<!--<div class="form-group m-b-0">-->
+					<!--<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">-->
+						<!--<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">-->
+							<!--<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"-->
+								   <!--type="text"-->
+								   <!--class="form-control"-->
+								   <!--uib-datepicker-popup="{{DatePicker.formats[0]}}"-->
+								   <!--show-weeks="false"-->
+								   <!--ng-model="vm.to"-->
+								   <!--ng-disabled="!vm.from"-->
+								   <!--min-date="vm.from"-->
+								   <!--max-date="vm.maxDate"-->
+								   <!--ng-change="vm.getAnalytics()"-->
+								   <!--is-open="opened2"-->
+								   <!--datepicker-options="vm.DatePicker.dateSettings"-->
+								   <!--close-text="Close"-->
+								   <!--placeholder="To"-->
+								   <!--required-->
+								   <!--style="padding: 0px 4px;height: 34px;" />-->
+						<!--</div>-->
+						<!--<span class="input-group-btn">-->
+										<!--<button type="button" class="btn btn-default m-t-0 f12"-->
+												<!--ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')">-->
+											<!--<i class="glyphicon glyphicon-calendar"></i></button>-->
+									<!--</span>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--&lt;!&ndash;<div class="col-sm-3">&ndash;&gt;-->
+			<!--&lt;!&ndash;<div class="form-group m-b-0">&ndash;&gt;-->
+			<!--&lt;!&ndash;<select chosen&ndash;&gt;-->
+			<!--&lt;!&ndash;class="form-control"&ndash;&gt;-->
+			<!--&lt;!&ndash;disable-search=true&ndash;&gt;-->
+			<!--&lt;!&ndash;ng-model="vm.selectedCustomer"&ndash;&gt;-->
+			<!--&lt;!&ndash;ng-options="item as item for item in vm.aCustomer track by item"&ndash;&gt;-->
+			<!--&lt;!&ndash;ng-change="">&ndash;&gt;-->
+			<!--&lt;!&ndash;<option value="" selected disabled>Customer</option>&ndash;&gt;-->
+			<!--&lt;!&ndash;</select>&ndash;&gt;-->
+			<!--&lt;!&ndash;</div>&ndash;&gt;-->
+			<!--&lt;!&ndash;</div>&ndash;&gt;-->
+			<!--<div class="col-sm-2" ng-if="vm.aggregateByValue === 'Date Wise'">-->
+				<!--<div class="form-group m-b-0">-->
+					<!--<select chosen-->
+							<!--class="form-control"-->
+							<!--disable-search=true-->
+							<!--ng-model="vm.levelValue"-->
+							<!--ng-options="item as item for item in vm.aLevel track by item"-->
+							<!--ng-change="vm.getAnalytics()">-->
+						<!--<option value="" selected disabled>Level</option>-->
+					<!--</select>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<button type="button"-->
+					<!--class="close"-->
+					<!--data-dismiss="modal"-->
+					<!--ng-if="!vm.isFullscreenActive"-->
+					<!--uib-tooltip="Show FullScreen"-->
+					<!--tooltip-placement="bottom"-->
+					<!--ng-click="vm.showFullscreen()"-->
+					<!--aria-label="Close">-->
+				<!--<i class="zmdi zmdi-fullscreen-alt zmdi-hc-fw fs-20"></i>-->
+			<!--</button>-->
+			<!--<button type="button"-->
+					<!--ng-click="vm.hideFullscreen()"-->
+					<!--ng-if="vm.isFullscreenActive"-->
+					<!--class="close"-->
+					<!--data-dismiss="modal"-->
+					<!--aria-label="Close">-->
+				<!--<span aria-hidden="true">&times;</span>-->
+			<!--</button>-->
+		<!--</div>-->
+		<!--<div class="col-md-12 nvd3-wrapper">-->
+			<!--<nvd3 options="vm.options" data="vm.data" api="vm.api"></nvd3>-->
+		<!--</div>-->
+	<!--</div>-->
+<!--</div>-->
+
+
+<!--<style>-->
+	<!--.modal-dialog{-->
+		<!--height: 90%;-->
+		<!--width: 90%;-->
+	<!--}-->
+	<!--.modal-dialog .modal-content{-->
+		<!--height: 100%;-->
+		<!--width: 100%;-->
+	<!--}-->
+	<!--.modal-dialog .container,-->
+	<!--.modal-dialog .container .card,-->
+	<!--.modal-dialog .container .card .nvd3-wrapper, nvd3,-->
+	<!--.modal-dialog .container .card .nvd3-wrapper, nvd3, svg{-->
+		<!--height: 100% !important;-->
+		<!--width: 100% !important;-->
+	<!--}-->
+	<!--.modal-dialog .container .card .nvd3-wrapper{-->
+		<!--width: 100% !important;-->
+		<!--height: calc(100% - 50px) !important;-->
+	<!--}-->
+
+	<!--.fs-20{-->
+		<!--font-size: 20px;-->
+	<!--}-->
+<!--</style>-->

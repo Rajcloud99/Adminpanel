@@ -1,0 +1,1141 @@
+<div ng-controller="registerContractController">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="actions">
+        <span ng-show="onShow">Select Contract :</span>
+        <select ng-show="onShow" ng-options="item as item.name for item in aContractS" ng-model="selectedContract" ng-change="selectedItemChanged(selectedContract)"></select>
+        <a ng-if="!(role_local_data.customer.indexOf('add')==-1)" uib-tooltip="Add Contract" ng-click="addNewContract()" ng-show="onShow" tooltip-placement="bottom"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i></a>
+        <a ng-if="!(role_local_data.customer.indexOf('edit')==-1)" uib-tooltip="Edit Contract" ng-click="editContract()" ng-show="onShow" tooltip-placement="bottom"><i class="zmdi zmdi-edit"></i></a>
+        <a uib-tooltip="Clone Contract" ng-click="cloneContract()" ng-show="onShow" tooltip-placement="bottom"><i class="zmdi zmdi-copy zmdi-hc-fw"></i></a>
+        <a uib-tooltip="Show Contract" ng-click="showContract()" ng-show="onEdit || onAdd" tooltip-placement="bottom"><i class="zmdi zmdi-menu zmdi-hc-fw"></i></a>
+      </div>
+      <div class="detailList" ng-show="onShow">
+        <ul>
+			<li ng-if="contractS.payment_basis"><span>Pay Basic</span>  : {{contractS.payment_basis}}</li>
+			<li ng-if="contractS.name"><span>Name</span>  : {{contractS.name}}</li>
+          <li ng-if="contractS.customer_name"><span>Customer Name</span>  : {{contractS.customer_name}}</li>
+          <li ng-if="contractS.contract_type"><span>Contract Type</span>  : {{contractS.contract_type}}</li>
+          <li ng-if="contractS.contract_status"><span>Status</span>  : {{contractS.contract_status}}</li>
+          <li ng-if="contractS.payment_type"><span>Payment Type</span>  : {{contractS.payment_type}}</li>
+          <li ng-if="contractS.billing_type"><span>Billing Type</span>  : {{contractS.billing_type}}</li>
+          <li ng-if="contractS.contract_start_date"><span>Start Date</span>  : {{contractS.contract_start_date | date:"dd-MMM-yyyy" || 'NA'}}</li>
+          <li ng-if="contractS.contract_end_date"><span>End Date</span>  : {{contractS.contract_end_date | date:"dd-MMM-yyyy" || 'NA'}}</li>
+          <li ng-if="contractS.duration_in_days"><span>Duration(In Day's)</span>  : {{contractS.duration_in_days}}</li>
+          <li ng-if="contractS.duration_in_months"><span>Duration(In Month's)</span>  : {{contractS.duration_in_months}}</li>
+          <li ng-if="contractS.total_vehicle_movement"><span>Total Vehicle Movement</span>  : {{contractS.total_vehicle_movement}}</li>
+          <li ng-if="contractS.vehicle_movement_monthly"><span>Vehcile Movement(Monthly)</span>  : {{contractS.vehicle_movement_monthly}}</li>
+          <li ng-if="contractS.vehicle_movement_daily"><span>Vehcile Movement(Daily)</span>  : {{contractS.vehicle_movement_daily}}</li>
+          <li ng-if="contractS.total_container_movement"><span>Total Container Movement</span>  : {{contractS.total_container_movement}}</li>
+          <li ng-if="contractS.container_movement_monthly"><span>Container Movement(Monthly)</span>  : {{contractS.container_movement_monthly}}</li>
+          <li ng-if="contractS.container_movement_daily"><span>Container Movement(Daily)</span>  : {{contractS.container_movement_daily}}</li>
+          <li ng-if="contractS.total_amount"><span>Total Amount</span>  : {{contractS.total_amount}}</li>
+          <li ng-if="contractS.amount_monthly"><span>Amount(Monthly)</span>  : {{contractS.amount_monthly}}</li>
+          <li ng-if="contractS.amount_daily"><span>Amount(Daily)</span>  : {{contractS.amount_daily}}</li>
+          <li ng-if="contractS.total_weight_moved"><span>Total Weight Moved</span>  : {{contractS.total_weight_moved}}</li>
+          <li ng-if="contractS.weight_moved_monthly"><span>Weight Moved(Monthly)</span>  : {{contractS.weight_moved_monthly}}</li>
+          <li ng-if="contractS.weight_moved_daily"><span>Weight Moved(Daily)</span>  : {{contractS.weight_moved_daily}}</li>
+          <li ng-if="contractS.diesel_escalation_clause.base_price"><span>Diesel Base Price</span>  : {{contractS.diesel_escalation_clause.base_price}}</li>
+          <li ng-if="contractS.diesel_escalation_clause.percentage_freight"><span>Diesel Percent Frieght</span>  : {{contractS.diesel_escalation_clause.percentage_freight}}</li>
+          <li ng-if="contractS.diesel_escalation_clause.increase_in_price"><span>Diesel Increase In Price</span>  : {{contractS.diesel_escalation_clause.increase_in_price}}</li>
+          <li ng-if="contractS.diesel_escalation_clause.hike"><span>Diesel Hike</span>  : {{contractS.diesel_escalation_clause.hike}}</li>
+          <li ng-if="contractS.emails_required"><span>Email Required</span>  : {{contractS.emails_required}}</li>
+          <li ng-if="contractS.email"><span>Email</span>  : {{contractS.email}}</li>
+          <li ng-if="contractS.email_frequency"><span>Email Frequency</span>  : {{contractS.email_frequency}}</li>
+          <li ng-if="contractS.credit.total_credit_limit"><span>Total Credit Limit</span>  : {{contractS.credit.total_credit_limit}}</li>
+          <li ng-if="contractS.credit.credit_days"><span>Credit Days</span>  : {{contractS.credit.credit_days}}</li>
+          <li ng-if="contractS.credit.monthly_credit_limit"><span>Credit Limit(Monthly)</span>  : {{contractS.credit.monthly_credit_limit}}</li>
+          <li ng-if="contractS.credit.daily_credit_limit"><span>Credit Limit(Daily)</span>  : {{contractS.credit.daily_credit_limit}}</li>
+          <li ng-if="contractS.credit.payment_cycle_days"><span>Payment Cycle Days</span>  : {{contractS.credit.payment_cycle_days}}</li>
+          <li ng-if="contractS.billing_generation_date"><span>Billing Generation Date</span>  : {{contractS.billing_generation_date}}</li>
+          <li ng-if="contractS.bank_guarantee"><span>Bank Guarantee</span>  : {{contractS.bank_guarantee}}</li>
+          <li ng-if="contractS.wc_requirement"><span>WC Requirment</span>  : {{contractS.wc_requirement}}</li>
+          <li ng-if="contractS.monthly_bvalue"><span>Monthly B Value</span>  : {{contractS.monthly_bvalue}}</li>
+          <li ng-if="contractS.emd"><span>EMD</span>  : {{contractS.emd}}</li>
+          <li ng-if="contractS.insurance"><span>Insurance</span>  : {{contractS.insurance}}</li>
+          <li ng-if="contractS.overdue_amount"><span>Overdue Amount</span>  : {{contractS.overdue_amount}}</li>
+          <li ng-if="contractS.overdue_days"><span>Overdue Days</span>  : {{contractS.overdue_days}}</li>
+			<li ng-if="contractS.outstanding_amt"><span>Outstanding Amount</span>  : {{contractS.outstanding_amt}}</li>
+			<li ng-if="contractS.do_weight"><span>DO Weight</span>  : {{contractS.do_weight}}</li>
+			<li ng-if="contractS.remaining_weight"><span>Remaining Weight</span>  : {{contractS.remaining_weight}}</li>
+          <li ng-if="contractS.remarks"><span>Remarks</span>  : {{contractS.remarks}}</li>
+          <li ng-if="contractS.created_by_name"><span>Created By Name</span>  : {{contractS.created_by_name}}</li>
+          <li ng-if="contractS.created_by_employee_code"><span>Created By Employee Code</span>  : {{contractS.created_by_employee_code}}</li>
+          <li ng-if="contractS.last_modified_by_name"><span>Last Modified By Name</span>  : {{contractS.last_modified_by_name}}</li>
+          <li ng-if="contractS.last_modified_employee_code"><span>Last Modified By Employee Code</span>  : {{contractS.last_modified_employee_code}}</li>
+          <li ng-if="$configs.master.customer.contract.required.do_number && contractS.do_number"><span>DO Number</span>  : {{contractS.do_number}}</li>
+          <li ng-if="$configs.master.customer.contract.required.mine_name && contractS.mine_name"><span>Mine Name</span>  : {{contractS.mine_name}}</li>
+
+			<li ng-if="contractS.payment_basis"><span>Total Weight</span>  : {{ contractS.payment_basis === 'PUnit' ? (contractS.totalWeight * contractS.totalUnit) : (contractS.totalWeight || 0)}}</li>
+			<li ng-if="contractS.payment_basis"><span>Served Weight</span>  : {{contractS.servedWeight || 0}}</li>
+			<li ng-if="contractS.payment_basis"><span>Remaining Weight</span>  : {{ contractS.payment_basis === 'PUnit' ? ((contractS.totalWeight * contractS.totalUnit) - contractS.servedWeight) : (contractS.totalWeight - contractS.servedWeight)}}</li>
+
+			<li ng-if="contractS.payment_basis && contractS.payment_basis === 'PUnit'"><span>Total Unit</span>  : {{contractS.totalUnit || 0}}</li>
+			<li ng-if="contractS.payment_basis && contractS.payment_basis === 'PUnit'"><span>Weight Per Unit</span>  : {{contractS.totalWeight || 0}}</li>
+			<li ng-if="contractS.payment_basis && contractS.payment_basis === 'PUnit'"><span>Served Unit</span>  : {{contractS.servedUnit || 0}}</li>
+			<li ng-if="contractS.payment_basis && contractS.payment_basis === 'PUnit'"><span>Remaining Unit</span>  : {{contractS.totalUnit - contractS.servedUnit}}</li>
+
+			<li ng-if="contractS.payment_basis && contractS.payment_basis === 'Fixed'"><span>Total Vehicle</span>  : {{contractS.totalVehicle || 0}}</li>
+			<li ng-if="contractS.payment_basis && contractS.payment_basis === 'Fixed'"><span>Served Vehicle</span>  : {{contractS.servedVehicle || 0}}</li>
+			<li ng-if="contractS.payment_basis && contractS.payment_basis === 'Fixed'"><span>Remaining Vehicle</span>  : {{contractS.totalVehicle - contractS.servedVehicle}}</li>
+			<li ng-if="contractS.diesel_base_price"><span>Diesel Base Price</span>  : {{contractS.diesel_base_price}}</li>
+
+        </ul>
+      </div>
+		<hr>
+		<div style="clear: both;"></div>
+		<div class=" w-set" style="margin:5px 15px;margin-top: 50px; overflow-y: auto;"  ng-show="onShow">
+			<table class="table table-bordered  unresponsive">
+				<thead>
+				<tr>
+					<th>Material(Group)</th>
+					<th>Vehicle(Group)</th>
+					<th style="min-width: 65px;">Price Per Trip</th>
+					<th style="min-width: 65px;">Price Per Unit</th>
+					<th style="min-width: 65px;">Price per MT</th>
+					<th style="min-width: 65px;">Min. Payable MT</th>
+					<th style="min-width: 50px;">Diesel Allot</th>
+					<th style="min-width: 65px;">Cash Allot</th>
+					<th style="min-width: 65px;">Toll Tax</th>
+				</tr>
+				</thead>
+				<tbody ng-repeat="route in aRate">
+					<tr ng-repeat="sData in route.data">
+						<td>{{sData.materialType ? sData.materialType.name+'('+sData.materialType.group_name+')' : 'NA'}}</td>
+						<td>{{sData.vehicle_id ? sData.vehicle_id.name+'('+sData.vehicle_id.group_name+')' : 'NA'}}</td>
+						<td>{{sData.rate.price_per_trip}}</td>
+						<td>{{sData.rate.price_per_unit}}</td>
+						<td>{{sData.rate.price_per_mt}}</td>
+						<td>{{sData.rate.min_payable_mst}}</td>
+						<td>{{sData.allot.diesel}}</td>
+						<td>{{sData.allot.cash}}</td>
+						<td>{{sData.allot.toll}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+
+      <div class="detailList2" ng-show="onEdit">
+        <form name="contractUpdateForm" novalidate>
+          <div class="validationError" ng-show="upadetContactErrMsg"><h5 class="c-red">* {{CCmsg}}</h5></div>
+          <div class="row" style="margin:15px">
+			  <div class="col-md-4">
+				  <div class="form-group m-b-0">
+					  <label class="col-sm-6 control-label">Basis:
+						  <span class="req_r">*</span>
+					  </label>
+					  <div class="col-sm-6">
+						  <div class="select">
+							  <select class="form-control" ng-options="item as item for item in $constants.aWeightTypes" ng-model="contractUpdate.payment_basis"
+									  name="Weight Type" required ng-disabled="(!contractUpdate.sQty || contractUpdate.sQty == 0 ) ? false : true">
+								  <option value="" disabled style="display: none;">
+									  Payment Basis
+								  </option>
+							  </select>
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Name: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="text" ng-model="contractUpdate.name" class="form-control" name="name" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Contract Type: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contractUpdate.contract_type" name=
+                    "contract type" required="">
+                      <option value="" disabled selected>Select Contract type</option>
+                      <option value="Temporary">Temporary</option>
+                      <option value="Permanent">Permanent</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Status: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contractUpdate.contract_status" name="status" required="">
+                      <option value="" disabled selected>Select Status</option>
+                      <option value="Not started">Not started</option>
+                      <option value="Live">Live</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Payment Type <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contractUpdate.payment_type" required ng-options="item as item for item in $constants.paymentType" >
+                      <option value="" disabled selected>Select Payment type</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Billing Type <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contractUpdate.billing_type" required>
+                      <option value="" disabled selected>Select Contract type</option>
+                      <option value="BOE wise">BOE wise</option>
+                      <option value="Trip wise">Trip wise</option>
+                      <option value="Contract wise">Contract wise</option>
+                      <option value="Monthly">Monthly</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Bi-Weekly">Bi-Weekly</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Start Date: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                    <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                      <input ng-click="open($event, 'opened1')"
+							 type="text"
+							 name="start date"
+							 class="form-control"
+							 uib-datepicker-popup="{{format}}"
+							 ng-model="contractUpdate.contract_start_date"
+							 ng-change="$configs.master.customer.contract.setting.setEndDateTo ? setEndDate(contractUpdate, $configs.master.customer.contract.setting.setEndDateTo) : ''; toggleMin(contractUpdate)"
+							 show-weeks="false"
+							 is-open="opened1"
+							 uib-datepicker-options="dateOptions"
+							 close-text="Close"
+							 placeholder="Date"
+							 required="" />
+                    </div>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">End Date: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                      <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                        <input ng-click="open($event, 'opened2')"
+							   name="end date"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{format}}"
+							   min-date="minDate"
+							   show-weeks="false"
+							   ng-model="contractUpdate.contract_end_date"
+							   is-open="opened2"
+							   uib-datepicker-options="dateOptions"
+							   close-text="Close"
+							   placeholder="Date"
+							   required="" />
+                      </div>
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Total Vehicle Movement</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.total_vehicle_movement" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+			<div class="col-md-4" ng-if="$configs.master.customer.contract.required.do_number">
+			  <div class="form-group m-b-0 m-t-10">
+				  <label class="col-sm-6 control-label">Do Number</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  <input type="string" ng-model="contractUpdate.do_number" class="form-control">
+					  </div>
+				  </div>
+			  </div>
+			</div>
+			<div class="col-md-4" ng-if="$configs.master.customer.contract.required.mine_name">
+			  <div class="form-group m-b-0 m-t-10">
+				  <label class="col-sm-6 control-label">Mine Name</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  <input type="string" ng-model="contractUpdate.mine_name" class="form-control">
+					  </div>
+				  </div>
+			  </div>
+			</div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Total Container Movement</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.total_container_movement" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Total Amount</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.total_amount" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Diesel Base Price</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.diesel_base_price" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Diesel Percent Freight</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="text" ng-model="contractUpdate.percentage_freight" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Diesel Hike</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.hike" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Email Required</label>
+                <div class="col-sm-6">
+                  <label class="checkbox checkbox-inline m-r-20">
+                    <input type="checkbox" ng-model="contractUpdate.emails_required">
+                    <i class="input-helper"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Email </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="text" ng-model="contractUpdate.email" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Email Frequency <span style="color:red">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contractUpdate.email_frequency" required>
+                      <option value="" disabled selected>Select Email Frequency</option>
+                      <option value="BOE wise">BOE wise</option>
+                      <option value="Trip wise">Trip wise</option>
+                      <option value="Contract wise">Contract wise</option>
+                      <option value="Monthly">Monthly</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Bi-Weekly">Bi-Weekly</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Total Credit Limit</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.total_credit_limit" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Credit Days </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.credit_days" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Credit Limit(Monthly) </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.monthly_credit_limit" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Credit Limit(Daily)</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.daily_credit_limit" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Billing Generation Date </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.billing_generation_date" class="form-control" placeholder="EX.- 1,2,3,4...31">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Bank Guarntee</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.bank_guarantee" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Wc Requirment </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.wc_requirement" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">EMD</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.emd" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Insurance</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.insurance" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Insurance</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.insurance" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+		  <div class="row" style="margin:15px">
+			  <div class="col-md-4">
+				  <div class="form-group m-b-0">
+					  <label class="col-sm-6 control-label">{{contractUpdate.payment_basis === 'PUnit' ? 'Weight Per Unit' : 'Total Weight' }} </label>
+					  <div class="col-sm-6">
+						  <div class="fg-line">
+							  <input type="number" ng-model="contractUpdate.totalWeight" class="form-control">
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="col-md-4" ng-show="contractUpdate.payment_basis === 'PUnit'">
+				  <div class="form-group m-b-0">
+					  <label class="col-sm-6 control-label">Total Weight</label>
+					  <div class="col-sm-6">
+						  <div class="fg-line">
+							  {{contractUpdate.totalWeight * contractUpdate.totalUnit}}
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+				<div class="col-md-4">
+				  <div class="form-group m-b-0">
+					  <label class="col-sm-6 control-label">Served Weight</label>
+					  <div class="col-sm-6">
+						  <div class="fg-line">
+							  <input ng-model="contractUpdate.servedWeight" class="form-control" readonly="true">
+						  </div>
+					  </div>
+				  </div>
+				</div>
+			  <div class="col-md-4">
+				  <div class="form-group m-b-0">
+					  <label class="col-sm-6 control-label">Remaining Weight</label>
+					  <div class="col-sm-6">
+						  <div class="fg-line">
+							  {{ (contractUpdate.payment_basis === 'PUnit' ? (contractUpdate.totalWeight * contractUpdate.totalUnit) : contractUpdate.totalWeight) - contractUpdate.servedWeight}}
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+
+		  <div class="row" style="margin:15px" ng-show="contractUpdate.payment_basis === 'PUnit'">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Total Unit </label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="contractUpdate.totalUnit" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Served Unit</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input ng-model="contractUpdate.servedUnit" class="form-control" readonly="true">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remaining Unit</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{contractUpdate.totalUnit - contractUpdate.servedUnit}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" style="margin:15px" ng-show="contractUpdate.payment_basis === 'Fixed'">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Total Vehicle</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="contractUpdate.totalVehicle" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Served Vehicle</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input ng-model="contractUpdate.servedVehicle" class="form-control" readonly="true">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remaining Vehicle</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{contractUpdate.totalVehicle - contractUpdate.servedVehicle}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Outstanding Amount</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contractUpdate.outstanding_amt" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Set Default Contract:</label>
+                <div class="col-sm-6">
+                  <label class="checkbox checkbox-inline m-r-10">
+                    <input type="checkbox" value="defaultC" ng-model="defaultC" name="select default contact">
+                    <i class="input-helper"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Remarks</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="text" ng-model="contractUpdate.remarks" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin:15px" ng-show="!(contractUpdateForm.$error.required) &&
+           										!(contractUpdateForm.$error.maxlength) &&
+           										!(contractUpdateForm.$error.minlength) &&
+           										!(contractUpdateForm.$error.email)">
+            <div class="m-l-30 col-md-10">
+              <div class="form-group m-b-10">
+                <button type="submit" class="btn btn-primary" ng-click="UpdateContractDetails(contractUpdateForm)" style="margin-bottom: 12px;">Update</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+		<!-- Add Contract -->
+
+
+      <div class="detailList2" ng-show="onAdd">
+        <form name="contractReg" novalidate>
+          <div class="validationError" ng-show="upadetContactErrMsg"><h5 class="c-red">* {{CCmsg}}</h5></div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Basis:
+                  <span class="req_r">*</span>
+                </label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-options="item as item for item in $constants.aWeightTypes" ng-model="contract.payment_basis"
+                      name="Weight Type" required>
+                      <option value="" disabled style="display: none;">
+                        Payment Basis
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Name: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="text" ng-model="contract.name" class="form-control" name="name" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Contract Type: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contract.contract_type" name="contract type" required="">
+                      <option value="" disabled selected>Select Contract type</option>
+                      <option value="Temporary">Temporary</option>
+                      <option value="Permanent">Permanent</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Status:
+                  <span style="color: red;">*</span>
+                </label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contract.contract_status" name="Status" required="">
+                      <option value="" disabled selected>Select Status</option>
+                      <option value="Not started">Not started</option>
+                      <option value="Live">Live</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Payment Type <span style="color:red">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contract.payment_type" ng-options="item as item for item in $constants.paymentType" required>
+                      <option value="" disabled selected>Select Payment type</option>
+                      <!--<option value="To pay">To pay</option>-->
+                      <!--<option value="To be billed">To be billed</option>-->
+                      <!--<option value="Advance Payment">Advance Payment</option>-->
+                      <!--<option value="Others">Others</option>-->
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Billing Type <span style="color:red">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contract.billing_type" required>
+                      <option value="" disabled selected>Select Contract type</option>
+                      <option value="BOE wise">BOE wise</option>
+                      <option value="Trip wise">Trip wise</option>
+                      <option value="Contract wise">Contract wise</option>
+                      <option value="Monthly">Monthly</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Bi-Weekly">Bi-Weekly</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Start Date:
+                  <span style="color: red;">*</span>
+                </label>
+                <div class="col-sm-6">
+                  <!-- <div class="fg-line">
+                                <input type="text" ng-model="contract.contract_start_date" class="form-control">
+                              </div> -->
+                  <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                    <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                      <input ng-click="open($event, 'opened1')"
+							 type="text"
+							 class="form-control"
+							 uib-datepicker-popup="{{format}}"
+							 ng-change="$configs.master.customer.contract.setting.setEndDateTo ? setEndDate(contract,$configs.master.customer.contract.setting.setEndDateTo) : '';toggleMin(contract)"
+							 show-weeks="false"
+							 ng-model="contract.contract_start_date"
+							 is-open="opened1"
+							 uib-datepicker-options="dateOptions"
+							 close-text="Close"
+							 placeholder="Date"
+							 name="start date"
+							 required="">
+						<!--min-date="minDate"
+							 ng-change="setMaxDate(contract.contract_start_date)"-->
+                    </div>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">End Date: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <!-- <input type="text" ng-model="contract.contract_end_date" class="form-control"> -->
+                    <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                      <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                        <input ng-click="open($event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   min-date="minDate"
+							   uib-datepicker-popup="{{format}}"
+							   show-weeks="false"
+							   ng-model="contract.contract_end_date"
+							   is-open="opened2"
+							   uib-datepicker-options="dateOptions"
+							   close-text="Close"
+							   placeholder="Date"
+							   name="end date"
+							   required="" />
+						  <!--max-date="maxDate"-->
+                      </div>
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Total Vehicle Movement</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.total_vehicle_movement" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+			<div class="col-md-4" ng-if="$configs.master.customer.contract.required.do_number">
+              <div class="form-group m-b-0 m-t-10">
+                <label class="col-sm-6 control-label">Do Number</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="string" ng-model="contract.do_number" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+			<div class="col-md-4" ng-if="$configs.master.customer.contract.required.mine_name">
+			  <div class="form-group m-b-0 m-t-10">
+				  <label class="col-sm-6 control-label">Mine Name</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  <input type="string" ng-model="contract.mine_name" class="form-control">
+					  </div>
+				  </div>
+			  </div>
+			</div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Total Container Movement</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.total_container_movement" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Total Amount</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.total_amount" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Diesel Base Price</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.diesel_base_price" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Diesel Percent Freight</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="text" ng-model="contract.percentage_freight" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Diesel Hike</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.hike" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Email Required</label>
+                <div class="col-sm-6">
+                  <label class="checkbox checkbox-inline m-r-20">
+                    <input type="checkbox" ng-model="contract.emails_required">
+                    <i class="input-helper"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Email </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="text" ng-model="contract.email" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Email Frequency <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control" ng-model="contract.email_frequency">
+                      <option value="" disabled selected>Select Email Frequency</option>
+                      <option value="BOE wise">BOE wise</option>
+                      <option value="Trip wise">Trip wise</option>
+                      <option value="Contract wise">Contract wise</option>
+                      <option value="Monthly">Monthly</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Bi-Weekly">Bi-Weekly</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Total Credit Limit</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.total_credit_limit" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Credit Days </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.credit_days" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Credit Limit(Monthly) </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.monthly_credit_limit" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Credit Limit(Daily)</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.daily_credit_limit" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Billing Generation Date </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.billing_generation_date" class="form-control" placeholder="EX.- 1,2,3...31">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Bank Guarntee</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.bank_guarantee" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Wc Requirment </label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.wc_requirement" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">EMD</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.emd" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Insurance</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.insurance" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Outstanding Amount</label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" ng-model="contract.outstanding_amt" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+			<div class="row" style="margin:15px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Total {{contract.payment_basis === 'PUnit' ? 'Weight Per Unit' : 'Weight' }} </label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="contract.totalWeight" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4" ng-show="contract.payment_basis === 'PUnit'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Total Unit </label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="contract.totalUnit" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4" ng-show="contract.payment_basis === 'Fixed'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Total Vehicle</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="contract.totalVehicle" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+          <div class="row" style="margin:15px">
+            <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Set Default Contract:</label>
+                <div class="col-sm-6">
+                  <label class="checkbox checkbox-inline m-r-10">
+                    <input type="checkbox" value="defaultC" ng-model="defaultC" name="select default contact">
+                    <i class="input-helper"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+			<div class="row" style="margin:15px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remarks</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="contract.remarks" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+          <div class="row" style="margin:15px" ng-show="!(contractReg.$error.required) &&
+           										!(contractReg.$error.maxlength) &&
+           										!(contractReg.$error.minlength) &&
+           										!(contractReg.$error.email)">
+            <div class="m-l-30 col-md-10">
+              <div class="form-group m-b-10">
+                <button type="submit" class="btn btn-primary"
+                  ng-click="saveContractDetails(contractReg)" style="margin-bottom: 12px;">Save</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

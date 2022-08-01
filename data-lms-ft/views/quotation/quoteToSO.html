@@ -1,0 +1,356 @@
+<div class="container" ng-controller="quoteToSOController">
+	<div class="card m-b-0" id="messages-main">
+		<div style="min-height: 550px;">
+			<div class="listview lv-message">
+
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span class="c-black">
+							<b>Quotation to SO</b>
+						</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="lv-body">
+					<div class="row" style="margin: 5px auto;">
+						<div class="col-md-12">
+							<div class="task">
+
+								<div class="col-md-8" style="border-right: 1px solid #2196f3;">
+									<div class="detailsList">
+
+										<div class="col-sm-12">
+											<div class="form-group m-b-0">
+												
+												<label class="col-sm-2 control-label">
+													Customer <span class="req_r">*</span>
+												</label>
+												
+												<div class="col-sm-4">
+													<div class="lvh-search sear">
+														<input type="text" class="lvhs-input" placeholder="Customer Search..." ng-model="customer"typeahead-wait-ms="10" typeahead="item as item.name for item in customers | limitTo:10"
+														ng-change="getCustomers(customer)" required>
+														<i class="lvh-search-close" ng-click="clearCustomerSearch()">×</i>
+													</div>
+												</div>
+												
+												<div class="col-sm-6" ng-show="show()">
+													<div class="form-group m-b-0">
+														<label class="col-sm-3 control-label">
+															SO Number
+															<span class="req_r">*</span>
+														</label>
+														<div class="col-sm-6">
+															<div class="select">
+																<select
+																	chosen
+																	class="form-control"
+																	placeholder="Select"
+																	ng-options="item as item.so_number for item in allSaleOrders track by item._id"
+																	ng-model="selectedSaleOrder"
+																	ng-change="saleOrderChange(selectedSaleOrder)">
+																		<option value=""> Select</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-sm-3">
+															<button
+																class="btn btn-primary waves-effect"
+																ng-click="createSONew()">New SO
+															</button>
+														</div>
+													</div>
+												</div>
+												<div class="clearfix"></div>
+												
+											</div>
+											<div class="clearfix"></div>
+										</div>
+										<div class="clearfix"></div>
+										<br>
+
+										<form>
+											<div ng-show="selectedSaleOrder" style="margin-top:10px">
+
+											<div class="col-sm-6">
+												<div class="form-group m-b-0">
+													<label class="col-sm-4 control-label">SO Approver
+														<span class="req_r">*</span>
+													</label>
+													<div class="col-sm-6">
+														<div class="select">
+															<select
+																chosen
+																class="form-control"
+																placeholder="Select"
+																ng-options="item as item.full_name for item in aApprover track by item._id"
+																ng-model="selectedSaleOrder.approver"
+																required>
+																<option value=""> Select</option>
+															</select>
+														</div>
+													</div>
+													<span class="col-sm-2 req_r">{{soapprmsg}}</span>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+											<br>
+											<div class="col-sm-6">
+												<div class="form-group m-b-0">
+													<label class="col-sm-4 control-label">Freight (Rs)</label>
+													<div class="col-sm-6">
+														<div class="fg-line">
+															<input type="number" class="form-control" ng-model="selectedSaleOrder.shipping_charges" placeholder="enter here ...">
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="form-group m-b-0">
+													<label class="col-sm-4 control-label">Tax(%)</label>
+													<div class="col-sm-6">
+														<div class="fg-line">
+															<input type="number" class="form-control" ng-model="tax" placeholder="enter here ..." ng-change="addAllTax()">
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+											<br>
+											<div class="col-sm-6">
+												<div class="form-group m-b-0">
+													<label class="col-sm-4 control-label">Description</label>
+													<div class="col-sm-6">
+														<div class="fg-line">
+															<input type="text" class="form-control" ng-model="selectedSaleOrder.additional_notes" placeholder="enter here ...">
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- <div class="col-sm-6">
+																											<div class="form-group m-b-0">
+																												<label class="col-sm-6 control-label">Needed Date</label>
+																												<div class="col-sm-6">
+																													<div class="fg-line">
+																														<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4 == true }">
+																															<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+																																<input ng-click="open($event, 'opened4')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="neededDate" is-open="opened4" datepicker-options="dateOptions" close-text="Close" placeholder="Date Search" style="padding: 0px 4px;height: 34px;" />
+																															</div>
+																															<span class="input-group-btn">
+																																<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened4')"><i class="glyphicon glyphicon-calendar"></i></button>
+																															</span>
+																														</div>
+																													</div>
+																												</div>
+																											</div>
+																										</div> -->
+											<div class="clearfix"></div>
+											<br>
+											<div class="col-sm-6">
+												<div class="form-group m-b-0">
+													<label class="col-sm-4 control-label">Payment Terms</label>
+													<div class="col-sm-6">
+														<div class="select">
+															<select
+																chosen
+																class="form-control"
+																placeholder="Select"
+																ng-options="item as item for item in aPayTerms track by item"
+																ng-model="selectedSaleOrder.payment_terms"
+															 	required>
+																<option value=""> Select</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="form-group m-b-0">
+													<label class="col-sm-4 control-label">Freight Terms</label>
+													<div class="col-sm-6">
+														<div class="select">
+															<select chosen class="form-control" placeholder="Select" ng-options="item as item for item in aFreightTerms track by item" ng-model="selectedSaleOrder.shipping_terms"
+															 required>
+																<option value=""> Select</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+											<br>
+											</div>
+											<div class="clearfix"></div>
+										</form>
+
+										<div class="" style="overflow-y: auto;min-height: 280px;">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th style="color:#fff;background: #2196f3;">Spare</th>
+														<th style="color:#fff;background: #2196f3;">Category Name</th>
+														<th style="color:#fff;background: #2196f3;">Qty.</th>
+														<th style="color:#fff;background: #2196f3;">UOM</th>														
+														<th style="color:#fff;background: #2196f3;">Price Per Unit</th>
+														<th style="color:#fff;background: #2196f3;">Discount(%)</th>
+														<th style="color:#fff;background: #2196f3;">Tax(%)</th>
+														<th style="color:#fff;background: #2196f3;">Total</th>
+													</tr>
+												</thead>
+												<tbody>
+
+													<tr data-ng-repeat="aQ in selectedSaleOrder.items track by aQ._id" class="pointer">
+														
+														<td style="padding-left:0">
+															<i tooltip="remove" style="font-size:20px" class="zmdi zmdi-minus-circle zmdi-hc-fw"
+																ng-click="removeQuot(aQ)">
+															</i>&nbsp;&nbsp; {{aQ.name || aQ.item_ref.name}}
+														</td>
+
+														<td>{{aQ.category_name || aQ.item_ref.category_name}}</td>
+														
+														<td>
+															<input
+																type="number"
+																onwheel="return false"
+															   onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+															   onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+																style="width: 45px;"
+																ng-init="quantityChangeInSOHandler(aQ);"
+																ng-model="aQ.quantity"
+																ng-change="quantityChangeInSOHandler(aQ);">
+														</td>
+														
+														<td>{{aQ.uom || aQ.item_ref.uom}}</td>
+
+														<td>
+															<input
+																type="number"
+																onwheel="return false"
+									   onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+																style="width: 45px;"
+																ng-model="aQ.price_per_unit">
+														</td>
+														
+														<td>
+															<input
+																type="number"
+																onwheel="return false"
+									   onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+																style="width: 30px;"
+																ng-model="aQ.discount_percent">
+														</td>
+
+														<td>
+															<input
+																type="number"
+																onwheel="return false"
+									   onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+																style="width: 30px;"
+																ng-model="aQ.tax_percent">
+														</td>
+														
+														<td>{{calcTotal(aQ)}}</td>
+														
+													</tr>
+													
+												</tbody>
+											</table>
+											<div ng-show="!selectedSaleOrder.items.length" class="ms-body" style=" min-height: 50px;">
+												<h4>SO data not available !!!</h4>
+											</div>
+										</div>
+									</div>
+									<div>
+										<button
+											ng-click="updateSO()"
+											class="btn btn-primary waves-effect pull-right"
+											style="margin-left: 10px;"
+											ng-disabled="!selectedSaleOrder.items.length">
+											<i class="zmdi zmdi-floppy zmdi-hc-2x"></i> Save
+										</button>
+									</div>
+								</div>
+
+								<div class="col-md-4" ng-show="selectedSaleOrder">
+									<div class="col-sm-12">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">
+												Quotation Number <span class="req_r">*</span>
+											</label>
+											<div class="col-sm-6">
+												<div class="select">
+													<select
+														chosen
+														class="form-control"
+														placeholder="Select"
+														ng-model="selectedQuote"
+														ng-options="item as item.quot_number for item in quotations track by item._id"
+														ng-change="quoteChange(selectedQuote, $index)"
+														required>
+															<option value=""> Select</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+									<br>
+									<div ng-show="selectedQuote"
+											 style="margin-top: 13px;">
+										<p>{{selectedQuote.created_by.full_name}} requested on {{selectedQuote.created_at | date:'dd-MM-yyyy'}}</p>
+										<p>Approved by {{selectedQuote.quot_approver.full_name}}</p>
+										<p>Possible delivery by {{selectedQuote.possible_delivery_by | date:'dd-MM-yyyy'}} with {{selectedQuote.priority}} priority</p>
+									</div>
+
+									<div class="detailsList">
+										<div style="overflow-y: auto;min-height: 470px;">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th style="color:#fff;background: #2196f3;">Spare</th>
+														<th style="color:#fff;background: #2196f3;">Remaining/Total Qty.
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="quot in selectedQuote.items track by quot._id">
+														<td>
+															<a class="pointer"
+															ng-click="pushToAddedQuotes(quot, selectedQuote.quot_number, selectedQuote._id)">
+																{{quot.item_ref.name + ' - ' + quot.item_ref.code}}
+															</a>
+														</td>
+														<td>{{(quot.remaining_quantity || 0 ) + '/' + quot.quantity}}</td>
+													</tr>
+												</tbody>
+											</table>
+											<div ng-show="selectedQuote && !selectedQuote.items.length"
+													 class="ms-body"
+													 style=" min-height: 50px;">
+												<h3>Quotation items not available !!!!!</h3>
+											</div>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.bg-green {
+		background-color: green;
+		color: white;
+	}
+</style>

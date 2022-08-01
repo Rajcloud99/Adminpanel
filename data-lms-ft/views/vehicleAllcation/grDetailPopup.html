@@ -1,0 +1,207 @@
+<!-- Controller: grDetailPopupCtrl -->
+<!-- ControllerAs: vm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="vm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>GrNumber UpDate</b>
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(Trip No:{{vm.aTripInfo.trip_no}})
+			</span>
+		</span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<form name="grEditform" novalidate autocomplete="off">
+			<ul class="list-group list-group-flush">
+
+				<!--Table DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">GR DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-4">
+
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Branch: </label>
+									<div class="col-sm-6">
+										{{vm.oGr.branch_id.name}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Gr Date: </label>
+									<div class="col-sm-6">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened1 == true }">
+											<div class="fg-line"
+												 ng-class="{ 'fg-toggled': opened1 == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+													   type="text"
+													   class="form-control"
+													   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-model="vm.oGr.grDate"
+													   max-date="vm.DatePicker.newDate"
+													   is-open="opened1"
+													   datepicker-options="vm.DatePicker.dateSettings"
+													   close-text="Close"
+													   placeholder="Gr Date"
+													   name="Gr Date"
+													   required
+													   style="padding: 0px 4px;height: 34px;"/>
+											</div>
+											<span class="input-group-btn">
+												<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Gr Number: </label>
+									<div class="col-sm-6">
+										<div class="ng-scope sear chosen-row-3">
+											<input type="text"
+												   placeholder="Search..."
+												   name="Gr Number"
+												   ng-model="vm.oGr.grNumber"
+												   typeahead-wait-ms="10"
+												   typeahead="item.bookNo as item.bookNo for item in vm.getBillBookNo($viewValue)|limitTo:10"
+												   class="form-control"
+												   required>
+											<i class="lvh-search-close" ng-click="vm.oGr.grNumber = ''">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-md-12">
+								<div class="pull-right">
+									<div class="form-group m-b-0">
+										<button class="btn-xs btn-primary"
+												ng-disabled="grUpset|validateFormArray: ['Bill Number', 'Bill Expiry']: vm.oGr.eWayBills.length"
+												ng-click="vm.oGr.eWayBills.push({});">
+											<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+										</button>&nbsp;&nbsp;
+										<button class="btn-danger btn-xs"
+												ng-click="vm.oGr.eWayBills.splice(vm.selectedEwayBillRow, 1)"
+												uib-tooltip="Delete Item"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+										</button>
+									</div>
+								</div>
+								<table class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th>#</th>
+										<th>
+											Eway Bill
+										</th>
+										<th>
+											Eway Bill Expiry
+										</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="bill in vm.oGr.eWayBills"
+										ng-click="vm.selectedEwayBillRow = $index"
+										class="pointer"
+										ng-class="{grn: vm.selectedEwayBillRow === $index}">
+										<td>{{$index+1}}</td>
+										<td>
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Eway Bill"
+													   ng-model="bill.number"
+													   name="Bill Number"
+													   class="form-control">
+											</div>
+										</td>
+										<td>
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': bill.opened == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'bill.opened')"
+													   type="text"
+													   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-init="bill.expiry = ('toDateObj'|dateUtilsFilt:bill.expiry)"
+													   ng-model="bill.expiry"
+													   max-date="vm.oGr.grDate|setMaxDate:3"
+													   min-date="vm.oGr.grDate"
+													   class="form-control"
+													   is-open="bill.opened"
+													   uib-datepicker-options="vm.DatePicker.dateSettings"
+													   placeholder="Eway Bill Expiry"
+													   close-text="Close"
+													   name="Bill Expiry">
+												<span class="input-group-btn">
+															<button type="button"
+																	class="btn btn-default m-t-0 f12"
+																	ng-click="vm.DatePicker.openDatePicker(this, $event, 'bill.opened')">
+																<i class="glyphicon glyphicon-calendar"></i>
+															</button>
+														</span>
+											</div>
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-primary"
+			type="button"
+			ng-click="vm.submit()">SUBMIT
+	</button>
+	<button class="btn btn-warning"
+			type="button"
+			ng-click="vm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+
+	.chosen-row-1 {
+		z-index: 80;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: auto;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

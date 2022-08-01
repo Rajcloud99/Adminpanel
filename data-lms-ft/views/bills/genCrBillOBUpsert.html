@@ -1,0 +1,152 @@
+<!-- Controller: genCrBillOBUpsertCtrl as vm -->
+
+
+<div class="container" style="">
+	<div class="m-b-0" id="messages-main">
+		<form name="genBill" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<!--<span class="booking_list_header">Gr Details: </span>-->
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3">
+									<label class="col-sm-5 control-label">Vendor (Cr. A/c):<span class="req_r">*</span></label>
+									<div class="col-sm-7" style="z-index: 90">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input autocomplete="off"
+												   type="text"
+												   name="vendor"
+												   class="form-control lvhs-input"
+												   placeholder="Select vendor"
+												   ng-model="vm.vendor"
+												   uib-typeahead="m as m.name for m in vm.getVendor($viewValue)"
+												   typeahead-wait-ms="10"
+												   typeahead-on-select="vm.onVendSelect($item, $model, $label)"
+												   required
+											>
+											<i class="lvh-search-close" ng-click="vm.vendor=undefined;">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Bills: </span>
+						<div class="pull-right">
+							<button class="btn btn-primary"
+									ng-disabled="vm.mode === 'edit'"
+									uib-tooltip="Add Bill"
+									ng-click="vm.addBill()">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-danger"
+									ng-disabled="vm.mode === 'edit'"
+									uib-tooltip="Remove Bill"
+									tooltip-placement="bottom"
+									ng-click="vm.aBill.splice(vm.iSelectedBill, 1)">
+								<i class="zmdi zmdi-minus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+						</div>
+
+						<div class="card-body m-t-10" style="overflow: auto; min-height: 450px">
+							<table class="table table-bordered unresponsive">
+								<thead>
+								<tr>
+									<th>#</th>
+									<th>Bill Date</th>
+									<th>Bill No.</th>
+									<th>Amount</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr ng-repeat="oBill in vm.aBill"
+									ng-class="{'grn': vm.iSelectedBill === $index}"
+									ng-click="vm.oSelectedBill = oBill; vm.iSelectedBill = $index">
+									<td>{{$index+1}}</td>
+									<td>
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened1 == true }">
+											<div ng-class="{ 'fg-toggled': opened1 == true }">
+												<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+													   type="text"
+													   class="form-control"
+													   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   max-date="vm.DatePicker.newDate"
+													   ng-model="oBill.billDate"
+													   is-open="opened1"
+													   datepicker-options="vm.DatePicker.dateSettings"
+													   close-text="Close"
+													   required
+													   placeholder="Bill Date"/>
+											</div>
+											<span class="input-group-btn">
+												<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+											</span>
+										</div>
+									</td>
+									<td>
+										<div class="fg-line form-group m-b-0">
+											<input type="text"
+												   ng-model="oBill.billNo"
+												   name="bill_no"
+												   class="form-control input-sm"
+												   placeholder="Bill No."
+												   required
+												   ng-model-options="{ updateOn: 'blur' }">
+										</div>
+									</td>
+									<td>
+										<div class="fg-line form-group m-b-0">
+											<input type="number"
+												   ng-model="oBill.amount"
+												   ng-change="vm.calAmt(oBill);"
+												   class="form-control input-sm"
+												   placeholder="Amount"
+												   required
+												   ng-model-options="{ updateOn: 'blur' }">
+										</div>
+									</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body text-center">
+							<button ng-click="vm.submit(genBill)"
+									class="btn btn-primary">SUBMIT</button>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+
+	.red {
+		color: red;
+	}
+
+	.border-red {
+		border: 2px solid #ff000080 !important;
+	}
+
+	.container:not(.ja-containter) {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+</style>

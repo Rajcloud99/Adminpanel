@@ -1,0 +1,285 @@
+<!-- Controller: settleTripCompPopupCtrl -->
+<!-- ControllerAs: sTCVm -->
+
+<form role="form"  name="settleTripCompPopup" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="sTCVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Settlement</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="col-md-6" ng-hide="sTCVm.markDate && sTCVm.type == 'markSettle' && !sTCVm.updateDate">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label">{{sTCVm.dateLabel}} Date</label>
+					<div class="col-sm-7">
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened1 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{sTCVm.DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   max-date="sTCVm.DatePicker.newDate"
+									   min-date = sTCVm.minDate
+									   ng-model="sTCVm.date"
+									   is-open="opened1"
+									   datepicker-options="sTCVm.DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="Settlement Date"
+									   name="Settlement Date"
+									   required
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+								<button type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+										class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" ng-show="sTCVm.markDate && !sTCVm.updateDate">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<b>Date:</b>&nbsp;&nbsp; {{sTCVm.date | date: "dd-MM-yyyy"}}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label">Remark</label>
+					<div class="col-sm-7">
+						<div class="fg-line">
+							<input type="text"
+								   placeholder="Remark"
+								   class="form-control"
+								   ng-model="sTCVm.remark"
+								   name="Remark"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12" ng-if="false">
+				<table class="table table-bordered unresponsive">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>From</th>
+							<th>To</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="driver in sTCVm.aDriver">
+							<td>
+								{{driver.name}}
+								<span ng-hide="true">
+									{{driver.internalAccount = $clientConfigs.accountDetails.internalDriver}}
+								</span>
+							</td>
+							<td>
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': driver.opened1 }">
+										<input ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'driver.opened1')"
+											   type="text"
+											   uib-datepicker-popup="{{sTCVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="driver.fromDate"
+											   placeholder="From Date"
+											   min-date="sTCVm.tripStarted"
+											   class="form-control"
+											   is-open="driver.opened1"
+											   uib-datepicker-options="sTCVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   name="Driver From Date[{{$index}}]">
+										<span class="input-group-btn">
+												<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'driver.opened1')">
+													<i class="glyphicon glyphicon-calendar"></i>
+												</button>
+											</span>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': driver.opened }">
+										<input ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'driver.opened')"
+											   type="text"
+											   uib-datepicker-popup="{{sTCVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="driver.toDate"
+											   placeholder="To Date"
+											   max-date="sTCVm.tripEnded"
+											   class="form-control"
+											   is-open="driver.opened"
+											   uib-datepicker-options="sTCVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   name="Driver To Date[{{$index}}]">
+										<span class="input-group-btn">
+												<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'driver.opened')">
+													<i class="glyphicon glyphicon-calendar"></i>
+												</button>
+											</span>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr ng-repeat="happay in sTCVm.aHappay">
+							<td>
+								{{happay.name}}
+								<span ng-hide="true">
+									{{happay.internalAccount = $clientConfigs.accountDetails.internalHappay}}
+								</span>
+							</td>
+							<td>
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': happay.opened1 }">
+										<input ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'happay.opened1')"
+											   type="text"
+											   uib-datepicker-popup="{{sTCVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="happay.fromDate"
+											   placeholder="From Date"
+											   class="form-control"
+											   min-date="sTCVm.tripStarted"
+											   is-open="happay.opened1"
+											   uib-datepicker-options="sTCVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   name="Happay To Date[{{$index}}]">
+										<span class="input-group-btn">
+												<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'happay.opened1')">
+													<i class="glyphicon glyphicon-calendar"></i>
+												</button>
+											</span>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': happay.opened }">
+										<input ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'happay.opened')"
+											   type="text"
+											   uib-datepicker-popup="{{sTCVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="happay.toDate"
+											   max-date="sTCVm.tripEnded"
+											   placeholder="To Date"
+											   class="form-control"
+											   is-open="happay.opened"
+											   uib-datepicker-options="sTCVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   name="Happay To Date[{{$index}}]">
+										<span class="input-group-btn">
+												<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'happay.opened')">
+													<i class="glyphicon glyphicon-calendar"></i>
+												</button>
+											</span>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr ng-repeat="fastag in sTCVm.aFastag">
+						<td>
+							{{fastag.name}}
+							<span ng-hide="true">
+								{{fastag.internalAccount = $clientConfigs.accountDetails.internalFastag}}
+							</span>
+						</td>
+						<td>
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': fastag.opened1 }">
+									<input ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'fastag.opened1')"
+										   type="text"
+										   uib-datepicker-popup="{{sTCVm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="fastag.fromDate"
+										   min-date="sTCVm.tripStarted"
+										   placeholder="From Date"
+										   class="form-control"
+										   is-open="fastag.opened1"
+										   uib-datepicker-options="sTCVm.DatePicker.dateSettings"
+										   close-text="Close"
+										   name="Fastag To Date[{{$index}}]">
+									<span class="input-group-btn">
+											<button type="button"
+													class="btn btn-default m-t-0 f12"
+													ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'fastag.opened1')">
+												<i class="glyphicon glyphicon-calendar"></i>
+											</button>
+										</span>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': fastag.opened }">
+									<input ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'fastag.opened')"
+										   type="text"
+										   uib-datepicker-popup="{{sTCVm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="fastag.toDate"
+										   max-date="sTCVm.tripEnded"
+										   placeholder="To Date"
+										   class="form-control"
+										   is-open="fastag.opened"
+										   uib-datepicker-options="sTCVm.DatePicker.dateSettings"
+										   close-text="Close"
+										   name="Fastag To Date[{{$index}}]">
+									<span class="input-group-btn">
+											<button type="button"
+													class="btn btn-default m-t-0 f12"
+													ng-click="sTCVm.DatePicker.openDatePicker(this, $event, 'fastag.opened')">
+												<i class="glyphicon glyphicon-calendar"></i>
+											</button>
+										</span>
+								</div>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="sTCVm.submit(settleTripCompPopup)">Submit</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="sTCVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 50%;
+		height: 173px
+	}
+	.exced{
+		margin-top: 20px;margin-left:10px;
+	}
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+	td ,th{
+		text-align:center;
+	}
+	.pac-container.pac-logo{z-index: 9999;}
+</style>

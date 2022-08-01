@@ -1,0 +1,168 @@
+<!--ng-controller="billStationeryController as StationeryVm">-->
+
+<div class="card" style="margin:20px;">
+	<div class="card-header">
+		<div class="row m-b-5">
+			<form name='filterFrom' novalidate autocomplete="off">
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="StationeryVm.oFilter.type"
+								ng-options="item as item for item in $user.billBook_type"
+								placeholder-text-single ="'Stationary Type'"
+								name="Type">
+							<option value="" disabled></option>
+						</select>
+						<span class="error" ng-if="!$user.billBook_type.length > 0">
+							you don't have access!! Ask your Admin</span>
+						<span class="error" ng-if="!StationeryVm.oFilter.type">
+							This Field is Mandatory</span>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="StationeryVm.oFilter.bookNo"
+							   name="Stationery No"
+							   class="form-control input-sm"
+							   placeholder="Stationery No">
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="lvh-search ng-scope sear chosen-row-1">
+							<input type="text"
+								   placeholder="Book Search..."
+								   ng-model="StationeryVm.oFilter.BillBook" class="lvhs-input"
+								   typeahead-wait-ms="10"
+								   typeahead="item as (item.deleted ? item.name + '(Deleted)' : item.name) for item in StationeryVm.getBillBook($viewValue, true)| limitTo:6"
+								   class="form-control"
+							>
+<!--							<i class="lvh-search-close" ng-click="StationeryVm.oFilter.BillBook=''">×</i>-->
+<!--							<span class="error" ng-if="!StationeryVm.oFilter.BillBook">-->
+<!--							This Field is Mandatory</span>-->
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Branch Search..."
+								ng-model="StationeryVm.oFilter.branch"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in StationeryVm.getAllBranch($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="StationeryVm.oFilter.branch=null;">×</i>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="number"
+							   ng-model="StationeryVm.oFilter.range"
+							   name="Range"
+							   class="form-control input-sm"
+							   placeholder="Range">
+					</div>
+				</div>
+
+
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="StationeryVm.oFilter.status"
+								placeholder-text-single ="'Status Type'"
+								ng-options="item as item for item in ['used', 'unused','disable']"
+								name="Type">
+							<option value="" disabled></option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							type="button"
+							ng-click="StationeryVm.get();"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="StationeryVm.oFilter={}"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>&nbsp;
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Download Stationary"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="StationeryVm.get(null, true)"><i class="zmdi zmdi-download zmdi-hc-fw"></i></button>
+					<button class="btn btn-info p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Download Stockbook"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="StationeryVm.downloadStockbook()"><i class="zmdi zmdi-download zmdi-hc-fw"></i></button>
+				</div>
+			</form>
+		</div>
+
+		<div class="row" style="margin-right: 1px;">
+			<div class="pull-right">
+
+				<button ng-hide="false"
+						class="btn btn-primary waves-effect"
+						uib-tooltip="Free Bill Stationery"
+						tooltip-placement="bottom"
+						ng-disabled="StationeryVm.oBillBook.status == 'unused' || StationeryVm.oBillBook.disable"
+						ng-click="StationeryVm.freeStationary()">
+					<i class="zmdi zmdi-badge-check zmdi-hc-fw"></i>
+					<span></span>
+				</button>&nbsp;&nbsp;
+				<button class="btn btn-primary waves-effect"
+						ng-disabled="!(StationeryVm.oBillBook.disable)"
+						ng-click="StationeryVm.updateStationary('enable')">
+					Enable
+				</button>&nbsp;&nbsp;
+				<button class="btn btn-primary waves-effect"
+						ng-disabled="StationeryVm.oBillBook.disable || StationeryVm.oBillBook.status == 'used'"
+						ng-click="StationeryVm.updateStationary('disable')">
+					Disable
+				</button>
+				&nbsp;&nbsp;
+				<!--<button ng-hide="false" ng-if="$role['Stationery']['Delete Bill Stationery']"-->
+					<!--class="btn btn-danger waves-effect"-->
+					<!--uib-tooltip="Delete Bill Stationery"-->
+					<!--tooltip-placement="bottom"-->
+					<!--ng-disabled="StationeryVm.oBillBook.status == 'used' || StationeryVm.oBillBook.status == 'cancelled' || StationeryVm.oBillBook.disable"-->
+					<!--ng-click="StationeryVm.deleteStationary()">-->
+				<!--<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+				<!--<span></span>-->
+				<!--</button>-->
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<div
+						ja-table
+						table-head="StationeryVm.tableHead"
+						table-body="StationeryVm.aStationery"
+						table-height='300px'
+						table-load="StationeryVm.get(true)"
+						table-column-setting="StationeryVm.columnSetting"
+						table-selectable='"true"'
+						table-api='StationeryVm.tableApi'
+						table-selectable-model="StationeryVm.oBillBook">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

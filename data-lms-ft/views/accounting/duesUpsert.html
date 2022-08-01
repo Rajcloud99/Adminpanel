@@ -1,0 +1,99 @@
+<!--Controller: duesUpsertController-->
+<!--ControllerAs: duesVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-3 control-label">Dues Type: <span
+					class="req_r">*</span></label>
+				<div class="col-sm-7">
+					<select chosen
+							class="form-control"
+							ng-model="duesVm.oDues.duesType"
+							ng-options="item as item for item in duesVm.aDuesType"
+							ng-change="duesVm.onTypeSelect(duesVm.oDues.duesType);"
+							name="Dues Type"
+							required>
+						<option value=""></option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row"  style="margin:5px">
+
+	<!-- otherDues VIEW -->
+	<!-- Controller otherDuesController -->
+	<!-- ControllerAs duesVm -->
+	<!-- html duesOtherType.html -->
+
+	<div class="col-sm-12" ng-if="duesVm.oDues.duesType != 'Insurance' && duesVm.oDues.duesType != 'Permit' && duesVm.oDues.duesType != 'EMI' && duesVm.oDues.duesType != 'Calibration'">
+		<div ui-view="otherDues"></div>
+	</div>
+
+	<!-- insuranceDues VIEW -->
+	<!-- Controller insuranceDuesController -->
+	<!-- ControllerAs duesVm -->
+	<!-- html insuranceDues.html -->
+	<div class="col-sm-12"  ng-if="duesVm.oDues.duesType === 'Insurance' && duesVm.oDues.duesType != 'Permit'">
+		<div ui-view="insuranceDues"></div>
+	</div>
+
+	<!-- permitDues VIEW -->
+	<!-- Controller permitDuesController -->
+	<!-- ControllerAs duesVm -->
+	<!-- html permitDues.html -->
+	<div class="col-sm-12"  ng-if="duesVm.oDues.duesType === 'Permit' && duesVm.oDues.duesType != 'Insurance'">
+		<div ui-view="permitDues"></div>
+	</div>
+
+	<!-- emiDues VIEW -->
+	<!-- Controller emiDuesController -->
+	<!-- ControllerAs duesVm -->
+	<!-- html emiDues.html -->
+	<div class="col-sm-12"  ng-if="duesVm.oDues.duesType === 'EMI'">
+		<div ui-view="emiDues"></div>
+	</div>
+
+	<!-- calibrationDues VIEW -->
+	<!-- Controller calibrationDuesController -->
+	<!-- ControllerAs duesVm -->
+	<!-- html calibrationDues.html -->
+	<div class="col-sm-12"  ng-if="duesVm.oDues.duesType === 'Calibration'">
+		<div ui-view="calibrationDues"></div>
+	</div>
+
+</div>
+
+<style>
+
+
+	error {
+		font-size: 10px;
+		color: red;
+	}
+
+	color {
+		color: red;
+	}
+
+	.btn-danger:focus {
+		box-shadow: 0px 0px 13px 2px darkred !important;
+	}
+
+	.btn-primary:focus {
+		box-shadow: 0px 0px 13px 2px blue !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+</style>

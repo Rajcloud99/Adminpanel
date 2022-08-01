@@ -1,0 +1,93 @@
+<!-- ControllerAs: addTripOnSettlement -->
+<!-- ControllerAs: aTSVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="aTSVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Add Trip</b>
+		</span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="row">
+		<div class="justify col-md-12">
+			<form name="form" novalidate autocomplete="off">
+				<ul class="list-group list-group-flush">
+					<!-- Basic DETAILS -->
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<input type="Number"
+										   placeholder="Trip No."
+										   ng-model="aTSVm.tripNo"
+										   class="lvhs-input"
+										   class="form-control"
+									>
+								</div>
+								<div class="col-md-1">
+									<div class="form-group m-b-0 text-center">
+										<button class="btn btn-primary p-t-0 p-b-0"
+												type="button"
+												style="margin-bottom: 3px;  font-size: 16px"
+												uib-tooltip="Search"
+												ng-click="aTSVm.getTrips()"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<!--Table DETAILS-->
+					<li class="list-group-item">
+						<span class="booking_list_header">TRIP DETAIL</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<div class="col-md-12">
+										<div ja-table
+											 table-body="aTSVm.aTrips"
+											 table-head="aTSVm.tableHead"
+											 table-height='500px'
+											 table-load="aTSVm.getTrips(true)"
+											 table-column-setting="aTSVm.columnSetting"
+											 table-api="aTSVm.tableApi"
+											 table-selectable='"single"'
+											 table-selectable-model="aTSVm.selectedTrip"
+										></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-success waves-effect" ng-click="aTSVm.submit()">Add</button>&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-warning" ng-click="aTSVm	.closeModal()">Close</button>
+</div>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

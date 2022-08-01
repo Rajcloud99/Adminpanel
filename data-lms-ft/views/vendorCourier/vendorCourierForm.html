@@ -1,0 +1,545 @@
+<div>
+    <form name="VendorCourierForm" novalidate>
+        <div class="validationError" ng-show="courierVendor"><h5 class="c-red">* {{Cmsg}}</h5></div>
+        <div class="card-header" >
+            <h2 style="color: #847777;font-size: 16px;">Basic info</h2>
+        </div>
+        <ul ng-show="form_vendorCourier=='view'" class="lv-actions actions"
+            style="position:absolute;margin-top: -45px;margin-left:90%;">
+            <li class="btn-wave" data-ui-sref-active="active">
+                <a data-ui-sref="masters.vendorCourier.edit"
+                   uib-tooltip="Edit VendorCourier" tooltip-placement="bottom"
+                   ng-click="editVendorCourier()" >
+                    <i class="zmdi zmdi-edit">
+                    </i>
+                </a>
+            </li>
+            <li ng-if="!(role_local_data.courierVendor.indexOf('remove')==-1)">
+                <a href="" uib-tooltip="Delete VendorCourier"
+                   tooltip-placement="bottom"
+                   ng-click="deleteVendorCourier()">
+                    <i class="zmdi zmdi-delete">
+                    </i>
+                </a>
+            </li>
+        </ul>
+
+        <!-- vendorCourier basic info -->
+        <div id="div_vendorCourier_info" class="card-body" style="padding-left: 25px;padding-right: 25px">
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vendor Name : <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.name" class="form-control"
+                                        ng-readonly="form_vendorCourier_read_only" name="name" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">For branch: <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="select" ng-show="(form_vendorCourier=='view'
+                            && objVendorCourier.branch_name.length) ||
+                                    form_vendorCourier=='add' || form_vendorCourier=='edit'"
+                                 ng-readonly="form_vendorCourier_read_only">
+                                <select class="form-control" 
+                                        ng-readonly="form_vendorCourier_read_only"
+                                        ng-disabled="form_vendorCourier_read_only"
+                                        ng-model="objVendorCourier.branch_name"
+                                        ng-options="branch.name as branch.name for branch in branchesTrim"
+                                        ng-change="branchSelected(objVendorCourier.branch_name)" name="branch" required>
+                                    <option value="" disabled selected>Select branch</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Primary contact person: <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.prim_contact_person" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only" name="primary contact person" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Alternate contact person</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.alt_contact_person" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Primary contact no: <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="number" ng-model="objVendorCourier.prim_contact_no" class="form-control"
+                                       ng-readonly="form_vendorCourier_read_only" ng-minlength="10" ng-maxlength="10" name="primary contact number" required="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Alternate contact no 1</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="number" ng-model="objVendorCourier.alt_contact_no1" class="form-control"
+                                        
+                                        ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Alternate contact no 2</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="number"  ng-model="objVendorCourier.alt_contact_no2" class="form-control"
+                                        ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Primary email: <span style="color: red;">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="email" ng-model="objVendorCourier.prim_email" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only" name="email" required="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Alternate email</label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input ng-readonly="form_vendorCourier_read_only"
+                                           ng-model="objVendorCourier.alt_email" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Fax </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                    <input ng-readonly="form_vendorCourier_read_only"
+                                           ng-model="objVendorCourier.fax" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px" ng-show="form_vendorCourier_read_only">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Rating</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.rating"
+                                       class="form-control" ng-readonly="form_vendorCourier_read_only"
+                                       >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Total times rated</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.total_times_rated"
+                                       class="form-control" ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px" ng-show="form_vendorCourier == 'edit'">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label  class="col-sm-4 control-label">Status</label>
+                        <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="radio m-b-15" style="display: inline-block">
+                                <label>
+                                    <input type="radio" ng-readonly="form_vendorCourier_read_only"
+                                           name="status" ng-model="objVendorCourier.status" value="Active">
+                                    <i class="input-helper"></i>
+                                    Active
+                                </label>
+                            </div>
+                            <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                                <label>
+                                    <input type="radio" ng-readonly="form_vendorCourier_read_only"
+                                           name="status" ng-model="objVendorCourier.status" value="Inactive">
+                                    <i class="input-helper"></i>
+                                    Inactive
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--vendorCourier address 1-->
+        <div class="card-header" >
+            <h2 style="color: #847777;font-size: 16px;">Address 1</h2>
+        </div>
+
+        <div id="div_vendorCourier_address1" class="card-body" style="padding-left: 25px;
+                padding-right: 25px;">
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Address Line 1</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.address1.line1"
+                                       class="form-control" ng-readonly="form_vendorCourier_read_only"
+                                       >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Address Line 2</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.address1.line2"
+                                       class="form-control" ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">City</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input id ="autoCompleteCity1" type="text"
+                                       ng-model="objVendorCourier.address1.city" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">District</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input  ng-model="objVendorCourier.address1.district"
+                                        class="form-control" ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">State</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address1.state" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Country</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address1.country"
+                                       class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">PIN code</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address1.pincode" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+        </div>
+
+<!--------------------------------------------address 2-------------------------------------------------->
+
+        <!--vendorCourier address 1-->
+        <div class="card-header" >
+            <h2 style="color: #847777;font-size: 16px;">Address 2</h2>
+        </div>
+
+        <div id="div_vendorCourier_address" class="card-body" style="padding-left: 25px;
+                padding-right: 25px">
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Address Line 1</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.address2.line1"
+                                       class="form-control" ng-readonly="form_vendorCourier_read_only"
+                                       >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Address Line 2</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.address2.line2"
+                                       class="form-control" ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">City</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input id ="autoCompleteCity2" type="text"
+                                       ng-model="objVendorCourier.address2.city" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">District</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input  ng-model="objVendorCourier.address2.district"
+                                        class="form-control" ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">State</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address2.state" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Country</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address2.country"
+                                       class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">PIN code</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address2.pincode" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+        </div>
+
+<!--------------------Address 3 ------------------------------->
+        <!--vendorCourier address 1-->
+        <div class="card-header" >
+            <h2 style="color: #847777;font-size: 16px;">Address 3</h2>
+        </div>
+
+        <div id="div_vendorCourier_address_3" class="card-body" style="padding-left: 25px;
+                padding-right: 25px;margin-bottom: 50px">
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Address Line 1</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.address3.line1"
+                                       class="form-control" ng-readonly="form_vendorCourier_read_only"
+                                       >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Address Line 2</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input type="text" ng-model="objVendorCourier.address3.line2"
+                                       class="form-control" ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">City</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input id ="autoCompleteCity3" type="text"
+                                       ng-model="objVendorCourier.address3.city" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">District</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input  ng-model="objVendorCourier.address3.district"
+                                        class="form-control" ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">State</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address3.state" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Country</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address3.country"
+                                       class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-6">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">PIN code</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_vendorCourier_read_only">
+                                <input ng-model="objVendorCourier.address3.pincode" class="form-control"
+                                       
+                                       ng-readonly="form_vendorCourier_read_only">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" ng-show="!form_vendorCourier_read_only" style="margin: 0px 0px 30px 0px">
+            <div style="margin-left: 80%">
+                <button class="btn btn-default" ng-disabled="(form_vendorCourier=='edit'
+                ||(form_vendorCourier=='add' && !(VendorCourierForm.$dirty)))"
+                        ng-click="clearForm()" style="margin-bottom: 15px;margin-right:30px"> Clear</button>
+                <button type="submit" class="btn btn-primary"
+                        ng-click="saveVendorCourier(VendorCourierForm)" style="margin-bottom: 15px;margin-right:30px">Save</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+          <h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+        </div>
+    </form>
+</div>

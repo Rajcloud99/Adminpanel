@@ -1,0 +1,263 @@
+<form role="form"  name="billCover" autocomplete="off" novalidate>
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Select Template:</label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control ng-pristine ng-valid ng-not-empty ng-touched"
+									placeholder="Select Template"
+									ng-init="templateKey='object:831'"
+									ng-model="templateKey"
+									name="template"
+									style="">
+								<option label="Default"
+										value="object:831"
+										selected="selected">Default
+								</option>
+								<option label="ADANI"
+										value="object:832">ADANI
+								</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<button ng-click="printDiv('idOne')" class="btn btn-primary glyphicon glyphicon-print" style="margin-bottom: 12px;"> PRINT </button>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="modal-body">
+		<div id="idOne" ng-if="templateKey === 'object:831'">
+
+			<div style="text-align:center;font-size: 25px;padding-left: 34px;">ASHUTOSH LOGISTICS PVT LTD.</div>
+			<p style="text-align: center">
+				<b>
+					<span>GSTIN: 07AAFCA5342P1ZD</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<span>CIN: U60231DL2005PTC144221</span>&nbsp;&nbsp;&nbsp;&nbsp;
+					<span>A-10, First Floor, Back Side Vishwakarma Colony, Delhi</span>
+					<br>
+					<span>Phone: 26364589/90/91 &nbsp;&nbsp;&nbsp;&nbsp; Fax: 26364591</span>
+				</b>
+
+
+			<hr>
+
+			<div style="margin-top: 15px">
+				<p style="float: left">
+					To, <br>
+					M/s <span style="text-transform: uppercase">Chatanya Logistics Pvt. Ltd.</span><br>
+					B - 109, DDA Shed, Okhla Phase - 1
+				</p>
+				<p style="float: right">
+					Date: 09/03/18
+				</p>
+				<div style="clear: both"></div>
+
+				<p style="margin-top: 20px;">
+					<u>Subject : Bill Covering Letter</u>
+				</p>
+				<p>
+					Dear Sir,<br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					Please find herewith encolsed bill(s) as per detail given below :-
+				</p>
+			</div>
+			<div style="width: 100%;">
+				<div class="table-responsive" style="width: 100%;">
+					<table class="table ja-table" style="width: 100%;border-spacing: 0px;">
+						<tbody>
+							<tr style="text-align: center">
+								<td style="border: 1px solid #000000;"><b>SI.No.</b></td>
+								<td style="border: 1px solid #000000;"><b>Bill No.</b></td>
+								<td style="border: 1px solid #000000;"><b>Date</b></td>
+								<td style="border: 1px solid #000000;"><b>Bill Amount</b></td>
+								<td style="border: 1px solid #000000;"><b>Less Advance</b></td>
+								<td style="border: 1px solid #000000;"><b>Net Amount</b></td>
+							</tr>
+							<tr ng-repeat="oBill in aBill" style="text-align: center">
+								<td style="border: 1px solid #000000;">{{$index + 1}}</td>
+								<td style="border: 1px solid #000000;">{{oBill.billNo}}</td>
+								<td style="border: 1px solid #000000;">{{oBill.created_at | date:'dd-MMM-yyyy'}}</td>
+								<td style="border: 1px solid #000000;">{{oBill.totalAmount}}</td>
+								<td style="border: 1px solid #000000;">{{oBill.amountRecived || 0}}</td>
+								<td style="border: 1px solid #000000;">{{oBill.totalAmount - (oBill.amountRecived || 0)}}</td>
+							</tr>
+							<tr ng-repeat="oBill in ((16 - aBill.length) | getNumber) track by $index" style="text-align: center;height: 27px">
+								<td style="border: 0px ; border-left: 1px solid black;"></td>
+								<td style="border: 0px;"></td>
+								<td style="border: 0px;"></td>
+								<td style="border: 0px;"></td>
+								<td style="border: 0px;"></td>
+								<td style="border: 0px ;border-right: 1px solid black;"></td>
+							</tr>
+							<tr style="text-align: center">
+								<td style="border: 1px solid #000000;" colspan="3"><b>Total</b></td>
+								<td style="border: 1px solid #000000;"><b>{{sumTotalAmount}}</b></td>
+								<td style="border: 1px solid #000000;"><b>{{sumAdvanceAmount}}</b></td>
+								<td style="border: 1px solid #000000;"><b>{{sumTotalAmount - sumAdvanceAmount}}</b></td>
+							</tr>
+							<tr>
+								<td style="border: 1px solid #000000;" colspan="6"><b>Rupees {{(sumTotalAmount - sumAdvanceAmount)|numberToWords}}</b></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div style="clear: both"></div>
+			<div style="margin-top: 20px">
+				<div style="float:left;">
+					<p style="margin-bottom: 10px">Thanking You</p>
+					<p style="margin-bottom: 10px">Kindly acknowledge the receipt</p>
+					<p style="margin-bottom: 10px">Encl. : As above</p>
+				</div>
+				<div style="float: right">
+					<p style="margin-bottom: 40px">For ASHUTOSH LOGISTICS PVT. LTD.</p>
+					<p style="text-align: center">Authorised Signatory</p>
+				</div>
+				<div style="clear: both"></div>
+			</div>
+		</div>
+		<div id="idOne" ng-if="templateKey === 'object:832'">
+
+			<table class="table ja-table" style="width: 100%;border-spacing: 0px;">
+				<tbody>
+					<tr style="text-align: center">
+						<td style="border: 1px solid #000000;" colspan="4">
+							<p style="margin: 0px; font-size: 12px"><b>SAC 9966</b></p>
+							<p style="margin: 0px; font-size: 12px"><b>Bill of Supply</b></p>
+							<p style="margin: 0px; font-size: 12px"><b>“As per sr. no. 23, Notification No.9/2017-Integrated Tax(Rate) GST not applicable “Services by way of giving on hire to a goods transport agency, a means of transportation of goods.” Heading 9966 or Heading 9973</b></p>
+						</td>
+					</tr>
+					<tr style="text-align: center">
+						<td style="border: 1px solid #000000;" colspan="4">
+							<p style="margin: 0px;font-size: 25px;">ASHUTOSH LOGISTICS PVT LTD</p>
+							<p style="margin: 0px; font-size: 12px">A-10 FIRST FLOOR BACK SIDE VISHWAKARMA COLONY NEW DELHI-110044 &nbsp;&nbsp; PHONE NO. 011-26364589/90/91</p>
+							<p style="margin: 0px; font-size: 12px">COMPUTER GENERATED INVOICE, SIGNATURE NOT REQUIRED</p>
+							<p style="margin: 0px; font-size: 12px">PAN NO. AAFCA5342P</p>
+							<p style="margin: 0px; font-size: 12px">GSTIN NO. 07AAFCA5342P1ZD</p>
+							<p style="margin: 0px; font-size: 12px">CIN NO. U60231DL2005PTC144221</p>
+							<p style="margin: 0px; font-size: 12px">Notification no. 5/2017 - Central Tax</p>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #000000;" colspan="2">
+							<p style="margin: 0px;"><b>PAN: {{aBill[0].billingParty.pan_no}} &nbsp;&nbsp;&nbsp;&nbsp; GSTIN: {{aBill[0].billingParty.gstin_no}}</b></p>
+							<p style="margin: 0px;"><b>{{aBill[0].billingParty.name}}</b></p>
+							<p style="margin: 0px;"><b>{{[aBill[0].billingParty.address.line1,aBill[0].billingParty.address.line2,aBill[0].billingParty.address.country] | mergeString:', '}}</b></p>
+							<p style="margin: 0px;"><b>{{[aBill[0].billingParty.address.city] | mergeString:', '}} - {{aBill[0].billingParty.address.pincode}}</b></p>
+							<p style="margin: 0px;"><b>{{[aBill[0].billingParty.address.state,aBill[0].billingParty.address.country] | mergeString:', '}}</b></p>
+						</td>
+						<td style="border: 1px solid #000000;">
+							<p style="margin: 0px;"><b>Bill No:</b></p>
+							<p style="margin: 0px;"><b>Bill Date:</b></p>
+							<p style="margin: 0px;">Period</p>
+							<p style="margin: 0px;">VENDOR CODE:</p>
+							<p style="margin: 0px;">&nbsp;</p>
+						</td>
+						<td style="border: 1px solid #000000;">
+							<p style="margin: 0px;">{{aBill[0].billNo}}</p>
+							<p style="margin: 0px;">{{aBill[0].created_at | date:'dd-MMM-yyyy'}}</p>
+							<p style="margin: 0px;">{{''|periodFilter}}</p>
+							<p style="margin: 0px;">{{aBill[0].billingParty.vendor_code}}</p>
+							<p style="margin: 0px;">&nbsp;</p>
+						</td>
+					</tr>
+					<tr style="text-align: center">
+						<td style="border: 1px solid #000000;">SR NO.</td>
+						<td style="border: 1px solid #000000;">ITEM DETAILS</td>
+						<td style="border: 1px solid #000000;">NO OF TRIP</td>
+						<td style="border: 1px solid #000000;">AMOUNT(RS)</td>
+					</tr>
+					<tr style="text-align: center; height: 400px" valign="top">
+						<td style="border: 1px solid #000000;"></td>
+						<td style="border: 1px solid #000000;">HARING OF TRUCK NEED BASIS</td>
+						<td style="border: 1px solid #000000;">{{aBill[0].items.length}}</td>
+						<td style="border: 1px solid #000000;">{{aBill[0].totalAmount}}</td>
+					</tr>
+					<tr style="text-align: center">
+						<td style="border: 1px solid #000000;" colspan="2"></td>
+						<td style="border: 1px solid #000000;"> Total </td>
+						<td style="border: 1px solid #000000;">{{aBill[0].totalAmount}}</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #000000;" colspan="4"> <b>RS.IN WORDS: {{aBill[0].totalAmount|numberToWords}}</b> </td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #000000;">PAN NO:</td>
+						<td style="border: 1px solid #000000;" colspan="3">AAFCA5342P</td>
+					</tr>
+					<tr>
+						<td style="border: 1px solid #000000;">GSTIN NO.:</td>
+						<td style="border: 1px solid #000000;" colspan="3">07AAFCA5342P1ZD</td>
+					</tr>
+					<tr>
+						<td colspan="4" style="padding: 0px !important;">
+							<table class="table ja-table" style="width: 100%;border-spacing: 0px;">
+								<tr style="font-size: 13px">
+									<td style="border: 1px solid #000000;"><b>TERMS & CONDITIONS</b></td>
+									<td style="border: 1px solid #000000;text-align: center; width: 300px" >
+										<b>FOR: ASHUTOSH LOGISTICS PVT. LTD.</b>
+									</td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid #000000;">E. & O.E.</td>
+									<td style="border-right: 1px solid #000000;"></td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid #000000;">1. Cheque/DD Should be drawn in favour of Ashutosh Logistics Pvt. Ltd.  Payable at New Delhi.</td>
+									<td style="border-right: 1px solid #000000;"></td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid #000000;">2. Any discrepancies in the bill should be brought to the notice of the company within 2 weeks of bill date.</td>
+									<td style="border-right: 1px solid #000000;"></td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid #000000;">3. All dispute subject to Delhi Jurisdiction only.</td>
+									<td style="border-right: 1px solid #000000;"></td>
+								</tr>
+								<tr>
+									<td style="border: 1px solid #000000;">4. GST IS PAYABLE BY CONSIGNOR/CONSIGNEE.</td>
+									<td style="border: 1px solid #000000;text-align: center">AUTHORISED SIGNATOR</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 75%;
+		height: 173px
+	}
+	.ja-table{
+
+	}
+
+	.fs-12{
+		font-size: 11px;
+	}
+
+	.text-center{
+		text-align: center;
+	}
+
+	.ja-table > tbody > tr > td{
+		border: 1px solid #000000;
+		padding: 2px 5px !important;
+		border-spacing: 0px;
+	}
+</style>

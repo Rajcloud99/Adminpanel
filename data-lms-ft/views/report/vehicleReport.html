@@ -1,0 +1,116 @@
+<div class="container" ng-controller="RegVehicleReportController">
+    <div class="card m-b-0" id="messages-main">
+        <div class="" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lv-body">
+                    <div class="col-md-12" style="min-height: 272px;">
+                        <div class="clearfix"></div>
+                        <form role="form" ng-submit="filter(form)">
+                            <div class="col-xs-6 m-b-5 col-sm-1 col-md-2 col-lg-2">
+                                <div class="lvh-search ng-scope sear">
+                                    <input
+                                        type="text"
+                                        placeholder="Vehicle Search..."
+                                        ng-model="vehicle_reg_no"
+                                        class="lvhs-input"
+                                        typeahead-wait-ms="10"
+                                        typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue"
+                                        ng-change="getVname(vehicle_reg_no)"
+                                        class="form-control"
+                                        typeahead-on-select="onSelect($item, $model, $label)"
+                                    >
+                                    <i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <div class="select">
+                                    <select class="form-control" ng-options="item.val as item.key for item in aVehStatus" ng-model="status" style="height: 34px;">
+										<option style="display:none" value="">Status Search</option>
+									</select>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <div class="select">
+                                    <select class="form-control" ng-options="item.val as item.key for item in aVehDriver" ng-model="driverStatus" style="height: 34px;">
+										<option style="display:none" value="">Search</option>
+									</select>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <div class="select">
+                                    <select chosen data-placeholder-text-single="'Driver'" allow-single-deselect="true" no-results-text="'Could not find any Driver'" search-contains="true" class="form-control" ng-model="driver123" ng-options="item as item.name for item in aDrivers">
+										<option value=""></option>
+									</select>
+                                </div>
+                            </div>
+                            <!-- <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+                              <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                                  <input ng-click="open($event, 'opened1')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date" is-open="opened1" datepicker-options="dateOptions" close-text="Close" placeholder="From Date" ng-change="getAllTrip()" style="padding: 0px 4px;height: 34px;" />
+                                </div>
+                                  <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                              </div>
+                            </div> -->
+                            <div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                <label class="checkbox checkbox-inline m-r-20" style="margin-left: 9%; margin-top: 9px;">
+									<input type="checkbox" ng-model="own_vehicle" ng-click="whoseVehicle()">
+									<i class="input-helper"></i>
+									Own Vehicle
+								</label>
+                            </div>
+
+                            <div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+                                <button ng-click="getAllVehicles()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+									Search
+								</button>
+                            </div>
+							<button ng-click="downloadGroupReport()" class="btn btn-primary hidden-print pull-right" style="font-size: 11px; padding: 5px;margin-top: 5px;">VEHICLE GROUP
+							</button>&nbsp;
+                            <button ng-hide="aVehicle.length == 0" ng-click="downloadReport(true)" class="btn btn-primary hidden-print pull-right" style="font-size: 11px; padding: 5px;margin-top: 5px;margin-right: 5px;">Download
+							</button>&nbsp;
+                        </form>
+                        <div class="clearfix"></div>
+                        <div class="detailsList">
+                            <div class="" style="overflow-y: auto; max-height: 500px;">
+                                <table class="table table-bordered unresponsive">
+                                    <thead fix-head>
+                                        <tr>
+                                            <th>Vehicle No.</th>
+                                            <th>Vehicle Type</th>
+                                            <th>Status</th>
+                                            <th>Current Location</th>
+                                            <th>Driver</th>
+                                            <th>Manager</th>
+                                            <th>Branch</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="oVehicle in aVehicle" class="pointer selectItem">
+                                            <td>{{oVehicle.vehicle_reg_no}}</td>
+                                            <td>{{oVehicle.veh_type_name || 'NA'}}</td>
+                                            <td>{{oVehicle.last_known ? oVehicle.last_known.status ? (oVehicle.last_known.status == "Booked" || oVehicle.last_known.status == "Journey") ? oVehicle.last_known.status + " (Trip No. "+ (oVehicle.last_known.trip_no
+                                                || "NA")+")" : oVehicle.last_known.status :"NA" : "NA"}}
+                                            </td>
+                                            <td>{{oVehicle.last_known ? oVehicle.last_known.status ? (oVehicle.last_known.address || "NA") : "NA" :"NA"}}
+                                            </td>
+                                            <td>{{(oVehicle.driver_name || "NA") + ' (' + (oVehicle.driver_contact_no || "NA") + ')'}}
+                                            </td>
+                                            <td>{{oVehicle.manager ? (oVehicle.manager.name || "NA") + ' (' + (oVehicle.manager.mobile || "NA") + ')' : "NA"}}
+                                            </td>
+                                            <td>{{oVehicle.branch || "NA"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div ng-if="aVehicle.length == 0" class="ms-body" style=" min-height: 100px;">
+                                <h3>No any registered vehicle available !!!!!</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

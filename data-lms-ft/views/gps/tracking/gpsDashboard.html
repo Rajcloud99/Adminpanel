@@ -1,0 +1,138 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-4"
+				 ng-if="gdcVm.visibility"
+				 ng-repeat='oGraph in gdcVm.aData'
+				 style="float: left;">
+				<div class="ja-back"
+					 ng-if="gdcVm.isBack">
+					<a href="javascript:void(0)"
+					   uib-tooltip="Back"
+					   ng-click="gdcVm.goBack()"
+					   tooltip-placement="bottom">
+						<i class="zmdi zmdi-arrow-left zmdi-hc-fw pointer" style="font-size: 20px; color: #adadad;"></i>
+					</a>
+				</div>
+
+				<dashboard graph="oGraph"
+						   graph-data="gdcVm.data">
+
+				</dashboard>
+			</div>
+			<div class="col-md-8" ng-if="gdcVm.showTable">
+				<div class="pull-right">
+					<button class="btn btn-primary p-t-0 p-b-0 m-t-5"
+							style="margin-bottom: 3px;  font-size: 16px"
+							ng-click="gdcVm.downloadCsv(gdcVm.tableData)"
+					>
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+				</div>
+				<div ng-if !="$configs.tracking.gpsBoardColShow" class="col-md-12"  style="max-height: 474px; overflow: scroll">
+					<table class="table table-bordered unresponsive invoiceDetail">
+						<thead>
+
+							<tr>
+								<th>#</th>
+								<th>Vehicle</th>
+								<th>Segment</th>
+								<th>Status</th>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr data-ng-repeat="data in gdcVm.tableData"
+							class="pointer">
+
+							<td>{{$index+1}}</td>
+							<td>{{data.vehicle_reg_no || 'NA'}}</td>
+							<td>{{data.segment || 'NA'}}</td>
+							<td>{{data.status || 'NA'}}</td>
+							<td>{{data.address || 'NA'}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div ng-if="$configs.tracking.gpsBoardColShow" class="col-md-12"  style="max-height: 474px; overflow: scroll">
+					<table class="table table-bordered unresponsive invoiceDetail">
+						<thead>
+
+						<tr>
+							<th>#</th>
+							<th>Vehicle</th>
+							<th>Vehicle Type</th>
+							<th>Status</th>
+							<th>Address</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr data-ng-repeat="data in gdcVm.tableData"
+							class="pointer">
+
+							<td>{{$index+1}}</td>
+							<td>{{data.vehicle_reg_no || 'NA'}}</td>
+							<td>{{data.veh_type_name || 'NA'}}</td>
+							<td>{{data.status || 'NA'}}</td>
+							<td>{{data.address || 'NA'}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	dashboard .container:not(.ja-containter){
+		width: 100%;
+	}
+
+	.ja-back{
+		position: absolute;
+		right: 40px;
+		top: 10px;
+		z-index: 1;
+	}
+
+	.red{
+		color: red;
+	}
+
+	.fs-25{
+		font-size: 25px;
+	}
+
+	.ja-fullscreen{
+		position: fixed;
+		z-index: 10;
+		left: 0;
+		top: 40px;
+		width: 100% !important;
+		margin: 0 !important;
+		height: 100vh;
+		background: #0000003d;
+	}
+
+	.ja-fullscreen .card{
+		height: 80% !important;
+		width: 90%;
+		margin: 30px auto;
+		border-radius: 5px;
+	}
+
+	.nvd3-wrapper{
+		height: calc(100% - 100px) !important;
+		width: 100% !important;
+	}
+
+	nvd3, svg{
+		/*height: calc(100% - 40px) !important;*/
+		height: 100% !important;
+		width: 100% !important;
+	}
+</style>
+

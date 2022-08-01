@@ -1,0 +1,121 @@
+<div style="width: 100%;height: 15px">
+	<button style="margin-right: 10px" ; type="button" ng-click="pbpVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button></div>
+<div>
+	<div style="margin-left: 20px; margin-right: 20px" class="row h-set3">
+		<div class="col-sm-9">
+			<div class="col-sm-2 bold">{{pbpVm.thatTrip.vehicle_no}}</div>
+			<div class="col-sm-2 bold">Speed: {{pbpVm.speed||0}}Km/hr</div>
+			<div class="col-sm-3 bold">{{((pbpVm.thatTrip.statuses | filter:{"status": "Trip started"})[0].date | date:"dd-MMM-yyyy 'at' h:mma")}}</div>
+			<div class="col-sm-3 bold">{{((pbpVm.thatTrip.statuses | filter:{"status": "Trip ended"})[0].date | date:"dd-MMM-yyyy 'at' h:mma")}}</div>
+			<div class="col-sm-2 bold">{{pbpVm.thatTrip.route_name}}</div>
+			<div class="clearfix"></div>
+			<div class="col-sm-2 bold">{{pbpVm.playbackRes.tot_dist + ' km'}}</div>
+			<div ng-if="!loader" class="col-sm-2" style="padding-top: 5px;padding-bottom: 5px;">
+				<a ng-click="showInList();" class="btn btn-normal"><span class="glyphicon " ng-class="{'glyphicon-road': showDiv, 'glyphicon-th-list': !showDiv}"></span> {{toggleText}}</a>
+			</div>
+			<div ng-if="!loader" class="col-sm-1" style="padding-top: 5px;padding-bottom: 5px;margin-left:60px; ">
+				<button class="btn btn-primary"
+					style="font-size:13px"
+					ng-click="downloadCsv(aPlayPosiData)"
+				>
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+			</div>
+
+			<div ng-if="!loader" class="col-sm-2" style="padding-top: 5px;padding-bottom: 5px;">
+				<input type="checkbox"
+						   ng-model="pbpVm.alertStatus" ng-change="pbpVm.showAlerts()">
+					<i class="input-helper"></i>Show Alerts
+			</div>
+
+		</div>
+		<div class="col-sm-3 p-r-0 p-l-0" ng-if="!loader">
+			<div class="side-alert">
+				<div class="side-inn">
+					<div class="ply" ng-show="!showDiv">
+						<div class="col-sm-2" style="font-size: 32px; padding-top: 15px;">
+							<a href="" ng-show="showPlay" class="play" ng-click="play()">
+								<span class="glyphicon glyphicon-play-circle"  aria-hidden="true"></span>
+							</a>
+							<a href="" ng-show="showStop" class="pause" ng-click="stopFight()">
+								<span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+							</a>
+						</div>
+						<div class="col-sm-9">
+							<rzslider rz-slider-model="slider.value" rz-slider-options="slider.options">	</rzslider>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="btns" ng-show="!showDiv">
+						<a href="" ng-click="line()" class="btn btn-normal"><span class="glyphicon glyphicon-resize-horizontal">&nbsp;Draw Route</span></a>&nbsp;
+						<a href="" ng-click="resetFight()" class="btn btn-normal"><span class="glyphicon glyphicon-repeat">&nbsp;Reset</span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="p-l-0" style="background: #fff;">
+			<div class="toggle-map" id="map-togg2">
+				<div class="paly-map labelsss" style="height:540px;margin-bottom:0px;margin-top: 0!important;color: #fff;">
+					<div class="col-md-12" style="width:100%;height:500px;border:1px solid;z-index:0;" id="pbpMap"></div>
+				</div>
+			</div>
+		</div>
+		<div class="toggle-table2" ng-show="showDiv">
+			<div class="table-responsive" style="min-height: 500px;height: 450px;">
+				<table class="table table-condensed">
+					<thead>
+					<tr>
+						<th>Start Time</th>
+						<th>End Time</th>
+						<th>Location</th>
+						<th>Latitude</th>
+						<th>Longitude</th>
+						<th>Nearest Landmark</th>
+						<th>Speed(Kmph)</th>
+						<th>Duration(Hour)</th>
+						<th>Distance(Kms)</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="list in aPlayPosiData" ng-if="aPlayPosiData.length>0">
+						<td>{{list.start_time || "NA"}}</td>
+						<td>{{list.end_time || "NA" }}</td>
+						<td>
+							<a href="" ng-click="viewOnMap(list)">{{list.start_addr || "NA" }}</a>
+						</td>
+						<td>{{list.start && list.start.latitude || "NA" }}</td>
+						<td>{{list.start && list.start.longitude || "NA" }}</td>
+						<td>{{list.nearest_landmark && list.nearest_landmark.name && list.nearest_landmark.dist ? list.nearest_landmark.dist/1000 + " KM from " + list.nearest_landmark.name : "NA"}}</td>
+						<td>{{list.top_speed || "0" }}</td>
+						<td>{{list.duration || "0" }}</td>
+						<td>{{list.distance || "0" }}</td>
+					</tr>
+					<tr ng-if="aPlayPosiData.length < 1">
+						<td colspan="4"> Play data not available !!!</td>
+					</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+<style type="text/css">
+	section.main{width: 100%;float: none;margin: 0;}
+	#map.togg2{display: block;}
+	.toggle-table2{
+		float: left;
+		width: 100%;
+		background: #fff;
+	}
+	ul.dropdown-menu{
+		z-index: 99;
+	}
+	.bold {
+		font-weight: bold;
+	}
+</style>

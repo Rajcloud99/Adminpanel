@@ -1,0 +1,312 @@
+<ul class="list-group list-group-flush">
+	<li class="list-group-item">
+		 <span class="booking_list_header">BASIC DETAILS</span>
+		<div class="card-body">
+			<div class="row" style="margin:5px">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Payment Type:</label>
+						<div class="col-sm-6 select" ng-hide="user_mode=='View'">
+							<select chosen
+									multiple
+									class="form-control"
+									ng-model="oUser.aPaymentType"
+									ng-options="item as item.pType for item in ($user.aPaymentType || $configs.Bill.Payment.PaymentType)"
+									name="Payment Type"
+							>
+								<option value=""></option>
+							</select>
+						</div>
+
+						<div ng-show="user_mode=='View'" class="col-sm-6">
+							{{oUser.aPaymentType|arrayOfString:'pType'}}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4" ng-if="$user.client_allowed.length">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Client Allowed:</label>
+						<div ng-hide="user_mode=='View'" class="col-sm-6 select">
+							<select chosen
+									multiple
+									class="form-control"
+									ng-model="oUser.client_allowed"
+									ng-options="item as item.name for item in $user.client_allowed"
+									name="Payment Type"
+							>
+								<option value=""></option>
+							</select>
+						</div>
+
+						<div ng-show="user_mode=='View'" class="col-sm-6">
+							{{oUser.client_allowed|arrayOfString:'name'}}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Bill Book:</label>
+						<div ng-hide="user_mode=='View'" class="col-sm-6 select">
+						<select chosen multiple
+								class="form-control"
+								ng-model="oUser.billBook_type"
+								ng-options="item as item for item in $constants.aBillBookType"
+								name="Type">
+							<option value="" disabled></option>
+						</select>
+					</div>
+						<div ng-show="user_mode=='View'" class="col-sm-6">
+							{{oUser.billBook_type}}
+						</div>
+				</div>
+			</div>
+				<div class="clearfix"></div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Segment:</label>
+						<div ng-hide="user_mode=='View'" class="col-sm-6 select">
+							<select chosen multiple
+									class="form-control"
+									ng-model="oUser.segment_type"
+									ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+									name="Segment">
+								<option value="" disabled></option>
+							</select>
+						</div>
+						<div ng-show="user_mode=='View'" class="col-sm-6">
+							{{oUser.segment_type}}
+						</div>
+					</div>
+				</div>
+		</div>
+		</div>
+	</li>
+
+<!--	BRANCH ACCESS CONTROL-->
+	<li class="list-group-item">
+		<span class="booking_list_header">BRANCH ACCESS CONTROL</span>
+		<div class="card-body">
+			<div class="row" style="margin:5px">
+				<div class="col-md-4" ng-hide="user_mode=='View'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Branch :<span
+							class="req_r">*</span></label>
+						<div class="col-sm-8">
+							<div class="ng-scope sear chosen-row-1">
+								<input
+									type="text"
+									class="form-control"
+									placeholder="Branch Search.."
+									ng-model="oUser.selectBranch"
+									typeahead-wait-ms="10"
+									name="Branch"
+									typeahead="item as (item.name + '('+($configs.client_allowed|filter:{'clientId': item.clientId})[0].name+')') for item in getAllBranch($viewValue) | limitTo:6"
+									typeahead-on-select="onBranchSelect($item, $model, $label)">
+								<i class="lvh-search-close" ng-click="selectBranch=null;">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="row" style="margin:5px">
+								<div class="detailsList">
+									<div class="" style="overflow-y: auto; max-height: 300px;">
+										<table class="table table-bordered unresponsive">
+											<thead id='my_fixable_table_header' fix-head>
+											<tr>
+												<th>&#35;</th>
+												<th>branch</th>
+												<th><div class="col-xs-8"><label>Read</label></div>
+													<div ng-hide="user_mode=='View'" class="col-xs-1" style="margin-left: -40px;">
+														<label class="checkbox checkbox-inline m-r-20">
+															<input type="checkbox"
+																   ng-model="read"
+															       ng-change="readAll(read)">
+															<i class="input-helper"></i>
+														</label>
+													</div></th>
+												<th><div class="col-xs-8"><label>Write</label></div>
+													<div ng-hide="user_mode=='View'" class="col-xs-1" style="margin-left: -40px;">
+														<label class="checkbox checkbox-inline m-r-20">
+															<input type="checkbox"
+																   ng-model="write"
+																   ng-change="writeAll(write)">
+															<i class="input-helper"></i>
+														</label>
+													</div></th>
+												<th>Remove</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr class="pointer selectItem"
+												ng-repeat="obj in oUser.branch">
+												<td>{{$index + 1}}</td>
+												<td>{{obj.name}}</td>
+												<td><div class="checkbox m-b-15">
+													<label>
+														<input type="checkbox"
+															   ng-model="obj.read"
+															   name="read">
+														<i class="input-helper"></i>
+													</label>
+												</div></td>
+												<td><div class="checkbox m-b-15">
+													<label>
+														<input type="checkbox"
+															   ng-model="obj.write"
+															   name="write">
+														<i class="input-helper"></i>
+													</label>
+												</div></td>
+												<td>
+													<button ng-disabled="user_mode=='View'" ng-click="removeBranch($index)" class="btn btn-primary waves-effect pointer">
+													<i class="zmdi zmdi-minus zmdi-hc-fw"></i>
+												</button>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+
+			</div>
+		</div>
+	</li>
+
+<!--	CUSTOMER ACCESS CONTROL-->
+	<li class="list-group-item">
+		<span class="booking_list_header">CUSTOMER ACCESS CONTROL</span>
+		<div class="card-body">
+			<div class="row" style="margin:5px">
+				<div class="col-md-4" ng-hide="user_mode=='View'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Customer :<span
+								class="req_r">*</span></label>
+						<div class="col-sm-8">
+							<div class="ng-scope sear chosen-row-1">
+								<input
+										type="text"
+										class="form-control"
+										placeholder="Customer Search.."
+										ng-model="oUser.selectCust"
+										typeahead-wait-ms="10"
+										name="Customer"
+										typeahead="item as (item.name + '('+($configs.client_allowed|filter:{'clientId': item.clientId})[0].name+')') for item in getAllCustomer($viewValue) | limitTo:6"
+										typeahead-on-select="onCustSelect($item, $model, $label)">
+								<i class="lvh-search-close" ng-click="selectCust=null;">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="detailsList">
+					<div class="" style="overflow-y: auto; max-height: 300px;">
+						<table class="table table-bordered unresponsive">
+							<thead id='my_fixable_table_header' fix-head>
+							<tr>
+								<th>&#35;</th>
+								<th>Customer</th>
+								<th>Remove</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr class="pointer selectItem"
+								ng-repeat="obj in oUser.aCustomer">
+								<td>{{$index + 1}}</td>
+								<td>{{obj.name}}</td>
+								<td>
+									<button ng-disabled="user_mode=='View'" ng-click="removeCust($index)" class="btn btn-primary waves-effect pointer">
+										<i class="zmdi zmdi-minus zmdi-hc-fw"></i>
+									</button>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="clearfix"></div>
+
+
+			</div>
+		</div>
+	</li>
+
+<!--	VEHICLE ACCESS CONTROL-->
+	<li class="list-group-item">
+		<span class="booking_list_header">VEHICLE ACCESS CONTROL</span>
+		<div class="card-body">
+			<div class="row" style="margin:5px">
+
+				<div class="col-md-4" ng-hide="user_mode=='View'">
+					<div class="lvh-search ng-scope sear">
+						<input type="text"
+							   placeholder="Vehicle Search..."
+							   ng-model="oUser.vehicle"
+							   class="lvhs-input"
+							   typeahead-wait-ms="10"
+							   typeahead="person as person.vehicle_reg_no for person in getVname($viewValue)"
+							   typeahead-on-select="onVehicleSelect(oUser.vehicle)"
+							   class="form-control">
+						<i class="lvh-search-close" ng-click="oUser.vehicle='';">×</i>
+					</div>
+				</div>
+
+				<div class="col-md-1" ng-hide="user_mode=='View'">
+					<div class="form-group m-b-0 text-center">
+						<button class="btn btn-primary p-t-0 p-b-0"
+								type="button"
+								style="margin-bottom: 3px;  font-size: 16px"
+								uib-tooltip="clear all"
+								ng-click="clearAll()"
+								tooltip-placement="bottom">
+							<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+						</button>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="row" style="margin:5px">
+				<div class="detailsList">
+					<div class="" style="overflow-y: auto; max-height: 300px;">
+						<div class="col-sm-12 r-truck">
+				<span class="btn-lst" ng-repeat="veh in oUser.vehicle_allowed">{{veh}}
+								<a ng-hide="user_mode=='View'" ng-click="removeVehicle(veh,$index)"> x </a></span>
+						</div>
+					</div>
+				</div>
+
+				<div class="clearfix"></div>
+
+
+			</div>
+		</div>
+	</li>
+</ul>
+
+<style type="text/css">
+	.btn-lst {
+		background: #eea;
+		margin-right: 5px;
+		padding: 3px 5px
+	}
+
+	.btn-lst a {
+		cursor: pointer;
+		background: #5B5B5B;
+		padding: 0 4px 2px 6px;
+		color: #fff;
+		line-height: 30px
+	}
+
+	.btn-lst a:hover {
+		background: #333
+	}
+
+</style>

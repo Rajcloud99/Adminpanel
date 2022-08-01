@@ -1,0 +1,132 @@
+<form role="form" class="form-group" name="addChargesFrom" ng-submit="popupCtrl.addCharges(addChargesFrom)" autocomplete="off" novalidate>
+	<div class="modal-header p-b-0" >
+		<button type="button"
+				ng-click="popupCtrl.closeModal()"
+				class="close"
+				data-dismiss="modal"
+				aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add Charges</h4><br>
+		<div class="row">
+			<div class="col-md-12 text-right m-b-10">
+				<b>Remaining Amount : {{popupCtrl.remainingAmount || '0'}}</b>
+				<br>
+				<b>Total Form Amount : {{popupCtrl.formAmount || '0'}}</b>
+				<br>
+				<b>Difference :
+					<span uib-tooltip="Difference Should Be 0"
+						  tooltip-placement="bottom"
+						  ng-class="((popupCtrl.remainingAmount - popupCtrl.formAmount) != 0) && 'red'">
+						{{(popupCtrl.remainingAmount - popupCtrl.formAmount) || '0'}}
+					</span>
+				</b>
+			</div>
+		</div>
+		<div class="row" ng-repeat="oCharges in popupCtrl.aCharges">
+			<div class="col-md-4">
+				<div class="col-md-10">
+					<select chosen
+							class="form-control"
+							ng-model="oCharges.chargesType"
+							ng-options="item._id as item.name for item in oCharges.aChargesType"
+							name="charges_{{$index}}"
+							ng-change="popupCtrl.onChangeChargeType()"
+							required>
+						<option value="" disabled>Charges</option>
+					</select>
+					<span class="error"
+						  ng-if="addChargesFrom['charges_'+ $index].$error.required
+								&& (addChargesFrom['charges_'+$index].$touched
+									|| addChargesFrom.$submitted)">
+						This Field is Mandatory
+					</span>
+				</div>
+			</div>
+			<div class="col-md-4 m-t-10">
+				<p class="c-black col-md-4 f-500">Amount <span class="req_r">*</span></p>
+				<div class="form-group col-md-8">
+					<div class="fg-line m-b-0">
+						<input type="number"
+							   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+							   onwheel="return false"
+							   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+							   ng-model="oCharges.amount"
+							   name="amount_{{$index}}"
+							   ng-change="popupCtrl.validateAmount()"
+							   ng-min="1"
+							   required
+							   class="form-control input-sm">
+					</div>
+					<span class="error"
+						  ng-if="addChargesFrom['amount_'+ $index].$error.required
+								&& (addChargesFrom['amount_'+$index].$touched
+									|| addChargesFrom.$submitted)">
+						This Field is Mandatory
+					</span>
+					<span class="error"
+						  ng-if="addChargesFrom['amount_'+ $index].$error.min
+								&& (addChargesFrom['amount_'+$index].$touched
+									|| addChargesFrom.$submitted)">
+						Amount Should be grater than 0
+					</span>
+				</div>
+			</div>
+			<div class="col-md-3 m-t-10">
+				<div class="form-group col-md-12">
+					<div class="fg-line">
+						  <textarea class="form-control"
+									rows="3"
+									ng-model="oCharges.remark"
+									name="amount_{{$index}}"
+									placeholder="Please Specify the Remark"
+						  ></textarea>
+					</div>
+					<span class="error"
+						  ng-if="addChargesFrom['amount_' + $index].$error.required
+								&& (addChargesFrom['amount_'+$index].$touched
+									|| addChargesFrom.$submitted)">
+						This Field is Mandatory
+					</span>
+				</div>
+			</div>
+			<div class="col-md-1 text-center">
+				<i class="zmdi zmdi-delete zmdi-hc-fw m-t-5 pointer"
+				   uib-tooltip="Remove This Row"
+				   ng-click="popupCtrl.aCharges.splice($index, 1);popupCtrl.validateAmount()"
+				   style="font-size: 20px"></i>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+						style="font-size: 20px; width: 50px"
+						uib-tooltip="Add New Row"
+						ng-disabled="addChargesFrom.$invalid"
+						ng-click="popupCtrl.appendCharges()"
+						type="button">
+					<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect">Submit</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="popupCtrl.closeModal()">Cancel</button>
+	</div>
+</form>
+<style type="text/css">
+	.red{
+		color: red;
+	}
+
+	.modal-dialog {width: 45%;
+		height: 173px
+	}
+
+	i:hover{
+		color: #2196f3;
+	}
+</style>

@@ -1,0 +1,266 @@
+<!-- Controller: billAcknowledgeDataPopupController -->
+
+<form role="form" class="form-group"  name="billAcknowledge" autocomplete="off" novalidate>
+	<div class="modal-header p-b-0" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">{{type}} Bill</h4><br>
+
+		<div class="card-body">
+			<ul class="list-group list-group-flush">
+				<!-- DETAILS -->
+				<li class="list-group-item">
+					<div class="card-body">
+
+		<div class="row">
+
+			<div class="col-md-4">
+				<p class="c-black col-md-4 f-500 m-b-20">{{type}} Date <span class="req_r">*</span></p>
+				<div class="form-group col-md-8">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="oData.acknowledge.date"
+								   is-open="opened2"
+								   datepicker-options="DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="Date"
+								   name="Booking Date"
+								   required
+								   style="padding: 0px 4px;height: 34px;" />
+						</div>
+						<span class="input-group-btn">
+							  <button type="button" class="btn btn-default m-t-0 f12"
+									  ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+									  class="glyphicon glyphicon-calendar"></i></button>
+						  </span>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-8">
+				<div class="form-group m-b-0">
+					<p class="c-black col-md-4 f-500 m-b-20">Narration <span class="req_r">*</span></p>
+					<div class="col-sm-8">
+						<div class="fg-line">
+						  <textarea class="form-control"
+									rows="2"
+									ng-model="oData.acknowledge.remark"
+									placeholder="Please Specify the Narration"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<p class="c-black col-md-4 f-500 m-b-20">Bill Date :</p>
+					<div class="col-sm-8">
+					{{selectedBillData.billDate | date:"dd-MM-yyyy"}}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<p class="c-black col-md-4 f-500 m-b-20">Ref No :</p>
+					<div class="col-sm-8">
+					{{selectedBillData.billNo}}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<p class="c-black col-md-4 f-500 m-b-20">Bill Type :</p>
+					<div class="col-sm-8">
+					{{selectedBillData.type}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<p class="c-black col-md-4 f-500 m-b-20">Payment date:</p>
+					<div class="col-sm-8">
+						{{selectedBillData.paymentDate| date:"dd-MM-yyyy"}}
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<p class="c-black col-md-4 f-500 m-b-20">Payment Type:</p>
+					<div class="col-sm-8">
+						{{selectedBillData.paymentRef}}
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<p class="c-black col-md-4 f-500 m-b-20">Billing Party:</p>
+					<div class="col-sm-8">
+						{{selectedBillData.billingParty.name}}
+					</div>
+				</div>
+			</div>
+
+		</div>
+					</div>
+				</li>
+
+		<li class="list-group-item">
+			<span class="booking_list_header"> </span>
+			<div class="card-body">
+				<div class="row" style="margin:5px">
+					<div class="col-md-12">
+						<table class="table table-bordered unresponsive">
+							<thead>
+							<tr>
+								<th>Type</th>
+								<th>Amount</th>
+								<th>Credit A/c</th>
+								<th>Debit A/c</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<th>Sales</th>
+								<td>{{oData.sales.amount.toFixed(2)}}</td>
+								<td>{{oData.sales.accountName}}</td>
+								<!--<td>-->
+									<!--<div class="col-md-12">-->
+										<!--<div class="form-group m-b-0">-->
+												<!--<div class="ng-scope sear chosen-row-1">-->
+													<!--<input-->
+															<!--type="text"-->
+															<!--class="form-control"-->
+															<!--placeholder="Sales Account Credit"-->
+															<!--ng-model="oData.sales.from"-->
+															<!--typeahead-wait-ms="10"-->
+															<!--name="Sales Account Credit"-->
+															<!--typeahead="item as item.name for item in accountmaster($viewValue, 'Sales')|limitTo:6"-->
+															<!--required>-->
+													<!--<i class="lvh-search-close" ng-click="oData.sales.from=null;">×</i>-->
+												<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</td>-->
+								<td>
+									{{selectedBillData.billingParty.billName || selectedBillData.billingParty.name}}
+								</td>
+
+							</tr>
+							<tr ng-if="oData.igst.amount">
+								<th>IGST ({{oData.igst.percent}}%) </th>
+								<td>{{oData.igst.amount.toFixed(2)}}</td>
+								<td>{{oData.igst.accountName}}</td>
+								<!--<td>-->
+									<!--<div class="col-md-12">-->
+										<!--<div class="form-group m-b-0">-->
+												<!--<div class="ng-scope sear chosen-row-1">-->
+													<!--<input-->
+															<!--type="text"-->
+															<!--class="form-control"-->
+															<!--placeholder="IGST Credit"-->
+															<!--ng-model="oData.igst.from"-->
+															<!--typeahead-wait-ms="10"-->
+															<!--name="IGST Credit"-->
+															<!--typeahead="item as item.name for item in accountmaster($viewValue)|limitTo:6"-->
+															<!--required>-->
+													<!--<i class="lvh-search-close" ng-click="oData.igst.from=null;">×</i>-->
+												<!--</div>-->
+											<!--</div>-->
+										<!--</div>-->
+								<!--</td>-->
+								<td>
+									{{selectedBillData.billingParty.billName || selectedBillData.billingParty.name}}
+								</td>
+							</tr>
+							<tr ng-if="oData.cgst.amount">
+								<th>CGST ({{oData.cgst.percent}}%)</th>
+								<td>{{oData.cgst.amount.toFixed(2)}}</td>
+								<td>{{oData.cgst.accountName}}</td>
+								<!--<td>-->
+									<!--<div class="col-md-12">-->
+										<!--<div class="form-group m-b-0">-->
+												<!--<div class="ng-scope sear chosen-row-1">-->
+													<!--<input-->
+															<!--type="text"-->
+															<!--class="form-control"-->
+															<!--placeholder="CGST Credit"-->
+															<!--ng-model="oData.cgst.from"-->
+															<!--typeahead-wait-ms="10"-->
+															<!--name="CGST Credit"-->
+															<!--typeahead="item as item.name for item in accountmaster($viewValue)|limitTo:6"-->
+															<!--required>-->
+													<!--<i class="lvh-search-close" ng-click="oData.cgst.from=null;">×</i>-->
+												<!--</div>-->
+											<!--</div>-->
+									<!--</div>-->
+								<!--</td>-->
+								<td>
+									{{selectedBillData.billingParty.billName || selectedBillData.billingParty.name}}
+								</td>
+							</tr>
+							<tr ng-if="oData.sgst.amount">
+								<th>SGST ({{oData.sgst.percent}}%)</th>
+								<td>{{oData.sgst.amount.toFixed(2)}}</td>
+								<td>{{oData.sgst.accountName}}</td>
+								<!--<td>-->
+									<!--<div class="col-md-12">-->
+										<!--<div class="form-group m-b-0">-->
+												<!--<div class="ng-scope sear chosen-row-1">-->
+													<!--<input-->
+															<!--type="text"-->
+															<!--class="form-control"-->
+															<!--placeholder="SGST Credit"-->
+															<!--ng-model="oData.sgst.from"-->
+															<!--typeahead-wait-ms="10"-->
+															<!--name="SGST Credit"-->
+															<!--typeahead="item as item.name for item in accountmaster($viewValue)|limitTo:6"-->
+															<!--required>-->
+													<!--<i class="lvh-search-close" ng-click="oData.sgst.from=null;">×</i>-->
+												<!--</div>-->
+											<!--</div>-->
+										<!--</div>-->
+								<!--</td>-->
+								<td>
+									{{selectedBillData.billingParty.billName || selectedBillData.billingParty.name}}
+								</td>
+							</tr>
+							<tr ng-if="oData.totCwt.amount">
+								<th>Without Tax</th>
+								<td>{{oData.totCwt.amount.toFixed(2)}}</td>
+								<td>{{oData.totCwt.accountName}}</td>
+								<td>{{selectedBillData.billingParty.billName || selectedBillData.billingParty.name}}</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</li>
+			</ul>
+		</div>
+
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-success waves-effect" ng-click="acknowledgeBill(billAcknowledge)">Acknowledge Bill</button>&nbsp;&nbsp;&nbsp;
+		<button type="button" class="btn btn-warning" ng-click="closeModal()">Cancel</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+		height: 400px;
+	}
+</style>

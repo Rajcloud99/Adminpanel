@@ -1,0 +1,316 @@
+<!-- Controller: addTdsPaymentrController-->
+<!-- ControllerAs: addTpVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+			<span class="c-black"><b> TDS Payment Vouchers({{addTpVm.mode}})</b></span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" style="position: absolute;width: 100%;margin-bottom: 65px">
+		<form novalidate autocomplete="off" name="addVoucherForm" ng-submit="addTpVm.submit(addVoucherForm)">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">Vouchers Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6"  ng-if="!addTpVm.readOnly">
+											<select chosen
+													class="form-control"
+													ng-model="addTpVm.oPaymentType"
+													ng-options="item as item.pType for item in addTpVm.aVoucherPaymentType"
+													ng-change="addTpVm.onSelect(addTpVm.oPaymentType, 'PaymentType');addTpVm.oVoucher.edited=true"
+													name="Payment Type"
+													required>
+												<option value=""></option>
+											</select>
+										</div>
+										<div class="col-sm-6" ng-if="addTpVm.readOnly">
+											{{addTpVm.oPaymentType.pType}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Voucher Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6" ng-if="!addTpVm.readOnly">
+											<select chosen
+													class="form-control"
+													ng-model="addTpVm.oVoucher.type"
+													ng-change="addTpVm.taxAccounts = addTpVm.getAccounts(); aTaxes = [];addTpVm.setBillType()"
+													ng-options="item as item for item in addTpVm.aVouchersType"
+													name="Voucher Type"
+													required>
+												<option value=""></option>
+											</select>
+											<span class="error" ng-if="(addVoucherForm['Voucher Type'].$error.required
+													&& (addVoucherForm['Voucher Type'].$touched
+														|| addVoucherForm.$submitted))">
+							This Field is Mandatory</span>
+										</div>
+										<div class="col-sm-6" ng-if="addTpVm.readOnly">
+											{{addTpVm.oVoucher.type}}
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Date: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+
+											<input
+												fill-date
+												max-date="addTpVm.DatePicker.newDate"
+												min-date="'setDate'|dateUtilsFilt:'31/03/2019'"
+												type="text"
+												class="form-control"
+												placeholder="Date"
+												ng-model="addTpVm.oVoucher.billDate"
+												ng-change="addTpVm.getTDSRate()"
+												ng-readonly="addTpVm.readOnly"
+											>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Branch Search.."
+													ng-model="addTpVm.oVoucher.branch"
+													typeahead-wait-ms="10"
+													name="Branch"
+													typeahead="item as item.name for item in addTpVm.getAllBranch($viewValue)|limitTo:6"
+													typeahead-on-select="addTpVm.onSelect($item, $model, $label)"
+													required ng-readonly="addTpVm.readOnly">
+												<i class="lvh-search-close"  ng-if="!addTpVm.readOnly" ng-click="addTpVm.oVoucher.branch=null;">×</i>
+											</div>
+											<span class="error" ng-show="!addTpVm.oVoucher.branch">No Branch Selected</span>
+											<span class="warning" ng-show="addTpVm.oVoucher.branch && !addTpVm.oVoucher.branch.refNoBook">No Ref Book Linked to selected branch</span>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Ref No:<span
+											class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Ref Number"
+													ng-model="addTpVm.oVoucher.refNo"
+													typeahead-wait-ms="10"
+													name="Reference Number"
+													typeahead="item.bookNo as item.bookNo for item in addTpVm.getRefNo(addTpVm.oVoucher.refNo)|limitTo:10"
+													typeahead-on-select="addTpVm.setUsed($item, $model, $label)"
+													required ng-readonly="addTpVm.readOnly">
+												<i class="lvh-search-close" ng-if="!addTpVm.readOnly"
+												   ng-click="addTpVm.oVoucher.refNo=null;">×</i>
+												<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+												   style="right: -20px; background: #3096f3;" ng-if="!addTpVm.readOnly"
+												   ng-click="addTpVm.getAutoStationaryNo(addTpVm.oVoucher.billDate)"></i>
+											</div>
+											<span class="error" ng-if="addVoucherForm['Reference Number'].$error.required
+																	&& !addVoucherForm['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Mode: </label>
+										<div class="col-sm-6" ng-if="!addTpVm.readOnly">
+											<select chosen
+													class="form-control"
+													ng-model="addTpVm.oVoucher.paymentMode"
+													ng-options="item as item for item in addTpVm.aPaymentMode"
+													name="Payment Mode"
+													ng-readonly="addTpVm.readOnly"
+													ng-change="addTpVm.oVoucher.edited=true">
+												<option value=""></option>
+											</select>
+										</div>
+										<div class="col-sm-6" ng-if="addTpVm.readOnly">
+											{{addTpVm.oVoucher.paymentMode}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Ref:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Payment Ref"
+													   ng-model="addTpVm.oVoucher.paymentRef"
+													   name="Payment Ref"
+													   ng-change="addTpVm.oVoucher.edited=true"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   ng-readonly="addTpVm.readOnly"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group">
+										<div class="fg-line">
+											<textarea class="form-control"
+													  rows="2"
+													  ng-model="addTpVm.oVoucher.narration"
+													  ng-change="addTpVm.oVoucher.edited=true"
+													  ng-readonly="addTpVm.readOnly"
+													  placeholder="Narration..."></textarea>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header"> </span>
+						<div class="card-body">
+
+
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Total DrAmt:</label>
+										<div class="col-sm-6">
+											{{addTpVm.totDrAmount = (((addTpVm.aSecV | filter: {cRdR:"DR"}) | sumObjKey:'amount') | roundOff) || 0}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Total CrAmt:</label>
+										<div class="col-sm-6">
+											{{addTpVm.totCrAmount = (((addTpVm.aSecV | filter: {cRdR:"CR"}) | sumObjKey:'amount') | roundOff) || 0}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Tot Remaining Amount:</label>
+										<div class="col-sm-6">
+											{{addTpVm.totRemaingAmount = (addTpVm.totDrAmount - addTpVm.totCrAmount) }}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+							</div>
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<table class="table table-bordered unresponsive">
+										<thead>
+										<tr>
+<!--											<th>Type</th>-->
+											<th>Account</th>
+											<th>Amount</th>
+											<th>Bill Type</th>
+											<th>Bill No</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-repeat="oSec in addTpVm.aSecV | filter: addTpVm.myFilter"
+											class="pointer selectItem"
+											ng-click="addTpVm.selectedIndex = $index"
+											ng-class="{grn: addTpVm.selectedIndex = $index}">
+<!--											<td>{{oSec.cRdR}}</td>-->
+											<td ng-if="oSec.accountEditable">
+												<div class="col-md-12">
+													<div class="form-group m-b-0">
+														<div class="col-sm-12">
+															<div class="ng-scope sear chosen-row-3">
+																<input type="text"
+																	   placeholder="To Account"
+																	   name="To A/c"
+																	   ng-model="oSec.to"
+																	   typeahead-wait-ms="10"
+																	   typeahead="item as item.name for item in addTpVm.accountmaster($viewValue)"
+																	   class="form-control"
+																	   required>
+																<i class="lvh-search-close"
+																   ng-click="oSec.to=null;">×</i>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td ng-if="!oSec.accountEditable">{{oSec.to.ledger_name || oSec.to.name}}</td>
+											<td ng-if="oSec.amount">{{oSec.amount.toFixed(2)}}</td>
+											<td>{{oSec.billType}}</td>
+											<td>{{oSec.billNo}}</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</li>
+
+				</ul>
+			</div>
+			<div class="text-center" ng-if="!addTpVm.readOnly">
+				<button ng-disabled="addTpVm.isdisabled" class="btn btn-primary">Add Voucher</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+
+
+	error {
+		font-size: 10px;
+		color: red;
+	}
+	color {
+		color: red;
+	}
+
+	.btn-danger:focus {
+		box-shadow: 0px 0px 13px 2px darkred !important;
+	}
+	.btn-primary:focus {
+		box-shadow: 0px 0px 13px 2px blue !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+</style>

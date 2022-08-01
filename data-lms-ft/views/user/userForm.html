@@ -1,0 +1,1157 @@
+<!--suppress ALL -->
+<div id ="div_main_user_form">
+    <ul class="tab-nav" ng-show="users.length || form_user=='add'"
+        style="margin-top: 10px;margin-right: 25px;margin-left: 25px;width: auto">
+        <li ng-class="{active: tab_active_user===1}">
+            <a href="" ng-click="selectTabUser(1)">Basic Info.</a>
+        </li>
+        <li ng-class="{active: tab_active_user===2}">
+            <a href="" ng-click="selectTabUser(2)" >Employment Info</a>
+        </li>
+        <li ng-class="{active: tab_active_user===3}" >
+            <a href="" ng-click="selectTabUser(3)">Accounts Info. </a>
+        </li>
+        <li ng-class="{active: tab_active_user===4}">
+            <a href="" ng-click="selectTabUser(4)" > Documents</a>
+        </li>
+    </ul>
+
+    <ul ng-show="form_user=='view'" class="lv-actions actions"
+        style="position:absolute;margin-top: -45px;margin-left:86%;">
+        <li class="btn-wave" data-ui-sref-active="active" ng-show="(localStorage.ft_data.userLoggedIn.role
+                ===$constants.super_admin_role_name) ||
+                localStorage.ft_data.userLoggedIn.role ===$constants.client_admin_role_name">
+            <a uib-tooltip="change Password" tooltip-placement="bottom"
+                    ng-click="changePassword()" >
+                <i class="zmdi zmdi-key zmdi-hc-fw">
+                </i>
+            </a>
+        </li>
+        <li class="btn-wave" data-ui-sref-active="active">
+            <a
+                    uib-tooltip="Edit User" tooltip-placement="bottom"
+                    ng-click="editUser()" >
+                <i class="zmdi zmdi-edit">
+                </i>
+            </a>
+        </li>
+        <li ng-if="!(role_local_data.users.indexOf('remove')==-1)" class="btn-wave" data-ui-sref-active="active">
+            <a href="" uib-tooltip="Delete User" tooltip-placement="bottom"
+               ng-click="deleteUser()">
+                <i class="zmdi zmdi-delete">
+                </i>
+            </a>
+        </li>
+    </ul>
+
+    <div class="card-body card-padding">
+
+
+<!------------------------------------------------Tab 1 Basic info -------------------------------------------------->
+        <form name="UserFormTab1" class="form-horizontal" novalidate>
+            <div class="validationError" ng-show="userMngmt"><h5 class="c-red">* {{Umsg}}</h5></div>
+            <div ng-show="tab_active_user===1">
+                <div class="form-group" >
+                    <label class="col-sm-4 control-label">User ID:<span style="color: red;">*</span> </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only || objUser._id">
+                            <input ng-readonly="form_user_read_only || objUser._id" ng-model="objUser.userId"
+                                   class="form-control input-sm" style="height: 30px" name="employee Id" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-show="localStorage.ft_data.userLoggedIn.role===$constants.super_admin_role_name" >
+                    <label class="col-sm-4 control-label">Client ID:<span style="color: red;">*</span> </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only || objUser._id">
+                            <input ng-readonly="form_user_read_only || objUser._id" ng-model="objUser.clientId" class="form-control
+                                input-sm" style="height: 30px" name="client Id"
+                                   ng-required="localStorage.ft_data.userLoggedIn.role===$constants.super_admin_role_name">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Full name: <span style="color: red;">*</span></label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"
+                                   ng-model="objUser.full_name" class="form-control
+                                input-sm" style="height: 30px"
+                                   ng-required="form_user_required_active" name="full name" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-if="form_user==='add'">
+                    <label  class="col-sm-4 control-label">Password: <span style="color: red;">*</span></label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.password" style="height: 30px" name="password"
+                                   ng-required="form_user_required_active"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">User Type: </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg_line">
+                            <div class="select" ng-show="(form_user=='view' && objUser.user_type.length) ||
+                                            form_user=='add' || form_user=='edit'"
+                                 ng-readonly="form_user_read_only">
+                                <select class="form-control"
+                                        ng-readonly="form_user_read_only" style="height:35px"
+                                        ng-disabled="form_user_read_only" ng-model="objUser.user_type" name="user type">
+                                    <option value="" disabled selected>Select User Type</option>
+                                    <option ng-repeat="y in $constants.user_type" ng-disabled="form_user_read_only"
+                                            value="{{y}}">{{y}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Father's name: </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"
+                                   ng-model="objUser.father_name" class="form-control
+                                input-sm" style="height: 30px" name="father's name">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Mother's name:</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"
+                                   ng-model="objUser.mother_name" class="form-control
+                                input-sm" style="height: 30px" name="mother's name">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Blood group</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg_line">
+                            <div class="select" ng-show="(form_user=='view' && objUser.blood_group.length) ||
+                                            form_user=='add' || form_user=='edit'"
+                                 ng-readonly="form_user_read_only">
+                                <select class="form-control"
+                                        ng-readonly="form_user_read_only" style="height:35px"
+                                        ng-disabled="form_user_read_only" ng-model="objUser.blood_group" name="blood group">
+                                    <option value="" disabled selected>Select blood group type</option>
+                                    <option ng-repeat="x in $constants.bloodGroupTypes" ng-disabled="form_user_read_only"
+                                            value="{{x}}">{{x}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Gender</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <input ng-if="form_user_read_only && objUser.gender" readonly
+                               ng-model="objUser.gender" class="form-control
+                                input-sm" style="height: 30px" >
+                    </div>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;" ng-hide="form_user_read_only">
+                        <div class="radio m-b-15" style="display: inline-block">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio"
+                                       ng-readonly="form_user_read_only"
+                                       name="gender" ng-model="objUser.gender" value="Male">
+                                <i class="input-helper"></i>
+                                Male
+                            </label>
+                        </div>
+                        <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="gender" ng-model="obUser.gender" value="Female">
+                                <i class="input-helper"></i>
+                                Female
+                            </label>
+                        </div>
+                        <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only" ng-readonly="form_user_read_only"
+                                       name="gender" ng-model="objUser.gender" value="Other">
+                                <i class="input-helper"></i>
+                                Other
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Date of birth: </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="date-picker input-group dp-blue"
+                             ng-class="{ 'is-opened': opened1 == true }">
+                            <div class="fg-line" ng-readonly="form_user_read_only"
+                                 ng-class="{ 'fg-toggled': opened1 == true }">
+                                <input style="height:30px" ng-readonly="form_user_read_only" max-date="minDate"
+                                       ng-click="open($event, 'opened1')" type="text" class="form-control"
+                                       uib-datepicker-popup="{{format}}" show-weeks="false"
+                                       ng-model="objUser.date_of_birth" is-open="opened1"
+                                       uib-datepicker-options="dateOptions" close-text="Close"
+                                       placeholder="Select Date" name="date of birth" />
+                            </div>
+                            <span class="input-group-btn" ng-hide="form_user_read_only">
+                                <button type="button" class="btn btn-default m-t-0 f12"
+                                        ng-click="open($event, 'opened1')">
+                                    <i class="glyphicon glyphicon-calendar">
+                                    </i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Education: </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg_line">
+                            <div class="select" ng-show="(form_user=='view' && objUser.education.length) ||
+                                            form_user=='add' || form_user=='edit'"
+                                 ng-readonly="form_user_read_only">
+                                <select class="form-control"
+                                        ng-readonly="form_user_read_only" style="height:35px"
+                                        ng-disabled="form_user_read_only" ng-model="objUser.education" name="education" >
+                                    <option value="" disabled selected>Select education</option>
+                                    <option ng-repeat="x in $constants.educationTypes" ng-disabled="form_user_read_only"
+                                            value="{{x}}">{{x}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Marital Status: </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg_line">
+                            <div class="select" ng-show="(form_user=='view' && objUser.marital_status.length) ||
+                                            form_user=='add' || form_user=='edit'"
+                                 ng-readonly="form_user_read_only">
+                                <select class="form-control"
+                                        ng-readonly="form_user_read_only" style="height:35px"
+                                        ng-disabled="form_user_read_only" ng-model="objUser.marital_status" name="marital status">
+                                    <option value="" disabled selected>Select marital status</option>
+                                    <option ng-repeat="x in $constants.maritalStatusTypes" ng-disabled="form_user_read_only"
+                                            value="{{x}}">{{x}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">No of dependents</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.no_of_dependents" style="height: 30px">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">ID type</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg_line">
+                            <div class="select"
+                                 ng-show="(form_user=='view' && objUser.id_type.length)
+                                 ||form_user=='add' || form_user=='edit'"
+                                 ng-readonly="form_user_read_only">
+                                <select class="form-control"
+                                        ng-readonly="form_user_read_only" style="height:35px"
+                                        ng-disabled="form_user_read_only" ng-model="objUser.id_type">
+                                    <option value="" disabled selected>Select ID type</option>
+                                    <option ng-repeat="x in $constants.idTypes" ng-disabled="form_user_read_only"
+                                            value="{{x}}">{{x}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label  class="col-sm-4 control-label">ID no.</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.id_number" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Nationality: </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.nationality" style="height: 30px"
+                             name="nationality" >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Contact No.: </label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.contact_no" ng-minlength="10" ng-maxlength="10"  style="height: 30px"
+                            name="contact number">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Emergency Contact No.</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-minlength="10" ng-maxlength="10"  ng-model="objUser.emergency_contact_no" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Email</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only" type="email" class="form-control
+                                input-sm" ng-model="objUser.email" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Current address</label>
+                    <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.current_address.line1"
+                                   style="height: 30px" placeholder="Line 1">
+                        </div>
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.current_address.line2"
+                                   style="height: 30px" placeholder="Line 2">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label"></label>
+                    <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-xs-6">
+                            <input id ="autoCompleteCurrCity" ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.current_address.city"
+                                   style="height: 30px" placeholder="City">
+                        </div>
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.current_address.district"
+                                   style="height: 30px" placeholder="District">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label"></label>
+                    <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.current_address.state"
+                                   style="height: 30px" placeholder="State">
+                        </div>
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.current_address.country"
+                                   style="height: 30px" placeholder="Country">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label"></label>
+                    <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.current_address.pincode"
+                                   style="height: 30px" placeholder="Pincode">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Permanent Address</label>
+                    <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.permanent_address.line1"
+                                   style="height: 30px" placeholder="Line 1">
+                        </div>
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.permanent_address.line2"
+                                   style="height: 30px" placeholder="Line 2">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label"></label>
+                    <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-xs-6">
+                            <input id ="autoCompletePermCity" ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.permanent_address.city"
+                                   style="height: 30px" placeholder="City">
+                        </div>
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.permanent_address.district"
+                                   style="height: 30px" placeholder="District">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label"></label>
+                    <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.permanent_address.state"
+                                   style="height: 30px" placeholder="State">
+                        </div>
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.permanent_address.country"
+                                   style="height: 30px" placeholder="Country">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 30px;">
+                    <label  class="col-sm-4 control-label"></label>
+                    <div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-xs-6">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.permanent_address.pincode"
+                                   style="height: 30px" placeholder="Pincode">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="form_user_read_only" style="margin: 30px 0px 45px 0px">
+                    <div style="float: right;">
+                        <button type="submit" class="btn btn-primary"
+                                ng-click="saveUser(UserFormTab1)" style="margin-right:30px">Save</button>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-12">
+              <h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+            </div> -->
+        </form>
+
+
+
+<!----------------------------------tab 2 User Contact Info-------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------->
+        <form name="UserFormTab2" class="form-horizontal">
+        <div ng-show="tab_active_user===2">
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Employment type</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg_line">
+                            <div class="select"
+                                 ng-show="(form_user=='view' && objUser.type_of_employment.length)
+                                 ||form_user=='add' || form_user=='edit'"
+                                 ng-readonly="form_user_read_only">
+                                <select class="form-control" ng-required="form_user_required_active"
+                                        ng-readonly="form_user_read_only" style="height:35px"
+                                        ng-disabled="form_user_read_only" ng-model="objUser.type_of_employment">
+                                    <option value="" disabled selected>Select employment type</option>
+                                    <option ng-repeat="x in $constants.employmentTypes" ng-disabled="form_user_read_only"
+                                            value="{{x}}">{{x}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-4 control-label">Department</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg_line">
+                            <div class="select" ng-show="(form_user=='view' && objUser.department) ||
+                                            form_user=='add' || form_user=='edit'"
+                                 ng-readonly="form_user_read_only">
+                                <select  class="form-control" ng-model="objUser.department"
+                                         ng-readonly="form_user_read_only"
+                                         style="height:35px"
+                                         ng-disabled="form_user_read_only"
+                                         ng-options="department.name as department.name for department in departmentTrims"
+                                         ng-required="form_user_required_active">
+                                    <option value="" disabled selected>Select department</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2" >
+                        <input readonly class="form-control
+                                input-sm" ng-model="objUser.department_code" style="height: 30px">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Role</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg_line">
+                            <div class="select" ng-show="(form_user=='view' && objUser.access) ||
+                                            form_user=='add' || form_user=='edit'"
+                                 ng-readonly="form_user_read_only">
+                                <select class="form-control" ng-model="objUser.access"
+                                         ng-readonly="form_user_read_only"
+                                         style="height:35px"
+                                         ng-required="form_user_required_active"
+                                         ng-disabled="form_user_read_only"
+                                         ng-options="role._id as role.name for role in rolesTrim" required>
+                                    <option value="" disabled selected>Select role</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Work phone</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.office_telephone" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Work email</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.office_email" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Reporting authority</label>
+                    <div class="col-sm-4" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.ra_name" style="height: 30px"
+                                   uib-typeahead="user.full_name as user.full_name +' ('+user.userId+')' for user in userNames"
+                                   typeahead-min-length="2" ng-change="getUserNames(objUser.ra_name)"
+                                   typeahead-on-select="onUserTypeAheadSelect($item,'ra_name')"
+                                   placeholder="Reporting authority name">
+                        </div>
+                    </div>
+                    <div class="col-sm-2" >
+                        <input readonly  class="form-control
+                                input-sm" ng-model="objUser.ra_employee_code" style="height: 30px">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">HR Manager</label>
+                    <div class="col-sm-4" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.hr_manager_name" style="height: 30px"
+                                   uib-typeahead="user.full_name as user.full_name +' ('+user.userId+')' for user in userNames"
+                                   typeahead-min-length="2" ng-change="getUserNames(objUser.hr_manager_name)"
+                                   typeahead-on-select="onUserTypeAheadSelect($item, 'hr_name')"
+                                   placeholder="HR Manager Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-2" >
+                        <input readonly class="form-control
+                                input-sm" ng-model="objUser.hr_manager_employee_code" style="height: 30px">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Hours per week</label>
+                    <div class="col-sm-2" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.hours_per_week" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Gross annual salary (in Rs.)</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.gross_annual_salary" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Net annual salary (in Rs.)</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.net_annual_salary" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Basic monthly allowance (in Rs.)</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.basic_monthly_allowance" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Additional monthly allowances (in Rs.)</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.other_monthly_allowance" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Total monthly allowance (in Rs.)</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.total_monthly_allowance" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Work experience </label>
+                    <div class="col-sm-2" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-sm-6" ng-show="form_user=='edit'
+                            || (form_user=='view' && objUser.work_exp_years)">
+                            <input readonly class="form-control input-sm" style="height: 30px" value="Years"
+                                   ng-init="Years"
+                            >
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_user_read_only">
+                                <input ng-readonly="form_user_read_only"  class="form-control
+                                    input-sm" ng-model="objUser.work_exp_years" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-sm-6" ng-show="form_user=='edit'
+                            || (form_user=='view' && objUser.work_exp_month)">
+                            <input readonly class="form-control input-sm" style="height: 30px" ng-init="Months"
+                                   value="Months">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_user_read_only">
+                                <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.work_exp_month" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Previous employer name</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.previous_company_name" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Previous work designation</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.previous_company_designation" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Previous employer work duration</label>
+                    <div class="col-sm-2" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-sm-6" ng-show="form_user=='edit'
+                        || (form_user=='view' && objUser.previous_company_work_years)">
+                            <input readonly class="form-control input-sm" style="height: 30px" value="Years"
+                                   ng-init="Years"
+                            >
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_user_read_only">
+                                <input ng-readonly="form_user_read_only"  class="form-control
+                                    input-sm" ng-model="objUser.previous_company_work_years" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="col-sm-6" ng-show="form_user=='edit'
+                        || (form_user=='view' && objUser.previous_company_work_months)">
+                            <input readonly class="form-control input-sm" style="height: 30px" ng-init="Months"
+                                   value="Months">
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="fg-line" ng-readonly="form_user_read_only">
+                                <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.previous_company_work_months" style="height: 30px"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Desk alloted</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="radio m-b-15" style="display: inline-block">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="desk_alloted" ng-model="objUser.seat_allotted" ng-value="true">
+                                <i class="input-helper"></i>
+                                Yes
+                            </label>
+                        </div>
+                        <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="desk_alloted" ng-model="objUser.seat_allotted" ng-value="false" >
+                                <i class="input-helper"></i>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="objUser.seat_allotted==true">
+                    <label  class="col-sm-4 control-label">Alloted desk code</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only" class="form-control
+                                input-sm" ng-model="objUser.seat_no" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">System alloted</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="radio m-b-15" style="display: inline-block">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="pc_alloted" ng-model="objUser.pc_allotted" ng-value="true">
+                                <i class="input-helper"></i>
+                                Yes
+                            </label>
+                        </div>
+                        <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="pc_alloted" ng-model="objUser.pc_allotted" ng-value="false" >
+                                <i class="input-helper"></i>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="objUser.pc_allotted==true">
+                    <label  class="col-sm-4 control-label">Alotted system code</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.pc_no" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Joining date</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="date-picker input-group dp-blue"
+                             ng-class="{ 'is-opened': opened1 == true }">
+                            <div class="fg-line" ng-readonly="form_user_read_only"
+                                 ng-class="{ 'fg-toggled': opened1 == true }">
+                                <input style="height:30px" ng-readonly="form_user_read_only"
+                                       ng-click="open($event, 'opened1')" type="text" class="form-control"
+                                       uib-datepicker-popup="{{format}}" show-weeks="false"
+                                       ng-model="objUser.start_date" is-open="opened1"
+                                       uib-datepicker-options="dateOptions" close-text="Close"
+                                       placeholder="Select Date" />
+                            </div>
+                            <span class="input-group-btn" ng-hide="form_user_read_only">
+                                <button type="button" class="btn btn-default m-t-0 f12"
+                                        ng-click="open($event, 'opened1')">
+                                    <i class="glyphicon glyphicon-calendar">
+                                    </i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Leaving date</label>
+                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="date-picker input-group dp-blue"
+                             ng-class="{ 'is-opened': opened2 == true }">
+                            <div class="fg-line" ng-readonly="form_user_read_only"
+                                 ng-class="{ 'fg-toggled': opened2 == true }">
+                                <input style="height:30px" ng-readonly="form_user_read_only"
+                                       ng-click="open($event, 'opened2')" type="text" class="form-control"
+                                       uib-datepicker-popup="{{format}}" show-weeks="false"
+                                       ng-model="objUser.leaving_date" is-open="opened2"
+                                       uib-datepicker-options="dateOptions" close-text="Close"
+                                       placeholder="Select Date" />
+                            </div>
+                            <span class="input-group-btn" ng-hide="form_user_read_only">
+                                <button type="button" class="btn btn-default m-t-0 f12"
+                                        ng-click="open($event, 'opened2')">
+                                    <i class="glyphicon glyphicon-calendar">
+                                    </i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Leaving reason</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input ng-readonly="form_user_read_only"  class="form-control
+                                input-sm" ng-model="objUser.leaving_reason" style="height: 30px"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label  class="col-sm-4 control-label">Remarks</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                                <textarea class="form-control" ng-model="objUser.employment_remarks"
+                                          style="padding-top: 10px" rows="5" placeholder="Remarks"
+                                          ng-readonly="form_user_read_only"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-hide="form_user_read_only || !objUser._id" style="margin: 30px 0px 45px 0px">
+                    <div style="float: right;">
+                        <button type="submit" class="btn btn-primary" ng-disabled="!(UserFormTab2.$dirty) "
+                                ng-click="saveUser(UserFormTab2)" style="margin-right:30px">Save</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+
+
+
+<!------------------------------------------tab 3 Account Info-------------------------------------------->
+        <form name="UserFormTab3" class="form-horizontal">
+        <div ng-show="tab_active_user===3">
+                <div class="form-group" >
+                    <label class="col-sm-4 control-label">Health insurance availed</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="radio m-b-15" style="display: inline-block">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="health_insurance" ng-model="objUser.health_insurance_availed"
+                                       ng-value="true">
+                                <i class="input-helper"></i>
+                                Yes
+                            </label>
+                        </div>
+                        <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="health_insurance" ng-model="objUser.health_insurance_availed"
+                                       ng-value="false"  ng-checked="true">
+                                <i class="input-helper"></i>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="objUser.health_insurance_availed">
+                    <label class="col-sm-4 control-label">Health insurance company</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input  class="form-control
+                                input-sm" ng-readonly="form_user_read_only"
+                                    style="height: 30px" ng-model="objFTData.health_insurance_company">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="objUser.health_insurance_availed">
+                    <label class="col-sm-4 control-label">Health insurance policy no.</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-="form_user_read_only">
+                            <input readonly class="form-control
+                               input-sm" ng-readonly="form_user_read_only"
+                                   style="height: 30px" ng-model="objFTData.health_insurance_no">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Life insurance availed</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="radio m-b-15" style="display: inline-block">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="life_insurance" ng-model="objUser.life_insurance_availed"
+                                       ng-value="true">
+                                <i class="input-helper"></i>
+                                Yes
+                            </label>
+                        </div>
+                        <div class="radio m-b-15" style="display: inline-block;margin-left: 30px">
+                            <label ng-disabled="form_user_read_only">
+                                <input type="radio" ng-disabled="form_user_read_only"
+                                       ng-readonly="form_user_read_only"
+                                       name="life_insurance" ng-model="objUser.life_insurance_availed"
+                                       ng-value="false"  ng-checked="true">
+                                <i class="input-helper"></i>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="objUser.life_insurance_availed">
+                    <label class="col-sm-4 control-label">Life insurance company</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input  class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.life_insurance_company">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="objUser.life_insurance_availed">
+                    <label class="col-sm-4 control-label">Life insurance policy number</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input  class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.life_insurance_no">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-4 control-label">Salary Account number</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input  class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.salary_account_no">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-4 control-label">Salary account bank</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input  class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.salary_acount_bank">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-4 control-label">Salary account branch</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input  class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.salary_acount_bank_branch">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" >
+                    <label class="col-sm-4 control-label">Salary account bank IFSC</label>
+                    <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                        <div class="fg-line" ng-readonly="form_user_read_only">
+                            <input  class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.salary_acount_bank_ifsc">
+                        </div>
+                    </div>
+                </div>
+               <div class="form-group" >
+                   <label class="col-sm-4 control-label">Provident fund account no.</label>
+                   <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                       <div class="fg-line" ng-readonly="form_user_read_only">
+                           <input  class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.pf_account_number">
+                       </div>
+                   </div>
+               </div>
+               <div class="form-group">
+                   <label class="col-sm-4 control-label">Pension account no.</label>
+                   <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                       <div class="fg-line" ng-readonly="form_user_read_only">
+                           <input  class="form-control
+                                input-sm" style="height: 30px" ng-model="objFTData.pension_account_number">
+                       </div>
+                   </div>
+               </div>
+               <div class="form-group">
+                   <label  class="col-sm-4 control-label">Remarks</label>
+                   <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                       <div class="fg-line" ng-readonly="form_user_read_only">
+                                <textarea class="form-control" ng-model="objUser.account_remarks"
+                                          style="padding-top: 10px" rows="5" placeholder="Remarks"
+                                          ng-readonly="form_user_read_only"></textarea>
+                       </div>
+                   </div>
+               </div>
+               <div class="row" ng-hide="form_user_read_only || !objClient._id" style="margin: 0px 0px 30px 0px">
+                   <div style="float: right;">
+                       <button type="submit" class="btn btn-primary" ng-disabled="!(UserFormTab3.$dirty)"
+                               ng-click="saveUser(UserFormTab3)" style="margin-bottom: 15px;margin-right:30px">Save</button>
+                   </div>
+               </div>
+           </div>
+        </form>
+<!------------------------------------------tab 4 User Documents-------------------------------------------------->
+        <div ng-show="tab_active_user===4">
+            <form name="fileUploadForm">
+                <div class="row" style="margin-bottom: 5%;margin-top: 5%;margin-left: 15%">
+                    <label  class="col-sm-3 control-label">Previous employer salary slip</label>
+                    <div class="col-sm-9">
+                        <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                                onclick="document.getElementById('previous_comp_salary_slip').click();">Select File</button>
+                        <input ng-hide="true" id="previous_comp_salary_slip" type="file" accept="image/*,application/pdf"
+                               ngf-select ng-model="previous_comp_salary_slip" name="previous_comp_salary_slip"
+                               ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                        <i ng-show="myForm.previous_comp_salary_slip.$error.maxSize">File too large
+                            {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                        <img ng-show="fileUploadForm.previous_comp_salary_slip.$valid" ngf-src="previous_comp_salary_slip"
+                             ngf-resize="{width: 100, height: 100}">
+                        <img ng-show="objUser.previous_comp_salary_slip && form_user_read_only"
+                             ngf-src="{{fileURLUser}}{{objUser.previous_comp_salary_slip}}"
+                             ngf-resize="{width: 100, height: 100}">
+                        <button ng-click="previous_comp_salary_slip = null"
+                                ng-show="previous_comp_salary_slip">Remove</button>
+                        <br>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                    <label  class="col-sm-3 control-label">ID Document</label>
+                    <div class="col-sm-9">
+                        <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                                onclick="document.getElementById('id_proof').click();">Select File</button>
+                        <input ng-hide="true" id="id_proof" type="file" accept="image/*,application/pdf"
+                               ngf-select ng-model="id_proof" name="id_proof"
+                               ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                        <i ng-show="fileUploadForm.id_proof.$error.maxSize">File too large
+                            {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                        <img ng-show="fileUploadForm.id_proof.$valid" ngf-src="id_proof"
+                             ngf-resize="{width: 100, height: 100}">
+                        <img ng-show="objUser.id_proof && form_user_read_only"
+                             ngf-src="{{fileURLUser}}{{objUser.id_proof}}"
+                             ngf-resize="{width: 100, height: 100}">
+                        <button ng-click="id_proof = null"
+                                ng-show="id_proof">Remove</button>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                    <label  class="col-sm-3 control-label">PAN Document</label>
+                    <div class="col-sm-9">
+                        <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                                onclick="document.getElementById('pan_proof').click();">Select File</button>
+                        <input ng-hide="true" id="pan_proof" type="file" ngf-select
+                               accept="image/*,application/pdf"  ng-model="pan_proof" name="pan_proof"
+                               ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                        <i ng-show="fileUploadForm.pan_proof.$error.maxSize">File too large
+                            {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                        <img ng-show="fileUploadForm.pan_proof.$valid" ngf-src="pan_proof"
+                             ngf-resize="{width: 100, height: 100}">
+                        <button ng-click="pan_proof = null"
+                                ng-show="pan_proof">Remove</button>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                    <label  class="col-sm-3 control-label">DOB verification document</label>
+                    <div class="col-sm-9">
+                        <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                                onclick="document.getElementById('dob_proof').click();">Select File</button>
+                        <input ng-hide="true" id="dob_proof" accept="image/*,application/pdf"
+                               type="file" ngf-select ng-model="dob_proof" name="dob_proof"
+                               ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                        <i ng-show="fileUploadForm.dob_proof.$error.maxSize">File too large
+                            {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                        <img ng-show="fileUploadForm.dob_proof.$valid" ngf-src="dob_proof"
+                             ngf-resize="{width: 100, height: 100}">
+                        <button ng-click="dob_proof = null"
+                                ng-show="dob_proof">Remove</button>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                    <label  class="col-sm-3 control-label">Education certificate</label>
+                    <div class="col-sm-9">
+                        <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                                onclick="document.getElementById('educational_proof').click();">Select File</button>
+                        <input ng-hide="true" id="educational_proof" accept="image/*,application/pdf"
+                               type="file" ngf-select ng-model="educational_proof" name="educational_proof"
+                               ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                        <i ng-show="fileUploadForm.educational_proof.$error.maxSize">File too large
+                            {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                        <img ng-show="fileUploadForm.educational_proof.$valid" ngf-src="educational_proof"
+                             ngf-resize="{width: 100, height: 100}">
+                        <img ng-show="objUser.educational_proof && form_user_read_only"
+                             ngf-src="{{}}{{objUser.educational_proof}}"
+                             ngf-resize="{width: 100, height: 100}">
+                        <button ng-click="educational_proof = null"
+                                ng-show="educational_proof">Remove</button>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 5%;margin-left: 15%">
+                    <label  class="col-sm-3 control-label">EPF Document</label>
+                    <div class="col-sm-9">
+                        <button ng-hide="form_user_read_only" class="btn btn-sm btn-primary"
+                                onclick="document.getElementById('pf_account').click();">Select File</button>
+                        <input ng-hide="true" id="pf_account" accept="image/*,application/pdf"
+                               type="file" ngf-select ng-model="pf_account" name="pf_account"
+                               ngf-max-size="2MB" ngf-model-invalid="errorFile">
+                        <i ng-show="fileUploadForm.pf_account.$error.maxSize">File too large
+                            {{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+                        <img ng-show="fileUploadForm.pf_account.$valid" ngf-src="pf_account"
+                             ngf-resize="{width: 100, height: 100}">
+                        <img ng-show="objUser.pf_account && form_user_read_only"
+                             ngf-src="{{}}{{objUser.pf_account}}"
+                             ngf-resize="{width: 100, height: 100}">
+                        <button ng-click="pf_account = null"
+                                ng-show="pf_account">Remove</button>
+                    </div>
+                </div>
+                <div class="row" ng-hide="form_user_read_only || !objClient._id" style="margin: 0px 0px 30px 0px">
+                    <div style="float: right;">
+                        <button type="submit" class="btn btn-primary" ng-disabled="!(fileUploadForm.$dirty)"
+                                ng-click="saveUser()" style="margin-bottom: 15px;margin-right:30px">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

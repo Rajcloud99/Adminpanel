@@ -1,0 +1,599 @@
+<div class="container" ng-controller="tripExpDetailCtrl">
+  <div class="card m-b-0" id="messages-main">
+	  <h4 style="margin-left: 10px;"> Trip No: {{selectedTripExp.trip_no}}			Vendor: {{aTrips[0].vendor.name}}</h4>
+    <div style="min-height:575px;">
+      <div class="listview lv-message">
+        <div class="lv-body">
+			<div ng-if="selectedTripExp.vehicle_no" class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Vehicle No.: </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text" ng-model="selectedTripExp.vehicle_no" class="form-control" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-if="selectedTripExp.trip && selectedTripExp.trip.route_name" class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Route Name: </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text" ng-model="selectedTripExp.trip.route_name" class="form-control" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Branch: </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<span ng-repeat="t in aTrips[0].gr">{{t.branch.name}},</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Status: </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							{{selectedTripExp.trip.status}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-3 control-label">Customer: </label>
+					<div class="col-sm-9">
+						<div class="fg-line">
+							<span ng-repeat="t in aTrips[0].gr">{{t.booking.customer.name}},</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Trip Manager: </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							{{aTrips[0].trip_manager.full_name}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Trip Created: </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							{{aTrips[0].created_by.full_name}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+			<hr>
+			<h4 ng-if="aTrips[0].gr" class="modal-title">GR Detail</h4>
+			<br>
+			<div class="detailsList">
+				<div class="" style="overflow-y: auto; max-height: 500px;">
+					<table class="table table-bordered unresponsive">
+						<thead>
+						<tr>
+							<th>Gr No.</th>
+							<th>Type</th>
+							<th>Status</th>
+							<th>POD Status</th>
+							<th>Date</th>
+							<th>Acknowledge by</th>
+							<th>Acknowledge Via</th>
+							<th>Created By</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="oGr in aTrips[0].gr" class="pointer selectItem">
+							<td>{{oGr.grNumber}}</td>
+							<td>{{oGr.gr_type}}</td>
+							<td>{{oGr.status}}</td>
+							<td> {{isAcnowledged(oGr.statuses,'GR Acknowledged')}}</td>
+							<td>{{oGr.grDate | date:'dd-MM-yyyy'}}</td>
+							<td>{{oGr.acknowledge.user.full_name}}</td>
+
+							<td>
+								<label ng-if="oGr.acknowledge.via.driver">{{oGr.acknowledge.via.driver.name || 'NA'}}</label>
+								<label ng-if="oGr.acknowledge.via.courier">{{oGr.acknowledge.via.courier.name || 'NA'}}</label>
+							</td>
+
+							<td>{{oGr.created_by_full_name}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div class="pagi" ng-show="total_pages>1">
+						<pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+									last-text="&raquo;"></pagination>
+					</div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+			<hr>
+			<!--******** vendor deal payment code********-->
+			<div class="clearfix"></div>
+			<h4  class="modal-title" ng-if="selectedTripExp.trip.vendorDeal" style="margin-left: 10px;">Vendor Deal</span></h4>
+			<div ng-if="selectedTripExp.trip.vendorDeal" class="col-md-12" style="margin-top: 13px;margin-left: 12px;">
+				<div class="detailList">
+					<ul>
+						<li ng-if="selectedTripExp.trip.vendorData && selectedTripExp.trip.vendorData.name"><span>Vendor</span>: {{selectedTripExp.trip.vendorData.name}}</li>
+						<li ng-if="selectedTripExp.trip.vendorData && selectedTripExp.trip.vendorData.prim_contact_no"><span>Vendor Contact</span>: {{selectedTripExp.trip.vendorData.prim_contact_no}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.total_expense"><span>Total Expense</span>: {{selectedTripExp.trip.vendorDeal.total_expense}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.munshiyana"><span>Munshiyana</span>: {{selectedTripExp.trip.vendorDeal.munshiyana}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.advance"><span>Advance</span>: {{selectedTripExp.trip.vendorDeal.advance}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.advance_due_date"><span>Adv. Due Date</span>: {{selectedTripExp.trip.vendorDeal.advance_due_date | date:'dd-MM-yyyy'}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.toPay"><span>ToPay/Balace</span>: {{selectedTripExp.trip.vendorDeal.toPay}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.topay_due_date"><span>ToPay Due Date</span>: {{selectedTripExp.trip.vendorDeal.topay_due_date | date:'dd-MM-yyyy'}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.payment_type"><span>Payment Type</span>: {{selectedTripExp.trip.vendorDeal.payment_type | date:'dd-MM-yyyy'}}</li>
+						<li><span>Deduct TDS</span>: {{selectedTripExp.trip.vendorDeal.deductTDS ? "Yes" : "No" }}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.weight_type"><span>Weight Type</span>: {{selectedTripExp.trip.vendorDeal.weight_type | date:'dd-MM-yyyy'}}</li>
+						<li ng-if="selectedTripExp.trip.vendor && selectedTripExp.trip.vendorDeal.loading_slip"><span>Loading Slip</span>:
+							<button ng-click="$event.preventDefault();preview(selectedTripExp.trip.vendorDeal.loading_slip)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-show="selectedTripExp.trip.vendorDeal.loading_slip">Preview Slip</button>
+						</li>
+
+					</ul>
+				</div>
+				<br>
+				<div class="clear-fix"></div>
+				<div ng-show="selectedTripExp.trip.vendorData.banking_details.length>0" class="col-sm-6">
+					<table style="border: 1px solid #ddd;margin-left: 15px;" class="table table-bordered">
+						<thead>
+						<th>Bank A/C</th>
+						<th>IFSC</th>
+						<th>Declaration</th>
+						<th>Cancel Cheque</th>
+						</thead>
+						<tbody>
+						<tr ng-style="{ 'background-color': selectedTripExp.trip.vendorData.vendorDeal.bankingDetail.a_c == bank.a_c ? '#5ce260' : 'white' }" ng-repeat="bank in selectedTripExp.trip.vendorData.banking_details">
+							<td>{{bank.a_c}}</td>
+							<td>{{bank.ifsc}}</td>
+							<td>{{bank.declaration}}</td>
+							<td>
+								<button title="Preview" class="btn btn-warning" ng-click="$event.preventDefault();preview(bank.cancelled_cheque)" ng-show="bank.cancelled_cheque">
+									<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+								</button >
+							</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-sm-6"></div>
+			</div>
+			<div class="clearfix"></div>
+			<br>
+			<h4  class="modal-title" ng-if="selectedTripExp.trip.vendorDeal" style="margin-left: 10px;">Advance Component</span></h4>
+			<div ng-if="selectedTripExp.trip.vendorDeal" class="col-md-12">
+				<div class="detailList" style="margin-top: 13px;margin-left: 12px;">
+					<ul>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.diesel && selectedTripExp.trip.vendorDeal.diesel.quantity"><span>Diesel Quantity</span>:{{selectedTripExp.trip.vendorDeal.diesel.quantity}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.diesel && selectedTripExp.trip.vendorDeal.diesel.rate"><span>Diesel Rate</span>:{{selectedTripExp.trip.vendorDeal.diesel.rate}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.diesel && selectedTripExp.trip.vendorDeal.diesel.amount"><span>Diesel Amount</span>:{{selectedTripExp.trip.vendorDeal.diesel.amount}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.driver_cash"><span>Driver Cash</span>: {{selectedTripExp.trip.vendorDeal.driver_cash}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.toll_tax"><span>Toll Tax</span>: {{selectedTripExp.trip.vendorDeal.toll_tax}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.other_charge"><span>Other Charge</span>: {{selectedTripExp.trip.vendorDeal.other_charge}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.account_payment"><span>Account Payment</span>: {{selectedTripExp.trip.vendorDeal.account_payment}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.other_charges_remark"><span>Other c Remark</span>: {{selectedTripExp.trip.vendorDeal.other_charges_remark}}</li>
+						<li ng-if="selectedTripExp.trip.vendorDeal && selectedTripExp.trip.vendorDeal.remark"><span>Remark</span>: {{selectedTripExp.trip.vendorDeal.remark}}</li>
+					</ul>
+				</div>
+				<div class="col-md-12" ng-if="selectedTripExp.trip.askPayment.length>0">
+					<div class="detailList">
+						<table class="table table-bordered unresponsive">
+							<thead>
+							<tr>
+								<th>#</th>
+								<th>Date</th>
+								<th>Type</th>
+								<th>Amount</th>
+								<th>Settled</th>
+								<th>Remaining</th>
+								<th>Remark</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr data-ng-repeat="oAskPayment in selectedTripExp.trip.askPayment"
+								class="pointer selectItem">
+								<td>
+									<label class="radio radio-inline m-r-20"
+										   ng-if="(oAskPayment.settledAmount || 0)<oAskPayment.amount">
+										<input type="radio"
+											   name="askPayment"
+											   ng-model="selectedAskPayment.selected"
+											   ng-value="oAskPayment"
+											   ng-click="selectAskPayment(oAskPayment)">
+										<i class="input-helper"></i>
+									</label>
+								</td>
+								<td>{{(oAskPayment.date | date: "dd-MMM-yyyy 'at' hh:mm a") || 'NA'}}</td>
+								<td>{{oAskPayment.type || 'NA'}}</td>
+								<td>{{oAskPayment.amount || 'NA'}}</td>
+								<td>{{oAskPayment.settledAmount || '0'}}</td>
+								<td>{{(oAskPayment.amount || 0) - (oAskPayment.settledAmount || 0)}}</td>
+								<td>{{oAskPayment.remark || 'NA'}}</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<br>
+				<div class="hd2">
+					<button
+							class="btn btn-success waves-effect pull-right m-r-10"
+							ng-disabled="selectedTripExp.trip.vendorDeal.acknowledge.status"
+							ng-click="acknowledgeDeal()"
+					>
+						Acknowledge Deal
+					</button>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<hr>
+			<h4 class="modal-title" style="margin-left: 10px;">Actual Payment</h4>
+			<br>
+			<div ng-if="selectedTripExp.driverCash" class="col-md-2">
+				<div class="form-group m-b-0">
+					<label class="col-sm-8 control-label">Driver Cash</label>
+					<div class="col-sm-4">
+						<div class="fg-line">
+							<input type="text" ng-model="selectedTripExp.driverCash" placeholder=" " class="form-control" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-if="selectedTripExp.diesel" class="col-md-2">
+				<div class="form-group m-b-0">
+					<label class="col-sm-8 control-label">Diesel Amount</label>
+					<div class="col-sm-4">
+						<div class="fg-line">
+							<input type="text" ng-model="selectedTripExp.diesel" class="form-control" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-if="selectedTripExp.tollTax" class="col-md-2">
+				<div class="form-group m-b-0">
+					<label class="col-sm-8 control-label">Toll Tax</label>
+					<div class="col-sm-4">
+						<div class="fg-line">
+							<input type="text" ng-model="selectedTripExp.tollTax" class="form-control" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-if="selectedTripExp.oCharges" class="col-md-2">
+				<div class="form-group m-b-0">
+					<label class="col-sm-8 control-label">Other</label>
+					<div class="col-sm-4">
+						<div class="fg-line">
+							<input type="number" ng-model="selectedTripExp.oCharges" class="form-control" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div ng-if="selectedTripExp.netExpense" class="col-md-2">
+				<div class="form-group m-b-0">
+					<label class="col-sm-8 control-label">Total Expense</label>
+					<div class="col-sm-4">
+						<div class="fg-line">
+							<input type="number" ng-model="selectedTripExp.netExpense" class="form-control" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<label class="col-sm-8 control-label">Vendor Adv. Remaining</label>
+					<div class="col-sm-4">
+						<div class="fg-line">
+							<!--<input type="number" ng-model="selectedTripExp.v_adv_remaining" class="form-control" ng-readonly="true">-->
+							{{selectedTripExp.v_adv_remaining}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<label class="col-sm-8 control-label">Vendor ToPay Remaining</label>
+					<div class="col-sm-4">
+						<div class="fg-line">
+							<!--<input type="number" ng-model="selectedTripExp.v_topay_remaining" class="form-control" ng-readonly="true">-->
+							{{selectedTripExp.v_topay_remaining}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<hr>
+			<h4 class="modal-title" style="margin-left: 10px;">Add More Expense</h4>
+			<br>
+			<div class="col-md-12 exced" style="">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-6 control-label">Select Type <span class="req_r">*</span></label>
+						<div class="col-md-6">
+							<select class="form-control"
+									ng-model="objDiesel.type"
+									ng-options="item as item for item in $constants.aPayType"
+									ng-change="typeChange(objDiesel.type); setUnsetAccountMasterVendor(objDiesel.type);">
+								<option value="" disabled selected> Select</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="col-md-12 exced" ng-if="objDiesel.type=='Diesel'">
+				<div class="col-md-3">
+					<div class="form-group m-b-0">
+						<label class="control-label"> Vendor Name </label>
+						<select class="form-control" ng-model="diesel_info.vendor" ng-options="item as item.name for item in aFuelVendor" ng-change="fuelFunc(diesel_info.vendor)">
+							<option value="" disabled selected> Select Vendor</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group m-b-0">
+						<label class="control-label"> Fuel Station </label>
+						<select class="form-control" ng-model="diesel_info.station" ng-options="item as item.address+' (' + item.fuel_type + ')' for item in aFuelStations" ng-change="fuelStationFunc(diesel_info.station)">
+							<option value="" disabled selected> Select Station</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<label class="control-label"> Rate </label>
+						<div class="fg-line">
+							<input type="number" onwheel="return false" onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"
+								   ng-model="diesel_info.rate" placeholder=" " class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<label class="control-label"> Litres </label>
+						<div class="fg-line">
+							<input type="number" onwheel="return false" onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"
+								   ng-model="diesel_info.litre" placeholder=" " class="form-control">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<label class="control-label"> Amount </label>
+						<div class="fg-line">
+							<input type="number" onwheel="return false" onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"
+								   ng-model="diesel_info.amount" placeholder=" " class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<br>
+			<div class="col-md-12">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label"> Person <span class="req_r">*</span> </label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="text"
+									   ng-model="objDiesel.person"
+									   placeholder="Enter Person Name "
+									   class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label"> Amount<span class="req_r">*</span> </label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="number" onwheel="return false" onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   ng-model="objDiesel.amount" ng-change="validateAmount(objDiesel.amount)" ng-readonly="objDiesel.type === 'Diesel'" placeholder="Enter Amount" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label"> Date </label>
+						<div class="date-picker input-group dp-blue"
+							 ng-class="{ 'is-opened': opened2 == true }"
+							 style=" ">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="open($event, 'opened2')" type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{format}}" show-weeks="false"
+									   ng-model="objDiesel.date"
+									   is-open="opened2" max-date="maxDate"
+									   datepicker-options="dateOptions" close-text="Close"
+									   placeholder=" Date"
+									   style="padding: 0px 4px; height: 34px;"/>
+							</div>
+							<span class="input-group-btn">
+							  <button type="button" class="btn btn-default m-t-0 f12"
+									  ng-click="open($event, 'opened2')"><i
+									  class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label"> Reference No </label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="text" ng-model="objDiesel.reference_no" placeholder="Enter Reference No" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-md-4 control-label"> Remark</label>
+						<div class="col-md-8">
+							<div class="fg-line">
+								<input type="text" ng-model="objDiesel.remark" placeholder="Enter Remark" class="form-control">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4" ng-show="trip.isMarketVehicle">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Paid To Vendor</label>
+						<div class="col-sm-6">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" ng-model="objDiesel.paidToVendor" value="">
+									<i class="input-helper"></i>
+									Paid To Vendor
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div style="clear: both"></div>
+
+				<div ng-if="$configs.master.showAccount" class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">From Account : <span class="req_r">*</span></label>
+						<div class="col-sm-8">
+							<select chosen
+									class="form-control"
+									ng-model="objDiesel.account_data.from"
+									ng-options="item as item.name for item in aAccountMasterOfMoney"
+									search-contains="true"
+									ng-change="onSelectAccount()"
+									name="Account From" ng-required="$configs.master.showAccount"
+							>
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div ng-if="$configs.master.showAccount" class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">To Account: <span class="req_r">*</span></label>
+						<div class="col-sm-8">
+							<select chosen
+									class="form-control"
+									ng-model="objDiesel.account_data.to"
+									ng-options="item as item.name for item in (( objDiesel.type.toLowerCase().indexOf('vendor') !== -1 ? (aAccountMasterOfVendor || []) : aAccountMasterAll )|filter:{name:'!'+objDiesel.account_data.from.name})"
+									search-contains="true"
+									ng-change="onSelectAccount()"
+									name="Account To" ng-required="$configs.master.showAccount"
+							>
+								<option value=""></option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr>
+
+			<div class="hd2">
+				<button ng-disabled="!(objDiesel.person
+										&& objDiesel.amount
+										&& objDiesel.type
+										&& (
+											$configs.master.showAccount ? objDiesel.account_data.from : true
+										)
+										&& (
+											$configs.master.showAccount ? objDiesel.account_data.to : true
+										))"
+						class="btn btn-success waves-effect pull-right m-r-10"
+						ng-click="addExpenseMore(objExp.aTripExpense)">Add</button>
+
+				<button class="btn btn-success waves-effect pull-right m-r-10"
+						ng-disabled="checkIsTDSdone(objExp.aTripExpense)"
+						ng-click="fillExpenseDeal()">Deduct TDS</button>
+			</div>
+			<div class="clearfix"></div>
+			<br>
+			<div class="table-responsive" style="margin:15px">
+				<table class="table">
+					<thead>
+					<tr>
+						<th>Trip No.</th>
+						<th>Type</th>
+						<th>Person</th>
+						<th>Date</th>
+						<th>Amount</th>
+						<th>Vendor Name</th>
+						<th>Station</th>
+						<th>Fuel Type</th>
+						<th>Liter</th>
+						<th>Rate</th>
+						<th>Paid to vendor</th>
+						<th>Created Date</th>
+						<th>Created By</th>
+						<th>Remark</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="expense in objExp.aTripExpense">
+						<td>{{expense.trip_no}}</td>
+						<td>{{expense.type}}</td>
+						<td>{{expense.person}}</td>
+						<td>{{expense.date | date:'dd-MM-yyyy'}}</td>
+						<td>{{expense.amount}}</td>
+						<td>{{expense.diesel_info.vendor.name}}</td>
+						<td>{{expense.diesel_info.station.address}}</td>
+						<td>{{expense.diesel_info.station.fuel_type}}</td>
+						<td>{{expense.diesel_info.litre}}</td>
+						<td>{{expense.diesel_info.rate}}</td>
+						<td>{{(expense.paidToVendor && (expense.paidToVendor==true))?"Yes":"No"}}</td>
+						<td>{{expense.created_at | date:'dd-MM-yyyy'}}</td>
+						<td>{{expense.created_by.name}}</td>
+						<td>{{expense.remark}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<br>
+			<hr>
+          <!--<div class="col-sm-6">
+            <a href="" class="btn btn-success waves-effect" ng-click="updateTripExpense(selectedTripExp)">Update</a>
+          </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style type="text/css">
+    .fg-float .fg-label{top: 0px;}
+	.table thead tr th {
+		background: #62b6ff;
+	}
+	.detailList ul li {
+		width: 22%;
+	}
+	.tbl-sm thead tr th {
+		padding: 2px !important;
+		font-size: 10px;
+		color: #fff;
+		background: #2196f3;
+	}
+	.tbl-sm tbody tr td {
+		padding: 0 !important;
+		font-size: 9px;
+	}
+	.tbl-sm tbody tr td button {
+		font-size: 7px;
+		padding: 4px;
+	}
+</style>

@@ -1,0 +1,28 @@
+<ul class="header-inner clearfix" >
+	<div class="container m-b-10">
+		<div class="col-md-12 card m-b-0">
+			<div class="lvh-label">
+				<span class="c-black"><b>Notifications</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View Notifications)
+					</span>
+				</span>
+			</div>
+
+			<div class="pull-right">
+				<div class="col-md-4">
+					<button ng-click="getVouchers(true)" ng-disabled="aVouchers.length<=0"
+							class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+						Download
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</ul>
+<style>
+	.container{
+		width: 98% !important;
+	}
+</style>

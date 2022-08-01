@@ -1,0 +1,293 @@
+<!-- Controller: purchaseBillController-->
+<!-- ControllerAs: pbVm -->
+
+<div class="container">
+    <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <div class="row hidden-print" style="margin:15px;">
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="pbVm.myFilter.billNo"
+						   name="bill_no"
+						   class="form-control input-sm"
+						   placeholder="Bill No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="pbVm.myFilter.refNo"
+						   name="refNo"
+						   class="form-control input-sm"
+						   placeholder="Ref No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Creditor(A/c) Group..."
+							ng-model="pbVm.myFilter.acGroup"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in pbVm.accountmaster($viewValue, 'isGroup') | limitTo:6"
+							typeahead-on-select="pbVm.onAccountGrp($item, $model, $label)">
+					<i class="lvh-search-close" ng-click="pbVm.myFilter.acGroup = undefined;">×</i>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-1">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Accounts"
+							ng-model="pbVm.myFilter.account"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in pbVm.accountmaster($viewValue) | limitTo:6"
+							typeahead-on-select="pbVm.onAccSelect($item, $model, $label)">
+					<i class="lvh-search-close" ng-click="pbVm.myFilter.account = undefined;">×</i>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group m-b-0 select">
+					<select chosen multiple class="form-control"
+							ng-model="pbVm.myFilter.type"
+							ng-options="item as item for item in pbVm.aBillType"
+							name="Voucher Type"
+							placeholder="Select Bill Type"
+							required>
+						<option value="" disabled>Select Bill Type</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<select class="form-control" ng-model="pbVm.myFilter.dateType" style="line-height: 34px;">
+					<option value="" selected>Select Type</option>
+					<option value="billDate" selected>Bill date</option>
+					<option value="actulDate" selected>Actual date</option>
+					<option value="created_at" selected>Creation date</option>
+					<option value="approved_at" selected>Approved date</option>
+				</select>
+			</div>
+			<div class="col-md-1">
+				<select class="form-control" ng-model="pbVm.myFilter.approved" style="line-height: 34px;">
+					<option value="" selected >Approved</option>
+					<option value="true" selected>Yes</option>
+					<option value="false" selected>No</option>
+				</select>
+			</div>
+			<div class="col-md-3">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Search"
+						type="submit"
+						ng-click="pbVm.getBills()"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Clear Search"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="pbVm.myFilter={};pbVm.aAccount = [];pbVm.aAccountGroup = [];pbVm.getBills();">
+					<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+				</button>
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Download"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="pbVm.getBills(false, true);">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+
+						uib-tooltip="Download Purchase Bill Report"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="pbVm.getPurcBills(false, true);">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+
+<!--				<button class="btn btn-primary p-l-10 p-r-10 app_tile"-->
+<!--						style="font-size: 16px"-->
+<!--						uib-tooltip="Diesel Report"-->
+<!--						tooltip-placement="bottom"-->
+<!--						type="button"-->
+<!--						ng-click="pbVm.reportDownload('Diesel');">-->
+<!--					<i class="zmdi zmdi-download zmdi-hc-fw"></i>-->
+<!--				</button>-->
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="lvh-search ng-scope sear chosen-row-1">
+							<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Advance Ref. No."
+								ng-model="pbVm.myFilter.dieselrRfNo"
+								typeahead-wait-ms="10"
+								name="Ref_Number"
+								typeahead="item as item.reference_no for item in pbVm.getAdvance(pbVm.myFilter.dieselrRfNo)|limitTo:10"
+								>
+							<i class="lvh-search-close" ng-click="pbVm.myFilter.dieselrRfNo=null;">×</i>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="pbVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{pbVm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="pbVm.DatePicker.newDate"
+							   ng-model="pbVm.myFilter.start_date"
+							   ng-change="pbVm.dateChange('startDate');"
+							   is-open="opened1"
+							   datepicker-options="pbVm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="Start Date"
+							   name="Start Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="pbVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+						class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+				</div>
+			</div>
+
+			<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened2 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="pbVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+							   type="text"
+							   class="form-control"
+							   uib-datepicker-popup="{{pbVm.DatePicker.formats[0]}}"
+							   show-weeks="false"
+							   max-date="pbVm.DatePicker.newDate"
+							   ng-model="pbVm.myFilter.end_date"
+							   ng-change="pbVm.dateChange('endDate');"
+							   is-open="opened2"
+							   datepicker-options="pbVm.DatePicker.dateSettings"
+							   close-text="Close"
+							   placeholder="End Date"
+							   name="End Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="pbVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-xs-6 col-sm-12 col-md-12 col-lg-12" ng-if="pbVm.aAccount.length">
+			  <span class="btn-lst" ng-repeat="select in pbVm.aAccount">
+				  <button class="btn-xs" style="background: black; color: aliceblue;">     {{select.name}}&nbsp;
+				  <a ng-click="pbVm.removeAccount(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+			</div>
+			<div class="col-xs-6 col-sm-12 col-md-12 col-lg-12" ng-if="pbVm.aAccountGroup.length">
+			  <span class="btn-lst" ng-repeat="sel in pbVm.aAccountGroup">
+				  <button class="btn-xs" style="background: midnightblue; color: #00FFFF;">     {{sel.name}}&nbsp;
+				  <a ng-click="pbVm.removeAcGroup(sel,$index)"> X </a></button>&nbsp;&nbsp;</span>
+			</div>
+        </div>
+    </div>
+
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="form-group m-b-0">
+			<button class="btn btn-primary m-r-10"
+					ng-click="pbVm.upsertBill()"
+					uib-tooltip="Add Bill">
+				<i class="zmdi zmdi-file-add zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					ng-show="!pbVm.selectedBill.items.length"
+					ng-click="pbVm.upsertBill('edit')"
+					uib-tooltip="Edit Bill"
+					ng-disabled="pbVm.shouldDisableEditing()">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					ng-show="pbVm.selectedBill.items.length"
+					ng-click="pbVm.billOperation('edit')"
+					uib-tooltip="Bill Approve"
+					ng-disabled="pbVm.selectedBill.plainVoucher">
+				<i class="zmdi zmdi-thumb-up zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					ng-show="pbVm.selectedBill.items.length"
+					ng-click="pbVm.billOperation()"
+					uib-tooltip="Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary m-r-10"
+					ng-hide="pbVm.selectedBill.items.length"
+					ng-click="pbVm.printBill()"
+					uib-tooltip="print Bill">
+				<i class="zmdi zmdi-print zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-10"
+					ng-click="pbVm.unapprove()"
+					uib-tooltip="Unapprove"
+					ng-disabled="!pbVm.selectedBill.plainVoucher || (pbVm.selectedBill.deduction && pbVm.selectedBill.deduction.length)">
+				<i class="zmdi zmdi-thumb-down zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger m-r-10"
+					ng-click="pbVm.remove()"
+					uib-tooltip="Delete"
+					ng-disabled="pbVm.selectedBill.plainVoucher">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<div ja-table
+				 table-body="pbVm.aBills"
+				 table-head="pbVm.tableHead"
+				 table-height='500px'
+				 table-load="pbVm.getBills(true)"
+				 table-column-setting="pbVm.columnSetting"
+				 table-selectable='"index"'
+				 table-api='pbVm.tableApi'
+				 table-selectable-model="pbVm.selectedBill"
+			></div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+
+	.fs-20{
+		font-size: 20px;
+	}
+	.hideExtraData{
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		height: 45px;
+	}
+</style>

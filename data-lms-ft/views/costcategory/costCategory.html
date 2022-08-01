@@ -1,0 +1,150 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Cost Category</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 7px">
+			<form ng-submit="ccVm.getCostCategory()" novalidate autocomplete="off">
+				<div class="col-md-1">
+
+					<div class="fg-line form-group m-b-0">
+
+						<input type="text"
+							   ng-model="ccVm.oFilter.name"
+							   name="Name"
+							   class="form-control input-sm"
+							   placeholder="Name">
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="ccVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{ccVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="ccVm.DatePicker.newDate"
+											   ng-model="ccVm.oFilter.from"
+											   is-open="opened1"
+											   datepicker-options="ccVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From"/>
+										<!--ng-change="dateChange('startDate')"-->
+									</div>
+									<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="ccVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="ccVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{ccVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="ccVm.oFilter.to"
+											   max-date="ccVm.DatePicker.newDate"
+											   min-date="ccVm.oFilter.from"
+											   is-open="opened2"
+											   datepicker-options="ccVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To"/>
+										<!--ng-change="dateChange('endDate')"-->
+									</div>
+									<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="ccVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw">
+					</i></button>
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Clear Search"
+							type="button"
+							ng-click="ccVm.oFilter={};">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Add"
+							type="button"
+							ng-click="ccVm.upsertCostCategory()">
+					<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Edit"
+							ng-click="ccVm.upsertCostCategory(ccVm.selectedCategory)"
+							type="button">
+					<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<div class="row">
+
+		<div class="col-md-12">
+			<div ja-table
+				 table-body="ccVm.aCostCategory"
+				 table-head="ccVm.tableHead"
+				 table-order-by-model='ccVm.orderBy'
+				 table-order-by-event='ccVm.getCostCategory()'
+				 table-height='500px'
+				 table-load="ccVm.getCostCategory(true)"
+				 table-column-setting="ccVm.columnSetting"
+				 table-selectable='"true"'
+				 table-api="ccVm.tableApi"
+				 table-selectable-model="ccVm.selectedCategory"
+				 table-index="true"
+			></div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+</style>

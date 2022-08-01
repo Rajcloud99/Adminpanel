@@ -1,0 +1,687 @@
+<!-- Controller: multiTripPaymentController -->
+<!-- ControllerAs: mpcVm -->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<div class="lvh-label">
+			<span class="c-black"><b>Multi Trip Payment</b>
+			</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<form novalidate name="vendorPayment" autocomplete="off">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">
+						<div class="pull-right text-right m-t-5">
+							<button class="btn-danger"
+									ng-click="mpcVm.deletePayment()"
+									ng-disabled="mpcVm.isDeleteDisable"
+									tooltip-placement="bottom">
+								DELETE PAYMENT
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-2">
+									<div class="">
+										<input autofocus
+											   type="text"
+											   class="form-control"
+											   ng-model="mpcVm.filter.refNo"
+											   ng-change="mpcVm.prepareRefFilter()"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   name="reference"
+											   placeholder="Ref. No."
+										>
+										<i class="lvh-search-close" ng-click="mpcVm.reset();">×</i>
+									</div>
+									<span class="error" ng-if="mpcVm.filter.refNo && mpcVm.noRefNoFound">No Ref. No. Found</span>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">General Info: </span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Mode: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="mpcVm.paymentMode"
+													ng-options="item as item for item in mpcVm.aPaymentMode"
+													name="Payment Mode"
+													ng-change="mpcVm.setAccount(mpcVm.paymentMode)"
+													required>
+												<option value=""></option>
+											</select>
+											<span class="error"
+												  ng-show="!mpcVm.paymentMode">No PaymentMode Selected</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Date: </label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="Payment Date"
+													ng-model="mpcVm.paymentDate">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-show="mpcVm.vendorDealPayment.paymentRef">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Ref:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Payment Ref"
+													   ng-model="mpcVm.paymentRef"
+													   name="Payment Ref"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!--							<div class="col-md-3">-->
+								<!--								<div class="col-md-12 form-group m-b-5">-->
+								<!--									<label class="col-sm-4 control-label">Credit A/c :<span class="req_r">*</span></label>-->
+								<!--									<div class="col-sm-8">-->
+								<!--										<div ng-dropdown-multiselect=""-->
+								<!--											 options="mpcVm.aFromAccount"-->
+								<!--											 selected-model="mpcVm.fromAccount"-->
+								<!--											 extra-settings="mpcVm.selectAccountSettings"-->
+								<!--											 ja-search-input='inputModel'-->
+								<!--											 ja-search-trigger="mpcVm.getAccount('aFromAccount', mpcVm.aFromGroup, inputModel)"-->
+								<!--										></div>-->
+								<!--										<span class="error"-->
+								<!--											  ng-if="'isEmptyObject'|otherUtilsFilt:mpcVm.fromAccount">-->
+								<!--													This Field is Mandatory</span><br>-->
+								<!--										&lt;!&ndash;<span class="error" ng-if="!mpcVm.aFromAccount.length">&ndash;&gt;-->
+								<!--										&lt;!&ndash;No Account Found</span>&ndash;&gt;-->
+								<!--									</div>-->
+								<!--								</div>-->
+								<!--							</div>-->
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Credit A/c :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Credit A/c Search.."
+														ng-model="mpcVm.fromAccount"
+														typeahead-wait-ms="10"
+														name="Credit A/c"
+														typeahead="item as item.name for item in mpcVm.getAc($viewValue, mpcVm.aFromGroup)|limitTo:6"
+														required>
+												<i class="lvh-search-close" ng-click="mpcVm.fromAccount=null;">×</i>
+											</div>
+											<span class="error"
+												  ng-if="'isEmptyObject'|otherUtilsFilt:mpcVm.fromAccount">
+													This Field is Mandatory</span><br>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Branch Search.."
+														ng-model="mpcVm.branch"
+														typeahead-wait-ms="10"
+														name="Branch"
+														typeahead="item as item.name for item in mpcVm.getAllBranch($viewValue)|limitTo:6"
+														typeahead-on-select="mpcVm.onBranchSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close" ng-click="mpcVm.branch=null;">×</i>
+											</div>
+											<span class="error" ng-show="!mpcVm.branch">No Branch Selected</span>
+											<span class="warning" ng-show="mpcVm.branch && !mpcVm.branch.refNoBook">No Ref Book Linked to selected branch</span>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Voucher Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="mpcVm.voucherType"
+													ng-options="item as item for item in mpcVm.aVoucherType"
+													name="VoucherType"
+													required>
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="$configs.vendorDeal.multiPayment">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="mpcVm.paymentType"
+													ng-options="item as item for item in mpcVm.aPaymentType"
+													name="Payment Type"
+													ng-change="mpcVm.otherCal()"
+													required>
+												<option value=""></option>
+											</select>
+											<span class="error"
+												  ng-show="!mpcVm.paymentType">No PaymentType Selected</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="mpcVm.paymentMode === 'Cheque' && $configs.vendorDeal.multiPayment">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">ChequeClear Date: </label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="ChequeClear Date"
+													ng-model="mpcVm.ChequeClearDate">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="$configs.vendorDeal.payRefNo">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">{{mpcVm.paymentMode}} Payment
+											RefNo:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="{{mpcVm.paymentMode}} Payment RefNo"
+													   ng-model="mpcVm.payRefNo"
+													   name="Payment RefNo"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-5">Amount: <span class="req_r">*</span></label>
+										<div class="col-sm-6 p-t-5">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Amount"
+													   ng-model="mpcVm.receivedAmt"
+													   name="Amount"
+													   class="form-control"
+													   required>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--							<div class="col-md-3">-->
+								<!--								<div class="form-group m-b-0">-->
+								<!--									<label class="col-sm-5 control-label">Branch :<span class="req_r">*</span></label>-->
+								<!--									<div class="col-sm-6">-->
+								<!--										<div class="ng-scope sear chosen-row-1">-->
+								<!--											<input-->
+								<!--													type="text"-->
+								<!--													class="form-control"-->
+								<!--													placeholder="Branch Search.."-->
+								<!--													ng-model="mpcVm.branch"-->
+								<!--													typeahead-wait-ms="10"-->
+								<!--													name="Branch"-->
+								<!--													typeahead="item as item.name for item in mpcVm.getAllBranch($viewValue)|limitTo:6"-->
+								<!--													typeahead-on-select="mpcVm.onBranchSelect($item, $model, $label)"-->
+								<!--													required>-->
+								<!--											<i class="lvh-search-close" ng-click="mpcVm.branch=null;">×</i>-->
+								<!--										</div>-->
+								<!--										<span class="error" ng-show="!mpcVm.branch">No Branch Selected</span>-->
+								<!--										<span class="warning" ng-show="mpcVm.branch && !mpcVm.branch.refNoBook">No Ref Book Linked to selected branch</span>-->
+								<!--									</div>-->
+								<!--								</div>-->
+								<!--							</div>-->
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Ref No:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-9">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Ref Number"
+														ng-model="mpcVm.refNo"
+														typeahead-wait-ms="10"
+														name="Reference Number"
+														typeahead="item.bookNo as item.bookNo for item in mpcVm.getRefNo(mpcVm.refNo)|limitTo:10"
+														typeahead-on-select="mpcVm.onRefNoSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close" ng-click="mpcVm.refNo=null;">×</i>
+																					<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+																					   style="right: -20px; background: #3096f3;"
+																					   ng-click="mpcVm.getAutoStationaryNo(mpcVm.paymentDate)"></i>
+											</div>
+											<span class="error" ng-if="vendorPayment['Reference Number'].$error.required
+																	&& !vendorPayment['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<!--<div class="col-md-1">-->
+									<!--<button class="btn btn-primary p-t-0 p-b-0"-->
+											<!--type="button"-->
+											<!--style="margin-bottom: 3px;  font-size: 16px"-->
+											<!--uib-tooltip="getAutoStationary"-->
+											<!--ng-click="mpcVm.getAutoStationaryNo(mpcVm.paymentDate)"-->
+											<!--tooltip-placement="bottom">-->
+										<!--<i class="zmdi zmdi-refresh zmdi-hc-fw"></i>-->
+									<!--</button>-->
+								<!--</div>-->
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">remark:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="remark"
+													   ng-model="mpcVm.remark"
+													   name="remark"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Tot Amount:</label>
+										<div class="col-sm-6">
+											{{mpcVm.aTrips|sumObjKey:'receivedAmt'}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">TRIP'S &nbsp;(Tot Remaining Amt.: {{(mpcVm.vendorDealAmt = (mpcVm.aTrips|getArrayElementSum:'remainingAmount') | roundOff) || '0'}})</b></span>
+						<div class="pull-right">
+							<button class="btn btn-danger p-t-0 p-b-0"
+									type="button"
+									style="margin-bottom: 3px;  font-size: 16px"
+									uib-tooltip="Remove"
+									ng-click="mpcVm.removeTrip()"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<div class="col-md-2">
+										<div class="col-md-12 form-group m-b-5">
+											<div class="fg-line">
+												<input type="text"
+													   ng-model="mpcVm.filter.lsNo"
+													   name="Hire Slip"
+													   class="form-control input-sm"
+													   placeholder="Hire Slip"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   style="height: 34px;font-size: 13px;">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="col-md-12 form-group m-b-5">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   placeholder="Enter Amount"
+													   ng-model="mpcVm.filter.amount"
+													   class="form-control"
+													   name="Amount">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2" ng-if="mpcVm.paymentMode === 'Diesel'">
+										<div class="col-md-12 form-group m-b-5">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   placeholder="Enter Diesel Qty"
+													   ng-model="mpcVm.filter.qty"
+													   class="form-control"
+													   name="Enter Diesel Qty">
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group m-b-0">
+											<label class="col-sm-6 control-label">Paid To Broker: </label>
+											<div class="col-sm-6">
+												<div class="checkbox">
+													<label>
+														<input
+																type="checkbox"
+																ng-model="mpcVm.filter.paidToBroker"
+																value="">
+														<i class="input-helper"></i>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-1">
+										<div class="col-md-12 form-group m-b-5">
+											<button
+													class="btn btn-primary" type="button" uib-tooltip="Add"
+													ng-click="mpcVm.prepareFilter()">+
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="row">
+										<div class="table-responsive" style="margin:15px">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>#</th>
+													<th>Start Date</th>
+													<th ng-show="mpcVm.vendorDealPayment.paymentRef">Lori Hire</th>
+													<!--<th>{{mpcVm.multiTripPaymentOf === 'vendor'? 'Broker' : 'Vendor'}}</th>-->
+													<th>Debit A/c(vendor)</th>
+													<th>Hire Slip</th>
+													<th>Amount</th>
+													<th ng-if="mpcVm.paymentMode === 'Diesel'">Qty(litre)</th>
+													<th ng-if="mpcVm.paymentMode === 'Diesel'">Rate</th>
+													<th>PaidToBroker</th>
+													<th ng-if="$configs.barterSystem && mpcVm.paymentMode === 'Diesel'">
+														LinkPayment
+													</th>
+													<th>Paid Amt</th>
+													<th>Payable Amt</th>
+													<th>Remaining Amt</th>
+													<th>Tot Charges</th>
+													<th>Tot Deduction</th>
+													<th>TDS Amt</th>
+													<th>Advance</th>
+													<th ng-if="$configs.vendorDeal.multiPayment">Advance Paid</th>
+													<th ng-if="$configs.vendorDeal.multiPayment">Advance Rem</th>
+													<th ng-if="$configs.vendorDeal.multiPayment">Balance</th>
+													<th ng-if="$configs.vendorDeal.multiPayment">Balance Paid</th>
+													<th ng-if="$configs.vendorDeal.multiPayment">Balance Rem</th>
+													<th>Total With Munshiyana</th>
+													<th>Munshiyana</th>
+													<th>Total amt</th>
+													<th>Vendor</th>
+													<th>Broker</th>
+													<th>Trip No</th>
+													<th>Vehicle No</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr ng-repeat="oTrip in mpcVm.aTrips"
+													ng-click="mpcVm.oSelectedTrip = oTrip"
+													class="pointer"
+													ng-class="{grn: mpcVm.oSelectedTrip._id === oTrip._id}">
+													<td>{{$index+1}}</td>
+													<td>{{((oTrip.statuses | filter:{"status": "Trip started"})[0].date
+														| date:"dd-MM-yyyy") || 'NA'}}
+													</td>
+													<td ng-show="mpcVm.vendorDealPayment.paymentRef">
+														{{oTrip.vendorDeal.lorryAc.name}}
+													</td>
+													<!--<td>-->
+													<!--{{-->
+													<!--mpcVm.multiTripPaymentOf === 'vendor'-->
+													<!--? 	oTrip.vendorDeal.broker.name-->
+													<!--:	oTrip.vendor.name-->
+													<!--}}-->
+													<!--</td>-->
+													<td>
+														{{oTrip.vendor.name}}
+														<span ng-hide="true"> {{oTrip.toAccount = oTrip.vendorDeal.lorryAc}} </span>
+													</td>
+													<td>{{oTrip.vendorDeal.loading_slip}}</td>
+													<td>
+														<div class="fg-line">
+															<input type="number"
+																   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+																   onwheel="return false"
+																   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+																   placeholder="Amount"
+																   ng-min="1"
+																   ng-max="oTrip.maxAmount"
+																   ng-model="oTrip.receivedAmt"
+																   name="recivedAmt{{$index}}"
+																   class="form-control"
+																   required>
+														</div>
+														<span class="error" ng-if="vendorPayment['recivedAmt'+$index].$error.required
+																			&& (vendorPayment['recivedAmt'+$index].$touched
+																			|| vendorPayment.$submitted)">
+														This Field is Mandatory</span>
+														<span class="error"
+															  ng-if="vendorPayment['recivedAmt'+$index].$error.min">
+														Amount Should be Grater than 0</span>
+														<span class="error"
+															  ng-if="vendorPayment['recivedAmt'+$index].$error.max">
+														Amount Should be Less than Remaining {{mpcVm.paymentType ? mpcVm.paymentType : 'amt'}}</span>
+													</td>
+													<td ng-if="mpcVm.paymentMode === 'Diesel'">
+														<div class="fg-line">
+															<input type="number"
+																   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+																   onwheel="return false"
+																   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+																   placeholder="Diesel Qty"
+																   ng-min="1"
+																   ng-model="oTrip.litre"
+																   name="dieselQty{{$index}}"
+																   class="form-control"
+																   required>
+														</div>
+														<span class="error" ng-if="vendorPayment['dieselQty'+$index].$error.required
+																			&& (vendorPayment['dieselQty'+$index].$touched
+																			|| vendorPayment.$submitted)">
+														This Field is Mandatory</span>
+													</td>
+													<td ng-if="mpcVm.paymentMode === 'Diesel'">{{oTrip.rate =
+														(oTrip.receivedAmt/oTrip.litre)|roundOff:0}}{{'/lit'}}
+													</td>
+													<td>
+														<label class="checkbox checkbox-inline">
+															<input type="checkbox"
+																   ng-init="oTrip.paidToBroker = oTrip.paidToBroker ? true  : false"
+																   ng-model="oTrip.paidToBroker"
+																   ng-change="mpcVm.checkBrocker(oTrip)"
+															>
+															<i class="input-helper"></i>
+														</label>
+													</td>
+													<td ng-if="$configs.barterSystem && mpcVm.paymentMode === 'Diesel'">
+														<label class="checkbox checkbox-inline">
+															<input type="checkbox"
+																   ng-init="oTrip.linkPayment = oTrip.linkPayment ? true  : false"
+																   ng-model="oTrip.linkPayment"
+																   ng-change="mpcVm.checklinkPayment(oTrip)"
+															>
+															<i class="input-helper"></i>
+														</label>
+													</td>
+													<td>{{oTrip.totAdvance|roundOff:0}}</td>
+													<td>{{(oTrip.payable = ((oTrip.vendorDeal.totWithMunshiyana || 0) +
+														(oTrip.vendorDeal.totalCharges || 0) -
+														(oTrip.vendorDeal.totalDeduction || 0) -
+														(oTrip.vendorDeal.tdsAmount || 0) -
+														(oTrip.vendorDeal.charges|sumObjKey:'tdsAmount') || 0) ) |
+														roundOff}}
+													</td>
+													<td>{{(oTrip.remainingAmount = oTrip.payable -
+														oTrip.totAdvance)|roundOff:0}}
+													</td>
+													<td>{{(oTrip.vendorDeal.totalCharges || 0)|roundOff}}</td>
+													<td>{{(oTrip.vendorDeal.totalDeduction || 0)|roundOff}}</td>
+													<td>{{(oTrip.vendorDeal.tdsAmount || 0)|roundOff}}</td>
+													<td>{{(oTrip.vendorDeal.advance || 0)|roundOff}}</td>
+													<td ng-if="$configs.vendorDeal.multiPayment">{{(oTrip.advPaid ||
+														0)|roundOff}}
+													</td>
+													<td ng-if="$configs.vendorDeal.multiPayment">
+														{{((oTrip.vendorDeal.advance || 0)- (oTrip.advPaid ||
+														0))|roundOff}}
+													</td>
+													<td ng-if="$configs.vendorDeal.multiPayment">
+														{{(oTrip.vendorDeal.toPay || 0)|roundOff}}
+													</td>
+													<td ng-if="$configs.vendorDeal.multiPayment">{{(oTrip.balPaid ||
+														0)|roundOff}}
+													</td>
+													<td ng-if="$configs.vendorDeal.multiPayment">
+														{{((oTrip.vendorDeal.toPay || 0)- (oTrip.balPaid ||
+														0))|roundOff}}
+													</td>
+													<td>{{(oTrip.vendorDeal.totWithMunshiyana || 0)|roundOff}}</td>
+													<td>{{(oTrip.vendorDeal.munshiyana || 0)|roundOff}}</td>
+													<td>{{(oTrip.vendorDeal.total_expense || 0)|roundOff}}</td>
+													<td>{{oTrip.vendor.name}}</td>
+													<td>{{oTrip.vendorDeal.broker.name}}</td>
+													<td>{{oTrip.trip_no}}</td>
+													<td>{{oTrip.vehicle_no}}</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12 text-right">
+									<label class="checkbox checkbox-inline">
+										<input type="checkbox"
+											   ng-model="mpcVm.dataPreserve">
+										<i class="input-helper"></i>
+										Preserve Data
+									</label>&nbsp;&nbsp;
+									<button class="btn btn-primary"
+											type="button"
+											style="font-size: 14px"
+											ng-disabled="mpcVm.isDisable"
+											ng-click="mpcVm.submit(vendorPayment)">
+										Submit
+									</button>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<style>
+
+	input[type=text]:focus {
+		border: 1px solid black;
+		border-color: rgb(40, 137, 194);
+		outline-style: solid !important;
+		outline-color: #89cde045 !important;
+		outline-width: medium;
+	}
+
+	input[type=number]:focus {
+		border: 1px solid black;
+		border-color: rgb(40, 137, 194);
+		outline-style: solid !important;
+		outline-color: #89cde045 !important;
+		outline-width: medium;
+	}
+
+	input[type=checkbox]:focus {
+		border: 1px solid black;
+		border-color: rgb(40, 137, 194);
+		outline-style: solid !important;
+		outline-color: #89cde045 !important;
+		outline-width: medium;
+	}
+
+
+	.btn-danger:focus {
+		border: 1px solid black;
+		outline-style: solid;
+		outline-color: #b9323245;
+		outline-width: medium;
+	}
+
+	.btn-primary:focus {
+		border: 1px solid black;
+		outline-style: solid !important;
+		outline-color: #89cde045 !important;
+		outline-width: medium;
+	}
+
+	table thead tr th {
+		text-align: center;
+		color: #fff !important;
+		background: #2196f3 !important;
+	}
+
+	table tbody tr td {
+		text-align: center;
+	}
+</style>

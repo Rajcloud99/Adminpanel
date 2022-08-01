@@ -1,0 +1,66 @@
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+             id="messages-main">
+            <div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
+                <div class="lvh-search ng-scope sear">
+                    <input type="text" placeholder="Search Maintenance Vendor ..."
+                           ng-model="vendorMaintenanceTypeAheadValue" class="lvhs-input"
+                           typeahead="vendorMaintenance.name as vendorMaintenance.name for vendorMaintenance in vendorMaintenanceNames"
+                           typeahead-min-length="2" ng-change="getVendorMaintenanceNames(vendorMaintenanceTypeAheadValue)"
+                           typeahead-on-select="onVendorMaintenanceTypeAheadSelect($item, $model, $label)"
+                            style="font-size: 13px">
+                    <i class="lvh-search-close" ng-click="resetVendorMaintenanceName()">×</i>
+                </div>
+                <div class="listview lv-vendorMaintenance clk" style="overflow: auto;height:97%;">
+                    <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)"
+                         ng-repeat="vendorMaintenance in vendorMaintenances"
+                         ng-click="selectVendorMaintenance(vendorMaintenance,$index)">
+                        <div class="truck-desc">
+                            <div class="row">
+                                <div class="col-md-8 bold">
+                                    {{vendorMaintenance.name}}
+                                </div>
+                                <div class="col-md-4 bold">
+                                    {{vendorMaintenance.vendorId}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagi" ng-show="total_pages>1">
+                        <pagination ng-change="pageChanged()" total-items="totalItems"
+                                    items-per-page="items_per_page" num-pages="numPages"
+                                    ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi"
+                                    boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+                                    first-text="&laquo;" last-text="&raquo;"></pagination>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="min-height: 600px;margin-left:20%;overflow: auto">
+                <div class="card-header">
+                    <h2 style="font-size: 18px">Maintenance Vendor
+                    <span ng-show="vendorMaintenanceName.length" style="margin-left:10px;">{{vendorMaintenanceName}}
+                    </span>
+                    <span ng-show="vendorMaintenance_action_tag.length " style="margin-left:10px;
+                    color:#B7B7B7">({{vendorMaintenance_action_tag}})
+                    </span> </h2>
+                </div>
+
+                <button class="btn btn-primary waves-effect"
+                        style="margin-top:-45px;float: right;margin-right: 20px;"
+                        ng-click="addVendorMaintenance()" ng-show="vendorMaintenance_show_add_button">
+                    Add New Maintenance Vendor
+                </button>
+
+                <div class="separator" style="width: 100%;height:1px;background-color: #EAEAEA"></div>
+                <div class="card-header" style="margin: 0 auto;"
+                     ng-show="(vendorMaintenance_show_no_data && !vendorMaintenances.length)">
+                    <h2 style="color: grey">
+                        No maintenance vendors found
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <data ui-view value=""></data>
+                </div>
+            </div>
+</div>

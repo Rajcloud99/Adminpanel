@@ -1,0 +1,70 @@
+<!-- Controller: showHistryPopUpCtrl -->
+<!-- ControllerAs: shVm -->
+
+<form role="form"  name="voucherHistryPopUp" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="shVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">History</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<li class="list-group-item">
+				<div class="card-body">
+					<div class="row" style="margin:5px">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<div class="detailsList" ng-show="shVm.voucherHistory">
+									<div class="" style="overflow-y: auto; max-height: 500px;">
+										<table class="table table-bordered unresponsive">
+											<thead>
+											<tr>
+												<th>Sr.No.</th>
+												<th>Changed By</th>
+												<th>Category</th>
+												<th>Changed At</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat="his in shVm.voucherHistory" ng-if="shVm.voucherHistory">
+												<td>{{$index+1}}</td>
+												<td>{{his.by}}</td>
+												<td>{{his.cat}}</td>
+												<td>{{his.at | date:'dd-MMM-yyyy' }}</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-warning" ng-click="shVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 70%;
+		height: 273px
+	}
+	.exced{
+		margin-top: 20px;margin-left:10px;
+	}
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+	td ,th{
+		text-align:center;
+	}
+	.pac-container.pac-logo{z-index: 9999;}
+</style>
+
+

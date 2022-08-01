@@ -1,0 +1,194 @@
+<form role="form" name="advancePaymentGRPopup" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+						data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">GR No. {{selectedTripGr.grNumber}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+
+			<h4>Advance Received So Far</h4>
+			<div class="row" style="margin:15px">
+				<table class="table table-bordered">
+					<thead>
+					<tr>
+						<th>Entered Date</th>
+						<th>Receiving Date</th>
+						<th>Received By</th>
+						<th>Amount</th>
+						<th>Ref No.</th>
+						<th>Remark</th>
+						<th>From</th>
+						<th>To</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr class="pointer selectItem" ng-repeat="p in advancePayments">
+						<td>{{p.entryDate | date:'dd-MM-yyyy' || 'NA'}}</td>
+						<td>{{p.receivingDate | date:'dd-MM-yyyy' || 'NA'}}</td>
+						<td>{{p.user.full_name || 'NA'}}</td>
+						<td>{{p.amount}}</td>
+						<td>{{p.ref || 'NA'}}</td>
+						<td>{{p.remark || 'NA'}}</td>
+						<td ng-show="accountingAvailable">{{(p.from && p.from.name) || 'NA'}}</td>
+						<td ng-show="accountingAvailable">{{(p.to && p.to.name) || 'NA'}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<hr>
+
+			<h4 ng-show="accountingAvailable">Account Details</h4>
+			<div class="row" style="margin:15px">
+				<div ng-show="accountingAvailable" class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">From Account: <span class="req_r">*</span></label>
+						<div class="col-sm-8">
+							<select
+									chosen
+									class="form-control"
+									ng-model="advancePaymentData.from"
+									ng-options="item._id as item.name for item in aFromAccounr"
+									search-contains="true"
+									name="Account From"
+									ng-required="accountingAvailable"
+							>
+								<option selected disabled></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div ng-show="accountingAvailable" class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">To Account: <span class="req_r">*</span></label>
+						<div class="col-sm-8">
+							<select
+									chosen
+									class="form-control"
+									ng-model="advancePaymentData.to"
+									ng-options="item._id as item.name for item in (aAccountMaster|filter:{_id:'!'+advancePaymentData.from})"
+									search-contains="true"
+									name="Account To"
+									ng-required="accountingAvailable"
+							>
+								<option selected disabled></option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<h4>Payment Details</h4>
+			<div class="row" style="margin:15px">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-3 control-label">Amount: <span class="req_r">*</span></label>
+						<div class="col-sm-9">
+							<input
+									type="number"
+									ng-model="advancePaymentData.amount"
+									placeholder="Enter Amount here..."
+									class="form-control"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-3 control-label">Receiving: <span class="req_r">*</span></label>
+						<div class="col-sm-9">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input
+											ng-click="open($event, 'opened1')"
+											type="text"
+											class="form-control"
+											uib-datepicker-popup="{{format}}"
+											show-weeks="false"
+											ng-model="advancePaymentData.receivingDate"
+											is-open="opened1"
+											max-date="maxDate"
+											datepicker-options="dateOptions"
+											close-text="Close"
+											placeholder="Receiving date here..."
+											style="padding: 0px 4px;height: 34px;"
+									/>
+								</div>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+							  	</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:15px">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-3 control-label">Remark:</label>
+						<div class="col-sm-9">
+							<input
+									type="text"
+									ng-model="advancePaymentData.remark"
+									placeholder="Remark here..."
+									class="form-control"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-3 control-label">Ref No:</label>
+						<div class="col-sm-9">
+							<input
+									type="text"
+									ng-model="advancePaymentData.ref"
+									placeholder="Reference No. here..."
+									class="form-control"
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<br>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button
+				type="button"
+				class="btn btn-success waves-effect"
+				ng-click="updateTripGR()"
+				ng-disabled="!advancePaymentData.receivingDate || !advancePaymentData.amount">
+			Add Advance
+		</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 60%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

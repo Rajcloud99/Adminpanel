@@ -1,0 +1,89 @@
+<div class="container" ng-controller="vendorPayDetailsCtrl">
+    <div class="card m-b-0" id="messages-main">
+        <h5 style="text-align: center;">Trip Number {{selectedvendorPayment.booking_info[0].trip_no}} </h5>
+        <div class="" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lv-body">
+                    <div class="col-md-12" style="margin-top: 13px;margin-left: 12px;">
+                      <div class="detailList">
+                        <ul>
+                          <li><span>Invoice No.</span>: {{selectedvendorPayment.invoice_no || 'NA'}}</li>
+                          <li><span>Total Amount</span>: {{selectedvendorPayment.total_expense | number:2 || 'NA'}}</li>
+
+                          <li><span>Paid</span>: {{formatfindPaidAmount(selectedvendorPayment) | number:2  || 'NA'}}</li>
+                          <li><span>Unpaid </span>: {{ramainingAmountforVendor | number:2  || 'NA'}}</li>
+
+                          <!--<li ng-if="selectedCustomerPayment.route.route_name"><span>Route Name</span>: {{selectedCustomerPayment.route.route_name}}</li> -->
+                           <li ><span>Customer Name</span>: {{selectedvendorPayment.customer_name || 'NA'}}</li>
+                          <li><span>Vendor Name</span>: {{selectedvendorPayment.vendor_name || 'NA'}}</li>
+
+                          <li><span>Vehicle No.</span>: {{selectedvendorPayment.vehicle_no || 'NA'}}</li>
+                          <li><span>Invoice Date</span>: {{selectedvendorPayment.invoice_date | date:"dd-MM-yyyy 'at' h:mma" || 'NA'}}</li>
+                        </ul>
+                      </div><hr>
+                    </div>
+					<div ng-if="selectedvendorPayment.vendor_payment"  class="col-md-12" style="margin-top: 13px;margin-left: 12px;">
+						<h5 style="text-align: center;">Vendor Deal Payment</h5>
+						<div class="detailList">
+							<ul>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.diesel && selectedvendorPayment.vendor_payment.diesel.quantity"><span>Diesel Quantity</span>:{{selectedvendorPayment.vendor_payment.diesel.quantity}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.diesel && selectedvendorPayment.vendor_payment.diesel.rate"><span>Diesel Rate</span>:{{selectedvendorPayment.vendor_payment.diesel.rate}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.diesel && selectedvendorPayment.vendor_payment.diesel.amount"><span>Diesel Amount</span>:{{selectedvendorPayment.vendor_payment.diesel.amount}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.driver_cash"><span>Driver Cash</span>: {{selectedvendorPayment.vendor_payment.driver_cash}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.toll_tax"><span>Toll Tax</span>: {{selectedvendorPayment.vendor_payment.toll_tax}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.other_charge"><span>Other Charge</span>: {{selectedvendorPayment.vendor_payment.other_charge}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.total_expense"><span>Total Expense</span>: {{selectedvendorPayment.vendor_payment.total_expense}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.advance"><span>Advance</span>: {{selectedvendorPayment.vendor_payment.advance}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.toPay"><span>ToPay/Balace</span>: {{selectedvendorPayment.vendor_payment.toPay}}</li>
+								<li ng-if="selectedvendorPayment.vendor_payment && selectedvendorPayment.vendor_payment.remark"><span>Remark</span>: {{selectedvendorPayment.vendor_payment.remark}}</li>
+
+							</ul>
+						</div>
+					</div>
+                    <!-- <div class="modal-footer">
+                       <button class="btn btn-success waves-effect" ng-click="myTripUpdate(selectedvendorPayment)">Update</button>
+                    </div> -->
+                    <button ng-click="addNewRowInTable(selectedvendorPayment)" tooltip="Add Row" class="btn btn-primary waves-effect pull-right" style="margin:5px;">
+                    <i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+                    </button>
+                    <table class="table table-bordered">
+                        <thead>
+                          <tr >
+                            <th>#</th>
+                            <th>Key</th>
+                            <th>Amount</th>
+                            <th>Mode</th>
+                            <th>Bank A/c</th>
+                            <th>Status</th>
+                            <th>Reference No.</th>
+                            <th>Person</th>
+                            <th>Remark</th>
+                            <th>Shedule Date</th>
+                            <th>Payment Date</th>
+                            <th>Change Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="info in selectedvendorPayment.payment">
+                            <td>{{ $index + 1 }}</td>
+                            <td >{{info.key || 'NA'}}</td>
+                            <td >{{info.amount | number:2 || 'NA'}}</td>
+                            <td>{{info.mode || 'NA'}}</td>
+                            <td>{{info.banking_detail.a_c || 'NA'}}</td>
+                            <td>{{info.status || 'NA'}}</td>
+                            <td>{{info.reference_no || 'NA'}}</td>
+                            <td>{{info.person || 'NA'}}</td>
+                            <td>{{info.remark || 'NA'}}</td>
+                            <td>{{info.scheduled_date | date:'dd-MMM-yyyy' || 'NA'}}</td>
+                            <td>{{info.payment_date | date:'dd-MMM-yyyy' || 'NA'}}</td>
+                            <td>
+                              <button ng-class="info.status == 'Paid' ? 'btn-success' : btn-primary" ng-disabled="(info.status=='Paid')" ng-click="statusExpense(selectedvendorPayment, info, $index)"><i class="glyphicon glyphicon-pencil"></i></button>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

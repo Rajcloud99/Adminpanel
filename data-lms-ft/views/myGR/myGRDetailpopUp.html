@@ -1,0 +1,354 @@
+<form role="form"  name="myGRPopUp" autocomplete="off" novalidate>
+  <div class="modal-header">
+    <button type="button" ng-click="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">GR for Trip No. {{gr.trip.trip_no}} for Route {{gr.trip.route.name}}</h4>
+    <h5 class="modal-title" align="center">Branch : {{gr.branch.name}}</h5>
+  </div>
+  <div class="modal-body">
+	  <div class="row m-b-10">
+			<div class="col-md-12"><span class="booking_list_header">Consignor</span></div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Name :</b></div>
+			  <div class="col-md-7">{{gr.consignor.name || gr.booking && gr.booking.consigner.name || 'NA'}}</div>
+		  </div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Contact No. :</b></div>
+			  <div class="col-md-7">{{gr.consignor.contact_number || gr.booking && gr.booking.consigner.prim_cont_no || 'NA'}}</div>
+		  </div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Alt. Contact No. :</b></div>
+			  <div class="col-md-7">{{gr.booking && gr.booking.consigner.sec_contact_name || 'NA'}}</div>
+		  </div>
+		  <div class="col-md-6">
+			  <div class="col-md-3"><b>Address :</b></div>
+			  <div class="col-md-9">
+					{{gr.consignor.address || gr.booking && gr.booking.consigner.address || 'NA'}}
+				</div>
+		  </div>
+		  <div class="col-md-12"><span class="booking_list_header">Consignee</span></div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Name :</b></div>
+			  <div class="col-md-7">{{gr.consignee.name || Array.isArray(gr.booking && gr.booking.consignee) ? gr.booking.consignee[0].name : (gr.booking && gr.booking.consignee.name) || 'NA'}}</div>
+		  </div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Contact No. :</b></div>
+			  <div class="col-md-7">
+					{{gr.consignee.contact_number
+					|| (Array.isArray(gr.booking && gr.booking.consignee) ? gr.booking.consignee[0].contact_number : (gr.booking && gr.booking.consignee.contact_number))
+					|| 'NA'}}
+				</div>
+		  </div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Alt. Contact No. :</b></div>
+			  <div class="col-md-7">{{Array.isArray(gr.booking && gr.booking.consignee) ? gr.booking.consignee[0].sec_contact_name : (gr.booking && gr.booking.consignee.sec_contact_name )|| 'NA'}}</div>
+		  </div>
+		  <div class="col-md-6">
+			  <div class="col-md-3"><b>Address :</b></div>
+			  <div class="col-md-9">
+					{{gr.consignee.address || Array.isArray(gr.booking && gr.booking.consignee) ? gr.booking.consignee[0].address : (gr.booking && gr.booking.consignee.address) || 'NA'}}
+				</div>
+		  </div>
+		  <div class="col-md-12"><span class="booking_list_header">Customer</span></div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Name :</b></div>
+			  <div class="col-md-7">{{gr.booking && gr.booking.customer.name}}</div>
+		  </div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Contact No. :</b></div>
+			  <div class="col-md-7">{{gr.booking && gr.booking.customer.prim_cont_no || 'NA'}}</div>
+		  </div>
+		  <div class="col-md-4">
+			  <div class="col-md-5"><b>Alt. Contact No. :</b></div>
+			  <div class="col-md-7">{{gr.booking && gr.booking.customer.sec_contact_name || 'NA'}}</div>
+		  </div>
+		  <div class="col-md-6">
+			  <div class="col-md-3"><b>Address :</b></div>
+			  <div class="col-md-9">{{[gr.booking && gr.booking.customer.address.city,gr.booking && gr.booking.customer.address.state,gr.booking && gr.booking.customer.address.country] | mergeString:', '}}</div>
+		  </div>
+	  </div>
+	  <hr>
+
+	  <div class="justify col-md-12">
+
+      <div class="row" style="">
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">gr No.</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-model="gr.grNumber" placeholder="  " class="form-control" readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Vehicle No. </label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-model="gr.trip.vehicle_no" placeholder=" " class="form-control" readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="">
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Customer Name:</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="text" ng-model="gr.booking.customer.name" placeholder=" " class="form-control" readonly="true" name="customer name" ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">GR Date:</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                {{gr.grDate | date: "dd-MM-yyyy"}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">GR Charge:</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="number" ng-model="gr.charges.grCharges" placeholder=" " class="form-control" name="GR Charge" ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Loading Charge</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="number" ng-model="gr.charges.loading_charges" placeholder="" class="form-control"  ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Unloading Charge</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="number" ng-model="gr.charges.unloading_charges" placeholder=" " class="form-control" ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">other Charges</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="number" ng-model="gr.charges.other_charges" placeholder=" " class="form-control" ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+	  	<div class="col-md-4">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-6 control-label">Detention Charges</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  <input type="number" ng-model="gr.charges.detention" placeholder=" " class="form-control" ng-readonly="true">
+					  </div>
+				  </div>
+			  </div>
+	  	</div>
+	  	<div class="col-md-4">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-6 control-label">Damage Charges</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  <input type="number" ng-model="gr.charges.damage" placeholder=" " class="form-control" ng-readonly="true">
+					  </div>
+				  </div>
+			  </div>
+	  	</div>
+	  	<div class="col-md-4">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-6 control-label">Penalty Charges</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  <input type="number" ng-model="gr.charges.penalty" placeholder=" " class="form-control" ng-readonly="true">
+					  </div>
+				  </div>
+			  </div>
+	  	</div>
+	  	<div class="col-md-4">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-6 control-label">Shortage Charges</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  <input type="number" ng-model="gr.charges.shortage" placeholder=" " class="form-control" ng-readonly="true">
+					  </div>
+				  </div>
+			  </div>
+	  	</div>
+        <!--<div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Total</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="number" ng-model="gr.total" placeholder=" " class="form-control" ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>-->
+		  <div class="clearfix"></div>
+		  <br>
+		<div class="col-md-6" ng-show="configs['GR']['Add']['Show field']['Loading Tare Weight'] || configs['GR']['Add']['Show field']['Loading Gross Weight'] || configs['GR']['Add']['Show field']['Loading Net Weight']">
+			<div class="col-md-12" >
+				<div class="col-md-12">
+					<span class="booking_list_header">Loading Details</span>
+				</div>
+				<div class="col-md-12" ng-show="configs['GR']['Add']['Show field']['Loading Tare Weight']">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Tare Weight</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{ gr.l_tare_w || 'NA'}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12" ng-show="configs['GR']['Add']['Show field']['Loading Gross Weight']">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Gross Weight</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{ gr.l_gross_w || 'NA'}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12" ng-show="configs['GR']['Add']['Show field']['Loading Net Weight']">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Net Weight</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{ gr.l_net_w = gr.l_gross_w - gr.l_tare_w || "NA" }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6"  ng-show="configs['GR']['Add']['Show field']['Unloading Tare Weight'] || configs['GR']['Add']['Show field']['Unloading Gross Weight'] || configs['GR']['Add']['Show field']['Unloading Net Weight']">
+			  <div class="col-md-12">
+				  <div class="col-md-12">
+					  <span class="booking_list_header">Unoading Details</span>
+				  </div>
+				  <div class="col-md-12" ng-show="configs['GR']['Add']['Show field']['Unloading Tare Weight']">
+					  <div class="form-group m-b-0">
+						  <label class="col-sm-6 control-label">Gross Weight</label>
+						  <div class="col-sm-6">
+							  <div class="fg-line">
+								  {{ gr.ul_gross_w || 'NA'}}
+							  </div>
+						  </div>
+					  </div>
+				  </div>
+				  <div class="col-md-12" ng-show="configs['GR']['Add']['Show field']['Unloading Gross Weight']">
+					  <div class="form-group m-b-0">
+						  <label class="col-sm-6 control-label">Tare Weight</label>
+						  <div class="col-sm-6">
+							  <div class="fg-line">
+								  {{ gr.ul_tare_w || 'NA'}}
+							  </div>
+						  </div>
+					  </div>
+				  </div>
+				  <div class="col-md-12" ng-show="configs['GR']['Add']['Show field']['Unloading Net Weight']">
+					  <div class="form-group m-b-0">
+						  <label class="col-sm-6 control-label">Net Weight</label>
+						  <div class="col-sm-6">
+							  <div class="fg-line">
+								  {{ gr.ul_net_w = gr.ul_gross_w - gr.ul_tare_w }}
+							  </div>
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+        <!-- <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Freight</label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="number" ng-model="gr.freight" placeholder=" " class="form-control" ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group m-b-0">
+            <label class="col-sm-6 control-label">Rate<span>  {{"  x  "+gr.booking_info[0].weight.value +"("+gr.booking_info[0].weight.unit+")"}} </span></label>
+            <div class="col-sm-6">
+              <div class="fg-line">
+                <input type="number" ng-model="gr.rate" placeholder=" " class="form-control" ng-readonly="true">
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <hr>
+    <div>
+      <form name="">
+        <div class="table-responsive">
+          <div ng-if="gr.booking_info.length>0">
+            <table ng-table="tableParams" class="table table-bordered unresponsive" >
+              <thead>
+                <tr>
+                  <!-- <th>Booking No.</th> -->
+                  <th>Item No./ Container No.</th>
+                  <th>Weight(MT)</th>
+                  <th>Rate(Rs.)</th>
+                  <th>Freight(Rs.)</th>
+                  <th>Material type</th>
+                  <!-- <th>Loading Yard</th>
+                  <th>Offloading Yard</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="oInfo in gr.booking_info">
+                  <td>
+                    <span ng-if="oInfo.item_no">{{oInfo.item_no}}</span>
+                    <span ng-if="oInfo.container_no">{{oInfo.container_no}}</span>
+                  </td>
+                  <td>{{oInfo.weight.value || 'NA'}}</td>
+                  <td>{{oInfo.rate || 'NA'}}</td>
+                  <td>{{oInfo.freight || 'NA'}}</td>
+                  <td>{{oInfo.material_type || 'NA'}}</td>
+                  <!-- <td>{{oInfo.loading_yard.name || 'NA'}}</td>
+                  <td>{{oInfo.offloading_yard.name || 'NA'}}</td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>
+  </form>
+  <style type="text/css">
+  .modal-dialog {width: 75%;
+        height: 173px
+    }
+  </style>

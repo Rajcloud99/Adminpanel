@@ -1,0 +1,46 @@
+<form role="form"  name="unApprove" autocomplete="off" novalidate>
+	<div class="modal-header" style="padding-bottom: 5px;">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">UnApprove PO</h4><br>
+	</div>
+	<div class="modal-body">
+		<div class="row" style="margin:15px">
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Reason</label>
+					<div class="col-sm-6">
+						<div class="">
+							<select chosen class="form-control" placeholder="Select" ng-options="item as item for item in areason" ng-model="reason" required>
+								<option value="" selected> Select </option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Remark</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text" class="form-control" ng-model="remark" placeholder="enter here..." required>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="unApproveFinal(unApprove)">Release</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Cancel</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+	}
+</style>
+

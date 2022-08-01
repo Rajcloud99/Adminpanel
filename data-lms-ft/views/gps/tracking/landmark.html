@@ -1,0 +1,171 @@
+<!--Controller: landmarkController-->
+<!--ControllerAs: lmVm-->
+
+<div class="landmark"></div>
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Landmark</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form ng-submit="lmVm.getLandmark()" novalidate>
+<!--				<div class="col-md-2">-->
+<!--					<div class="form-group m-b-0">-->
+<!--						<div class="col-sm-12">-->
+<!--							<input-->
+<!--									fill-date-->
+<!--									type="text"-->
+<!--									class="form-control"-->
+<!--									placeholder="From"-->
+<!--									ng-model="lmVm.oFilter.from_date"-->
+<!--									ng-change="lmVm.oFilter.to_date=undefined;"-->
+<!--							>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--				<div class="col-md-2">-->
+<!--					<div class="form-group m-b-0">-->
+<!--						<div class="col-sm-12">-->
+<!--							<input-->
+<!--									fill-date-->
+<!--									type="text"-->
+<!--									class="form-control"-->
+<!--									placeholder="To"-->
+<!--									ng-model="lmVm.oFilter.to_date"-->
+<!--							>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									type="text"
+									class="form-control"
+									placeholder="Name"
+									ng-model="lmVm.oFilter.name"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="lmVm.oFilter={};lmVm.getLandmark();">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+					<button ng-if="$role['Landmark']['download']"
+							class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Download"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="lmVm.downloadLandmark();">
+						<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+					</button>
+				</div>
+				<div class="clearfix"></div>
+
+			</form>
+		</div>
+	</div>
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="col-md-12">
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Add Landmark"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="lmVm.upsertLandmark('add')">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					ng-if="lmVm.aSelectedLandmark"
+					style="font-size: 20px"
+					uib-tooltip="View Landmark"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="lmVm.upsertLandmark('view')"
+			>
+				<i class="zmdi zmdi-assignment zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+					ng-if="lmVm.aSelectedLandmark"
+					style="font-size: 20px"
+					uib-tooltip="Edit Landmark"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="lmVm.upsertLandmark('edit')">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger btn-xs p-l-5 p-r-5"
+					style="font-size: 20px"
+					uib-tooltip="Delete Landmark"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="lmVm.deleteLandmark()"
+					ng-disabled="lmVm.shouldDisableEditing()"
+			>
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<div ja-table
+
+						 table-body="lmVm.aLandmark"
+						 table-head="lmVm.tableHead"
+						 table-height='500px'
+						 table-load="lmVm.getLandmark(true)"
+						 table-column-setting="lmVm.columnSetting"
+						 table-selectable='lmVm.selectType'
+						 table-api='lmVm.tableApi'
+						 table-selectable-model="lmVm.aSelectedLandmark"
+					></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+	.container{
+		width: 98% !important;
+	}
+	.landmark{
+		width: 98% !important;
+	}
+</style>

@@ -1,0 +1,351 @@
+<form role="form" name="myForm" autocomplete="off">
+	<div class="container" ng-controller="myTripPopUpCtrl">
+    	<div class="card m-b-0" style="padding: 1px 5px 0px 5px;">
+        <h5 style="text-align: center;">Trip Number {{selectedTrip.trip_no}} &nbsp;&nbsp;<span style="color: #1CAA1C; font-size: 14px">({{selectedTrip.status}})</span></h5>
+        <div class="" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lv-body">
+                    <div class="col-md-12" style="margin-top: 13px;margin-left: 12px;">
+                        <div class="detailList">
+                            <ul>
+								<li ng-if="selectedTrip.vehicle_no">
+									<span style="width: 30%;">Vehicle</span>:
+									<span style="width: 17%;">{{selectedTrip.vehicle_no}}</span>
+									<span ng-if="selectedTrip.m_vehicle_no" style="width: 17%;">({{selectedTrip.m_vehicle_no}})</span>
+                                </li>
+                                <li ng-if="selectedTrip.vehicle.driver_name">
+									<span>Driver Name </span>:
+									{{selectedTrip.driver.name || selectedTrip.vehicle.driver_name || 'NA'}}
+                                </li>
+                                <li ng-if="selectedTrip.vehicle.driver_contact_no">
+									<span>Driver Contact </span>:
+									{{selectedTrip.driver.prim_contact_no || selectedTrip.vehicle.driver_contact_no || 'NA'}}
+                                </li>
+								<li ng-if="selectedTrip.vehicle.driver2Name">
+									<span>Assistant Driver</span>:
+									{{selectedTrip.driver.driver2Name || selectedTrip.vehicle.driver2Name || 'NA'}}
+                                </li>
+                                <li ng-if="selectedTrip.route.name">
+									<span>Route Name</span>:
+									{{selectedTrip.route_name}}
+                                </li>
+								<li ng-if="selectedTrip.branch.name">
+									<span>Branch Name</span>:
+									{{selectedTrip.branch.name}}
+								</li>
+                                <li>
+									<span>Status</span>:
+									{{selectedTrip.status}}
+								</li>
+
+								<li ng-if="selectedTrip.category != 'Empty' && (selectedTrip.ewayBill_expiry || selectedTrip.ewayBillExpiry)">
+									<span>Tentative E-way Expiry</span>:
+									{{(selectedTrip.ewayBill_expiry | date:"dd-MMM-yyyy") || (selectedTrip.ewayBillExpiry | date:"dd-MMM-yyyy" )|| 'NA'}}
+								</li>
+
+								<li ng-if="selectedTrip.last_modified_at">
+									<span>Last Update Time</span>:
+									{{selectedTrip.last_modified_at | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}
+								</li>
+								<li ng-if="selectedTrip.transShipment">
+									<span>Transshipment Vehicle</span>:
+									{{selectedTrip.transShipment.vehicle_no || 'NA'}}
+								</li>
+								<li ng-if="selectedTrip.transShipment">
+									<span>Transshipment Driver</span>:
+									{{selectedTrip.transShipment.driver_name|| 'NA'}}
+								</li>
+                            </ul>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="clearfix"></div>
+					<h5 ng-if="selectedTrip.vendorDeal" style="text-align: center;">Vendor Deal Payment</span></h5>
+					<div ng-if="selectedTrip.vendorDeal" class="col-md-12" style="margin-top: 6px;margin-left: 12px;">
+						<div class="col-md-12">
+							<div class="detailList">
+								<ul>
+									<li ng-if="selectedTrip.vendor && selectedTrip.vendor.name">
+
+										<div class="col-md-5">Vendor </div>
+										<div class="col-md-6">: {{selectedTrip.vendor.name}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendor && selectedTrip.vendor.prim_contact_no">
+										<div class="col-md-5">Vendor Contact </div>
+										<div class="col-md-6">: {{selectedTrip.vendor.prim_contact_no}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.payment_type">
+										<div class="col-md-5">Payment Type </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.payment_type | date:'dd-MM-yyyy'}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.weight_type">
+										<div class="col-md-5">Payment Basis </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.weight_type | date:'dd-MM-yyyy'}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.munshiyana">
+										<div class="col-md-5">Munshiyana </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.munshiyana}}</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="detailList">
+								<ul>
+									<li>
+										<div class="col-md-5">Total Amt Payable </div>
+										<div class="col-md-6">: {{upsertVm.paymentAmt - upsertVm.total_deduction }}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.total_expense">
+										<div class="col-md-5">Total Expense </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.total_expense}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.advance">
+										<div class="col-md-5">Advance </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.advance}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.advance_due_date">
+										<div class="col-md-5">Adv. Due Date </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.advance_due_date | date:'dd-MM-yyyy'}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.toPay">
+										<div class="col-md-5">ToPay/Balance </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.toPay}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.tdsPercent">
+										<div class="col-md-5">TDS% :</div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.tdsPercent}}%</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.tdsAmount">
+										<div class="col-md-5">TDS Amount :</div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.tdsAmount}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal && selectedTrip.vendorDeal.topay_due_date">
+										<div class="col-md-5">ToPay Due Date </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.topay_due_date | date:'dd-MM-yyyy'}}</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="detailList">
+								<ul>
+									<li ng-hide="true">
+										<div class="col-md-5">Purchase Amt </div>
+										{{
+										upsertVm.paymentAmt = ((selectedTrip.vendorDeal.other_charges || 0) +
+										(selectedTrip.vendorDeal.detention_charge || 0) +
+										(selectedTrip.vendorDeal.oveloading_charge || 0) +
+										(selectedTrip.vendorDeal.loading_charges || 0) +
+										(selectedTrip.vendorDeal.unloading_charges || 0) +
+										(selectedTrip.vendorDeal.total_expense || 0))
+										}}
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.detention_charge">
+										<div class="col-md-5">Detention Charges </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.detention_charge}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.oveloading_charge">
+										<div class="col-md-5">Overload Charges </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.oveloading_charge}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.loading_charges">
+										<div class="col-md-5">Loading Charges </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.loading_charges}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.unloading_charges">
+										<div class="col-md-5">Unloading Charges </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.unloading_charges}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.other_charges">
+										<div class="col-md-5">Other Charges </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.other_charges}}</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="detailList">
+								<ul>
+									<!--all deduction-->
+
+									<li ng-if="selectedTrip.vendorDeal.tds_deduction">
+										<div class="col-md-5">TDS Detention </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.tds_deduction}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.damage_deduction">
+										<div class="col-md-5">Damage Detention </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.damage_deduction}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.penalty_deduction">
+										<div class="col-md-5">Penalty Detention </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.penalty_deduction}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.other_deduction">
+										<div class="col-md-5">Other Detention </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.other_deduction}}</div>
+									</li>
+									<li ng-hide="true">{{ upsertVm.total_deduction =
+										(selectedTrip.vendorDeal.tds_deduction || 0) +
+										(selectedTrip.vendorDeal.damage_deduction || 0) +
+										(selectedTrip.vendorDeal.penalty_deduction || 0) +
+										(selectedTrip.vendorDeal.other_deduction || 0) }}
+									</li>
+
+									<!--upsertVm.paymentAmt-->
+
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="detailList">
+								<ul>
+									<li ng-if="selectedTrip.vendorDeal.acknowledge.status">
+										<div class="col-md-5">Ack. By </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.acknowledge.user.full_name}}</div>
+									</li>
+									<li ng-if="selectedTrip.vendorDeal.acknowledge.status">
+										<div class="col-md-5">Ack. Date </div>
+										<div class="col-md-6">: {{selectedTrip.vendorDeal.acknowledge.date | date:'dd-MM-yyyy'}}</div>
+									</li>
+									<li><span>Loading Slip ({{selectedTrip.vendorDeal.loading_slip}})</span>
+										<button ng-click="$event.preventDefault();preview(selectedTrip.vendorDeal.loading_slip)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-show="selectedTrip.vendorDeal.loading_slip">Preview Slip</button>
+										<div ng-hide="selectedTrip.vendorDeal.loading_slip">
+											<button class="btn btn-sm btn-primary"
+													onclick="document.getElementById('loading_slip').click();">Select File</button>
+											<input ng-hide="true" id="loading_slip" type="file" accept="image/*,application/pdf"
+												   ngf-select ng-model="loading_slip" name="loading_slip"
+												   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+											<i ng-show="myForm.loading_slip.$error.maxSize">File too large
+												{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+											<img ng-show="myForm.loading_slip.$valid" ngf-src="loading_slip"
+												 ngf-resize="{width: 100, height: 100}">
+											<button ng-click="$event.preventdefault();uploadLoadingSlip(loading_slip)" ng-show="(loading_slip && myForm.loading_slip.$valid)" class="btn btn-primary waves-effect pointer">
+												<i class="glyphicon glyphicon-upload"></i>
+											</button>
+											<br>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div ng-show="selectedTrip.vendor.banking_details.length>0" class="col-sm-6">
+								<table style="border: 1px solid #ddd;margin-left: 15px;" class="table table-bordered">
+									<thead>
+									<th>Bank A/C</th>
+									<th>IFSC</th>
+									<th>Declaration</th>
+									<th>Cancel Cheque</th>
+									</thead>
+									<tbody>
+									<tr ng-style="{ 'background-color': selectedTrip.vendorDeal.bankingDetail.a_c == bank.a_c ? '#5ce260' : 'white' }" ng-repeat="bank in selectedTrip.vendor.banking_details">
+										<td>{{bank.a_c}}</td>
+										<td>{{bank.ifsc}}</td>
+										<td>{{bank.declaration}}</td>
+										<td>
+											<button title="Preview" class="btn btn-warning" ng-click="$event.preventDefault();preview(bank.cancelled_cheque)" ng-show="bank.cancelled_cheque">
+												<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+											</button >
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!--<div class="detailList">-->
+							<!--<ul>-->
+								<!--<li ng-if="selectedTrip.vendor.name">-->
+									<!--<span>Vendor Name</span>:-->
+									<!--{{selectedTrip.vendor.name}}-->
+								<!--</li>-->
+								<!--<li ng-if="selectedTrip.vendor.prim_contact_no">-->
+									<!--<span>Vendor Contact</span>:-->
+									<!--{{selectedTrip.vendor.prim_contact_no}}-->
+								<!--</li>-->
+								<!--<li ng-if="selectedTrip.vendor.email">-->
+									<!--<span>Vendor Email</span>:-->
+									<!--{{selectedTrip.vendor.email}}-->
+								<!--</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.total_expense"><span>Total Expense</span>: {{selectedTrip.vendorDeal.total_expense}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.advance"><span>Advance</span>: {{selectedTrip.vendorDeal.advance}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.advance_due_date"><span>Adv. Due Date</span>: {{selectedTrip.vendorDeal.advance_due_date | date:'dd-MM-yyyy'}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.munshiyana"><span>Munshiyana</span>: {{selectedTrip.vendorDeal.munshiyana}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.toPay"><span>ToPay/Balace</span>: {{selectedTrip.vendorDeal.toPay}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.topay_due_date"><span>ToPay Due Date</span>: {{selectedTrip.vendorDeal.topay_due_date | date:'dd-MM-yyyy'}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.payment_type"><span>Payment Type</span>: {{selectedTrip.vendorDeal.payment_type}}</li>-->
+								<!--<li><span>Deduct TDS</span>: {{selectedTrip.vendorDeal.deductTDS ? "Yes" : "No"}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.weight_type"><span>Weight Type</span>: {{selectedTrip.vendorDeal.weight_type}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.diesel && selectedTrip.vendorDeal.diesel.quantity"><span>Diesel Quantity</span>:{{selectedTrip.vendorDeal.diesel.quantity}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.diesel && selectedTrip.vendorDeal.diesel.rate"><span>Diesel Rate</span>:{{selectedTrip.vendorDeal.diesel.rate}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.diesel && selectedTrip.vendorDeal.diesel.amount"><span>Diesel Amount</span>:{{selectedTrip.vendorDeal.diesel.amount}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.driver_cash"><span>Driver Cash</span>: {{selectedTrip.vendorDeal.driver_cash}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.toll_tax"><span>Toll Tax</span>: {{selectedTrip.vendorDeal.toll_tax}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.other_charge"><span>Other Charge</span>: {{selectedTrip.vendorDeal.other_charge}}</li>-->
+								<!--<li ng-if="selectedTrip.vendorDeal.remark"><span>Remark</span>: {{selectedTrip.vendorDeal.remark}}</li>-->
+
+							<!--</ul>-->
+							<!--<div class="clear-fix"></div>-->
+						<!--</div>-->
+
+					</div>
+					<div class="clearfix"></div>
+                    <hr>
+                    <uib-tabset active="activeForm" class="">
+                        <uib-tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
+                            <div ng-include="tab.content"></div>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
+
+            </div>
+        </div>
+    </div>
+	</div>
+</form>
+
+<style>
+    .nav-tabs>li.active {
+        background: #2196f5;
+    }
+
+    .nav-tabs>li.active>a {
+        color: #fff !important;
+    }
+
+    .nav-tabs>li.active>a,
+    .nav-tabs>li.active>a:hover,
+    .nav-tabs>li.active>a:focus {
+        border: 1px solid #2196f5;
+    }
+
+    .list_border_background {
+        border: 2px solid blue !important;
+        background: #47d6c9;
+    }
+
+    .modal-footer {
+        padding-top: 0px;
+        /* margin-top: -56px; */
+        margin-bottom: -37px;
+    }
+	.tbl-sm thead tr th {
+		padding: 2px !important;
+		font-size: 10px;
+		color: #fff;
+		background: #2196f3;
+	}
+	.tbl-sm tbody tr td {
+		padding: 0 !important;
+		font-size: 9px;
+	}
+	.tbl-sm tbody tr td button {
+		font-size: 7px;
+		padding: 4px;
+	}
+
+	ul li .col-md-5{
+		font-weight: bold;
+	}
+
+</style>

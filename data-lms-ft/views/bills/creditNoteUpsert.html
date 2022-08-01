@@ -1,0 +1,646 @@
+<!-- Controller: creditNoteUpsertController-->
+<!-- ControllerAs: crNoteVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Credit Note</b>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="m-b-0" id="messages-main">
+		<form name="creditNote" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<!--<span class="booking_list_header">Gr Details: </span>-->
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-2">
+									<div class="">
+										<input
+												type="text"
+												class="form-control"
+												ng-model="crNoteVm.filter.creditNo"
+												ng-change="crNoteVm.getCreditNoteByCreditNo()"
+												ng-model-options="{ updateOn: 'blur' }"
+												name="Credit Note"
+												placeholder="Credit Note"
+										>
+										<i class="lvh-search-close" ng-click="crNoteVm.filter.creditNo = null;">×</i>
+									</div>
+									<span class="error" ng-if="crNoteVm.filter.creditNo && crNoteVm.noRefFound">No CN No. Found</span>
+								</div>
+								<div class="col-md-3 text-center">
+									<span style="font-size: 14px; line-height: 32px;"
+										  ng-if="crNoteVm.aBill[0].receiving.moneyReceipt.length"
+										  class="error">Money Receipt Generated</span>
+								</div>
+<!--								<div class="pull-right text-center">-->
+<!--									<button class="btn btn-primary"-->
+<!--											uib-tooltip="Add Miscellaneous"-->
+<!--											tooltip-placement="bottom"-->
+<!--											ng-click="crNoteVm.onCategoryChange()">-->
+<!--										<i class="zmdi zmdi-refresh-alt zmdi-hc-fw"></i>-->
+<!--									</button>-->
+<!--								</div>-->
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Bill Summary: </span>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Bill No:</label>
+										<div class="col-sm-8" ng-if="!crNoteVm.showBillNo">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Bill No"
+														ng-model="crNoteVm.billNo"
+														ng-change="crNoteVm.getBill()"
+														ng-model-options="{ updateOn: 'blur' }"
+														name="Bill Number"
+														placeholder="Bill No.">
+												<i class="lvh-search-close"
+												   ng-click="crNoteVm.filter.billNo=null; crNoteVm.aBill=[];">×</i>
+											</div>
+										</div>
+										<div class="col-sm-6" ng-if="crNoteVm.showBillNo">
+											{{crNoteVm.aBill[0].billNo}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!crNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Billing Party:</label>
+										<div class="col-sm-6">
+											{{crNoteVm.aBill[0].billingParty.name || 'NA'}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!crNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Billing Party withHold A/c:</label>
+										<div class="col-sm-6">
+											{{crNoteVm.aBill[0].billingParty.withHoldAccount.name || 'NA'}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!crNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Bill Date:</label>
+										<div class="col-sm-6">
+											{{crNoteVm.aBill[0].billDate | date: 'dd-MM-yyyy'}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3" ng-if="!crNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">IGST({{crNoteVm.aBill[0].iGST_percent|
+											roundOff}}%):</label>
+										<div class="col-sm-6">
+											{{crNoteVm.aBill[0].iGST| roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!crNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">CGST({{crNoteVm.aBill[0].cGST_percent|
+											roundOff}}%):</label>
+										<div class="col-sm-6">
+											{{crNoteVm.aBill[0].cGST| roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!crNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">SGST({{crNoteVm.aBill[0].sGST_percent|
+											roundOff}}%):</label>
+										<div class="col-sm-6">
+											{{crNoteVm.aBill[0].sGST| roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!crNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Bill Amount:</label>
+										<div class="col-sm-6">
+											{{(crNoteVm.aBill[0].billAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Received Amount:</label>
+										<div class="col-sm-6 bold">
+											{{(crNoteVm.aBill[0].receivedAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Remaining Amount:</label>
+										<div class="col-sm-6 bold">
+											{{(crNoteVm.aBill[0].remainingAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Deduction Applied:</label>
+										<div class="col-sm-6 bold">
+											{{(crNoteVm.aBill[0].deductionApplied || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!crNoteVm.readonly && crNoteVm.oCreditNote.category ==='Full'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Adj Amount:</label>
+										<div class="col-sm-6">
+											{{(crNoteVm.oCreditNote.adjAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+<!--								<div class="col-md-3">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-5 control-label">Deduction Receivable:</label>-->
+<!--										<div class="col-sm-6 bold">-->
+<!--											{{(crNoteVm.aBill[0].deductionReceivable || 0) | roundOff}}-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<!--<span class="booking_list_header">Gr Details: </span>-->
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Date: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="Date"
+													ng-change="crNoteVm.oCreditNote.creditNo = undefined;"
+													ng-model="crNoteVm.oCreditNote.date"
+											>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Credit Note:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Credit Note No"
+														ng-model="crNoteVm.oCreditNote.creditNo"
+														typeahead-wait-ms="10"
+														name="Credit Note"
+														typeahead="item.bookNo as item.bookNo for item in crNoteVm.getCnBookNo(crNoteVm.oCreditNote.creditNo)|limitTo:10"
+														typeahead-on-select="crNoteVm.onCNoteSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close"
+												   ng-click="crNoteVm.oCreditNote.creditNo=null;">×</i>
+											</div>
+											<span class="error" ng-if="creditNote['Credit Note'].$error.required
+																	&& !creditNote['Credit Note'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Amount Without Tax:</label>
+										<div class="col-sm-6">
+											{{crNoteVm.oCreditNote.amount|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">CGST ({{crNoteVm.aBill[0].cGST_percent || 0}}%):</label>
+										<div class="col-sm-6">
+											{{crNoteVm.oCreditNote.cGST|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">SGST ({{crNoteVm.aBill[0].sGST_percent || 0}}%):</label>
+										<div class="col-sm-6">
+											{{crNoteVm.oCreditNote.sGST|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">IGST ({{crNoteVm.aBill[0].iGST_percent || 0}}%):</label>
+										<div class="col-sm-6">
+											{{crNoteVm.oCreditNote.iGST|roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Tot. Amount with Tax:</label>
+										<div class="col-sm-6 bold">
+											{{(crNoteVm.oCreditNote.totalAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="crNoteVm.aBill[0].iGST_percent">
+									<label class="col-md-3 control-label">IGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="IGST A/c Search..."
+												   ng-model="crNoteVm.oCreditNote.iGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in crNoteVm.getAccount($viewValue, 'IGST Paid') | limitTo:6"
+												   typeahead-on-select="crNoteVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close"
+											   ng-click="crNoteVm.oCreditNote.iGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="crNoteVm.aBill[0].sGST_percent">
+									<label class="col-md-3 control-label">SGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="SGST A/c Search..."
+												   ng-model="crNoteVm.oCreditNote.sGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in crNoteVm.getAccount($viewValue, 'SGST Paid') | limitTo:6"
+												   typeahead-on-select="crNoteVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close"
+											   ng-click="crNoteVm.oCreditNote.sGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="crNoteVm.aBill[0].cGST_percent">
+									<label class="col-md-3 control-label">CGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="CGST A/c Search..."
+												   ng-model="crNoteVm.oCreditNote.cGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in crNoteVm.getAccount($viewValue, 'CGST Paid') | limitTo:6"
+												   typeahead-on-select="crNoteVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close"
+											   ng-click="crNoteVm.oCreditNote.cGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Category:<span class="req_r">*</span></label>
+									<div class="col-md-9" ng-if="!crNoteVm.showBillNo">
+										<div class="fg-line select">
+											<select class="form-control"
+													name="Select Type"
+													ng-init="crNoteVm.oCreditNote.category='Partial'"
+													ng-model="crNoteVm.oCreditNote.category"
+													ng-options="item as item for item in $constants.aCreditNoteType"
+													ng-change="crNoteVm.onCategoryChange();"
+													name="category"
+													required>
+												<option value="" disabled selected> Select</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-9" ng-if="crNoteVm.showBillNo">
+										{{crNoteVm.oCreditNote.category}}
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-3" ng-show="crNoteVm.generateReverseVoucher.visible && crNoteVm.oCreditNote.category === 'Partial'">
+									<label class="checkbox checkbox-inline m-r-20">
+										<input type="checkbox"
+											   ng-model="crNoteVm.oCreditNote.genRevVch"
+											   ng-change="crNoteVm.calculateAmount()"
+											   ng-disabled="crNoteVm.generateReverseVoucher.disable">
+										<i class="input-helper"></i>
+										Generate Reverse Voucher
+									</label>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<!-- Settlement Details-->
+					<li class="list-group-item" ng-if="crNoteVm.oCreditNote.category != 'Full'">
+						<span class="booking_list_header">GR's: </span>
+						<div class="pull-right"
+							 ng-if="crNoteVm.oCreditNote.category == 'Partial'">
+							<button class="btn btn-primary"
+									uib-tooltip="Add Miscellaneous"
+									tooltip-placement="bottom"
+									ng-hide="crNoteVm.isMiscellaneousAdded"
+									ng-click="crNoteVm.addMiscellaneousGr()">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i> Misc.
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-danger"
+									uib-tooltip="Remove Miscellaneous"
+									tooltip-placement="bottom"
+									ng-show="crNoteVm.isMiscellaneousAdded"
+									ng-click="crNoteVm.removeMiscellaneousGr()">
+								<i class="zmdi zmdi-minus zmdi-hc-fw"></i> Misc.
+							</button>&nbsp;&nbsp;
+						</div>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5" style="overflow-y: auto;">
+											<table class="table table-bordered unresponsive"
+												   style="min-height: 100px;">
+												<thead>
+												<tr>
+													<th ng-show="crNoteVm.oCreditNote.category == 'Full(Gr Reversal)'">#</th>
+													<!--<th>Bill No</th>-->
+													<!--<th>Bill Date</th>-->
+													<th>Gr No</th>
+													<th>Vehicle No</th>
+													<th>Shipment No</th>
+													<th>Load RefNo</th>
+													<th>Invoice No</th>
+													<th>Item RefNo1</th>
+													<th>Gr Date</th>
+													<!--<th>Total Freight</th>-->
+													<!--<th>CGST</th>-->
+													<!--<th>SGST</th>-->
+													<!--<th>IGST</th>-->
+													<!--<th>Total Tax</th>-->
+													<th>Total Amount</th>
+													<!--<th>Settled Amount</th>-->
+													<th>Ded. Received</th>
+													<th>Deduction</th>
+													<th>igst({{crNoteVm.aBill[0].iGST_percent| roundOff}}%)</th>
+													<th>cgst({{crNoteVm.aBill[0].cGST_percent| roundOff}}%)</th>
+													<th>sgst({{crNoteVm.aBill[0].sGST_percent| roundOff}}%)</th>
+													<th>receivable deduction</th>
+												</tr>
+												</thead>
+												<tbody ng-repeat="oBill in crNoteVm.aBill">
+													<tr ng-repeat="oItem in oBill.items"
+														ng-click="crNoteVm.selectBill($parent.$index, $index)"
+														class="pointer"
+														ng-class="{grn: crNoteVm.selectedGr._id === oItem.gr._id && crNoteVm.selectedBill._id === oBill._id && crNoteVm.selectedGrIndex === $index}">
+														<td ng-show="crNoteVm.oCreditNote.category == 'Full(Gr Reversal)'">
+															<label class="checkbox checkbox-inline m-r-20">
+																<input ng-init="oItem.checked=oItem.checked || false"
+																	   type="checkbox"
+																	   ng-change="crNoteVm.onCategoryChange()"
+																	   ng-disabled="oItem.disableCheck"
+																	   ng-model="oItem.checked">
+																<i class="input-helper"></i>
+															</label>
+														</td>
+														<!--<td>{{oBill.billNo}}</td>-->
+														<!--<td>{{oBill.billDate | date: 'dd-MM-yyyy'}}</td>-->
+														<td>{{oItem.gr.grNumber || 'NA'}}</td>
+														<td>{{oItem.gr.vehicle_no || 'NA'}}</td>
+														<td>{{oItem.gr.invoices[0].ref2 || 'NA'}}</td>
+														<td>{{oItem.gr.invoices[0].loadRefNumber || 'NA'}}</td>
+														<td>{{oItem.gr.invoices[0].invoiceNo || 'NA'}}</td>
+														<td>{{oItem.gr.invoices[0].ref1 || 'NA'}}</td>
+														<td>{{(oItem.gr.grDate| date: 'dd-MM-yyyy') || 'NA'}}</td>
+														<!--<td>{{(oItem.gr.totalFreight|roundOff) || 0}}</td>-->
+														<!--<td>{{(oItem.cGST|roundOff) || 0}}</td>-->
+														<!--<td>{{(oItem.sGST|roundOff) || 0}}</td>-->
+														<!--<td>{{(oItem.iGST|roundOff) || 0}}</td>-->
+														<!--<td>{{((oItem.iGST + oItem.sGST + oItem.cGST)|roundOff) || 0}}</td>-->
+														<td>{{oItem.grAmountWithTax|roundOff}}</td>
+														<!--<td>{{oItem.settledAmount|roundOff}}</td>-->
+														<td>{{oItem.deductionReceived|roundOff}}</td>
+
+														<td>{{((oItem.dedWithoutTax = (oItem.deduction * 100) / (100 + crNoteVm.aBill[0].iGST_percent + crNoteVm.aBill[0].cGST_percent + crNoteVm.aBill[0].sGST_percent))|roundOff) || 0}}</td>
+														<td>{{((oItem.dedWithoutTax * (crNoteVm.aBill[0].iGST_percent))/100)|roundOff}}</td>
+														<td>{{((oItem.dedWithoutTax * (crNoteVm.aBill[0].cGST_percent))/100)|roundOff}}</td>
+														<td>{{((oItem.dedWithoutTax * (crNoteVm.aBill[0].sGST_percent))/100)|roundOff}}</td>
+														<td>{{oItem.deduction|roundOff}}</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<!-- Deduction/Extra Charges -->
+					<li class="list-group-item" ng-if="crNoteVm.oCreditNote.category == 'Partial'">
+						<span class="booking_list_header">Deductions: </span>
+
+						<button class="btn btn-primary"
+								ng-show="!!crNoteVm.selectedGr"
+								uib-tooltip="Hide Deduction"
+								tooltip-placement="bottom"
+								ng-click="crNoteVm.selectedGr = false; crNoteVm.selectedGrIndex = 0">
+							<i class="zmdi zmdi-eye-off zmdi-hc-fw"></i>
+						</button>
+						<button class="btn btn-primary"
+								uib-tooltip="Show All Deduction"
+								ng-hide="!!crNoteVm.selectedGr"
+								tooltip-placement="bottom"
+								ng-click="crNoteVm.selectBill(0,0);">
+							<i class="zmdi zmdi-eye zmdi-hc-fw"></i>
+						</button>&nbsp;&nbsp;
+						&nbsp;&nbsp;
+						<div class="pull-right">
+							<button class="btn btn-primary"
+									uib-tooltip="Add Deduction"
+									tooltip-placement="bottom"
+									ng-click="crNoteVm.addDeduction()">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-danger"
+									uib-tooltip="Remove Deduction"
+									tooltip-placement="bottom"
+									ng-click="crNoteVm.removeDeduction()">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>Gr No</th>
+													<th>Type</th>
+													<th>Account</th>
+													<th>Amount</th>
+													<th>Remark</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr ng-repeat-start="oBill in crNoteVm.aBill">
+													<!--<td>- {{oBill.billNo}}</td>-->
+												</tr>
+												<tr ng-repeat-start="oItem in oBill.items"
+													ng-show="crNoteVm.selectedGr._id ? (crNoteVm.selectedGr._id === oItem.gr._id) : true">
+													<td rowspan="{{oItem.aDeduction.length+1}}"
+														style="vertical-align: middle;">{{oItem.gr.grNumber || 'NA'}}
+													</td>
+												</tr>
+												<tr ng-repeat-end ng-repeat="oDeduction in oItem.aDeduction"
+													ng-class="{grn: crNoteVm.dedSelectedItem.gr._id === oItem.gr._id && crNoteVm.selectedDeductionIndex === $index}"
+													ng-show="crNoteVm.selectedGr._id ? (crNoteVm.selectedGr._id === oItem.gr._id) : true"
+													class="pointer"
+													ng-click="crNoteVm.dedSelectedItem = oItem; crNoteVm.selectedDeductionIndex = $index">
+													<!--<td>- - - {{oItem.gr.grNumber}}</td>-->
+													<td>
+														<div class="fg-line select">
+															<select class="form-control"
+																	name="Select Type"
+																	ng-model="oDeduction.deductionType"
+																	ng-options="item.name as item.name for item in oDeduction.aDeductionTypeConstant"
+																	ng-change="crNoteVm.refreshDeduction()"
+																	required>
+																<option value="" disabled selected> Select</option>
+															</select>
+														</div>
+													</td>
+													<td>
+														<div class="col-md-12">
+															<div class="">
+																<input
+																		type="text"
+																		class="form-control"
+																		placeholder="Account Search.."
+																		ng-model="oDeduction.deductionAccount"
+																		typeahead-wait-ms="10"
+																		name="account"
+																		typeahead="item as item.name for item in crNoteVm.getAccount($viewValue, ['Receipt Deduction'])"
+																		required>
+																<i class="lvh-search-close"
+																   ng-click="oDeduction.deductionAccount = null;">×</i>
+															</div>
+														</div>
+													</td>
+													<td>
+														<input type="number"
+															   ng-model="oDeduction.amount"
+															   placeholder="Number"
+															   ng-model-options="{ updateOn: 'blur' }"
+															   ng-change="crNoteVm.refreshBillamt(true)"
+															   ng-readonly="oDeduction.genFrom === 'mr'"
+															   name="Number"
+															   class="form-control">
+													</td>
+													<td>
+														<input type="text"
+															   ng-model="oDeduction.remark"
+															   placeholder="Remark"
+															   name="remark"
+															   class="form-control">
+													</td>
+												</tr>
+												<tr ng-repeat-end>
+													<!--<td>display: hidden</td>-->
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="text-right p-10">
+											<button class="btn btn-primary"
+													style="font-size: 14px"
+													ng-disabled="crNoteVm.disableSubmit"
+													ng-click="crNoteVm.submit(creditNote, true)"
+													type="button">
+												Submit & Approve
+											</button>
+											&nbsp;&nbsp;
+											<button class="btn btn-primary"
+													style="font-size: 14px"
+													ng-disabled="crNoteVm.disableSubmit"
+													ng-hide="true"
+													ng-click="crNoteVm.submit(creditNote)"
+													type="button">
+												Submit
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+
+	.red {
+		color: red;
+	}
+
+	.border-red {
+		border: 2px solid #ff000080 !important;
+	}
+
+	.container:not(.ja-containter) {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+</style>

@@ -1,0 +1,372 @@
+<div class="modal-header">
+	<button
+		type="button"
+		ng-click="closeModal()"
+		class="close"
+		data-dismiss="modal"
+		aria-label="Close"
+	>
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title text-center" id="modal-title" ng-if="!$configs.tracking.parkingReport.addLocation">
+		Add New Location For <b> <u>{{selectedVehicleData.vehicle_reg_no}}</u> </b>
+	</h4>
+	<h4 class="modal-title text-center" id="modal-title" ng-if="$configs.tracking.parkingReport.addLocation">
+		Add New Location For <b> <u>{{aSelectedVehicle.vehicle_reg_no}}</u> </b>
+	</h4>
+</div>
+<div class="m-b-20" id="modal-body" style="margin-top: 20px">
+	<form
+		name="AddMoreLocReg"
+		class="form-horizontal"
+		ng-submit="addNewLocationData(AddMoreLocReg, $configs.tracking.parkingReport.addLocation)"
+		novalidate
+	>
+		<div class="clearfix"></div>
+		<div class="col-md-5 search-container text-center" ng-if="!$configs.tracking.parkingReport.addLocation" style="z-index: 999">
+			<div class="form-group">
+				<label class="col-sm-4 control-label"
+					>Search By Address: <span class="req_r">*</span></label
+				>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<input
+						type="text"
+						name="address"
+						required
+						placeholder="Search Location..."
+						ng-model="oLiveData.address"
+						uib-typeahead="suggestion as suggestion.formattedAddress for suggestion in cities($viewValue)"
+						typeahead-on-select="onSelect($item, $model, $label)"
+						class="form-control"
+					/>
+					<span
+						class="error"
+						ng-if="	AddMoreLocReg['address'].$error.required
+							   && AddMoreLocReg.$submitted"
+					>
+						This Field is Mandatory</span
+					>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-3" ng-if="$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<label class="col-sm-4 control-label"> Current Address: </label>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="fg-line">
+						<input
+							type="text"
+							placeholder="address"
+							ng-model="oLiveData.address"
+							class="form-control"
+							name="address"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-3"  ng-if="!$configs.tracking.parkingReport.addLocation">
+
+
+			<div
+				class="date-picker input-group dp-blue"
+				ng-class="{ 'is-opened': opened1 == true }"
+			>
+				<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+					<input
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+						class="form-control"
+						uib-datepicker-popup="dd-MM-yyyy"
+						show-weeks="false"
+						ng-model="oLiveData.date"
+						ng-change="oLiveData.datetime=oLiveData.date"
+						is-open="opened1"
+						datepicker-options="DatePicker.dateSettings"
+						close-text="Close"
+						placeholder="Datetime"
+						name="date"
+						required
+						style="padding: 0px 4px; height: 30px"
+					/>
+					<span
+						class="error"
+						ng-if="	AddMoreLocReg['date'].$error.required
+								   && AddMoreLocReg.$submitted"
+					>
+						This Field is Mandatory</span
+					>
+				</div>
+				<span class="input-group-btn">
+					<button
+						type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+					>
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button>
+				</span>
+				<div class="col-md-1" ng-class="{ 'fg-toggled': opened1 == true }">
+					<timepicker
+						ng-model="oLiveData.datetime"
+						ng-click=""
+						show-spinners="false"
+						show-meridian="false"
+					>
+					</timepicker>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-md-3" ng-if="$configs.tracking.parkingReport.addLocation && aSelectedVehicle.trip">
+
+			<div
+				class="date-picker input-group dp-blue"
+				ng-class="{ 'is-opened': opened1 == true }"
+			>
+				<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+					<input
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+						class="form-control"
+						uib-datepicker-popup="dd-MM-yyyy"
+						show-weeks="false"
+						ng-model="oLiveData.reportingdate"
+						ng-change="oLiveData.reportingdatetime"
+						is-open="opened1"
+						datepicker-options="DatePicker.dateSettings"
+						close-text="Close"
+						placeholder="reportingdate"
+						name="reportingdate"
+						required
+						style="padding: 0px 4px; z-index: 999; height: 30px "
+					/>
+					<span
+						class="error"
+						ng-if="	AddMoreLocReg['date'].$error.required
+								   && AddMoreLocReg.$submitted"
+					>
+						This Field is Mandatory</span
+					>
+				</div>
+				<span class="input-group-btn">
+					<button
+						type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+					>
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button>
+				</span>
+				<div class="col-md-1" ng-class="{ 'fg-toggled': opened1 == true }">
+					<timepicker
+						ng-model="oLiveData.reportingdatetime"
+						ng-click=""
+						show-spinners="false"
+						show-meridian="false"
+					>
+					</timepicker>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-md-3" ng-if="!$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<label class="col-sm-4 control-label"
+					>Status: <span class="req_r">*</span></label
+				>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="select">
+						<select
+							class="form-control"
+							name="status"
+							ng-model="oLiveData.status"
+							ng-options="item as item for item in liveTrackStatus"
+							required
+						>
+							<option value="" selected disabled>Status</option>
+						</select>
+						<span
+							class="error"
+							ng-if="	AddMoreLocReg['status'].$error.required
+							   && AddMoreLocReg.$submitted"
+						>
+							This Field is Mandatory</span
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="clearfix" ng-if="!$configs.tracking.parkingReport.addLocation" ></div>
+		<div class="col-md-3" ng-if="!$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<label class="col-sm-4 control-label">Latitude: </label>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="fg-line">
+						<input
+							type="number"
+							placeholder="latitude"
+							ng-model="oLiveData.lat"
+							class="form-control"
+							name="latitude"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3" ng-if="!$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<label class="col-sm-6 control-label">Longitude: </label>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="fg-line">
+						<input
+							type="number"
+							placeholder="longitude"
+							ng-model="oLiveData.lng"
+							class="form-control"
+							name="longitude"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-1 text-center" ng-if="!$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<!--<input class="col-sm-4" type="button" ng-click="getAddress(oLiveData.lat,oLiveData.lng,true)"/>-->
+				<button
+					type="submit"
+					class="btn btn-primary"
+					ng-click="getAddress(oLiveData.lat,oLiveData.lng,true)"
+					uib-tooltip="Get Address"
+				>
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+			</div>
+		</div>
+
+		<div class="col-md-2" ng-if="!$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<label class="col-sm-4 control-label">Speed: </label>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="fg-line">
+						<input
+							type="text"
+							placeholder="Speed"
+							ng-model="oLiveData.speed"
+							class="form-control"
+							name="speed"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-2" ng-if="!$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<label class="col-sm-4 control-label">Duration: </label>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="fg-line">
+						<input
+								type="text"
+								placeholder="Duration"
+								ng-model="oLiveData.duration"
+								class="form-control"
+								name="duration"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-3" ng-if="!$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<label class="col-sm-4 control-label"
+					>Remark: <span class="req_r">*</span></label
+				>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="fg-line">
+						<input
+							type="text"
+							placeholder="Remark"
+							ng-model="oLiveData.remarks"
+							class="form-control"
+							required
+							name="remark"
+						/>
+						<span
+							class="error"
+							ng-if="	AddMoreLocReg['remark'].$error.required
+							   && AddMoreLocReg.$submitted"
+						>
+							This Field is Mandatory</span
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-3" ng-if="$configs.tracking.parkingReport.addLocation">
+			<div class="form-group">
+				<label class="col-sm-4 control-label"
+					>Remark: <span class="req_r">*</span></label
+				>
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="select">
+						<select
+							class="form-control"
+							name="remark"
+							ng-model="oLiveData.remarks"
+							ng-options="item as item for item in ['Waiting For Loading','Waiting For Unloading','Under maintance At Workshhop','Driver Not Available','Accident','Other']"
+							required
+						>
+							<option value="" selected disabled>Remark</option>
+						</select>
+						<span
+							class="error"
+							ng-if="	AddMoreLocReg['status'].$error.required
+							   && AddMoreLocReg.$submitted"
+						>
+							This Field is Mandatory</span
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3" ng-if="$configs.tracking.parkingReport.addLocation && oLiveData.remarks === 'Other'">
+				<div class="col-sm-6" style="margin-top: 5px">
+					<div class="fg-line">
+						<input
+							type="text"
+							placeholder="remarks"
+							ng-model="oLiveData.otherremarks"
+							class="form-control"
+							name="remarks"
+						/>
+					</div>
+				</div>
+		</div>
+		<div class="clearfix"></div>
+		<!-- Map initialization -->
+
+		<div class="col-md-6 m-t-20 m-b-20 text-right">
+			<button class="btn btn-danger" type="button" ng-click="closeModal()">
+				Cancel
+			</button>
+			<button class="btn btn-primary" style="width: 70px" ng-disabled="">
+				Submit
+			</button>
+		</div>
+		<br />
+		<div id="mapForLiveTrack" style="width: 100%; height: 478px " ng-if="!$configs.tracking.parkingReport.addLocation"></div>
+	</form>
+</div>
+<div style="clear: both"></div>
+
+<style>
+	.modal-dialog {
+		width: 90%;
+	}
+</style>

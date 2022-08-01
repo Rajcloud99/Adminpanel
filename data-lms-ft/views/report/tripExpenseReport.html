@@ -1,0 +1,250 @@
+<div ng-controller="tripExpenseReportCtrl">
+	<div class="card m-b-10" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 0px">
+			<form role="form" ng-submit="getAllTripExp()" name="tripExpenseReportFilterForm">
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+					<div class="fg-line">
+						<input type="text"
+							   ng-model="trip_no"
+							   name="trip_no"
+							   class="form-control input-sm"
+							   placeholder="Trip No"
+							   ng-model-options="{ updateOn: 'blur' }"
+							   style="height: 34px;font-size: 13px;">
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+					<div class="fg-line">
+						<input type="text"
+							   ng-model="gr_no"
+							   name="boe_no"
+							   class="form-control input-sm"
+							   placeholder="GR NO"
+							   ng-model-options="{ updateOn: 'blur' }"
+							   style="height: 34px;font-size: 13px;">
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input type="text"
+							   placeholder="Vehicle Search..."
+							   ng-model="vehicle_no"
+							   class="lvhs-input"
+							   typeahead-wait-ms="10"
+							   typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue"
+							   ng-change="getVname(vehicle_no)"
+							   class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+						<i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+					<div class="m-t-10" ng-dropdown-multiselect=""
+						 ng-init="filterObj.vendor=[];aVendor=[]"
+						 options="aVendor"
+						 selected-model="filterObj.vendor"
+						 extra-settings="selectSettings"
+						 events='selectEvents'
+						 translation-texts="{buttonDefaultText: 'Vendor'}"
+						 ja-search-input='inputModel'
+						 ja-search-trigger="getVendorName(inputModel)"
+					></div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+					<div class="m-t-10" ng-dropdown-multiselect=""
+						 ng-init="filterObj.route=[];routes=[]"
+						 options="routes"
+						 selected-model="filterObj.route"
+						 extra-settings="selectSettings"
+						 events='selectEvents'
+						 translation-texts="{buttonDefaultText: 'Route'}"
+						 ja-search-input='inputModel'
+						 ja-search-trigger="getRoutes(inputModel)"
+					></div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+					<div class="m-t-10" ng-dropdown-multiselect=""
+						 ng-init="filterObj.driver=[];drivers=[]"
+						 options="drivers"
+						 selected-model="filterObj.driver"
+						 extra-settings="selectSettings"
+						 events='selectEvents'
+						 translation-texts="{buttonDefaultText: 'Driver'}"
+						 ja-search-input='inputModel'
+						 ja-search-trigger="getDrivers(inputModel)"
+					></div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+					<select class="form-control"
+							ng-model="filterObj.type"
+							ng-options="item as item for item in $constants.aPayType"
+							style="line-height: 34px;">
+						<option value="" selected> Select Type</option>
+					</select>
+				</div>
+				<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+					<div class="date-picker input-group dp-blue"
+						 ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+								   type="text"
+								   class="form-control"
+								   datepicker-popup="{{DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="start_date"
+								   is-open="opened1"
+								   datepicker-options="DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="From Date"
+								   ng-change="setMaxDate(start_date);end_date=''"
+								   required
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="DatePicker.openDatePicker(this, $event, 'opene	d1')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+						 style=" ">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+								   type="text"
+								   class="form-control"
+								   datepicker-popup="{{DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="end_date"
+								   is-open="opened2"
+								   datepicker-options="DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="To Date"
+								   max-date="maxDate"
+								   min-date="start_date"
+								   ng-change="setEndDate()"
+								   ng-disabled="!start_date"
+								   style="padding: 0px 4px; height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-2 col-md-1 col-lg-1">
+					<label class="checkbox checkbox-inline m-r-20">
+						<input type="checkbox"
+							   ng-model="filterObj.paidToVendor"
+							   class="ng-pristine ng-valid ng-empty ng-touched">
+						<i class="input-helper"></i>
+						Paid To Vendor
+					</label>
+				</div>
+				<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+					<button ng-disabled="tripExpenseReportFilterForm.$invalid"
+							class="btn btn-primary"
+							style="font-size: 11px; padding: 5px;margin-top: 5px;">
+						Search
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>Trip No.</th>
+										<th>GR No.</th>
+										<th>Vehicle No.</th>
+										<th>Route Name</th>
+										<th>Allocation Date</th>
+										<th>Vendor</th>
+										<th>Vendor Advance</th>
+										<th>Vendor ToPay</th>
+										<th>Toll Tax</th>
+										<th>Total Diesel(Rs.)</th>
+										<th style="min-width: 90px;">Cash</th>
+										<th>Vendor Cash Payment</th>
+										<th>Vendor AC Payment</th>
+										<th>Vendor Payment</th>
+										<th>Vendor Check Payment</th>
+										<th>Vendor Penalty Payment</th>
+										<th>Vendor Adv. Remaining</th>
+										<th>Vendor ToPay Remaining</th>
+										<th>Diesel (ltr.)</th>
+										<th>Diesel Price</th>
+										<th>Created On</th>
+										<th>Challan</th>
+										<th>Diesel</th>
+										<th>Driver Cash</th>
+										<th>GR Charges</th>
+										<th>Load Charges</th>
+										<th>Other Charges</th>
+										<th>Damage</th>
+										<th>Detention</th>
+										<th>Net Expenses</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oTripExp in aTripExpense" class="pointer">
+										<td>{{oTripExp.trip_no}}</td>
+										<td>{{oTripExp | grNumbers}}</td>
+										<td>{{oTripExp.vehicle_no || 'NA'}}</td>
+										<td>{{oTripExp.trip.route_name || 'NA'}}</td>
+										<td>{{oTripExp.trip.allocation_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+										<td>{{oTripExp.trip.vendorData.name}}{{oTripExp.trip.vendorData.prim_contact_no ? ('('+oTripExp.trip.vendorData.prim_contact_no+')') : '' }}</td>
+										<td>{{oTripExp.trip.vendorDeal.advance || 0}}</td>
+										<td>{{oTripExp.trip.vendorDeal.toPay || 0}}</td>
+										<td>{{oTripExp.tollTax || 0}}</td>
+										<td>{{oTripExp.diesel || 0}}</td>
+										<td>{{oTripExp.driverCash || 0}}</td>
+										<td>{{oTripExp.vCash || 0}}</td>
+										<td>{{oTripExp.vACPay || 0}}</td>
+										<td>{{oTripExp.vNet || 0}}</td>
+										<td>{{oTripExp.vCheque || 0}}</td>
+										<td>{{oTripExp.vPenalty || 0}}</td>
+										<td>{{oTripExp.v_adv_remaining || 0}}</td>
+										<td>{{oTripExp.v_topay_remaining || 0}}</td>
+										<td>{{oTripExp.dieselLtr || 0}}</td>
+										<td>{{oTripExp.diesel || 0}}</td>
+										<td>{{(oTripExp.trip.created_at | date:'dd-MM-yyyy') || 'NA'}}</td>
+										<td>{{oTripExp.chalan || 0}}</td>
+										<td>{{oTripExp.diesel || 0}}</td>
+										<td>{{oTripExp.driverCash || 0}}</td>
+										<td>{{oTripExp.grCharges || 0}}</td>
+										<td>{{oTripExp.loadCharges || 0}}</td>
+										<td>{{oTripExp.oCharges || 0}}</td>
+										<td>{{oTripExp.vDamage || 0}}</td>
+										<td>{{oTripExp.vDetention || 0}}</td>
+										<td>{{oTripExp.vNet || 0}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<!--<div class="pagi text-center" ng-show="aTripExpense.length > 0">
+								<uib-pagination ng-change="getAllTripExp(true)" total-items="pagination.totalItems"
+												items-per-page="pagination.items_per_page" num-pages="pagination.numPages"
+												ng-model="pagination.currentPage" max-size="pagination.maxSize"
+												class="pagination-sm smallPagi" boundary-links="true"
+												previous-text="&lsaquo;" next-text="&rsaquo;"
+												first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+							</div>-->
+							<div ng-if="aTripExpense.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any Trip Expense available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

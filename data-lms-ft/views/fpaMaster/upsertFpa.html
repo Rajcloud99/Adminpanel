@@ -1,0 +1,202 @@
+<!-- ControllerAs: upsertVm-->
+
+<form name="upserForm" ng-submit="upsertVm.submit(upserForm)" novalidate autocomplete="off">
+
+	<div class="modal-header" >
+		<button type="button" ng-click="upsertVm.closePopup()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>{{upsertVm.modelName}}</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183); text-transform: capitalize">
+							({{upsertVm.modelType}})
+						</span>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vendor:</label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear">
+											<input
+													type="text"
+													name="vend"
+													class="form-control lvhs-input"
+													placeholder="Select vendor"
+													ng-model="upsertVm.vend"
+													uib-typeahead="c as c.name for c in upsertVm.getVendors($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="upsertVm.onVendorSelect($item, $model, $label)"
+													required
+											>
+											<i class="lvh-search-close"
+											   ng-click="upsertVm.ofpa.vendor=undefined;upsertVm.ofpa.vendor_name=undefined;upsertVm.vend=undefined">
+												×
+											</i>
+										</div>
+										<span
+												class="error"
+												ng-if="upserForm['vend'].$error.required
+													&& (upserForm['vend'].$touched
+													|| upserForm.$submitted)"
+										>
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Customer:</label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear">
+											<input
+													type="text"
+													name="cust"
+													class="form-control lvhs-input"
+													placeholder="Select customer"
+													ng-model="upsertVm.cust"
+													uib-typeahead="c as c.name for c in upsertVm.getCustomers($viewValue)"
+													typeahead-wait-ms="10"
+													typeahead-on-select="upsertVm.onCustomerSelect($item, $model, $label)"
+													ng-disabled="!upsertVm.ofpa.vendor"
+											>
+											<i class="lvh-search-close"
+											   ng-click="upsertVm.ofpa.customer=undefined;upsertVm.ofpa.customer_name=undefined;upsertVm.cust=undefined">
+												×
+											</i>
+										</div>
+<!--										<span-->
+<!--												class="error"-->
+<!--												ng-if="upserForm['cust'].$error.required-->
+<!--													&& (upserForm['cust'].$touched-->
+<!--													|| upserForm.$submitted)"-->
+<!--										>-->
+<!--											This Field is Mandatory-->
+<!--										</span>-->
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<label class="col-sm-4 control-label">Date: <span class="req_r">*</span></label>
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{upsertVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="upsertVm.ofpa.date"
+											   is-open="opened1"
+											   datepicker-options="upsertVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Date"
+											   name="date"
+											   style="padding: 0px 4px;height: 34px;"
+											   required
+										/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="upsertVm.DatePicker.openDatePicker(this, $event, 'opened1')">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</button>
+									</span>
+									<span
+											class="error"
+											ng-if="upserForm['date'].$error.required
+													&& (upserForm['date'].$touched
+													|| upserForm.$submitted)"
+									>
+											This Field is Mandatory
+										</span>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Type: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<select chosen
+													class="form-control"
+													ng-model="upsertVm.ofpa.type"
+													ng-options="item as item for item in ['Commission', 'Other']"
+													name="Select Type">
+												<option value="" selected>Select Type</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Rate: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   ng-min="0.1"
+												   ng-max="30"
+												   step="0.1"
+												   placeholder="FPA in %"
+												   ng-model="upsertVm.ofpa.rate"
+												   name="rate"
+												   class="form-control"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   required>
+										</div>
+										<span class="error" ng-if="upserForm['rate'].$error.required
+																		&& (upserForm['rate'].$touched
+																		|| upserForm.$submitted)">
+													This Field is Mandatory</span>
+										<span class="error" ng-if="upserForm['rate'].$error.max
+																		&& (upserForm['rate'].$touched
+																		|| upserForm.$submitted)">
+													Rate must be from 0.1 - 30</span>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="upsertVm.closePopup()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.modal-dialog{
+		width: 90%;
+	}
+
+</style>

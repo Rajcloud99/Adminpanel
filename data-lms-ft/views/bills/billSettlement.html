@@ -1,0 +1,247 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:15px;">
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="vm.myFilter.bill_no"
+						   name="bill_no"
+						   class="form-control input-sm"
+						   placeholder="Bill No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line form-group m-b-0">
+					<input
+							type="text"
+							ng-model="vm.myFilter.gr_no"
+							name="gr_no"
+							class="form-control input-sm"
+							placeholder="GR No."
+							ng-model-options="{ updateOn: 'blur' }"
+					>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   ng-change="vm.getInvoice(false,true)"
+										   class="form-control"
+										   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   max-date="vm.DatePicker.newDate"
+										   ng-model="vm.myFilter.start_date"
+										   is-open="opened1"
+										   datepicker-options="vm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Start Date"/>
+								</div>
+								<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened2 == true }">
+								<div ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+										   ng-change="vm.getInvoice(false,true)"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   max-date="vm.DatePicker.newDate"
+										   ng-model="vm.myFilter.end_date"
+										   is-open="opened2"
+										   datepicker-options="vm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="End Date"/>
+								</div>
+								<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="lvh-search ng-scope sear">
+							<input type="text"
+								   placeholder="Billing Party..."
+								   ng-model="vm.myFilter.search_billParty"
+								   class="lvhs-input"
+								   typeahead-wait-ms="10"
+								   typeahead="item as item.name for item in vm.aBillingParty"
+								   ng-change="vm.getBillingPartyName(vm.myFilter.search_billParty)"
+								   class="form-control"
+								   typeahead-on-select="vm.onSelect($item, $model, $label)">
+							<i class="lvh-search-close"
+							   ng-click="vm.myFilter.search_billParty='';vm.clearSelection();">×</i>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Search"
+						type="submit"
+						ng-click="vm.getAcknowledgedBills()"
+						tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Clear Search"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="vm.myFilter={};vm.getAcknowledgedBills();"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="form-group m-b-0">
+			<button class="btn btn-primary"
+					ng-click="vm.creditNote()"
+					ng-hide="vm.multipeBillSelection"
+					uib-tooltip="Credit Note">
+				<i class="zmdi zmdi-card zmdi-hc-fw fs-20"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-click="vm.printBill('Preview')"
+					uib-tooltip="Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw fs-20"></i>
+			</button>&nbsp;&nbsp;
+			<button class="btn btn-primary"
+					ng-hide="true"
+					ng-disabled="vm.selectedBill.length <= 0"
+					ng-click="vm.settleBill()"
+					uib-tooltip="Settle Bill">
+				<i class="zmdi zmdi-thumb-up animated infinite wobble zmdi-hc-fw fs-20"></i>
+			</button>&nbsp;&nbsp;
+		</div>
+	</div>
+
+
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<table class="table table-bordered unresponsive">
+				<thead id='my_fixable_table_header' fix-head>
+				<tr>
+					<th ng-if="vm.multipeBillSelection">
+						<div class="checkbox m-0"
+							 uib-tooltip="Select All">
+							<label class="p-l-0">
+								<input type="checkbox"
+									   ng-click="vm.selectOrDeSelectAll()"
+									   ng-model="vm.boolJustCheck">
+								<i class="input-helper"></i>
+							</label>
+						</div>
+					</th>
+					<th style="min-width: 50px">Actual Bill No.</th>
+					<th style="min-width: 50px">Bill No.</th>
+					<th style="min-width: 50px">Gr No.</th>
+					<th style="min-width: 120px">Bill Type</th>
+					<th style="min-width: 100px">Status</th>
+					<th style="min-width: 320px">Billing Party</th>
+					<th style="min-width: 100px">Billing Date</th>
+					<th style="min-width: 100px">Due Date</th>
+					<th style="min-width: 100px">Amount(Rs.)</th>
+					<th style="min-width: 100px">Cr/Dr Note</th>
+					<th style="min-width: 100px">Net Receivable</th>
+					<th style="min-width: 130px">Amount Received</th>
+					<th style="min-width: 100px">Due Amount</th>
+					<th style="min-width: 100px">CGST</th>
+					<th style="min-width: 100px">SGST</th>
+					<th style="min-width: 100px">IGST</th>
+					<th style="min-width: 100px">Total Tax</th>
+					<th style="min-width: 100px">Created By</th>
+
+				</tr>
+				</thead>
+				<tbody>
+				<tr data-ng-repeat="oBill in vm.aBill"
+					class="selectItem pointer"
+					ng-click="!vm.multipeBillSelection && vm.selectThisRow(oBill, $index)">
+					<td ng-if="vm.multipeBillSelection">
+						<div class="checkbox m-0">
+							<label class="p-l-0">
+								<input type="checkbox"
+									   ng-change="vm.addOrRemoveSelectedBill(oBill.boolJustCheck, oBill)"
+									   ng-model="oBill.boolJustCheck">
+								<i class="input-helper"></i>
+							</label>
+						</div>
+					</td>
+					<td>{{oBill.billNo}}</td>
+					<td>{{oBill.billNo}}</td>
+					<td>{{oBill.items|getGrNumber}}</td>
+					<td>{{oBill.type || 'NA'}}</td>
+					<td>{{oBill.status || 'NA'}}</td>
+					<td>{{oBill.billingParty.name}}</td>
+					<td>{{oBill.billDate | date:"dd-MM-yyyy"}}</td>
+					<td>{{(oBill.dueDate | date:"dd-MM-yyyy") || 'NA'}}</td>
+					<td>{{(oBill.totalAmount || 0)|roundOff}}</td>
+					<td>{{(oBill.crDrAmount || 0)|roundOff}}</td>
+					<td>{{((oBill.netReceivable = oBill.totalAmount + oBill.crDrAmount) || 0)|roundOff}}</td>
+					<td>{{(oBill | calculateReceivedAmount)|roundOff}}</td>
+					<td>{{((oBill.netReceivable - (oBill | calculateReceivedAmount)) || 0)|roundOff}}</td>
+					<td>{{(oBill.cGST || 0)|roundOff}}</td>
+					<td>{{(oBill.sGST || 0)|roundOff}}</td>
+					<td>{{(oBill.iGST || 0)|roundOff}}</td>
+					<td>{{(oBill.iGST !== 0 ? oBill.iGST : (oBill.cGST + oBill.sGST))|roundOff}}</td>
+					<td>{{oBill.created_by.full_name || "NA"}}</td>
+				</tr>
+				</tbody>
+			</table>
+			<div ng-if="vm.aBill.length<=0" class="ms-body" style=" min-height: 50px;">
+				<h3>No any bill available !!!!!</h3>
+			</div>
+		</div>
+		<div style="text-align: center;" ng-show="vm.aBill.length>0">
+			<pagination ng-change="vm.getAcknowledgedBills()"
+						total-items="vm.pagination.totalItems"
+						items-per-page="vm.pagination.items_per_page"
+						num-pages="vm.pagination.numPages"
+						ng-model="vm.pagination.currentPage"
+						max-size="vm.pagination.maxSize"
+						class="vm.pagination-sm smallPagi"
+						boundary-links="true"
+						previous-text="&lsaquo;"
+						next-text="&rsaquo;"
+						first-text="&laquo;" last-text="&raquo;"></pagination>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+</style>

@@ -1,0 +1,413 @@
+<!--<div ng-controller="routeRatesController" class="container">-->
+	<!--<div class="row">-->
+		<!--<div class="col-md-12">-->
+			<!--<div class="">-->
+				<!--<div class="">-->
+					<!--<div class="pull-right m-r-10" style="text-align: right;">-->
+						<!--<a style="font-size: 24px;" ng-if="!(role_local_data.customer.indexOf('add')==-1)"-->
+						   <!--uib-tooltip="Add Rate" ng-click="addNewRates()" ng-show="onShow"-->
+						   <!--tooltip-placement="bottom"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i></a>-->
+						<!--<a style="font-size: 24px;" ng-if="!(role_local_data.customer.indexOf('edit')==-1)"-->
+						   <!--uib-tooltip="Edit Rate" ng-click="editRates()" ng-show="onShow" tooltip-placement="bottom"><i-->
+								<!--class="zmdi zmdi-edit"></i></a>-->
+						<!--<a style="font-size: 24px;" uib-tooltip="Show Rate" ng-click="showRates()"-->
+						   <!--ng-show="onEdit || onAdd" tooltip-placement="bottom"><i-->
+								<!--class="zmdi zmdi-menu zmdi-hc-fw"></i></a>-->
+					<!--</div>-->
+					<!--<div class="clearfix"></div>-->
+					<!--<div class="col-md-4">-->
+						<!--<div class="form-group m-b-0" ng-show="onShow">-->
+							<!--<label class="col-sm-4 control-label" ng-show="onShow" ng-if="aRate.length>0">Select Route-->
+								<!--:</label>-->
+							<!--<div class="col-sm-8">-->
+								<!--<select chosen-->
+										<!--search-contains="true"-->
+										<!--ng-show="onShow"-->
+										<!--ng-if="aRate.length>0"-->
+										<!--ng-options="item as item.route_name for item in aRate"-->
+										<!--ng-model="selectedRateS"-->
+										<!--ng-change="selectedRateItemChanged(selectedRateS)">-->
+									<!--<option value="" disabled selected style="display: none;"> Select Route-->
+								<!--</select>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--<div class="clearfix"></div>-->
+			<!--</div>-->
+			<!--<div class="detailList2" ng-show="onShow">-->
+				<!--<hr>-->
+				<!--<div class=" w-set" style="margin:5px 15px;overflow-y: auto;">-->
+					<!--<table class="table table-bordered  unresponsive">-->
+						<!--<thead>-->
+						<!--<tr>-->
+							<!--<th>Vehicle(Group)</th>-->
+							<!--<th style="min-width: 50px;">Diesel</th>-->
+							<!--<th style="min-width: 65px;">Cash</th>-->
+							<!--<th style="min-width: 65px;">Toll Tax</th>-->
+						<!--</tr>-->
+						<!--</thead>-->
+						<!--<tbody>-->
+						<!--<tr ng-repeat="sData in rateSingle.data">-->
+							<!--<td>{{vehicle.vehicle_id ? vehicle.vehicle_id.name+'('+vehicle.vehicle_id.group_name+')' : 'NA'}}</td>-->
+							<!--<td>{{sData.allot.diesel_allot}}</td>-->
+							<!--<td>{{sData.allot.cash_allot}}</td>-->
+							<!--<td>{{sData.allot.toll_tax}}</td>-->
+						<!--</tr>-->
+						<!--</tbody>-->
+					<!--</table>-->
+				<!--</div>-->
+			<!--</div>-->
+
+			<!--<div class="detailList2" ng-show="onEdit">-->
+				<!--<form name="updateRateF" novalidate>-->
+					<!--<div class="validationError" ng-show="upadetRateErrMsg">-->
+						<!--<h5 class="c-red">* {{CCmsg}}</h5>-->
+					<!--</div>-->
+					<!--<div class="row" style="margin:5px 15px">-->
+						<!--<div class="col-md-6">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-5 control-label">Route Name:</label>-->
+								<!--<div class="col-sm-7">-->
+									<!--<div class="select">-->
+										<!--<select class="form-control" ng-options="item as item.name for item in aRoutes"-->
+												<!--ng-model="rateUpdate.route_name" ng-disabled="true"-->
+												<!--ng-change="selectedRouteChanged(route_name)">-->
+										<!--</select>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="col-md-4">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-6 control-label">Distance(km):</label>-->
+								<!--<div class="col-sm-6">-->
+									<!--<div class="fg-line">-->
+										<!--<input type="number" onwheel="return false"-->
+											   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+											   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+											   <!--ng-model="rateUpdate.route_distance" class="form-control">-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="row" ng-if="rateUpdate.route_name" style="margin:5px 15px">-->
+						<!--<div class="col-md-4">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-6 control-label">Selection Type: </label>-->
+								<!--<div class="col-sm-6">-->
+									<!--<div class="select">-->
+										<!--<select class="form-control"-->
+												<!--placeholder="Select Type"-->
+												<!--ng-options="item as item for item in aSelectionType"-->
+												<!--ng-model="appendObj.oSelectionType"-->
+												<!--name="booking type"-->
+												<!--ng-change="changeSelectionType(oSelectionType)">-->
+											<!--<option value="" disabled selected> Select Type-->
+											<!--</option>-->
+										<!--</select>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="col-md-4" ng-if="appendObj.oSelectionType === 'Vehicle'">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-6 control-label">Vehicle Type: <span-->
+										<!--style="color: red;">*</span></label>-->
+								<!--<div class="col-sm-6">-->
+									<!--<div class="select">-->
+										<!--<select class="form-control"-->
+												<!--placeholder="Select Type"-->
+												<!--ng-options="item as item.name for item in vehicleTypes"-->
+												<!--ng-model="appendObj.oVehicleType"-->
+												<!--name="vehicle type"-->
+												<!--required="">-->
+											<!--<option value="" disabled selected style="display: none;"> Select Type-->
+											<!--</option>-->
+										<!--</select>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="col-md-4" ng-if="appendObj.oSelectionType === 'Material'">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-6 control-label">Material Type: <span-->
+										<!--style="color: red;">*</span></label>-->
+								<!--<div class="col-sm-6">-->
+									<!--<div class="select">-->
+										<!--<select class="form-control"-->
+												<!--placeholder="Select Type"-->
+												<!--ng-options="item as item.name for item in materialTypes"-->
+												<!--ng-model="appendObj.oMaterialType"-->
+												<!--name="vehicle type"-->
+												<!--required="">-->
+											<!--<option value="" disabled selected style="display: none;"> Select Type-->
+											<!--</option>-->
+										<!--</select>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="col-md-4">-->
+							<!--<div class=" m-b-0">-->
+								<!--<button class="pointer btn btn-primary waves-effect"-->
+										<!--uib-tooltip="Add Vehicle"-->
+										<!--ng-disabled="!appendObj.oVehicleType && !appendObj.oMaterialType"-->
+										<!--ng-click="addVehicleInList()"-->
+										<!--tooltip-placement="bottom">-->
+									<!--<i class="zmdi zmdi-plus zmdi-hc-fw"></i>-->
+								<!--</button>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="row" style="margin:5px 15px">-->
+						<!--<div class="col-md-12">-->
+							<!--<div class=" w-set" style="overflow-y: auto;">-->
+								<!--<table class="table table-bordered  unresponsive">-->
+									<!--<thead>-->
+									<!--<tr>-->
+										<!--<th>Vehicle(Group)</th>-->
+										<!--<th style="min-width: 50px;">Diesel Allot</th>-->
+										<!--<th style="min-width: 65px;">Cash Allot</th>-->
+										<!--<th style="min-width: 65px;">Toll Tax</th>-->
+									<!--</tr>-->
+									<!--</thead>-->
+									<!--<tbody>-->
+									<!--<tr ng-repeat="vehicle in newVehicleTypes track by $index">-->
+										<!--<td>{{vehicle.vehicle_id ? vehicle.vehicle_id.name+'('+vehicle.vehicle_id.group_name+')' : 'NA'}}</td>-->
+										<!--<td>-->
+											<!--<input onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--onwheel="return false"-->
+												   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+												   <!--type="number"-->
+												   <!--ng-model="vehicle.allot.diesel_allot"-->
+												   <!--class="form-control">-->
+										<!--</td>-->
+										<!--<td>-->
+											<!--<input onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--onwheel="return false"-->
+												   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+												   <!--type="number"-->
+												   <!--ng-model="vehicle.allot.cash_allot"-->
+												   <!--class="form-control">-->
+										<!--</td>-->
+										<!--<td>-->
+											<!--<input onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--onwheel="return false"-->
+												   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+												   <!--type="number"-->
+												   <!--ng-model="vehicle.allot.toll_tax"-->
+												   <!--class="form-control">-->
+										<!--</td>-->
+									<!--</tr>-->
+									<!--</tbody>-->
+								<!--</table>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<!--<div class="row" style="margin:5px 15px">-->
+						<!--<div class="col-md-12">-->
+							<!--<div class="form-group m-b-10 text-right">-->
+								<!--<button type="submit" ng-disabled="newVehicleTypes.length < 1" class="btn btn-primary"-->
+										<!--ng-click="UpdateRateDetails(updateRateF)" style="margin-bottom: 12px;">Save-->
+								<!--</button>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</form>-->
+			<!--</div>-->
+
+			<!--<div class="detailList2" ng-show="onAdd">-->
+				<!--<form name="contractReg" novalidate>-->
+					<!--<div class="validationError" ng-show="addRatesErrMsg">-->
+						<!--<h5 class="c-red">* {{ARmsg}}</h5>-->
+					<!--</div>-->
+					<!--<div class="row" style="margin:5px 15px">-->
+						<!--<div class="col-md-6">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-5 control-label">Route Name: <span-->
+										<!--style="color: red;">*</span></label>-->
+								<!--<div class="col-sm-7">-->
+									<!--<select chosen search-contains="true" class="form-control"-->
+											<!--ng-options="item as item.name for item in aRoutes" ng-model="route_name"-->
+											<!--ng-change="selectedRouteChanged(route_name)" name="Route Name" required="">-->
+										<!--<option value=""></option>-->
+									<!--</select>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="col-md-4">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-6 control-label">Distance(km):</label>-->
+								<!--<div class="col-sm-6">-->
+									<!--<div class="fg-line">-->
+										<!--<input type="number" onwheel="return false"-->
+											   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+											   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+											   <!--ng-model="route_distance" class="form-control">-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="row" ng-if="route_name" style="margin:5px 15px">-->
+						<!--<div class="col-md-4">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-6 control-label">Selection Type: </label>-->
+								<!--<div class="col-sm-6">-->
+									<!--<div class="select">-->
+										<!--<select class="form-control"-->
+												<!--placeholder="Select Type"-->
+												<!--ng-options="item as item for item in aSelectionType"-->
+												<!--ng-model="appendObj.oSelectionType"-->
+												<!--name="booking type"-->
+												<!--ng-change="changeSelectionType(oSelectionType)">-->
+											<!--<option value="" disabled selected> Select Type-->
+											<!--</option>-->
+										<!--</select>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="col-md-4" ng-if="appendObj.oSelectionType === 'Vehicle'">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-6 control-label">Vehicle Type: <span-->
+										<!--style="color: red;">*</span></label>-->
+								<!--<div class="col-sm-6">-->
+									<!--<div class="select">-->
+										<!--<select class="form-control"-->
+												<!--placeholder="Select Type"-->
+												<!--ng-options="item as item.name for item in vehicleTypes"-->
+												<!--ng-model="appendObj.oVehicleType"-->
+												<!--name="vehicle type"-->
+												<!--required="">-->
+											<!--<option value="" disabled selected style="display: none;"> Select Type-->
+											<!--</option>-->
+										<!--</select>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="col-md-4" ng-if="appendObj.oSelectionType === 'Material'">-->
+							<!--<div class="form-group m-b-0">-->
+								<!--<label class="col-sm-6 control-label">Material Type: <span-->
+										<!--style="color: red;">*</span></label>-->
+								<!--<div class="col-sm-6">-->
+									<!--<div class="select">-->
+										<!--<select class="form-control"-->
+												<!--placeholder="Select Type"-->
+												<!--ng-options="item as item.name for item in materialTypes"-->
+												<!--ng-model="appendObj.oMaterialType"-->
+												<!--name="vehicle type"-->
+												<!--required="">-->
+											<!--<option value="" disabled selected style="display: none;"> Select Type-->
+											<!--</option>-->
+										<!--</select>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="col-md-4">-->
+							<!--<div class=" m-b-0">-->
+								<!--<button class="pointer btn btn-primary waves-effect"-->
+										<!--uib-tooltip="Add Vehicle"-->
+										<!--ng-disabled="!appendObj.oVehicleType && !appendObj.oMaterialType"-->
+										<!--ng-click="addVehicleInList()"-->
+										<!--tooltip-placement="bottom">-->
+									<!--<i class="zmdi zmdi-plus zmdi-hc-fw"></i></button>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<!--<div class="row" style="margin:5px 15px">-->
+						<!--<div class="col-md-12">-->
+							<!--<div class=" w-set" style="overflow-y: auto;">-->
+								<!--<table class="table table-bordered  unresponsive">-->
+									<!--<thead>-->
+									<!--<tr>-->
+										<!--<th>Vehicle(Group)</th>-->
+										<!--<th style="min-width: 50px;">Diesel Allot</th>-->
+										<!--<th style="min-width: 65px;">Cash Allot</th>-->
+										<!--<th style="min-width: 65px;">Toll Tax</th>-->
+									<!--</tr>-->
+									<!--</thead>-->
+									<!--<tbody>-->
+									<!--<tr ng-repeat="vehicle in newVehicleTypes track by $index">-->
+										<!--<td>{{vehicle.vehicle_id ? vehicle.vehicle_id.name+'('+vehicle.vehicle_id.group_name+')' : 'NA'}}</td>-->
+										<!--<td>-->
+											<!--<input onwheel="return false"-->
+												   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--type="number"-->
+												   <!--ng-model="vehicle.allot.diesel_allot"-->
+												   <!--class="form-control">-->
+										<!--</td>-->
+										<!--<td>-->
+											<!--<input onwheel="return false"-->
+												   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--type="number"-->
+												   <!--ng-model="vehicle.allot.cash_allot"-->
+												   <!--class="form-control">-->
+										<!--</td>-->
+										<!--<td>-->
+											<!--<input onwheel="return false"-->
+												   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--type="number"-->
+												   <!--ng-model="vehicle.allot.toll_tax"-->
+												   <!--class="form-control">-->
+										<!--</td>-->
+									<!--</tr>-->
+									<!--</tbody>-->
+								<!--</table>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<!--<div class="row" style="margin:5px 15px">-->
+						<!--<div class="col-md-12">-->
+							<!--<div class="form-group m-b-10 text-right">-->
+								<!--<button type="submit" ng-disabled="newVehicleTypes.length < 1" class="btn btn-primary"-->
+										<!--ng-click="saveRateDetails(contractReg)" style="margin-bottom: 12px;">Save-->
+								<!--</button>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</form>-->
+			<!--</div>-->
+		<!--</div>-->
+	<!--</div>-->
+<!--</div>-->
+
+
+<style type="text/css">
+	.radio-inline + .radio-inline,
+	.checkbox-inline + .checkbox-inline {
+		margin-left: 0px;
+	}
+
+	.checkbox-inline,
+	.radio-inline {
+		width: 40%;
+	}
+
+	.tbl-w tbody tr td input {
+		width: 60px;
+	}
+
+	.unresponsive thead tr th:nth-child(2) {
+		min-width: 115px;
+	}
+
+	.unresponsive thead tr th:first-child{
+		max-width: 125px;
+		padding: 0 5px;
+	}
+
+	.xxaa .checkbox-inline,
+	.xxaa .radio-inline {
+		width: auto;
+	}
+</style>

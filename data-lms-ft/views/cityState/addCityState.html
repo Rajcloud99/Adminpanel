@@ -1,0 +1,169 @@
+<!--controller:addCityStateCtrl-->
+<!--controllerAs:acsVm-->
+
+<form role="form" name="myCityPopUp" ng-submit="acsVm.submit(myCityPopUp)" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="acsVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">{{acsVm.type === 'add' ? 'Add' : 'Update' }} City State</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-2 control-label"><b>City:</b><span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="lvh-search ng-scope sear chosen-row-2">
+								<input
+										type="text"
+										class="form-control lvhs-input"
+										placeholder="City Search..."
+										ng-model="acsVm.aSelectedCity.c"
+										ng-pattern="/^[A-z ]+$/"
+										name="City"
+										typeahead-wait-ms="10"
+										typeahead="item as item.c for item in acsVm.getCity($viewValue) | limitTo:6"
+										typeahead-on-select="acsVm.onSelect($item, $model, $label)"
+										required >
+								<i class="lvh-search-close" ng-click="acsVm.aSelectedCity.c='';">×</i>
+							</div>
+							<span class="error" ng-show="myCityPopUp.City.$error.pattern">Invalid City Name</span>
+						</div>
+					</div>
+				</div>
+<!--				<div class="col-md-6">-->
+<!--					<div class="form-group m-b-0">-->
+<!--						<label class="col-sm-2 control-label"><b>City:</b><span class="req_r">*</span></label>-->
+<!--						<div class="col-md-8">-->
+<!--							<div class="lvh-search ng-scope sear chosen-row-2" autocomplete="off">-->
+<!--								<input-->
+<!--										type="text"-->
+<!--										class="form-control lvhs-input"-->
+<!--										placeholder="city Search..."-->
+<!--										ng-model="acsVm.aSelectedCity.c"-->
+<!--								        ng-pattern="/^[A-z ]+$/"-->
+<!--										name="City"-->
+<!--										typeahead-wait-ms="10"-->
+<!--										typeahead="item as item.c for item in acsVm.getCity($viewValue) | limitTo:6"-->
+<!--										typeahead-on-select="acsVm.onSelect($item, $model, $label)"-->
+<!--										required>-->
+<!--								<i class="lvh-search-close" ng-click="acsVm.aSelectedCity.c='';">×</i>-->
+<!--							</div>-->
+<!--							<span class="error" ng-show="myCityPopUp.City.$error.pattern">Invalid City Name</span>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label"><b>State:</b><span class="req_r">*</span></label>
+						<div class="col-md-6">
+							<div class="select">
+								<select class="form-control"
+										placeholder="State Name"
+										ng-options="item as item.state for item in $constants.aGSTstates"
+										ng-model="acsVm.aSelectedCity.s"
+										ng-change="acsVm.stateSelect(acsVm.aSelectedCity.s)"
+										name="state_name"
+								        required>
+									<option selected disabled>Select State</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-2 control-label"><b>PinCode:</b></label>
+						<div class="col-md-8">
+							<input
+									type="number"
+									name="PinCode"
+									class="form-control lvhs-input"
+									placeholder="city pinCode"
+									ng-model="acsVm.aSelectedCity.p"
+									typeahead-wait-ms="10"
+									ng-maxlength="10">
+							<span class="error" ng-if="	(myCityPopUp['PinCode'].$error.maxlength)">
+													Invalid PinCode</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-2 control-label"><b>District:</b><span class="req_r">*</span></label>
+						<div class="col-md-8">
+							<div class="lvh-search ng-scope sear chosen-row-2">
+								<input
+										type="text"
+										class="form-control lvhs-input"
+										placeholder="District Search..."
+										ng-model="acsVm.aSelectedCity.d"
+										ng-pattern="/^[A-z ]+$/"
+										name="District"
+										typeahead-wait-ms="10"
+										typeahead="item as item.c for item in acsVm.getCity($viewValue) | limitTo:6"
+										required >
+								<i class="lvh-search-close" ng-click="acsVm.aSelectedCity.d='';">×</i>
+							</div>
+							<span class="error" ng-show="myCityPopUp.District.$error.pattern">Invalid District Name</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+					<div class="row">
+
+						<div class="col-md-6" ng-if="acsVm.aSelectedCity.s">
+							<div class="form-group m-b-0">
+								<label class="col-sm-2 control-label"><b>Zone:</b></label>
+								<div class="col-md-8">
+								{{acsVm.aSelectedCity.s.zone}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect">{{acsVm.type === 'add' ? 'Add' : 'Update' }}</button>&nbsp;&nbsp;&nbsp;
+		<button type="button" class="btn btn-warning" ng-click="acsVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 60%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

@@ -1,0 +1,218 @@
+<!-- controller: bankReconciliationCtrl -->
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Bank Reconciliation</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(Bank Reconciliation)
+					</span>
+				</span>
+		</div>
+		<div class="pull-right" style="width: 6%;">
+			<div class="col-md-4">
+				<button ng-click="getVouchers(true)"
+						class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+					Download
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form ng-submit="getVouchers()" novalidate>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Ledger search"
+								ng-model="oFilter.ledger"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in accountGet($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="oFilter.ledger = undefined;">×</i>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="From"
+									max-date="maxDate"
+									ng-model="oFilter.from_date"
+									ng-change="oFilter.to_date=undefined;"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="To"
+									max-date="maxDate"
+									ng-model="oFilter.to_date"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="as-on-date"
+									max-date="maxDate"
+									ng-model="oFilter.asOnDate"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="select">
+						<select chosen
+								class="form-control"
+								ng-model="oFilter.cheque"
+								ng-options="item as item for item in ['Clear', 'Not Clear']"
+								name="Cheque_by"
+						>
+							<option value="">Cheque By</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 m-t-5 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Search"
+							tooltip-placement="bottom"
+							type="submit"
+							><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 m-t-5 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="submit"
+							ng-click="resetFilter();"><i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+<!--					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 m-t-5 app_tile"-->
+<!--							style="font-size: 16px"-->
+<!--							uib-tooltip="Day wise opening balance report"-->
+<!--							tooltip-placement="bottom"-->
+<!--							type="button"-->
+<!--							ng-click="openBalRep();">-->
+<!--						<i class="zmdi zmdi-download zmdi-hc-fw"></i>-->
+<!--					</button>-->
+<!--					<button ng-if="$role['Ledger']['preview Ledger']"-->
+<!--							class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 m-t-5 app_tile"-->
+<!--							style="font-size: 16px"-->
+<!--							uib-tooltip="Print"-->
+<!--							tooltip-placement="bottom"-->
+<!--							type="button"-->
+<!--							ng-click="PreviewDayWiseOB();">-->
+<!--						<i class="zmdi zmdi-print zmdi-hc-fw"></i>-->
+<!--					</button>-->
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="detailsList card">
+
+		<div class="" style="overflow-y: auto; max-height: 500px;">
+			<div class="col-md-12 m-b-10">
+				<div class="col-md-12 pp">
+					<ul class="listB" style="list-style-type: none;">
+						<li>Ledger A/c: {{oFilter.ledger.name}}</li>
+						<li>Opening Balance: {{summary.ob || 0}}{{(summary.ob > 0) ? ' DR' : ' CR'}}</li>
+						<li>Closing Balance: {{summary.cb || 0}}{{(summary.cb > 0) ? ' DR' : ' CR'}}</li>
+						<li ng-if="showBankReconAmt">UnClear Check Amount: {{summary.tNclAmt || 0}}</li>
+						<li ng-if="showBankReconAmt">Closing Balance with UnClear Check: {{(summary.tNclAmt+ summary.cb) || 0}}</li>
+						<li ng-if="showBankReconAmt">Balance as per company book: {{summary.cb || 0}}</li>
+						<li ng-if="showBankReconAmt">Amount not reflected in Bank: {{(summary.tNclDr - summary.tNclCr ) || 0}}</li>
+						<li ng-if="showBankReconAmt">Balance as per Bank: {{((summary.cb - (summary.tNclDr - summary.tNclCr))  || 0)}}</li>
+						<li>Date(From - To): {{oFilter.from_date|date:"dd-MMM-yyyy"}} - {{oFilter.to_date|date:"dd-MMM-yyyy"}}</li>
+						<li>Current Total(Dr.): {{summary.dr || 0}}</li>
+						<li>Current Total(Cr.): {{summary.cr || 0}}</li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="" style="overflow-y: auto; max-height: 600px;">
+					<table class="table table-bordered unresponsive">
+						<thead id='my_fixable_table_header' fix-head>
+						<tr>
+							<th>SL No.</th>
+							<th>Vch No.</th>
+							<th>Particular</th>
+							<th>Vch Type</th>
+							<th>Transaction Type</th>
+							<th>Instrument No.</th>
+							<th>Instrument Date</th>
+							<th>Bank Date</th>
+							<th>DR({{summary.dr}})</th>
+							<th>CR({{summary.cr}})</th>
+							<th>Narration</th>
+							<th>Entry</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="voucher in aVouchers">
+							<td>{{$index + 1}}</td>
+							<td>{{voucher.refNo || "NA" }}</td>
+							<td>{{voucher.pAc}}</td>
+							<td>{{voucher.type || "NA"}}</td>
+							<td>{{voucher.paymentMode || "NA"}}</td>
+							<td>{{voucher.chequeNo || "NA"}}</td>
+							<td>{{voucher.date || voucher.created_at | date:"dd-MMM-yyyy 'at' h:mma" || "NA"}}</td>
+							<td>{{voucher.chequeClear.date | date:"dd-MMM-yyyy 'at' h:mma" || "NA"}}</td>
+							<td>{{(voucher.dr).toFixed(2)}}</td>
+							<td>{{(voucher.cr).toFixed(2)}}</td>
+							<td>{{voucher.narration ||  "NA"}}</td>
+							<td>{{voucher.created_at | date:"dd-MMM-yyyy 'at' h:mma" || "NA"}}</td>
+						</tr>
+						</tbody>
+					</table>
+					<div ng-if="aVouchers.length === 0" class="ms-body" style=" min-height: 50px;">
+						<h3>No Ledger Found !!!!!</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<div class="pagi text-center" ng-if="aVouchers.length>0">-->
+		<!--<uib-pagination ng-change="getVouchers()" total-items="pagination.totalItems"-->
+		<!--items-per-page="pagination.items_per_page" num-pages="pagination.numPages"-->
+		<!--ng-model="pagination.currentPage" max-size="pagination.maxSize"-->
+		<!--class="pagination-sm smallPagi" boundary-links="true"-->
+		<!--previous-text="&lsaquo;" next-text="&rsaquo;"-->
+		<!--first-text="&laquo;" last-text="&raquo;"></uib-pagination>-->
+		<!--</div>-->
+	</div>
+</div>
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.listB > li{width: 28%;
+		float: left;margin-left: 1%;}
+	.pp{
+		list-style-type: none;
+		padding: 20px;
+		font-weight: bold;
+		border: 1px solid #2a96f3;
+	}
+</style>

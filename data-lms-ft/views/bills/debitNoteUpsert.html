@@ -1,0 +1,706 @@
+<!-- Controller: debitNoteUpsertController-->
+<!-- ControllerAs: drNoteVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Debit Note</b> </span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="m-b-0" id="messages-main">
+		<form name="debitNote" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<!-- DETAILS -->
+					<!-- <li class="list-group-item">
+						<span class="booking_list_header">Gr Details: </span>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-2">
+									<div class="">
+										<input
+												type="text"
+												class="form-control"
+												ng-model="drNoteVm.filter.debitNo"
+												ng-change="drNoteVm.getDebitNoteByDebitNo()"
+												ng-model-options="{ updateOn: 'blur' }"
+												name="Debit Note"
+												placeholder="Debit Note"
+										>
+										<i class="lvh-search-close" ng-click="drNoteVm.filter.debitNo = null;">×</i>
+									</div>
+									<span class="error" ng-if="drNoteVm.filter.debitNo && drNoteVm.noRefFound">No DN No. Found</span>
+								</div>
+								<div class="col-md-3 text-center">
+									<span style="font-size: 14px; line-height: 32px;"
+										  ng-if="drNoteVm.aBill[0].receiving.moneyReceipt.length"
+										  class="error">Money Receipt Generated</span>
+								</div>
+								
+							</div>
+						</div>
+					</li> -->
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Bill Summary: </span>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin: 15px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Purchase Bill Ref No:</label>
+										<div class="col-sm-8" ng-if="!drNoteVm.showBillNo">
+											<div class="ng-scope sear chosen-row-1">
+												<input type="text" class="form-control"
+													placeholder="Purchase bill ref no." ng-model="drNoteVm.billNo"
+													ng-change="drNoteVm.getBill()"
+													ng-model-options="{ updateOn: 'blur' }" name="Bill Number"
+													placeholder="Bill No." />
+												<i class="lvh-search-close"
+													ng-click="drNoteVm.filter.billNo=null; drNoteVm.aBill=[];">×</i>
+											</div>
+										</div>
+										<div class="col-sm-6" ng-if="drNoteVm.showBillNo">
+											{{drNoteVm.aBill[0].billNo}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!drNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vendor Name</label>
+										<div class="col-sm-6">
+											{{drNoteVm.aBill[0].vendor.name
+											||drNoteVm.aBill[0].vendorName || 'NA'}}
+										</div>
+									</div>
+								</div>
+								<!-- <div class="col-md-3" ng-if="!drNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vendor A/c:</label>
+										<div class="col-sm-6">
+											{{drNoteVm.aBill[0].vendor.name || 'NA'}}
+										</div>
+									</div>
+								</div> -->
+								<div class="col-md-3" ng-if="!drNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Bill Date:</label>
+										<div class="col-sm-6">
+											{{drNoteVm.aBill[0].billDate | date: 'dd-MM-yyyy'}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row hidden-print" style="margin: 15px">
+								<div class="col-md-3" ng-if="!drNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">IGST({{drNoteVm.aBill[0].iGST_percent|
+											roundOff}}):</label>
+										<div class="col-sm-6">
+											{{drNoteVm.aBill[0].iGST| roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!drNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">CGST({{drNoteVm.aBill[0].cGST_percent|
+											roundOff}}):</label>
+										<div class="col-sm-6">
+											{{drNoteVm.aBill[0].cGST| roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!drNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">SGST({{drNoteVm.aBill[0].sGST_percent|
+											roundOff}}):</label>
+										<div class="col-sm-6">
+											{{drNoteVm.aBill[0].sGST| roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="!drNoteVm.readonly">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Bill Amount:</label>
+										<div class="col-sm-6">
+											{{(drNoteVm.aBill[0].billAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<!-- <div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Received Amount:</label>
+										<div class="col-sm-6 bold">
+											{{(drNoteVm.aBill[0].receivedAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Remaining Amount:</label>
+										<div class="col-sm-6 bold">
+											{{(drNoteVm.aBill[0].remainingAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Deduction Applied:</label>
+										<div class="col-sm-6 bold">
+											{{(drNoteVm.aBill[0].deductionApplied || 0) | roundOff}}
+										</div>
+									</div>
+								</div> -->
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<span class="booking_list_header">Summary Details</span>
+						<div class="card-body">
+							<div class="row" style="margin: 5px">
+								<div class="col-md-12">
+									<h5 class="col-md-1">Material</h5>
+									<h5 class="col-md-2">
+										Total W/O tax :
+										{{drNoteVm.totalMaterialWithoutTax|roundOff}}
+									</h5>
+									<h5 class="col-md-1">
+										Discount : {{drNoteVm.discountOfMaterial|roundOff}}
+									</h5>
+									<h5 class="col-md-1">
+										Tot A/D : {{(drNoteVm.totalMaterialWithoutTax -
+										pbab.discountOfMaterial)|roundOff}}
+									</h5>
+									<h5 class="col-md-1">
+										CGST : {{drNoteVm.cGSTOfMaterial|roundOff}}
+									</h5>
+									<h5 class="col-md-1">
+										SGST : {{drNoteVm.sGSTOfMaterial|roundOff}}
+									</h5>
+									<h5 class="col-md-1">
+										IGST : {{drNoteVm.iGSTOfMaterial|roundOff}}
+									</h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-2">
+										Total With tax : {{drNoteVm.totalMaterialWithTax|roundOff}}
+									</h5>
+								</div>
+								<!-- <div class="col-md-12">
+									<h5 class="col-md-1">Labour/Repair</h5>
+									<h5 class="col-md-2">Total W/O tax : {{drNoteVm.totalLabRepWithoutTax|roundOff}}</h5>
+									<h5 class="col-md-1">Discount : {{drNoteVm.discountOfLabRep|roundOff}}</h5>
+									<h5 class="col-md-1">Tot A/D : {{(drNoteVm.totalLabRepWithoutTax - pbab.discountOfLabRep)|roundOff}}</h5>
+									<h5 class="col-md-1">CGST : {{drNoteVm.cGSTOfLabRep|roundOff}}</h5>
+									<h5 class="col-md-1">SGST : {{drNoteVm.sGSTOfLabRep|roundOff}}</h5>
+									<h5 class="col-md-1">IGST : {{drNoteVm.iGSTOfLabRep|roundOff}}</h5>
+									<h5 class="col-md-1">TDS : {{drNoteVm.tdsAmt|roundOff}}</h5>
+									<h5 class="col-md-2">Total With tax : {{drNoteVm.totalLabRepWithTax|roundOff}}</h5>
+								</div> -->
+								<!-- <div class="col-md-12">
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-2">Total W/O tax : {{drNoteVm.amt|roundOff}}</h5>
+									<h5 class="col-md-1">Discount : {{drNoteVm.totDiscount|roundOff}}</h5>
+									<h5 class="col-md-1">Tot A/D : {{drNoteVm.amount|roundOff}}</h5>
+									<h5 class="col-md-1">CGST : {{drNoteVm.cGST|roundOff}}</h5>
+									<h5 class="col-md-1">SGST : {{drNoteVm.sGST|roundOff}}</h5>
+									<h5 class="col-md-1">IGST : {{drNoteVm.iGST|roundOff}}</h5>
+									<h5 class="col-md-1">TDS : {{drNoteVm.tdsAmt|roundOff}}</h5>
+									<h5 class="col-md-2">Total With tax : {{drNoteVm.totalAmount|roundOff}}</h5>
+								</div> -->
+								<!-- <div class="col-md-12">
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-2"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1"></h5>
+									<h5 class="col-md-1">TCS: {{drNoteVm.tcsAmt|roundOff}}</h5>
+									<h5 class="col-md-2">Total With TDS/TCS : {{(drNoteVm.totalAmount + drNoteVm.tdsAmt + drNoteVm.tcsAmt)|roundOff}}</h5>
+								</div> -->
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</li>
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row hidden-print" style="margin: 15px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Date: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input fill-date type="text" class="form-control" placeholder="Date"
+												ng-change="drNoteVm.oDebitNote.debitNo = undefined;"
+												ng-model="drNoteVm.oDebitNote.date" />
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear chosen-row-1">
+												<input type="text" class="form-control" placeholder="Branch Search.."
+													ng-model="drNoteVm.oDebitNote.branch" typeahead-wait-ms="10"
+													name="Branch" focusable
+													typeahead="item as item.name for item in drNoteVm.getAllBranch($viewValue)|limitTo:6"
+													typeahead-on-select="drNoteVm.oDebitNote.debitNo = '';drNoteVm.onBranchSelect($item, $model, $label)" />
+												<i class="lvh-search-close"
+													ng-click="drNoteVm.oDebitNote.branch=null;">×</i>
+											</div>
+											<span class="error" ng-show="!drNoteVm.oDebitNote.branch">No Branch
+												Selected</span>
+											<span class="warning"
+												ng-show="drNoteVm.oDebitNote.branch && !drNoteVm.oDebitNote.branch.debitBook">No
+												Ref Book Linked to selected branch</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Debit Note:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input type="text" class="form-control" placeholder="Debit Note no"
+													ng-model="drNoteVm.oDebitNote.debitNo" typeahead-wait-ms="10"
+													name="Reference Number" focusable
+													typeahead="item.bookNo as item.bookNo for item in drNoteVm.getBillBookNo (drNoteVm.oDebitNote.debitNo)|limitTo:10"
+													typeahead-on-select="drNoteVm.onRefSelect($item, $model, $label)"
+													required ng-readonly="drNoteVm.readOnly" />
+												<i class="lvh-search-close" ng-if="!drNoteVm.readOnly"
+													ng-click="drNoteVm.oDebitNote.debitNo=null;">×</i>
+												<!-- <i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+												   style="right: -20px; background: #3096f3;" ng-if="!drNoteVm.readOnly"
+												   ng-click="drNoteVm.getAutoStationaryNo(drNote.selectBill.billDate)"></i> -->
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- <div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Debit Note:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Debit Note No"
+														ng-model="drNoteVm.oDebitNote.debitNo"
+														typeahead-wait-ms="10"
+														name="Debit Note"
+														typeahead="item.bookNo as item.bookNo for item in drNoteVm.getDnBookNo(drNoteVm.oDebitNote.debitNo)|limitTo:10"
+														typeahead-on-select="drNoteVm.onDNoteSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close"
+												   ng-click="drNoteVm.oDebitNote.debitNo=null;">×</i>
+											</div>
+											<span class="error" ng-if="debitNote['Debit Note'].$error.required
+																	&& !debitNote['Debit Note'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div> -->
+							</div>
+
+							<!-- <div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Amount Without Tax:</label>
+										<div class="col-sm-6">
+											{{drNoteVm.oDebitNote.amount|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">CGST ({{drNoteVm.aBill[0].cGST_percent || 0}}%):</label>
+										<div class="col-sm-6">
+											{{drNoteVm.oDebitNote.cGST|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">SGST ({{drNoteVm.aBill[0].sGST_percent || 0}}%):</label>
+										<div class="col-sm-6">
+											{{drNoteVm.oDebitNote.sGST|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">IGST ({{drNoteVm.aBill[0].iGST_percent || 0}}%):</label>
+										<div class="col-sm-6">
+											{{drNoteVm.oDebitNote.iGST|roundOff}}
+										</div>
+									</div>
+								</div>
+							</div> -->
+							<!-- <div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Tot. Amount with Tax:</label>
+										<div class="col-sm-6 bold">
+											{{(drNoteVm.oDebitNote.totalAmount || 0) | roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="drNoteVm.aBill[0].iGST_percent">
+									<label class="col-md-3 control-label">IGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="IGST A/c Search..."
+												   ng-model="drNoteVm.oDebitNote.iGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in drNoteVm.getAccount($viewValue, 'IGST Paid') | limitTo:6"
+												   typeahead-on-select="drNoteVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close"
+											   ng-click="drNoteVm.oDebitNote.iGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="drNoteVm.aBill[0].sGST_percent">
+									<label class="col-md-3 control-label">SGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="SGST A/c Search..."
+												   ng-model="drNoteVm.oDebitNote.sGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in drNoteVm.getAccount($viewValue, 'SGST Paid') | limitTo:6"
+												   typeahead-on-select="drNoteVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close"
+											   ng-click="drNoteVm.oDebitNote.sGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="drNoteVm.aBill[0].cGST_percent">
+									<label class="col-md-3 control-label">CGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="CGST A/c Search..."
+												   ng-model="drNoteVm.oDebitNote.cGSTAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in drNoteVm.getAccount($viewValue, 'CGST Paid') | limitTo:6"
+												   typeahead-on-select="drNoteVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close"
+											   ng-click="drNoteVm.oDebitNote.cGSTAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div> -->
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header pull-left">Material Details</span>
+						<div class="clearfix"></div>
+						<div class="card-body">
+							<div class="row" style="margin: 5px">
+								<div class="clearfix"></div>
+
+								<div class="card-body">
+									<div class="row" style="margin: 5px">
+										<div class="detailsList">
+											<div style="overflow-x: scroll">
+												<table class="table table-bordered unresponsive">
+													<thead>
+														<tr>
+															<th>&#35;</th>
+															<th>material</th>
+															<th>HSN code</th>
+															<th>UNIT</th>
+															<th>RATE</th>
+															<th>QUANTITY</th>
+															<th>TOTAL</th>
+															<th>Discount</th>
+															<th>tot after Discount</th>
+															<th>CGST RT.</th>
+															<th>CGST AMT.</th>
+															<th>SGST RT.</th>
+															<th>SGST AMT.</th>
+															<th>IGST RT.</th>
+															<th>IGST AMT.</th>
+															<th>FRGT</th>
+															<th>FRGT CGST RT.</th>
+															<th>FRGT CGST AMT.</th>
+															<th>FRGT SGST RT.</th>
+															<th>FRGT SGST AMT.</th>
+															<th>FRGT IGST RT.</th>
+															<th>FRGT IGST AMT.</th>
+															<th>TOTAL WITH TAX</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr class="pointer selectItem"
+															ng-repeat="mat in drNoteVm.aMaterials"
+															ng-click="drNoteVm.onMaterialSelect($index, mat)"
+															ng-class="{'grn': drNoteVm.oMaterialIndex === $index}">
+															<td>{{$index + 1}}</td>
+															<td>{{mat.material}}</td>
+															<td>{{mat.hsnCode}}</td>
+															<td>{{mat.unit}}</td>
+															<td>{{mat.rate}}</td>
+															<td>{{mat.quantity}}</td>
+															<td>{{mat.totalWithoutTax|roundOff}}</td>
+															<td>{{mat.discount|roundOff}}</td>
+															<td>
+																{{(mat.totalWithoutTax -
+																mat.discount)|roundOff}}
+															</td>
+															<td>{{mat.cGSTPercent}}</td>
+															<td>{{mat.cGST|roundOff}}</td>
+															<td>{{mat.sGSTPercent}}</td>
+															<td>{{mat.sGST|roundOff}}</td>
+															<td>{{mat.iGSTPercent}}</td>
+															<td>{{mat.iGST|roundOff}}</td>
+															<td>{{mat.frgt|roundOff}}</td>
+															<td>{{mat.frgtCGSTPercent}}</td>
+															<td>{{mat.frgtCGST|roundOff}}</td>
+															<td>{{mat.frgtSGSTPercent}}</td>
+															<td>{{mat.frgtSGST|roundOff}}</td>
+															<td>{{mat.frgtIGSTPercent}}</td>
+															<td>{{mat.frgtIGST|roundOff}}</td>
+															<td>{{mat.total|roundOff}}</td>
+														</tr>
+														<tr ng-show="drNoteVm.aMaterials.length"
+															style="border-top: 2px solid black" class="pointer">
+															<td></td>
+															<td></td>
+															<td></td>
+															<td></td>
+															<td>{{drNoteVm.rateMaterial|roundOff}}</td>
+															<td></td>
+															<td>
+																{{drNoteVm.tableTotalMaterialWithoutTax|roundOff}}
+															</td>
+															<td>{{drNoteVm.discountOfMaterial|roundOff}}</td>
+															<td>
+																{{(drNoteVm.tableTotalMaterialWithoutTax -
+																drNoteVm.discountOfMaterial)|roundOff}}
+															</td>
+															<td></td>
+															<td>{{drNoteVm.tableCGSTOfMaterial|roundOff}}</td>
+															<td></td>
+															<td>{{drNoteVm.tableSGSTOfMaterial|roundOff}}</td>
+															<td></td>
+															<td>{{drNoteVm.tableIGSTOfMaterial|roundOff}}</td>
+															<td>{{drNoteVm.totFrgt|roundOff}}</td>
+															<td></td>
+															<td>{{drNoteVm.frgtCGSTOfMaterial|roundOff}}</td>
+															<td></td>
+															<td>{{drNoteVm.frgtSGSTOfMaterial|roundOff}}</td>
+															<td></td>
+															<td>{{drNoteVm.frgtIGSTOfMaterial|roundOff}}</td>
+															<td>
+																{{drNoteVm.totalMaterialWithTax|roundOff}}
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="clearfix"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<!-- Deduction/Extra Charges -->
+					<li class="list-group-item">
+						<span class="booking_list_header">Deductions: </span>
+
+						<!-- <button class="btn btn-primary"
+								ng-show="!!drNoteVm.selectedGr"
+								uib-tooltip="Hide Deduction"
+								tooltip-placement="bottom"
+								ng-click="drNoteVm.selectedItem = false; drNoteVm.selectedGrIndex = 0">
+							<i class="zmdi zmdi-eye-off zmdi-hc-fw"></i>
+						</button> -->
+						<!-- <button class="btn btn-primary"
+								uib-tooltip="Show All Deduction"
+								ng-hide="!!drNoteVm.selectedGr"
+								tooltip-placement="bottom"
+								ng-click="drNoteVm.selectBill(0,0);">
+							<i class="zmdi zmdi-eye zmdi-hc-fw"></i>
+						</button>&nbsp;&nbsp; -->
+						&nbsp;&nbsp;
+						<div class="pull-right">
+							<button class="btn btn-primary" uib-tooltip="Add Deduction" tooltip-placement="bottom"
+								ng-click="drNoteVm.addDeduction()">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i></button>&nbsp;&nbsp;
+							<button class="btn btn-danger" uib-tooltip="Remove Deduction" tooltip-placement="bottom"
+								ng-click="drNoteVm.removeDeduction()">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin: 15px">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div style="overflow-x: scroll" class="p-l-5 p-r-5 p-b-5">
+											<table class="table table-bordered unresponsive">
+												<thead>
+													<tr>
+														<th>HSN Code</th>
+														<th>Type</th>
+														<th>Account</th>
+														<th>Quantity</th>
+														<th>Rate</th>
+														<th>CGST RT.</th>
+														<th>CGST AMT.</th>
+														<th>SGST RT.</th>
+														<th>SGST AMT.</th>
+														<th>IGST RT.</th>
+														<th>IGST AMT.</th>
+														<th>Amount</th>
+														<th>Remark</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat-start="oBill in drNoteVm.aBill">
+														<!--<td>- {{oBill.billNo}}</td>-->
+													</tr>
+													<tr ng-repeat-start="oItem in oBill.materialItems"
+														ng-show="drNoteVm.selectedItem.hsnCode ? (drNoteVm.selectedItem.hsnCode === oItem.hsnCode) : true">
+														<td rowspan="{{oItem.aDeduction.length+1}}"
+															style="vertical-align: middle">
+															{{oItem.hsnCode || 'NA'}}
+														</td>
+													</tr>
+													<tr ng-repeat-end ng-repeat="oDeduction in oItem.aDeduction"
+														ng-class="{grn: drNoteVm.dedSelectedItem.hsnCode === oItem.hsnCode && drNoteVm.selectedDeductionIndex === $index}"
+														ng-show="drNoteVm.selectedItem.hsnCode ? (drNoteVm.selectedItem.hsnCode === oItem.hsnCode) : true"
+														class="pointer"
+														ng-click="drNoteVm.dedSelectedItem = oItem; drNoteVm.selectedDeductionIndex = $index">
+														<!--<td>- - - {{oItem.gr.grNumber}}</td>-->
+														<td>
+															<div class="fg-line select">
+																<select class="form-control" name="Select Type"
+																	ng-model="oDeduction.deductionType"
+																	ng-options="item.name as item.name for item in oDeduction.aDeductionTypeConstant"
+																	ng-change="drNoteVm.refreshDeduction()" required>
+																	<option value="" disabled selected>
+																		Select
+																	</option>
+																</select>
+															</div>
+														</td>
+														<td>
+															<div class="col-md-12">
+																<div class="">
+																	<input type="text" class="form-control"
+																		placeholder="Account Search.."
+																		ng-model="oDeduction.dedAccName"
+																		typeahead-wait-ms="10"
+																		typeahead-append-to-body="true" name="account"
+																		typeahead="item as item.name for item in drNoteVm.getAccount($viewValue, ['Receipt Deduction'])"
+																		required />
+																	<i class="lvh-search-close"
+																		ng-click="oDeduction.dedAccName = null;">×</i>
+																</div>
+															</div>
+														</td>
+														<td>
+															<input type="number" ng-model="oDeduction.quantity"
+																placeholder="Number"
+																ng-model-options="{ updateOn: 'blur' }"
+																ng-change="drNoteVm.changeQuantity(oDeduction)"
+																name="Number" class="form-control" />
+														</td>
+														<td>
+															<input type="number" ng-model="oDeduction.rate"
+																placeholder="Number"
+																ng-init="oDeduction.rate = oItem.rate"
+																ng-model-options="{ updateOn: 'blur' }"
+																ng-change="drNoteVm.changeQuantity(oDeduction)"
+																name="Number" class="form-control" />
+														</td>
+														<td>{{oItem.cGSTPercent}}</td>
+														<td>{{oDeduction.cGST|roundOff}}</td>
+														<td>{{oItem.sGSTPercent}}</td>
+														<td>{{oDeduction.sGST|roundOff}}</td>
+														<td>{{oItem.iGSTPercent}}</td>
+														<td>{{oDeduction.iGST|roundOff}}</td>
+														<td>{{oDeduction.totalAmount}}</td>
+														<td>
+															<input type="text" ng-model="oDeduction.remark"
+																placeholder="Remark" name="remark"
+																class="form-control" />
+														</td>
+													</tr>
+													<tr ng-repeat-end>
+														<!--<td>display: hidden</td>-->
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row hidden-print" style="margin: 15px">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="text-right p-10">
+											<button class="btn btn-primary" style="font-size: 14px"
+												ng-disabled="drNoteVm.disableSubmit"
+												ng-click="drNoteVm.submit(debitNote, true)" type="button">
+												Submit & Approve
+											</button>
+											&nbsp;&nbsp;
+											<button class="btn btn-primary" style="font-size: 14px"
+												ng-disabled="drNoteVm.disableSubmit" ng-hide="true"
+												ng-click="drNoteVm.submit(debitNote)" type="button">
+												Submit
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+	.red {
+		color: red;
+	}
+
+	.border-red {
+		border: 2px solid #ff000080 !important;
+	}
+
+	.container:not(.ja-containter) {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+</style>

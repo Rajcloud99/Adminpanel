@@ -1,0 +1,280 @@
+
+<style type="text/css">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        width: 1200px;
+        height: 1000px;
+        background-color: #fff;
+    }
+
+    #blank {
+        height: 80px
+    }
+
+    #heading {
+        text-align: center;
+        font-weight: bold
+    }
+
+    #title {
+        font-size: 14px;
+        font-weight: bold
+    }
+
+    #iso {
+        font-size: 9px;
+        font-weight: bold
+    }
+
+    #subtitle {
+        font-size: 10px;
+    }
+
+    #addr {
+        font-size: 9px;
+    }
+
+    .num {
+        font-size: 9px;
+    }
+
+    .centertext= {
+        text-align: center;
+    }
+
+    .header {
+        font-size: 12px;
+        background-color: #d3d3d3
+    }
+
+    .data {
+        font-size: 12px;
+        padding-left: 2px;
+    }
+
+    .ctable,
+    .cth,
+    .ctd {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    .ctd {
+        padding-left: 2px;
+    }
+
+    .cthnotop {
+        border: 1px solid black;
+        border-collapse: collapse;
+        border-top: 0;
+    }
+
+    .bold {
+        font-weight: bold
+    }
+
+    .calign {
+        text-align: center
+    }
+    /*body {
+                width:80%;
+                margin-left:auto;
+                margin-right:auto;
+        }*/
+</style>
+
+  <div >
+    <div class="" style="margin-left: 64px;margin-right: -60px;">
+        <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <form name="billEditForm" >
+                <h4 style="text-align: -webkit-center;">Edit Invoice Bill</h4><hr><br>
+                <div class="row" style="margin:15px">
+                    <div class="col-md-4">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label"> Billing Party Name:</label>
+                            <div class="col-sm-6">
+                                <select chosen class="form-control" ng-model="selectInVoice.biller_id" ng-options="item as item.name for item in aBiller" name="Billing Party" ng-change="billerChange()" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label"> Billing Party Address:  </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <textarea rows="3" ng-model="selectInVoice.billing_party_address" placeholder="Billing Address" name="billing_address" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label"> Customer Name:  </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectInVoice.customer_name" placeholder="Enter Detention" name="name" class="form-control" ng-readonly="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:15px">
+                    <div class="col-md-4">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label"> Vehicle Number: </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectInVoice.vehicle_no" placeholder="Vehicle Number" name="Vehicle Number" class="form-control" ng-readonly="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- <div class="col-md-4">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label"> Total Expenses:  </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="billData.name" placeholder="Enter Service Tax" name="Service Tax" style="border-color: aliceblue;" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-md-4">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label">Invoice Date</label>
+                            <div class="col-sm-6">
+                                    <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                                    <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                                        <input ng-click="open($event, 'opened1')" type="text" class="form-control" uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="selectInVoice.invoice_date" is-open="opened1" uib-datepicker-options="dateOptions" close-text="Close" placeholder="Select Date" />
+                                    </div>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-md-3">
+                        <div class="form-group m-b-0">
+                            <label class="checkbox checkbox-inline m-b-0">Market Vehicle</label>
+                            <i class="input-helper"></i>
+                            <input type="checkbox" ng-model="selectInVoice.isMarketVehicle" ng-disabled="true">
+                        </div>
+                    </div> -->
+                    <div class="col-md-4">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label"> Market Builty:  </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="checkbox" ng-model="selectInVoice.isMarketVehicle" name="isMarket">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <!-- <div ng-if="selectInVoice.isMarketVehicle" class="col-md-3">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-4 control-label"> Vendor Name:  </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectInVoice.vendor_name" placeholder="Enter Service Tax" name="Service Tax" style="border-color: aliceblue;" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+
+
+                    <!-- <div class="col-md-4">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label"> Invoice Date:  </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectInVoice.invoice_date" placeholder="Enter Extra Charges" name="Extra Charges" style="border-color: aliceblue;" >
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+                <br>
+                <div style="box-shadow: 1px 1px 4px 1px #524E4E">
+                    <table ng-show="selectInVoice.booking_info.length>0" ng-table="tableParams" class="table">
+                        <tr ng-repeat="vVehicle in selectInVoice.booking_info track by $index">
+                            <td data-title="'Trip No'">{{vVehicle.trip_no || "NA"}}</td>
+                            <td data-title="'GR No'">{{vVehicle.gr_no || "NA"}}</td>
+                            <td data-title="'GR Date'">{{vVehicle.gr_date | date:"dd-MM-yyyy" || "NA"}}</td>
+                            <td data-title="'Weight'">{{vVehicle.weight+" ("+vVehicle.weight_unit+")"}}</td>
+                            <td data-title="'Rate'">{{vVehicle.rate}}</td>
+                            <td data-title="'Freight'">{{vVehicle.freight}}</td>
+                            <td data-title="'GR Charges'">{{vVehicle.gr_charges}}</td>
+                            <td data-title="'Loading'">{{vVehicle.loading_charges}}</td>
+                            <td data-title="'Unoading'">{{vVehicle.unloading_charges}}</td>
+							<td data-title="'Advance'">{{vVehicle.totalAdvance}}</td>
+							<td data-title="'Balance'">{{vVehicle.totalBalance}}</td>
+                            <td data-title="'Total'">{{vVehicle.total}}</td>
+                            <td data-title="'Action'"><i class="glyphicon glyphicon-pencil" ng-click="updateInvoice(vVehicle,$index)" tooltip="Edit"></i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- <div class="row" style="margin:15px">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label"> Detention Charges........: </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectInVoice.name" placeholder="Enter Detention Charges....." class="form-control" name="Route name" style=";">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <br><br>
+
+                <div class="row" style="margin:15px; margin-left: 54%;">
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label"> Sub Total: </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectInVoice.sub_total" placeholder="Sub Total" class="form-control" name="Route name" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label"> Total Expenses: </label>
+                            <div class="col-sm-6">
+                                <div class="fg-line">
+                                    <input type="text" ng-model="selectInVoice.total_expenses" placeholder="Sub Total" class="form-control" name="Route name" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+                <div class="row" style="text-align: right;">
+                    <div class="">
+                        <div class="form-group">
+                            <button type="submit" style="margin-right: 1%;" class="btn btn-primary"
+                                ng-click="saveBill(selectInVoice)">Save</button><!-- &nbsp;&nbsp;
+                            <button class="btn btn-warning" ng-click="$back()">Cancel</button> -->
+                        </div>
+                    </div>
+                </div>
+           </form>
+        </div>
+    </div>
+</div>

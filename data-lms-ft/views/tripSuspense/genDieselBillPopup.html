@@ -1,0 +1,662 @@
+<!--
+Controller: genDieselBillPopupController
+ControllerAs: gdbVm
+-->
+
+<form role="form"  name="purchaseBill" autocomplete="off">
+	<div class="modal-header" >
+		<button type="button" ng-click="gdbVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			Purchase Bill
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					({{gdbVm.type}})
+			</span>
+		</h4>
+		<!--<span class="text-transform: capitalize">{{gdbVm.type}}</span>-->
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- Form Detail -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12 exced" style="">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Bill No.: </label>
+											<div class="col-md-6">
+												<input type="text"
+													   ng-if="gdbVm.type !== 'view'"
+													   ng-model="gdbVm.billNo"
+													   name="Remark"
+													   class="form-control input-sm"
+													   placeholder="Bill No"
+													   style="height: 34px;font-size: 13px;">
+												<span ng-if="gdbVm.type === 'view'">
+													{{gdbVm.billNo}}
+												</span>
+											</div>
+										</div>
+									</div>
+									<!--									<div class="col-md-4">-->
+									<!--										<div class="form-group m-b-0">-->
+									<!--											<label class="col-md-4 control-label">Bill Date: </label>-->
+									<!--											<div class="col-md-6"-->
+									<!--												 ng-if="gdbVm.type !== 'view'">-->
+									<!--												<div class="date-picker input-group dp-blue"-->
+									<!--													 ng-class="{ 'is-opened': opened1 == true }">-->
+									<!--													<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">-->
+									<!--														<input ng-click="gdbVm.DatePicker.openDatePicker(this, $event, 'opened1')"-->
+									<!--															   type="text"-->
+									<!--															   class="form-control"-->
+									<!--															   uib-datepicker-popup="{{gdbVm.DatePicker.formats[0]}}"-->
+									<!--															   show-weeks="false"-->
+									<!--															   ng-model="gdbVm.billDate"-->
+									<!--															   ng-change="gdbVm.advanceDateType()"-->
+									<!--															   is-open="opened1"-->
+									<!--															   datepicker-options="gdbVm.DatePicker.dateSettings"-->
+									<!--															   close-text="Close"-->
+									<!--															   placeholder="Advance Date"-->
+									<!--															   name="Advance Date"-->
+									<!--															   required-->
+									<!--															   style="padding: 0px 4px;height: 34px;"/>-->
+									<!--													</div>-->
+									<!--													<span class="input-group-btn">-->
+									<!--														<button type="button"-->
+									<!--																class="btn btn-default m-t-0 f12"-->
+									<!--																ng-click="gdbVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i-->
+									<!--																class="glyphicon glyphicon-calendar"></i></button>-->
+									<!--													</span>-->
+									<!--												</div>-->
+									<!--											</div>-->
+									<!--											<div class="col-md-6"-->
+									<!--												 ng-if="gdbVm.type === 'view'">-->
+									<!--												{{gdbVm.billDate|date: 'dd-MMM-yy'}}-->
+									<!--											</div>-->
+									<!--										</div>-->
+									<!--									</div>-->
+									<div class="col-md-4">
+										<label class="col-md-3 control-label">Bill Date: <span class="req_r">*</span></label>
+										<div class="form-group m-b-0">
+											<div class="col-sm-6" ng-if="gdbVm.type !== 'view'">
+												<input
+														fill-date
+														type="text"
+														class="form-control"
+														placeholder="Advance Date"
+														ng-change="gdbVm.refNo = undefined;"
+														name="Advance Date"
+														ng-model="gdbVm.billDate"
+														required>
+											</div>
+											<div class="col-md-6" ng-if="gdbVm.type === 'view'">
+												{{gdbVm.billDate|date: 'dd-MMM-yy'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Narration: </label>
+											<div class="col-md-6">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="gdbVm.remark"
+														   name="Remark"
+														   class="form-control input-sm"
+														   placeholder="Remark"
+														   ng-readonly="gdbVm.type === 'view'"
+														   style="height: 34px;font-size: 13px;">
+													<!--<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"-->
+													<!--style="right: -20px; background: #3096f3;"-->
+													<!--ng-click="gdbVm.refreshRemark()"></i>-->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<!--Approval DETAILS-->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12 exced" style="">
+									<div class="col-md-2">
+										<div class="form-group m-b-0">
+											<label class="col-md-6 control-label">Tot Advance: </label>
+											<div class="col-md-6">{{(gdbVm.totItem || 0)|roundOff}}</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group m-b-0">
+											<label class="col-md-6 control-label">Discount: </label>
+											<div class="col-md-6">{{(gdbVm.discount || 0)|roundOff}}</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group m-b-0">
+											<label class="col-md-6 control-label">Tot Amount: </label>
+											<div class="col-md-6">{{(gdbVm.totalAmount || 0)|roundOff}}</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-6 control-label">Tot Req Diesel(Lit): </label>
+											<div class="col-md-6">{{(gdbVm.totalLit || 0)|roundOff}}</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-6 control-label">Tot Actual Diesel(Lit): </label>
+											<div class="col-md-6">{{(gdbVm.totActualLit || 0)|roundOff}}</div>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Branch: </label>
+											<div class="col-md-6">
+												<div class="fg-line">
+													<input
+															type="text"
+															class="form-control"
+															placeholder="Branch Search.."
+															ng-model="gdbVm.branch"
+															typeahead-wait-ms="10"
+															name="Branch"
+															typeahead="item as item.name for item in gdbVm.getBranch($viewValue)|limitTo:6"
+															typeahead-on-select="gdbVm.onBranchSelect($item, $model, $label)">
+													<i class="lvh-search-close" ng-click="gdbVm.branch=null;">×</i>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Ref. No: </label>
+											<div class="col-sm-8">
+												<div class="lvh-search ng-scope sear chosen-row-1">
+													<input
+															type="text"
+															class="form-control lvhs-input"
+															placeholder="Ref Number"
+															ng-model="gdbVm.refNo"
+															typeahead-wait-ms="10"
+															name="Reference Number"
+															typeahead="item.bookNo as item.bookNo for item in gdbVm.getRefNo(gdbVm.reference_no)|limitTo:10"
+															typeahead-on-select="gdbVm.onRefSelect($item, $model, $label)">
+													<i class="lvh-search-close" ng-click="gdbVm.refNo=null;">×</i>
+												</div>
+												<span class="error"
+													  ng-if="'isEmptyObject'|otherUtilsFilt:gdbVm.from">
+													This Field is Mandatory</span><br>
+											</div>
+										</div>
+									</div>
+									<div class='col-md-3' ng-if="$configs.master.showAccount"
+										 class="col-md-4 m-b-5 m-t-5">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Credit A/c: <span class="req_r">*</span></label>
+											<div class="col-sm-8" ng-if="gdbVm.type !== 'view'">
+												<div class="lvh-search ng-scope sear chosen-row-1">
+													<input
+															type="text"
+															class="form-control lvhs-input"
+															placeholder="Credit A/c"
+															ng-model="gdbVm.from"
+															typeahead-wait-ms="10"
+															typeahead="item as item.name for item in gdbVm.getAccount($viewValue, gdbVm.aFromGroup)"
+													>
+													<i class="lvh-search-close" ng-click="gdbVm.from='';">×</i>
+												</div>
+												<span class="error"
+													  ng-if="'isEmptyObject'|otherUtilsFilt:gdbVm.from">
+													This Field is Mandatory</span><br>
+											</div>
+											<div class="col-sm-8" ng-if="gdbVm.type === 'view'">{{gdbVm.from.name}}</div>
+										</div>
+									</div>
+									<div class="col-md-3" ng-if="$configs.master.showAccount">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Debit A/c: </label>
+											<div class="col-md-6">{{gdbVm.vendor}}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!--Discount DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">DISCOUNT DETAIL</span>
+					<div class="card-body">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12"
+									 ng-if="gdbVm.type!=='view'">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Amount:  </label>
+											<div class="col-md-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   placeholder="Amount"
+														   ng-model="gdbVm.discountAmount"
+														   name="discount amount"
+														   class="form-control"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Credit A/c(Discount): </label>
+											<div class="col-sm-8" ng-if="gdbVm.type !== 'view'">
+												<div class="lvh-search ng-scope sear">
+													<input
+															type="text"
+															class="form-control lvhs-input"
+															placeholder="Credit A/c"
+															ng-model="gdbVm.discountAccount"
+															typeahead-wait-ms="10"
+															typeahead="item as item.name for item in gdbVm.getAccount($viewValue, gdbVm.aDiscountGroup)"
+													>
+													<i class="lvh-search-close" ng-click="gdbVm.discountAccount='';">×</i>
+												</div>
+												<span class="error"
+													  ng-if="'isEmptyObject'|otherUtilsFilt:gdbVm.discountAccount">
+													This Field is Mandatory</span><br>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Narration: </label>
+											<div class="col-md-6">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="gdbVm.discountRemark"
+														   name="Narration"
+														   class="form-control input-sm"
+														   placeholder="Narration"
+														   style="height: 34px;font-size: 13px;">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<div class="col-md-4">
+												<button class="btn-primary btn-xs"
+														ng-click="gdbVm.addDiscount();"
+														type="button">
+													Add
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-12" ng-show="gdbVm.aDiscount.length">
+									<table class="table table-bordered unresponsive">
+										<thead jaFixHead>
+										<tr>
+											<th>S.No.</th>
+											<th>Credit A/c</th>
+											<th>Debit A/c</th>
+											<th>Amount</th>
+											<th>Narration</th>
+											<th ng-if="gdbVm.type!=='view'"></th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-repeat="oDiscount in gdbVm.aDiscount">
+											<td>{{$index+1}}</td>
+											<td>{{oDiscount.accountName || 'NA'}}</td>
+											<td>{{gdbVm.from.name || 'NA'}}</td>
+											<td>{{oDiscount.amount | roundOff}}</td>
+											<td>{{oDiscount.remark || 'NA'}}</td>
+											<td ng-if="gdbVm.type!=='view'">
+												<button class="btn-danger btn-xs"
+														ng-click="gdbVm.deleteDiscount(oDiscount,$index)"
+														uib-tooltip="Delete Advance"
+														type="button"
+														tooltip-placement="bottom">
+													<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+												</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!--TDS DETAILS-->
+				<li class="list-group-item" ng-if="$configs.tripAdv.dieselBillTds">
+					<span class="booking_list_header">TDS DETAIL</span>
+					<div class="card-body">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12"
+									 ng-if="gdbVm.type!=='view'">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Amount:  </label>
+											<div class="col-md-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   placeholder="Amount"
+														   ng-model="gdbVm.tdsAmt"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   ng-change="gdbVm.calTds()"
+														   name="Tds amount"
+														   class="form-control"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Credit A/c(TDS): </label>
+											<div class="col-sm-8" ng-if="gdbVm.type !== 'view'">
+												<div class="lvh-search ng-scope sear">
+													<input
+															type="text"
+															class="form-control lvhs-input"
+															placeholder="Credit A/c"
+															ng-model="gdbVm.tdsAc"
+															typeahead-wait-ms="10"
+															typeahead="item as item.name for item in gdbVm.getAccount($viewValue, ['Others','Vendor TDS'])"
+													>
+													<i class="lvh-search-close" ng-click="gdbVm.tdsAc='';">×</i>
+												</div>
+												<span class="error"
+													  ng-if="'isEmptyObject'|otherUtilsFilt:gdbVm.tdsAc">
+													This Field is Mandatory</span><br>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!--ADJUSTMENT-->
+				<li class="list-group-item">
+					<span class="booking_list_header">ADJUSTMENT</span>
+					<div class="card-body">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-12"
+									 ng-if="gdbVm.type!=='view'">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Bill Amount:  </label>
+											<div class="col-md-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   placeholder="Amount"
+														   ng-model="gdbVm.billAmount"
+														   ng-model-options="{ updateOn: 'blur' }"
+														   ng-change="gdbVm.calAdjAmount()"
+														   name="bill amount"
+														   class="form-control"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!--
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Credit A/c: </label>
+											<div class="col-sm-8">
+												{{gdbVm.vendor}}
+											</div>
+										</div>
+
+									</div>
+									-->
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Adjustment A/c: </label>
+											<div class="col-md-8" ng-if="gdbVm.type !== 'view'">
+												<div class="lvh-search ng-scope sear">
+													<input
+															type="text"
+															class="form-control lvhs-input"
+															placeholder="Debit A/c"
+															ng-model="gdbVm.adjDebitAc"
+															typeahead-wait-ms="10"
+															typeahead="item as item.name for item in gdbVm.getAccount($viewValue, ['Adjustment'])"
+													>
+													<i class="lvh-search-close" ng-click="gdbVm.discountAccount='';">×</i>
+												</div>
+											</div>
+											<div class="col-md-6" ng-if="gdbVm.type === 'view'">
+												{{gdbVm.adjDebitAc.name}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-md-4 control-label">Adjustment Amount: </label>
+											<div class="col-md-6">
+												{{((gdbVm.adjAmount || 0)|roundOff)}}
+											</div>
+											<span class="error"
+												  ng-if="gdbVm.flag">
+													Adjustment Amount limit boundation</span><br>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+				<!-- Adavance's Detail -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<span class="booking_list_header">Advance's</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<input type="text"
+										   ng-model="gdbVm.oFilter.reference_no"
+										   name="reference_no"
+										   class="form-control input-sm"
+										   placeholder="Reference No"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="form-group m-b-0">
+										<div class="col-sm-12">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="From"
+													name="From"
+													ng-model="gdbVm.oFilter.from"
+											>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+									<div class="form-group m-b-0">
+										<div class="col-sm-12">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="To"
+													name="To"
+													ng-model="gdbVm.oFilter.to"
+											>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-1 m-b-1 col-sm-1 col-md-1 col-lg-1">
+									<button class="btn btn-primary" type="button" uib-tooltip="Add" ng-click="gdbVm.addAdvance()">+</button>
+<!--									<span>({{gdbVm.rowsInAdv}})</span>-->
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<form role="form" name="myForm" autocomplete="off">
+										<button class="btn btn-sm btn-primary"
+												onclick="document.getElementById('loading_slip').click();">
+											upload File
+										</button>
+										<input ng-hide="true" id="loading_slip" type="file"
+										accept="*/*"
+										ngf-select ng-model="loading_slip" name="loading_slip"
+										ngf-max-size="5MB" ngf-model-invalid="errorFile"
+										ngf-change="gdbVm.uploadLoadingSlip(loading_slip)">
+<!--										<span>({{gdbVm.rowsInExl}})</span>-->
+										<button class="btn btn-primary"
+												ng-click="gdbVm.downloadCsv(gdbVm.aAdvances)">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+									</form>
+								</div>
+
+								<div class="col-md-1 pull-right">
+									<div class="form-group m-b-0">
+										<label class="col-md-10 control-label">Tot Upload: </label>
+										<div class="col-md-2">{{(gdbVm.rowsInExl || 0)|roundOff}}</div>
+									</div>
+								</div>
+
+								<div class="col-md-1 pull-right">
+									<div class="form-group m-b-0">
+										<label class="col-md-10 control-label">Tot Advance: </label>
+										<div class="col-md-2">{{(gdbVm.rowsInAdv || 0)|roundOff}}</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" style="margin:5px">
+								<div class="col-md-12">
+									<table class="table table-bordered unresponsive">
+										<thead jaFixHead>
+										<tr>
+											<th>S. No.</th>
+											<th>Advance Date</th>
+											<th>Vehicle No.</th>
+											<th>Refference No.</th>
+											<th>Requested Lit</th>
+											<th>Actual litre</th>
+											<th>Difference Lit</th>
+											<th>Rate</th>
+											<th>Amount</th>
+											<th>Status</th>
+
+											<th ng-if="gdbVm.type!=='view'"></th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-repeat="oAdvance in gdbVm.aAdvances | orderBy:'date' "
+											ng-style=" (oAdvance.checkstatus === 'MisMatched' || oAdvance.checkstatus === 'Not Found') && {'background-color': '#FF8886'}">
+											<td>{{$index + 1 }}</td>
+											<td>{{(oAdvance.date | date:"dd-MMM-yyyy") || 'NA'}}</td>
+											<td>{{oAdvance.vehicle_no ? oAdvance.vehicle_no : oAdvance.category}}</td>
+											<td>{{oAdvance.reference_no || 'NA'}}</td>
+											<td>{{oAdvance.dieseInfo.litre || 0}}</td>
+											<td>{{oAdvance.dieseInfo.actualLit || 0}}</td>
+											<td>{{((oAdvance.dieseInfo.actualLit || 0) ? (oAdvance.dieseInfo.actualLit || 0) - (oAdvance.dieseInfo.litre || 0) : 0)}}</td>
+											<td>{{oAdvance.dieseInfo.rate|roundOff:0 || 'NA'}}</td>
+											<td>{{oAdvance.amount | roundOff}}</td>
+											<td>{{oAdvance.checkstatus || 'NA'}}</td>
+
+											<td ng-if="gdbVm.type!=='view'">
+												<button class="btn-danger btn-xs"
+														ng-click="gdbVm.delAdvance($index)"
+														uib-tooltip="Delete Advance"
+														type="button"
+														tooltip-placement="bottom">
+													<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+												</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect"
+				ng-if="gdbVm.type !== 'view'"
+				ng-click="gdbVm.submit(true)">
+			{{gdbVm.type === 'add' ? 'Generate' : 'Update' }} & Approval Bill
+		</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-success waves-effect"
+				ng-if="gdbVm.type !== 'view'"
+				ng-click="gdbVm.submit()">
+			{{gdbVm.type === 'add' ? 'Generate' : 'Update' }} Bill
+		</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning"
+				ng-click="gdbVm.closeModal()">Close</button>
+	</div>
+</form>
+
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label{
+		font-weight: bold !important;
+	}
+	.chosen-row-1 {
+		z-index: 89;
+	}
+
+	.chosen-row-2 {
+		z-index: 87;
+	}
+
+	.chosen-row-3 {
+		z-index: 98;
+	}
+
+	table {
+		table-layout: fixed;
+		width: 100%;
+	}
+
+</style>

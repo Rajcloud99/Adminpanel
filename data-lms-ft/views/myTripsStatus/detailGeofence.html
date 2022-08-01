@@ -1,0 +1,109 @@
+<form role="form"  name="" autocomplete="off" novalidate>
+	<div class="modal-header" style="padding-bottom: 5px;">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Geofence Detail</h4><br>
+	</div>
+	<div class="modal-body">
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Name:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.name}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Type:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.type}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Address:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.addr}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Contact Person Name:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.contact_person_name}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Contact Person No.:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.contact_person_number}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Deleted:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.deleted}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Category:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.category}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Customer:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.gCustomer}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Creation Date:</label>
+					<div class="col-sm-6">
+						<span>{{selectedLocationData.created_at}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row" style="margin:15px"></div>
+
+	</div>
+	<div class="modal-footer">&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Cancel</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 80%;
+	}
+	.pointer{
+		border: 1px solid #ddd;
+		text-align: center;
+	}
+	.pointer:hover{
+		background:#eee;
+		border-color: #000;
+	}
+</style>
+

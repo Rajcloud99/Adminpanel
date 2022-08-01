@@ -1,0 +1,217 @@
+<!--Controller: driverReportController-->
+<!--ControllerAs: drVm-->
+
+<div class="container" ng-controller="driverReportController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" >
+
+							<!-- item==$role['Driver Reports']['Driver Payment Report'] -->
+							<div class="select col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<!--<select class="form-control" ng-init="driverReport" ng-options="item as item for item in drVm.aDriverType"
+										ng-model="drVm.driverReport" style="height: 34px;">
+									<option style="display:none" value="">Report Type</option>
+								</select>-->
+
+								<select class="form-control" ng-init="driverReport" ng-model="drVm.driverReport">
+									<option value="Driver Performance" selected>Driver Performance</option>
+									<option value="Driver Trip Account">Driver Trip Account</option>
+									<option value="Driver Payment Report" ng-show="$role['Driver Reports']['Driver Payment Report']">Driver Payment Report</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-2">
+									<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Driver Search..."
+											ng-model="drVm.oFilter.driver"
+											typeahead-wait-ms="10"
+											typeahead="item as (item.nameCode || item.name) for item in drVm.getAllDriver($viewValue) | limitTo:6"
+											typeahead-on-select="drVm.onDriverSelect($item, $model, $label)">
+									<i class="lvh-search-close" ng-click="drVm.oFilter.driver=null;">×</i>
+								</div>
+							</div>
+
+
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }" >
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="drVm.DatePicker.openDatePicker(this,$event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{drVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="drVm.oFilter.from"
+											   max-date="drVm.oFilter.to"
+											   is-open="opened1"
+											   datepicker-options="drVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+				                      <button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="drVm.DatePicker.openDatePicker(this,$event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+				                    </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input
+												ng-click="drVm.DatePicker.openDatePicker(this,$event,'opened2')"
+												type="text"
+												class="form-control"
+												uib-datepicker-popup="{{drVm.DatePicker.formats[0]}}"
+												show-weeks="false"
+												ng-model="drVm.oFilter.to"
+												is-open="opened2"
+												datepicker-options="drVm.DatePicker.dateSettings"
+												close-text="Close"
+												placeholder="To Date"
+												style="padding: 0px 4px;height: 34px;"
+												ng-disabled="!drVm.oFilter.from"/>
+									</div>
+									<span class="input-group-btn">
+			                      <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="drVm.DatePicker.openDatePicker(this,$event,'opened2')" ng-disabled="!drVm.oFilter.from"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="drVm.driverReport=='Driver Payment Report'">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Vendor Search..."
+											ng-model="drVm.vendor"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in drVm.getVendorName($viewValue) | limitTo:10"
+											typeahead-on-select="drVm.onSelect($item, $model, $label)"
+									>
+									<i class="lvh-search-close" ng-click="drVm.vendor='';drVm.selectType='index'">×</i>
+								</div>
+							</div>
+
+
+							<div class="col-md-2 pull-right">
+								<div class="form-group m-b-0 text-center">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Clear All"
+											ng-click="drVm.oFilter={};drVm.aDriver = []"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Download"
+											ng-click="drVm.getAllReport(true)"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="drVm.aDriver.length">
+			                  <span class="btn-lst" ng-repeat="select in drVm.aDriver">
+				                 <button class="btn-xs" style="background: black; color: aliceblue;">     {{(select.nameCode || select.name)}}&nbsp;
+				                  <a ng-click="drVm.removeDriver(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+							</div>
+							<div class="m-b-10" style="clear: both"></div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2"  ng-show="drVm.driverReport=='Driver Payment Report'">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Vehicle Search..."
+											ng-model="drVm.vehicle"
+											typeahead-wait-ms="10"
+											typeahead="item as item.vehicle_reg_no for item in drVm.getVehicle($viewValue) | limitTo:10"
+											typeahead-on-select="drVm.onSelect($item, $model, $label)"
+									>
+									<i class="lvh-search-close" ng-click="drVm.vehicle=null;drVm.aVehicle=null;drVm.getAllTrip()">×</i>
+								</div>
+							</div>
+							<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2"  ng-show="drVm.driverReport=='Driver Payment Report'">
+								<div class="lvh-search ng-scope sear chosen-row-2">
+									<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Branch Search..."
+											ng-model="drVm.branch"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in drVm.getAllBranch($viewValue) | limitTo:6"
+									>
+									<i class="lvh-search-close" ng-click="drVm.branch=null;">×</i>
+								</div>
+							</div>-->
+							<div class="col-md-2" ng-show="drVm.driverReport=='Driver Payment Report'">
+								<div class="form-group m-b-0 select">
+									<select class="form-control"
+											ng-model="drVm.type"
+											ng-options="item as item for item in $constants.aVouchersType"
+											name="Voucher Type"
+											required>
+										<option value="" selected>Select Voucher Type</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-2" ng-show="drVm.driverReport=='Driver Payment Report'">
+								<div class="fg-line form-group m-b-0">
+									<input type="text"
+										   ng-model="drVm.refNo"
+										   name="Ref no"
+										   class="form-control input-sm"
+										   placeholder="Ref. no.">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1" ng-show="drVm.driverReport=='Driver Payment Report'">
+								<div class="fg-line">
+									<input type="number" ng-model="drVm.tsNo" name="tsNo"
+										   class="form-control input-sm" placeholder="RTP NO."
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.listB > li{width: 28%;
+		float: left;margin-left: 1%;}
+	.pp{
+		list-style-type: none;
+		padding: 20px;
+		font-weight: bold;
+		border: 1px solid #2a96f3;
+	}
+
+	.container{
+		margin: auto 14px;
+		width: 98% !important;
+	}
+
+	.table.table-bordered.unresponsive{
+		margin-top: -50px !important;
+	}
+</style>

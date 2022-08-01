@@ -1,0 +1,637 @@
+<div>
+	<div class="container m-b-10">
+		<div class="col-md-12 card m-b-0">
+			<div class="lvh-label">
+				<span class="c-black"><b>Vehicle No ({{detailVm.oVehicle.vehicle_reg_no}})</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+		 id="messages-main">
+		<div class="card">
+			<!--Form starts here -->
+			<div class="card-body">
+				<form name="accountMaster" ng-submit="submit(accountMaster)" novalidate>
+					<ul class="list-group list-group-flush">
+						<!-- BASIC Account DETAILS -->
+						<li class="list-group-item">
+							<span class="booking_list_header">PROFILE DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<!--<div class="col-md-4">-->
+									<!--<div class="col-md-12 form-group m-b-5">-->
+									<!--<label class="col-sm-5">Registration Number:: </label>-->
+									<!--<div class="col-sm-6">-->
+									<!--{{detailVm.oVehicle.vehicle_reg_no || 'NA'}}-->
+									<!--</div>-->
+									<!--</div>-->
+									<!--</div>-->
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Device IMEI:: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.device_imei || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-if="detailVm.oVehicle.costCenter">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Cost Center:: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.costCenter.name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Fleet: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.owner_group || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Ownership Type: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.ownershipType || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-show="detailVm.oVehicle.fasttag.name">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">FasttagAccount: </label>
+											<div class="col-sm-6">{{detailVm.oVehicle.fasttag.name}}</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5"
+											 ng-if="detailVm.oVehicle.ownershipType !== 'Own'">
+											<label class="col-sm-5">Vendor: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.vendor_name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5"
+											 ng-if="detailVm.oVehicle.ownershipType !== 'Own'">
+											<label class="col-sm-5">Vendor Mobile: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.vendor_mobile || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-if="detailVm.oVehicle.gpsApi.length">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Gps Api: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.gpsApi|mergeString:', ') || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">status: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.deleted ? 'Disable' : 'Enable') || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Created by: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.created_by_name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Created at: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.created_at | date:"dd-MM-yyyy" || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">last modified by: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.last_modified_by_name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">last modified at: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.last_modified_at | date:"dd-MM-yyyy" || 'NA'}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<span class="booking_list_header">VEHICLE DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Status: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.status || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Owner Name: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.owner_name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Owner Mobile: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.owner_mobile || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Group: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.veh_group_name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Type: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.veh_type.name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Category: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.category || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Segment: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.segment_type || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Structure: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.structure_name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Manufacturer: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.manufacturer || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Registration Date: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.manufactureDate |date: "dd-MMM-yyyy"  || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Model: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.model || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Vehicle Model year: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.modelYear || 'NA'}}
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">PUC No.: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.puc_no || 'NA'}}
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">PUC Issue Date: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.puc_issuance_date | date: "dd-MMM-yyyy")  || 'NA'}}
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">PUC Expiry Date: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.puc_expiry_date | date: "dd-MMM-yyyy")  || 'NA'}}
+											</div>
+										</div>
+									</div>
+
+
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Carrying Capacity(Ton): </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.capacity_tonne >= 0 ?
+												detailVm.oVehicle.capacity_tonne : 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Permit Expiry Date: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.permit_expiry_date | date:"dd-MMM-yyyy 'at' h:mma")
+												|| 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Height in Feet: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.height_ft || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Width in Feet: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.width_ft || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Length in Feet: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.length_ft || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Milage: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.mileage || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Rate/km: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.rpk || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-show="detailVm.oVehicle.account.name">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4">Account: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.account.name}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4">Active Status: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.activeStatus ? 'Active' : 'Inactive'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4">Modified At: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.last_modified_at | date:"dd-MMM-yyyy" || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4">Modified By: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.last_modified_by_name|| 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4">Hypothecated To: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.hypothecatedTo || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4">Gross Vehicle Weight: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.grossVehicleweight || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4">Unladen Weight: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.unladenWeight || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4">Laden Weight: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.ladenWeight || 'NA'}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<span class="booking_list_header">DRIVER DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Driver: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.driver_name || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Driver Mobile: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.driver_contact_no || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="col-md-12 form-group m-b-5">
+											<label class="col-sm-5">Driver Code: </label>
+											<div class="col-sm-6">
+												{{detailVm.oVehicle.driver_employee_code || 'NA'}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<span class="booking_list_header">IDENTITY DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Chasis Number: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													{{detailVm.oVehicle.chassis_no || 'NA'}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Engine Number:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													{{detailVm.oVehicle.engine_no || 'NA'}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Insurance Company: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													{{detailVm.oVehicle.insurance_company || 'NA'}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Insurance Number: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													{{detailVm.oVehicle.insurance_no || 'NA'}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Insured Amount: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													{{detailVm.oVehicle.insured_amount || 'NA'}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Insurance Expiry Date: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.insurance_expiry_date | date:"dd-MMM-yyyy 'at' h:mma") || 'NA'}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="list-group-item">
+							<!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">RC Book No: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													{{detailVm.oVehicle.rc_book_no || 'NA'}}
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Fitness Issuance Date: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.fitness_cert_issuance_date | date:"dd-MMM-yyyy 'at' h:mma") || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Fitness Expiry Date: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.fitness_cert_expiry_date | date:"dd-MMM-yyyy 'at'
+												h:mma") || 'NA'}}
+											</div>
+										</div>
+									</div>
+										<div class="col-md-4">
+											<div class="form-group m-b-0">
+												<label class="col-sm-5">Road Tax Issuance Date: </label>
+												<div class="col-sm-6">
+													{{(detailVm.oVehicle.road_tax_doc_issuance_date | date:"dd-MMM-yyyy
+													'at' h:mma") || 'NA'}}
+												</div>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group m-b-0">
+												<label class="col-sm-5">Road Tax Expiry Date: </label>
+												<div class="col-sm-6">
+													{{(detailVm.oVehicle.road_tax_doc_expiry_date | date:"dd-MMM-yyyy
+													'at' h:mma") || 'NA'}}
+												</div>
+											</div>
+										</div>
+									<div class="col-md-4" ng-if="detailVm.oVehicle.ownershipType==='Sold'">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Sold Date: </label>
+											<div class="col-sm-6">
+												{{(detailVm.oVehicle.sd | date:"dd-MMM-yyyy") || 'NA'}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-if="detailVm.oVehicle.ownershipType==='Sold'">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Sold Amount: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													{{detailVm.oVehicle.sa || 'NA'}}
+												</div>
+											</div>
+										</div>
+									</div>
+									   <div class="col-md-4" ng-if="detailVm.oVehicle.ownershipType==='Sold'">
+										 <div class="form-group m-b-0">
+											 <label class="col-sm-5">Sold Vehicle Vendor Name: </label>
+										 	   <div class="col-sm-6">
+												{{(detailVm.oVehicle.soldVendor_name || 'NA')}}
+											  </div>
+										  </div>
+									   </div>
+									   <div class="col-md-4" ng-if="detailVm.oVehicle.ownershipType==='Sold'">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Sold Vehicle Vendor Address: </label>
+											   <div class="col-sm-6">
+											   {{(detailVm.oVehicle.vendor_address || 'NA')}}
+											 </div>
+										 </div>
+									  </div>
+									  <div class="col-md-4" ng-if="detailVm.oVehicle.ownershipType==='Sold'">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Sold Vehicle Vendor Phone No: </label>
+											   <div class="col-sm-6">
+											   {{(detailVm.oVehicle.vendor_phno || 'NA')}}
+											 </div>
+										 </div>
+									  </div>
+									  <div class="col-md-4" ng-if="detailVm.oVehicle.ownershipType==='Sold'">
+										<div class="form-group m-b-0">
+											<label class="col-sm-5">Sold Vehicle Vendor Pan No: </label>
+											   <div class="col-sm-6">
+											   {{(detailVm.oVehicle.vendor_panNo || 'NA')}}
+											 </div>
+										 </div>
+									  </div>
+
+								</div>
+							</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+</style>
+
+<style type="text/css">
+	label {
+		font-weight: bold;
+	}
+
+	form.tab-form-demo .tab-pane {
+		margin: 20px 20px;
+	}
+
+	.nav-tabs > li.active {
+		background: #2196f5;
+	}
+
+	.nav-tabs > li.active > a {
+		color: #fff !important;
+	}
+
+	.nav-tabs > li.active > a,
+	.nav-tabs > li.active > a:hover,
+	.nav-tabs > li.active > a:focus {
+		border: 1px solid #2196f5;
+	}
+
+	.list_border_background {
+		border: 2px solid blue !important;
+		background: #47d6c9;
+	}
+</style>

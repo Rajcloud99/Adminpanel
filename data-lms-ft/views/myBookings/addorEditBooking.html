@@ -1,0 +1,2010 @@
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" style="min-height: 600px;">
+		<!--Form starts here -->
+		<div class="card-body">
+			<form name="bookingForm" ng-submit="submit()" novalidate>
+				<ul class="list-group list-group-flush">
+					<!-- BASIC DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">BASIC DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Booking Type: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select class="form-control"
+														placeholder="Select Type"
+														ng-options="item as item for item in $configs.Bookings.Add.aBookingTypes || $constants.aBookingTypes"
+														ng-model="oBooking.booking_type"
+														ng-change="oBooking.branch_id='';oBooking.customer='';oBooking.contract_id;oBooking.route=[]"
+														name="Booking Type"
+														ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+														required>
+													<option value="" disabled selected style="display: none;">
+														Select Booking Type
+													</option>
+												</select>
+											</div>
+											<span class="error" ng-if="bookingForm['Booking Type'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div ng-class="($configs.booking.timePicker) ? 'col-md-3' : 'col-md-4'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Booking Date:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened1 == true }">
+												<!--{{oBooking.booking_date}}-->
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+													<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+														   type="text"
+														   class="form-control"
+														   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+														   show-weeks="false"
+														   ng-model="oBooking.booking_date"
+														   is-open="opened1"
+														   datepicker-options="DatePicker.dateSettings"
+														   close-text="Close"
+														   placeholder="Booking Date"
+														   name="Booking Date"
+														   min-date="DatePicker.dateSettings.minDate"
+														   max-date="DatePicker.dateSettings.maxDate"
+														   ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+														   required
+														   style="padding: 0px 4px;height: 34px;" />
+												</div>
+												<span class="input-group-btn">
+								                      <button type="button" class="btn btn-default m-t-0 f12"
+															  ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+															  class="glyphicon glyphicon-calendar"></i></button>
+													</span>
+
+											</div>
+											<span class="error" ng-if="bookingForm['Booking Date'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-1" ng-if="$configs.booking.timePicker">
+									<timepicker ng-model="oBooking.booking_date"
+												show-spinners="false"
+												show-meridian="false"
+												ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)">
+									</timepicker>
+
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Branch Name: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="oBooking.branch_id"
+													ng-options="item._id as item.name for item in aBranch"
+													ng-change="oBooking.customer='';oBooking.contract_id;oBooking.route=[]"
+													name="Branch Name"
+													ng-disabled="!oBooking.booking_type || ((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													required>
+												<option value=""></option>
+											</select>
+											<span class="error" ng-if="bookingForm['Branch Name'].$error.required
+																	&& !bookingForm['Booking Type'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="animate-show-hide row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Customer Name:
+											<span class="req_r">*</span>
+										</label>
+										<div class="col-sm-6">
+											<select
+													chosen
+													class="form-control"
+													ng-model="oBooking.customer"
+													ng-options="item as item.name + ' (' + item.address.city + ')' for item in aCustomers track by item._id"
+													ng-change="getContract(oBooking.customer);
+																oBooking.contract_id;
+																oBooking.route=[];
+																oBooking.contact_person.mobile=oBooking.customer.prim_cont_no;
+																oBooking.contact_person.email=oBooking.customer.prim_email;
+																oBooking.contact_person.role=oBooking.customer.prim_contact_designation;
+																oBooking.contact_person.name=oBooking.customer.prim_contact_name;"
+													ng-disabled="!oBooking.branch_id || (((editBooking|typeOfFilter:'undefined') ? false : (!editBooking)))"
+													search-contains="true"
+													name="Customer Name"
+													required>
+												<option value=""></option>
+											</select>
+											<span class="error" ng-if="bookingForm['Customer Name'].$error.required
+																	&& !bookingForm['Branch Name'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Contract: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<select chosen
+													name="Contract"
+													class="form-control"
+													ng-model="oBooking.contract_id"
+													ng-options="item as item.name for item in aContracts track by item._id"
+													ng-change="oBooking.route=[];
+																getCustomerRoutes(oBooking.contract_id);
+																oBooking.geofence_points = [];
+																(oBooking.contract_id ? '' : getVehicleType());
+																($clientConfigs.booking.required.do_number ? (oBooking.do_number = oBooking.contract_id.name) : '');
+																"
+													ng-disabled="!oBooking.customer || (((editBooking|typeOfFilter:'undefined') ? false : (!editBooking)))"
+											>
+												<option value="">One Time (No Contract)</option>
+												<!-- add this line ng above ng-change oBooking.preference = []; -->
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4" ng-if="$configs.Bookings.required.do_number">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Do Number: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<textarea rows="2"
+														  placeholder="Enter DO Number"
+														  ng-model="oBooking.do_number"
+														  ng-readonly="(booking_mode_header == 'Edit')"
+														  name="do number"
+														  required
+														  ng-disabled="(((editBooking|typeOfFilter:'undefined') ? false : (!editBooking)))"
+														  class="form-control"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Remark:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<textarea rows="2"
+														  placeholder="Enter Remark"
+														  ng-model="oBooking.remark"
+														  ng-readonly="(booking_mode_header == 'Edit')"
+														  name="Remark"
+														  ng-disabled="(((editBooking|typeOfFilter:'undefined') ? false : (!editBooking)))"
+														  class="form-control"></textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="animate-show-hide row" ng-if="($configs.tripMemo && $configs.tripMemo.show)"
+								 style="margin: 5px;">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Service Type: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select class="form-control"
+														placeholder="Select Type"
+														ng-options="item as item for item in $configs.master.aServiceType || ['Express', 'Time Committed', 'Standard']"
+														ng-model="oBooking.sr"
+														name="Service Type"
+														ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+														required>
+													<option value="" disabled selected style="display: none;">
+														Select Service Type
+													</option>
+												</select>
+											</div>
+											<span class="error" ng-if="    bookingForm['Service Type'].$error.required
+																							   && (bookingForm['Service Type'].$touched
+																								   || bookingForm.$submitted)">
+																	   This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Category: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select class="form-control"
+														placeholder="Select Type"
+														ng-options="item as item for item in ['Ad-Hoc', 'Regular']"
+														ng-model="oBooking.cat"
+														name="Category"
+														ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+														required>
+													<option value="" disabled selected style="display: none;">
+														Select Category
+													</option>
+												</select>
+											</div>
+											<span class="error" ng-if="    bookingForm['Category'].$error.required
+																							   && (bookingForm['Category'].$touched
+																								   || bookingForm.$submitted)">
+																	   This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Packaging: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select class="form-control"
+														placeholder="Select Packaging"
+														ng-options="item as item for item in ['Drum', 'Pallets', 'Boxes', 'Ganibags', 'Other']"
+														ng-model="oBooking.pkg"
+														name="Packaging"
+														ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+														required>
+													<option value="" disabled selected style="display: none;">
+														Select Packaging
+													</option>
+												</select>
+											</div>
+											<span class="error" ng-if="    bookingForm['Packaging'].$error.required
+																							   && (bookingForm['Packaging'].$touched
+																								   || bookingForm.$submitted)">
+																	   This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-4" ng-if="oBooking.cat === 'Ad-Hoc'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Ticket No:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text" placeholder="Ticket No"
+													   ng-model="oBooking.ticketNo"
+													   class="form-control"
+													   class="form-control"
+													   ng-readonly="(booking_mode_header == 'Edit')"
+													   ng-disabled="(((editBooking|typeOfFilter:'undefined') ? false : (!editBooking)))"
+													   name="ticketNo">
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+
+							</div>
+						</div>
+					</li>
+					<!-- ROUTE DETAILS -->
+					<li class="animate-show-hide list-group-item">
+						<span class="booking_list_header">ROUTE & VEHICLE DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="form-group col-md-4" ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute)">
+									<label class="col-sm-4 control-label">Loading Point :<span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<input type="text"
+											   placeholder="Source Search..."
+											   ng-model="oBooking.ld"
+											   on-select="onSelectSource($item)"
+											   class="form-control"
+											   place-autocomplete
+											   ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+											   name="Loading Point"
+											   required>
+										<i ng-if="(editBooking|typeOfFilter:'undefined') ? true : (!!editBooking)"
+										   class="lvh-search-close" ng-click="oBooking.ld=''">×</i>
+										<span class="error" ng-if="bookingForm['Loading Point'].$error.required
+									&& (bookingForm['Loading Point'].$touched
+										|| bookingForm.$submitted)">
+									This Field is Mandatory</span>
+									</div>
+								</div>
+
+								<div ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute)"
+									 class="form-group col-md-4">
+									<label class="col-sm-4 control-label">Loading Zone :<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<input type="text" placeholder="Loading Zone"
+											   ng-model="oBooking.ld.zone"
+											   class="form-control"
+											   ng-disabled="true"
+											   name="Zone">
+									</div>
+								</div>
+
+
+								<div ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute)" class="form-group col-md-4">
+									<label class="col-sm-4 control-label">Unloading Point :<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<input type="text"
+											   placeholder="Dest Search..."
+											   ng-model="oBooking.uld"
+											   place-autocomplete
+											   class="form-control"
+											   typeahead-wait-ms="10"
+											   on-select="onSelectDest($item)"
+											   ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+											   name="Unloading Point" required>
+										<i ng-if="(editBooking|typeOfFilter:'undefined') ? true : (!!editBooking)"
+										   class="lvh-search-close" ng-click="oBooking.uld=''">×</i>
+										<span class="error" ng-if="bookingForm['Unloading Point'].$error.required
+									 	 && (bookingForm['Unloading Point'].$touched
+										  || bookingForm.$submitted)">
+									  This Field is Mandatory</span>
+									</div>
+								</div>
+
+								<div ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute)" class="form-group col-md-4">
+									<label class="col-sm-4 control-label">Unloading Zone :<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<input type="text" placeholder="Unloading Zone"
+											   ng-model="oBooking.uld.zone"
+											   class="form-control"
+											   class="form-control"
+											   ng-disabled="true"
+											   name="Zone">
+									</div>
+								</div>
+
+
+								<div class="col-md-4" ng-if="((routeVisibility) && !($configs.booking.showRoute || $configs.booking.showGoogleRoute))">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Route Name :
+											<span class="req_r">*</span>
+										</label>
+<!--										******************-->
+<!--										<div class="col-sm-6">-->
+<!--&lt;!&ndash;											<div ng-dropdown-multiselect=""&ndash;&gt;-->
+<!--&lt;!&ndash;												 options="aCustomerRoutes"&ndash;&gt;-->
+<!--&lt;!&ndash;												 selected-model="oBooking.route"&ndash;&gt;-->
+<!--&lt;!&ndash;												 extra-settings="selectRouteSettings"&ndash;&gt;-->
+<!--&lt;!&ndash;												 events='selectRouteEvents'&ndash;&gt;-->
+<!--&lt;!&ndash;												 ja-search-input='inputModel'&ndash;&gt;-->
+<!--&lt;!&ndash;												 ja-search-trigger="getRoutes(inputModel)"&ndash;&gt;-->
+<!--&lt;!&ndash;												 disabled="!oBooking.customer || ((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"&ndash;&gt;-->
+<!--&lt;!&ndash;											></div>&ndash;&gt;-->
+<!--										*****************-->
+										<div class="col-md-6">
+											<div class="lvh-search ng-scope sear">
+												<input type="text"
+													   placeholder="route Search..."
+													   ng-disabled="!oBooking.customer || ((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   ng-model="oBooking.dummyrouteobj"
+													   class="lvhs-input"
+													   typeahead-wait-ms="10"
+													   typeahead="item as item.name for item in getallroutes($viewValue)"
+													   typeahead-on-select="onRouteSelect(oBooking.dummyrouteobj)"
+													   class="form-control">
+												<i ng-hide="!oBooking.customer || ((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"  class="lvh-search-close" ng-click="oBooking.dummyrouteobj='';">×</i>
+
+											</div>
+											<span class="error" ng-if="oBooking.route.length <= 0
+																		&& !bookingForm['Customer Name'].$invalid">
+												This Field is Mandatory</span>
+
+											<div  style="margin:5px">
+												<div class="detailsList">
+													<div class="" style="overflow-y: auto; max-height: 300px;">
+														<div class="col-sm-12 r-truck">
+				<span class="btn-lst" ng-repeat="veh in oBooking.route">{{veh.name || veh.route_name}}
+								<a ng-hide="!oBooking.customer || ((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))" ng-click="removeroute(veh,$index)"> x </a></span>
+														</div>
+													</div>
+												</div>
+
+												<div class="clearfix"></div>
+
+
+											</div>
+
+										</div><button  ng-if="$configs.booking && $configs.booking.addRoute"  style="margin-left: 20px" type="button"
+													   class="btn-primary btn-xs"
+													   ng-click="Addroute()"
+													   uib-tooltip="Add New transport Route "
+													   tooltip-placement="bottom">
+										<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+									</button>
+
+									</div>
+								</div>
+								<!--
+								<div ng-show="oBooking.route.length > 0 && oBooking.route.length < 2" class="animate-show-hide col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Route Type: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												{{oBooking.route[0].route_type || 'NA'}}
+											</div>
+										</div>
+									</div>
+								</div>
+								-->
+								<div ng-show="oBooking.route.length > 0 && oBooking.route.length < 2"
+									 class="animate-show-hide col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Route Distance(Km.):</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												{{oBooking.route[0].route_distance || 'NA'}}
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div ng-if="($configs.tripMemo && $configs.tripMemo.show)" class="form-group col-md-4">
+									<label class="col-sm-4 control-label">Vehicle Type: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<select chosen
+													class="form-control"
+													ng-model="oBooking.newPreference"
+													ng-options="item._id as item.name + ' ' + '(' + item.group_name + ')' for item in aVehicleTypes"
+													name="Vehicle Type"
+											>
+												<option value="" disabled>Select Vehicle</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group col-md-3">
+									<label class="col-sm-4 control-label">Loading Date:<span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened9 == true }">
+											<!--{{oBooking.booking_date}}-->
+											<div class="fg-line" ng-class="{ 'fg-toggled': opened9 == true }">
+												<input ng-click="DatePicker.openDatePicker(this, $event, 'opened9')"
+													   type="text"
+													   class="form-control"
+													   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-model="oBooking.lDate"
+													   is-open="opened9"
+													   datepicker-options="DatePicker.dateSettings"
+													   close-text="Close"
+													   placeholder="Loading Date"
+													   name="Loading Date"
+													   ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+													   style="padding: 0px 4px;height: 34px;"
+													   required />
+											</div>
+											<span class="input-group-btn">
+												  <button type="button" class="btn btn-default m-t-0 f12"
+														  ng-click="DatePicker.openDatePicker(this, $event, 'opened9')"><i
+														  class="glyphicon glyphicon-calendar"></i></button>
+												</span>
+
+										</div>
+										<span class="error" ng-if="bookingForm['Loading Date'].$error.required
+												&& (bookingForm['Loading Date'].$touched
+												|| bookingForm.$submitted)">
+												This Field is Mandatory</span>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<timepicker ng-model="oBooking.lDate"
+												show-spinners="false"
+												show-meridian="false"
+												ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)">
+									</timepicker>
+								</div>
+
+							</div>
+
+							<div class="row" style="margin:5px" ng-if="($configs.booking.showRoute || $configs.booking.showGoogleRoute)">
+
+
+								<div class="form-group col-md-4">
+									<label class="col-sm-4 control-label">Intermittent Point </label>
+									<div class="col-sm-6">
+										<input type="text"
+											   placeholder="Intermittent Search..."
+											   ng-model="oBooking.imp"
+											   class="form-control"
+											   place-autocomplete
+											   on-select="onSelectIntermediate($item, $model, $label)"
+											   ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)">
+										<i class="lvh-search-close" ng-click="oBooking.imp=''">×</i>
+									</div>
+								</div>
+
+								<div class="col-md-4"
+									 ng-if="((intermediateRoute.length) && ($configs.tripMemo && $configs.tripMemo.show))">
+									<span class="btn-lst" ng-repeat="select in intermediateRoute">
+										<button class="btn-xs" style="background: black; color: aliceblue;"> {{select.c}} ({{select.d}}) ({{select.s}})&nbsp;
+											<div ng-if="(editBooking|typeOfFilter:'undefined') ? true : (!!editBooking)"
+												 ng-click="removeIntermediate(select,$index)"> X </div></button>&nbsp;&nbsp;</span>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label"> Km :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Total Km"
+													   ng-model="oBooking.rKm"
+													   class="form-control"
+													   max="5000"
+													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   name="Route Km"
+													   required>
+											</div>
+											<span class="error" ng-if="	(bookingForm['Route Km'].$error.required
+																			&& (bookingForm['Route Km'].$touched
+																				|| bookingForm.$submitted))">
+												This Field is Mandatory
+											</span>
+											<span class="error col-sm-12" ng-if="bookingForm['Route Km'].$error.max">Max 5000 Km allowed</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+					</li>
+					<!--PAYMENT DETAILS-->
+					<li class="animate-show-hide list-group-item">
+						<span class="booking_list_header">PAYMENT TERMS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Type: <span class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select class="form-control"
+														ng-model="oBooking.payment_type"
+														ng-disabled="oBooking.contract_id.payment_type || ((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														ng-options="item as item for item in $constants.paymentType"
+														ng-model-option="{updateOn: 'blur'}"
+														ng-change="changePayType(oBooking.payment_type);resetAll()"
+														name="Payment Type"
+														required>
+													<option value="" disabled>Payment type</option>
+												</select>
+											</div>
+											<span class="error" ng-if="	bookingForm['Payment Type'].$error.required
+																			&& (bookingForm['Payment Type'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Basis: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="select">
+												<select class="form-control"
+														ng-options="item as item for item in aWeightTypes"
+														ng-model="oBooking.payment_basis"
+														name="Payment Basis"
+														ng-change="resetAll()"
+														ng-model-option="{updateOn: 'blur'}"
+														required
+														ng-disabled="oBooking.contract_id.payment_basis || ((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))">
+													<option value="" disabled style="display: none;"> Payment Basis
+													</option>
+												</select>
+											</div>
+											<span class="error" ng-if="	bookingForm['Payment Basis'].$error.required
+																			&& (bookingForm['Payment Basis'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<!--
+								<div class="col-md-4" ng-if="!oBooking.contract_id">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Rate: <span
+											class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57" onwheel="return false" onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Rate"
+													   ng-model="oBooking.rate"
+													   class="form-control"
+													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   required
+													   name="Rate">
+											</div>
+											<span class="error" ng-if="	bookingForm['Rate'].$error.required
+																			&& (bookingForm['Rate'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								-->
+							</div>
+
+						</div>
+					</li>
+					<!-- MATERIAL DETAILS -->
+					<li class="animate-show-hide list-group-item">
+						<span class="booking_list_header">MATERIAL DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Type(Group): <span
+												ng-hide="oBooking.booking_type.toLowerCase().indexOf('containerized') > -1"
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="oBooking.material_type"
+													ng-options="item._id as (item.name === item.code ? item.name : (item.name + '(' + item.code + ')')) for item in aMaterialType track by item._id"
+													ng-change="onMaterialTypeChange(oBooking.material_type)"
+													name="Material Type"
+													ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													ng-required="oBooking.booking_type.toLowerCase().indexOf('containerized') > -1 ? false : true">
+												<option value="" disabled selected> Select Material</option>
+											</select>
+											<!--											<select chosen-->
+											<!--													class="form-control"-->
+											<!--													ng-model="oBooking.material_type"-->
+											<!--													ng-options="item._id as item.name for item in aMaterialType track by item._id"-->
+											<!--													ng-change="onMaterialTypeChange(oBooking.material_type)"-->
+											<!--													name="Material Type"-->
+											<!--													ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"-->
+											<!--													required>-->
+											<!--												<option value=""></option>-->
+											<!--											</select>-->
+											<span class="error" ng-if="	bookingForm['Material Type'].$error.required
+																			&& (bookingForm['Material Type'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 m-t-10">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label"> Total Weight (Tonne) :</label>
+										<div class="col-sm-3">
+											<div class="fg-line" ng-if="oBooking.payment_basis !== 'PUnit'">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Weight"
+													   ng-model="oBooking.total_weight"
+													   class="form-control"
+													   ng-init="(editBooking|typeOfFilter:'undefined')?oBooking.total_weight=0:''"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   max="{{oBooking.contract_id.totalWeight}}"
+													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   name="Total Weight">
+											</div>
+											<div class="fg-line" ng-if="oBooking.payment_basis === 'PUnit'">
+												{{oBooking.total_weight = oBooking.weight_per_unit *
+												oBooking.total_no_of_units }}
+											</div>
+										</div>
+									</div>
+									<span class="error col-sm-12" ng-if="	(bookingForm['Total Weight'].$error.required
+																			&& (bookingForm['Total Weight'].$touched
+																				|| bookingForm.$submitted))">
+													This Field is Mandatory</span>
+									<!--									<span class="error col-sm-12" ng-if="oBooking.booking_type.toLowerCase().indexOf('empty') == -1 && (oBooking.total_weight || 0) <= 0">-->
+									<!--													Weight Should be Grater than 0</span>-->
+									<!--									<span class="error col-sm-12" ng-if="bookingForm['Total Weight'].$error.max">-->
+									<!--													Weight Should be Smaller or Equal to Remaining Weight</span>-->
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-4" ng-if="oBooking.payment_basis === 'PUnit'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label"> PUnit Weight :</label>
+										<div class="col-sm-4">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter Weight"
+													   ng-init="((editBooking|typeOfFilter:'undefined') ?oBooking.weight_per_unit=0:'')"
+													   ng-model="oBooking.weight_per_unit"
+													   ng-change="calculateTotalPUnit()"
+													   class="form-control"
+													   max="{{oBooking.contract_id.totalWeight}}"
+													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   name="Weight Per Unit"
+												>
+											</div>
+										</div>
+									</div>
+									<span class="error" ng-if="	(bookingForm['Weight Per Unit'].$error.required
+																			&& (bookingForm['Weight Per Unit'].$touched
+																				|| bookingForm.$submitted))">
+											This Field is Mandatory
+										</span>
+									<span class="error col-sm-12" ng-if="bookingForm['Weight Per Unit'].$error.max">
+													Weight Per Unit Should be Smaller or Equal to Remaining Weight Per Unit</span>
+								</div>
+								<div class="col-md-4" ng-if="oBooking.payment_basis == 'PUnit'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label"> No of Unit :</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Enter PUnit"
+													   ng-model="oBooking.total_no_of_units"
+													   ng-change="calculateTotalPUnit()"
+													   ng-init="(editBooking|typeOfFilter:'undefined')?oBooking.total_no_of_units=0:''"
+													   class="form-control"
+													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   max="{{oBooking.contract_id.totalUnit}}"
+													   name="PUnit"
+												>
+											</div>
+											<span class="error" ng-if="	bookingForm['PUnit'].$error.required
+																			&& (bookingForm['PUnit'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+											<span class="error col-sm-12" ng-if="bookingForm['PUnit'].$error.max">
+													Unit Should be Smaller or Equal to Remaining Unit</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4" ng-if="oBooking.payment_basis === 'PMT'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">PMT Weight: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input
+														type="number"
+														class="form-control"
+														placeholder="enter here..."
+														ng-change="calculateTotalPMT()"
+														ng-model="oBooking.pmtWeight"
+														ng-required="oBooking.payment_basis === 'PMT'"
+														ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4" ng-if="oBooking.payment_basis === 'PMT'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">PMT Rate: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input
+														type="number"
+														class="form-control"
+														placeholder="enter here..."
+														ng-change="calculateTotalPMT()"
+														ng-model="oBooking.pmtRate"
+														ng-required="oBooking.payment_basis === 'PMT'"
+														ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="oBooking.payment_basis === 'PMT'">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Other Exp </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   class="form-control"
+													   ng-model="oBooking.otherExp"
+													   ng-readonly="oBooking.isAcknowledge"
+													   placeholder="Other Exp">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+							</div>
+						</div>
+					</li>
+					<!-- RENTAL DEAL -->
+					<li ng-if="($configs.tripMemo && $configs.tripMemo.show)" class="animate-show-hide list-group-item">
+						<span class="booking_list_header">RENTAL DEAL (Optional)</span>
+						<div class="card-body">
+							<div class="row" style="margin:15px" ng-if="oBooking.payment_basis">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Total: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input
+														type="number"
+														class="form-control"
+														ng-change="changeAdvance('total');changeAcPayment();"
+														ng-model="oBooking.total_expense"
+														name="Total"
+														ng-disabled="(oBooking.payment_basis === 'PMT' || oBooking.payment_basis === 'PUnit') ? (!editBooking) : (editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+												>
+											</div>
+											<!-- <span class="error" ng-if="    bookingForm['Total'].$error.required
+																	&& (bookingForm['Total'].$touched
+																		|| bookingForm.$submitted)">
+											This Field is Mandatory</span> -->
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Munshiyana </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-change="changeAdvance('munshiyana');changeAcPayment();"
+													   class="form-control"
+													   ng-model="oBooking.munshiyana"
+													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   placeholder="enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Total With Munshiyana: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												{{oBooking.totWithMunshiyana}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Advance </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-change="changeAdvance('advance');changeAcPayment()"
+													   class="form-control"
+													   ng-model="oBooking.advance"
+													   placeholder="enter here..."
+													   name="advance"
+													   ng-disabled="(oBooking.payment_type === 'To pay' || oBooking.payment_type === 'To be billed') ? (!editBooking) : (editBooking|typeOfFilter:'undefined') ? false : (!editBooking)">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">To Pay/Balance: </label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												{{oBooking.toPay =
+												(((oBooking.totWithMunshiyana || 0) -
+												(oBooking.advance || 0) - (oBooking.tdsAmount || 0))|roundOff:0:0)}}
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</li>
+
+					<div ng-show="oBooking.route.length || oBooking.ld">
+						<!--SERVE DETAILS-->
+						<li class="animate-show-hide list-group-item">
+							<span class="booking_list_header">{{($configs.tripMemo && $configs.tripMemo.show) ? "PLACEMENT TIME" :  "SERVE DETAILS"}}</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Serve Start:</label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened7 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened7 == true }">
+														<input ng-click="DatePicker.openDatePicker(this, $event, 'opened7')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="oBooking.serve_start"
+															   is-open="opened7"
+															   datepicker-options="DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Serve Start"
+															   name="Serve Start"
+															   min-date="oBooking.booking_date"
+															   ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+															   style="padding: 0px 4px;height: 34px;" />
+													</div>
+													<span class="input-group-btn">
+								                      <button type="button" class="btn btn-default m-t-0 f12"
+															  ng-click="DatePicker.openDatePicker(this, $event, 'opened7')"><i
+															  class="glyphicon glyphicon-calendar"></i></button>
+								                    </span>
+												</div>
+												<span class="error" ng-if="bookingForm['Booking Date'].$error.required">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-1" ng-if="$configs.booking.timePicker">
+										<timepicker ng-model="oBooking.serve_start"
+													show-spinners="false"
+													show-meridian="false"
+													ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)">
+										</timepicker>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Serve End:</label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened8 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened8 == true }">
+														<input ng-click="DatePicker.openDatePicker(this, $event, 'opened8')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="oBooking.serve_end"
+															   is-open="opened8"
+															   datepicker-options="DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Serve End"
+															   name="Serve End"
+															   min-date="oBooking.serve_start"
+															   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking)) || (!oBooking.serve_start)"
+															   style="padding: 0px 4px;height: 34px;" />
+													</div>
+													<span class="input-group-btn">
+								                      <button type="button" class="btn btn-default m-t-0 f12"
+															  ng-click="DatePicker.openDatePicker(this, $event, 'opened8')"><i
+															  class="glyphicon glyphicon-calendar"></i></button>
+								                    </span>
+													<!--max-date="DatePicker.dateSettings.maxDate"-->
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-1" ng-if="$configs.booking.timePicker">
+										<timepicker ng-model="oBooking.serve_end"
+													show-spinners="false"
+													show-meridian="false"
+													ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)">
+										</timepicker>
+									</div>
+
+									<div class="col-md-3" ng-if="$configs.booking.timePicker">
+										<label class="col-sm-4 control-label">Departure Date:</label>
+										<div class="col-sm-6">
+											<div class="date-picker input-group dp-blue"
+												 ng-class="{ 'is-opened': opened10 == true }">
+												<!--{{oBooking.booking_date}}-->
+												<div class="fg-line" ng-class="{ 'fg-toggled': opened10 == true }">
+													<input ng-click="DatePicker.openDatePicker(this, $event, 'opened10')"
+														   type="text"
+														   class="form-control"
+														   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+														   show-weeks="false"
+														   ng-model="oBooking.dDate"
+														   is-open="opened10"
+														   datepicker-options="DatePicker.dateSettings"
+														   close-text="Close"
+														   placeholder="Departure Date"
+														   name="Departure Date"
+														   ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)"
+														   style="padding: 0px 4px;height: 34px;"
+													/>
+												</div>
+												<span class="input-group-btn">
+								                      <button type="button" class="btn btn-default m-t-0 f12"
+															  ng-click="DatePicker.openDatePicker(this, $event, 'opened10')"><i
+															  class="glyphicon glyphicon-calendar"></i></button>
+													</span>
+
+											</div>
+										</div>
+									</div>
+									<div class="col-md-1" ng-if="$configs.booking.timePicker">
+										<timepicker ng-model="oBooking.dDate"
+													show-spinners="false"
+													show-meridian="false"
+													ng-disabled="(editBooking|typeOfFilter:'undefined') ? false : (!editBooking)">
+										</timepicker>
+									</div>
+								</div>
+							</div>
+						</li>
+						<!-- PO_Number DETAILS -->
+						<!--<li class="animate-show-hide list-group-item">-->
+						<!--<span class="booking_list_header">PO DETAILS</span>-->
+						<!--<div class="card-body">-->
+						<!--<div class="row" style="margin:5px">-->
+						<!--<div class="col-md-4">-->
+						<!--<div class="form-group m-b-0">-->
+						<!--<label class="col-sm-4 control-label">PO No: <span ng-if="$clientConfigs.booking.mandatory.po_number" class="req_r">*</span></label>-->
+						<!--<div class="col-sm-6">-->
+						<!--<div class="fg-line">-->
+						<!--<input type="number"-->
+						<!--placeholder="Enter PO Number"-->
+						<!--ng-model="oBooking.po_number"-->
+						<!--class="form-control"-->
+						<!--ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"-->
+						<!--ng-required="$clientConfigs.booking.mandatory.po_number ? true : false"-->
+						<!--name="PO Number">-->
+						<!--</div>-->
+						<!--<span class="error" ng-if="(bookingForm['Contant Name 1'].$error.required-->
+						<!--&& (bookingForm['Contant Name 1'].$touched-->
+						<!--|| bookingForm.$submitted))-->
+						<!--&& $clientConfigs.booking.mandatory.po_number">-->
+						<!--Enter PO Number</span>-->
+						<!--</div>-->
+						<!--</div>-->
+						<!--</div>-->
+						<!--</div>-->
+						<!--</div>-->
+						<!--</li>-->
+						<!-- CHA DETAILS -->
+						<li class="animate-show-hide list-group-item"
+							ng-if="oBooking.booking_type.toLowerCase().indexOf('containerized') > -1">
+							<span class="booking_list_header">CHA DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">CHA: <span
+													class="req_r">*</span></label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<select chosen
+															class="form-control"
+															ng-model="oBooking.cha"
+															ng-options="item._id as item.name for item in aCha"
+															name="cha"
+															ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+															required>
+														<option value=""></option>
+													</select>
+													<span class="error" ng-if="	bookingForm['cha'].$error.required
+																			&& (bookingForm['cha'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<!-- BOE/DO_Number DETAILS -->
+						<li class="animate-show-hide list-group-item"
+							ng-if="oBooking.booking_type.indexOf('Import - Containerized') > -1">
+							<span class="booking_list_header">BOE DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">'BOE' No: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   placeholder="Enter BOE Number"
+														   ng-model="oBooking.boe.number"
+														   class="form-control"
+														   name="BOE No"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													>
+												</div>
+												<span class="error" ng-if="	bookingForm['BOE No'].$error.required
+																			&& (bookingForm['BOE No'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">BOE Value: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   placeholder="Enter BOE Value"
+														   ng-model="oBooking.boe.value"
+														   class="form-control"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   name="BOE Value"
+													>
+												</div>
+												<span class="error" ng-if="	bookingForm['BOE Value'].$error.required
+																			&& (bookingForm['BOE Value'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">BOE Date: </label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened2 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+														<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+															   type="text"
+															   class="form-control"
+															   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="oBooking.boe.date"
+															   is-open="opened2"
+															   datepicker-options="DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Booking Date"
+															   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+															   name="BOE Date"
+															   style="padding: 0px 4px;height: 34px;" />
+													</div>
+													<span class="input-group-btn">
+														  <button type="button" class="btn btn-default m-t-0 f12"
+																  ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+																  class="glyphicon glyphicon-calendar"></i></button>
+														</span>
+												</div>
+												<span class="error" ng-if="	bookingForm['BOE Date'].$error.required
+																			&& (bookingForm['BOE Date'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+
+
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Total Container in BOE: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   placeholder="Total Container"
+														   ng-model="oBooking.boe.total_container"
+														   class="form-control"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   ng-min="1"
+														   ng-max="100"
+														   name="Total Container">
+												</div>
+												<span class="error" ng-if="	bookingForm['Total Container'].$error.required
+																			&& (bookingForm['Total Container'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+												<span class="error" ng-if="	(bookingForm['Total Container'].$error.min || bookingForm['Total Container'].$error.max)
+																			&& (bookingForm['Total Container'].$touched
+																				|| bookingForm.$submitted)">
+													Number should be between 1 to 100</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-if="false">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">DO Validity Date:<span
+													class="req_r">*</span></label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened4 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+														<input ng-click="DatePicker.openDatePicker(this, $event, 'opened4')"
+															   type="text" class="form-control"
+															   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+															   how-weeks="false"
+															   ng-model=""
+															   is-open="opened4"
+															   datepicker-options="DatePicker.dateSettings"
+															   close-text="Close"
+															   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+															   placeholder="DO Validity Date"
+															   name="DO Validity Date"
+															   style="padding: 0px 4px;height: 34px;" />
+													</div>
+													<span class="input-group-btn">
+														  <button type="button" class="btn btn-default m-t-0 f12"
+																  ng-click="DatePicker.openDatePicker(this, $event, 'opened4')"><i
+																  class="glyphicon glyphicon-calendar"></i></button>
+														</span>
+												</div>
+												<span class="error" ng-if="	bookingForm['DO Validity Date'].$error.required
+																			&& (bookingForm['DO Validity Date'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-if="false">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">DO Start Date:<span
+													class="req_r">*</span></label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened5 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened5 == true }">
+														<input ng-click="DatePicker.openDatePicker(this, $event, 'opened5')"
+															   type="text" class="form-control"
+															   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+															   how-weeks="false"
+															   ng-model="oBooking.boe.start"
+															   is-open="opened5"
+															   datepicker-options="DatePicker.dateSettings"
+															   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+															   close-text="Close"
+															   placeholder="DO Start Date"
+															   name="DO Start Date"
+															   style="padding: 0px 4px;height: 34px;" />
+													</div>
+													<span class="input-group-btn">
+														  <button type="button" class="btn btn-default m-t-0 f12"
+																  ng-click="DatePicker.openDatePicker(this, $event, 'opened5')"><i
+																  class="glyphicon glyphicon-calendar"></i></button>
+														</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4" ng-if="false">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">DO End Date:<span
+													class="req_r">*</span></label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened6 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened6 == true }">
+														<input ng-click="DatePicker.openDatePicker(this, $event, 'opened6')"
+															   type="text" class="form-control"
+															   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+															   how-weeks="false"
+															   ng-model="oBooking.boe.end"
+															   is-open="opened6"
+															   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+															   datepicker-options="DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="DO End Date"
+															   name="DO End Date"
+															   style="padding: 0px 4px;height: 34px;" />
+													</div>
+													<span class="input-group-btn">
+														  <button type="button" class="btn btn-default m-t-0 f12"
+																  ng-click="DatePicker.openDatePicker(this, $event, 'opened6')"><i
+																  class="glyphicon glyphicon-calendar"></i></button>
+														</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<!-- INVOICE DETAILS -->
+						<li class="animate-show-hide list-group-item"
+							ng-if="oBooking.booking_type.indexOf('Export - Containerized') > -1">
+							<span class="booking_list_header">INVOICE DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Invoice No:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   placeholder="Enter Invoice Number"
+														   ng-model="oBooking.factory_invoice_number"
+														   class="form-control"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   name="Invoice Number">
+												</div>
+												<span class="error" ng-if="	(bookingForm['Invoice Number'].$error.required
+																			&& (bookingForm['Invoice Number'].$touched
+																				|| bookingForm.$submitted))">
+											This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Invoice Value:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+														   onwheel="return false"
+														   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+														   placeholder="Enter Invoice Value"
+														   ng-model="oBooking.factory_invoice_value"
+														   class="form-control"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   name="Invoice Value">
+												</div>
+												<span class="error" ng-if="	(bookingForm['Invoice Value'].$error.required
+																			&& (bookingForm['Invoice Value'].$touched
+																				|| bookingForm.$submitted))">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Invoice Date:</label>
+											<div class="col-sm-6">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened3 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+														<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+															   type="text" class="form-control"
+															   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+															   show-weeks="false"
+															   ng-model="oBooking.factory_invoice_date"
+															   is-open="opened3"
+															   datepicker-options="DatePicker.dateSettings"
+															   close-text="Close"
+															   placeholder="Invoice Date"
+															   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+															   name="Invoice Date"
+															   style="padding: 0px 4px;height: 34px;" />
+													</div>
+													<span class="input-group-btn">
+														  <button type="button" class="btn btn-default m-t-0 f12"
+																  ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"><i
+																  class="glyphicon glyphicon-calendar"></i></button>
+														</span>
+												</div>
+												<span class="error" ng-if="	(bookingForm['Invoice Date'].$error.required
+																			&& (bookingForm['Invoice Date'].$touched
+																				|| bookingForm.$submitted))">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<!-- CONTAINER LIST DETAILS -->
+						<li class="animate-show-hide list-group-item"
+							ng-if="oBooking.booking_type.toLowerCase().indexOf('containerized') > -1">
+							<span class="booking_list_header">CONTAINER LIST DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px"
+									 ng-if="((editBooking|typeOfFilter:'undefined') ? true : editBooking)">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Type:</label>
+											<div class="col-sm-6">
+												<div class="select">
+													<select class="form-control"
+															name="tempContainerType"
+															ng-model="container.cType">
+														<option value="">Select</option>
+														<option value="container">Container</option>
+														<option value="other">Other</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Container No:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   placeholder="Enter Container Number"
+														   ng-model="container.number"
+														   ng-pattern="handlePatternContainer"
+														   name="container number"
+														   class="form-control">
+													<span class="error" ng-if="	(bookingForm['container number'].$invalid)
+																			&& (bookingForm['container number'].$touched)">
+													Invalid Container Number</span>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Length(Feet):</label>
+											<div class="col-sm-4">
+												<div class="select">
+													<select class="form-control"
+															ng-model="container.length">
+														<option value="" selected>Other</option>
+														<option value="20">20 Feet</option>
+														<option value="40">40 Feet</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-sm-2" ng-if="!container.length">
+												<div class="fg-line">
+													<input type="number" class="form-control"
+														   ng-model="$parent.$parent.$parent.tempStoreContainerLength">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-1 control-label"></label>
+											<div class="col-sm-10"
+												 ng-init="(editBooking|typeOfFilter:'undefined')?oBooking.container=[]:''">
+												<button ng-click="addMoreContainer(container);container={};"
+														ng-disabled="!container.number
+												   				|| !container.cType
+												   				|| bookingForm['container number'].$invalid
+												   				|| (container.length ? false : (tempStoreContainerLength ? false : true))
+												   				|| (oBooking.container | filter:{number:container.number}).length > 0"
+														class="btn btn-primary" type="button">Add More
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" style="margin:5px">
+									<div class="col-md-12">
+										<div class="detailsList">
+											<div class="" style="overflow-y: auto;max-height: 250px;">
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th>#</th>
+														<th>Container No.</th>
+														<th>Container Type</th>
+														<th>Length (Feet)</th>
+														<th></th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr class="pointer selectItem"
+														ng-repeat="item in oBooking.container">
+														<td>{{$index+1}}</td>
+														<td>{{item.number }}</td>
+														<td>{{item.cType}}</td>
+														<td>{{item.length}}</td>
+														<td>
+															<button class="btn btn-primary"
+																	ng-click="oBooking.container.splice($index,1);">
+																Remove
+															</button>
+														</td>
+													</tr>
+													</tbody>
+												</table>
+												<span class="error"
+													  ng-show="oBooking.container.length <= 0 && bookingForm.$submitted">
+													Add {{oBooking.boe.total_container}} Containers</span>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</li>
+						<!-- GEOFENCE LOCATION DETAILS -->
+						<li class="animate-show-hide list-group-item" ng-hide="true">
+							<span class="booking_list_header">GEO FENCE LOCATION DETAILS</span>
+							<div class="" style="text-align: center; margin: 0 0 20px 0;"
+								 ng-if="((editBooking|typeOfFilter:'undefined') ? true : editBooking)">
+								<a href="{{createNewLocationUrl}}" target="_blank" class="btn btn-default">Create new
+																										   Location</a>
+								<a class="pointer btn btn-default" ng-click="getTripLocation(oBooking.route[0]._id);">Refresh
+																													  Location</a>
+							</div>
+							<div class="card-body">
+								<div class="row" style="margin:5px"
+									 ng-if="((editBooking|typeOfFilter:'undefined') ? true : editBooking)">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">GEO FENCE Type: </label>
+											<div class="col-sm-6">
+												<div class="select">
+													<select class="form-control"
+															ng-options="item for item in $constants.aLocationType"
+															ng-model="geofence.type">
+														<option value="" disabled> Select GEO FENCE Type</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Geofence Point: </label>
+											<div class="col-sm-6">
+												<div class="select">
+													<select class="form-control"
+															ng-options="item as item.name for item in (aTripLocations|removeAlreadySelectedLocations:oBooking.geofence_points)"
+															ng-change="geofence.loc = geofence.obj.name"
+															ng-model="geofence.obj">
+														<option value="" disabled> Select Trip Location</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Location : </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="geofence.loc"
+														   placeholder="Location Name"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-init="(editBooking|typeOfFilter:'undefined')?showCustomerLocation=true:''"
+										 ng-show="showCustomerLocation">
+										<div class="form-group m-b-0">
+											<div class="checkbox m-b-15">
+												<label>
+													<input type="checkbox"
+														   ng-model="geofence.isCustomerLocation"
+														   value="">
+													<i class="input-helper"></i>
+													Customer Location
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12">
+										<div class="form-group m-b-0">
+											<div class="col-sm-12 text-center"
+												 ng-init="(editBooking|typeOfFilter:'undefined')?oBooking.geofence_points=[]:''">
+												<button ng-click="	oBooking.geofence_points.push(prepareGeoFenceLocation(geofence));
+																geofence.isCustomerLocation ? showCustomerLocation = false : '';
+																geofence={};
+															"
+														ng-disabled="!geofence.obj || !geofence.type || !geofence.loc"
+														class="btn btn-primary">Add Location
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row" style="margin:5px">
+									<div class="col-md-12">
+										<div class="detailsList">
+											<div class="">
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th>Location Type</th>
+														<th>Geo Fence Location</th>
+														<th>Location Name</th>
+														<th>Contact Name</th>
+														<th>Contact Number</th>
+														<th>Contact Email</th>
+														<th>Contact Address</th>
+														<th>Is Customer Location</th>
+														<th></th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr class="pointer selectItem"
+														ng-repeat="item in oBooking.geofence_points">
+														<td>{{item.type}}</td>
+														<td>{{item.name}}</td>
+														<td>{{item.loc}}</td>
+														<td>{{item.contact_person_name}}</td>
+														<td>{{item.contact_person_number}}</td>
+														<td>{{item.contact_person_email}}</td>
+														<td>{{item.address}}</td>
+														<td>
+															<i ng-show="item.isCustomerLocation"
+															   style="font-size: 30px;color: green;"
+															   class="zmdi zmdi-check zmdi-hc-fw"></i>
+														</td>
+														<td>
+															<button
+																	type="button"
+																	class="btn btn-primary"
+																	ng-click="	item.isCustomerLocation ? $parent.showCustomerLocation=true : '';
+																			oBooking.geofence_points.splice($index,1);">
+																Remove
+															</button>
+														</td>
+													</tr>
+													</tbody>
+												</table>
+												<span class="error"
+													  ng-show="oBooking.geofence_points.length <= 0 && bookingForm.$submitted">
+													Add Location Type</span>
+												<!--<span class="error"
+													  ng-show="	(oBooking.geofence_points.length > 0)
+													  			&& bookingForm.$submitted
+													  			&& oBooking.geofence_points|GeoFenceValidation
+																">
+													Loading and unloading location should be mentioned</span>-->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+
+
+						<!-- CUSTOMER DETAILS -->
+						<!--						<li	class="animate-show-hide list-group-item">-->
+						<!--							<span class="booking_list_header">CUSTOMER DETAILS</span>-->
+						<!--							<div class="card-body">-->
+						<!--								<div class="row" style="margin:5px">-->
+						<!--									<div class="col-md-3">-->
+						<!--										<div class="form-group m-b-0">-->
+						<!--											<label class="col-sm-4 control-label">Consignor: </label>-->
+						<!--											<div class="col-sm-6">-->
+						<!--												<select-->
+						<!--														chosen-->
+						<!--														class="form-control"-->
+						<!--														ng-model="oBooking.consigner"-->
+						<!--														ng-options="item as item.name for item in aConsigner track by item._id"-->
+						<!--														name="Consigner"-->
+						<!--														ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"-->
+						<!--														ng-change="setGeoPoints(oBooking.consigner)"-->
+						<!--												>-->
+						<!--													<option value=""></option>-->
+						<!--												</select>-->
+						<!--											</div>-->
+						<!--										</div>-->
+						<!--									</div>-->
+						<!--									<div class="col-md-3">-->
+						<!--										<div class="form-group m-b-0">-->
+						<!--											<label class="col-sm-4 control-label">Consignee: </label>-->
+						<!--											<div class="col-sm-6">-->
+						<!--												<select chosen-->
+						<!--														multiple-->
+						<!--														placeholder-text-multiple="'Select Consignee'"-->
+						<!--														class="form-control"-->
+						<!--														ng-model="oBooking.consignee"-->
+						<!--														ng-options="item as item.name for item in aConsignee track by item._id"-->
+						<!--														name="Consignee"-->
+						<!--														ng-change="setGeoPointsOfConsignee(oBooking.consignee)"-->
+						<!--														ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))">-->
+						<!--													<option value=""></option>-->
+						<!--												</select>-->
+						<!--												<span class="error" ng-if="	bookingForm['Consignee'].$error.required-->
+						<!--																			&& (bookingForm['Consignee'].$touched-->
+						<!--																				|| bookingForm.$submitted)">-->
+						<!--													This Field is Mandatory</span>-->
+						<!--											</div>-->
+						<!--										</div>-->
+						<!--									</div>-->
+						<!--									<div class="col-md-3">-->
+						<!--										<div class="form-group m-b-0">-->
+						<!--											<label class="col-sm-4 control-label">Billing Party:</label>-->
+						<!--											<div class="col-sm-6">-->
+						<!--												<select chosen-->
+						<!--														class="form-control"-->
+						<!--														ng-model="oBooking.billing_party"-->
+						<!--														ng-options="item as item.name for item in aBiller track by item._id"-->
+						<!--														name="Billing Party"-->
+						<!--														ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))">-->
+						<!--													<option value=""></option>-->
+						<!--												</select>-->
+						<!--											</div>-->
+						<!--										</div>-->
+						<!--									</div>-->
+						<!--								</div>-->
+						<!--							</div>-->
+						<!--						</li>-->
+
+						<!--						ritika				-->
+
+						<li class="animate-show-hide list-group-item">
+							<span class="booking_list_header">CUSTOMER DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Consignor: </label>
+											<div class="col-sm-6">
+												<input type="text"
+													   class="form-control"
+													   ng-model="oBooking.consigner"
+													   uib-typeahead="item as item.name for item in aConsigner | filter:{name:$viewValue}"
+													   name="Consigner"
+													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   ng-change="setGeoPoints(oBooking.consigner)"
+													   typeahead-on-select="oBooking.consigner.onSelect($item, $model, $label)"
+												>
+												<!--													<option value=""></option>-->
+												<!--												</select>-->
+											</div>
+										</div>
+									</div>
+
+
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Consignee: </label>
+											<div class="col-sm-6">
+												<select chosen
+														multiple
+														placeholder-text-multiple="'Select Consignee'"
+														class="form-control"
+														ng-model="oBooking.consignee"
+														ng-options="item as item.name for item in aConsignee track by item._id"
+														name="Consignee"
+														ng-change="setGeoPointsOfConsignee(oBooking.consignee)"
+														ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))">
+													<option value=""></option>
+												</select>
+												<span class="error" ng-if="	bookingForm['Consignee'].$error.required
+																			&& (bookingForm['Consignee'].$touched
+																				|| bookingForm.$submitted)">
+													This Field is Mandatory</span>
+											</div>
+										</div>
+										<!--										<div class="form-group m-b-0">-->
+										<!--											<label class="col-sm-4 control-label">Consignee: </label>-->
+										<!--											<div class="col-sm-6">-->
+										<!--												<input type="text"-->
+										<!--														placeholder-text-multiple="'Search Consignee'"-->
+										<!--														class="form-control"-->
+										<!--														ng-model="oBooking.consignee"-->
+										<!--														uib-typeahead="item as item.name for item in aConsignee | filter:{name:$viewValue}"-->
+										<!--													   name="Consignee"-->
+										<!--													   ng-change="setGeoPointsOfConsignee(oBooking.consignee)"-->
+										<!--													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"-->
+										<!--													   typeahead-on-select="oBooking.consignee.onSelect($item, $model, $label)"-->
+										<!--												>-->
+										<!--&lt;!&ndash;													<option value=""></option>&ndash;&gt;-->
+										<!--												<span class="error" ng-if="	bookingForm['Consignee'].$error.required-->
+										<!--																			&& (bookingForm['Consignee'].$touched-->
+										<!--																					|| bookingForm.$submitted)">-->
+										<!--													This Field is Mandatory</span>-->
+										<!--											</div>-->
+										<!--										</div>-->
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Billing Party:</label>
+											<div class="col-sm-6">
+												<input type="text"
+													   placeholder-text-multiple="'Search BillingParty'"
+													   class="form-control"
+													   ng-model="oBooking.billing_party"
+													   uib-typeahead="item as item.name for item in aBiller | filter:{name:$viewValue}"
+													   name="Billing Party"
+													   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													   typeahead-on-select="oBooking.consignee.onSelect($item, $model, $label)"
+												>
+												<!--													<option value=""></option>-->
+												<!--												</select>-->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<!-- CONTACT DETAILS -->
+						<li class="animate-show-hide list-group-item">
+							<span class="booking_list_header">CONTACT DETAILS</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Contact Name 1:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="oBooking.contact_person.name"
+														   placeholder="Enter Name"
+														   class="form-control"
+														   name="Contant Name 1"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+													>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Contact Mobile 1:</label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   ng-model="oBooking.contact_person.mobile"
+														   placeholder="Enter Mobile"
+														   class="form-control"
+														   name="Contant Number 1"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   ng-minlength="10"
+														   ng-maxlength="10"
+													>
+												</div>
+
+												<span class="error" ng-if="	(bookingForm['Contant Number 1'].$error.minlength
+																				|| bookingForm['Contant Number 1'].$error.maxlength)
+																			&& (bookingForm['Contant Number 1'].$touched
+																				|| bookingForm.$submitted)">
+													Invalid Mobile Number</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Contact Designation 1: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   placeholder="Enter Designation"
+														   ng-model="oBooking.contact_person.role"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Contact Email 1: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   placeholder="Enter Email"
+														   ng-model="oBooking.contact_person.email"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row" style="margin:5px">
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Contact Name 2: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="oBooking.contact_person_2.name"
+														   placeholder="Enter Name"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Contact Mobile 2: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="number"
+														   ng-model="oBooking.contact_person_2.mobile"
+														   placeholder="Enter Mobile"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Contact Designation 2: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="oBooking.contact_person_2.role"
+														   placeholder="Enter Designation"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<label class="col-sm-4 control-label">Contact Email 2: </label>
+											<div class="col-sm-6">
+												<div class="fg-line">
+													<input type="text"
+														   ng-model="oBooking.contact_person_2.email"
+														   placeholder="Enter Email"
+														   ng-disabled="((editBooking|typeOfFilter:'undefined') ? false : (!editBooking))"
+														   class="form-control">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="animate-show-hide list-group-item"
+							ng-if="((editBooking|typeOfFilter:'undefined') ? true : editBooking)">
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+									<div class="col-md-12 text-center">
+										<button class="btn btn-primary" ng-click="submit();"
+												ng-disabled="disableSubmit">SUBMIT
+										</button>
+									</div>
+								</div>
+							</div>
+						</li>
+					</div>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+<style type="text/css">
+	.btn-lst {
+		background: #eea;
+		padding: 3px 5px
+	}
+
+	.btn-lst a {
+		cursor: pointer;
+		background: #5B5B5B;
+		padding: 0 4px 2px 6px;
+		color: #fff;
+		line-height: 30px
+	}
+
+	.btn-lst a:hover {
+		/*background: #333*/
+	}
+
+</style>

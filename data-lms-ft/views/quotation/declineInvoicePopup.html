@@ -1,0 +1,32 @@
+<form role="form" class="form-group"  name="invoiceAcknowledge" autocomplete="off" novalidate>
+<div class="validationError" ng-show="grPopup"><h5 class="c-red">* {{gmsg}}</h5></div>
+<div class="modal-header p-b-0" >
+	<button type="button" ng-click="closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Cancel Invoice</h4><br>
+	<div class="row" style="padding:10px 0;">
+		<div class="col-md-12">
+			<p class="c-black col-md-2 f-500 m-b-20">Remark <span class="req_r">*</span></p>
+			<div class="form-group col-md-10">
+				<div class="fg-line">
+					  <textarea class="form-control" rows="2" ng-model="oSend.cancel_remark" placeholder="Please Specify the Remark"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-success waves-effect"
+			ng-disabled="!oSend.cancel_remark"
+			ng-click="rejectInvoice();">Reject Bill</button>&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-warning"
+			ng-click="closeModal();">Close</button>
+</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 45%;
+		height: 173px
+	}
+</style>

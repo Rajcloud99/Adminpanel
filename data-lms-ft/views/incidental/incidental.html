@@ -1,0 +1,408 @@
+<!-- Controller: incidentalController -->
+<!-- ControllerAs: incVm -->
+
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Incidental Expense </b>
+				</span>
+		</div>
+		<div class="pull-right text-right m-t-5">
+
+			<span>
+				<button class="btn-danger btn-xs"
+						ng-click="incVm.deleteIncidental()"
+						ng-show="incVm.showDelete"
+						uib-tooltip="Delete Incidental"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="m-b-0" id="messages-main">
+		<form name="incidentalForm" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-2">
+									<div class="">
+										<input
+											type="text"
+											class="form-control"
+											ng-model="incVm.filter.refNo"
+											ng-change="incVm.prepareRefFilter();"
+											ng-model-options="{ updateOn: 'blur' }"
+											name="Ref No"
+											placeholder="Ref No."
+										>
+										<i class="lvh-search-close" ng-click="incVm.filter.refNo;">×</i>
+									</div>
+									<span class="error" ng-if="incVm.filter.refNo && incVm.noRefNoFound">No Ref. No. Found</span>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<!--<span class="booking_list_header">Gr Details: </span>-->
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span
+											class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear" style=" z-index: 99";>
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Branch Search.."
+													ng-model="incVm.oVoucher.branch"
+													typeahead-wait-ms="10"
+													name="Branch"
+													typeahead="item as item.name for item in incVm.getAllBranch($viewValue)|limitTo:6"
+													typeahead-on-select="incVm.onBranchSelect($item, $model, $label)"
+													required>
+												<i class="lvh-search-close"
+												   ng-click="incVm.oVoucher.branch = '';">×</i>
+											</div>
+											<span class="error"
+												  ng-show="!incVm.oVoucher.branch">No Branch Selected</span>
+											<span class="warning"
+												  ng-show="incVm.oVoucher.branch && !incVm.oVoucher.branch.refNoBook">No Ref Book Linked to selected branch</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Date: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="Date"
+													ng-model="incVm.oVoucher.date"
+													ng-change="incVm.oVoucher.refNo = undefined;"
+													required>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Ref No:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1" style=" z-index: 99;">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Ref Number"
+														ng-model="incVm.oVoucher.refNo"
+														typeahead-wait-ms="10"
+														name="Reference Number"
+														typeahead="item.bookNo as item.bookNo for item in incVm.getRefNo(incVm.oVoucher.refNo)|limitTo:10"
+														typeahead-on-select="incVm.onRefNoSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close"
+												   ng-click="incVm.oVoucher.refNo=null;">×</i>
+												<!--<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"-->
+												   <!--style="right: -20px; background: #3096f3;"-->
+												   <!--ng-click="incVm.getAutoStationaryNo(incVm.billDate)"></i>-->
+											</div>
+											<span class="error" ng-if="incidentalForm['Reference Number'].$error.required
+																	&& !incidentalForm['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Advice Amt :</label>
+									<div class="col-sm-4">
+										{{incVm.totReceivedAmount = ((incVm.aItems | sumObjKey:'amount') | roundOff) || 0}}
+									</div>
+								</div>
+
+								<div style="clear: both"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Mode: </label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="incVm.oVoucher.paymentMode"
+													ng-options="item as item for item in incVm.aPaymentMode"
+													name="Payment Mode">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Ref:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Payment Ref"
+													   ng-model="incVm.oVoucher.paymentRef"
+													   name="Payment Ref"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Date: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="Payment Date"
+													ng-model="incVm.oVoucher.paymentDate"
+													required>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Narration: </label>
+										<div class="col-sm-8">
+											<input type="text"
+												   onwheel="return false"
+												   ng-model="incVm.oVoucher.narration"
+												   ng-model-options="{updateOn: 'blur'}"
+												   name="Narration"
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+
+								<div style="clear: both"></div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Dr A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="Dr Account"
+												   ng-model="incVm.oVoucher.drAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in incVm.getAllAccount($viewValue) | limitTo:6"
+												   required>
+											<i class="lvh-search-close"
+											   ng-click="incVm.oVoucher.drAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Cr A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="cr Account"
+												   ng-model="incVm.oVoucher.crAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in incVm.getAllAccount($viewValue) | limitTo:6"
+												   required>
+											<i class="lvh-search-close"
+											   ng-click="incVm.oVoucher.crAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<!--<div class="col-md-3">-->
+									<!--<label class="col-md-3 control-label">TDS A/c:<span class="req_r">*</span></label>-->
+									<!--<div class="col-md-9">-->
+										<!--<div class="lvh-search ng-scope sear chosen-row-1">-->
+											<!--<input type="text"-->
+												   <!--class="form-control lvhs-input"-->
+												   <!--placeholder="TDS Account"-->
+												   <!--ng-model="incVm.oVoucher.tdsAccount"-->
+												   <!--typeahead-wait-ms="10"-->
+												   <!--typeahead="item as item.name for item in incVm.getAllAccount($viewValue) | limitTo:6"-->
+												   <!--required>-->
+											<!--<i class="lvh-search-close"-->
+											   <!--ng-click="incVm.oVoucher.tdsAccount=null;">×</i>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+
+								<!--<div class="col-md-3">-->
+									<!--<label class="col-sm-6 control-label">Tds Amt: <span class="req_r">*</span></label>-->
+									<!--<div class="col-sm-4">-->
+										<!--<div class="fg-line form-group m-b-0">-->
+											<!--<input type="number"-->
+												   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+												   <!--onwheel="return false"-->
+												   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+												   <!--ng-model="incVm.oVoucher.tdsAmt"-->
+												   <!--ng-model-options="{updateOn: 'blur'}"-->
+												   <!--name="TDS Amount"-->
+												   <!--placeholder="TDS Amount"-->
+												   <!--class="form-control input-sm"-->
+												   <!--required>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							</div>
+						</div>
+					</li>
+
+					<!-- Settlement Details-->
+					<li class="list-group-item">
+
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3">
+									<label class="col-sm-4 control-label">Gr No:</label>
+									<div class="col-sm-6">
+										<div class="fg-line form-group m-b-0">
+											<input type="text"
+												   ng-model="incVm.filter.grNo"
+												   name="Gr Number"
+												   class="form-control input-sm"
+												   placeholder="Gr Number"
+												   ng-model-options="{ updateOn: 'blur' }">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<button class="btn btn-primary"
+											uib-tooltip="Add"
+											tooltip-placement="bottom"
+											type="button"
+											ng-click="incVm.getGr()">
+										<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+									</button>&nbsp;&nbsp;
+									<button class="btn btn-danger"
+											uib-tooltip="Remove Gr"
+											tooltip-placement="bottom"
+											ng-click="incVm.aItems.splice(incVm.selectedIndex, 1);">
+										<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5" style="overflow-y: auto;">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>Date</th>
+													<th>Gr No</th>
+													<th>Vehicle No</th>
+													<th>Branch</th>
+													<th>Route</th>
+													<th>Billing Party</th>
+													<th>Total Freight</th>
+													<th>Payment</th>
+													<th>Amount</th>
+													<th>Remark</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr data-ng-repeat="oItem in incVm.aItems"
+													ng-click="incVm.selectedIndex = $index;"
+													ng-class="{grn: incVm.selectedIndex === $index}"
+													class="pointer">
+													<td>{{oItem.grDate| date: 'dd-MM-yyyy'}}</td>
+													<td>{{oItem.grNumber}}</td>
+													<td>{{oItem.vehicle_no}}</td>
+													<td>{{oItem.branch.name}}</td>
+													<td>{{oItem.route.name}}</td>
+													<td>{{oItem.billingParty.name}}</td>
+													<td>{{(oItem.totalFreight|roundOff) || 0}}</td>
+													<td>{{(oItem.totalPayment|roundOff) || 0}}</td>
+													<td>
+														<input type="number"
+															   ng-model="oItem.amount"
+															   name="Amount"
+															   placeholder="Amount..."
+															   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+															   onwheel="return false"
+															   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+															   ng-model-options="{updateOn: 'blur'}"
+															   class="form-control input-sm">
+													 </td>
+													  <td>
+														       <input type="text"
+																placeholder="remark"
+																ng-model="oItem.remark"
+																name="remark"
+																ng-model-options="{ updateOn: 'blur' }"
+																class="form-control">
+													  </td>
+												 </tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<div class="text-right p-10">
+						<button class="btn btn-primary"
+								style="font-size: 14px"
+								ng-click="incVm.submit(incidentalForm)"
+								type="button">
+							Submit
+						</button>
+					</div>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+
+	.red {
+		color: red;
+	}
+
+	.chosen-row-1 {
+		z-index: 89;
+	}
+
+	.border-red {
+		border: 2px solid #ff000080 !important;
+	}
+
+	.container:not(.ja-containter) {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+</style>

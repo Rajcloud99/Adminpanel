@@ -1,0 +1,76 @@
+<form role="form" name="myForm" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Vendor Name: {{vendor.name}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="col-md-12">
+				<div class="detailList">
+					<ul>
+						<li><span>PAN :</span> {{vendor.pan_no || 'NA'}}</li>
+						<li><span>GSTIN :</span> {{vendor.gstn || 'NA'}}</li>
+						<li><span>Email :</span> {{vendor.email || 'NA'}}</li>
+						<li><span>Branch :</span> {{vendor.branch || 'NA'}}</li>
+						<li><span>Area :</span> {{vendor.ho_address.line1 || 'NA'}}</li>
+						<li><span>City :</span>{{vendor.ho_address.city || 'NA'}}</li>
+						<li><span>State :</span> {{vendor.ho_address.state || 'NA'}}</li>
+						<li><span>Country :</span> {{vendor.ho_address.country || 'NA'}}</li>
+						<li><span>Contact Person :</span> {{vendor.contact_person_name || 'NA'}}</li>
+						<li><span>Contact Num:</span> {{vendor.prim_contact_no || 'NA'}}</li>
+						<li><span>Address Proof Type</span>{{vendor.address_proof_type || 'NA'}}</li>
+						<li><span>Address Proof No </span>{{vendor.address_proof_no || 'NA'}}</li>
+						<li><span>Created Date</span>{{vendor.date || 'NA'}}</li>
+						<li><span>Created By :</span> {{vendor.created || 'NA'}}</li>
+						<li><span>Updated By :</span> {{vendor.updated || 'NA'}}</li>
+					</ul>
+				</div>
+
+				<div class="col-md-12">
+					<h4 style="margin-left: 19px;">Bank Details</h4>
+					<table ng-show="vendor.banking_details.length" ng-table="tableParams" class="table">
+						<tr ng-repeat="vBank in vendor.banking_details track by $index">
+							<td style="width: 300px;" data-title="'Acount No '">{{vBank.a_c || 'NA'}}</td>
+							<td data-title="'IFSC '">{{vBank.ifsc || 'NA'}}</td>
+							<td data-title="'Declaration '">{{vBank.declaration || 'NA'}}</td>
+							<td data-title="'Cancel Cheque '">
+								<button ng-click="$event.preventDefault();preview(vBank.cancelled_cheque)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-show="vBank.cancelled_cheque">Preview Cheque</button >
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<br>
+		</div>
+	</div>
+	<div class="modal-footer">&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 75%;
+		height: 150px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

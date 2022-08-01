@@ -1,0 +1,161 @@
+<!--controller:soldVehicleCtrl-->
+<!--controllerAs:soldVehicleVm-->
+
+<form novalidate autocomplete="off" name="soldVehicleForm" ng-submit="soldVehicleVm.submit(soldVehicleForm)">
+	<div class="modal-header p-b-0">
+		<button type="button" ng-click="soldVehicleVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Sold Vehicle({{soldVehicleVm.oVehicle.vehicle_reg_no}})</h4><br>
+		<ul class="list-group list-group-flush">
+			<div>
+				<!-- DETAILS -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vendor Name: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="text"
+													class="form-control"
+													placeholder="Vendor Name"
+													name="Sold Vendor Name"
+													ng-model="soldVehicleVm.oVehicle.soldVendor_name"
+													typeahead-wait-ms="10"
+											        required>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vendor Address: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="text"
+													class="form-control"
+													placeholder="Enter Vendor Address"
+													ng-model="soldVehicleVm.oVehicle.vendor_address"
+											>
+											</div>
+									</div>
+								</div>
+							</div>
+							<div class="m-b-10" style="clear: both"></div>
+
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vendor Phone No: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   placeholder="Enter Mobile Number"
+												   ng-model="soldVehicleVm.oVehicle.vendor_phno"
+												   name="Mobile Number"
+												   ng-minlength="10"
+												   ng-maxlength="10"
+												   class="form-control"
+											>
+										</div>
+										<span class="error" ng-if="	(soldVehicleForm['Mobile Number'].$error.minlength
+																				|| soldVehicleForm['Mobile Number'].$error.maxlength)
+																			&& (soldVehicleForm['Mobile Number'].$touched
+																				|| soldVehicleForm.$submitted)">
+													Invalid Mobile Number</span>
+										</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vendor Pan No: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="text"
+													class="form-control"
+													placeholder="Enter Vendor PanNo"
+													ng-model="soldVehicleVm.oVehicle.vendor_panNo"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="m-b-10" style="clear: both"></div>
+
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Sold Amount: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onKeyPress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+												   onWheel="return false"
+												   onKeyDown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+												   placeholder="sold Amount"
+												   ng-model="soldVehicleVm.oVehicle.sa"
+												   class="form-control"
+												   name="Sold Amount"
+												   required>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Sold Date: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													fill-date
+													type="text"
+													class="form-control"
+													placeholder="Date"
+													ng-model="soldVehicleVm.oVehicle.sd"
+													required
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="m-b-10" style="clear: both"></div>
+
+						</div>
+					</div>
+				</li>
+				<div class="modal-footer">
+					<button class="btn btn-primary">Submit
+					</button>
+					<button class="btn btn-warning"
+							type="button"
+							ng-click="soldVehicleVm.closeModal()">Close
+					</button>
+				</div>
+			</div>
+
+		</ul>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 60%;
+		height: 173px
+	}
+
+	.strikeThrough {
+		text-decoration: line-through;
+	}
+
+	.activeBill {
+		background-color: #9af019;
+	}
+
+</style>
+

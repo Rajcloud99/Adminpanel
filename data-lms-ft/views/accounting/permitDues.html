@@ -1,0 +1,667 @@
+<!--Controller: permitDuesController-->
+<!--ControllerAs: duesVm-->
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" style="position: absolute;width: 100%;margin-bottom: 65px">
+		<form novalidate autocomplete="off" name="addVoucherForm">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Dues Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Dues Type: <span
+											class="req_r">*</span></label>
+										<div class="col-sm-6">
+											{{duesVm.oDues.duesType}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Branch :<span
+											class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Branch Search.."
+													ng-model="duesVm.oDues.branch"
+													typeahead-wait-ms="10"
+													name="Branch"
+													typeahead="item as item.name for item in duesVm.getAllBranch($viewValue)|limitTo:6"
+													required>
+												<i class="lvh-search-close" ng-click="duesVm.oDues.branch=null;">×</i>
+											</div>
+											<span class="error" ng-show="!duesVm.oDues.branch">No Branch Selected</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Ref No:<span
+											class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Ref Number"
+													ng-model="duesVm.oDues.refNo"
+													name="Ref Number"
+													required>
+												<i class="lvh-search-close"
+												   ng-click="duesVm.oDues.refNo= ''">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Credit AC:<span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Credit AC"
+													ng-model="duesVm.oDues.from_account"
+													typeahead-wait-ms="10"
+													name="Account"
+													required
+													typeahead="item as item.name for item in duesVm.accountmaster($viewValue) | limitTo:20"
+													typeahead-on-select="duesVm.onAcSelect($item, $model, $label)">
+												<i class="lvh-search-close"
+												   ng-click="duesVm.oDues.from_account=''">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Debit AC:<span
+											class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control"
+													placeholder="Debit AC"
+													ng-model="duesVm.oDues.to_account"
+													typeahead-wait-ms="10"
+													name="Account"
+													required
+													typeahead="item as item.name for item in duesVm.accountmaster($viewValue) | limitTo:20">
+												<i class="lvh-search-close" ng-click="duesVm.oDues.to_account=''">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+<!--								<div class="col-md-4">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">TDS AC:</label>-->
+<!--										<div class="col-sm-8">-->
+<!--											<div class="ng-scope sear chosen-row-1">-->
+<!--												<input-->
+<!--													type="text"-->
+<!--													class="form-control"-->
+<!--													placeholder="TDS AC"-->
+<!--													ng-model="duesVm.oDues.tdsAccount"-->
+<!--													typeahead-wait-ms="10"-->
+<!--													name="TDS Account"-->
+<!--													typeahead="item as item.name for item in duesVm.accountmaster($viewValue) | limitTo:20">-->
+<!--												<i class="lvh-search-close" ng-click="duesVm.oDues.tdsAccount=''">×</i>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Dues Date: <span
+											class="req_r">*</span></label>
+										<div class="col-sm-8">
+
+											<input
+												fill-date
+												max-date="duesVm.DatePicker.newDate"
+												min-date="'setDate'|dateUtilsFilt:'31/03/2019'"
+												type="text"
+												class="form-control"
+												placeholder="Dues Date"
+												ng-model="duesVm.oDues.date"
+												ng-change="duesVm.getTDSRate()"
+											>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Permit Policy: <span
+											class="req_r">*</span></label>
+										<div class="col-sm-7">
+											<select chosen
+													class="form-control"
+													ng-model="duesVm.oDues.insType"
+													ng-options="item as item for item in ['New', 'Renewal']"
+													required
+													name="Ins Type">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Cheque No: </label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Cheque No"
+													   ng-model="duesVm.oDues.chqueno"
+													   name="Cheque No"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Invoice No: </label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Invoice No"
+													   ng-model="duesVm.oDues.invoiceNo"
+													   name="Invoice No"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-4">
+									<div class="form-group">
+										<label class="col-sm-4 control-label">Remark:</label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+													<textarea class="form-control"
+															  rows="2"
+															  ng-model="duesVm.oDues.rmk"
+															  placeholder="Remark...">
+													</textarea>
+											</div>
+										</div>
+									</div>
+								</div>
+<!--								<div class="col-md-4">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Gst Type:</label>-->
+<!--										<div class="col-sm-7">-->
+<!--											<select chosen-->
+<!--													class="form-control"-->
+<!--													ng-model="duesVm.oDues.gstType"-->
+<!--													ng-options="item as item for item in ['IGST', 'CGST & SGST']"-->
+<!--													name="Gst Type">-->
+<!--												<option value=""></option>-->
+<!--											</select>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<div class="clearfix"></div>-->
+<!--								<div class="col-md-4" ng-if="duesVm.oDues.gstType === 'IGST'">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Igst AC:</label>-->
+<!--										<div class="col-sm-8">-->
+<!--											<div class="ng-scope sear chosen-row-1">-->
+<!--												<input-->
+<!--													type="text"-->
+<!--													class="form-control"-->
+<!--													placeholder="IGST AC"-->
+<!--													ng-model="duesVm.oDues.iGSTAccount"-->
+<!--													typeahead-wait-ms="10"-->
+<!--													name="TDS Account"-->
+<!--													typeahead="item as item.name for item in duesVm.accountmaster($viewValue) | limitTo:20">-->
+<!--												<i class="lvh-search-close" ng-click="duesVm.oDues.iGSTAccount=''">×</i>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<div class="col-md-4" ng-if="duesVm.oDues.gstType === 'IGST'">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">IGST Amount:</label>-->
+<!--										<div class="col-sm-7">-->
+<!--											{{( duesVm.oDues.iGST|| 0) |roundOff}}-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<div class="col-md-4" ng-if="duesVm.oDues.gstType === 'CGST & SGST'">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Cgst AC:</label>-->
+<!--										<div class="col-sm-8">-->
+<!--											<div class="ng-scope sear chosen-row-1">-->
+<!--												<input-->
+<!--													type="text"-->
+<!--													class="form-control"-->
+<!--													placeholder="CGST AC"-->
+<!--													ng-model="duesVm.oDues.cGSTAccount"-->
+<!--													typeahead-wait-ms="10"-->
+<!--													name="CGST Account"-->
+<!--													typeahead="item as item.name for item in duesVm.accountmaster($viewValue) | limitTo:20">-->
+<!--												<i class="lvh-search-close" ng-click="duesVm.oDues.cGSTAccount=''">×</i>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<div class="col-md-4" ng-if="duesVm.oDues.gstType === 'CGST & SGST'">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Sgst AC:</label>-->
+<!--										<div class="col-sm-8">-->
+<!--											<div class="ng-scope sear chosen-row-1">-->
+<!--												<input-->
+<!--													type="text"-->
+<!--													class="form-control"-->
+<!--													placeholder="SGST AC"-->
+<!--													ng-model="duesVm.oDues.sGSTAccount"-->
+<!--													typeahead-wait-ms="10"-->
+<!--													name="SGST Account"-->
+<!--													typeahead="item as item.name for item in duesVm.accountmaster($viewValue) | limitTo:20">-->
+<!--												<i class="lvh-search-close" ng-click="duesVm.oDues.sGSTAccount=''">×</i>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<div class="col-md-4" ng-if="duesVm.oDues.gstType === 'CGST & SGST'">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">CGST Amount:</label>-->
+<!--										<div class="col-sm-7">-->
+<!--											{{(duesVm.oDues.cGST || 0) |roundOff}}-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--								<div class="col-md-4" ng-if="duesVm.oDues.gstType === 'CGST & SGST'">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">SGST Amount:</label>-->
+<!--										<div class="col-sm-7">-->
+<!--											{{(duesVm.oDues.sGST || 0) |roundOff}}-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Total Amount:</label>
+										<div class="col-sm-7">
+											{{(duesVm.oDues.amount || 0) |roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header pull-left">Add Vehicle</span>
+
+						<div class="col-md-4 pull-right text-right">
+							<button ng-disabled="duesVm.flag" class="btn btn-primary" uib-tooltip="Add Vehicle" ng-click="duesVm.addVehicle()">
+								<i class="zmdi zmdi-plus"></i>
+							</button>
+							<button ng-disabled="!duesVm.flag" class="btn btn-primary" uib-tooltip="Modified Vehicle" ng-click="duesVm.addVehicle(duesVm.selectedIndex)">
+								<i class="zmdi zmdi-collection-plus"></i>
+							</button>
+							<button class="btn btn-danger" uib-tooltip="Delete Vehicle" ng-click="duesVm.deleteVehicle()">
+								<i class="zmdi zmdi-delete"></i>
+							</button>
+						</div>
+						<div class="clearfix"></div>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vehicle No: <span
+											class="req_r">*</span></label>
+										<div class="col-md-8">
+											<div class="lvh-search ng-scope sear chosen-row-1">
+												<input
+													type="text"
+													class="form-control lvhs-input"
+													placeholder="Vehicle Search..."
+													ng-model="duesVm.oVehicle.veh"
+													typeahead-wait-ms="10"
+													typeahead="item as item.vehicle_reg_no for item in duesVm.getAllVehicle($viewValue)"
+													typeahead-on-select="duesVm.onVehSelect($item, $model, $label)">
+												<i class="lvh-search-close" ng-click="duesVm.oVehicle.veh=null;">×</i>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Permit Type: </label>
+										<div class="col-sm-7">
+											<select chosen
+													class="form-control"
+													ng-model="duesVm.oVehicle.prmityp"
+													ng-options="item as item for item in ['National Permit','5 years']"
+													name="Permit Type">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Valid From:<span
+											class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<input
+												fill-date
+												type="text"
+												class="form-control"
+												placeholder="Start date"
+												ng-model="duesVm.oVehicle.frmdt"
+												ng-change="duesVm.oVehicle.todt=undefined;duesVm.setToDate(duesVm.oVehicle.frmdt)"
+											>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Valid To:<span
+											class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<input
+												fill-date
+												max-date= "duesVm.max |setMaxDate:60"
+												min-date="'setDate'|dateUtilsFilt:duesVm.oVehicle.frmdt"
+												type="text"
+												class="form-control"
+												placeholder="End date"
+												ng-model="duesVm.oVehicle.todt"
+												ng-change="duesVm.maxDate(duesVm.oVehicle.frmdt)"
+											>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Permit Fee :<span
+											class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   placeholder="Enter Amount"
+													   ng-model="duesVm.oVehicle.amount"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control"
+													   name="Amount">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Home state Permit Fees - Govt:</label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"
+													   placeholder="HS Govt Fees"
+													   ng-model="duesVm.oVehicle.othrexp"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control"
+													   name="Other Expenses">
+											</div>
+										</div>
+									</div>
+								</div>
+
+<!--								<div class="col-md-3">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">Processing Charges :</label>-->
+<!--										<div class="col-sm-8">-->
+<!--											<div class="fg-line">-->
+<!--												<input type="number"-->
+<!--													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"-->
+<!--													   onwheel="return false"-->
+<!--													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 45 && event.charCode <= 57"-->
+<!--													   placeholder="Enter Processing Charges"-->
+<!--													   ng-model="duesVm.oVehicle.proCharge"-->
+<!--													   ng-model-options="{ updateOn: 'blur' }"-->
+<!--													   class="form-control"-->
+<!--													   name="Amount">-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Permit No: </label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Permit Number"
+													   ng-model="duesVm.oVehicle.permitNo"
+													   name="Permit Number"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+<!--								<div class="col-md-3">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-6 control-label">TDS: </label>-->
+<!--										<div class="col-sm-6">-->
+<!--											<div class="checkbox">-->
+<!--												<label>-->
+<!--													<input-->
+<!--														type="checkbox"-->
+<!--														ng-model="duesVm.oVehicle.tds"-->
+<!--														value="">-->
+<!--													<i class="input-helper"></i>-->
+<!--												</label>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+<!--								<div class="clearfix"></div>-->
+
+<!--								<div class="col-md-3">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">TDS Rate: </label>-->
+<!--										<div class="col-sm-6" ng-if="duesVm.showTDSRate">-->
+<!--											<div class="select">-->
+<!--												<select-->
+<!--													class="form-control"-->
+<!--													placeholder="Percent Type"-->
+<!--													ng-model="duesVm.oVehicle.tdsRate"-->
+<!--													ng-options="item as (item + '%') for item in [0,0.5,1,2,5,10,12,15,18,24,28,40]"-->
+<!--													name="percent">-->
+<!--													<option value=" " disabled selected>-->
+<!--														Select TDS Rate-->
+<!--													</option>-->
+<!--												</select>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--										<div class="col-sm-6"  ng-if="!duesVm.showTDSRate">-->
+<!--											{{duesVm.tdsRate || 0}}-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+
+								<div class="clearfix"></div>
+
+								<div class="card-body">
+									<div class="row" style="margin:5px">
+										<div class="detailsList">
+											<div style="overflow-x: scroll">
+												<table class="table table-bordered unresponsive">
+													<thead>
+													<tr>
+														<th>&#35;</th>
+														<th>Vehicle No</th>
+														<th>Vehicle Model</th>
+														<th>Vehicle Owner</th>
+														<th>From</th>
+														<th>To</th>
+														<th>Permit Type</th>
+														<th>Permit No</th>
+														<th>Amount</th>
+														<th>Other Expenses</th>
+<!--														<th>Processing Charges</th>-->
+<!--														<th>TDS</th>-->
+<!--														<th>CGST RT.</th>-->
+<!--														<th>CGST AMT.</th>-->
+<!--														<th>SGST RT.</th>-->
+<!--														<th>SGST AMT.</th>-->
+<!--														<th>IGST RT.</th>-->
+<!--														<th>IGST AMT.</th>-->
+														<th>TOTAL</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr class="pointer selectItem"
+														ng-repeat="veh in duesVm.oDues.aVehCollection"
+														ng-dblclick="duesVm.onSelect($index, veh)"
+														ng-class="{'grn': veh.veh_no === duesVm.vehNo}">
+														<td>{{$index + 1}}</td>
+														<td>{{veh.veh_no}}</td>
+														<td>{{veh.vehModel}}</td>
+														<td>{{veh.vehOwnerName}}</td>
+														<td>{{veh.frmdt | date: "dd-MM-yyyy"}}</td>
+														<td>{{veh.todt | date: "dd-MM-yyyy"}}</td>
+														<td>{{veh.prmityp}}</td>
+														<td>{{veh.permitNo}}</td>
+														<td>{{veh.amount |roundOff}}</td>
+														<td>{{veh.othrexp |roundOff}}</td>
+<!--														<td>{{veh.proCharge |roundOff}}</td>-->
+<!--														<td>{{(veh.tds ? (((veh.proCharge) * (veh.tdsRate||0)/100)|roundOff) : 0)}}</td>-->
+<!--														<td>{{veh.cGSTPercent}}</td>-->
+<!--														<td>{{veh.cGST|roundOff}}</td>-->
+<!--														<td>{{veh.sGSTPercent}}</td>-->
+<!--														<td>{{veh.sGST|roundOff}}</td>-->
+<!--														<td>{{veh.iGSTPercent}}</td>-->
+<!--														<td>{{veh.iGST|roundOff}}</td>-->
+														<td>{{veh.total |roundOff}}</td>
+													</tr>
+													<tr class="pointer"
+														style="border-top: 2px solid black"
+														ng-show="duesVm.oDues.aVehCollection.length">
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>{{duesVm.oDues.totalWithoutTax|roundOff}}</td>
+														<td>{{duesVm.oDues.totalOthrexp|roundOff}}</td>
+<!--														<td>{{duesVm.oDues.proTotalWithoutTax|roundOff}}</td>-->
+<!--														<td>{{duesVm.oDues.tdsAmt|roundOff}}</td>-->
+<!--														<td></td>-->
+<!--														<td>{{duesVm.oDues.cGST|roundOff}}</td>-->
+<!--														<td></td>-->
+<!--														<td>{{duesVm.oDues.sGST|roundOff}}</td>-->
+<!--														<td></td>-->
+<!--														<td>{{duesVm.oDues.iGST|roundOff}}</td>-->
+														<td>{{duesVm.oDues.totalWithTax|roundOff}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+										<div class="clearfix"></div>
+
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="text-center">
+									<label class="checkbox checkbox-inline">
+										<input type="checkbox"
+											   ng-model="duesVm.dataPreserve">
+										<i class="input-helper"></i>
+										Preserve Data
+									</label>&nbsp;&nbsp;
+									<button ng-disabled="duesVm.isdisabled" ng-click="duesVm.submit(addVoucherForm)" class="btn btn-primary">{{duesVm.mode}} Dues</button>
+								</div>
+
+							</div>
+
+						</div>
+					</li>
+
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+
+
+	error {
+		font-size: 10px;
+		color: red;
+	}
+
+	color {
+		color: red;
+	}
+
+	.btn-danger:focus {
+		box-shadow: 0px 0px 13px 2px darkred !important;
+	}
+
+	.btn-primary:focus {
+		box-shadow: 0px 0px 13px 2px blue !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+</style>

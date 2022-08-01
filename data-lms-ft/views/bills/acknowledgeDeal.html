@@ -1,0 +1,446 @@
+<form role="form" name="myTripPopUp" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+						data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Trip No. {{trip.trip_no}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+
+			<!--<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Branch</label>
+						<div class="col-sm-6">
+							<div class="select">
+								<select chosen class="form-control" ng-model="trip.oBranch" ng-options="b as b.name for b in aBranch"
+												style="background-color: white;">
+									<option value="" selected>Select</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Trip Manager</label>
+						<div class="col-sm-6">
+							<div class="select">
+								<select chosen class="form-control" ng-model="trip.oTripManager" ng-options="m as m.full_name for m in aUsers"
+												style="background-color: white;">
+									<option value="" selected>Select</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Allocation Date</label>
+						<div class="col-sm-4">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="open($event, 'opened1')"
+												 type="text"
+												 class="form-control"
+												 uib-datepicker-popup="{{format}}"
+												 show-weeks="false"
+												 ng-model="trip.allocation_date"
+												 is-open="opened1"
+												 datepicker-options="dateOptions"
+												 close-text="Close"
+												 ng-disabled="trip.status != 'Trip not started'"
+												 style="padding: 0px 4px;height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+										<button ng-disabled="trip.status != 'Trip not started'" type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+												class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark <span class="req_r">*</span></label>
+						<div class="col-sm-6">
+							<input type="text" class="form-control" ng-model="updated_status.remark" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<hr>
+			<br>-->
+
+			<div ng-show="trip.vehicle.ownershipType==='Market'">
+				<h4 ng-if="accountingAvailable">Account Details</h4>
+				<div class="row" style="margin:15px">
+					<div ng-if="accountingAvailable" class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">From Account : <span class="req_r">*</span></label>
+							<div class="col-sm-8">
+								<select
+										chosen
+										class="form-control"
+										ng-model="trip.account_data.from"
+										ng-options="item as item.name for item in aAccountMasterOfVendor"
+										search-contains="true"
+										name="Account From"
+										ng-required="accountingAvailable"
+								>
+									<option selected disabled></option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div ng-if="accountingAvailable" class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-4 control-label">To Account: <span class="req_r">*</span></label>
+							<div class="col-sm-8">
+								<select chosen
+												class="form-control"
+												ng-model="trip.account_data.to"
+												ng-options="item as item.name for item in (aAccountMasterOfPurchase|filter:{name:'!'+trip.account_data.from.name})"
+												search-contains="true"
+												name="Account To"
+												ng-required="accountingAvailable"
+								>
+									<option selected disabled></option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div ng-show="trip.vehicle.ownershipType==='Market'">
+				<h4>Vendor Deal</h4>
+				<div class="row" style="margin:15px">
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Payment Type: <span
+									class="req_r">*</span></label>
+							<div class="col-sm-6">
+								<div class="select">
+									<select class="form-control"
+													ng-model="trip.vendorDeal.payment_type"
+													ng-options="item as item for item in $constants.paymentType"
+													ng-change="changePayType(trip.vendorDeal.payment_type)" required>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Basis: <span
+									class="req_r">*</span></label>
+							<div class="col-sm-6">
+								<div class="select">
+									<select class="form-control"
+													ng-options="item as item for item in $constants.aWeightTypes"
+													ng-model="trip.vendorDeal.weight_type"
+													name="Weight Type"
+													required>
+										<option value="" disabled style="display: none;">
+											Payment Basis
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<div class="checkbox m-b-15">
+								<label>
+									<input type="checkbox"
+										   ng-init="trip.vendorDeal.deductTDS = false"
+										   ng-model="trip.vendorDeal.deductTDS"
+										   name="deduct tds">
+									<i class="input-helper"></i>
+									Deduct TDS
+								</label>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="row" style="margin:15px">
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Total: <span
+									class="req_r">*</span></label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number" ng-change="changeAdvance('total');changeAcPayment()" class="form-control" ng-model="trip.vendorDeal.total_expense" placeholder="enter here..." required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Munshiyana </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number" ng-change="changeAdvance('munshiyana');changeAcPayment()" class="form-control" ng-model="trip.vendorDeal.munshiyana" placeholder="enter here..." >
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Advance  <span
+									class="req_r">*</span></label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number" ng-change="changeAdvance('advance');changeAcPayment()" class="form-control" ng-model="trip.vendorDeal.advance" placeholder="enter here..." ng-readonly="(trip.vendorDeal.payment_type==='To pay' || trip.vendorDeal.payment_type === 'To be billed')" required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">To Pay/Balance: <span
+									class="req_r">*</span></label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number" ng-change="changeAdvance('topay');changeAcPayment()" class="form-control" ng-model="trip.vendorDeal.toPay" placeholder="enter here..." ng-readonly="(trip.vendorDeal.payment_type==='To pay' || trip.vendorDeal.payment_type === 'To be billed')" required>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin:15px">
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-md-4 control-label">Advance Due Date </label>
+							<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }"
+									 style=" ">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="open($event, 'opened1')" type="text"
+												 class="form-control"
+												 uib-datepicker-popup="{{format}}" show-weeks="false"
+												 ng-model="trip.vendorDeal.advance_due_date"
+												 is-open="opened1" min-date="minDate" max-date="maxDate"
+												 datepicker-options="dateOptions" close-text="Close"
+												 placeholder="Advance Date"
+												 style="padding: 0px 4px; height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+							<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="open($event, 'opened1')"><i
+									class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-md-4 control-label">Topay Due Date </label>
+							<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="open($event, 'opened2')" type="text"
+												 class="form-control"
+												 uib-datepicker-popup="{{format}}" show-weeks="false"
+												 ng-model="trip.vendorDeal.topay_due_date"
+												 is-open="opened2" min-date="minDate" max-date="maxDate"
+												 datepicker-options="dateOptions" close-text="Close"
+												 placeholder="Due Date"
+												 style="padding: 0px 4px; height: 34px;"/>
+								</div>
+								<span class="input-group-btn">
+							<button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="open($event, 'opened2')"><i
+									class="glyphicon glyphicon-calendar"></i></button>
+						</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Hire Slip <span class="req_r">*</span></label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" class="form-control" ng-model="trip.vendorDeal.lsNo" placeholder="Enter Hire Slip" required>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div  ng-hide="trip.vendorDeal.payment_type=='To pay' || trip.vendorDeal.payment_type=='To be billed'">
+					<h4>Advance Component</h4>
+					<div class="row" style="margin:15px">
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Diesel</label>
+								<div class="col-sm-6">
+									<div class="select">
+										<select ng-options="t for t in aType" class="form-control" ng-model="trip.vendorDeal.diesel.type" ng-change="changeAmount()">
+											<option value="" selected>Select</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2" ng-show="trip.vendorDeal.diesel.type=='Liter'">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Liter</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number" ng-change="changeAmount()" class="form-control" ng-model="trip.vendorDeal.diesel.quantity" placeholder="enter here...">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2" ng-show="trip.vendorDeal.diesel.type=='Liter'">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Rate</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number" ng-change="changeAmount()" class="form-control" ng-model="trip.vendorDeal.diesel.rate" placeholder="enter here...">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Amount</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number" ng-change="changeAcPayment()" class="form-control" ng-model="trip.vendorDeal.diesel.amount" placeholder="enter here..." ng-readonly="trip.vendor_payment.diesel.type=='Liter'">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="margin:15px">
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Driver Cash</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number" ng-change="changeAcPayment()" class="form-control" ng-model="trip.vendorDeal.driver_cash" placeholder="enter here...">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Toll Tax</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number" ng-change="changeAcPayment()" class="form-control" ng-model="trip.vendorDeal.toll_tax" placeholder="enter here...">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="margin:15px">
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Other</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number" ng-change="changeAcPayment()" class="form-control" ng-model="trip.vendorDeal.other_charges" placeholder="enter here...">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Remark For Other</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="text" class="form-control" ng-model="trip.vendorDeal.other_charges_remark" placeholder="enter here...">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row" style="margin:15px">
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">A/C Payment</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="number" class="form-control" ng-model="trip.vendorDeal.account_payment" placeholder="enter here..." ng-readonly="true">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Remark</label>
+								<div class="col-sm-6">
+									<div class="fg-line">
+										<input type="text" class="form-control" ng-model="trip.vendorDeal.remark" placeholder="enter here...">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group m-b-0">
+								<label class="col-sm-6 control-label">Own Diesel</label>
+								<div class="col-sm-6">
+									<div class="checkbox">
+										<label>
+											<input type="checkbox" ng-model="trip.diesel_stage" value="">
+											<i class="input-helper"></i>
+											Own Diesel
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<hr>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button
+				class="btn btn-success waves-effect"
+				ng-disabled="!trip.account_data.from || !trip.account_data.to || !trip.vendorDeal.payment_type || !trip.vendorDeal.weight_type || !trip.vendorDeal.total_expense || !trip.vendorDeal.lsNo"
+				ng-click="updateTripDataCall()"
+		>
+			Acknowledge
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+		min-height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

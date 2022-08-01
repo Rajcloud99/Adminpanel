@@ -1,0 +1,100 @@
+<form name="trafficManager" ng-submit="submit(trafficManager)" autocomplete="off" novalidate>
+
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Traffic Manager</b>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Account DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">ADD / UPDATE TRAFFIC MANAGER</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+                                    <div class="lvh-search ng-scope sear chosen-row-2">
+                                        <input type="text" class="form-control lvhs-input" placeholder="Traffic Manager Search..."
+                                            ng-model="oFilter.trManager" ng-disabled="isQuoteExist" typeahead-wait-ms="10"
+                                            typeahead="item as item.full_name for item in getAllUsers($viewValue)"
+                                            typeahead-on-select="onSelectUser($item, $model, $label)">
+                                        <i class="lvh-search-close" ng-click="oFilter.trManager=null;">×</i>
+                                    </div>
+                                </div>
+							
+
+                        </div>
+                        <!-- <div class="col-xs-6 col-sm-8 col-md-8 col-lg-8" ng-if="aTrafficManager.length">
+                            <span class="btn-lst" ng-repeat="select in aTrafficManager">
+                                <button class="btn-xs" style="background: black; color: aliceblue;"> {{select.full_name ? select.full_name : select.name}}&nbsp;
+                                    <a ng-click="removeUser(select,$index)"> X </a></button>&nbsp;&nbsp;</span>
+						</div> -->
+						<div class="row">
+							<div style="clear:both;"></div>
+							<div class="row" style="margin:5px">
+								<div class="" style="overflow-y: auto; max-height: 200px;">
+									<table class="table table-bordered vehicleAllot">
+										<thead>
+										<tr>
+											<th>#</th>
+											<th>Name</th>
+											<th>Assign By</th>
+											<th>Added At</th>
+											<th ng-if="!(isQuoteExist)">Action</th>
+											
+										</tr>
+										</thead>
+										<tbody>
+										<tr ng-repeat="tm in aTrafficManager"
+										>
+											<td>{{$index+1}}</td>
+											<td>{{tm.full_name ? tm.full_name : tm.name}}</td>
+											<td>{{tm.assignBy}}</td>
+											<td>{{(tm.date | date:"dd-MMM-yyyy 'at' h:mma")}}</td>
+											<td ng-if="!(isQuoteExist)">
+												<button class="btn btn-danger btn-xs p-l-5 p-r-5" style="font-size: 20px"
+													uib-tooltip="Delete Traffic Manager" tooltip-placement="bottom" type="button"
+													ng-click="removeUser(select,$index)">
+													<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+												</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="closeModal()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.modal-dialog{
+		width: 90%;
+	}
+
+</style>

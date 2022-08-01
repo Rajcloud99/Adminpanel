@@ -1,0 +1,339 @@
+<div class="container m-b-10">
+  <div class="col-md-12 card m-b-0">
+	<div class="lvh-label">
+	  <span class="c-black"><b>Trip Report</b></span>
+	</div>
+	<div class="pull-right">
+	  <button class="btn btn-primary p-t-0 p-b-0 m-t-5"
+			  style="margin-bottom: 3px;  font-size: 16px"
+			  ng-click="downloadCsv(aTrips)"
+	  >
+		  <i class="zmdi zmdi-download zmdi-hc-fw"></i>
+	  </button>
+	  &nbsp;&nbsp;
+	  <button class="btn btn-primary p-t-0 p-b-0 m-t-5"
+			  style="margin-bottom: 3px;  font-size: 16px"
+			  ng-click=" graphView = !graphView;"
+	  >
+		  <i class="zmdi zmdi-view-column zmdi-hc-fw"></i>
+	  </button>
+	</div>
+  </div>
+</div>
+
+<div class="container m-b-12">
+	<div class="col-md-12 card m-b-0">
+  <div class="row" style="margin: 7px">
+    <form name="tripHistoryForm" ng-submit="search()" novalidate>
+      <div class="col-sm-2">
+        <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+          <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+            <input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+                   type="text"
+                   class="form-control"
+                   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+                   show-weeks="false"
+				   max-date="DatePicker.newDate"
+                   ng-model="filter.startDate"
+				   ng-change="dateChange('start_Date')"
+                   is-open="opened1"
+
+				   datepicker-options="DatePicker.dateSettings"
+                   close-text="Close"
+                   placeholder="Start Date..."
+                   name="Start Date"
+                   style="padding: 0px 4px;height: 34px;" />
+          </div>
+          <span class="input-group-btn">
+            <button
+                type="button"
+                class="btn btn-default m-t-0 f12"
+                ng-click="DatePicker.openDatePicker(this, $event, 'opened1')">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <span class="error"
+			  ng-if="tripHistoryForm['Start Date'].$error.required && (tripHistoryForm['Start Date'].$touched || tripHistoryForm.$submitted)">
+          This Field is Mandatory
+        </span>
+      </div>
+      <div class="col-sm-2">
+        <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+          <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+            <input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+                   type="text"
+                   class="form-control"
+                   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+                   show-weeks="false"
+				   max-date="DatePicker.newDate"
+                   ng-model="filter.endDate"
+				   ng-change="dateChange('end_Date')"
+                   is-open="opened2"
+                   datepicker-options="DatePicker.dateSettings"
+                   close-text="Close"
+                   placeholder="End Date..."
+                   name="End Date"
+                   style="padding: 0px 4px;height: 34px;" />
+          </div>
+          <span class="input-group-btn">
+            <button
+                type="button"
+                class="btn btn-default m-t-0 f12"
+                ng-click="DatePicker.openDatePicker(this, $event, 'opened2')">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <span
+            class="error"
+            ng-if="tripHistoryForm['End Date'].$error.required && (tripHistoryForm['End Date'].$touched || tripHistoryForm.$submitted)">
+          This Field is Mandatory
+        </span>
+      </div>
+      <div class="col-md-1">
+        <div class="fg-line form-group m-b-0">
+          <input type="text"
+                 ng-model="filter.vehicle_no"
+                 name="Vehicle Reg"
+                 class="form-control input-sm"
+                 placeholder="Vehicle Reg No."
+          >
+        </div>
+      </div>
+      <div class="col-md-2">
+			  <div class="fg-line form-group m-b-0">
+				  <select chosen
+						  class="form-control"
+						  ng-model="filter.segment_type"
+						  ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+						  name="Segment"
+						  required>
+					  <option value="" selected>Select Segment</option>
+				  </select>
+			  </div>
+      </div>
+      <div class="col-md-2">
+        <div class="fg-line form-group m-b-0">
+            <select chosen
+                    class="form-control"
+                    ng-model="filter.consignor"
+                    ng-options="item._id as item.name for item in aConsigner track by item._id"
+                    name="Consignor"
+            >
+              <option value="" selected>Select Consignor</option>
+            </select>
+        </div>
+      </div>
+		<div class="col-md-2">
+			<select
+					class="fg-line form-control"
+					ng-model="filter.group_by"
+					name="Group By">
+				<option value="" selected disabled>Grouped Report</option>
+				<option value="driver">Driver</option>
+				<option value="segment">Segment</option>
+				<option value="consignor">Consignor</option>
+				<option value="consignee">Consignee</option>
+			</select>
+		</div>
+
+		<!--<div class="col-md-2">-->
+        <!--<div class="fg-line form-group m-b-0">-->
+            <!--<select chosen-->
+                    <!--class="form-control"-->
+                    <!--ng-model="filter.consignee"-->
+                    <!--ng-options="item._id as item.name for item in aConsignee track by item._id"-->
+                    <!--name="Consignee"-->
+            <!--&gt;-->
+              <!--<option value="" selected>Consignee</option>-->
+            <!--</select>-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <!--<div class="col-md-2">
+        <div class="fg-line form-group m-b-0">
+          <select chosen
+                  class="form-control"
+                  ng-model="filter.customer"
+                  ng-options="item._id as item.name for item in aCustomer track by item._id"
+                  name="Customer"
+          >
+            <option value="" disabled>Customer</option>
+          </select>
+        </div>
+      </div>-->
+
+      <!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+        <!--<div class="lvh-search ng-scope sear">-->
+          <!--<input-->
+              <!--type="text"-->
+              <!--class="form-control lvhs-input"-->
+              <!--placeholder="Driver Search..."-->
+              <!--ng-model="filter.driver"-->
+              <!--typeahead-wait-ms="10"-->
+              <!--typeahead="item as item.name for item in aDriver | limitTo:6"-->
+              <!--ng-change="getDriver(filter.driver)"-->
+              <!--typeahead-on-select="onSelectDriver($item, $model, $label)"-->
+          <!--&gt;-->
+          <!--<i class="lvh-search-close" ng-click="filter.driver=null;aDriver=null;">×</i>-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <div class="col-md-1">
+		  <button
+				  class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-t-5 m-r-5 app_tile"
+				  style="font-size: 16px"
+				  type="button"
+				  ng-click="search(true)">
+			  <i class="zmdi zmdi-download zmdi-hc-fw"></i>
+		  </button>
+			<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+					style="font-size: 16px"
+					type="submit"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+        <!--<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"-->
+            <!--style="font-size: 16px"-->
+            <!--uib-tooltip="Clear Search"-->
+            <!--tooltip-placement="bottom"-->
+            <!--type="submit"-->
+            <!--ng-click="mvcVm.oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>-->
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+
+<div  style="line-height: 55px;">
+<div class="card m-b-0 m-t-0 m-l-10 m-r-0"
+     style="margin-top: -20px !important; background: none;box-shadow: none; padding-bottom: 10px; width: 98%;">
+  <div class="card">
+	<div class="col-md-12 p-0"
+		 ng-class="(graphView && aTrips.length>0) ? 'col-md-8' : 'col-md-12'"
+		 style="overflow-y: auto; max-height: 600px;">
+	  <table class="table table-bordered unresponsive">
+		<thead id='my_fixable_table_header' fix-head>
+		<tr>
+			<!--<th>Trip No.</th>-->
+			<th>S. No.</th>
+			<th>Trip No.</th>
+			<th>V. No.</th>
+			<th>V. Status</th>
+			<th>Consignor</th>
+			<th>Segment</th>
+			<th>Route</th>
+			<th>KM. covered</th>
+			<th>KM. left</th>
+			<th>Loading D&amp;T</th>
+			<th>Unloading D&amp;T</th>
+			<th>Status</th>
+			<th>Acc. ETA</th>
+			<th>Vehicle Arrival - Loading</th>
+			<th>Vehicle Arrival - Unloading</th>
+			<th>Trip Start D&T</th>
+			<th>Trip End D&T</th>
+			<th>Remark</th>
+
+		</tr>
+		</thead>
+		  <tbody>
+		  <tr data-ng-repeat="trip in aTrips" class="pointer">
+			  <td>{{$index+1}}</td>
+			  <td>{{trip.trip_no || 'NA'}}</td>
+			  <td>{{trip.vehicle.vehicle_reg_no || 'NA'}}</td>
+			  <td>{{trip.status || 'NA'}}</td>
+			  <td>{{trip.gr.consignor.name || trip.gr.booking && trip.gr.booking.consigner.name || 'NA'}}</td>
+			  <td>{{trip.vehicle.segment_type || 'NA'}}</td>
+			  <td>
+				  {{trip.route.name || 'NA'}}
+				  {{ trip.route.name ? '('+ trip.route.route_distance +')' : ''}}
+			  </td>
+			  <td>{{(trip.distance_travelled | toString) || 'NA'}}</td>
+			  <td>{{(trip.route.route_distance - trip.distance_travelled | number:0	) }}</td>
+			  <td>{{(trip.gr.loading_ended_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+			  <td>{{(trip.gr.unloading_ended_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+			  <td>{{trip.t_status || 'NA'}}</td>
+			  <td>{{(trip.expected_eta|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+			  <td>{{(trip.gr.vehicle_arrived_for_loading_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+			  <td>{{(trip.gr.vehicle_arrived_for_unloading_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+			  <td>{{(trip.trip_start_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+			  <td>{{(trip.trip_end_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
+			  <td>{{trip.rmk || 'NA'}}</td>
+		  </tr>
+		  </tbody>
+	  </table>
+	</div>
+	<div class="col-md-4"
+		 ng-if="graphView && aTrips.length>0">
+		<dashboard graph="oGraph"
+				   graph-data="aGraphTrip">
+		</dashboard>
+	</div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+</div>
+
+<style>
+
+	.unresponsive thead tr th:nth-child(14){
+		min-width: 150px;
+	}
+
+  .unresponsive thead tr th:nth-child(13){
+    min-width: 150px;
+  }
+
+  .unresponsive thead tr th:nth-child(12){
+    min-width: 150px;
+  }
+
+  .unresponsive thead tr th:nth-child(10){
+    min-width: 160px;
+  }
+
+  .unresponsive thead tr th:nth-child(11){
+    min-width: 220px;
+  }
+
+	dashboard .container:not(.ja-containter){
+		width: 100%;
+	}
+
+	.red{
+		color: red;
+	}
+
+	.fs-25{
+		font-size: 25px;
+	}
+
+	.ja-fullscreen{
+		position: fixed;
+		z-index: 10;
+		left: 0;
+		top: 40px;
+		width: 100% !important;
+		margin: 0 !important;
+		height: 100vh;
+		background: #0000003d;
+	}
+
+	.ja-fullscreen .card{
+		height: 80% !important;
+		width: 90%;
+		margin: 30px auto;
+		border-radius: 5px;
+	}
+
+	.nvd3-wrapper{
+		height: calc(100% - 64px) !important;
+		width: 100% !important;
+	}
+
+	nvd3, svg{
+		/*height: calc(100% - 40px) !important;*/
+		height: 100% !important;
+		width: 100% !important;
+	}
+
+</style>

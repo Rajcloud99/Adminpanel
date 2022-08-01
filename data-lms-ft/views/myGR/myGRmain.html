@@ -1,0 +1,784 @@
+<!--Controller: myGRController-->
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style="min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix" style="padding: 5px;">
+					<div class="clearfix"></div>
+				</div>
+
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<div class="col-md-12">
+							<form role="form" ng-submit="filter(form)">
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="number" ng-model="oFilter.trip_no" name="trip_no"
+											   class="form-control input-sm" placeholder="Trip No"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="text" ng-model="oFilter.grNumber" name="grNumber"
+											   class="form-control input-sm" placeholder="GR No"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+                                <div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+								<div class="select">
+									<select class="form-control" ng-model="oFilter.grStatus">
+										<option value="">GR Status</option>
+										<option value="Loading Ended">Loading Ended</option>
+										<option value="Unloading Ended">Unloading Ended</option>
+										<option value="GR Not Acknowledged">GR Not Acknowledged</option>
+									</select>
+								</div>
+								</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Vehicle Search..."
+												ng-model="oFilter.vehicle_no"
+												typeahead-wait-ms="10"
+												typeahead="item as (item.vehicle_reg_no  + ' (' + item.ownershipType[0] + ')') for item in getVehicles($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="oFilter.vehicle_no='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Vendor Search..."
+												ng-model="oFilter.vendor_id"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in getVendors($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="oFilter.vendor_id='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Customer Search..."
+												ng-model="oFilter.grCustomer"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in getCustomer($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="oFilter.grCustomer='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-xs-4 m-b-2 col-sm-1 col-md-2 col-lg-2">
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Billing Search..."
+												ng-model="oFilter.billingParty"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in getBilling($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="oFilter.billingParty='';">×</i>
+									</div>
+								</div>
+
+								<div class="col-md-2">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   placeholder="Consignor Search..."
+											   ng-model="oFilter.grConsignor"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in getConsignor($viewValue)"
+											   class="form-control">
+										<i class="lvh-search-close" ng-click="oFilter.grConsignor='';getAllGR()">×</i>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+								<div class="col-md-1">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input type="text"
+											   placeholder="Consignee Search..."
+											   ng-model="oFilter.grConsignee"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in getConsignee($viewValue)"
+											   class="form-control">
+										<i class="lvh-search-close" ng-click="oFilter.grConsignee='';getAllGR()">×</i>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line">
+										<input type="text" ng-model="oFilter.bill_no" name="bill_no"
+											   class="form-control input-sm" placeholder="Bill No"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control"
+												ng-model="oFilter.dateType">
+											<option value="">Select Date</option>
+											<option value="grDate">Gr Date</option>
+											<option value="pod.date">Gr Receiving Date</option>
+											<option value="acknowledge.systemDate">Gr Ack Date</option>
+											<option value="pod.pendingRemark.systemDate">Remark Date</option>
+											<option value="billDate">Bill Date</option>
+											<option value="GR Assigned">Entry Date</option>
+											<option value="Loading Ended">Loading Ended</option>
+											<option value="Vehicle Arrived for unloading">Vehicle Arrived for unloading</option>
+											<option value="ewbDate">Eway bill expiry date</option>
+											<option value="gatePassDate">Gate Pass Date</option>
+											<option value="gateoutDate">Gate Out Date</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="oFilter.deliveryStatus">
+											<option value="">Delivery Status</option>
+											<option value="pod.billingUnloadingTime">Delivered</option>
+											<option value="pod.unloadingArrivalTime">At dealer point</option>
+											<option value="intransit">Intransit</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text" class="form-control"
+												   datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="DatePicker.newDate"
+												   ng-model="oFilter.from"
+												   ng-change="onFromDateChange()"
+												   is-open="opened1"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="From Date"
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+										  	<button type="button" class="btn btn-default m-t-0 f12"
+													ng-click="DatePicker.openDatePicker(this, $event, 'opened1')">
+												<i class="glyphicon glyphicon-calendar"></i>
+											</button>
+										</span>
+									</div>
+								</div>
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened2 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+												   type="text" class="form-control"
+												   datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   max-date="DatePicker.newDate"
+												   min-date="oFilter.from"
+												   ng-model="oFilter.to"
+												   is-open="opened2"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+														 placeholder="To Date"
+														 style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+											  <button type="button" class="btn btn-default m-t-0 f12"
+													  ng-click="DatePicker.openDatePicker(this, $event, 'opened2')">
+												  <i class="glyphicon glyphicon-calendar"></i>
+											  </button>
+										</span>
+									</div>
+								</div>
+								<!--
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+									<div class="select">
+										<select chosen
+												class="form-control"
+												ng-model="oFilter.status"
+												ng-options="item as item for item in $constants.aGRstate.slice(0,9)"
+												name="GR State">
+											<option value="" selected>All Status</option>
+										</select>
+									</div>
+								</div>-->
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+									<select chosen class="form-control"
+											ng-options="item as item for item in aBill"
+											ng-model="oFilter.bill">
+										<option value="">Select Bill</option>
+									</select>
+								</div>
+								<!--
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+									<select chosen class="form-control"
+											ng-options="item as item for item in aPod"
+											ng-model="oFilter.received"
+											style="line-height: 34px;">
+										<option value="">Select POD</option>
+									</select>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+									<!--<select chosen class="form-control"-->
+											<!--ng-options="item as item for item in aAcknowledged"-->
+											<!--ng-model="oFilter.acknowledge"-->
+											<!--style="line-height: 34px;"-->
+									<!--&gt;-->
+										<!--<option value="">Select Acknowledged</option>-->
+									<!--</select>-->
+								<!--</div>-->
+
+								<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+									<div class="fg-line form-group m-b-0">
+										<select chosen
+												class="form-control"
+												ng-model="oFilter.segment_type"
+												ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+												name="Segment"
+												required>
+											<option value="" selected>Select Segment</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-xs-6 col-sm-2 col-md-1 col-lg-1">
+									<div class="fg-line form-group m-b-0">
+										<select class="form-control"
+												ng-model="oFilter.Ownership"
+												ng-options="item as item for item in $constants.aOwnershipVehicle"
+												name="Ownership"
+												required>
+											<option value="" selected>Select Type</option>
+										</select>
+									</div>
+								</div>
+
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+									<select class="form-control"
+											chosen
+											disable-search="true"
+											ng-options="item as item for item in aType"
+											ng-model="oFilter.type">
+										<option value="">Select type</option>
+									</select>
+								</div>
+
+								<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+									<div class="form-group m-b-0">
+										<input type="text"
+											   ng-model="oFilter.shipmentNo"
+											   name="Shipment No"
+											   class="form-control input-sm"
+											   placeholder="{{oFilter.type || 'shipmentNo'}}">
+									</div>
+								</div>
+
+								<div class="col-xs-6 col-sm-2 col-md-1 col-lg-1" ng-if="$configs.client_allowed.length > 1">
+									<div class="select">
+										<select
+												class="form-control"
+												ng-options="c.clientId as c.name for c in $constants.client_allowed"
+												ng-model="oFilter.bPclientId"
+										>
+											<option value="" selected>Select client</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="fg-line form-group m-b-0">
+										<select chosen
+												class="form-control"
+												ng-model="oFilter.veh_group"
+												ng-options=" item as item.name for item in aVehicleGroups "
+												name="Vehicle Group"
+												required>
+											<option value="" selected>Vehicle Group</option>
+										</select>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="col-md-1">
+									<div class="lvh-search ng-scope sear">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Branch Search..."
+												ng-model="oFilter.branch"
+												typeahead-wait-ms="10"
+												typeahead="item as (item.name + '('+($configs.client_allowed|filter:{'clientId': item.clientId})[0].name+')') for item in getAllBranch($viewValue) | limitTo:6"
+												>
+										<i class="lvh-search-close" ng-click="oFilter.branch=null;">×</i>
+									</div>
+								</div>
+
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="oFilter.tripStatus">
+											<option value="">Trip Status</option>
+											<option value="Trip not started">Trip not started</option>
+											<option value="Trip started">Trip started</option>
+											<option value="Trip ended">Trip ended</option>
+											<option value="Trip cancelled">Trip cancelled</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="oFilter.received">
+											<option value="">POD status</option>
+											<option value="Received">Received</option>
+											<option value="Not Received">Not Received</option>
+											<option value="POD Updated By">POD Updated By</option>
+											<option value="Hard Copy">Hard Copy</option>
+                                            <option value="Soft Copy">Soft Copy</option>
+											<!--<option value="pod.date">Lost</option> -->
+ 										</select>
+									</div>
+								</div>
+								<!----
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="oFilter.tripStatus">
+											<option value="">Bill status</option>
+											<option value="grDate">Billed</option>
+											<option value="pod.date">Unbilled</option>
+ 										</select>
+									</div>
+								</div>-->
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="oFilter.vendPaymStatus">
+											<option value="">Vendor Payment Status</option>
+											<option value="Paid">Paid</option>
+											<option value="Unpaid">Unpaid</option>
+											<option value="Balance Pending">Balance Pending</option>
+											<option value="Over Paid">Over Paid</option>
+ 										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="form-group m-b-0">
+										<select chosen multiple
+												class="form-control"
+												ng-model="oFilter.category"
+												ng-options="item as item for item in aCategory"
+												name="Category Type">
+											<option value="" ></option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="form-group m-b-0">
+										<select chosen
+												class="form-control"
+												ng-model="oFilter.isGr"
+												ng-options="item as item for item in aGrStatus"
+												name="Status">
+											<option value="" ></option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="select">
+										<select chosen multiple class="form-control"
+												ng-model="oFilter.grDocType"
+												ng-options="item.value as item.key for item in $constants.aGrDocType"
+												style="line-height: 34px;">
+										</select>
+									</div>
+								</div>
+								<div class="col-md-1">
+									<div class="select">
+										<select class="form-control" ng-model="oFilter.sortBy">
+											<option value="" selected>Sort By</option>
+											<option value="Assending">Assending</option>
+											<option value="Dessending">Dessending</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-3">
+
+									<div class="text-center">
+										<button class="btn btn-primary p-t-0 p-b-0" ng-disabled="buttonDisable"
+												type="button"
+												style="font-size: 16px"
+												uib-tooltip="Search"
+													ng-click="getAllGR()"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0"
+												style="font-size: 16px"
+												uib-tooltip="Clear Search"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="oFilter={}; buttonDisable = false;">
+											<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$role['GR']['Download Report']"
+												class="btn btn-primary p-t-0 p-b-0"
+												disable-btn=""
+							`					style="font-size: 16px"
+												uib-tooltip="Download GR report"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="downloadGRReport(true);">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$role['GR']['Download Daily MIS Report']"
+												class="btn btn-primary p-t-0 p-b-0"
+												disable-btn=""
+												style="font-size: 16px"
+												uib-tooltip="Download Daily MIS report"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="dailyMISreport(true);">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$role['GR']['Download Report']"
+												class="btn btn-success p-t-0 p-b-0"
+												disable-btn=""
+												style="font-size: 16px"
+												uib-tooltip="Download CSV report"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="downloadGRReport(false, true);">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<!--ng-if="$role['GR']['Download POD Report']"-->
+
+										<button  class="btn btn-primary p-t-0 p-b-0"
+												style="font-size: 16px"
+												uib-tooltip="Download pod report"
+												tooltip-placement="bottom"
+												 disable-btn
+												type="button"
+												ng-click="downloadPODReport();">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$role['GR']['Download GR Report New']"
+												class="btn btn-primary p-t-0 p-b-0"
+												style="font-size: 16px"
+												disable-btn
+												uib-tooltip="Customized GR Report"
+												tooltip-placement="bottom"
+												type="button"
+												ng-click="downloadGRReportCron();">
+											<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+										</button>
+<!--										<button class="btn btn-primary p-t-0 p-b-0"-->
+<!--												style="font-size: 16px"-->
+<!--												uib-tooltip="Download GR Report"-->
+<!--												tooltip-placement="bottom"-->
+<!--												type="button"-->
+<!--												ng-click="downloadGRReportMMT();">-->
+<!--											<i class="zmdi zmdi-download zmdi-hc-fw"></i>-->
+<!--										</button>-->
+										<button ng-if="$role['GR']['Download MR Report']" ng-disabled="buttonDisable"
+												class="btn btn-primary p-t-0 p-b-0"
+												type="button"
+												style="font-size: 16px"
+												uib-tooltip="Download MRreport"
+												ng-click="downloadMRReport(false)"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-play-for-work"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0"
+												type="button"
+												style="font-size: 16px"
+												uib-tooltip="Download MR CSV"
+												ng-click="downloadMRReport(true)"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-play-for-work"></i>
+										</button>
+										<button class="btn btn-primary p-t-0 p-b-0" ng-disabled="buttonDisable"
+												style="font-size: 16px"
+												ng-hide="true"
+												uib-tooltip="Upload"
+												tooltip-placement="bottom"
+												type="button"
+												onclick="document.getElementById('toUpload').click();">
+											<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+										</button>
+										<input
+												type="file"
+												id="toUpload"
+												name="toUpload"
+												ng-model="toUpload"
+												ng-hide="true"
+												accept="*/*"
+												ngf-select
+												ngf-max-size="5MB"
+												ngf-model-invalid="errorFile"
+												ngf-change="uploadGR($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+										>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+							</form>
+							<div class="pull-right" ng-if="!(role_local_data.gr.indexOf('add')==-1)" ng-show="selectedTrip">
+								<span ng-if="$role['GR']['Gen Multi Gr'] && selectedTrip.invToBill"><a href="" uib-tooltip="revert Multi Gr" ng-click="revertMultiGr()" tooltip-placement="bottom">
+									<span class="zmdi zmdi-swap-vertical-circle zmdi"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Gen Multi Gr'] && selectedTrip._id"><a href="" uib-tooltip="Gen Multi Gr" ng-click="genMultiGr()" tooltip-placement="bottom">
+									<span class="zmdi zmdi-plus-circle-o-duplicate zmdi"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span  ng-if="$role['GR']['UnMap Gr From Trip'] && selectedTrip.grNumber"><a href="" uib-tooltip="unMap Gr From Trip" ng-click="unMapGrFromTrip(selectedTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-unchecked"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span  ng-if="$role['GR']['Move Gr'] && selectedTrip._id"><a href="" uib-tooltip="Move Gr To Another Trip" ng-click="moveGr(selectedTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-new-window"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Money Receipt'] && selectedTrip.grNumber"><a href="" uib-tooltip="MoneyReceipt" ng-click="mrOpperation('preview')" tooltip-placement="bottom">
+									<span class="zmdi zmdi-plus-square zmdi"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-hide="true"><a href="" uib-tooltip="Generate FPA Bill" ng-click="genFPABill(selectedTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-check"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Gr Ack'] && $configs.GR.grAck"><a href="" uib-tooltip="Gr Acknowledgement" ng-click="grAckRmk(selectedTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-check"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Gr Ack'] && selectedTrip.acknowledge.status && $configs.GR.grAck"><a href="" uib-tooltip="revert Acknowledgement" ng-click="grAckRevert(selectedTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-share-alt"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Gr Receive'] && (selectedTrip.grNumber || $configs.GR.grReceive)"><a href="" uib-tooltip="Gr Receive" ng-click="grReceive(selectedTrip, $index)"
+								   tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-thumbs-up" style="font-size: 20px;"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Upload Documents'] && selectedTrip.acknowledge"><a href="" uib-tooltip="Upload Documents"
+									 tooltip-placement="bottom"
+									 ng-click="uploadDocs(selectedTrip)">
+									<span class="glyphicon glyphicon-upload"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Add More Gr'] && selectedTrip.acknowledge"><a href="" uib-tooltip="Add More Gr"
+									 tooltip-placement="bottom"
+									 ng-click="addMultipleGr(selectedTrip)">
+									<span class="glyphicon glyphicon-plus-sign"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Preview Documents'] && selectedTrip.acknowledge"><a href="" uib-tooltip="Preview Documents"
+								   tooltip-placement="bottom"
+								   ng-click="previewBuilty(selectedTrip)">
+								  <span class="glyphicon glyphicon-list-alt"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Print TDS'] && selectedTrip.acknowledge"><a href="" uib-tooltip="Print TDS" tooltip-placement="bottom" ng-click="printTDS()">
+									<span class="glyphicon glyphicon-print"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Add'] && !(selectedTrip.grNumber) && selectedTrip.acknowledge"><a href="" uib-tooltip="Add GR" ng-click="grOpperation('add')" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-plus"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Gr History'] && selectedTrip.grNumber"><a href="" uib-tooltip="Show Gr History" ng-click="showHistory(selectedTrip)"
+								   tooltip-placement="bottom">
+									<i class="zmdi zmdi-time-restore zmdi-hc-fw" style="font-size: 20px;"></i>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Add Remark'] && selectedTrip.grNumber"><a href="" uib-tooltip="Add Remark" ng-click="addRemark(selectedTrip, $index)"
+								   tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-plus" style="font-size: 20px;"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['status update'] && selectedTrip._id"><a href="" uib-tooltip="status update" ng-click="grStatusUpdate()" tooltip-placement="bottom">
+									<i class="zmdi zmdi-badge-check zmdi-hc-fw"></i>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['GR Detail'] && selectedTrip.grNumber"><a href="" uib-tooltip="GR Detail" ng-click="grOpperation('preview')" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-info-sign"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Mark NonBillable'] && selectedTrip._id && !selectedTrip.bill"><a href="" uib-tooltip="Mark NonBillable" ng-click="isNonBillable(selectedTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-question-sign"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Update'] && selectedTrip.grNumber"><a href="" uib-tooltip="Change Details" ng-click="grOpperation('edit')" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Print Builty'] && selectedTrip.grNumber"><a href="" uib-tooltip="Print Builty" ng-click="printBuilty(oTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-print"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-show="selectedTrip.grNumber && $configs['gr']['table']['show_field']['transporter_slip'] "><a href="" uib-tooltip="Transporter Slip"
+								   ng-click="previewTransportSlip(oTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-print"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-show="selectedTrip.grNumber && $configs['gr']['table']['show_field']['tdr'] "><a href="" uib-tooltip="TDS"
+								   ng-click="previewTDS(oTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-print"></span>
+								</a>&nbsp;&nbsp;</span>
+								<span ng-if="$role['GR']['Cancel GR'] && !selectedTrip.bill && selectedTrip._id"><a href="" uib-tooltip="Cancel GR" ng-click="cancelGR(oTrip)" tooltip-placement="bottom">
+									<span class="glyphicon glyphicon-ban-circle"></span>
+								</a>&nbsp;&nbsp;</span>
+							</div>
+						</div>
+
+						<div class="clearfix"></div>
+
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-12">
+										<div ja-table
+											 table-body="aTrip"
+											 table-head="tableHead"
+											 table-column-setting="columnSetting"
+											 table-load="getAllGR(true)"
+											 table-height='600px'
+											 table-selectable='selectType'
+											 table-api="tableApi"
+											 table-selectable-model="selectedTrip"
+											 table-row-dbl-click-event="grOpperation('edit')"
+										></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!--<div class="detailsList">-->
+							<!--<div class="" style="overflow-y: auto; max-height: 600px;">-->
+								<!--<table class="table table-bordered unresponsive">-->
+									<!--<thead id='my_fixable_table_header' fix-head>-->
+										<!--<tr>-->
+											<!--<th>Trip No./ Booking No.</th>-->
+											<!--<th>Gr Status</th>-->
+											<!--<th>Gr No.</th>-->
+											<!--<th>Gr Date</th>-->
+											<!--<th>Loading Date</th>-->
+											<!--<th>Vehicle No.</th>-->
+											<!--<th>Material Code</th>-->
+											<!--<th>Customer</th>-->
+											<!--<th>Consignor</th>-->
+											<!--<th>Consignee</th>-->
+											<!--<th>BllingParty</th>-->
+											<!--<th>Route Name</th>-->
+											<!--<th>Billing Route</th>-->
+											<!--<th>Allocation Date</th>-->
+											<!--<th>Payment Basis</th>-->
+											<!--<th>Payment Type</th>-->
+											<!--<th>Invoice No</th>-->
+											<!--<th>Load Ref. No</th>-->
+											<!--<th>Incentive</th>-->
+											<!--<th>Qty/Weight(T)</th>-->
+						                    <!--<th>BILLING WEIGHT</th>-->
+						                    <!--<th>BILLING UNIT</th>-->
+											<!--&lt;!&ndash;<th>Rate</th>&ndash;&gt;-->
+											<!--<th>Freight</th>-->
+											<!--<th>Branch</th>-->
+											<!--<th>Driver</th>-->
+											<!--<th>Vendor</th>-->
+											<!--<th>Eway Bill</th>-->
+											<!--<th>Unloaded By</th>-->
+											<!--<th>Gr Remark</th>-->
+											<!--<th>POD Remark</th>-->
+										<!--</tr>-->
+									<!--</thead>-->
+									<!--<tbody>-->
+										<!--<tr ng-repeat="oTrip in aTrip" class="pointer selectItem"-->
+											<!--ng-click="selectRow(oTrip, $index)"-->
+											<!--ng-class="{'grn': selectedTrip._id === oTrip._id}"-->
+										     <!--class="pointer">-->
+											<!--<td>{{oTrip.trip.trip_no}}-->
+												<!--<span ng-if="oTrip.booking.booking_no">/{{oTrip.booking.booking_no}}</span>-->
+											<!--</td>-->
+											<!--<td>{{oTrip.status || 'NA'}}</td>-->
+											<!--<td>{{oTrip.grNumber || 'NA'}}</td>-->
+											<!--<td>{{(oTrip.grDate ? (oTrip.grDate | date:'dd-MM-yyyy') : 'NA')}}</td>-->
+											<!--<td>{{ ((oTrip.statuses | filter:{"status": "Loading Ended"})[0].date | date:"dd-MMM-yyyy") || 'NA' }}-->
+											<!--</td>-->
+											<!--<td>{{oTrip.trip.vehicle_no || 'NA'}}</td>-->
+											<!--&lt;!&ndash;<td class="">{{(oTrip.invoices.length > 0 ? ((oTrip.invoices|arrayOfObjectToArray:'groupCode')|mergeString:', '): "NA")}}</td>&ndash;&gt;-->
+											<!--<td class="">{{(oTrip.invoices.length > 0 ? (oTrip.invoices[0].material.groupName) : "NA")}}</td>-->
+											<!--<td>{{oTrip.customer.name || oTrip.booking.customer.name || 'NA'}}</td>-->
+											<!--<td>{{oTrip.consignor.name || oTrip.booking.consigner.name || 'NA'}}</td>-->
+											<!--<td>{{oTrip.consignee.name || oTrip.booking.consignee[0].name || 'NA'}}</td>-->
+											<!--<td>{{oTrip.billingParty.name || oTrip.booking.billingParty.name || 'NA'}}</td>-->
+											<!--<td>{{oTrip.route.name || oTrip.trip.route.name || 'NA'}}</td>-->
+											<!--<td>{{oTrip.acknowledge.source ? oTrip.acknowledge.source + ' to ': 'NA'}}{{oTrip.acknowledge.destination}}</td>-->
+											<!--<td>{{oTrip.trip.allocation_date | date:'dd-MM-yyyy' || 'NA'}}</td>-->
+											<!--<td>{{oTrip.payment_basis || oTrip.booking.payment_basis || 'NA'}}</td>-->
+											<!--<td>{{oTrip.payment_type || oTrip.booking.payment_type || 'NA'}}</td>-->
+											<!--<td class="">{{((oTrip.invoices|arrayOfObjectToArray:'invoiceNo')|mergeString:', ') || 'NA'}}</td>-->
+											<!--<td class="">{{((oTrip.invoices|arrayOfObjectToArray:'loadRefNumber')|mergeString:', ') || 'NA'}}</td>-->
+											<!--<td>{{(oTrip.charges) ? (oTrip.charges.incentive) : 'NA'}}</td>-->
+											<!--<td>{{(oTrip.invoices.length > 0 && oTrip.invoices[0].noOfUnits ? (oTrip.invoices|getArrayElementSum:'noOfUnits') : 0)}} /-->
+												<!--{{(oTrip.invoices.length > 0  ? (oTrip.invoices | getArrayElementSum:'weightPerUnit') + ' T' : '0 T')}}</td>-->
+						                     <!--{{(oTrip.invoices.length > 0  ? (oTrip.invoices | getArrayElementSum:'billingWeightPerUnit') + ' T' : '0 T')}}</td>-->
+						                     <!--{{(oTrip.invoices.length > 0  ? (oTrip.invoices | getArrayElementSum:'billingNoOfUnits') + ' T' : '0 T')}}</td>-->
+											<!--<td>{{oTrip.freight = ((oTrip.invoices.length > 0  ? (oTrip.invoices|getArrayElementSum:'freight') : 0))}}</td>-->
+											<!--<td>{{oTrip.branch.name || 'NA'}}</td>-->
+											<!--<td>{{oTrip.trip.driver.name || 'NA'}}</td>-->
+											<!--<td>{{oTrip.trip.vendor.name || 'NA'}}</td>-->
+											<!--<td>-->
+												<!--{{((oTrip.eWayBills|arrayOfObjectToArray:'number')|mergeString:', ') || 'NA'}}-->
+											<!--</td>-->
+											<!--<td>{{(oTrip.statuses|filter:{'status': 'Unloading Ended'})[0].user_id.full_name || 'NA'}}</td>-->
+											<!--<td>{{oTrip.remarks || 'NA'}}</td>-->
+											<!--<td>{{oTrip.pod.arRemark || 'NA'}}</td>-->
+										<!--</tr>-->
+									<!--</tbody>-->
+								<!--</table>-->
+								<!--<div class="pagi" style="text-align: center;" ng-show="grPagination.total_pages>1">-->
+									<!--<uib-pagination ng-change="getAllGR(true)" total-items="grPagination.totalItems"-->
+													<!--items-per-page="grPagination.items_per_page" num-pages="grPagination.numPages"-->
+													<!--ng-model="grPagination.currentPage" max-size="grPagination.maxSize"-->
+													<!--class="pagination-sm smallPagi" boundary-links="true"-->
+													<!--previous-text="&lsaquo;" next-text="&rsaquo;"-->
+													<!--first-text="&laquo;" last-text="&raquo;"></uib-pagination>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--<div ng-if="aTrip.length == 0" class="ms-body" style=" min-height: 100px;">-->
+								<!--<h3>No any GR available !!!!!</h3>-->
+							<!--</div>-->
+						<!--</div>-->
+					</div>
+				</div>
+				<br>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+
+	.pull-right.ng-scope a {
+		font-size: 22px;
+	}
+	.color1{
+		background: rgb(30, 175, 20);
+		color: white;
+	}
+	.color2{
+		background: rgb(199, 194, 32);
+		color: white;
+	}
+</style>

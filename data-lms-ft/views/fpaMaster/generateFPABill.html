@@ -1,0 +1,232 @@
+<div class="container">
+	<div class="card">
+		<form role="form" name="xform" autocomplete="off" novalidate ng-submit="submit(xform)">
+			<div class="modal-header" style="padding: 10px 26px 0px;" >
+				<hr>
+				<h5 class="modal-title" align="center"><b>TAX INVOICE</b></h5>
+				<hr>
+			</div>
+			<div class="modal-body">
+				<div class="row" style="margin:15px">
+					<div class="col-md-12">
+						<div class="up_data">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vendor/Associate</label>
+									<div class="col-sm-8">
+										<span>{{vendorDetails$$.vendor_name || 'NA'}}</span>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<br>
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Branch :</label>
+									<div class="col-sm-8">
+										<select chosen
+												name="branch"
+												class="form-control"
+												ng-model="oSend.branch"
+												ng-options="item._id as item.name for item in branches"
+												ng-change="getBranches()"
+												required
+										>
+											<option value=""></option>
+										</select>
+									</div>
+									<span
+											class="error"
+											ng-if="xform['branch'].$error.required
+													&& (xform['branch'].$touched
+													|| xform.$submitted)"
+									>
+											This Field is Mandatory
+										</span>
+								</div>
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Remark :</label>
+									<div class="col-sm-8">
+										<div class="form-group">
+											<div class="fg-line">
+												<textarea class="form-control"
+														  rows="2"
+														  name="remark"
+														  required
+														  ng-model="oSend.remark"
+														  placeholder="Please specify Remark"></textarea>
+											</div>
+										</div>
+										<span
+												class="error"
+												ng-if="xform['remark'].$error.required
+													&& (xform['remark'].$touched
+													|| xform.$submitted)"
+										>
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">FPA Date:</label>
+									<div class="col-sm-8">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened1 == true }">
+											<div ng-class="{ 'fg-toggled': opened1 == true }">
+												<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+													   type="text"
+													   name="fpadate"
+													   min-date="lastBillGenerationDate"
+													   max-date="DatePicker.newDate"
+													   class="form-control"
+													   datepicker-popup="{{DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-model="oSend.billDate"
+													   is-open="opened1"
+													   datepicker-options="DatePicker.dateSettings"
+													   close-text="Close"
+													   ng-disabled="operationType=='Preview'"
+													   placeholder="Date"
+													   required
+												/>
+											</div>
+											<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="open($event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+											<span
+													class="error"
+													ng-if="xform['fpadate'].$error.required
+															&& (xform['fpadate'].$touched
+															|| xform.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Due Date:</label>
+									<div class="col-sm-8">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened2 == true }">
+											<div ng-class="{ 'fg-toggled': opened2 == true }">
+												<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+													   type="text"
+													   name="duedate"
+													   class="form-control"
+													   datepicker-popup="{{DatePicker.formats[0]}}"
+													   show-weeks="false"
+													   ng-init="dueDate = dueDate ? dueDate : DatePicker.newDate"
+													   ng-model="oSend.dueDate"
+													   is-open="opened2"
+													   datepicker-options="DatePicker.dateSettings"
+													   ng-disabled="operationType=='Preview'"
+													   close-text="Close"
+													   placeholder="Due Date"
+													   required
+												/>
+											</div>
+											<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="open($event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+											<span
+													class="error"
+													ng-if="xform['duedate'].$error.required
+													&& (xform['duedate'].$touched
+													|| xform.$submitted)"
+											>
+											This Field is Mandatory
+										</span>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-bordered">
+									<thead>
+									<tr>
+										<th>VEHICLE NO</th>
+										<th>GR DATE</th>
+										<th>GR NO</th>
+										<th>TRIP NO</th>
+										<th>ROUTE</th>
+										<th>CUSTOMER</th>
+										<th>CONSIGNOR</th>
+										<th>WEIGHT</th>
+										<th>UNIT</th>
+										<th>FREIGHT</th>
+										<th>FPA PERCENT</th>
+										<th>Total FP</th>
+										<th>REMARK</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="gr in grs$$">
+										<td>{{gr.vehicle.vehicle_reg_no}}</td>
+										<td>{{gr.grDate | date:'dd-MMM-yyyy'}}</td>
+										<td>{{gr.grNumber}}</td>
+										<td>{{gr.trip.trip_no}}</td>
+										<td>{{gr.route.name}}</td>
+										<td>{{gr.customer.name}}</td>
+										<td>{{gr.consignor.name}}</td>
+										<td>{{gr.weight}}</td>
+										<td>{{gr.unit}}</td>
+										<td>{{gr.totalFreight}}</td>
+										<td>{{gr.comission_percent}}</td>
+										<td>{{gr.total=(gr.comission_percent/100*gr.totalFreight).toFixed(2)}}</td>
+										<td>
+											<input type="text" ng-model="gr.remark" placeholder="Remark">
+										</td>
+									</tr>
+									</tbody>
+
+								</table>
+							</div>
+						</div>
+						<div class="row pull-right">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-default m-t-0 f12">Submit</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+	hr {
+		margin-top: 5px;
+		margin-bottom: 2px;
+	}
+
+	.ja-index{
+		z-index: 10;
+	}
+
+	.modal-dialog{width: 80%;}
+	.footAct div div {
+		text-align: center;
+	}
+	.footAct{    margin-top: 91px;}
+	body{font-size: 12px;}
+
+	.unresponsive tbody tr td{
+		vertical-align: middle;
+	}
+
+</style>

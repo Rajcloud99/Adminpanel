@@ -1,0 +1,46 @@
+<ul class="header-inner clearfix">
+    <li class="logo hidden-xs" style="padding: 10px 10px 10px 20px">
+        <a>{{client_config.client_display_name}}</a>
+    </li>
+    <li class="pull-right">
+        <ul class="top-menu">
+            <li class="logo hidden-xs" style="padding: 10px 10px 10px 20px">
+                <a style="text-transform: none">{{userLoggedIn.full_name}}</a>
+            </li>
+			<li class="logo hidden-xs" style="padding: 10px 10px 10px 20px" ng-show="userLoggedIn.client_allowed">
+				<label>
+					<select class="form-control"
+							ng-options="option.clientId as option.name for option in userLoggedIn.client_allowed"
+							ng-change="changeSelectedClient(selectedClient)"
+							ng-model="selectedClient">
+					</select>
+				</label>
+            </li>
+
+			<!-- Notification Start-->
+			<li class="dropdown"
+				uib-dropdown=""
+				notif-bell></li>
+
+            <li class="dropdown" uib-dropdown>
+                <a style="padding-top: 10px" uib-dropdown-toggle href="">
+                    <i class="tm-icon zmdi zmdi-settings"></i>
+                </a>
+                <ul class="dropdown-menu dm-icon pull-right">
+                    <li>
+                        <a data-ui-sref="home.apps"><i class="zmdi zmdi-home"></i>Home</a>
+                    </li>
+                    <!--Hide settings option for admin users since its not required -->
+                    <li ng-hide="userLoggedIn.role===$constants.super_admin_role_name">
+                        <a data-ui-sref="home.settings"><i class="zmdi zmdi-settings"></i>Settings</a>
+                    </li>
+                    <li>
+                        <!--<a data-ui-sref="login"><i class="zmdi zmdi-power"></i>Logout</a>-->
+						<a data-ui-sref="login" ng-click="logout()"><i class="zmdi zmdi-power"></i>Logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
+</ul>

@@ -1,0 +1,103 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Account Master</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					(Detail View)
+				</span>
+			</span>
+		</div>
+		<div class="pull-right m-t-5 m-b-5" >
+			<button class="btn btn-primary pull-right"
+					ng-click="upsertAccountMaster(oAccountMaster)"
+					uib-tooltip="Edit">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>&nbsp;&nbsp;
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px" id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<div class="card-body">
+			<form name="accountMaster" ng-submit="submit(accountMaster)" novalidate>
+				<ul class="list-group list-group-flush">
+					<!-- BASIC Account DETAILS -->
+					<li class="list-group-item">
+						<span class="booking_list_header">BASIC ACCOUNT DETAILS</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Account Name: </label>
+										<div class="col-sm-6">
+											{{oAccountMaster.name}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Branch Name: </label>
+										<div class="col-sm-6">
+											{{oAccountMaster.branch.name}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Account Type: </label>
+										<div class="col-sm-6">
+											{{oAccountMaster.type}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Group: </label>
+										<div class="col-sm-6">
+											{{oAccountMaster.group}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Account Id: </label>
+										<div class="col-sm-6">
+											{{oAccountMaster.accountId}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Limit: </label>
+										<div class="col-sm-6">
+											{{oAccountMaster.limit}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Balance: </label>
+										<div class="col-sm-6">
+											{{oAccountMaster.balance || 0}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+</style>
+

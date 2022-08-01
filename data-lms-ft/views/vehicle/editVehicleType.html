@@ -1,0 +1,233 @@
+<div id="" ng-controller="EditvehicleTypeController">
+	<form name="editTypeProfile" novalidate>
+	    <div class="modal-header" >
+			<button type="button" ng-click="closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+			<h3 class="modal-title" align="center">Edit Vehicle Type</h3><hr>
+		</div>
+	    <div class="validationError" ng-show="vTypeErrormsg"><h5 class="c-red">* {{VTmsg}}</h5></div>
+	    <style type="text/css">
+		 .modal-backdrop.in{z-index:9 !important;}
+		 .modal-open .modal{z-index:99 !important;}
+		</style>
+
+		<div class="modal-body">
+		    <div class="justify col-md-12">
+			    <div class="row" style="margin:15px">
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Name: <span style="color: red;">*</span> </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" name="name" ng-model="vehicleTYE.name" placeholder="Enter Name" class="form-control" required>
+								</div>
+							</div>
+							<!-- <div ng-messages="vehicleProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Code: <span style="color: red;">*</span>  </label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" name="code" ng-model="vehicleTYE.code" placeholder="Enter Code" class="form-control" required>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin:15px">
+					<!-- <div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Capacity(Ton): <span style="color: red;">*</span></label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="number" name="Capcity" ng-model="vehicleTYE.model" placeholder="Enter Capacity" class="form-control" required>
+								</div>
+							</div>
+						</div>
+					</div>	 -->
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Group Name: </label>
+							<div class="col-sm-6">
+							    <div class="select">
+									<select class="form-control" name="Group name" ng-model="vehicleTYE.group_name" ng-options="option.name as option.name for option in vehicleGroup" ng-change="getGroupName(vType.group_name)" name="Group name">
+					               </select>
+								</div>
+								<!-- <div class="fg-line">
+									<input class="form-control" ng-model="vType.group_name" placeholder="Group Name">
+								</div> -->
+							</div>
+							<!-- <div ng-messages="vehicleProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Description</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" id="vType.width_ft" ng-model="vType.desc" class="form-control" placeholder="type here...">
+								</div>
+							</div>
+							<!-- <div ng-messages="vehicleProfile.FNameID.$error" ng-messages-include="error-messages"></div> -->
+						</div>
+					</div>
+				</div>
+			    <div class="row" style="margin:15px">
+					<!-- <div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Group Code</label>
+							<div class="col-sm-6">
+								<div class="select">
+									<select class="form-control" ng-model="vType.group_code" ng-options="option as option.code for option in vehicleGroup" ng-blur="getGroupName(vType.group_code)">
+					               </select>
+								</div>
+							</div>
+						</div>
+					</div> -->
+
+					<!-- <div class="col-md-4">
+						<div class="form-group m-b-0">
+							<label class="col-sm-6 control-label">Group</label>
+							<div class="col-sm-6">
+								<div class="fg-line">
+									<input type="text" ng-model="vType.group" class="form-control" placeholder="Group Id">
+								</div>
+					        </div>
+						</div>
+					</div> -->
+
+					<div class="col-md-6">
+						<div class="form-group m-b-0" >
+							<label class="col-sm-6 control-label" class="ts-label">Owned</label>
+							<div class="col-sm-6 toggle-switch" data-ts-color="blue">
+								<div class="fg-line">
+					                <div class="checkbox m-b-15">
+				                      <label>
+				                        <input type="checkbox" value="" ng-model="vehicleTYE.is_owned" ng-init="vehicleTYE.is_owned=false">
+				                        <i class="input-helper"></i>
+				                      </label>
+				                    </div>
+					            </div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-repeat="oMaterial in vehicleTYE.materialAllowed">
+					<div class="col-md-4">
+						<div class="col-md-10">
+							<select chosen
+									class="form-control"
+									ng-model="oMaterial.material_type"
+									ng-options="item._id as (item.name + '(' + item.group_name + ')') for item in oMaterial.aMaterialType"
+									name="material_{{$index}}"
+									required>
+								<option value="" disabled>Material</option>
+							</select>
+							<span class="error"
+								  ng-if="editTypeProfile['material_'+ $index].$error.required
+								&& (editTypeProfile['material_'+$index].$touched
+									|| editTypeProfile.$submitted)">
+						This Field is Mandatory
+					</span>
+						</div>
+					</div>
+					<div class="col-md-4 m-t-10">
+						<p class="c-black col-md-4 f-500">Weight <span class="req_r">*</span></p>
+						<div class="form-group col-md-8">
+							<div class="fg-line m-b-0">
+								<input type="number"
+									   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onwheel="return false"
+									   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+									   ng-model="oMaterial.weight"
+									   name="weight_{{$index}}"
+									   ng-change="onChangeMaterialType()"
+									   ng-min="1"
+									   required
+									   class="form-control input-sm">
+							</div>
+							<span class="error"
+								  ng-if="editTypeProfile['weight_'+ $index].$error.required
+								&& (editTypeProfile['weight_'+$index].$touched
+									|| editTypeProfile.$submitted)">
+								This Field is Mandatory
+							</span>
+						</div>
+					</div>
+					<div class="col-md-3 m-t-10">
+						<p class="c-black col-md-4 f-500">Units <span class="req_r">*</span></p>
+						<div class="form-group col-md-8">
+							<div class="fg-line m-b-0">
+								<input type="number"
+									   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+									   onwheel="return false"
+									   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+									   ng-model="oMaterial.units"
+									   name="unit_{{$index}}"
+									   required
+									   ng-min="1"
+									   class="form-control input-sm">
+							</div>
+							<span class="error"
+								  ng-if="editTypeProfile['unit_'+ $index].$error.required
+								&& (editTypeProfile['unit_'+$index].$touched
+									|| editTypeProfile.$submitted)">
+								This Field is Mandatory
+							</span>
+						</div>
+					</div>
+					<div class="col-md-1 text-center">
+						<i class="zmdi zmdi-delete zmdi-hc-fw m-t-5 pointer"
+						   uib-tooltip="Remove This Row"
+						   ng-click="vehicleTYE.materialAllowed.splice($index, 1);"
+						   style="font-size: 20px"></i>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+								style="font-size: 20px; width: 50px"
+								uib-tooltip="Add New Row"
+								ng-disabled="editTypeProfile.$invalid"
+								ng-click="appendMaterial()"
+								type="button">
+							<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+						</button>
+					</div>
+				</div>
+				<br>
+				<!-- <div class="row" style="margin:15px">
+					<div class="row">
+						<div class="m-l-30 col-md-10">
+							<div class="form-group m-b-10">
+								<button type="submit" class="btn btn-primary"
+									ng-click="vTypeDetails(vTypeProfile)" style="margin-bottom: 12px;">Save</button>
+							</div>
+						</div>
+					</div>
+				</div> -->
+			</div>
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-6">
+				<h5 style="color: red;">* Mandatory Field....</h5>
+			</div>
+			<div class="col-md-6">
+					<div class="form-group">
+						<div class=" text-right">
+						<button type="submit" class="btn btn-primary"
+									ng-click="editVehicleTypeDetails(editTypeProfile)" style="">Update</button>&nbsp;&nbsp;&nbsp;
+						<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<style type="text/css">
+   .md-dialog-container{z-index: 9999;    }
+</style>

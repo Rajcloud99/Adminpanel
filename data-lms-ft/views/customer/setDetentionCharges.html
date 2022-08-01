@@ -1,0 +1,112 @@
+<style>
+	.modal .modal-content{
+		width: 720px;
+	}
+</style>
+
+<div class="modal-header">
+	<button type="button" ng-click="closeModal()" class="close pull-right"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h3 class="text-center">Add Date Range</h3>
+</div>
+<div class="container modal-body">
+	<form name="detentionSetDateRangeForm" novalidate>
+		<div class="col-md-3">
+			<div class="form-group m-b-0">
+				<label class="col-sm-7 control-label">From (Days):  <span style="color: red;">*</span></label>
+				<div class="col-sm-5">
+					<div class="fg-line">
+						<input type="number"
+							   ng-model="detentionData.from"
+							   class="form-control"
+							   ng-min="0"
+							   ng-max="25"
+							   ng-change="(detentionData.from && detentionData.to) ? setLabel(detentionData.from,detentionData.to) : ''"
+							   ng-model-options="{ updateOn: 'blur' }"
+							   required
+							   name="From">
+					</div>
+				</div>
+				<span class="col-md-12"
+					  style="color:red; font-size: 9px"
+					  ng-show="detentionSetDateRangeForm['From'].$error.max || detentionSetDateRangeForm['From'].$error.min">Days Should be between 0 to 25</span>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group m-b-0">
+				<label class="col-sm-7 control-label">To (Days): <span style="color: red;">*</span></label>
+				<div class="col-sm-5">
+					<div class="fg-line">
+						<input type="number"
+							   ng-model="detentionData.to"
+							   class="form-control"
+							   ng-min="0"
+							   ng-max="25"
+							   ng-change="(detentionData.from && detentionData.to) ? setLabel(detentionData.from,detentionData.to) : ''"
+							   ng-model-options="{ updateOn: 'blur' }"
+							   required
+							   name="To">
+					</div>
+				</div>
+				<span class="col-md-12"
+					  style="color:red; font-size: 9px"
+					  ng-show="detentionSetDateRangeForm['To'].$error.max || detentionSetDateRangeForm['To'].$error.min">Days Should be between 0 to 25</span>
+				<span class="col-md-12"
+					  style="color:red; font-size: 9px"
+					  ng-if="detentionData.to <= detentionData.from">To(Days) should be Grater than From(Days)</span>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group m-b-0">
+				<label class="col-sm-7 control-label">Lable: <span style="color: red;">*</span></label>
+				<div class="col-sm-5">
+					<div class="fg-line">
+						<input type="text"
+							   ng-model="detentionData.label"
+							   class="form-control"
+							   required
+							   name="label">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-10 text-center">
+				<button type="submit"
+						class="btn btn-primary"
+						ng-click="setDetentionRange()"
+						ng-disabled="detentionSetDateRangeForm.$error.required
+															|| detentionSetDateRangeForm.$error.min
+															|| detentionSetDateRangeForm.$error.max
+															|| detentionData.to <= detentionData.from"
+						style="margin-bottom: 12px;text-transform: capitalize;">Add Charges</button>
+			</div>
+		</div>
+	</div>
+	</form>
+
+	<div class="detailList">
+		<table class="table table-bordered unresponsive">
+			<thead>
+			<tr>
+				<th>Start Day</th>
+				<th>End Day</th>
+				<th>Label</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr	data-ng-repeat="detention in detentionDateRange"
+				   class="pointer selectItem">
+				<td>{{detention.start_day}}</td>
+				<td>{{detention.end_day}}</td>
+				<td>{{detention.label}}</td>
+				<td><a uib-tooltip="Remove Detention" ng-click="updateDetentionDateRange($index);" tooltip-placement="bottom"><i class="zmdi zmdi-close-circle-o fs-20 zmdi-hc-fw"></i></a></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

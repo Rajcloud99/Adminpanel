@@ -1,0 +1,586 @@
+<!-- Controller: duesBillUpsertController-->
+<!-- ControllerAs: dbuVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+			<span class="c-black"><b>Dues Bill</b></span>
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					({{dbuVm.mode}})
+			</span>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" style="position: absolute;width: 100%;margin-bottom: 65px">
+		<form novalidate autocomplete="off" name="upsertDuesBillForm">
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+					<!-- DETAILS -->
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Dues Bill Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Invoice No.:</label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												<input type="text" ng-model="dbuVm.oDuesBill.billNo"
+													   class="form-control"
+													   placeholder="Bill No">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+							<label class="col-sm-4 control-label">Bill Date:</label>
+							<div class="date-picker input-group dp-blue col-sm-8" ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input autocomplete="off" ng-click="dbuVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{dbuVm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="dbuVm.oDuesBill.billDate"
+										   ng-change="dbuVm.dateChange('billDate')"
+										   is-open="opened1"
+										   datepicker-options="dbuVm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Bill Date"
+										   name="Bill Date"
+										   required
+										   style="padding: 0px 4px;height: 34px;" />
+								</div>
+								<span class="input-group-btn">
+									<button type="button"
+											class="btn btn-default m-t-0 f12"
+											ng-click="dbuVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+							</div>
+						</div>
+
+						      <div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-3 control-label">Remark:</label>
+								<div class="col-sm-9">
+									<div class="fg-line">
+										<input type="text" ng-model="dbuVm.oDuesBill.remark"
+											   class="form-control"
+											   placeholder="Enter here...">
+									</div>
+								</div>
+							</div>
+						</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Permit Qty:</label>
+										<div class="col-sm-9">
+											{{dbuVm.permitQty}}
+											</div>
+										</div>
+									</div>
+
+								<div class="clearfix"></div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Fitness Qty:</label>
+									<div class="col-sm-9">
+										{{dbuVm.fitnessQty}}
+									</div>
+								</div>
+							</div>
+
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-3 control-label">Good and Token Qty:</label>
+								<div class="col-sm-9">
+									{{dbuVm.GTQty}}
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="form-group m-b-0">
+								<label class="col-sm-3 control-label">Miscellaneous Qty:</label>
+								<div class="col-sm-9">
+									{{dbuVm.misQty}}
+								</div>
+							</div>
+						</div>
+
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-3">
+									<label class="col-sm-3 control-label">Credit A/c:<span class="req_r">*</span></label>
+									<div class="col-sm-9" style="z-index: 90">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input autocomplete="off"
+												   type="text"
+												   name="Credit AC"
+												   class="form-control lvhs-input"
+												   placeholder="Credit Ac"
+												   ng-model="dbuVm.oDuesBill.account"
+												   uib-typeahead="m as m.name for m in dbuVm.getAccount($viewValue)"
+												   typeahead-wait-ms="10"
+												   ng-change="dbuVm.duesBillItems = [];"
+												   required>
+											<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.account=undefined;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-3 control-label">Debit A/c:<span class="req_r">*</span></label>
+									<div class="col-sm-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   name="Debit AC"
+												   class="form-control lvhs-input"
+												   placeholder="Debit Ac"
+												   ng-model="dbuVm.oDuesBill.from_account"
+												   uib-typeahead="m as m.name for m in dbuVm.getAccount($viewValue)"
+												   typeahead-wait-ms="10"
+												   required>
+											<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.from_account=undefined;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Branch:<span class="req_r">*</span></label>
+									<div class="col-md-9"  style="z-index: 90">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="Branch Search..."
+													ng-model="dbuVm.oDuesBill.branch"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in dbuVm.getBranch($viewValue) | limitTo:6"
+													typeahead-on-select="dbuVm.onBranchSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.branch=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">Ref No:<span class="req_r">*</span></label>
+										<div class="col-sm-8">
+											<div class="ng-scope sear chosen-row-1">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Ref Number"
+														ng-model="dbuVm.oDuesBill.refNo"
+														typeahead-wait-ms="10"
+														name="Reference Number"
+														typeahead="item.bookNo as item.bookNo for item in dbuVm.getRefNo(dbuVm.oDuesBill.refNo)|limitTo:10"
+														typeahead-on-select="dbuVm.onRefSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.refNo = null;">×</i>
+<!--												<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"-->
+<!--												   style="right: -20px; background: #3096f3;"-->
+<!--												   ng-click="dbuVm.getRefNo(false, true)"></i>-->
+											</div>
+											<span class="error" ng-if="upsertDuesBillForm['Reference Number'].$error.required
+																	&& !upsertDuesBillForm['Reference Number'].$error.required">
+													This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Gst Type:</label>
+										<div class="col-sm-7">
+											<select chosen
+													class="form-control"
+													ng-model="dbuVm.oDuesBill.gstType"
+													ng-options="item as item for item in ['IGST', 'CGST & SGST']"
+													name="Gst Type"
+											        ng-change="dbuVm.applyTax()">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group">
+										<div class="col-xs-3"><label>TDS Rate :</label></div>
+										<div class="col-xs-6">
+											<div class="select">
+												<select
+														class="form-control"
+														ng-options="item as (item + '%') for item in [0,0.5,1,2,5,10,12,15,18,24,28,40]"
+														ng-model="dbuVm.oDuesBill.tdsRate"
+														ng-change="dbuVm.calculateDuesItems()">
+													<option value="" selected disabled>Select Rate</option>d
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="dbuVm.oDuesBill.tdsRate">
+									<label class="col-md-3 control-label">TDS A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9" style="z-index: 88">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="TDS A/c Search..."
+													ng-model="dbuVm.oDuesBill.tdsAc"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in dbuVm.getAccount($viewValue) | limitTo:6">
+											<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.tdsAc=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="dbuVm.oDuesBill.gstType === 'IGST'">
+									<label class="col-md-3 control-label">IGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="IGST A/c Search..."
+													ng-model="dbuVm.oDuesBill.igstAcnt"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in dbuVm.getAccount($viewValue, 'IGST Paid') | limitTo:6"
+													typeahead-on-select="dbuVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.igstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="dbuVm.oDuesBill.gstType === 'CGST & SGST'">
+									<label class="col-md-3 control-label">CGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="CGST A/c Search..."
+													ng-model="dbuVm.oDuesBill.cgstAcnt"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in dbuVm.getAccount($viewValue, 'CGST Paid') | limitTo:6"
+													typeahead-on-select="dbuVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.cgstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="dbuVm.oDuesBill.gstType === 'CGST & SGST'">
+									<label class="col-md-3 control-label">SGST A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input  type="text"
+													class="form-control lvhs-input"
+													placeholder="SGST A/c Search..."
+													ng-model="dbuVm.oDuesBill.sgstAcnt"
+													typeahead-wait-ms="10"
+													typeahead="item as item.name for item in dbuVm.getAccount($viewValue, 'SGST Paid') | limitTo:6"
+													typeahead-on-select="dbuVm.onAccountSelect($item, $model, $label)"
+											>
+											<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.sgstAcnt=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label">Total Amount: </label>
+										<div class="col-md-6">{{((dbuVm.oDuesBill.amount || 0) - (dbuVm.oDuesBill.proCharge || 0))|roundOff}}</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label">Total Charges: </label>
+										<div class="col-md-6">{{(dbuVm.oDuesBill.proCharge || 0)|roundOff}}</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label">Total Amount withCharges: </label>
+										<div class="col-md-6">{{(dbuVm.oDuesBill.amount || 0)|roundOff}}</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label">Total TDS: </label>
+										<div class="col-md-6">{{(dbuVm.oDuesBill.tdsAmt || 0)|roundOff}}</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="dbuVm.oDuesBill.gstType === 'IGST'">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label">IGST: </label>
+										<div class="col-md-6">{{(dbuVm.oDuesBill.iGST || 0)|roundOff}}</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="dbuVm.oDuesBill.gstType === 'CGST & SGST'">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label">CGST: </label>
+										<div class="col-md-6">{{(dbuVm.oDuesBill.cGST || 0)|roundOff}}</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="dbuVm.oDuesBill.gstType === 'CGST & SGST'">
+									<div class="form-group m-b-0">
+										<label class="col-md-4 control-label">SGST: </label>
+										<div class="col-md-6">{{(dbuVm.oDuesBill.sGST || 0)|roundOff}}</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-md-5 control-label">Total Amount With Tax: </label>
+										<div class="col-md-6">{{(dbuVm.oDuesBill.totalAmount || 0)|roundOff}}</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Adjustment Details</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Bill Amount:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-model="dbuVm.oDuesBill.billAmount"
+													   class="form-control"
+													   placeholder="Enter here...">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Debit A/c:</label>
+									<div class="col-md-9" style="z-index: 3">
+										<div class="lvh-search ng-scope sear chosen-row-1">
+											<input type="text" autocomplete="off"
+												   class="form-control lvhs-input"
+												   placeholder="Debit Accounts"
+												   ng-model="dbuVm.oDuesBill.adjDebitAc"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in dbuVm.getAccount($viewValue, 'Adjustment')"
+											>
+											<i class="lvh-search-close" ng-click="dbuVm.oDuesBill.adjDebitAc=''">×</i>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Adjustment Amount:</label>
+										<div class="col-sm-6">
+											{{(dbuVm.oDuesBill.adjAmount = dbuVm.oDuesBill.billAmount - dbuVm.oDuesBill.totalAmount)|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="card-body">
+							<span class="booking_list_header">Add Dues</span>
+							<div class="card-body">
+								<div class="row" style="margin:5px">
+<!--									<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+<!--										<input type="text"-->
+<!--											   ng-model="dbuVm.oFilter.refNo"-->
+<!--											   name="reference_no"-->
+<!--											   class="form-control input-sm"-->
+<!--											   placeholder="Reference No"-->
+<!--											   ng-model-options="{ updateOn: 'blur' }"-->
+<!--											   style="height: 34px;font-size: 13px;">-->
+<!--									</div>-->
+									<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+										<input type="text"
+											   ng-model="dbuVm.oFilter.invoiceNo"
+											   name="reference_no"
+											   class="form-control input-sm"
+											   placeholder="Invoice No"
+											   ng-model-options="{ updateOn: 'blur' }"
+											   style="height: 34px;font-size: 13px;">
+									</div>
+									<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+										<div class="form-group m-b-0">
+											<div class="col-sm-12">
+												<input
+														fill-date
+														type="text"
+														class="form-control"
+														placeholder="From"
+														name="From"
+														ng-model="dbuVm.oFilter.from"
+												>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+										<div class="form-group m-b-0">
+											<div class="col-sm-12">
+												<input
+														fill-date
+														type="text"
+														class="form-control"
+														placeholder="To"
+														name="To"
+														ng-model="dbuVm.oFilter.to"
+												>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+										<button
+												class="btn btn-primary" type="button" uib-tooltip="Add" ng-click="dbuVm.addDues()">+</button>
+									</div>
+								</div>
+								<div class="row" style="margin:5px">
+									<div class="col-md-12">
+										<table class="table table-bordered unresponsive">
+											<thead jaFixHead>
+											<tr>
+												<th>S.No.</th>
+												<th>Type</th>
+												<th>Vehicle</th>
+												<th>Ref No.</th>
+												<th>Invoice No.</th>
+												<th>Date</th>
+<!--												<th>CREDIT AC</th>-->
+<!--												<th>DEBIT AC</th>-->
+												<th>Amount</th>
+												<th>Processing Charges</th>
+												<th>Apply TDS</th>
+												<th>Apply GST</th>
+												<th ng-if="dbuVm.type!=='view'"></th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat="oItem in dbuVm.duesBillItems">
+												<td>{{$index+1}}</td>
+												<td>{{oItem.duesType}}</td>
+												<td>{{oItem.aVehCollection[0].veh_no || 'NA'}}</td>
+												<td>{{oItem.refNo || 'NA'}}</td>
+												<td>{{oItem.invoiceNo || 'NA'}}</td>
+												<td>{{(oItem.date | date:"dd-MMM-yyyy") || 'NA'}}</td>
+<!--												<td>{{oItem.from_account && oItem.from_account.name || "NA"}}</td>-->
+<!--												<td>{{oItem.to_account && oItem.to_account.name || "NA"}}</td>-->
+												<td>{{oItem.amount | roundOff}}</td>
+												<td>{{oItem.proCharge | roundOff}}</td>
+												<td>
+													<label class="checkbox checkbox-inline">
+														<input type="checkbox"
+															   ng-init="oItem.applyTds = oItem.applyTds ? true : false"
+															   ng-model="oItem.applyTds"
+															   ng-change="dbuVm.calculateDuesItems()">
+														<i class="input-helper"></i>
+													</label>
+												</td>
+												<td>
+													<label class="checkbox checkbox-inline">
+														<input type="checkbox"
+															   ng-init="oItem.applyGst = oItem.applyGst ? true : false"
+															   ng-model="oItem.applyGst"
+															   ng-change="dbuVm.calculateDuesItems()">
+														<i class="input-helper"></i>
+													</label>
+												</td>
+												<td ng-if="dbuVm.type!=='view'">
+													<button class="btn-danger btn-xs"
+															ng-click="dbuVm.delDuesItem($index)"
+															uib-tooltip="Delete Dues"
+															type="button"
+															tooltip-placement="bottom">
+														<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+													</button>
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+
+
+				</ul>
+			</div>
+<!--			<div class="text-center">-->
+<!--				<button-->
+<!--						class="btn btn-primary"-->
+<!--						ng-click="dbuVm.addBill(true)"-->
+<!--				>Submit & Approve-->
+<!--				</button>-->
+<!--			</div>-->
+			<div class="modal-footer">
+				<button class="btn btn-success waves-effect"
+						ng-if="dbuVm.type !== 'view'"
+						ng-disabled="dbuVm.isDisabled"
+						ng-click="dbuVm.submit(upsertDuesBillForm, true)">
+					{{dbuVm.type === 'add' ? 'Generate' : 'Update' }} & Approval Bill
+				</button>&nbsp;&nbsp;&nbsp;
+				<button class="btn btn-success waves-effect"
+						ng-if="dbuVm.type !== 'view'"
+						ng-disabled="dbuVm.isDisabled"
+						ng-click="dbuVm.submit(upsertDuesBillForm)">
+					{{dbuVm.type === 'add' ? 'Generate' : 'Update' }} Bill
+				</button>&nbsp;&nbsp;&nbsp;
+			</div>
+		</form>
+	</div>
+</div>
+
+<style>
+
+
+	error {
+		font-size: 10px;
+		color: red;
+	}
+	color {
+		color: red;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.list-group-item {
+		padding: 2px 15px;
+	}
+
+</style>

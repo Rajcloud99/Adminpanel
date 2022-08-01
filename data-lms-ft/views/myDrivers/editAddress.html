@@ -1,0 +1,199 @@
+<form name="DriverAddress" autocomplete="off">
+
+	 <div class="row" style="margin:15px">
+	  <h5>Temporary Address</h5>
+	   <hr>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 1</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="driver.temporary_address.line1" ng-readonly="(mode=='View')"
+						 class="form-control"></textarea>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 2</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="driver.temporary_address.line2" ng-readonly="(mode=='View')"
+						 class="form-control"></textarea>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID1.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">City</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.temporary_address.city" ng-readonly="(mode=='View')" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+    <div class="row" style="margin:15px">
+     	<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">District</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.temporary_address.district" ng-readonly="(mode=='View')" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+        <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-6 control-label">State</label>
+                    <div class="col-sm-6">
+                    	<div class="fg-line">
+                        	<input type="text" ng-model="driver.temporary_address.state" ng-readonly="(mode=='View')" class="form-control">
+                    	</div>
+					</div>
+                    <!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-6 control-label">Pincode</label>
+                    <div class="col-sm-6">
+                    	<div class="fg-line">
+                        	<input type="number" ng-model="driver.temporary_address.pincode" ng-readonly="(mode=='View')" class="form-control">
+                    	</div>
+					</div>
+                    <!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+                </div>
+            </div>
+
+    </div>
+	<div class="row" style="margin:15px">
+		<div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Country</label>
+                <div class="col-sm-6">
+                	<div class="fg-line">
+                    	<input type="text" ng-model="driver.temporary_address.country" ng-readonly="(mode=='View')" class="form-control">
+                	</div>
+				</div>
+                <!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+            </div>
+        </div>
+	</div>
+
+    <div class="row" style="margin:15px">
+		<h5>Permanent Address</h5> <br>
+		<div class="col-md-3">
+			<div class="form-group m-b-0">
+				<label class="col-sm-8 control-label">Same Address</label>
+				<div class="col-sm-4">
+					<div class="fg-line">
+						<input type="checkbox" ng-disabled="(mode=='View')"  ng-model="driver.copyAddress" ng-change="copyAddress()" class="">
+					</div>
+				</div>
+			</div>
+		</div>
+	   <hr>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 1</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="driver.permanent_address.line1" ng-readonly="(mode=='View')"
+						 class="form-control"></textarea>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.MobileNumberID.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">Address Line 2</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<textarea type="text" rows="2" ng-model="driver.permanent_address.line2" ng-readonly="(mode=='View')"
+						 class="form-control"></textarea>
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID1.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">City</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.permanent_address.city" ng-readonly="(mode=='View')" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+	</div>
+    <div class="row" style="margin:15px">
+     	<div class="col-md-4">
+			<div class="form-group m-b-0">
+				<label class="col-sm-6 control-label">District</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						<input type="text" ng-model="driver.permanent_address.district" ng-readonly="(mode=='View')" class="form-control">
+					</div>
+				</div>
+				<!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+			</div>
+		</div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">State</label>
+                <div class="col-sm-6">
+                	<div class="fg-line">
+                    	<input type="text" ng-model="driver.permanent_address.state" ng-readonly="(mode=='View')" class="form-control">
+                	</div>
+				</div>
+                <!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Pincode</label>
+                <div class="col-sm-6">
+                	<div class="fg-line">
+                    	<input type="number" ng-model="driver.permanent_address.pincode" ng-readonly="(mode=='View')" class="form-control">
+                	</div>
+				</div>
+                <!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin:15px">
+    	<div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Country</label>
+                <div class="col-sm-6">
+                	<div class="fg-line">
+                    	<input type="text" ng-model="driver.permanent_address.country" ng-readonly="(mode=='View')" class="form-control" >
+                	</div>
+				</div>
+                <!-- <div ng-messages="DriverProfile.AddressID2.$error" ng-messages-include="error-messages"></div> -->
+            </div>
+        </div>
+    </div>
+
+
+	<div class="row" ng-hide="true">
+		<div class="m-l-30 col-md-10">
+			<div class="form-group m-b-0">
+				<button type="submit" class="btn btn-primary" ng-disabled="!(DriverAddress.$dirty)" style="margin-bottom: 3%;"
+					ng-click="saveDriverDetails(DriverAddress)">Save</button>
+			</div>
+		</div>
+	</div>
+</form>

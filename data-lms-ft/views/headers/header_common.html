@@ -1,0 +1,66 @@
+<ul class="header-inner clearfix" >
+    <li ng-click="$back()" class="dropdown waves-effect" style="padding: 0 10px;font-size: 26px;
+    margin-left: 5px;margin-top: 3px;">
+        <div ><i class="zmdi zmdi-arrow-left" style="padding:0;color: white"></i></div>
+    </li>
+    <li ng-click="$forward()" class="dropdown waves-effect" style="padding: 0 10px;font-size: 26px;margin-top: 3px;">
+        <div ><i class="zmdi zmdi-arrow-right" style="padding:0;color: white"></i></div>
+    </li>
+	<li ng-click="stateRefresh()" class="dropdown waves-effect" style="padding: 0 10px;font-size: 26px;margin-top: 3px;">
+		<div ><i class="zmdi zmdi-refresh zmdi-hc-fw" style="padding:0;color: white"></i></div>
+	</li>
+    <li ng-click="$goToAppHome()" class="dropdown waves-effect" style="padding: 0 10px;margin-left:10px;
+        font-size: 26px;margin-top: 3px;">
+        <div ><i class="zmdi zmdi-apps" style="padding:0;color: white"></i></div>
+    </li>
+	<li class="logo hidden-xs" style="padding: 10px 0px 10px 20px;margin-left: 10px">
+		<a>{{headerTitle}} ></a>
+	</li>
+	<li class="logo hidden-xs" style="padding: 10px 0px 10px 0px;margin-left: 10px">
+        <a>{{headerSubTitle}}</a>
+    </li>
+    <li class="pull-right">
+        <ul class="top-menu">
+            <li class="logo hidden-xs" style="padding: 10px 10px 10px 20px">
+                <a style="text-transform: none">{{userLoggedIn.full_name}}</a>
+            </li>
+			<li class="logo hidden-xs" style="padding: 2px 10px 10px 20px" ng-show="userLoggedIn.client_allowed">
+				<label>
+					<select class="form-control"
+							ng-options="option.clientId as option.name for option in userLoggedIn.client_allowed"
+							ng-change="changeSelectedClient(selectedClient)"
+							ng-model="selectedClient">
+					</select>
+				</label>
+
+            </li>
+
+			<!-- Notification Start-->
+			<li class="dropdown"
+				uib-dropdown=""
+				notif-bell></li>
+
+
+            <!-- Notification Start END-->
+
+            <li class="dropdown" uib-dropdown>
+                <a uib-dropdown-toggle href="">
+                    <i class="tm-icon zmdi zmdi-settings"></i>
+                </a>
+                <ul class="dropdown-menu dm-icon pull-right">
+                    <li>
+                        <a data-ui-sref="home.apps"><i class="zmdi zmdi-home"></i>Home</a>
+                    </li>
+                    <!--Hide settings option for admin users since its not required -->
+                    <li ng-hide="userLoggedIn.role===$constants.super_admin_role_name">
+                        <a data-ui-sref="home.settings"><i class="zmdi zmdi-settings"></i>Settings</a>
+                    </li>
+                    <li>
+                        <!--<a data-ui-sref="login"><i class="zmdi zmdi-power"></i>Logout</a>-->
+						<a data-ui-sref="login" ng-click="logout()"><i class="zmdi zmdi-power"></i>Logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+</ul>

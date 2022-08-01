@@ -1,0 +1,698 @@
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Trip Advances</b></span>
+		</div>
+		<div class="pull-right text-right m-t-5">
+
+               <span>
+				<button class="btn-primary btn-xs"
+						ng-click="vm.UnMapAdvance()"
+						ng-if="$role['Trip Advance']['UnMap Advance'] && vm.selectType == 'index' && vm.aSelectedTrips"
+						uib-tooltip="UnMap Advance"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-undo zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-primary btn-xs"
+						ng-click="vm.addOtherExpense()"
+						ng-if="$role['Trip Advance']['Add']"
+						uib-tooltip="Add Other Expense"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-primary btn-xs"
+						ng-if="$role['Trip Advance']['Add']"
+						ng-click="vm.advanceOper()"
+						uib-tooltip="Add Advance"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-info btn-xs"
+						ng-if="$role['Trip Advance']['Add DieselReq']"
+						ng-click="vm.dieselReqAdv()"
+						uib-tooltip="Add Diesel Request"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-info btn-xs"
+						ng-if="$role['Trip Advance']['Edit DieselReq'] && vm.aSelectedTrips[0].status === 'Diesel Request'"
+						ng-click="vm.dieselReqAdv('edit')"
+						uib-tooltip="Edit Diesel Request"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-success btn-xs"
+						ng-if="$configs.tripAdv.multiAdv"
+						ng-click="vm.multiAdv()"
+						uib-tooltip="Multi Advance"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="$role['Trip Advance']['Add Multi Advance']">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.addMultiAdv()"
+						uib-tooltip="Add Multi Advance"
+						tooltip-placement="bottom">
+					Multi <i class="zmdi zmdi-accounts-add zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="$role['Trip Advance']['Edit Multi Advance']">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.addMultiAdv('edit')"
+						uib-tooltip="Edit Multi Advance"
+						tooltip-placement="bottom">
+					Multi <i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="$role['Trip Advance']['Delete Multi Advance']">
+				<button class="btn-danger btn-xs"
+						ng-click="vm.addMultiAdv('delete')"
+						uib-tooltip="Delete Multi Advance"
+						tooltip-placement="bottom">
+					Multi <i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="$role['Trip Advance']['Delete Contra Reverse']">
+				<button class="btn-danger btn-xs"
+				ng-click="vm.advanceOper('deleteContra')"
+				uib-tooltip="Delete Contra Reverse"
+				tooltip-placement="bottom">
+					Contra <i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-primary btn-xs"
+						ng-if="$role['Trip Advance']['Edit'] && vm.aSelectedTrips[0].status != 'Diesel Request'"
+						ng-click="vm.advanceOper('edit')"
+						uib-tooltip="Edit Advance"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-hide="vm.shouldHideReverse()">
+				<button class="btn-primary btn-xs"
+						ng-if="$role['Trip Advance']['voucher Reverse']"
+						ng-click="vm.reverseAdv()"
+						ng-disabled="vm.isDisabled"
+						uib-tooltip="Reverse"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-refresh zmdi-hc-fw"></i>
+				</button>&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-danger btn-xs"
+				ng-if="$role['Trip Advance']['Delete']"
+				ng-click="vm.advanceOper('delete')"
+				uib-tooltip="Delete Advance"
+				tooltip-placement="bottom">
+				<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="vm.selectType == 'multiple' && vm.aSelectedTrips.length>0">
+				<button class="btn-primary btn-xs"
+						ng-click="vm.advanceOper('mapTripOnAdv')"
+						uib-tooltip="Map trip on advances"
+						tooltip-placement="bottom">
+					<i class="glyphicon glyphicon-edit"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span ng-if="vm.selectType == 'multiple' && vm.aSelectedTrips.length>0">
+				<button class="btn-success btn-xs"
+						uib-tooltip="Import to Accounts"
+						ng-if="$role['Trip Advance']['Import to Accounts']"
+						tooltip-placement="bottom"
+						ng-disabled="(vm.oFilter.voucher == 'Account exported')"
+						ng-click="vm.createVouchers(vm.aSelectedTrips)">
+					<i class="glyphicon glyphicon-edit"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-info btn-xs"
+						uib-tooltip="Import to account Bulk"
+						ng-if="$role['Trip Advance']['Import to account Bulk']"
+						tooltip-placement="bottom"
+						ng-click="vm.createVouchers()"
+						ng-disabled="!vm.oFilter.start_date || !vm.oFilter.end_date || !vm.oFilter.advanceType ||  !(vm.oFilter.voucher == 'Account not exported')">
+					<i class="glyphicon glyphicon-edit"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-primary btn-xs"
+						type="button"
+						ng-if="$role['Trip Advance']['Upload trip Advance']"
+						uib-tooltip="Upload Trip Advance"
+						onclick="document.getElementById('toUpload').click();"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-upload zmdi-hc-fw"></i>
+				</button>
+				<input
+						type="file"
+						id="toUpload"
+						name="toUpload"
+						ng-model="toUpload"
+						ng-hide="true"
+						accept="*/*"
+						ngf-select
+						ngf-max-size="10MB"
+						ngf-model-invalid="errorFile"
+						ngf-change="vm.upload($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)"
+				>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-success btn-xs"
+						type="button"
+						ng-if="$role['Trip Advance']['Trip Advance sample file']"
+						uib-tooltip="Trip Advance sample file"
+						ng-click="vm.downloadCsv()"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+				</button>
+				&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-primary btn-xs"
+						type="button"
+						uib-tooltip="Generate Bill"
+						ng-if="$role['Trip Advance']['Generate Bill']"
+						ng-click="vm.generateBill()"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-assignment zmdi-hc-fw"></i>
+				</button>&nbsp;&nbsp;
+			</span>
+			<span>
+				<button class="btn-info btn-xs"
+						type="button"
+						uib-tooltip="Generate DieselReq Bill"
+						ng-if="$role['Trip Advance']['Gen Diesel Bill']"
+						ng-click="vm.generateDieselBill()"
+						tooltip-placement="bottom">
+					<i class="zmdi zmdi-assignment zmdi-hc-fw"></i>
+				</button>
+			</span>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)" autocomplete="off">
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="number"
+										   ng-model="vm.oFilter.trip_no"
+										   name="trip_no"
+										   class="form-control input-sm"
+										   placeholder="Trip No"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<input type="text"
+									   ng-model="vm.oFilter.ref_no"
+									   name="reference_no"
+									   class="form-control input-sm"
+									   placeholder="Reference No"
+									   ng-model-options="{ updateOn: 'blur' }"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text"
+										   ng-model="vm.oFilter.bill_no"
+										   name="bill_no"
+										   class="form-control input-sm"
+										   placeholder="Bill No"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text" placeholder="Vehicle Search..."
+										   ng-model="vm.oFilter.vehicle"
+										   class="lvhs-input"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.vehicle_reg_no for item in vm.aVehicles | filter:$viewValue"
+										   ng-change="vm.getVname(vm.oFilter.vehicle)"
+										   class="form-control"
+										   >
+									<i class="lvh-search-close" ng-click="vm.oFilter.vehicle='';vm.getAllTripSus()">×</i>
+								</div>
+							</div>
+							<!--
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text"
+											class="form-control lvhs-input"
+											placeholder="Driver Search..."
+											ng-model="vm.oFilter.driver"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in vm.aDriver | limitTo:6"
+											ng-change="vm.getDriver(vm.oFilter.driver)"
+									>
+									<i class="lvh-search-close" ng-click="vm.oFilter.driver='';vm.getTrips()">×</i>
+								</div>
+							</div>
+							-->
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text"
+											class="form-control lvhs-input"
+											placeholder="Vendor Search..."
+											ng-model="vm.oFilter.vendor"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in vm.aVendor | limitTo:6"
+											ng-change="vm.getVendorName(vm.oFilter.vendor)">
+									<i class="lvh-search-close" ng-click="vm.oFilter.vendor='';vm.getTrips()">×</i>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Accounts"
+											ng-model="vm.oFilter.account"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in vm.accountmaster($viewValue)"
+									>
+									<i class="lvh-search-close" ng-click="vm.oFilter.account='';vm.getTrips()">×</i>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear chosen-row-1">
+									<input type="text"
+										   class="form-control lvhs-input"
+										   placeholder="Branch Search..."
+										   ng-model="vm.oFilter.branch"
+										   typeahead-wait-ms="10"
+										   typeahead="item as (item.name + '('+($configs.client_allowed|filter:{'clientId': item.clientId})[0].name+')') for item in vm.getAllBranch($viewValue) | limitTo:6"
+										   typeahead-on-select="onBranchSelect($item, $model, $label)">
+									<i class="lvh-search-close" ng-click="vm.oFilter.branch='';">×</i>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-1 col-lg-1">
+								<select class="form-control"
+										ng-options="item as item for item in vm.aVoucher"
+										ng-model="vm.oFilter.voucher"
+										style="line-height: 34px;"
+										typeahead-on-select="vm.onSelect($item, $model, $label)">
+									<option value="">Select Voucher</option>
+								</select>
+							</div>
+							<!--$configs.master.expenseObj ||-->
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<select chosen multiple class="form-control"
+										ng-model="vm.oFilter.advanceType"
+										ng-options="item.name as item.name for item in ($constants.expenseObj2)|filter:{c: 'n'}:true"
+										style="line-height: 34px;">
+									<option value="">Advance Type</option>
+								</select>
+							</div>
+<!--							<div class="clearfix"></div>-->
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+								<select chosen class="form-control"
+										ng-options="item as item for item in vm.aBill"
+										ng-model="vm.oFilter.bill">
+									<option value="">Select Bill</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-1">
+								<select chosen class="form-control"
+										ng-options="item as item for item in ['trip', 'Car', 'Market', 'Generator']"
+										ng-model="vm.oFilter.category">
+									<option value="">Select Category</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<select class="form-control"
+										ng-model="vm.oFilter.dateType"
+										ng-options="item.value as item.key for item in $constants.advanceDateType"
+										style="line-height: 34px;">
+									<option value="" selected> Select Type</option>
+								</select>
+							</div>
+							<!--
+							<div class="col-md-1">
+								<div class="date-picker input-group dp-blue">
+										<input
+											   fill-date
+											   type="text"
+											   class="form-control"
+											   ng-model="vm.oFilter.start_date"
+											   ng-change="vm.oFilter.end_date=undefined"
+											   close-text="Close"
+											   placeholder="From Date"
+											   name="From Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="date-picker input-group dp-blue">
+										<input
+											   fill-date
+											   type="text"
+											   class="form-control"
+											   max-date="vm.DatePicker.newDate"
+											   ng-model="vm.oFilter.end_date"
+											   close-text="Close"
+											   placeholder="To Date"
+											   name="To Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+								</div>
+							</div>-->
+							<div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')"
+											   type="text" class="form-control"
+											   datepicker-popup="{{format}}"
+											   show-weeks="false"
+											   max-date="vm.DatePicker.newDate"
+											   ng-model="vm.oFilter.start_date"
+											   ng-change="vm.dateChange('startDate')"
+											   is-open="opened1"
+											   datepicker-options="dateOptions"
+											   close-text="Close"
+											   placeholder="From Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+									 <button type="button"
+											 class="btn btn-default m-t-0 f12"
+											 ng-click="open($event, 'opened1')"><i
+											 class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+							<div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')"
+											   type="text" class="form-control"
+											   datepicker-popup="{{format}}"
+											   show-weeks="false"
+											   max-date="vm.maxEndDate"
+											   ng-model="vm.oFilter.end_date"
+											   ng-change="vm.dateChange('endDate')"
+											   is-open="opened2"
+											   datepicker-options="dateOptions"
+											   close-text="Close"
+											   min-date="vm.oFilter.start_date"
+											   placeholder="To Date"
+											   style="padding: 0px 4px; height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+									 <button type="button"
+											 class="btn btn-default m-t-0 f12"
+											 ng-click="open($event, 'opened2')"><i
+											 class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<select chosen class="form-control"
+										ng-options="item as item for item in vm.aType"
+										ng-model="vm.oFilter.status"
+										style="line-height: 34px;">
+									<option value="">All</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<select chosen class="form-control"
+										ng-options="item as item for item in vm.aIsSettle"
+										ng-model="vm.oFilter.isSettle"
+										style="line-height: 34px;">
+									<option value="">All</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="number"
+										   ng-model="vm.oFilter.sRoFilter.sR"
+										   name="start"
+										   class="form-control input-sm"
+										   placeholder="Start"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="number"
+										   ng-model="vm.oFilter.eR"
+										   name="end"
+										   class="form-control input-sm"
+										   placeholder="End"
+										   ng-model-options="{ updateOn: 'blur' }"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+							<div class="col-md-2">
+								<label class="col-sm-6">Selected DR:</label>
+								<div class="form-group m-b-0">
+									<div class="col-sm-2">
+										{{vm.totdr| roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<label class="col-sm-6">Selected CR:</label>
+								<div class="form-group m-b-0">
+									<div class="col-sm-2">
+										{{vm.totcr| roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2" ng-if="vm.advSum">
+								<label class="col-sm-6">Total DR:</label>
+								<div class="form-group m-b-0">
+									<div class="col-sm-2">
+										{{vm.advSum.dr| roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2" ng-if="vm.advSum">
+								<label class="col-sm-6">Total CR:</label>
+								<div class="form-group m-b-0">
+									<div class="col-sm-2">
+										{{vm.advSum.cr| roundOff}}
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-push-12">
+								<div class="form-group m-b-0 ja-text-right">
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Search"
+											ng-click="vm.getAllTripSus()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Clear All"
+											ng-click="vm.oFilter={};vm.getAllTripSus();vm.advSum=undefined;vm.totcr=0;vm.totdr=0"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Download Excel"
+											ng-disabled="vm.disableDownloadBtn"
+											ng-click="vm.downloadReport()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-success p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Download CSV"
+											ng-disabled="vm.disableDownloadBtn"
+											ng-click="vm.downloadReport('csv')"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											ng-hide="true"
+											style="margin-bottom: 3px; font-size: 16px;"
+											uib-tooltip="Tally XML"
+											ng-disabled="vm.disableDownloadBtn"
+											ng-click="vm.downloadReport('tally-xml')"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Diesel Trip Report"
+											ng-disabled="vm.disableDownloadBtn"
+											ng-click="vm.dieselTripReport()"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-danger p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Download advances with issues"
+											ng-disabled="vm.disableDownloadBtn"
+											ng-click="vm.downloadReport('issues')"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-success p-t-0 p-b-0" ng-if="$configs.tripAdv.summaryCrDrBal"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Summary CrDr Balance"
+											ng-click="vm.getSummary()"
+											ng-disabled="!vm.oFilter.start_date || !vm.oFilter.end_date"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search-replace zmdi-hc-fw"></i>
+									</button>
+									<div class="col-md-2" ng-if="!vm.advSum && $configs.tripAdv.summaryCrDrBal">
+										<label class="col-sm-6">Total DR:</label>
+										<div class="form-group m-b-0">
+											<div class="col-sm-2">
+												{{vm.totalDr| roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2" ng-if="!vm.advSum && $configs.tripAdv.summaryCrDrBal">
+										<label class="col-sm-6">Total CR:</label>
+										<div class="form-group m-b-0">
+											<div class="col-sm-2">
+												{{vm.totalCr| roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2" ng-if="$configs.tripAdv.summaryCrDrBal">
+										<label class="col-sm-6">Total Entries:</label>
+										<div class="form-group m-b-0">
+											<div class="col-sm-2">
+												{{vm.count}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2" ng-if="vm.totalLtr && $configs.tripAdv.summaryCrDrBal">
+										<label class="col-sm-6">Total Diesel Qty:</label>
+										<div class="form-group m-b-0">
+											<div class="col-sm-2">
+												{{vm.totalLtr| roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2" ng-if="vm.advSum && $configs.tripAdv.summaryCrDrBal">
+										<label class="col-sm-6">Total DR:</label>
+										<div class="form-group m-b-0">
+											<div class="col-sm-2">
+												{{vm.advSum.dr| roundOff}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2" ng-if="vm.advSum && $configs.tripAdv.summaryCrDrBal">
+										<label class="col-sm-6">Total CR:</label>
+										<div class="form-group m-b-0">
+											<div class="col-sm-2">
+												{{vm.advSum.cr| roundOff}}
+											</div>
+										</div>
+									</div>
+
+									<button class="btn btn-primary p-t-0 p-b-0"
+											type="button"
+											style="margin-bottom: 3px;  font-size: 16px"
+											uib-tooltip="Check CrDr Balance"
+											ng-click="vm.getAdvCrDr()"
+											ng-disabled="!vm.oFilter.start_date || !vm.oFilter.end_date || !vm.oFilter.advanceType ||  !(vm.oFilter.voucher)"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-search-replace zmdi-hc-fw"></i>
+									</button>
+									<button class="btn btn-primary p-t-0 p-b-0"
+											style="margin-bottom: 3px;  font-size: 16px"
+											ng-if="$role['Trip Advance']['Bill Preview']"
+											ng-click="vm.printBill('Preview')"
+											ng-disabled="billIconStatus"
+											uib-tooltip="Preview">
+										<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+									</button>&nbsp;
+								</div>
+							</div>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div ja-table
+									 ng-if="vm.showTable"
+									 table-body="vm.aTripSuspense"
+									 table-head="vm.tableHead"
+									 table-height='500px'
+									 table-load="vm.getAllTripSus(true)"
+									 table-column-setting="vm.columnSetting"
+									 table-selectable='vm.selectType'
+									 table-api='vm.tableApi'
+									 table-selectable-model="vm.aSelectedTrips"
+									 table-row-click-event="vm.selectedAdvance()"
+								></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.chosen-row-1{
+		z-index: 89;
+	}
+	tbody tr:hover{background: #dbd6d6;}
+	.m-t-10{margin-top: 10px;}
+</style>
+

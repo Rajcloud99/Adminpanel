@@ -1,0 +1,981 @@
+<!-- Controller: billsMoneyReceiptUpsertController -->
+<!-- ControllerAs: vm -->
+
+<div class="container" style="">
+	<div class="m-b-0" id="messages-main">
+		<form name="grUpset" autocomplete="off" novalidate>
+			<div class="card-body">
+				<ul class="list-group list-group-flush">
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-2">
+									<div class="">
+										<input
+												type="text"
+												class="form-control"
+												ng-model="vm.mrNo"
+												ng-change="vm.getMoneyReceipt()"
+												ng-model-options="{ updateOn: 'blur' }"
+												name="Money Receipt"
+												placeholder="CR No."
+										>
+										<i class="lvh-search-close" ng-click="vm.mrNo;">×</i>
+									</div>
+									<span class="error" ng-if="vm.mrNo && vm.noRefNoFound">No CR. No. Found</span>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<!-- DETAILS -->
+					<li class="list-group-item">
+						<!--<span class="booking_list_header">Gr Details: </span>-->
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Billing Party:</label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear" style="z-index: 10;">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Billing Party"
+														ng-model="vm.oMoneyReceipt.billingParty"
+														typeahead-wait-ms="10"
+														name="Billing Party"
+														typeahead-on-select="vm.onBPSelect($item, $model, $label)"
+														typeahead="item as item.name for item in vm.getBillingParty($viewValue)|limitTo:6">
+												<i class="lvh-search-close"
+												   ng-click="vm.oMoneyReceipt.billingParty=null;vm.clearBillData()">×</i>
+											</div>
+										</div>
+										<!--<div class="col-sm-6" ng-if="!vm.readonly">-->
+										<!--{{vm.aBill[0].billingParty.name}}-->
+										<!--</div>-->
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Credit A/c: </label>
+										<div class="col-sm-8">{{vm.oMoneyReceipt.bpAccNam || 'NA'}}</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Rem. Amount:</label>
+									<div class="col-sm-4">
+										{{vm.remainingBillAmount| roundOff}}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Advice Amount : <span
+											class="req_r">*</span></label>
+									<div class="col-sm-4">
+										<div class="fg-line form-group m-b-0">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="vm.oMoneyReceipt.adviceAmount"
+												   ng-model-options="{updateOn: 'blur'}"
+												   readonly="true"
+												   name="Total Receiving"
+												   required
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+								<div style="clear: both"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Branch :<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div class="ng-scope sear"
+												 style="z-index: 9;"
+												 ng-if="vm.isBranchEditable">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Branch Search.."
+														ng-model="vm.oMoneyReceipt.branch"
+														typeahead-wait-ms="10"
+														name="Branch"
+														typeahead="item as item.name for item in vm.getAllBranch($viewValue)|limitTo:6"
+														typeahead-on-select="vm.onBranchSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close"
+												   ng-click="vm.oMoneyReceipt.branch=null;">×</i>
+											</div>
+											<!--<span class="error"-->
+												  <!--ng-show="!vm.oMoneyReceipt.branch">No Branch Selected</span>-->
+											<span class="warning"
+												  ng-show="vm.oMoneyReceipt.branch && !vm.oMoneyReceipt.branch.crBook">No CR Book Linked to selected branch</span>
+											<span ng-if="!vm.isBranchEditable">{{vm.oMoneyReceipt.branch.name}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">CR Date: <span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<input
+													fill-date
+													type="text"
+													ng-readonly="vm.oMoneyReceipt.isVchAlGen"
+													class="form-control"
+													placeholder="Date"
+													ng-change="vm.oMoneyReceipt.mrNo = undefined;"
+													ng-model="vm.oMoneyReceipt.date"
+											>
+											<!--<span ng-if="vm.oMoneyReceipt.isVchAlGen">{{vm.oMoneyReceipt.date|date:'dd-MM-yyyy'}}</span>-->
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">CR Number:<span
+												class="req_r">*</span></label>
+										<div class="col-sm-6">
+											<div ng-if="!vm.oMoneyReceipt.isVchAlGen" style="z-index: 8;">
+												<input
+														type="text"
+														class="form-control"
+														placeholder="Cr Number"
+														ng-model="vm.oMoneyReceipt.mrNo"
+														typeahead-wait-ms="10"
+														name="CR Number"
+														typeahead="item.bookNo as item.bookNo for item in vm.getMrStationary(vm.mrNo)|limitTo:10"
+														typeahead-on-select="vm.onMrNoSelect($item, $model, $label)"
+														required>
+												<i class="lvh-search-close" ng-click="vm.oMoneyReceipt.mrNo=null;">×</i>
+												<i class="lvh-search-close zmdi zmdi-refresh zmdi-hc-fw"
+												   style="right: -20px; background: #3096f3;"
+												   ng-click="vm.getAutoStationaryNo(addpvVm.oVoucher.billDate)"></i>
+											</div>
+											<span ng-if="vm.oMoneyReceipt.isVchAlGen">{{vm.oMoneyReceipt.mrNo}}</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Narration: </label>
+										<div class="col-sm-8">
+											<input type="text"
+												   onwheel="return false"
+												   ng-model="vm.oMoneyReceipt.narration"
+												   ng-model-options="{updateOn: 'blur'}"
+												   name="Narration"
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+								<div style="clear: both"></div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Debit A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear"
+											 style="z-index: 7;"
+											 ng-if="!vm.oMoneyReceipt.isVchAlGen">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="Debit Account"
+												   ng-model="vm.oMoneyReceipt.bankAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAllAccount($viewValue, ['banks', 'Transaction']) | limitTo:6"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.oMoneyReceipt.bankAccount=null;">×</i>
+										</div>
+										<span ng-if="vm.oMoneyReceipt.isVchAlGen">{{vm.oMoneyReceipt.bankAccount.name}}</span>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Bank Received : </label>
+									<div class="col-sm-4">
+										<div class="fg-line form-group m-b-0">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="vm.oMoneyReceipt.receivedAmount"
+												   ng-change="vm.refreshBillamt();"
+												   ng-model-options="{updateOn: 'blur'}"
+												   ng-readonly="vm.oMoneyReceipt.isVchAlGen"
+												   name="Bank Received"
+												   required
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Mode: </label>
+										<div class="col-sm-6">
+											<select chosen
+													class="form-control"
+													ng-model="vm.oMoneyReceipt.paymentMode"
+													ng-options="item as item for item in vm.aPaymentMode"
+													name="Payment Mode">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Payment Ref:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="text"
+													   placeholder="Payment Ref"
+													   ng-model="vm.oMoneyReceipt.paymentRef"
+													   name="Payment Ref"
+													   ng-model-options="{ updateOn: 'blur' }"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div style="clear: both"></div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">TDS A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear" style="z-index: 6">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="TDS Account"
+												   ng-model="vm.oMoneyReceipt.tdsAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAllAccount($viewValue) | limitTo:6"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.oMoneyReceipt.tdsAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Tot. TDS: <span class="req_r">*</span></label>
+									<div class="col-sm-4">
+										<div class="fg-line form-group m-b-0">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="vm.totBillTds"
+												   ng-change="vm.refreshBillamt();"
+												   ng-readonly="vm.isTDSApplied"
+												   ng-model-options="{updateOn: 'blur'}"
+												   name="TDS Amount"
+												   required
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Adj. A/c:<span class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear" style="z-index: 6">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="Adjustment A/c"
+												   ng-model="vm.oMoneyReceipt.adjAcc"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAllAccount($viewValue) | limitTo:6"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.oMoneyReceipt.adjustmentAcc=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Adj. Amt.: <span class="req_r">*</span></label>
+									<div class="col-sm-4">
+										<div class="fg-line form-group m-b-0">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="vm.adjAmt"
+												   ng-model-options="{updateOn: 'blur'}"
+												   name="Adjustment Amount"
+												   required
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Ext. Charge A/c:<span
+											class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="ExtraCharge Account"
+												   ng-model="vm.oMoneyReceipt.extChargeAccount"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAllAccount($viewValue) | limitTo:6"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.oMoneyReceipt.extChargeAccount=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Tot. Ext. Charge: <span class="req_r">*</span></label>
+									<div class="col-sm-4">
+										<div class="fg-line form-group m-b-0">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="vm.totBillExtCharge"
+												   ng-change="vm.refreshBillamt()"
+												   ng-readonly="vm.isExtChargeApplied"
+												   ng-model-options="{updateOn: 'blur'}"
+												   name="Extra Charge Amount"
+												   required
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Pending Amount : <span class="req_r">*</span></label>
+									<div class="col-sm-4">
+										{{vm.pendingAmount}}
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<label class="col-md-3 control-label">Ext. Charge A/c 2nd:<span
+											class="req_r">*</span></label>
+									<div class="col-md-9">
+										<div class="lvh-search ng-scope sear" style="z-index: 3">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="ExtraCharge Account"
+												   ng-model="vm.oMoneyReceipt.extChargeAccount2"
+												   typeahead-wait-ms="10"
+												   typeahead="item as item.name for item in vm.getAllAccount($viewValue) | limitTo:6"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.oMoneyReceipt.extChargeAccount2=null;">×</i>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Tot. Ext. Charge 2nd: <span class="req_r">*</span></label>
+									<div class="col-sm-4">
+										<div class="fg-line form-group m-b-0">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="vm.totBillExtCharge2"
+												   ng-change="vm.refreshBillamt()"
+												   ng-readonly="vm.isExtChargeApplied2"
+												   ng-model-options="{updateOn: 'blur'}"
+												   name="Extra Charge Amount 2"
+												   required
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Deduction A/c: </label>
+										<div class="col-sm-8">{{vm.oMoneyReceipt.dedAccNam || "NA"}}</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-3">
+									<label class="col-sm-6 control-label">Tot. Deduction : <span class="req_r">*</span></label>
+									<div class="col-sm-4">
+										{{vm.totBillDed|roundOff}}
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="col-md-12">
+							<div class="col-md-1">
+								<span class="booking_list_header">Add Bill: </span>
+							</div>
+							<div class="col-md-7">
+								<div class="col-md-3">
+									<div class="fg-line form-group m-b-0">
+										<div class="lvh-search ng-scope sear">
+											<input type="text"
+												   class="form-control lvhs-input"
+												   placeholder="Bill No."
+												   ng-model="vm.myFilter.bill_no"
+												   typeahead-wait-ms="10"
+												   typeahead-on-select="vm.onSelectbillNo($item, $model, $label)"
+												   typeahead="item as (item.billNo + ' / ' + item.billAmount) for item in vm.getBills($viewValue)"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.myFilter.bill_no=null;">×</i>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="fg-line form-group m-b-0">
+										<input type="text"
+											   ng-model="vm.myFilter.gr"
+											   name="Gr Number"
+											   class="form-control input-sm"
+											   placeholder="Gr Number"
+											   ng-model-options="{ updateOn: 'blur' }">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="fg-line form-group m-b-0">
+										<input type="number"
+											   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   onwheel="return false"
+											   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+											   ng-model="vm.myFilter.amount"
+											   ng-max="vm.myFilter.maxAmount"
+											   ng-min="0"
+											   ng-model-options="{updateOn: 'blur'}"
+											   name="amountFilter"
+											   placeholder="Amount"
+											   class="form-control input-sm">
+									</div>
+								</div>
+								<div class="col-md-2">
+									<div class="fg-line form-group m-b-0">
+										<input type="number"
+											   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   onwheel="return false"
+											   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+											   ng-model="vm.myFilter.tds"
+											   ng-model-options="{updateOn: 'blur'}"
+											   name="tdsFilter"
+											   placeholder="TDS"
+											   class="form-control input-sm">
+									</div>
+								</div>
+								<div class="col-md-1">
+									<button class="btn btn-primary"
+											uib-tooltip="Add"
+											tooltip-placement="bottom"
+											type="button"
+											ng-click="vm.addBill()">
+										<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+									</button>&nbsp;&nbsp;
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="pull-right">
+									<button class="btn btn-primary"
+											ng-click="vm.showGrPaymentDeductions()">
+										Gr Payment Ded
+									</button>&nbsp;&nbsp;
+									<button class="btn btn-primary"
+											uib-tooltip="Add Miscellaneous"
+											tooltip-placement="bottom"
+											ng-hide="vm.isMiscellaneousAdded"
+											ng-click="vm.addMiscellaneousBill()">
+										<i class="zmdi zmdi-plus zmdi-hc-fw"></i> Misc.
+									</button>&nbsp;&nbsp;
+									<button class="btn btn-danger"
+											uib-tooltip="Remove Gr"
+											tooltip-placement="bottom"
+											ng-click="vm.removeGr(); vm.applyTDS()">
+										<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5" style="overflow-y: auto; max-height: 500px;">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>#</th>
+													<th>Bill No</th>
+													<th>Gr No</th>
+													<th>Billing Party</th>
+													<th>Total Amount</th>
+													<th>Settled Amount</th>
+													<th>Remaining Amount</th>
+													<th>Received Amount ({{vm.totReceivedBillAmount}})</th>
+													<th>TDS ({{vm.totBillTds|roundOff}})</th>
+													<th>Deduction ({{vm.totBillDed|roundOff}})</th>
+													<th>GR Payment</th>
+													<th>Bill Amount</th>
+													<th>Bill Date</th>
+													<th>Gr Date</th>
+													<th>Total Freight</th>
+													<th>CGST</th>
+													<th>SGST</th>
+													<th>IGST</th>
+													<!--<th>Ext. Charge</th>-->
+													<!--<th>Settlement Status</th>-->
+												</tr>
+												</thead>
+												<tbody ng-repeat="oBill in vm.aBill">
+												<tr ng-repeat="oItem in oBill.items"
+													ng-click="vm.selectBill($parent.$index, $index)"
+													class="pointer"
+													ng-class="{grn: vm.selectedGr._id === oItem.gr._id && vm.selectedBill._id === oBill._id}"
+												>
+													<td>{{$parent.$index + $index + 1}}</td>
+													<!--<td>-->
+													<!--<input type="radio"-->
+													<!--class="pointer"-->
+													<!--ng-show="oItem.receivedAmount"-->
+													<!--ng-init="oItem.isSelected = false"-->
+													<!--value="true"-->
+													<!--name="radioOption"-->
+													<!--ng-model="oItem.isSelected"-->
+													<!--ng-click="vm.selectThisGr( oItem.receivedAmount ? oItem : false)">-->
+													<!--</td>-->
+													<td>{{oBill.billNo || oBill.billNumber ||  'NA'}}</td>
+													<td>{{oItem.gr.grNumber || oItem.grData.grNumber || 'NA'}}</td>
+													<td>{{oBill.billingParty.name || oBill.bpNam}}</td>
+													<td>{{(oItem.grTotalAmount|roundOff) || 0}}</td>
+													<td>{{(oItem.settledAmount|roundOff) || 0}}</td>
+													<td>{{(oItem.remainingAmount|roundOff) || 0}}</td>
+													<td>
+														<!--ng-class="vm.isSettled(oItem)"-->
+														<input type="number"
+															   ng-model="oItem.receivedAmount"
+															   name="Received Amount"
+															   placeholder="Amount..."
+															   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+															   onwheel="return false"
+															   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+															   ng-model-options="{updateOn: 'blur'}"
+															   ng-change="vm.validateReceivedAmount(oItem);"
+															   ng-readonly="oBill.isNonReceivable"
+															   class="form-control input-sm">
+													</td>
+
+													<td>
+														<div class="fg-line form-group m-b-0">
+															<input type="number"
+																   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+																   onwheel="return false"
+																   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+																   ng-model="oItem.tdsAmount"
+																   ng-readonly="(!oItem.tdsAmount && oBill.isTDSApplied) || oBill.canApplyTDS"
+																   ng-model-options="{updateOn: 'blur'}"
+																   ng-change="vm.applyTDS(oBill, oItem); vm.validateReceivedAmount(oItem);"
+																   name="TDS Amount"
+																   required
+																   class="form-control input-sm">
+														</div>
+													</td>
+													<td>{{(oItem.deduction|roundOff) || 0}}</td>
+													<td>
+														<div class="checkbox m-b-15"
+															 ng-if="oItem.grMrAmt">
+															<label>
+																<input type="checkbox"
+																	   ng-disabled="oItem.grMrAmt > oItem.receivedAmount"
+																	   value=""
+																	   ng-model="oItem.grPay">
+																<i class="input-helper"></i>
+																Payment Amt: {{oItem.grMrAmt}}
+															</label>
+														</div>
+														<div ng-if="!oItem.grMrAmt">No</div>
+													</td>
+													<td>{{(oBill.billAmount|roundOff) || 0}}</td>
+													<td>{{oBill.billDate | date: 'dd-MM-yyyy'}}</td>
+													<td>{{oItem.gr.grDate| date: 'dd-MM-yyyy'}}</td>
+													<td>{{(oItem.gr.totalFreight|roundOff) || 0}}</td>
+													<td>{{(oItem.cGST|roundOff) || 0}}</td>
+													<td>{{(oItem.sGST|roundOff) || 0}}</td>
+													<td>{{(oItem.iGST|roundOff) || 0}}</td>
+													<!--<td>-->
+													<!--<div class="fg-line form-group m-b-0">-->
+													<!--<input type="number"-->
+													<!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+													<!--onwheel="return false"-->
+													<!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+													<!--ng-model="oItem.extChargeAmount"-->
+													<!--ng-model-options="{updateOn: 'blur'}"-->
+													<!--ng-change="vm.validateReceivedAmount(oItem)"-->
+													<!--name="TDS Amount"-->
+													<!--required-->
+													<!--class="form-control input-sm">-->
+													<!--</div>-->
+													<!--</td>-->
+													<!--<td>-->
+													<!--<i class="zmdi zmdi-check zmdi-hc-fw"-->
+													<!--ng-if="oItem | checkSettlementStatus"-->
+													<!--style="color: green;font-size: 20px;"></i>-->
+													<!--<i class="zmdi zmdi-close zmdi-hc-fw"-->
+													<!--ng-if="!(oItem | checkSettlementStatus)"-->
+													<!--style="color: red;font-size: 20px;"></i>-->
+													<!--</td>-->
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<div class="col-md-12">
+							<div class="col-md-2">
+								<span class="booking_list_header">Deductions: </span>
+								&nbsp;&nbsp;
+								<button class="btn btn-primary"
+										ng-show="!!vm.selectedGr"
+										uib-tooltip="Hide Deduction"
+										tooltip-placement="bottom"
+										ng-click="vm.selectedGr = false; vm.selectedGrIndex = 0">
+									<i class="zmdi zmdi-eye-off zmdi-hc-fw"></i>
+								</button>
+								<button class="btn btn-primary" e
+										uib-tooltip="Show All Deduction"
+										ng-hide="!!vm.selectedGr"
+										tooltip-placement="bottom"
+										ng-click="vm.selectBill(0,0);">
+									<i class="zmdi zmdi-eye zmdi-hc-fw"></i>
+								</button>&nbsp;&nbsp;
+							</div>
+							<div class="col-md-6">
+								<div class="col-md-4">
+									<div class="col-sm-10">
+										<div class="fg-line form-group m-b-0">
+											<input type="text"
+												   ng-model="vm.myFilter.grDed"
+												   name="Gr Number"
+												   class="form-control input-sm"
+												   placeholder="Gr Number"
+												   ng-model-options="{ updateOn: 'blur' }">
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<button class="btn btn-primary"
+												ng-click="vm.addGrForDed();">
+											<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="pull-right">
+									<button class="btn btn-primary"
+											uib-tooltip="Add Deduction"
+											tooltip-placement="bottom"
+											ng-click="vm.selectedItem.aDeduction.push({}); vm.refreshDeductionType()">
+										<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+									</button>&nbsp;&nbsp;
+									<button class="btn btn-danger"
+											uib-tooltip="Remove Deduction"
+											tooltip-placement="bottom"
+											ng-click="vm.dedSelectedItem.aDeduction.splice(vm.selectedDeductionIndex, 1); vm.refreshBillamt()">
+										<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>Gr No</th>
+													<th>Type</th>
+													<th ng-if="$configs.moneyReceipt.dedNotToWithHold">Account</th>
+													<th>Amount</th>
+													<th>Remark</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr ng-repeat-start="oBill in vm.aBill">
+													<!--<td>- {{oBill.billNo}}</td>-->
+												</tr>
+												<tr ng-repeat-start="oItem in oBill.items"
+													ng-show="vm.selectedGr._id ? (vm.selectedGr._id === oItem.gr._id) : true">
+													<td rowspan="{{oItem.aDeduction.length+1}}"
+														style="vertical-align: middle;">
+														{{oItem.gr.grNumber || oItem.grData.grNumber || 'NA'}}
+													</td>
+												</tr>
+												<tr ng-repeat-end ng-repeat="oDeduction in oItem.aDeduction"
+													ng-class="{grn: vm.dedSelectedItem.gr._id === oItem.gr._id && vm.selectedDeductionIndex === $index}"
+													ng-show="vm.selectedGr._id ? (vm.selectedGr._id === oItem.gr._id) : true"
+													class="pointer"
+													ng-click="vm.dedSelectedItem = oItem; vm.selectedDeductionIndex = $index">
+													<!--<td>- - - {{oItem.gr.grNumber}}</td>-->
+													<td>
+														<div class="fg-line select">
+															<select class="form-control"
+																	name="Select Type"
+																	ng-model="oDeduction.type"
+																	ng-options="item.name as item.name for item in oDeduction.aDeductionType"
+																	ng-change="vm.refreshDeductionType(oItem, oDeduction)"
+																	required>
+																<option value="" disabled selected> Select</option>
+															</select>
+														</div>
+													</td>
+													<td ng-if="$configs.moneyReceipt.dedNotToWithHold">
+														<div class="col-md-12">
+															<div class="">
+																<input
+																		type="text"
+																		class="form-control"
+																		placeholder="Account Search.."
+																		ng-model="oDeduction.account"
+																		typeahead-wait-ms="10"
+																		name="account"
+																		typeahead="item as item.name for item in vm.getAllAccount($viewValue, ['Receipt Deduction'])"
+																		typeahead-on-select="vm.onDedAccSelect($item, oDeduction)"
+																		required>
+																<i class="lvh-search-close"
+																   ng-click="oDeduction.deductionAccount = null;">×</i>
+															</div>
+														</div>
+													</td>
+													<td>
+														<input type="number"
+															   ng-model="oDeduction.amount"
+															   placeholder="Number"
+															   ng-change="vm.refreshBillamt()"
+															   ng-readonly="oDeduction.genFrom === 'cn'"
+															   name="Number"
+															   class="form-control">
+													</td>
+													<td>
+														<input type="text"
+															   ng-model="oDeduction.remark"
+															   placeholder="Remark"
+															   name="remark"
+															   class="form-control">
+													</td>
+												</tr>
+												<tr ng-repeat-end>
+													<!--<td>display: hidden</td>-->
+												</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+<!--					<div ng-if="$configs.moneyReceipt.showAccount" data-ng-include="'views/bills/billsMoneyReceiptUpsertDeductionV2.html'"></div>-->
+
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Ext. Charge Bill's: </span>
+
+						<div class="pull-right">
+							<button class="btn btn-primary"
+									uib-tooltip="Add Bill"
+									tooltip-placement="bottom"
+									ng-click="vm.extraCharges.push({})">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-danger"
+									uib-tooltip="Remove Bill"
+									tooltip-placement="bottom"
+									ng-click="vm.extraCharges.splice(vm.selectedExtCharge, 1);vm.applyExtraCharge()">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5" style="overflow-y: auto;">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>#</th>
+													<th>Bill No</th>
+													<th>Amount</th>
+													<th>Remark</th>
+												</tr>
+												</thead>
+												<tbody>
+													<tr ng-repeat="oCharge in vm.extraCharges"
+														ng-class="{grn: vm.selectedExtCharge === $index}"
+														class="pointer"
+														ng-click="vm.selectedExtCharge = $index">
+														<td>{{$index+1}}</td>
+														<td>
+															<input type="text"
+																   ng-model="oCharge.billNo"
+																   placeholder="Bill No"
+																   name="Charge Bill No"
+																   class="form-control">
+														</td>
+														<td>
+															<input type="number"
+																   ng-model="oCharge.amt"
+																   placeholder="Amount"
+																   ng-change="vm.applyExtraCharge()"
+																   name="Charge Amount"
+																   class="form-control">
+														</td>
+														<td>
+															<input type="text"
+																   ng-model="oCharge.rmk"
+																   placeholder="Remark"
+																   name="remark"
+																   class="form-control">
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+
+					<li class="list-group-item">
+						<span class="booking_list_header">Ext. Charge Bill's 2nd: </span>
+
+						<div class="pull-right">
+							<button class="btn btn-primary"
+									uib-tooltip="Add Bill"
+									tooltip-placement="bottom"
+									ng-click="vm.extraCharges2.push({})">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-danger"
+									uib-tooltip="Remove Bill"
+									tooltip-placement="bottom"
+									ng-click="vm.extraCharges2.splice(vm.selectedExtCharge2, 1);vm.applyExtraCharge()">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="card-body">
+							<div class="row hidden-print" style="margin:15px;">
+								<div class="col-md-12">
+									<div class="detailsList">
+										<div class="p-l-5 p-r-5 p-b-5" style="overflow-y: auto;">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>#</th>
+													<th>Bill No</th>
+													<th>Amount</th>
+													<th>Remark</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr ng-repeat="oCharge in vm.extraCharges2"
+													ng-class="{grn: vm.selectedExtCharge2 === $index}"
+													class="pointer"
+													ng-click="vm.selectedExtCharge2 = $index">
+													<td>{{$index+1}}</td>
+													<td>
+														<input type="text"
+															   ng-model="oCharge.billNo"
+															   placeholder="Bill No"
+															   name="Charge Bill No"
+															   class="form-control">
+													</td>
+													<td>
+														<input type="number"
+															   ng-model="oCharge.amt"
+															   placeholder="Amount"
+															   ng-change="vm.applyExtraCharge()"
+															   name="Charge Amount"
+															   class="form-control">
+													</td>
+													<td>
+														<input type="text"
+															   ng-model="oCharge.rmk"
+															   placeholder="Remark"
+															   name="remark"
+															   class="form-control">
+													</td>
+												</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="text-right p-10">
+											<button class="btn btn-primary"
+													style="font-size: 14px"
+													ng-disabled="vm.disableSubmit"
+													ng-click="vm.submit()"
+													type="button">
+												Submit
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+</div>
+<style>
+
+	.red {
+		color: red;
+	}
+
+	.chosen-row-1 {
+		z-index: 89;
+	}
+
+	.border-red {
+		border: 2px solid #ff000080 !important;
+	}
+
+	.container:not(.ja-containter) {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+</style>

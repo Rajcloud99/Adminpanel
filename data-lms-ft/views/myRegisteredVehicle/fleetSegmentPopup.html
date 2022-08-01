@@ -1,0 +1,144 @@
+<!-- ControllerAs: fleetSegmentVm-->
+
+<style>
+	.modal .modal-content{
+		width: 720px;
+	}
+
+	.btn-lst {
+		background: #eee;
+		margin-right: 5px;
+		padding: 3px 5px
+	}
+
+	.btn-lst a {
+		cursor: pointer;
+		background: #5B5B5B;
+		padding: 0 4px 2px 6px;
+		color: #fff;
+		line-height: 30px
+	}
+
+	.btn-lst a:hover {
+		background: #333
+	}
+
+</style>
+
+<div class="modal-header">
+	<button type="button" ng-click="fleetSegmentVm.closeModal()" class="close pull-right"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h3 class="text-center">Fleet Segment</h3>
+</div>
+
+<form name="fleetSegment" novalidate ng-submit="fleetSegmentVm.submit(fleetSegment)">
+	<div class="container modal-body">
+		<!--<div class="col-md-6">
+			<div class="col-md-4">
+				Select Segment:
+			</div>
+			<div class="col-md-8">
+				<div class="fg-line form-group m-b-0">
+					<select chosen
+							class="form-control"
+							ng-model="fleetSegmentVm.segment_type"
+							ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+							ng-change="fleetSegmentVm.removeVehicleOfThisSegment(fleetSegmentVm.segment_type)"
+							name="Segment"
+							required>
+						<option value="" selected>Select Segment</option>
+					</select>
+				</div>
+				<span class="error"
+					  ng-if="fleetSegment['Segment'].$error.required">This Field is Mandatory</span>
+			</div>
+        </div>-->
+         
+        <div class="col-md-6">
+			<div class="col-md-4">
+				Select Fleet:
+			</div>
+			<div class="col-md-8">
+				<div class="lvh-search ng-scope sear">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Fleet Search..."
+							ng-model="fleetSegmentVm.name"
+							typeahead-wait-ms="10"
+							typeahead="{_id: item._id, name: item.name, designation: item.designation} as item.name for item in fleetSegmentVm.getFleet($viewValue) | limitTo:6"
+							
+                    >
+                    <!--
+                    <input type="text"
+                        placeholder="Vendor Search..."
+                        ng-model="upsertVm.oVehicle.vendor_name"
+                        class="lvhs-input"
+                        typeahead-wait-ms="10"
+                        typeahead="item as item.name for item in upsertVm.aVendors"
+                        typeahead-on-select='upsertVm.onVendorSelect($item, $model, $label)'
+                        ng-change="upsertVm.getAllVendorsListOnSearch(upsertVm.oVehicle.vendor_name)"
+                        name="vendor"
+                        required
+                        class="form-control">-->
+
+					<i class="lvh-search-close" ng-click="fleetSegmentVm.name=''">×</i>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">
+			<div class="col-md-4">
+				Select Vehicle:
+			</div>
+			<div class="col-md-8">
+				<div class="lvh-search ng-scope sear">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="Vehicle Search..."
+							ng-model="fleetSegmentVm.vehicle"
+							typeahead-wait-ms="10"
+							typeahead="{_id: item._id, owner_group: item.owner_group,vehicle_reg_no: item.vehicle_reg_no} as item.vehicle_reg_no for item in fleetSegmentVm.getVehicle($viewValue) | limitTo:6"
+							typeahead-on-select="fleetSegmentVm.onSelect($item, $model, $label)"
+					>
+					<i class="lvh-search-close" ng-click="fleetSegmentVm.vehicle=''">×</i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 m-t-10">
+			<span class="btn-lst"
+				  ng-repeat="vehicle in fleetSegmentVm.aVehicle">{{vehicle.vehicle_reg_no}}
+				<a ng-click="fleetSegmentVm.aVehicle.splice($index, 1)"> x </a>
+			</span>
+		</div>
+
+		<div class="col-md-12 m-t-10">
+			<table class="table table-bordered unresponsive invoiceDetail">
+				<thead>
+				<tr>
+					<th>#</th>
+					<th>Old Group/Fleet Name</th>
+					<th>Modified Date</th>
+					<th>Modified By</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr data-ng-repeat="data in fleetSegmentVm.oVehicle.fleetHistory"
+					class="pointer">
+					<td>{{$index+1}}</td>
+					<td>{{data.ownGrp}}</td>
+					<td>{{(data.time | date: 'dd-MMM-yyyy \'at\' h:mm') || 'NA'}}</td>
+					<td>{{data.name || 'NA'}}</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">Submit</button>
+	</div>
+</form>

@@ -1,0 +1,103 @@
+<!-- Controller: viewDeltaController -->
+<!-- ControllerAs: vdVm -->
+
+<form role="form"  name="viewDetailRepPopup" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="vdVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">View {{vdVm.oLogs.refTo}} Logs</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<li class="list-group-item">
+				<div class="card-body">
+					<div class="row" style="margin:5px">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								 <div ng-show="vdVm.aDL && vdVm.aDL.length>0" ja-table
+									 table-body="vdVm.aDL"
+									 table-head="vdVm.tableHead"
+									 table-height='200px'
+									 table-column-setting="vdVm.columnSetting"
+									 table-api="vdVm.tableApi"
+									 table-selectable='"single"'
+									 table-selectable-model="vdVm.selectedLog"
+								></div>
+								{{vm.oDeltaLog}}
+								<div class="detailsList" ng-show="vdVm.oDeltaLog">
+									<div class="" style="overflow-y: auto; max-height: 500px;">
+										<table class="table table-bordered unresponsive">
+											<thead>
+											<tr>
+												<th>Sr.No.</th>
+												<th>Status</th>
+												<th>Total</th>
+												<th>Message</th>
+												<th ng-if="vdVm.oLogs.action && vdVm.oLogs.action.tsNo">RTNO</th>
+												<th ng-if="vdVm.oLogs.action && vdVm.oLogs.action.refNo">RefNo</th>
+												<th ng-if="vdVm.oLogs.action && vdVm.oLogs.action.addedUser">Settle By</th>
+												<th ng-if="vdVm.oLogs.action && vdVm.oLogs.action.datetime">Settle Date</th>
+												<th ng-if="vdVm.oLogs.action && vdVm.oLogs.action.remarkByUser">Action By</th>
+												<th ng-if="vdVm.oLogs.action && vdVm.oLogs.action.remark">Remark</th>
+												<th ng-if="vdVm.oLogs.action && vdVm.oLogs.action.remarkDatetime">Action Date</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-if="vdVm.oDeltaLog.Success">
+												<td>1</td>
+												<td>{{vdVm.oDeltaLog.Success.status}}</td>
+												<td>{{vdVm.oDeltaLog.Success.count}}</td>
+												<td>{{vdVm.oDeltaLog.Success.message}}</td>
+												<td ng-if="vdVm.oLogs.action && vdVm.oLogs.action.tsNo">{{vdVm.oLogs.action.tsNo}}</td>
+												<td ng-if="vdVm.oLogs.action && vdVm.oLogs.action.refNo">{{vdVm.oLogs.action.refNo}}</td>
+												<td ng-if="vdVm.oLogs.action && vdVm.oLogs.action.addedUser">{{vdVm.oLogs.action.addedUser}}</td>
+												<td ng-if="vdVm.oLogs.action && vdVm.oLogs.action.datetime">{{vdVm.oLogs.action.datetime  |
+													date:'dd-MM-yyyy'}}</td>
+												<td ng-if="vdVm.oLogs.action && vdVm.oLogs.action.remarkByUser">{{vdVm.oLogs.action.remarkByUser}}</td>
+												<td ng-if="vdVm.oLogs.action && vdVm.oLogs.action.remark">{{vdVm.oLogs.action.remark}}</td>
+												<td ng-if="vdVm.oLogs.action && vdVm.oLogs.action.remarkDatetime">{{vdVm.oLogs.action.remarkDatetime  |
+													date:'dd-MM-yyyy'}}</td>
+											</tr>
+											<tr ng-if="vdVm.oDeltaLog.Fail">
+												<td>2</td>
+												<td>{{vdVm.oDeltaLog.Fail.status}}</td>
+												<td>{{vdVm.oDeltaLog.Fail.count}}</td>
+												<td>{{vdVm.oDeltaLog.Fail.message}}</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-warning" ng-click="vdVm.closeModal()">Close</button>
+	</div>
+</form>
+
+
+<style type="text/css">
+	.modal-dialog {width: 70%;
+		height: 273px
+	}
+	.exced{
+		margin-top: 20px;margin-left:10px;
+	}
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+	td ,th{
+		text-align:center;
+	}
+	.pac-container.pac-logo{z-index: 9999;}
+</style>

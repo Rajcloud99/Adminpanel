@@ -1,0 +1,50 @@
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+        <div class="card-body">
+            <div class="row" style="margin:5px">
+				<div class="col-md-12 text-center">
+					<button class="btn btn-primary btn-xs m-b-20"
+							style="font-size: 15px"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="addSalary('Add')">
+						<i class="zmdi zmdi-plus zmdi-hc-fw"></i> Salary
+					</button>
+					<button class="btn btn-primary btn-xs m-b-20"
+							style="font-size: 15px"
+							uib-tooltip="Edit Salray"
+							tooltip-placement="bottom"
+							type="button"
+							ng-disabled='(monthlySalarySelectedIndex|typeOfFilter:"number" && monthlySalarySelectedIndex>=0)'
+							ng-click="addSalary('Edit', monthlySalarySelectedIndex)"><i class="zmdi zmdi-edit zmdi-hc-fw"></i> Salary</button>
+				</div>
+				<div class="col-md-12">
+					<table class="table table-bordered unresponsive">
+						<thead>
+						<tr>
+							<th style="min-width: 140px">#</th>
+							<th style="min-width: 140px">MM/YY</th>
+							<th style="min-width: 140px">Salary</th>
+							<th style="min-width: 140px">Created By</th>
+							<th style="min-width: 140px">Created At</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="oMonthlySalary in oVehicle.monthlyCharges | orderBy: '-created_at'"
+							class="pointer selectItem"
+							ng-click="selectThis($index);"
+							ng-class="$index === monthlySalarySelectedIndex ? 'grn' : ''">
+							<td>{{$index+1}}</td>
+							<td>{{oMonthlySalary.mm_yy | date: "MMMM-yyyy"}}</td>
+							<td>{{oMonthlySalary.amount}}</td>
+							<td>{{oMonthlySalary.created_by}}</td>
+							<td>{{oMonthlySalary.created_at | date: "dd-MM-yyyy"}}</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+            </div>
+        </div>
+    </li>
+</ul>

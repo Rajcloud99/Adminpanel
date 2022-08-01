@@ -1,0 +1,167 @@
+<div ng-controller="accountCrDrReportController">
+	<div class="container m-b-10">
+		<div class="col-md-12 card m-b-0">
+			<div class="lvh-label">
+				<span class="c-black"><b>Credit-Debit Report</b></span>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" style="">
+		<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+			<div class="row hidden-print" style="margin:7px;">
+				<form ng-submit="submit(crDrReport)" name="crDrReport" novalidate>
+					<div class="col-md-2">
+						<div class="form-group m-b-0">
+							<div class="col-sm-12">
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue chosen-row-1"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="oFilter.from_date"
+												   ng-change="oFilter.to_date=undefined"
+												   is-open="opened1"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   required
+												   placeholder="From"/>
+										</div>
+										<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group m-b-0">
+							<div class="col-sm-12">
+								<div class="fg-line">
+									<div class="date-picker input-group dp-blue chosen-row-1"
+										 ng-class="{ 'is-opened': opened2 == true }">
+										<div ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+												   type="text"
+												   class="form-control"
+												   datepicker-popup="{{DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="oFilter.to_date"
+												   min-date="oFilter.from_date"
+												   max-date="oFilter.from_date|setMaxDate:5"
+												   is-open="opened2"
+												   datepicker-options="DatePicker.dateSettings"
+												   close-text="Close"
+												   required
+												   placeholder="To"/>
+										</div>
+										<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+								style="font-size: 16px"
+								uib-tooltip="Search"
+								type="submit"
+								tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+						<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+								style="font-size: 16px"
+								uib-tooltip="Clear Search"
+								tooltip-placement="bottom"
+								type="submit"
+								ng-click="oFilter={};setDefaultDate();"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+					</div>
+				</form>
+			</div>
+		</div>
+		</div>
+		<div class="detailsList card" style="background: white">
+			<div class="" style="overflow-y: auto; max-height: 450px;">
+				<table class="table table-bordered unresponsive invoiceDetail">
+					<thead id='my_fixable_table_header' fix-head>
+					<tr>
+						<th></th>
+						<th></th>
+						<th colspan="2">Debit/Credit</th>
+						<th colspan="2">Original Invoice</th>
+						<th></th>
+						<th colspan="6">Differential Tax</th>
+					</tr>
+					<tr>
+						<th>GSTIN/UIN</th>
+						<th>Type of note</th>
+						<th>No.1</th>
+						<th>Date1</th>
+						<th>No.2</th>
+						<th>Date2</th>
+						<th>Diff Value</th>
+						<th>IRate</th>
+						<th>IAmount</th>
+						<th>CRate</th>
+						<th>CAmount</th>
+						<th>SRate</th>
+						<th>SAmount</th>
+					</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="report in aReport">
+							<td>{{report.billingParty[0].gstin_no}}</td>
+							<td>{{report.dcNotes.type || 'NA'}}</td>
+							<td>{{report.dcNotes.voucher.vId || 'NA'}}</td>
+							<td>{{(report.dcNotes.date | date:"dd-MMM-yyyy 'at' h:mma") || 'NA'}}</td>
+							<td>{{report.actualBillNo || "NA"}}</td>
+							<td>{{(report.bill_date | date:"dd-MMM-yyyy 'at' h:mma") || 'NA'}}</td>
+							<td>{{((report.totalAmt || 0) + (report.dcNotes.netamount || 0)) || 0}}</td>
+							<td>{{report.iGST_percent || "NA"}}</td>
+							<td>{{report.dcNotes.iGST || "NA"}}</td>
+							<td>{{report.cGST_percent || "NA"}}</td>
+							<td>{{report.dcNotes.cGST || "NA"}}</td>
+							<td>{{report.sGST_percent || "NA"}}</td>
+							<td>{{report.dcNotes.sGST || "NA"}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<div ng-if="aReport.length <= 0 " class="ms-body" style=" min-height: 50px;">
+					<h3>No Reports Found !!!!!</h3>
+				</div>
+			</div>
+			<div class="pagi text-center" ng-if="aReport.length > 0">
+				<uib-pagination ng-change="getCrDrReport()"
+								total-items="Pagination.totalItems"
+								items-per-page="Pagination.items_per_page"
+								num-pages="Pagination.numPages"
+								ng-model="Pagination.currentPage"
+								max-size="Pagination.maxSize"
+								class="pagination-sm smallPagi"
+								boundary-links="true"
+								previous-text="&lsaquo;"
+								next-text="&rsaquo;"
+								first-text="&laquo;"
+								last-text="&raquo;"></uib-pagination>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+</style>
+

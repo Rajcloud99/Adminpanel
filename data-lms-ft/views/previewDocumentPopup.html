@@ -1,0 +1,116 @@
+<form role="form"  name="prevDoc" autocomplete="off" novalidate>
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h3 class="modal-title" align="center">Preview Document</h3><br>
+	</div>
+
+
+	<div class="modal-body"  ng-repeat="(keyHead, valueHead) in images">
+		<div class="justify col-md-12">
+			<div class="row" style="padding-bottom: 5px;" >
+				<div class="col-md-12 panel-title" style="background-color: #7c7c7c; ">
+					<span style="font-size: 20px; font-weight: bold; color: white;"> {{keyHead | uppercase}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="justify col-md-12 panel-collapse collapse in"  ng-repeat="i in valueHead" id="collapseOne{{keyHead}}" role="tabpanel" aria-labelledby="headingOne{{keyHead}}">
+			<div class="row" style="padding-left: 5px; padding-right: 5px;" ng-repeat="(k, v) in i" >
+				<div class="col-md-12" style="background-color: #98AFC7;">
+				<span style="font-size: 15px; font-weight: bold; color: black;">{{k | uppercase}} - {{v[0].sNumber}}</span>
+			</div>
+				<div class="col-md-2 bordercss1 offset-2 item" ng-repeat="(m, n) in v" style="padding-top: 5px;">
+					<img src="{{n.name}}" class="image" style="height:200px; width:190px;">
+					<div class="text">
+						<button class="btn" uib-tooltip="Print Docs" style="background: blue; color: white;" ng-click="printDoc(n.name)">
+							<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+						</button>
+						<button class="btn" uib-tooltip="Preview Docs" style="background: blue; color: white; margin-left: 7px;" ng-click="onDownloadButtonClicked(k, n.name)" style="padding-left: 2px;">
+							<i class="zmdi zmdi-border-color glyphicon glyphicon-list-alt"></i>
+						</button>
+<!--						<button class="btn" uib-tooltip="Delete Docs" style="background: red; color: white; margin-left: 7px;" ng-click="deleteDoc(keyHead, n.iName, n.sId)" style="padding-left: 2px;">-->
+<!--							<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+<!--						</button>-->
+					</div>
+				</div>
+<!--				<div class="col-md-12">-->
+<!--					<hr>-->
+<!--				</div>-->
+			</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+
+</form>
+<style type="text/css">
+	img {
+		border: 1px solid #ccc;
+	}
+	.modal-dialog {width: 90%;
+		height: 500px
+	}
+	.bordercss {
+		border-style: solid;
+		border-color: gray;
+	}
+
+	* {
+		box-sizing: border-box;
+	}
+
+	.container {
+		display: flex;
+		justify-content: flex-start;
+		flex-flow: wrap;
+		width: 200px;
+	}
+
+	.item {
+		display: inline-block;
+		margin: 0 0.5em 0.5em 0;
+		position: relative;
+	}
+
+	.text {
+		opacity: 0;
+		background-color: #00aa22;
+		color: white;
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		font-size: 16px;
+		/*padding: 16px 32px;*/
+	}
+
+	.text:hover {
+		background-color: #CCCCCC;
+		color:black;
+		opacity: 0.7;
+	}
+
+	.text:hover .middle {
+		opacity: 0.5;
+	}
+
+	@keyframes opac {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+</style>
+

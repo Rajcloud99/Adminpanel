@@ -1,0 +1,262 @@
+<div class="container" ng-controller="tripExpenseCntrl">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="trip_no" name="trip_no" class="form-control input-sm"
+										   placeholder="Trip No" ng-model-options="{ updateOn: 'blur' }"
+										   ng-change="getAllTripExp()" style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+                              <div class="fg-line">
+                                  <input type="text"
+										 ng-model="gr_no"
+										 name="boe_no"
+										 class="form-control input-sm"
+										 placeholder="GR NO"
+										 ng-model-options="{ updateOn: 'blur' }"
+										 ng-change="getAllTripExp()" style="height: 34px;font-size: 13px;">
+                              </div>
+                            </div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="lvh-search ng-scope sear">
+		                          <input type="text" placeholder="Vehicle Search..."
+										 ng-model="vehicle_no"
+										 class="lvhs-input"
+										 typeahead-wait-ms="10"
+										 typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue"
+										 ng-change="getVname(vehicle_no)"
+										 class="form-control"
+										 typeahead-on-select="onSelect($item, $model, $label)">
+		                          <i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+		                        </div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="lvh- ng-scope sear chosen-row-1">
+									<input type="text"
+										   class="form-control lvhs-input"
+										   placeholder="Vendor"
+										   ng-model="viewValue"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in getVendorName($viewValue) | limitTo:6">
+								</div>
+<!--								<div class="m-t-10" ng-dropdown-multiselect=""-->
+<!--									 ng-init="filterObj.vendor=[];aVendor=[]"-->
+<!--									 options="aVendor"-->
+<!--									 selected-model="filterObj.vendor"-->
+<!--									 extra-settings="selectSettings"-->
+<!--									 events='selectEvents'-->
+<!--									 translation-texts="{buttonDefaultText: 'Vendor'}"-->
+<!--									 ja-search-input='inputModel'-->
+<!--									 ja-search-trigger="getVendorName(inputModel)"-->
+<!--								></div>-->
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="lvh- ng-scope sear chosen-row-1">
+									<input type="text"
+										   class="form-control lvhs-input"
+										   placeholder="Route"
+										   ng-model="inputValue"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in getRoutes(inputValue) | limitTo:6">
+
+								</div>
+<!--								<div class="m-t-10" ng-dropdown-multiselect=""-->
+<!--									  ng-init="filterObj.route=[];routes=[]"-->
+<!--									  options="routes"-->
+<!--									  selected-model="filterObj.route"-->
+<!--									  extra-settings="selectSettings"-->
+<!--									  events='selectEvents'-->
+<!--									  translation-texts="{buttonDefaultText: 'Route'}"-->
+<!--									  ja-search-input='inputModel'-->
+<!--									  ja-search-trigger="getRoutes(inputModel)"-->
+<!--								></div>-->
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-2">
+								<div class="lvh- ng-scope sear chosen-row-2">
+									<input type="text"
+										   class="form-control lvhs-input"
+										   placeholder="Drivers"
+										   ng-model="inputModel"
+										   typeahead-wait-ms="10"
+										   typeahead="item as item.name for item in getDrivers(inputModel) | limitTo:6">
+								</div>
+<!--								<div class="m-t-10" ng-dropdown-multiselect=""-->
+<!--									  ng-init="filterObj.driver=[];drivers=[]"-->
+<!--									  options="drivers"-->
+<!--									  selected-model="filterObj.driver"-->
+<!--									  extra-settings="selectSettings"-->
+<!--									  events='selectEvents'-->
+<!--									  translation-texts="{buttonDefaultText: 'Driver'}"-->
+<!--									  ja-search-input='inputModel'-->
+<!--									  ja-search-trigger="getDrivers(inputModel)"-->
+<!--								></div>-->
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<select class="form-control"
+										ng-model="filterObj.type"
+										ng-options="item as item for item in $constants.aPayType"
+										ng-change="getAllTripExp()"
+										style="line-height: 34px;">
+									<option value="" selected> Select Type</option>
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<select class="form-control"
+										ng-model="filterObj.dateType"
+										ng-options="item.value as item.key for item in $constants.expenseDateType"
+										ng-change="getAllTripExp()"
+										style="line-height: 34px;">
+								</select>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<select class="form-control"
+										ng-model="filterObj.paymentStatus"
+										ng-options="item for item in $constants.expensePaymentStatus"
+										ng-change="getAllTripExp()"
+										style="line-height: 34px;">
+								</select>
+							</div>
+
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 m-b-10">
+								<label class="checkbox checkbox-inline m-r-20">
+									<input type="checkbox"
+										   ng-model="filterObj.paidToVendor"
+										   ng-click="getAllTripExp()"
+										   class="ng-pristine ng-valid ng-empty ng-touched">
+									<i class="input-helper"></i>
+									Paid To Vendor
+								</label>
+							</div>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="row">
+							<div class="col-md-12">
+								<div class="col-xs-6 col-sm-1 col-md-2 col-lg-2">
+									<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="open($event, 'opened1')"
+														 type="text"
+														 class="form-control"
+														 datepicker-popup="{{format}}"
+														 show-weeks="false"
+														 ng-model="start_date"
+														 is-open="opened1"
+														 datepicker-options="dateOptions"
+														 close-text="Close"
+														 placeholder="From Date"
+														 ng-change="getAllTripExp()"
+														 max-date="end_date"
+														 style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+																					ng-click="open($event, 'opened1')"><i
+																			class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-1 col-md-2 col-lg-2">
+									<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+											 style=" ">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="open($event, 'opened2')"
+														 type="text"
+														 class="form-control"
+														 datepicker-popup="{{format}}"
+														 show-weeks="false"
+														 ng-model="end_date"
+														 is-open="opened2"
+														 datepicker-options="dateOptions"
+														 close-text="Close"
+														 placeholder="To Date"
+														 ng-change="getAllTripExp()"
+														 min-date="start_date"
+														 style="padding: 0px 4px; height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+                                  <button type="button" class="btn btn-default m-t-0 f12"
+																					ng-click="open($event, 'opened2')"><i
+																			class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead id='my_fixable_table_header' fix-head>
+									<tr>
+										<th>Trip No.</th>
+										<th>GR No.</th>
+										<th>Vehicle No.</th>
+										<th>Route Name</th>
+										<th>Allocation Date</th>
+										<th>Vendor Payment Status</th>
+										<th>Net Expense</th>
+										<th style="min-width: 90px;">Cash</th>
+										<th>Vendor</th>
+										<th>Vendor Purchase</th>
+										<th>Vendor Advance</th>
+										<th>Vendor ToPay</th>
+										<th>Total Diesel(Rs.)</th>
+										<th>Toll Tax</th>
+										<th>Vendor Payment</th>
+
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="oTripExp in aTripExpense" class="pointer selectItem"
+										ng-click="tripExpDeatil(oTripExp,$index)">
+										<td>{{oTripExp.trip_no}}</td><td>{{oTripExp | grNumbers}}</td>
+										<td>{{oTripExp.vehicle_no || 'NA'}}</td>
+										<td>{{oTripExp.trip.route_name || 'NA'}}</td>
+										<td>{{oTripExp.trip.allocation_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+										<td>{{oTripExp.paymentStatus}}</td>
+										<td>{{oTripExp.netExpense || 0}}</td>
+										<td>{{oTripExp.driverCash || 0}}</td>
+										<td>{{oTripExp.trip.vendorData.name}}{{oTripExp.trip.vendorData.prim_contact_no ? ('('+oTripExp.trip.vendorData.prim_contact_no+')') : '' }}</td>
+										<td>{{oTripExp.trip.vendorDeal.total_expense || 0}}</td>
+										<td>{{oTripExp.trip.vendorDeal.advance || 0}}</td>
+										<td>{{oTripExp.trip.vendorDeal.toPay || 0}}</td>
+										<td>{{oTripExp.diesel || 0}}</td>
+										<td>{{oTripExp.tollTax || 0}}</td>
+										<td>{{oTripExp.vNet || 0}}</td>
+
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="pagi text-center" ng-show="aTripExpense.length > 0">
+								<uib-pagination ng-change="getAllTripExp(true)" total-items="pagination.totalItems"
+												items-per-page="pagination.items_per_page" num-pages="pagination.numPages"
+												ng-model="pagination.currentPage" max-size="pagination.maxSize"
+												class="pagination-sm smallPagi" boundary-links="true"
+												previous-text="&lsaquo;" next-text="&rsaquo;"
+												first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+							</div>
+							<div ng-if="aTripExpense.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any Trip Expense available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	tbody tr:hover{background: #dbd6d6;}
+	.m-t-10{margin-top: 10px;}
+</style>

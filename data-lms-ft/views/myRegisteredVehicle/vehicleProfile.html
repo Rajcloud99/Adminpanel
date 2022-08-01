@@ -1,0 +1,334 @@
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+        <div class="card-body">
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Registration Number: <span ng-hide="(registered_vehicle_mode=='View')" class="req_r">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="registration Num" ng-model="oVehicle.vehicle_reg_no" placeholder="Enter Registration Number" class="form-control" ng-readonly="(registered_vehicle_mode=='View')||(registered_vehicle_mode=='Edit')" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Group Name: <span
+								class="req_r" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="oVehicle.group_data" ng-options="option as option.name for option in aVehicleGroups" ng-selected="aVehicleType=oVehicle.group_data.vehicle_types" search-contains="true" name="Group Name" ng-disabled="(registered_vehicle_mode=='View')"
+                                required>
+								<option value="" selected>Select Group</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vehicle Type: <span
+								class="req_r" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" placeholder="Select Type" ng-options="option as option.name for option in aVehicleType" ng-model="oVehicle.veh_type_data" name="vehicle type" ng-disabled="(registered_vehicle_mode=='View')" required>
+								<option value="" disabled selected>Select Vehicle Type</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vehicle Owner Name: <span class="req_r" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="vehicle owner name" ng-model="oVehicle.supervisor_name" placeholder="Owner Name" class="form-control" ng-readonly="(registered_vehicle_mode=='View')" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vehicle Owner Mobile: <span
+								class="req_r" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="vehicle owner mobile" ng-model="oVehicle.supervisor_contact_no" class="form-control" placeholder="Owner Mobile" ng-minlength="10" ng-maxlength="10" ng-readonly="(registered_vehicle_mode=='View')" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">{{fleet_Label || "Fleet"}}:</label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="oVehicle.owner_group" ng-options="item.name as item.name for item in aOwners" search-contains="true" name="Route Name" ng-disabled="(registered_vehicle_mode=='View')">
+								<option value="" disabled selected>Select Group</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <li class="list-group-item">
+        <!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+        <div class="card-body">
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vehicle Category: <span class="req_r" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="oVehicle.category" ng-options="item as item for item in aCategory" search-contains="true" name="Vehicle Category" ng-disabled="(registered_vehicle_mode=='View')" required>
+								<option value="" disabled selected>Select Category</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vehicle Structure: <span class="req_r" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="oVehicle.structure" ng-options="item as item.structure_name for item in aStructure" search-contains="true" name="Vehicle Structure" ng-disabled="(registered_vehicle_mode=='View')" required>
+								<option value="" disabled selected>Select Structure</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Manufacturer: <span class="req_r" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="oVehicle.manufacturer" ng-options="key as key for (key , value) in vehModelMatrix" ng-selected="aModels=vehModelMatrix[oVehicle.manufacturer]" search-contains="true" name="Vehicle Manufacturer" ng-disabled="(registered_vehicle_mode=='View')"
+                                required>
+								<option value="" disabled selected>Select Manufacturer</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vehicle Model: <span class="req_r" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="select">
+                                <select class="form-control" ng-model="oVehicle.model" ng-options="model.model as model.model for model in aModels" search-contains="true" name="vehicle model" ng-disabled="(registered_vehicle_mode=='View')" required>
+									<option value="">Select Model</option>
+								</select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Carrying Capacity(Ton) <span style="color: red;" ng-hide="(registered_vehicle_mode=='View')">*</span>:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number"
+									   ng-model="oVehicle.capacity_tonne"
+									   class="form-control"
+									   placeholder="Capacity(Tonnes)"
+									   ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Axel Type:</label>
+                        <div class="col-sm-6">
+                            <div class="select">
+                                <select class="form-control" ng-model="oVehicle.axel" search-contains="true" name="Vehicle Axel Type" ng-disabled="(registered_vehicle_mode=='View')">
+									<option value="">Select Axel</option>
+									<option value="Single">Single</option>
+									<option value="Multi">Multi</option>
+								</select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+        <div class="card-body">
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Permit Expiry Date:</label>
+                        <div class="col-sm-6">
+                            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                                <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                                    <input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   class="form-control"
+										   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="oVehicle.permit_expiry_date"
+										   is-open="opened1"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Permit Expiry Date"
+										   style="padding: 0px 4px;height: 34px;"
+										   ng-disabled="(registered_vehicle_mode=='View')"/>
+                                </div>
+                                <span class="input-group-btn">
+								  <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="DatePicker.openDatePicker(this, $event, 'opened1')" ng-disabled="(registered_vehicle_mode=='View')"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+								</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Height in Feet:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="Height in Feet" ng-model="oVehicle.height_ft" class="form-control" placeholder="Height" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Width in Feet:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="Width in Feet" ng-model="oVehicle.width_ft" class="form-control" placeholder="Width" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Length in Feet:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="Length in Feet" ng-model="oVehicle.length_ft" class="form-control" placeholder="Length" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Driver:</label>
+                        <div class="col-sm-6">
+                            <select chosen class="form-control" ng-model="oVehicle.driver_data" ng-options="option as option.name for option in aDriver" name="Driver Name" ng-disabled="(registered_vehicle_mode=='View')">
+								<option value="">Select Driver</option>
+							</select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Driver Mobile:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="Driver Mobile" ng-model="oVehicle.driver_data.prim_contact_no" class="form-control" placeholder="Enter Mobile" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+        <div class="card-body">
+            <div class="row" style="margin:5px">
+                <div class="col-md-4" ng-if="oVehicle.ownershipType == 'Market'">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vendor <span style="color: red;" ng-hide="(registered_vehicle_mode=='View')">*</span>:</label>
+                        <div class="col-sm-6">
+							<div class="lvh-search ng-scope sear">
+								<input type="text" placeholder="Vendor Search..."
+									   ng-model="oVehicle.vendor_data"
+									   class="lvhs-input" typeahead-wait-ms="10"
+									   typeahead="option as option.name for option in aVendors"
+									   ng-change="getAllVendorsListOnSearch(oVehicle.vendor_data)"
+									   class="form-control">
+								<i class="lvh-search-close" ng-click="oVehicle.vendor_data=''">×</i>
+							</div>
+                            <!--<select chosen class="form-control"-->
+									<!--ng-model="oVehicle.vendor_data"-->
+									<!--ng-options="option as option.name for option in aVendors"-->
+									<!--name="Vendor Name"-->
+									<!--ng-disabled="(registered_vehicle_mode=='View')">-->
+								<!--<option value="">Select Vendor</option>-->
+							<!--</select>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" ng-if="oVehicle.ownershipType == 'Market'">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vendor Mobile <span style="color: red;" ng-hide="(registered_vehicle_mode=='View')">*</span>:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="Vendor Mobile" ng-model="oVehicle.vendor_data.prim_contact_no" class="form-control" placeholder="Enter Mobile" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">SAP Id:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="SAP Id" ng-model="oVehicle.sap_id" class="form-control" placeholder="SAP Id" ng-readonly="(registered_vehicle_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Ownership Vehicle<span style="color: red;" ng-hide="(registered_vehicle_mode=='View')">*</span>:</label>
+                        <div class="col-sm-6">
+                            <div class="select">
+                                <select chosen
+										class="form-control"
+										ng-model="oVehicle.ownershipType"
+										ng-options="item as item for item in $constants.aOwnershipVehicle"
+										name="Vendor Name"
+										ng-disabled="(registered_vehicle_mode=='View')">
+								</select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Vehicle Status:<span style="color: red;" ng-hide="(registered_vehicle_mode=='View')">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="select">
+                                <select class="form-control" ng-model="oVehicle.status" ng-options=" item for item in aStatus" ng-change="changeLastKnown()" ng-disabled="(registered_vehicle_mode=='View')">
+									<option value="" selected>Select Status</option>
+								</select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" ng-show="(registered_vehicle_mode=='View')">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Last Modified:</label>
+                        <div class="col-sm-6">
+                            <div class="">
+                                {{oVehicle.last_modified_by_name}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>

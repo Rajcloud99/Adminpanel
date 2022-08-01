@@ -1,0 +1,322 @@
+<div class="row" style="margin: 15px">
+	<div class="col-sm-12">
+		<div class="col-sm-12" ng-if="selectedVendorInfo._id">
+			<div class="lists">
+				<ul>
+					<li ng-if="selectedVendorInfo.name">Name: {{selectedVendorInfo.name}}</li>
+					<li ng-if="selectedVendorInfo.prim_contact_no">Contact No.: {{selectedVendorInfo.prim_contact_no}}
+					</li>
+					<li ng-if="selectedVendorInfo.email">Email: {{selectedVendorInfo.email}}</li>
+					<li ng-if="selectedVendorInfo.contact_person_name">Contact Person:
+						{{selectedVendorInfo.contact_person_name}}
+					</li>
+					<li ng-if="selectedVendorInfo.ho_address.city">HO Address:
+						{{parseAddressToString(selectedVendorInfo.ho_address)}}
+					</li>
+					<li ng-if="selectedVendorInfo.ratting">Ratting: {{selectedVendorInfo.ratting}}</li>
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+			<hr>
+		</div>
+		<!-- Input Filter -->
+		<div class="row m-b-5">
+			<form ng-submit="getAllRegVehicle(true)">
+				<div class="col-sm-2 form-group">
+					<div class="fg-line">
+						<select chosen
+								ng-model="filterObj.vehicleSts"
+								no-results-text="'No Result Found'"
+								placeholder-text-multiple="'Vehicle Status'"
+								ng-options="v for v in $constants.aVehicleStatus">
+							<option value="">All</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-2 form-group">
+					<div class="fg-line">
+						<select multiple
+								chosen
+								ng-model="filterObj.veh_type"
+								no-results-text="'No Result Found'"
+								placeholder-text-multiple="'Vehicle Type'"
+								ng-options="v.name for v in vehicleTypes">
+							<option value="">Not Selected</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2 form-group">
+					<div class="lvh-search ng-scope sear">
+						<input type="text"
+							   placeholder="Vehicle No...."
+							   class="lvhs-input"
+							   ng-model="filterObj.vehicleNum"
+							   ng-change="getVname(filterObj.vehicleNum)"
+							   class="form-control"
+						>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2 form-group"
+					 ng-if="formDataSelected.vehicle_type !== 'Own'">
+					<div class="lvh-search ng-scope sear">
+						<input type="text"
+							   placeholder="Vendor Search..."
+							   ng-model="filterObj.selectedVendorInfo"
+							   class="lvhs-input"
+							   typeahead-wait-ms="10"
+							   typeahead="vendor as (vendor.name + (vendor.pan_no ? '(' + vendor.pan_no + ')' : '')) for vendor in getMarketVehicleVendor($viewValue)"
+							   typeahead-on-select="onVendorSelect($item, $model, $label)"
+							   class="form-control"
+						>
+						<i class="lvh-search-close" ng-click="filterObj.selectedVendorInfo='';onVendorSelect('');">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-3 col-md-1 col-lg-1">
+					<button class="btn btn-primary waves-effect f16" uib-tooltip="Search">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary waves-effect f16" ng-click="clearAllSearchFilterVehicle()"
+							uib-tooltip="Clear Search">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+					<a class="btn btn-primary pull-right" ng-click="AddMvehicle()"
+					   ng-show="formDataSelected.vehicle_type === 'Market'">Add New Vehicle</a>
+				</div>
+
+				<div class="col-xs-7 col-sm-4 col-md-3 col-lg-3">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Trip Start: </label>
+						<div class="col-sm-7">
+							<div class="date-picker timepicker input-group dp-blue chosen-row-1"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div ng-class="{ 'fg-toggled': opened1 == true }">
+									<input
+										type="text"
+										class="form-control"
+										name="trip_start_time"
+										ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+										datepicker-popup="{{DatePicker.formats[0]}}"
+										ng-model="trip_start_time"
+										max-date="DatePicker.newDate"
+										is-open="opened1"
+										show-weeks="false"
+										close-text="Close"
+										uib-datepicker-options="DatePicker.dateSettings"
+										close-text="Close"
+										placeholder="Trip Start"
+									/>
+								</div>
+								<span class="input-group-btn">
+									<button
+										type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-click="DatePicker.openDatePicker(this, $event, 'opened1')">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</button>
+								</span>
+							</div>
+							<!--<timepicker
+									ng-show="trip_start_time"
+									ng-model="trip_start_time"
+									show-spinners="false"
+									show-meridian="true"
+							>
+							</timepicker>-->
+						</div>
+						<br/>
+						<label style="margin-left: 5px;" class="col-sm-1 control-label">HH</label>
+								<div class="col-sm-2">
+									<div class="select">
+										<select ng-model="shh" ng-options="sAlert as sAlert for sAlert in time.aHours"
+											class="form-control" ng-change="changeTime1(time.hourSel1)">
+										</select>
+									</div>
+								</div>
+								<label style="margin-left: 2px;"  class="col-sm-1 control-label">MM</label>
+								<div class="col-sm-2">
+									<div class="select">
+										<select ng-model="smm" ng-options="sAlert as sAlert for sAlert in time.aMinutes"
+											class="form-control" ng-change="changeTime2(time.minuteSel1)">
+										</select>
+									</div>
+								</div>
+					</div>
+				</div>
+
+				<div class="col-xs-6 col-sm-4 col-md-3 col-lg-3">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Trip End: </label>
+						<div class="col-sm-7">
+							<div class="date-picker input-group dp-blue chosen-row-1"
+								 ng-class="{ 'is-opened': opened2 == true }">
+								<div ng-class="{ 'fg-toggled': opened2 == true }">
+									<input
+										type="text"
+										class="form-control"
+										name="trip_end_time"
+										ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+										datepicker-popup="{{DatePicker.formats[0]}}"
+										ng-model="trip_end_time"
+										min-date="trip_start_time"
+										is-open="opened2"
+										show-weeks="false"
+										close-text="Close"
+										datepicker-options="DatePicker.dateSettings"
+										placeholder="Trip End"
+										ng-disabled="!trip_start_time"
+									/>
+								</div>
+								<span class="input-group-btn">
+									<button
+										type="button"
+										class="btn btn-default m-t-0 f12"
+										ng-click="DatePicker.openDatePicker(this, $event, 'opened2')">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</button>
+								</span>
+							</div>
+							<!--<timepicker
+									ng-show="oSend.tripEndDate"
+									ng-model="oSend.tripEndDate"
+									show-spinners="false"
+									show-meridian="true"
+							>
+							</timepicker>-->
+						</div>
+						<label style="margin-left: 5px;" class="col-sm-1 control-label">HH</label>
+								<div class="col-sm-2">
+									<div class="select">
+										<select ng-model="ehh" ng-options="sAlert as sAlert for sAlert in time.aHours"
+											class="form-control" ng-change="changeTime1(time.hourSel1)">
+										</select>
+									</div>
+								</div>
+								<label style="margin-left: 2px;" class="col-sm-1 control-label">MM</label>
+								<div class="col-sm-2">
+									<div class="select">
+										<select ng-model="emm" ng-options="sAlert as sAlert for sAlert in time.aMinutes"
+											class="form-control" ng-change="changeTime2(time.minuteSel1)">
+										</select>
+									</div>
+								</div>
+					</div>
+				</div>
+
+				<a class="pull-right pointer f30" ng-click="reloadVehicleGet()" uib-tooltip="Refresh Vehicle List"
+				   style="margin-right: 14px;">
+					<i class="zmdi zmdi-rotate-right zmdi-hc-fw"></i>
+				</a>
+				<a class="pull-right pointer f30" ng-click="showSelectedVehicle()" uib-tooltip="Selected Vehicle List"
+				   ng-show="aVehicleSelected.length > 0">
+					<i class="zmdi zmdi-assignment-check zmdi-hc-fw"></i>
+				</a>
+			</form>
+		</div>
+
+		<div class="lv-body">
+			<div class="row" style="margin: 5px auto;">
+				<div class="col-md-12" style="min-height: 272px;">
+					<div class="clearfix"></div>
+					<div class="detailsList">
+						<div class="" style="overflow-y: auto; max-height: 430px;">
+							<table class="table table-bordered vehicleAllot">
+								<thead>
+								<tr>
+									<th>#</th>
+									<th>Vehicle No.</th>
+									<th>Capacity(Tonne)</th>
+									<th>Vehicle Type(Group)</th>
+									<th>Segment</th>
+									<th>Status</th>
+									<th>Permit Expiry Date</th>
+									<th>Vendor Name</th>
+									<th>Driver Name</th>
+									<th>Vehicle Address</th>
+									<th>Driver Number</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr
+									data-ng-repeat="SelectInt in aVehicleList"
+									ng-class="{green : SelectInt.status == 'Available', red : SelectInt.status == 'Maintenance', gray : SelectInt.status == 'Booked'}">
+									<td>
+										<div
+											class="checkbox"
+											style="margin: 0px;"
+											ng-show="SelectInt.status == 'Available'||(trip_start_time && trip_end_time)"
+										>
+											<label>
+												<input
+													type="checkbox"
+													ng-model="SelectInt.select"
+													value=""
+													ng-change="addInSelectedVehicle(SelectInt)"
+												>
+												<i class="input-helper"></i>
+											</label>
+										</div>
+									</td>
+									<td style="text-align: initial;">{{SelectInt.vehicle_reg_no}}</td>
+									<td>{{SelectInt.capacity_tonne || SelectInt.veh_type.capacity || 0}}</td>
+									<td>{{SelectInt.veh_type.name}}<span ng-if="SelectInt.veh_group_name">({{SelectInt
+											.veh_group_name}})</span></td>
+									<td>{{SelectInt.segment_type || "NA"}}</td>
+									<td>{{SelectInt.status || "NA"}}</td>
+									<td>{{SelectInt.permit_expiry_date | date:'dd-MM-yyyy'}}</td>
+									<td>{{SelectInt.vendor_name}}</td>
+
+
+									<td>{{SelectInt.driver_name}}</td>
+									<td>
+										{{SelectInt.gpsData.address || 'NA'}}
+									</td>
+									<td>{{SelectInt.driver_contact_no}}</td>
+								</tr>
+								</tbody>
+							</table>
+							<div class="pagi" ng-show="aVehicleList.length > 0">
+								<uib-pagination ng-change="getAllRegVehicle(true)"
+												total-items="vehiclePagination.totalItems"
+												items-per-page="vehiclePagination.items_per_page"
+												num-pages="vehiclePagination.numPages"
+												ng-model="vehiclePagination.currentPage"
+												max-size="vehiclePagination.maxSize"
+												class="pagination-sm smallPagi" boundary-links="true"
+												previous-text="&lsaquo;" next-text="&rsaquo;"
+												first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+							</div>
+							<div ng-if="aVehicleList.length <= 0" class="ms-body" style=" min-height: 50px;">
+								<h4>No Vehicle available !!!!!</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="form-group">
+	<div class="col-xs-12 text-center">
+		<button ng-show="aVehicleSelected.length > 0" ng-click="getBookingForThisTab(); tripStartEndDate(trip_start_time,shh,smm,trip_end_time,ehh,emm)" type="button" class="btn btn-primary">Booking Section</button>
+		<button ng-show="aVehicleSelected.length > 0 && $configs.vehAlloc.skipBooking" ng-click="skipBookingForThisTab();tripStartEndDate(trip_start_time,shh,smm,trip_end_time,ehh,emm)" type="button" class="btn btn-primary">Skip Booking Section</button>
+	</div>
+</div>
+
+<style>
+	.lists ul li {
+		list-style-type: none;
+		width: 20%;
+		float: left;
+		margin-bottom: 10px;
+	}
+
+	.f16 {
+		font-size: 16px;
+	}
+
+	.f30 {
+		font-size: 30px;
+	}
+</style>

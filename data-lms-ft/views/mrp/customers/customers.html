@@ -1,0 +1,169 @@
+<div class="container" ng-controller="customersMRPController">
+	<div class="card m-b-0" id="messages-main">
+		<!--New search filters -->
+		<div class="searchFilters">
+			<form role="form" ng-submit="filter(form)">
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear">
+						<input type="text" placeholder="Start typing name..." ng-model="customerName" class="lvhs-input" typeahead-wait-ms="10" typeahead="person as person.name for person in customers" ng-change="getCname(customerName)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+						<i class="lvh-search-close" ng-click="clearSearch()">×</i>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="fg-line">
+						<div class="select">
+							<select class="form-control" placeholder="Customer Type"
+									ng-options="item as item for item in $constants.customerTypes"
+									ng-model="customerType" ng-change="getCustomers()" style="height: 34px;">
+								<option value="" ng-click="getCustomers()"> Customer Type</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="fg-line">
+						<div class="select">
+							<select class="form-control" placeholder="Customer Status"
+									ng-options="status as status for status in aCustomerStatus"
+									ng-model="customerStatus" ng-change="getCustomers()" style="height: 34px;">
+								<option value="" ng-click="getCustomers()"> Customer Status</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+					<div class="date-picker input-group dp-blue"
+						 ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false"
+								   ng-model="start_date" max-date="end_date" ng-change="dateChange()"
+								   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+								   placeholder="From Date" style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+				                      <button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="open($event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+				                    </span>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+						 style=" ">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+								   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+								   min-date="start_date"="end_date" max-date="mxDate" is-open="opened2"
+							datepicker-options="dateOptions" close-text="Close" placeholder="To Date" style=
+							"padding: 0px 4px
+						;
+							height: 34px
+						;" ng-disabled="!start_date"/>
+						</div>
+						<span class="input-group-btn">
+			                      <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened2')" ng-disabled="!start_date"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="fg-line">
+						<button class="btn btn-primary" ng-click="getCustomers()">Search</button>
+					</div>
+				</div>
+			</form>
+			<div class="clearfix"></div>
+		</div>
+
+		<div class="ms-menu" style="top:45px;" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+			<!--<div class="lvh-search ng-scope sear">
+				<input type="text" placeholder="Start typing..." ng-model="customerName" class="lvhs-input" typeahead-wait-ms="10" typeahead="person as person.name for person in customers" ng-change="getCname(customerName)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)" >
+				<i class="lvh-search-close" ng-click="clearSearch()">×</i>
+			</div>-->
+			<div class="listview lv-user clk" style="overflow: auto;height:97%;">
+				<div class="lv-item media"  style="border-bottom:2px solid #4285f4" ng-repeat="customer in customers" ng-click="selectMrpCustomer(customer,$index)">
+					<div class="truck-desc">
+						<div class="row">
+							<div class="col-md-7 bold">
+								{{customer.name | capitalize}}
+							</div>
+							<div class="col-md-5 bold">
+								{{customer.customerId}}
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+				<div class="pagi" ng-show="total_pages>1">
+					<pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></pagination>
+				</div>
+			</div>
+		</div>
+
+		<div class="ms-body" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span ng-if="!wantThis3" class="c-black"><b>{{customer.name | capitalize}}</b> &nbsp;&nbsp;&nbsp;</span>
+						<span ng-if="wantThis3" class="c-black"><b>Register New Customer</b> &nbsp;&nbsp;&nbsp;</span>
+					</div>
+					<ul class="lv-actions actions" ng-if="hideBtns">
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="MRP_master.customers.profile" uib-tooltip="Show Customer" tooltip-placement="bottom"><i class="zmdi zmdi-menu zmdi-hc-fw"></i></a></li>
+						<div class="clearfix"></div>
+					</ul>
+					<ul class="lv-actions actions" ng-if="!hideBtns">
+
+						<li class="btn-wave" data-ui-sref-active="active">
+							<a data-ui-sref="MRP_master.customers.register" uib-tooltip="Create Customer" tooltip-placement="bottom">
+								<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+							</a>
+						</li>
+						<li class="btn-wave" ng-if="customers.length>0" data-ui-sref-active="active">
+							<a data-ui-sref="MRP_master.customers.editProfile" uib-tooltip="Edit Customer" tooltip-placement="bottom">
+								<i class="zmdi zmdi-edit"></i>
+							</a>
+						</li>
+						<li>
+							<a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()">
+								<i class="zmdi zmdi-download"></i>
+							</a>
+						</li>
+						<li class="btn-wave" data-ui-sref-active="active">
+							<a ng-click="addGpsGaadiUser()" uib-tooltip="Add Customer to Gpsgaadi" tooltip-placement="bottom">
+								<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+							</a>
+						</li>
+						<li class="btn-wave" ng-show="customer.gpsgaadi.user_id" data-ui-sref-active="active">
+							<a ng-click="changePassword()" uib-tooltip="Change Password" tooltip-placement="bottom">
+								<i class="zmdi zmdi-lock-open zmdi-hc-fw"></i>
+							</a>
+						</li>
+						<li class="btn-wave" ng-show="customer.gpsgaadi.user_id" data-ui-sref-active="active">
+							<a ng-click="updateGpsGaadiUser()" uib-tooltip="Update GPS Customer" tooltip-placement="bottom">
+								<i class="zmdi zmdi-edit"></i>
+							</a>
+						</li>
+						<div class="clearfix"></div>
+					</ul>
+				</div>
+
+				<div class="lv-body">
+					<ul class="tab-nav tn-justified" ng-if="wantThis2" >
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="MRP_master.customers.profile">Profile</a></li>
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="MRP_master.customers.document">Document</a></li>
+					</ul>
+					<ul class="tab-nav tn-justified" ng-if="wantThis" >
+						<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="MRP_master.customers.editProfile">Profile</a></li>
+					</ul>
+					<data ui-view></data>
+				</div>
+
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
+

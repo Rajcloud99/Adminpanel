@@ -1,0 +1,539 @@
+<div class="container" style="">
+    <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <div class="row hidden-print" style="margin:15px;">
+			<form novalidate>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="number"
+							   ng-model="myFilter.tripNo"
+							   name="Trip No"
+							   class="form-control input-sm"
+							   placeholder="Trip No"
+							   ng-model-options="{ updateOn: 'blur' }">
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<input type="text"
+							   ng-model="myFilter.grNo"
+							   name="GR No"
+							   class="form-control input-sm"
+							   placeholder="GR No"
+							   ng-model-options="{ updateOn: 'blur' }">
+					</div>
+				</div>
+				<div class="col-md-1" ng-if="$configs.tripMemo.show">
+					<div class="form-group m-b-0">
+						<input type="text"
+							   ng-model="myFilter.tMNo"
+							   name="Trip Memo No"
+							   class="form-control input-sm"
+							   placeholder="Trip Memo No"
+							   ng-model-options="{ updateOn: 'blur' }">
+					</div>
+				</div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Vehicle Search..."
+								ng-model="myFilter.vehicle_no"
+								typeahead-wait-ms="10"
+								typeahead="item as item.vehicle_reg_no for item in getVehicle($viewValue) | limitTo:10"
+						>
+						<i class="lvh-search-close" ng-click="myFilter.vehicle_no='';">×</i>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="lvh-search ng-scope sear chosen-row-2">
+								<input type="text"
+									   placeholder="Consignor Search..."
+									   ng-model="myFilter.consignor"
+									   class="lvhs-input"
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.name for item in getConsignor($viewValue)"
+									   class="form-control"
+									   >
+								<i class="lvh-search-close" ng-click="myFilter.consignor='';clearSelection();">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="lvh-search ng-scope sear chosen-row-2">
+								<input type="text"
+									   placeholder="Consignee Search..."
+									   ng-model="myFilter.consignee"
+									   class="lvhs-input"
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.name for item in getConsignee($viewValue)"
+									   class="form-control"
+								>
+								<i class="lvh-search-close" ng-click="myFilter.consignee='';clearSelection();">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="lvh-search ng-scope sear chosen-row-1">
+								<input type="text"
+									   placeholder="Customer Search..."
+									   ng-model="myFilter.customer"
+									   class="lvhs-input"
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.name for item in getCustomerName($viewValue)"
+									   class="form-control"
+								>
+								<i class="lvh-search-close" ng-click="myFilter.customer='';clearSelection();">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="lvh-search ng-scope sear chosen-row-1">
+								<input type="text"
+									   placeholder="billingParty Search..."
+									   ng-model="myFilter.billingParty"
+									   class="lvhs-input"
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.name for item in getBilling($viewValue)"
+									   class="form-control"
+								>
+								<i class="lvh-search-close" ng-click="myFilter.billingParty='';clearSelection();">×</i>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+					<!--<select chosen class="form-control"-->
+							<!--ng-options="item.value as item.name for item in aAcknowledged"-->
+							<!--ng-model="myFilter.acknowledge"-->
+							<!--style="line-height: 34px;"-->
+					<!--&gt;-->
+						<!--<option value="" disabled>Select Acknowledged</option>-->
+					<!--</select>-->
+				<!--</div>-->
+
+				<!--<div class="col-md-2">-->
+					<!--<div class="form-group m-b-0">-->
+						<!--<div class="fg-line">-->
+							<!--<div class="select m-t-5 chosen-row-3">-->
+								<!--<select chosen-->
+										<!--class="form-control"-->
+										<!--ng-model="myFilter.branch"-->
+										<!--style="height: 39px;margin-top: 1px"-->
+										<!--ng-options="item._id as item.name for item in $aBranch"-->
+										<!--name="Branch Name">-->
+									<!--<option value="" selected>select branch</option>-->
+								<!--</select>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+
+				<!--<div class="col-md-2">-->
+					<!--<div class="form-group m-b-0">-->
+						<!--<div class="fg-line">-->
+							<!--<div class="select">-->
+								<!--<select class="form-control"-->
+										<!--ng-model="grStatus"-->
+										<!--style="height: 33px;margin-top: 1px"-->
+										<!--ng-change="getGrs()"-->
+										<!--ng-options="item as item for item in $constants.aGrStatuses">-->
+									<!--<option value="">All</option>-->
+								<!--</select>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<!--<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="fg-line">
+							<div class="select">
+								<select chosen
+										multiple
+										allow-single-deselect="true"
+										class="form-control"
+										disable-search="true"
+										ng-change="getGrs()"
+										ng-model="myFilter.grToShow"
+										required>
+									<option value="Provisional Bill">Provisional Bill</option>
+									<option value="Actual Bill">Actual Bill</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>-->
+				<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">-->
+					<!--<select chosen class="form-control"-->
+							<!--ng-options="item as item for item in aPod"-->
+							<!--ng-model="myFilter.received"-->
+							<!--style="line-height: 34px;"-->
+					<!--&gt;-->
+						<!--<option value="">Select POD</option>-->
+					<!--</select>-->
+				<!--</div>-->
+
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+					<div class="fg-line form-group m-b-0">
+						<select chosen
+								class="form-control"
+								ng-model="myFilter.segment_type"
+								ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+								name="Segment"
+								required>
+							<option value="" selected>Select Segment</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="select">
+						<select class="form-control"
+								ng-model="myFilter.dateType"
+								name="Branch Name">
+							<option value="">Select Date</option>
+							<option value="grDate">Gr Date</option>
+							<option ng-if="$configs.tripMemo.show" value="tMemo.date">tMemo Date</option>
+							<option value="pod.date">Gr Receiving Date</option>
+							<option value="acknowledge.systemDate">Gr Ack Date</option>
+							<option value="pod.pendingRemark.systemDate">Remark Date</option>
+							<option value="created_at">Entry Date</option>
+							<!--<option value="pod.billingLoadingTime">Bill Date</option>-->
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="DatePicker.newDate"
+											   ng-model="myFilter.from"
+											   is-open="opened1"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="From"/>
+									</div>
+									<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="myFilter.to"
+											   max-date="DatePicker.newDate"
+											   is-open="opened2"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To"/>
+									</div>
+									<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened3 == true }">
+									<div ng-class="{ 'fg-toggled': opened3 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="DatePicker.newDate"
+											   ng-model="myFilter.asOnDate"
+											   is-open="opened3"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="As On Date"/>
+									</div>
+									<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"><i
+													class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="fg-line">
+						<div class="form-group m-b-0">
+							<input type="text"
+								   ng-model="myFilter.shipmentNo"
+								   name="Shipment No"
+								   class="form-control input-sm"
+								   placeholder="Shipment No">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group m-b-0 text-center">
+						<button class="btn btn-primary p-t-0 p-b-0"
+								style="margin-top: 10px;  font-size: 16px"
+								type="button"
+								ng-click="getGrs()"
+								uib-tooltip="Search"
+								tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+						</button>
+						<button class="btn btn-primary p-t-0 p-b-0"
+								style="margin-top: 10px;  font-size: 16px"
+								uib-tooltip="Clear Search"
+								tooltip-placement="bottom"
+								type="button"
+								ng-click="myFilter={};myFilter.noBill=true;clearSelection();getGrs();">
+							<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+						</button>
+						<button class="btn btn-primary p-t-0 p-b-0"
+								style="margin-top: 10px;  font-size: 16px"
+								uib-tooltip="Unbilled grs as on date"
+								tooltip-placement="bottom"
+								type="button"
+								ng-click="unbilledGRReport()">
+							<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+						</button>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+
+				<!--<div class="col-md-2" ng-show="makeContractVisible">-->
+					<!--<div class="form-group m-b-0">-->
+						<!--<div class="fg-line m-t-5 chosen-row-3">-->
+							<!--<select chosen-->
+									<!--name="Contract"-->
+									<!--class="form-control"-->
+									<!--style="height: 39px;margin-top: 1px"-->
+									<!--ng-model="myFilter.contract_id"-->
+									<!--ng-options="item as item.name for item in aContracts track by item._id"-->
+									<!--ng-change="getGrs();"-->
+							<!--&gt;-->
+								<!--<option value="">All</option>-->
+							<!--</select>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+			</form>
+        </div>
+    </div>
+	<div class="container m-b-5 m-t-5">
+		<div class="col-md-12">
+			<!--<div class="form-group m-b-0 pull-left" ng-show="makeContractVisible">-->
+				<!--<button class="btn btn-primary btn-xs p-l-5 p-r-5 check-box pointer"-->
+						<!--tooltip-placement="bottom"-->
+						<!--type="button"-->
+						<!--ng-click="selectAllGr(aGr);">-->
+					<!--Check All-->
+				<!--</button>-->
+				<!--<button class="btn btn-primary btn-xs p-l-5 p-r-5 check-box pointer"-->
+						<!--tooltip-placement="bottom"-->
+						<!--type="button"-->
+						<!--ng-click="deSelectAllGr(aGr);">-->
+					<!--Uncheck All-->
+				<!--</button>-->
+			<!--</div>-->
+			<div class="form-group m-b-0 pull-right text-right">
+
+				<!--<button class="btn btn-xs p-l-5 p-r-5 color2 color-box pointer"-->
+						<!--type="button"-->
+						<!--ng-click="myFilter.provisionBill=true;getGrs();">-->
+					<!--Provision Bill-->
+				<!--</button>-->
+				<!--<button class="btn btn-xs p-l-5 p-r-5 color1 color-box pointer"-->
+						<!--type="button"-->
+						<!--ng-click="myFilter.actualBill=true;getGrs();">-->
+					<!--Actual Bill-->
+				<!--</button>-->
+				<!--<button class="btn btn-xs p-l-5 p-r-5 color-box pointer bg-white text-grey"-->
+						<!--type="button"-->
+						<!--ng-click="myFilter.noBill=true;getGrs();">-->
+					<!--No Bill Generated-->
+				<!--</button>-->
+
+				<!--<div class="color2 color-box pointer" ng-click="myFilter.provisionBill=true;getGrs();">Provision Bill</div>
+				<div class="color1 color-box pointer" ng-click="myFilter.actualBill=true;getGrs();">Actual Bill</div>
+				<div class="color-box pointer bg-white" ng-click="myFilter.noBill=true;getGrs();">No Bill Generated</div>-->
+				<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+						style="font-size: 20px"
+						ng-hide="true"
+						uib-tooltip="generateBill Without Gr"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="generateBillWithOutGr();">
+					<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+				</button>
+				<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+						style="font-size: 20px"
+						uib-tooltip="Show Bill History"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="generateBillHistory();">
+					<i class="zmdi zmdi-time-restore zmdi-hc-fw"></i>
+				</button>
+
+				<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+						style="font-size: 20px"
+						uib-tooltip="Generate Loading Receipt"
+						tooltip-placement="bottom"
+						type="button"
+						ng-disabled="selectedGrs.booking.booking_type != 'Transporter Booking'"
+						ng-click="generateLoadingReceipt();">
+					<i class="zmdi zmdi-assignment-o zmdi-hc-fw"></i>
+				</button>
+
+				<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+						ng-if="selectedGrs.grNumber || selectedGrs.tMemo.tMNo || selectedGrs.length"
+						style="font-size: 20px"
+						uib-tooltip="Generate Bill"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="selectBillType()">
+							<i class="zmdi zmdi-assignment-returned zmdi-hc-fw"></i>
+				</button>
+
+				<button class="btn btn-primary btn-xs p-l-5 p-r-5"
+						style="font-size: 20px"
+						ng-if="!multipeGrSelection"
+						uib-tooltip="Edit Gr"
+						ng-show="false"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="editGr()"><i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+				</button>
+
+				<!--<button-->
+					<!--type="button"-->
+					<!--class="btn btn-primary btn-xs p-l-5 p-r-5"-->
+					<!--style="font-size: 20px"-->
+					<!--uib-tooltip="Multi-update GR"-->
+					<!--tooltip-placement="bottom"-->
+					<!--ng-disabled="selectedGrs.length < 1"-->
+					<!--ng-if="multipeGrSelection"-->
+					<!--ng-click="moisture(selectedGrs)">-->
+						<!--<i class="zmdi zmdi-select-all zmdi-hc-fw"></i>-->
+				<!--</button>-->
+
+				<label class="m-l-15" ng-if="$configs.preserveSelectHack">
+					<input type="checkbox" ng-model="selectPreserve">
+					<i class="input-helper"></i>
+				</label>
+
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div ja-table
+					 table-body="aGr"
+					 table-head="tableHead"
+					 table-column-setting="columnSetting"
+					 table-load="getGrs(true)"
+					 table-height='500px'
+					 table-selectable='selectType'
+					 table-api="tableApi"
+					 table-selectable-model="selectedGrs"
+				></div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+
+	.check-box{
+		display: inline-flex;
+		margin-right: 10px;
+		margin-top: 8px;
+	}
+
+	.text-grey{
+		color: #797979
+	}
+
+	.color-box{
+		border: 1px solid darkgrey;
+		display: inline-flex;
+		margin-right: 10px;
+		padding: 0px 3px;
+	}
+	.color1{
+		background: rgb(30, 175, 20);
+		color: white;
+	}
+	.color2{
+		background: rgb(199, 194, 32);
+		color: white;
+	}
+	.color2.grn{
+		background: rgb(228, 237, 100);
+		color: #5e5e5e;
+	}
+	.color1.grn{
+		background: rgb(154, 255, 0);
+		color: #5e5e5e;
+	}
+	.bg-white{
+		background: white;
+	}
+</style>

@@ -1,0 +1,63 @@
+<div class="container" ng-controller="PrCtrl">
+    <div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+         id="messages-main">
+        <div class="card" style="overflow: auto">
+            <div class="">
+                <h2 style="font-size: 18px;float: left;"> &nbsp;ALL PR</h2>
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <div class="col-md-12">
+                        <div class="card-body" style="min-height:500px">
+                            <table class="table table-bordered unresponsive">
+                                <thead>
+                                  <tr>
+                                    <th>Select</th>
+                                    <th>Spare Code</th>
+                                    <th>Spare Name</th>
+                                    <th>Category</th>
+                                    <th>Min. Buffer</th>
+                                    <th>Remaining</th>
+                                    <th>Quantity</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr data-ng-repeat="pr in aPrList track by $index" class="pointer">
+                                    <td>
+                                        <label class="checkbox checkbox-inline m-r-20">
+                                            <input type="checkbox" ng-click="thisSel(pr, $index)" ng-model="pr.selected">
+                                            <i class="input-helper"></i>
+                                        </label>
+                                    </td>
+                                    <td>{{pr.spare_code || 'NA'}}</td>
+                                    <td>{{pr.spare_name || 'NA'}}</td>
+                                    <td>{{pr.category_name || 'NA'}}</td>
+                                    <td>{{pr.min_buffer}}</td>
+                                    <td>{{pr.remaining}}</td>
+                                    <td><input type="number" style="width: 50px;" ng-model="pr.quantity"></td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                            <div ng-if="aPrList == 0" class="ms-body" style=" min-height: 50px;">
+                                <h3>Data not available !!!!!</h3>
+                            </div>
+                            <br>
+                            <div>
+                                <button ng-click="genertePR()" class="btn btn-primary waves-effect pull-right">Generate PR</button>
+                            </div>
+                        </div>
+                        <!-- <div class="pagi" ng-show="totalPages>1" style="position: absolute;bottom:0;right:20px;">
+                            <pagination ng-change="pageChanged()"
+                                        total-items="totalItems"
+                                        items-per-page="itemsPerPage" num-pages="numPages"
+                                        ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+                                        boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+                                        first-text="&laquo;" last-text="&raquo;">
+                            </pagination>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

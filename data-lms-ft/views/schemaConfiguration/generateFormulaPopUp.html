@@ -1,0 +1,185 @@
+<!-- Controller: generateFormulaPopUpController-->
+<!-- ControllerAs: gfVm-->
+
+<form name="generateFormulaForm" novalidate autocomplete="off">
+
+	<div class="modal-header">
+		<button type="button" ng-click="gfVm.closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>{{gfVm.header}}</b>
+				<!--<span style="margin-left: 10px; color: rgb(183, 183, 183);">({{gfVm.operationType}})</span>-->
+			</span>
+		</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="row">
+			<div class="justify col-md-12">
+				<form name="form" novalidate autocomplete="off">
+					<ul class="list-group list-group-flush">
+						<!-- Expression's -->
+						<li class="list-group-item">
+							<div class="card-body">
+
+								<!-- Expression Gen -->
+
+								<div class="row"
+									 style="margin:5px"
+									 ng-if="gfVm.formulaType === 'expression'">
+									<div class="col-md-12">
+										<div class="form-group m-b-0">
+											<label class="col-sm-2 control-label">Expression: </label>
+											<div class="col-sm-6">
+												<span ng-class="{expErr : !gfVm.postfixExp}">{{gfVm.expression|mergeString:' '}}</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12" ng-hide="true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-2 control-label">Eval Expression: </label>
+											<div class="col-sm-6">
+												{{gfVm.evalExp|mergeString:''}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-12" ng-hide="true">
+										<div class="form-group m-b-0">
+											<label class="col-sm-2 control-label">PostFix Expression: </label>
+											<div class="col-sm-6">
+												{{(gfVm.postfixExp = ('infixToPostfixExpression'|otherUtilsFilt:gfVm.evalExp))|mergeString:''}}
+											</div>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="col-md-12">
+											<div class="form-group m-b-0">
+												<button class="btn btn-primary uppercase m-l-5 m-b-5"
+														type="button"
+														ng-click="gfVm.pushKeyLabelOperand(key, value.label)"
+														ng-repeat="(key, value) in gfVm.filteredFormList">
+													{{value.label}}
+												</button>
+												<button class="btn btn-info uppercase m-l-5 m-b-5"
+														type="button"
+														ng-click="gfVm.push(key)"
+														ng-repeat="key in gfVm.specialOperator">
+													{{key}}
+												</button>
+											</div>
+										</div>
+
+										<div class="col-md-12" ng-if="gfVm.filteredRateList">
+											<span><b>Rate Chart</b></span><br>
+											<button class="btn btn-primary uppercase m-l-5 m-b-5"
+													type="button"
+													ng-click="gfVm.pushKeyLabelOperand(key+'(RC)', value.label+'(RC)')"
+													ng-repeat="(key, value) in gfVm.filteredRateList">
+												{{value.label}}
+											</button>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="form-group m-b-0">
+											<button class="btn btn-success operator uppercase m-l-5 m-b-5"
+													ng-hide="gfVm.hideOperator"
+													type="button"
+													ng-click="gfVm.push(oper)"
+													ng-repeat="oper in gfVm.operator">
+												{{oper}}
+											</button>
+											<button class="btn btn-warning uppercase m-l-5 m-b-5"
+													type="button"
+													ng-hide="gfVm.hideOperation"
+													ng-click="gfVm.performOperation(oper)"
+													ng-repeat="oper in gfVm.operation">
+												{{oper}}
+											</button>
+										</div>
+									</div>
+									<div class="col-md-3"
+										 ng-hide="gfVm.hideInput">
+										<div class="fg-line" style="display: flex">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="value"
+												   placeholder="Number"
+												   class="form-control">
+											<button class="btn-primary btn"
+													type="button"
+													ng-click="gfVm.push(value); value=''">Add</button>
+										</div>
+									</div>
+								</div>
+
+								<!-- Custom Value -->
+
+								<div class="row"
+									 style="margin:5px"
+									 ng-if="gfVm.formulaType === 'customValue'">
+									<div class="col-md-4">
+										<div class="fg-line" style="display: flex">
+											<input type="text"
+												   ng-model="textVal"
+												   placeholder="Text"
+												   style="width: 200px;"
+												   class="form-control m-r-10">
+											<button class="btn-primary btn"
+													type="button"
+													ng-click="textVal && gfVm.aValue.push(textVal); textVal=''">Add</button>
+											<button class="btn btn-warning uppercase m-l-5 m-b-5"
+													type="button"
+													ng-click="gfVm.aValue.pop()">
+												Backspace
+											</button>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+									<div class="col-md-6">
+										<div class="form-group m-b-0">
+											{{gfVm.aValue|mergeString:', '}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success" type="button" ng-click="gfVm.submit()">Done</button>
+		<button class="btn btn-primary" type="button" ng-click="gfVm.closeModal()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.modal-dialog{
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+	.operator{
+		font-size: 20px;
+		padding: 1px 10px;
+	}
+
+	.expErr{
+		border-bottom: 1px solid red;
+	}
+
+</style>

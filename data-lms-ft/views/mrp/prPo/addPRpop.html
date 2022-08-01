@@ -1,0 +1,41 @@
+<form role="form"  name="addPrData" autocomplete="off" novalidate>
+  <div class="modal-header" style="padding: 10px 26px 0px;" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">PR Submitted Data</h4><br>
+  </div>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div class="col-md-12">
+        <div class="">
+          <table class="table table-bordered unresponsive">
+            <thead>
+              <tr>
+                <th>Spare Code</th>
+                <th>Spare Name</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-ng-repeat="pr in aPrData" class="pointer">
+                <td>{{pr.spare_code || 'NA'}}</td>
+                <td>{{pr.spare_name || 'NA'}}</td>
+                <td>{{pr.remaining || 'NA'}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div ng-if="aPrData == 0" class="ms-body" style=" min-height: 50px;">
+            <h3>No any data available !!!!!</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>    
+  <!-- <div class="modal-footer">
+    <button class="btn btn-success waves-effect"  ng-click="addPrSubmit(addPrData)">Add PR</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>   -->
+</form> 

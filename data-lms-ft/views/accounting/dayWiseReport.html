@@ -1,0 +1,328 @@
+<!--Controller:dayWiseReportController-->
+<!--ControllerAs:dwrVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label pull-left">
+				<span class="c-black"><b>Report</b></span>
+		</div>
+		<div class="col-sm-4 col-md-4 col-lg-2">
+			<div class="select">
+				<select class="form-control"
+				ng-model="dwrVm.reportType"
+						ng-change="dwrVm.onReportChange()"
+						style="height: 34px;"
+				>
+				<!-- ng-options="item as item for item in ['Ledger', 'Ledger Group', 'Account Balance', 'Account Balance Monthly', 'Group Balance', 'Opening Balance', 'Bill to Bill', 'Trial Balance', 'Branch Expense', 'Ledger Outstanding Report Daywise', 'Ledgers Outstanding Report Period Wise','Group Trial Balance', 'Profit and Loss Detail', 'Profit and Loss Summary']"-->
+
+				<option value="" selected disabled>Report Type</option>
+				<option  ng-if="$role['Daywise Report']['Ledger Report']"value="Ledger">Ledger</option>
+				<option  ng-if="$role['Daywise Report']['Ledger Group Report']"value="Ledger Group">Ledger Group</option>
+				<option  ng-if="$role['Daywise Report']['Account Balance Report']"value="Account Balance">Account Balance</option>
+				<option  ng-if="$role['Daywise Report']['Account Balance Monthly Report']" value="Account Balance Monthly">Account Balance Monthly</option>
+				<option  ng-if="$role['Daywise Report']['Group Balance Report']" value="Group Balance">Group Balance</option>
+				<option  ng-if="$role['Daywise Report']['Opening Balance Report']" value="Opening Balance">Opening Balance</option>
+				<option  ng-if="$role['Daywise Report']['Bill to Bill Report']"value="Bill to Bill">Bill to Bill</option>
+				<option  ng-if="$role['Daywise Report']['Trial Balance Report']"value="Trial Balance">Trial Balance</option>
+				<option  ng-if="$role['Daywise Report']['Branch Expense Report']" value="Branch Expense">Branch Expense</option>
+				<option  ng-if="$role['Daywise Report']['Ledger Outstanding Report Daywise']"value="Ledger Outstanding Report Daywise">Ledger Outstanding Report Daywise</option>
+				<option  ng-if="$role['Daywise Report']['Ledgers Outstanding Report Period Wise']" value="Ledgers Outstanding Report Period Wise">Ledgers Outstanding Report Period Wise</option>
+				<option  ng-if="$role['Daywise Report']['Group Trial Balance Report']" value="Group Trial Balance">Group Trial Balance</option>
+				<option  ng-if="$role['Daywise Report']['Particulars Trial Balance Report']" value="Particulars Trial Balance">Particulars Trial Balance</option>
+				<option  ng-if="$role['Daywise Report']['Cost-Center Report']" value="Daywise Cost Center">Daywise Cost Center</option>
+				<option  ng-if="$role['Daywise Report']['Profit and Loss Detail']" value="Profit and Loss Detail">Profit and Loss Detail</option>
+				<option  ng-if="$role['Daywise Report']['Profit and Loss Summary']" value="Profit and Loss Summary">Profit and Loss Summary</option>
+				<option  ng-if="$role['Daywise Report']['Vehicle Profit Report']" value="Vehicle Profit Report">Vehicle Profit Report</option>
+				<option  ng-if="$role['Daywise Report']['Vehicle Expense Report']" value="Vehicle Expense Report">Vehicle Expense Report</option>
+
+					<!--	<option  value="ledger">Ledger</option>  -->
+
+				</select>
+			</div>
+		</div>
+
+		<div class="pull-right">
+			<button ng-click="dwrVm.downloadReport()" ng-disabled="dwrVm.aVouchers.length<=0"
+					class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+				Download
+			</button>
+		</div>
+
+		<div class="col-md-2 pull-right" ng-show = "dwrVm.reportType === 'Daywise Cost Center'">
+			<div class="lvh-label col-md-5" style="padding-left:0;padding-right:0;">Aggre By:</div>
+			<div class="select col-md-6">
+				<select
+						class="form-control"
+						ng-options="item as item for item in dwrVm.aggrs"
+						ng-model="dwrVm.oFilter.aggregateBy" style="width:120%;height:34px;"
+				>
+					<option value="" selected disabled>None</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-2 pull-right">
+			<button ng-click="dwrVm.resetAccountBalace(dwrVm.selectedAccountMaster)" ng-show="dwrVm.reportType === 'Ledger'"
+			class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+				Reset Balance
+			</button>
+		</div>
+		</div>
+	</div>
+</div>
+
+<div class="container" ng-show="dwrVm.reportType">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row" style="margin: 7px">
+			<form ng-submit="dwrVm.getAccountMasters()" novalidate autocomplete="off">
+
+				<div class="col-md-1" ng-show="dwrVm.reportType === 'Bill to Bill'">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="dwrVm.oFilter.billNo"
+							   name="billNo no"
+							   class="form-control input-sm"
+							   placeholder="billNo. no.">
+					</div>
+				</div>
+
+				<div class="col-md-1" ng-show="dwrVm.reportType === 'Bill to Bill'">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="dwrVm.oFilter.refNo"
+							   name="Ref no"
+							   class="form-control input-sm"
+							   placeholder="Ref. no.">
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="dwrVm.aAccountFilter.indexOf(dwrVm.reportType) != -1">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Account search"
+								ng-model="dwrVm.oFilter.account"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in dwrVm.accountmaster($viewValue, 'false') | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="dwrVm.oFilter.account=undefined;">×</i>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="dwrVm.aBranchFilter.indexOf(dwrVm.reportType) != -1">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input type="text"
+								class="form-control lvhs-input"
+								placeholder="Branch search"
+								ng-model="dwrVm.oFilter.branch"
+								typeahead-wait-ms="10"
+								typeahead-on-select="dwrVm.onBranchSelect($item, $model, $label)"
+								typeahead="item as item.name for item in dwrVm.getAllBranch($viewValue) | limitTo:6">
+						<i class="lvh-search-close" ng-click="dwrVm.oFilter.account=undefined;">×</i>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="dwrVm.aGroupFilter.indexOf(dwrVm.reportType) != -1">
+					<div class="lvh-search ng-scope sear">
+						<input type="text"
+								class="form-control lvhs-input"
+								placeholder="Ledger Group search"
+								ng-model="dwrVm.oFilter.type"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in dwrVm.accountmaster($viewValue, 'true') | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="dwrVm.oFilter.type = undefined;">×</i>
+					</div>
+				</div>
+
+				<!--<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Branch Search..."
+								ng-model="dwrVm.oFilter.branch"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in dwrVm.getAllBranch($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="dwrVm.oFilter.branch = undefined;">×</i>
+					</div>
+				</div>-->
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="dwrVm.reportType === 'Ledger Outstanding Report Daywise'">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="customer search"
+							ng-model="dwrVm.oFilter.customer"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in dwrVm.getCustomer($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="dwrVm.oFilter.customer=undefined;">×</i>
+					</div>
+				</div>
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="dwrVm.reportType === 'Ledger Outstanding Report Daywise'">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="billingParty search"
+							ng-model="dwrVm.oFilter.billingParty"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in dwrVm.getBilling($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="dwrVm.oFilter.billingParty=undefined;">×</i>
+					</div>
+				</div>
+
+				<div class="col-md-1" ng-show="dwrVm.reportType === 'Ledger Outstanding Report Daywise' || dwrVm.reportType === 'Ledgers Outstanding Report Period Wise'">
+					<div class="form-group m-b-0">
+						<select chosen multiple
+								class="form-control"
+								ng-model="dwrVm.oFilter.category"
+								ng-options="item as item for item in dwrVm.aCategory"
+								name="Category Type">
+							<option value="" disabled>Select Group</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-2" ng-if="dwrVm.reportType === 'Opening Balance'">
+					<div class="fg-line form-group m-b-0">
+						<select chosen multiple
+								class="form-control"
+								placeholder="Select Type"
+								ng-options="item as item for item in $constants.aAccountGroup"
+								ng-model="dwrVm.oFilter.group"
+								name="Group">
+							<option value="" disabled>Select Group</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="col-md-1" ng-if = "dwrVm.reportType === 'Cost Center' && $role['Daywise Report']['Daywise Cost-Center Report']">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="dwrVm.oFilter.costCenterName"
+							   name="Cost-Center Name"
+							   class="form-control input-sm"
+							   placeholder="Cost-Center Name">
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+							fill-date
+							type="text"
+							class="form-control"
+							max-date="dwrVm.maxDate"
+							ng-model="dwrVm.oFilter.from"
+							ng-change="dwrVm.oFilter.to = undefined"
+							placeholder="From"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+								fill-date
+								type="text"
+								class="form-control"
+								max-date="dwrVm.maxDate"
+								ng-model="dwrVm.oFilter.to"
+								placeholder="To"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-2">
+					<button ng-hide="dwrVm.reportType === 'Profit and Loss Detail' || dwrVm.reportType === 'Profit and Loss Summary' " class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Search"
+							type="submit"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 15px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="dwrVm.oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-show="dwrVm.reportType === 'Bill to Bill'">
+					<select chosen class="form-control"
+							ng-options="item as item for item in dwrVm.aStatus"
+							ng-model="dwrVm.oFilter.status"
+							style="line-height: 34px;">
+						<option value="">Select Status</option>
+					</select>
+				</div>
+				<div class="clearfix"></div>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-show="dwrVm.aBranch">
+					<span class="tag" ng-repeat="oBranch in dwrVm.aBranch">  {{oBranch.name}} <span class="error pointer" ng-click="dwrVm.aBranch.splice($index, 1)">X</span> </span>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-if="dwrVm.tCr && dwrVm.tDr">
+					<div class="col-md-2">CR Total:</div>
+					<div class="col-md-2">{{dwrVm.tCr}}</div>
+					<div class="col-md-offset-1 col-md-2">DR Total: </div>
+					<div class="col-md-2">{{dwrVm.tDr}}</div>
+				</div>
+			</form>
+
+		</div>
+
+	</div>
+
+	<div class="col-md-12 pp" ng-show="dwrVm.summary">
+		<ul class="listB" style="list-style-type: none;">
+			<li ng-repeat="(key, value) in dwrVm.summary">{{key}} : {{value|roundOff}}</li>
+		</ul>
+	</div>
+	<div class="clearfix"></div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div ja-table
+				 table-body="dwrVm.aAccountMaster"
+				 table-head="dwrVm.tableHead"
+				 table-order-by-model='dwrVm.orderBy'
+				 table-order-by-event='dwrVm.getAccountMasters()'
+				 table-height='500px'
+				 table-load="dwrVm.getAccountMasters(true)"
+				 table-column-setting="dwrVm.columnSetting"
+				 table-selectable='"true"'
+				 table-api="dwrVm.tableApi"
+				 table-selectable-model="dwrVm.selectedAccountMaster"
+				 table-index="true"
+			></div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20{
+		font-size: 20px;
+	}
+	 .container{
+		 width: 98% !important;
+	 }
+
+	.listB > li{
+		width: 20%;
+		float: left;margin-left: 1%;
+	}
+	.pp{
+		list-style-type: none;
+		padding: 20px;
+		font-weight: bold;
+		margin: 10px 0;
+		background-color: white;
+	}
+</style>

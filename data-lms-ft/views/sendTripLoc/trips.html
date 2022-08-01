@@ -1,0 +1,98 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style="min-height: 575px;"  ng-if="showTabular">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span class="c-black"><b>Trip Location</b> &nbsp;&nbsp;&nbsp;</span>
+					</div>
+					<ul class="lv-actions actions">
+						<li class="btn-wave"><a uib-tooltip="Add Location" tooltip-placement="bottom" href="#!/masters/trips/getMap"><i
+								class="zmdi zmdi-account-add zmdi-hc-fw"></i></a></li>
+					</ul>
+					<form role="form" ng-submit="filter(form)">
+						<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+							<div class="fg-line">
+								<input type="text" ng-model="locationName" name="booking" class="form-control input-sm"
+									   placeholder="Location" ng-model-options="{ updateOn: 'blur' }"
+									   ng-change="setValueToModel(locationName)" style="height: 34px;font-size: 13px;">
+							</div>
+						</div>
+						<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+							<div class="lvh-search ng-scope sear">
+								<input type="text"
+									   placeholder="Cutomer Search..."
+									   ng-model="customerName"
+									   class="lvhs-input "
+									   typeahead-wait-ms="10"
+									   typeahead="item as item.name for item in customerNames"
+									   ng-change="getLname(customerName)"
+									   typeahead-on-select="onSelect($item, $model, $label)" >
+								<i class="lvh-search-close" ng-click="clearSearch(this)">×</i>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="lv-body">
+					<div class="row" style="margin: 5px auto;">
+						<div class="col-md-12">
+							<div class="detailsList">
+								<div class="" >
+									<table class="table table-bordered unresponsive">
+										<thead>
+											<tr>
+												<th>Name(Location)</th>
+												<th>Location Type</th>
+												<th>Customer Name</th>
+												<th>Contact Mobile</th>
+												<th>Email</th>
+												<th>Address</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="location in locations" ng-dblclick="showLocationDetails()" class="pointer selectItem" ng-click="selectLocation(location, $index)">
+												<td>{{location.name}}</td>
+												<td>{{location.location_type || 'NA'}}</td>
+												<td>{{location.customer_name || 'NA'}}</td>
+												<td>{{location.contact_person_number || 'NA'}}</td>
+												<td>{{location.contact_person_email || 'NA'}}</td>
+												<td>{{location.address || 'NA'}}</td>
+											</tr>
+										</tbody>
+
+									</table>
+									<div class="pagi" ng-show="total_pages>1">
+										<uib-pagination ng-change="pageChanged(this)" total-items="totalItems"
+														items-per-page="items_per_page" num-pages="numPages"
+														ng-model="currentPage" max-size="maxSize"
+														class="pagination-sm smallPagi" boundary-links="true"
+														previous-text="&lsaquo;" next-text="&rsaquo;"
+														first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+									</div>
+									<div ng-if="locations.length == 0" class="ms-body" style=" min-height: 50px;">
+										<h3>No any Booking available !!!!!</h3>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--ng-if="drivers.length != 0 || driver.isNew" -->
+				<!--<div class="lv-body">-->
+					<!--<ul class="tab-nav tn-justified" style="border-top: 1px solid #eee;">-->
+						<!--<li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="booking_manage.booking.basic">Basic Info</a></li>-->
+						<!--<li class="btn-wave" data-ui-sref-active="active"><a ng-if="!enableNextTab">Extra Info</a></li>-->
+						<!--<li class="btn-wave" data-ui-sref-active="active"><a ng-if="enableNextTab" data-ui-sref="booking_manage.booking.extra">Extra Info</a></li>-->
+						<!--<li class="btn-wave" data-ui-sref-active="active"><a ng-if="!enableNextTab">Billing Details</a></li>-->
+						<!--<li class="btn-wave" data-ui-sref-active="active"><a ng-if="enableNextTab" data-ui-sref="booking_manage.booking.Billing">Billing Details</a></li>-->
+					<!--</ul>-->
+					<!--<data ui-view></data>-->
+				<!--</div>-->
+
+				<div class="clearfix"></div>
+			</div>
+		</div>
+		<div ui-view ng-if="!showTabular" style="min-height: 200px;"></div>
+	</div>
+</div>
+

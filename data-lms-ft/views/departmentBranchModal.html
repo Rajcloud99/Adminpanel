@@ -1,0 +1,78 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Department
+        <span style="margin-left:10px;color:#B7B7B7">
+                    ({{currentMode.substring(0,1).toUpperCase()+ currentMode.substring(1)}})
+        </span>
+    </h4>
+</div>
+<div class="modal-body" id="modal-body" style="margin-top: 20px">
+    <form name="DepartmentBranch" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Branch</label>
+            <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                <div class="fg-line" >
+                    <input style="height:30px"
+                           ng-model="selectedBranch.name"
+                           class="form-control input-sm" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-3 control-label">Department</label>
+            <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                <div class="select" ng-readonly="currentMode==='edit'">
+                    <select class="form-control"
+                            ng-model="objDepartmentBranch.depName"
+                            style="height:35px"
+                            ng-options="department.name as department.name for department in departmentMasterList"
+                            required
+                            ng-readonly="currentMode==='edit'"
+                            ng-disabled="currentMode==='edit'">
+                        <option value="" disabled>Select Department</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Head</label>
+            <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                <div class="fg-line" >
+                    <select chosen data-placeholder-text-single="'Search employee'"
+                            allow-single-deselect="true" no-results-text="'Could not find any employee'"
+                            class="form-control" ng-model="selectedUser"
+                            ng-options="user as user.full_name for user in userList">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-3" style="padding-left: 15px;padding-right: 15px;">
+                <div class="fg-line" >
+                    <input readonly style="height:30px" ng-model="selectedUser.userId" class="form-control
+                      input-sm" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-3 control-label">Department email</label>
+            <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                <div class="fg-line" >
+                    <input style="height:30px" ng-model="objDepartmentBranch.code" class="form-control
+                                    input-sm" required>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 15px">
+            <label  class="col-sm-3 control-label">Open date</label>
+            <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                <datepicker_ date-format="dd/MM/yy">
+                    <input ui-dateformat class="form-control
+                                    input-sm dateShow" ng-model="objDepartmentBranch.openDate" type="text"/>
+                </datepicker_>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="closeModal()">Cancel</button>
+    <button class="btn btn-primary" style="width: 60px" type="button" ng-click="saveDepartmentBranch(DepartmentBranch)">Save</button>
+</div>

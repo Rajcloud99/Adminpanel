@@ -1,0 +1,205 @@
+<!--Controller:tripPerformanceReportCntrl-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label p-t-5" style="width: 200px">
+			<div class="select">
+				<select class="form-control"
+						ng-options="item as item for item in $constants.aSettlementReport"
+						ng-model="vm.reportType"
+						ng-change="vm.onTypeSelect(vm.reportType)"
+						style="height: 34px;">
+					<option style="display:none" value="">Report Type</option>
+				</select>
+			</div>
+		</div>
+<!--			<div style="display: inline" ng-if="vm.reportType == 'Detail RTP'">-->
+<!--				<input	ng-model="vm.oFilter.showTrips"-->
+<!--					type="checkbox"-->
+<!--					name="ShowTrip">&nbsp;Show Trip Detail-->
+<!--			</div>-->
+			<div class="pull-right">
+			<button ng-click="vm.getAllReport(false,true)" ng-disabled="aSettlementReport.length<=0"
+					class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+				Download
+				</button>
+			</div>
+			<div class="col-md-2 pull-right" ng-if="vm.reportType == 'Detail RTP'">
+				<div class="lvh-label col-md-5" style="padding-left:0;padding-right:0;">Aggre By:</div>
+				<div class="select col-md-6">
+					<select
+						class="form-control"
+						ng-init="vm.oFilter.aggregateBy = vm.aggrs[0]"
+						ng-options="item as item for item in vm.aggrs"
+						ng-model="vm.oFilter.aggregateBy" style="width:120%;height:34px;"
+					>
+						<option value="" selected>None</option>
+					</select>
+				</div>
+			</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+				<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1" ng-if="vm.reportType == 'RTP'">
+					<div class="fg-line">
+						<input type="number" ng-model="vm.oFilter.tsNo" name="tsNo"
+							   class="form-control input-sm" placeholder="RT NO."
+							   ng-model-options="{ updateOn: 'blur' }"
+							   style="height: 34px;font-size: 13px;">
+					</div>
+				</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2" ng-if="vm.reportType == 'RTP' ">
+				<div class="lvh-search ng-scope sear">
+					<input type="text" placeholder="Vehicle Search..."
+						   ng-model="vm.oFilter.vehicle"
+						   class="lvhs-input"
+						   typeahead-wait-ms="10"
+						   typeahead="person as (person.vehicle_reg_no + (person.vendor_name ? '('+person.vendor_name+')' : '')) for person in vm.getVname($viewValue) | limitTo:10"
+						   class="form-control"
+					>
+					<i class="lvh-search-close" ng-click="vm.oFilter.vehicle_no='';getAllTrip();">×</i>
+				</div>
+			</div>
+				<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+					<div class="fg-line form-group m-b-0">
+						<select chosen multiple
+								class="form-control"
+								ng-model="vm.oFilter.segment_type"
+								ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+								name="Segment"
+								required>
+							<option value=""></option>
+						</select>
+					</div>
+				</div>
+			<div class="col-md-2">
+				<div class="fg-line form-group m-b-0">
+					<select chosen multiple
+							placeholder-text-multiple="'Select Fleet'"
+							class="form-control"
+							ng-model="vm.oFilter.owner_group"
+							ng-options="item.name as item.name for item in vm.aOwners"
+							name="FleetGroup">
+						<option value="">Select Fleet</option>
+					</select>
+				</div>
+			</div>
+				<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+					<div class="date-picker input-group dp-blue"
+						 ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="vm.oFilter.from"
+								   ng-change="vm.dateChange('from')"
+								   is-open="opened1"
+								   datepicker-options="vm.DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="from"
+								   name="Allocation from"
+								   required
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+					</div>
+				</div>
+				<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+					<div class="date-picker input-group dDiesel Budget(ltr)p-blue"
+						 ng-class="{ 'is-opened': opened2 == true }"
+						 style=" ">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+							<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+								   type="text"
+								   class="form-control"
+								   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+								   show-weeks="false"
+								   ng-model="vm.oFilter.to"
+								   ng-change="vm.dateChange('to')"
+								   is-open="opened2"
+								   datepicker-options="vm.DatePicker.dateSettings"
+								   close-text="Close"
+								   placeholder="To"
+								   name="Allocation To"
+								   required
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+					</div>
+				</div>
+
+				<div class="col-md-2 text-center">
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Search"
+							type="button"
+							ng-click="vm.getAllReport()"
+							tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+					<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"
+							style="font-size: 16px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="submit"
+							ng-click="vm.oFilter={};"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+				</div>
+		</div>
+		<div class="col-md-12 pp" ng-if="!vm.reportType == 'RTP'">
+			<ul class="listB" style="list-style-type: none;"
+				ng-repeat="val in vm.summaryConfig">
+				<li>{{val.label}}:{{(vm.summary[val.key])| roundOff:'0'}}</li>
+			</ul>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="row">
+			<div class="col-md-12">
+				<div ja-table
+					 table-body="vm.aTrips"
+					 table-head="vm.tableHead"
+					 table-height='500px'
+					 table-column-setting="vm.columnSetting"
+					 table-selectable='vm.selectType'
+					 table-api="vm.tableApi"
+					 table-selectable-model="vm.aSelectedTrips"
+				></div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.listB > li{
+		width: 20%;
+		float: left;margin-left: 1%;
+	}
+	.pp{
+		list-style-type: none;
+		padding: 20px;
+		font-weight: bold;
+		border: 1px solid #2a96f3;
+	}
+
+</style>

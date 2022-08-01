@@ -1,0 +1,311 @@
+<div class="container">
+	<div class="card m-b-0" style="padding: 1px 5px 0px 5px;">
+
+		<div style="padding:10px;text-align:right;">
+			<div class="col-md-12">
+				<button
+					class="btn btn-primary btn-xs p-l-5 p-r-5 waves-effect"
+					style="font-size: 20px"
+					uib-tooltip="Generate Invoice"
+					tooltip-placement="bottom"
+				 	ng-disabled="!isGenInvDis()"
+				 	type="button"
+				 	ng-click="generateInvoice()">
+						<i class="zmdi zmdi-assignment-o zmdi-hc-fw"></i>
+						<span style="font-size: 14px">Generate Invoice</span>
+				</button>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+
+		<h5 style="text-align:center;border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:5px">SO Number &mdash; {{selectedSO.so_number}}</h5>
+
+		<div style="min-height:575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="margin-top: 13px;margin-left: 12px;">
+
+						<div style="display:inline-block;">Billing Party Name : <span class="req_r">*</span></div>
+						<div class="lvh-search sear" style="display:inline-block;width:20%">
+							<input
+									type="text"
+									class="lvhs-input"
+									ng-model="billingParty"
+									ng-change="getCustomers(billingParty)"
+									typeahead-wait-ms="100"
+									typeahead="item as item.name for item in aCustomers | limitTo:8"
+									typeahead-on-select="onSelect($item, $model, $label)"
+									required
+							>
+							<i class="lvh-search-close" ng-click="clearSearch()">×</i>
+						</div>
+
+						<div style="display:inline-block;margin-left:3%;">Ship to : <span class="req_r">*</span></div>
+						<div class="lvh-search sear" style="display:inline-block;width:20%">
+							<input
+								type="text"
+								class="lvhs-input"
+								ng-model="ship_to"
+								ng-change="getShippingParties(ship_to)"
+								typeahead-wait-ms="100"
+								typeahead="item as item.name for item in aShippingParties | limitTo:8"
+								typeahead-on-select="onSelect($item, $model, $label)"
+								required
+							>
+							<i class="lvh-search-close" ng-click="clearSearch1()">×</i>
+						</div>
+
+						<div style="display:inline-block;margin-left:3%;">Invoice Approver: <span class="req_r">*</span></div>
+						<div class="lvh-search sear" style="display:inline-block;width:20%">
+							<input
+								type="text"
+								class="lvhs-input"
+								ng-model="approver"
+								ng-change="getInvoiceApprovers(approver)"
+								typeahead-wait-ms="100"
+								typeahead="item as item.full_name for item in approvers | limitTo:8"
+								typeahead-on-select="onSelect($item, $model, $label)"
+								required
+							>
+							<i class="lvh-search-close" ng-click="clearInvoiceApproverSearch()">×</i>
+						</div>
+
+						<div class="detailList">
+							<ul>
+								<li>
+									<!-- {{selectedSO.customer.name}} -->
+								</li>
+								<li>
+									<span>SO Approver : </span>{{selectedSO.approver.full_name}}
+								</li>
+								<li>
+									<span>Created At : </span>{{selectedSO.created_at | date:"dd-MMM-yyyy 'at' h:mma"}}
+								</li>
+								<li>
+									<span>Status : </span>{{selectedSO.status}}
+								</li>
+								<li>
+									<span>Priority : </span>{{selectedSO.priority}}
+								</li>
+								<li>
+									<span>SO Date : </span>{{selectedSO.so_date | date:"dd-MMM-yyyy 'at' h:mma"}}
+								</li>
+								<li>
+									<span>Additional Notes : </span>
+									<textarea
+										rows="1"
+										ng-model="additional_notes"
+										placeholder="Remarks"
+									>
+									</textarea>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<hr>
+					<div class="container"></div>
+					<div class="clearfix"></div>
+
+					<h4 style="text-align:center;">Select quantity of each item</h4>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<td style="width:5%">S. No.</td>
+								<td style="width:20%">ITEM / CODE</td>
+								<td style="width:10%">ITEM TYPE</td>
+								<td style="width:5%">CATEGORY</td>
+								<td style="width:10%">QUANTITY</td>
+								<td style="width:5%">UOM</td>
+								<td style="width:10%">PRICE/UNIT</td>
+								<td style="width:5%" ng-show="gstType === 'igst'">
+									IGST %
+									<span
+										style="font-size:20px;color:blue;float:right;cursor:pointer;"
+										uib-tooltip="Remove GST"
+										ng-click="removeGST();">
+										<i class="zmdi zmdi-close-circle"></i>
+									</span>
+								</td>
+								<td style="width:5%" ng-show="gstType === 'cgst'">
+									CGST %
+									<span
+										style="font-size:20px;color:blue;float:right;cursor:pointer;"
+										uib-tooltip="Remove GST"
+										ng-click="removeGST();">
+										<i class="zmdi zmdi-close-circle"></i>
+									</span>
+								</td>
+								<td style="width:5%" ng-show="gstType === 'cgst'">
+									SGST %
+								</td>
+								<td style="width:5%">Disc. %</td>
+								<td style="width:5%">Amount</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in selectedSO.items">
+								<td>{{$index + 1}}</td>
+								<td>{{item.name}} / {{item.code}}</td>
+								<td>{{item.item}}</td>
+								<td>{{item.category_name}}</td>
+								<td>
+									<input
+										type="number"
+										onwheel="return false"
+										onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									 	onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+									 	ng-init="(item.quantity > item.remaining_quantity)
+									 		? (item.quantity = item.remaining_quantity)
+									 		: ''"
+									 	ng-change="quantityChangeHandler(item)"
+									 	ng-model="item.quantity"
+									 	style="width:45%;"
+									>
+									 		&#47; {{item.remaining_quantity}}
+											<span class="req_r" style="font-size:11px" ng-show="item.err">{{errMsg}}</span>
+								</td>
+								<td>{{item.uom}}</td>
+								<td>{{item.price_per_unit}}</td>
+								<td ng-show="gstType === 'igst'">
+									<input
+										type="number"
+										onwheel="return false;"
+										onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									 	onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+									 	ng-change="gstChangeHandler(item)"
+									 	ng-init="item.igst_percent = item.tax_percent"
+									 	ng-model="item.igst_percent"
+									>
+										<!-- <span class="req_r" style="font-size:11px" ng-show="item.err">{{errMsg}}</span> -->
+								</td>
+								<td ng-show="gstType === 'cgst'">
+									<input
+										type="number"
+										onwheel="return false;"
+										onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									 	onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+									 	ng-init="item.cgst_percent = item.tax_percent / 2; item.sgst_percent = item.cgst_percent;"
+									 	ng-change="item.sgst_percent = item.cgst_percent"
+									 	ng-model="item.cgst_percent"
+									>
+										<!-- <span class="req_r" style="font-size:11px" ng-show="item.err">{{errMsg}}</span> -->
+								</td>
+								<td ng-show="gstType === 'cgst'">
+									<input
+										type="number"
+										onwheel="return false;"
+										onkeypress="return ( (event.which != 40 && event.which != 46) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 46 && event.charCode <= 57"
+									 	onkeydown="return ( (event.which != 40 && event.which != 190 && event.which != 110) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ) ? null : event.charCode >= 48 && event.charCode <= 57"
+									 	ng-model="item.sgst_percent"
+									 	ng-disabled="true"
+									>
+										<!-- <span class="req_r" style="font-size:11px" ng-show="item.err">{{errMsg}}</span> -->
+								</td>
+								<td>{{item.discount_percent}}</td>
+								<td>{{calcTotal(item)}}</td>
+							</tr>
+						</tbody>
+						<tfoot>
+								<tr>
+									<td colspan="{{(gstType === 'igst') ? 9 : 10}}" style="text-align:right;">
+										<span style="font-weight:bolder;">Total</span>
+									</td>
+									<td>
+										<span style="font-weight:bolder;">{{calcTotatOfAllItems()}}</span>
+									</td>
+								</tr>
+						</tfoot>
+					</table>
+					<!-- <div ng-show="(selectedPO.spare[$index].imei_list.length>0)" class="row" style="margin:5px">
+										<div class="col-md-12">
+											<span class="route_iCity" style="margin-left: 5px;"
+													ng-repeat="i in selectedPO.spare[$index].imei_list">{{i}} <a
+													class="route_iCityRemove"
+													ng-click="removeIMEI(i,$parent.$index)">x</a>
+											</span>
+										</div>
+									</div> -->
+					<div class="clearfix"></div>
+
+					<div class="container"></div>
+					<hr>
+
+					<h4 style="text-align:center;">Select IMEI's of each item</h4>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<td style="width:5%">S. No.</td>
+								<td style="width:25%">ITEM / CODE</td>
+								<td style="width:10%">ITEM TYPE</td>
+								<td style="width:60%;">ADD IMEI's</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in selectedSO.items">
+								<td>{{$index + 1}}</td>
+								<td>{{item.name}} / {{item.code}}</td>
+								<td>{{item.item}}</td>
+								<td>
+									<div class="select" ng-init="getDevice(item.item_ref._id,$index)">
+										<select
+											chosen
+											multiple
+											id="imeiselect"
+											ng-if="show"
+											class="form-control"
+											placeholder="Select IMEI's"
+											ng-options="imei as imei for imei in imei_list[$index]"
+											ng-model="imeis[$index]"
+											ng-change="addRemoveIMEI(item, imeis[$index])"
+											max-selected-options="item.quantity"
+											required>
+											<option selected disabled> Select</option>
+										</select>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container"></div>
+		<div class="clearfix"></div>
+
+	</div>
+</div>
+
+<style>
+	.nav-tabs>li.active {
+		background: #2196f5;
+	}
+
+	.nav-tabs>li.active>a {
+		color: #fff !important;
+	}
+
+	.nav-tabs>li.active>a,
+	.nav-tabs>li.active>a:hover,
+	.nav-tabs>li.active>a:focus {
+		border: 1px solid #2196f5;
+	}
+
+	.list_border_background {
+		border: 2px solid blue !important;
+		background: #47d6c9;
+	}
+
+	.modal-footer {
+		padding-top: 0px;
+		/* margin-top: -56px; */
+		margin-bottom: -37px;
+	}
+#imeiselect_chosen .chosen-drop,
+#imeiselect_chosen .chosen-results {
+    max-height: 150px !important;
+}
+
+</style>

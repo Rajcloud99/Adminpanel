@@ -1,0 +1,99 @@
+<form role="form" name="cancelGRPopUp" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">GR No. {{selGR.gr_no}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Booking No. :</label>
+						<div class="col-sm-6">
+							{{selGR.booking_no || 'NA'}}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Branch :</label>
+						<div class="col-sm-6">
+							{{selGR.branch_name || 'NA'}}
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Trip No. :</label>
+						<div class="col-sm-6">
+							{{selGR.trip_no || 'NA'}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Reason <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="select">
+								<select class="form-control" ng-model="reason" ng-options="o for o in aReason"
+										style="background-color: white;" required>
+									<option value="" disabled selected>Set Reason</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input placeholder="Enter Remark" class="form-control"
+									   ng-model="remark" type="text" class="form-control" required>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+			<br>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-disabled="!(reason && remark)"
+				ng-click="cancelClick()">Free GR
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 50%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

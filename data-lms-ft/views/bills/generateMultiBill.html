@@ -1,0 +1,285 @@
+<!--controller: printMultipleBillController-->
+<!--controllerAS: pmbVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="col-md-2">
+			<div class="form-group m-b-0">
+				<div class="fg-line">
+					<div class="select">
+						<select class="form-control"
+								ng-init="pmbVm.printType = 'bill'"
+								ng-model="pmbVm.printType"
+								style="height: 33px;margin-top: 1px"
+								ng-change="pmbVm.getGeneratedBills(undefined,true)"
+								ng-options="item.value as item.key for item in pmbVm.aPrintType">
+							<option value="" disabled>Print Type</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pull-right">
+			<button class="btn btn-primary"
+					ng-click="pmbVm.printBill('Preview')"
+					tooltip-placement="bottom"
+					uib-tooltip="Multi Bill Preview">
+				<i class="zmdi zmdi-print zmdi-hc-fw"></i></i>
+			</button>&nbsp;&nbsp;
+		</div>
+
+	</div>
+</div>
+
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:15px;">
+			<div class="col-md-1" ng-if="pmbVm.printType == 'bill'">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="pmbVm.myFilter.bill_no"
+						   name="bill_no"
+						   class="form-control input-sm"
+						   placeholder="Bill No."
+						   ng-model-options="{ updateOn: 'blur' }">
+				</div>
+			</div>
+			<div class="col-md-1" ng-if="pmbVm.printType == 'bill'">
+				<div class="fg-line form-group m-b-0">
+					<input
+							type="text"
+							ng-model="pmbVm.myFilter.gr_no"
+							name="gr_no"
+							class="form-control input-sm"
+							placeholder="GR No."
+							ng-model-options="{ updateOn: 'blur' }"
+					>
+				</div>
+			</div>
+			<div class="col-md-1" ng-if="pmbVm.printType == 'cover note'">
+				<div class="fg-line form-group m-b-0">
+					<input
+							type="text"
+							ng-model="pmbVm.myFilter.coverNoteNo"
+							name="coverNoteNo"
+							class="form-control input-sm"
+							placeholder="Cover Note No."
+							ng-model-options="{ updateOn: 'blur' }"
+					>
+				</div>
+			</div>
+			<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+				<div class="lvh-search ng-scope sear chosen-row-2">
+					<input
+							type="text"
+							class="form-control lvhs-input"
+							placeholder="BillingParty Search..."
+							ng-model="pmbVm.myFilter.search_billParty"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in pmbVm.getBillingPartyName($viewValue) | limitTo:6"
+							typeahead-on-select="pmbVm.onSelect($item, $model, $label)">
+					<i class="lvh-search-close" ng-click="pmbVm.myFilter.search_billParty=null;">×</i>
+				</div>
+			</div>
+			<!--<div class="col-md-1" ng-hide="true">-->
+				<!--<div class="form-group m-b-0">-->
+					<!--<div class="fg-line">-->
+						<!--<div class="select">-->
+							<!--<select class="form-control"-->
+									<!--ng-model="pmbVm.myFilter.status"-->
+									<!--style="height: 33px;margin-top: 1px"-->
+									<!--ng-options="item as item for item in $constants.abillStatus">-->
+								<!--<option value="">All Status</option>-->
+							<!--</select>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+			<!--</div>-->
+			<div class="col-md-1" ng-if="pmbVm.printType == 'bill'">
+				<div class="select">
+					<select class="form-control"
+							ng-model="pmbVm.myFilter.dateType"
+							name="Branch Name">
+						<option value="">Select Type</option>
+						<option value="billDate">Bill Date</option>
+						<option value="acknowledge.systemDate">Ack Date</option>
+						<option value="approve.date">Approve Date</option>
+						<option value="items.settlement.date">Settlement Date</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened1 == true }">
+								<div ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="pmbVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+										   type="text"
+										   ng-change="pmbVm.getInvoice(false,true)"
+										   class="form-control"
+										   datepicker-popup="{{pmbVm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="pmbVm.myFilter.start_date"
+										   is-open="opened1"
+										   datepicker-options="pmbVm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="Start Date"/>
+								</div>
+								<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="pmbVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue"
+								 ng-class="{ 'is-opened': opened2 == true }">
+								<div ng-class="{ 'fg-toggled': opened2 == true }">
+									<input ng-click="pmbVm.DatePicker.openDatePicker(this, $event, 'opened2')"
+										   ng-change="getInvoice(false,true)"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{pmbVm.DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="pmbVm.myFilter.end_date"
+										   is-open="opened2"
+										   datepicker-options="pmbVm.DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="End Date"/>
+								</div>
+								<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="pmbVm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Search"
+						type="submit"
+						ng-click="pmbVm.getGeneratedBills()"
+						tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+
+				<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+						style="font-size: 16px"
+						uib-tooltip="Clear Search"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="pmbVm.myFilter={};pmbVm.getGeneratedBills();"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+			</div>
+			<div class="clearfix"></div>
+
+		</div>
+	</div>
+
+	<div class="container m-b-5 m-t-5 text-left">
+		<div class="form-group m-b-0">
+			<button class="btn-primary btn-xs m-l-5"
+					ng-click="pmbVm.selectAll()">
+				Select All
+			</button>&nbsp;&nbsp;
+			<button class="btn-primary btn-xs m-l-5"
+					ng-click="pmbVm.UnSelectAll()">
+				UnSelect All
+			</button>
+		</div>
+	</div>
+
+	<div class="detailsList">
+		<div lazy-load-trigger="pmbVm.getGeneratedBills(true)" style="overflow-y: auto; max-height: 500px;">
+			<table class="table table-bordered unresponsive">
+				<thead id='my_fixable_table_header' fix-head>
+				<tr>
+					<th style="min-width: 70px">#</th>
+					<th ng-if="pmbVm.printType == 'cover note'" style="min-width: 70px">Cover Note No.</th>
+					<th style="min-width: 70px">Bill No.</th>
+					<th ng-if="pmbVm.printType == 'bill'" style="min-width: 160px">Gr No.</th>
+					<th ng-if="pmbVm.printType == 'bill'" style="min-width: 120px">Bill Type</th>
+					<th style="min-width: 320px">Billing Party</th>
+					<th style="min-width: 100px">Billing Date</th>
+					<th style="min-width: 100px">Amount(Rs.)</th>
+					<th style="min-width: 150px">Created By</th>
+					<th style="min-width: 150px">Bill Template</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr data-ng-repeat="oBill in pmbVm.aBill"
+					class="oBill pointer">
+					<td>
+						<label class="checkbox checkbox-inline m-r-20">
+							<input type="checkbox" ng-model="oBill.selected" ng-change=pmbVm.clickCheckBX(oBill)>
+							<i class="input-helper"></i>
+						</label>
+					</td>
+					<td ng-if="pmbVm.printType == 'cover note'">{{oBill.cnNo}}</td>
+					<td ng-if="pmbVm.printType == 'bill'">{{oBill.billNo}}</td>
+					<td ng-if="pmbVm.printType == 'cover note'">{{(oBill.bills|arrayOfString:'billNo') || 'NA'}}</td>
+					<td ng-if="pmbVm.printType == 'bill'">{{(oBill.items|getGrNumber) || 'NA'}}</td>
+					<td ng-if="pmbVm.printType == 'bill'">{{oBill.type || 'NA'}}</td>
+					<td>{{oBill.billingParty.name || 'NA'}}</td>
+					<td>{{(oBill.billDate || oBill.created_at) | date:"dd-MM-yyyy"}}</td>
+					<td ng-if="pmbVm.printType == 'bill'">{{(oBill.totalAmount && oBill.totalAmount|roundOff) || '0'}}</td>
+					<td ng-if="pmbVm.printType == 'cover note'">{{((oBill.bills|getArrayElementSum:'totalAmount')|roundOff) || '0'}}</td>
+					<td>{{oBill.created_by_name || oBill.user || "NA"}}</td>
+					<td>
+						<div class="col-md-12">
+						<div class="form-group m-b-0">
+							<div class="fg-line">
+								<div class="select">
+									<!--<select class="form-control"
+											ng-init="oBill.setectedTamplate = (this | templateExtract:oBill:pmbVm.printType)[0]"
+											ng-model="oBill.setectedTamplate"
+											style="height: 33px;margin-top: 1px"
+											ng-options="item as item.name for item in (this | templateExtract:oBill:pmbVm.printType)">
+										<option value="">Select Template</option>
+									</select>-->
+								<select class="form-control"
+								ng-model="oBill.setectedTamplate"
+								style="height: 33px;margin-top: 1px"
+								ng-options="item as item.name for item in oBill.aGetBillTemp">
+								<option value="" disabled>Select Template</option>
+								</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<div ng-if="pmbVm.aBill.length == 0" class="ms-body" style=" min-height: 50px;">
+				<h3>No any bill available !!!!!</h3>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	.fs-20 {
+		font-size: 20px;
+	}
+
+	.hideExtraData {
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		height: 45px;
+	}
+</style>

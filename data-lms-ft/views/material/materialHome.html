@@ -1,0 +1,252 @@
+<div class="card m-b-0" style="background: none;box-shadow: none;width:48%;display:inline-block;
+margin-left:12px;margin-right: 8px;padding-bottom: 10px">
+        <div class="card" style="height:580px;overflow: hidden">
+            <div class="card-header">
+
+                <h2 style="font-size: 18px">HSN CODE</h2>
+
+            </div>
+
+			<form autocomplete="off">
+			<div class="col-md-3">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="oFilter.hsn"
+						   name="hsn code"
+						   class="form-control input-sm"
+						   placeholder="HSN CODE">
+				</div>
+			</div>
+				<div class="col-md-3">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="oFilter.material"
+						   name="material"
+						   class="form-control input-sm"
+						   placeholder="MATERIAL">
+				</div>
+			</div>
+		    </form>
+			<div class="col-md-5">
+				<button class="btn btn-primary btn-sm waves-effect"
+					    uib-tooltip="Search"
+						type="button"
+						ng-click="getAllMaterialTypes(true)"
+						tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+				</button>
+
+				<button class="btn btn-primary btn-sm waves-effect"
+
+						uib-tooltip="Clear Search"
+						tooltip-placement="bottom"
+						type="button"
+						ng-click="oFilter={};getAllMaterialTypes(true);"><i class="zmdi zmdi-close zmdi-hc-fw"></i>
+				</button>
+
+				<button ng-if="!(role_local_data.material.indexOf('add')==-1)" class="btn btn-primary btn-sm waves-effect"
+						uib-tooltip="add"
+						tooltip-placement="bottom"
+						ng-click="addMaterialType()"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+
+				</button>
+
+				<button ng-if="!(role_local_data.material.$index('Edit')==-1)" class="btn btn-primary btn-sm waves-effect"
+				        uib-tooltip="edit"
+				        tooltip-placement="bottom"
+				        ng-click="editMaterialType(selectType)"><i class="zmdi zmdi-edit"></i>
+
+				</button>
+
+				<button ng-if="!(role_local_data.material.$index('delete')==-1)" class="btn btn-primary btn-sm waves-effect"
+				        uib-tooltip="delete"
+				        tooltip-placement="bottom"
+				        ng-click="deleteMaterialType(selectType)"><i class="zmdi zmdi-delete"></i>
+			    </button>
+			</div>
+			<br>
+			<div  style="width: 100%; background-color: #EAEAEA"></div>
+
+            <div class="card-header"  ng-show="(!materialTypes.length)">
+                <h2 style="color: grey">
+                    No material types found
+                </h2>
+            </div>
+			<div class="row">
+				<div class="detailsList">
+					<div class="" style="overflow-y: auto; max-height: 500px;">
+						<table class="table table-bordered unresponsive">
+							<thead id='my_fixable_table_header' fix-head>
+							<tr>
+								<th>#</th>
+								<th>category</th>
+								<th>hsn/sac Code</th>
+								<th>gst Percent</th>
+								<th>material</th>
+
+							</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="vSelect in materialTypes track by $index"
+							ng-click="onClickType(vSelect, $index)"
+							ng-class="{'grn': typeIndex === $index }"
+							 class="selectItempointer">
+
+								<td>{{((pagination.currentPage - 1) * pagination.itemsPerPage) + $index + 1}}</td>
+								<td>{{(vSelect.category || '').toUpperCase() || 'HSN'}} Code</td>
+								<td>{{(vSelect.category === 'sac' ? vSelect.sacCode : vSelect.hsnCode) || 'NA'}}</td>
+								<td>{{vSelect.gstPercent || 'NA'}}</td>
+								<td>{{vSelect.material && vSelect.material[0]}}
+									{{vSelect.material[1] && ','}}
+									{{vSelect.material[1]}}
+									{{vSelect.material[2] && ',...'}}</td>
+
+							</tr>
+							</tbody>
+						</table>
+						<div ng-if="materialTypes.length == 0" class="ms-body" style=" min-height: 100px;">
+							<h3>MaterialType not available !!!!!</h3>
+						</div>
+					</div>
+					<div class="pagi text-center" ng-show="pagination.total_pages > 0">
+						<uib-pagination ng-change="getAllMaterialTypes()"
+										total-items="pagination.totalItems"
+										items-per-page="pagination.itemsPerPage"
+										num-pages="pagination.numPages"
+										ng-model="pagination.currentPage" max-size="pagination.maxSize"
+										class="pagination-sm smallPagi" boundary-links="true"
+										previous-text="&lsaquo;" next-text="&rsaquo;"
+										first-text="&laquo;" last-text="&raquo;">
+						</uib-pagination>
+					</div>
+				</div>
+			</div>
+        </div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:48%;display: inline-block;
+padding-bottom: 10px" >
+    <div class="card" style="height:580px;overflow: hidden">
+        <div class="card-header">
+
+            <h2 style="font-size: 18px">Material Groups</h2>
+        </div>
+		<form autocomplete="off">
+		<div class="col-md-3">
+			<div class="fg-line form-group m-b-0">
+				<input type="text"
+					   ng-model="oFilter.materialGroup"
+					   name="Name"
+					   class="form-control input-sm"
+					   placeholder="Name">
+			</div>
+		</div>
+
+			<div class="col-md-3">
+				<div class="fg-line form-group m-b-0">
+					<input type="text"
+						   ng-model="oFilter.materialCode"
+						   name="Code"
+						   class="form-control input-sm"
+						   placeholder="Code">
+				</div>
+			</div>
+
+		<div class="col-md-5">
+
+			<button class="btn btn-primary btn-sm waves-effect"
+					uib-tooltip="Search"
+					type="button"
+					ng-click="getAllMaterialGroups(true)"
+					tooltip-placement="bottom"><i class="zmdi zmdi-search zmdi-hc-fw"></i>
+			</button>
+
+			<button class="btn btn-primary btn-sm waves-effect"
+					uib-tooltip="Clear Search"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="oFilter={};getAllMaterialGroups(true);"><i class="zmdi zmdi-close zmdi-hc-fw"></i>
+			</button>
+
+			<button ng-if="!(role_local_data.material.indexOf('add')==-1)" class="btn btn-primary btn-sm waves-effect"
+			        uib-tooltip="Add"
+			        ng-click="addMaterialGroup()"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+
+	        </button>
+
+			<button  ng-if="!(role_local_data.material.$index('Edit')==-1)" class="btn btn-primary btn-sm waves-effect"
+		            uib-tooltip="edit"
+			        tooltip-placement="bottom"
+			        ng-click="editMaterialGroup(selectGroup)"><i class="zmdi zmdi-edit"></i>
+
+            </button>
+
+			<button ng-if="!(role_local_data.material.$index('delete')==-1)" class="btn btn-primary btn-sm waves-effect"
+			uib-tooltip="delete"
+			tooltip-placement="bottom"
+			ng-click="deleteMaterialGroup(selectGroup);"><i class="zmdi zmdi-delete"></i>
+
+           </button>
+
+
+			</div>
+		</form>
+		<br>
+           <div style="width: 100%; background-color: #EAEAEA"></div>
+
+            <div class="card-header" style="margin: 0 auto;" ng-show="(!materialGroups.length)">
+            <h2 style="color: grey">
+                No material groups found
+            </h2>
+        </div>
+	<div 	class="row">
+			<div class="detailsList">
+				<div class="" style="overflow-y: auto; max-height: 500px;">
+					<table class="table table-bordered unresponsive">
+						<thead id='my_fixable_table_header' fix-head>
+						<tr>
+							<th>#</th>
+							<th>Name</th>
+							<th>Code</th>
+
+						</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="vSelect in materialGroups track by $index"
+						    ng-click="onClickGroup(vSelect, $index)"
+							ng-class="{ 'grn': groupIndex === $index }"
+						  	class="selectItem pointer">
+							<td>{{((pagination2.currentPage2 - 1) * pagination2.itemsPerPage2) + $index + 1}}</td>
+							<td>{{vSelect.name || 'NA'}}</td>
+							<td>{{vSelect.code || 'NA'}}</td>
+
+						</tr>
+						</tbody>
+					</table>
+
+
+
+					</div>
+					<div ng-if="materialGroups.length == 0" class="ms-body" style=" min-height: 100px;">
+						<h3>MaterialGroup not available !!!!!</h3>
+					</div>
+				</div>
+				<div class="pagi text-center" ng-show="pagination2.total_pages2 > 0">
+					<uib-pagination ng-change="getAllMaterialGroups()"
+									total-items="pagination2.totalItems2"
+									items-per-page="pagination2.itemsPerPage2"
+									num-pages="pagination2.numPages2"
+									ng-model="pagination2.currentPage2" max-size="pagination2.maxSize2"
+									class="pagination-sm smallPagi" boundary-links="true"
+									previous-text="&lsaquo;" next-text="&rsaquo;"
+									first-text="&laquo;" last-text="&raquo;">
+					</uib-pagination>
+				</div>
+			</div>
+		</div>
+    </div>
+</div>
+<style>
+	.color {
+		color: red;
+	}
+	</style>

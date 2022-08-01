@@ -1,0 +1,103 @@
+<div class="container" ng-controller="fleetOwnerReportController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false"
+											   ng-model="start_date" max-date="end_date" ng-change="setStartDate()"
+											   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="From Date" style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+				                      <button type="button" class="btn btn-default m-t-0 f12"
+											  ng-click="open($event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+				                    </span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+											   ng-change="setEndDate()"
+											   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date" min-date="start_date"
+											    is-open="opened2"
+										datepicker-options="dateOptions" close-text="Close" placeholder="To Date" style=
+										"padding: 0px 4px
+									;
+										height: 34px
+									;" ng-disabled="!start_date"/>
+									</div>
+									<span class="input-group-btn">
+			                      <button type="button" class="btn btn-default m-t-0 f12"
+										  ng-click="open($event, 'opened2')" ng-disabled="!start_date"><i
+										  class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-1 col-md-1 col-lg-1">
+								<button ng-disabled="!(start_date && end_date)" ng-click="getAllVehicles()" class="btn btn-primary" style="font-size: 11px; padding: 5px;margin-top: 5px;">
+									Search
+								</button>
+							</div>
+							<button ng-disabled="!(start_date && end_date)" ng-click="downloadReport(true)" class="btn btn-primary hidden-print pull-right" style="font-size: 11px; padding: 5px;margin-top: 5px;margin-right: 5px;">Download</button>&nbsp;
+						</form>
+						<div class="clearfix"></div>
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead fix-head>
+									<tr>
+										<th>Group</th>
+										<th>Allot Veh.</th>
+										<th>HSD (Today)</th>
+										<th>HSD (Cumulative)</th>
+										<th>Trip (Today)</th>
+										<th>Trip (Cumulative)</th>
+										<th>Working Progress</th>
+										<th>Average HSD</th>
+										<th>Average Trip</th>
+										<th>Trip Per Veh.</th>
+										<th>Working Days</th>
+										<th>Status</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="fleetOwner in aVehicle.owner_trips" class="pointer selectItem">
+										<td>{{fleetOwner.group}}</td>
+										<td>{{fleetOwner.allot_vehicle}}</td>
+										<td>{{fleetOwner.hsd_today}}</td>
+										<td>{{fleetOwner.hsd_cumulative}}</td>
+										<td>{{fleetOwner.trip_today}}</td>
+										<td>{{fleetOwner.trip_cumulative}}</td>
+										<td>{{fleetOwner.working_progress}}</td>
+										<td>{{fleetOwner.average_hsd}}</td>
+										<td>{{fleetOwner.average_trip}}</td>
+										<td>{{fleetOwner.trip_per_vehicle}}</td>
+										<td>{{fleetOwner.working_days}}</td>
+										<td>{{fleetOwner.report_status}}</td>
+
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div ng-if="aVehicle.length == 0" class="ms-body" style=" min-height: 100px;">
+								<h3>No any registered vehicle available !!!!!</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

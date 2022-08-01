@@ -1,0 +1,70 @@
+<form novalidate autocomplete="off" name="kpiSettingForm" ng-submit="vm.kpiSettingFormSubmit(kpiSettingForm)">
+	<div class="modal-header p-b-0" >
+		<button type="button" ng-click="vm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Setting</h4><br>
+
+		<div class="row m-t-10">
+			<div class="col-md-12 m-b-5">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Enter Target <span class="req_r">*</span></label>
+					<div class="col-sm-5">
+						<div class="fg-line">
+							<input type="number"
+								   class="form-control"
+								   ng-model="vm.graphData.target"
+								   placeholder="Target"
+								   required
+								   name="Target"/>
+						</div>
+						<span class="error" ng-if="kpiSettingForm['Target Amount'].$error.required">
+							This Field is Mandatory</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group m-b-0">
+					<label class="col-sm-4 control-label">Date:<span class="req_r">*</span></label>
+					<div class="col-sm-5">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+									   type="text"
+									   class="form-control"
+									   uib-datepicker-popup="{{vm.DatePicker.formats[0]}}"
+									   show-weeks="false"
+									   ng-model="vm.graphData.date"
+									   is-open="opened1"
+									   datepicker-options="vm.DatePicker.dateSettings"
+									   close-text="Close"
+									   placeholder="Date"
+									   name="Date"
+									   required
+									   style="padding: 0px 4px;height: 34px;" />
+							</div>
+							<span class="input-group-btn">
+								  <button type="button" class="btn btn-default m-t-0 f12"
+									  ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+									  class="glyphicon glyphicon-calendar"></i></button>
+							</span>
+						</div>
+						<span class="error" ng-if="kpiSettingForm['Date'].$error.required">
+													This Field is Mandatory</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-warning"
+				ng-click="vm.closeModal()">close</button>
+		<button class="btn btn-primary">Save</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 45%;
+		height: 173px
+	}
+</style>

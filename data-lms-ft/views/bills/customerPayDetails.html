@@ -1,0 +1,62 @@
+<div class="container" ng-controller="customerPayDetailsCtrl">
+    <div class="card m-b-0" id="messages-main">
+        <h5 style="text-align: center;">Trip Number {{selectedCustomerPayment.booking_info[0].trip_no}} </h5>
+        <div class="" style=" min-height: 575px;">
+            <div class="listview lv-message">
+                <div class="lv-body">
+                    <div class="col-md-12" style="margin-top: 13px;margin-left: 12px;">
+                      <div class="detailList">
+                        <ul>
+                          <li><span>Invoice No.</span>: {{selectedCustomerPayment.invoice_no || 'NA'}}</li>
+                          <li><span>Invoice Rate</span>: {{selectedCustomerPayment.total_expenses | number:2 || 'NA'}}</li>
+                          <li><span>Pay Received </span>: {{formatfindPaidAmount(selectedCustomerPayment) | number:2  || 'NA'}}</li>
+                          <li><span>Remaining </span>: {{ramainingAmount | number:2  || 'NA'}}</li>
+                          
+                          <!--<li ng-if="selectedCustomerPayment.route.route_name"><span>Route Name</span>: {{selectedCustomerPayment.route.route_name}}</li> -->
+                           <li ><span>Customer Name</span>: {{selectedCustomerPayment.customer_name || 'NA'}}</li> 
+                          <li><span>Vendor Name</span>: {{selectedCustomerPayment.vendor_name || 'NA'}}</li>
+                          <li><span>Invoice Date</span>: {{selectedCustomerPayment.invoice_date | date:"dd-MMM-yyyy 'at' h:mma" || 'NA'}}</li>
+                        </ul>
+                      </div><hr>
+                    </div>
+                    <!-- <div class="modal-footer">
+                       <button class="btn btn-success waves-effect" ng-click="myTripUpdate(selectedCustomerPayment)">Update</button>
+                    </div> -->
+                    <button ng-click="addNewRowInTable(selectedCustomerPayment)" tooltip="Add Row" class="btn btn-primary waves-effect pull-right" style="margin:5px;">
+                    <i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+                    </button>
+                    <table class="table table-bordered">
+                        <thead>
+                          <tr >
+                            <th>#</th>
+                            <th>Key</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Reference No.</th>
+                            <th>Person</th>
+                            <th>Remark</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="info in selectedCustomerPayment.payment">
+                            <td>{{ $index + 1 }}</td>
+                            <td >{{info.key || 'NA'}}</td>
+                            <td >{{info.amount | number:2 || 'NA'}}</td>
+                            <td>{{info.status || 'NA'}}</td>
+                            <td>{{info.reference_no || 'NA'}}</td>
+                            <td>{{info.person || 'NA'}}</td>
+                            <td>{{info.remark || 'NA'}}</td>
+                            <td>{{info.date | date:'dd-MMM-yyyy' || 'NA'}}</td>
+                            <td>
+                              <a href ng-click="removeItems(selectedCustomerPayment, info, $index)" uib-tooltip="Delete " tooltip-placement="bottom" class="active"><i class="zmdi zmdi-minus-circle zmdi-hc-fw" style="font-size: 22px"></i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

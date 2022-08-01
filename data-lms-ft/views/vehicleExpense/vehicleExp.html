@@ -1,0 +1,225 @@
+<!--Controller: vehicleExpController-->
+<!--ControllerAs: veVm-->
+
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+				<span class="c-black"><b>Vehicle Expense</b>
+					<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+						(View)
+					</span>
+				</span>
+		</div>
+	</div>
+</div>
+
+<div class="container" style="">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:7px;">
+			<form novalidate>
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="veVm.oFilter.refNo"
+							   name="Ref no"
+							   class="form-control input-sm"
+							   placeholder="Ref. no.">
+					</div>
+				</div>
+
+				<div class="col-md-1">
+					<div class="fg-line form-group m-b-0">
+						<input type="text"
+							   ng-model="veVm.oFilter.purchaseBillNo"
+							   name="Purchase Bill No"
+							   class="form-control input-sm"
+							   placeholder="Purchase Bill No">
+					</div>
+				</div>
+
+
+
+
+
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Account"
+								ng-model="veVm.oFilter.creditAcnt"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in veVm.accountMaster($viewValue)">
+
+
+					</div>
+				</div>
+
+
+
+
+
+
+
+				<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+					<div class="lvh-search ng-scope sear chosen-row-2">
+						<input
+								type="text"
+								class="form-control lvhs-input"
+								placeholder="Branch Search..."
+								ng-model="veVm.oFilter.branch"
+								typeahead-wait-ms="10"
+								typeahead="item as item.name for item in veVm.getAllBranch($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="veVm.oFilter.branch=null;">×</i>
+					</div>
+				</div>
+
+<!--				<div class="col-md-2">-->
+<!--					<div class="select">-->
+<!--						<select class="form-control"-->
+<!--								ng-init="veVm.oFilter.dateType = 'date'"-->
+<!--								ng-model="veVm.oFilter.dateType">-->
+<!--							<option value="" selected>Select Date</option>-->
+<!--							<option value="created_at">Creation date</option>-->
+<!--							<option value="last_modified_at">Last Modified date</option>-->
+<!--							<option value="date">Voucher date</option>-->
+<!--							<option value="acExp.at">Tally export date</option>-->
+<!--							<option value="acImp.at">Import date</option>-->
+<!--						</select>-->
+<!--					</div>-->
+<!--				</div>-->
+
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									class="form-control"
+									placeholder="From"
+									max-date="veVm.maxDate"
+									ng-model="veVm.oFilter.from_date"
+									ng-change="veVm.oFilter.to_date=undefined;"
+							>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<input
+									fill-date
+									type="text"
+									max-date="veVm.maxDate"
+									class="form-control"
+									placeholder="To"
+									ng-model="veVm.oFilter.to_date"
+							>
+						</div>
+					</div>
+				</div>
+<!--				<div class="col-md-2">-->
+<!--					<div class="select">-->
+<!--						<select class="form-control" ng-model="veVm.oFilter.sortBy">-->
+<!--							<option value="" selected>Sort by</option>-->
+<!--							<option value="created_at">Creation date</option>-->
+<!--							<option value="date">Voucher date</option>-->
+<!--							<option value="acExp.at">Tally export date</option>-->
+<!--							<option value="acImp.at">Import date</option>-->
+<!--							<option value="refNo">Reference no.</option>-->
+<!--						</select>-->
+<!--					</div>-->
+<!--				</div>-->
+
+				<div class="col-md-2">
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Search"
+							type="button"
+							ng-click="veVm.getExpenses();"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-search zmdi-hc-fw"></i>
+					</button>
+					<button class="btn btn-primary p-l-10 p-r-10 app_tile"
+							style="font-size: 12px"
+							uib-tooltip="Clear Search"
+							tooltip-placement="bottom"
+							type="button"
+							ng-click="veVm.oFilter={};">
+						<i class="zmdi zmdi-close zmdi-hc-fw"></i>
+					</button>
+
+				</div>
+
+				<div class="clearfix"></div>
+			</form>
+		</div>
+	</div>
+	<div class="container m-b-5 m-t-5 text-right">
+		<div class="col-md-12">
+
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['Vehicle Expense']['Add']"
+					style="font-size: 20px"
+					uib-tooltip="Add Expense"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="veVm.addExpense('add')">
+				<i class="zmdi zmdi-plus zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-primary btn-xs p-l-5 p-r-5" ng-if="$role['Vehicle Expense']['Update']"
+					style="font-size: 20px"
+					uib-tooltip="Edit Expense"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="veVm.addExpense('edit')">
+				<i class="zmdi zmdi-edit zmdi-hc-fw fs-20"></i>
+			</button>
+			<button class="btn btn-danger btn-xs p-l-5 p-r-5" ng-if="$role['Vehicle Expense']['Delete']"
+					style="font-size: 20px"
+					uib-tooltip="Edit Expense"
+					tooltip-placement="bottom"
+					type="button"
+					ng-click="veVm.deleteExpense(veVm.aSelectedExpenses)">
+				<i class="zmdi zmdi-delete zmdi-hc-fw fs-20"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-12">
+					<div ja-table
+						 table-body="veVm.aExpenses"
+						 table-head="veVm.tableHead"
+						 table-height='500px'
+						 table-load="veVm.getExpenses(true)"
+						 table-column-setting="veVm.columnSetting"
+						 table-selectable='veVm.selectType'
+						 table-api='veVm.tableApi'
+						 table-selectable-model="veVm.aSelectedExpenses"
+					></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+
+	.chosen-row-1{
+		z-index: 89;
+	}
+	.chosen-row-2{
+		z-index: 87;
+	}
+	.chosen-row-3{
+		z-index: 98;
+	}
+	.container{
+		width: 98% !important;
+	}
+</style>

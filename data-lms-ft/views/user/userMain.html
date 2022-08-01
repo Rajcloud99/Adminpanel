@@ -1,0 +1,247 @@
+<div class="container" >
+	<div class="card m-b-0" id="messages-main">
+		<!-- Search -->
+
+		<div class="ms-menu" data-ng-class="{ 'toggled': mactrl.lvMenuStat }">
+			<div class="lvh-search ng-scope sear">
+				<input type="text" placeholder="Search User..." ng-model="userName" class="lvhs-input"
+					   typeahead-wait-ms="10" typeahead="person.full_name as person.full_name for person in aUserName | filter:userName"
+					   ng-change="getUserByName(userName)" class="form-control"
+					   typeahead-on-select="onSelect($item, $model, $label)" >
+				<i class="lvh-search-close" ng-click="userName = ''; clearSearch()">×</i>
+			</div>
+			<div class="listview lv-user clk" style="overflow: auto;height:97%;">
+				<div class="lv-item media"  style="border-bottom:2px solid #4285f4" ng-repeat="u in aUser" ng-click="selectUser(u,$index)">
+					<div class="truck-desc">
+						<div class="row">
+							<div class="col-md-5 bold">
+								{{u.full_name | capitalize}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="pagi" ng-show="total_pages>1">
+					<pagination ng-change="pageChanged()"
+								total-items="totalItems"
+								items-per-page="items_per_page"
+								num-pages="numPages"
+								ng-model="currentPage"
+								max-size="maxSize"
+								class="pagination-sm smallPagi"
+								boundary-links="true"
+								previous-text="&lsaquo;"
+								next-text="&rsaquo;"
+								first-text="&laquo;"
+								last-text="&raquo;"></pagination>
+				</div>
+			</div>
+		</div>
+
+		<!-- Body  -->
+		<div class="ms-body" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lvh-label">
+                    <span style="margin-left: 1px;font-weight: bold;font-size: 20px;">{{((user_mode == 'Edit')||(user_mode=='View'))?oUser.full_name:"Register New User"}}
+						<span style="margin-left:10px;color:#B7B7B7">
+							({{user_mode}})
+						</span>
+                    </span>
+				</div>
+				<div class="col-md-1 pull-right">
+						<button class="btn-primary btn-xs"
+								uib-tooltip="Excel"
+								tooltip-placement="bottom"
+								ng-click="downloadReport();">
+							<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+						</button>
+				</div>
+				<div class="col-md-2 pull-right">
+					<div class="form-group m-b-0">
+						<div class="col-sm-12">
+							<div class="fg-line">
+								<div class="date-picker input-group dp-blue chosen-row-1"
+									 ng-class="{ 'is-opened': opened2 == true }">
+									<div ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="filterObj.end_date"
+											   ng-change="dateChange('endDate')"
+											   is-open="opened2"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="To"/>
+									</div>
+									<span class="input-group-btn">
+            		                			<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			    <div class="col-md-2 pull-right">
+				<div class="form-group m-b-0">
+					<div class="col-sm-12">
+						<div class="fg-line">
+							<div class="date-picker input-group dp-blue chosen-row-1"
+								 ng-class="{ 'is-opened': opened3 == true }">
+								<div ng-class="{ 'fg-toggled': opened3 == true }">
+									<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+										   type="text"
+										   class="form-control"
+										   datepicker-popup="{{DatePicker.formats[0]}}"
+										   show-weeks="false"
+										   ng-model="filterObj.start_date"
+										   ng-change="dateChange('startDate')"
+										   is-open="opened3"
+										   datepicker-options="DatePicker.dateSettings"
+										   close-text="Close"
+										   placeholder="From"/>
+								</div>
+								<span class="input-group-btn">
+                		                		<button type="button"
+														class="btn btn-default m-t-0 f12"
+														ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"><i
+														class="glyphicon glyphicon-calendar"></i></button>
+                		              	  </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+
+			<div ng-show="(aUser.length>0)" class="lv-body" style="margin-top: 13px;border-top: 1px solid #a9a8a8;">
+				<form name="registeredUserForm" class="tab-form-demo" novalidate>
+					<fieldset ng-disabled="false">
+						<ul class="lv-actions actions right" style="position: absolute; right: 22px; margin-top: 10px; margin-right: 0;">
+							<li class="btn-wave">
+								<button class="btn-primary btn-xs"
+										uib-tooltip="User Info"
+										ng-hide="!(user_mode=='View')"
+										tooltip-placement="bottom"
+										ng-click="viewUserInfo(selectedUser)">
+									<i class="zmdi zmdi-local-library zmdi-hc-fw"></i>
+								</button>
+							</li>
+							<li class="btn-wave">
+								<button class="btn-primary btn-xs"
+										uib-tooltip="Register User"
+										tooltip-placement="bottom"
+										ng-click="setMode('Add')">
+									<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+								</button>
+							</li>
+							<li class="btn-wave">
+								<button class="btn-primary btn-xs"
+										uib-tooltip="Download User"
+										tooltip-placement="bottom"
+										ng-click="downloadReport();">
+									<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+								</button>
+							</li>
+							<li class="btn-wave">
+								<button class="btn-primary btn-xs"
+										ng-hide="!(user_mode=='View')"
+										uib-tooltip="Edit User"
+										tooltip-placement="bottom"
+										ng-click="setMode('Edit')">
+									<i class="zmdi zmdi-edit"></i>
+								</button>
+							</li>
+							<li class="btn-wave"
+								ng-if="$aAccessControl.User.Delete">
+								<button class="btn-primary btn-xs"
+										ng-hide="!(user_mode=='View')"
+										uib-tooltip="Delete User"
+										tooltip-placement="bottom"
+										ng-click="deleteUser(oUser)">
+									<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+								</button>
+							</li>
+						</ul>
+						<div class="clearfix"></div>
+
+						<div class="wid100">
+							<uib-tabset active="activeForm" class="pull-left">
+								<uib-tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" ng-click="getAllTableCoumumnSetting(oUser._id,tab.title)" disable="tab.disabled">
+									<div ng-include="tab.content"></div>
+								</uib-tab>
+							</uib-tabset>
+							<section ng-show="((!(user_mode=='View')) && ((user_mode=='Add')?(!userIdExist && oUser.userId && oUser.full_name && oUser.password && oUser.oRoleData.name):oUser.full_name))" class="fixed-registered-vehicle-submit">
+								<div class="fixed-booking-submit-inner text-center">
+									<button type="submit" ng-click="submitUser()" class="btn btn-success fixed-registered-vehicle-btn-style">Submit
+									</button>
+								</div>
+							</section>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div ng-show="!(aUser.length>0)" class="lv-body" style="margin-top: 13px;border-top: 1px solid #a9a8a8;">
+				<form name="registeredUserForm" class="tab-form-demo" novalidate>
+					<fieldset ng-disabled="false">
+						<uib-tabset ng-show="!(user_mode == 'View')" active="activeForm" class="pull-left">
+							<uib-tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
+								<div ng-include="tab.content"></div>
+							</uib-tab>
+						</uib-tabset>
+						<ul class="lv-actions actions right" style="position: absolute; right: 22px; margin-top: 10px; margin-right: 0;">
+							<li class="btn-wave">
+								<button class="btn-primary btn-xs" uib-tooltip="Register User" tooltip-placement="bottom" ng-click="setMode('Add')">
+									<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+								</button>
+							</li>
+						</ul>
+						<section ng-show="(((user_mode=='Add')) && oUser.full_name && oUser.password && oUser.oRoleData.name)" class="fixed-registered-vehicle-submit">
+							<div class="fixed-booking-submit-inner text-center">
+								<button type="submit" ng-click="submitUser()" class="btn btn-success fixed-registered-vehicle-btn-style">Submit
+								</button>
+							</div>
+						</section>
+					</fieldset>
+				</form>
+				<span ng-show="(user_mode == 'View')">No Registered User Found!</span>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<style type="text/css">
+	form.tab-form-demo .tab-pane {
+		margin: 20px 20px;
+	}
+
+	.wid100>div {
+		width: 100%;
+	}
+
+
+
+	.nav-tabs>li.active {
+		background: #2196f5;
+	}
+
+	.nav-tabs>li.active>a {
+		color: #fff !important;
+	}
+
+	.nav-tabs>li.active>a,
+	.nav-tabs>li.active>a:hover,
+	.nav-tabs>li.active>a:focus {
+		border: 1px solid #2196f5;
+	}
+
+	.list_border_background {
+		border: 2px solid blue !important;
+		background: #47d6c9;
+	}
+</style>

@@ -1,0 +1,713 @@
+<!-- Controller: TripAdvanceUpsertController-->
+<!-- ControllerAs: upsertVm-->
+
+<div class="container m-b-10">
+	<div class="col-md-12 card m-b-0">
+		<div class="lvh-label">
+			<span class="c-black"><b>Trip No:</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					 {{upsertVm.oTrip.trip_no}}
+				</span>
+			</span>&nbsp;&nbsp;&nbsp;&nbsp;
+			<span class="c-black"><b>Gr No:</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					 {{upsertVm.oTrip.gr[0].grNumber}}
+				</span>
+			</span>&nbsp;&nbsp;
+			<span class="c-black"><b>Vehicle No:</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					 {{upsertVm.oTrip.vehicle.vehicle_reg_no}}
+				</span>
+			</span>&nbsp;&nbsp;
+			<span class="c-black"><b>Ownership:</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					{{upsertVm.oTrip.ownershipType || 'NA'}}
+				</span>
+			</span>&nbsp;&nbsp;
+			<span class="c-black"><b>Driver Name:</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					{{upsertVm.oTrip.driver.nameCode || upsertVm.oTrip.driver.name || upsertVm.oTrip.vehicle.driver.name || 'NA'}}
+				</span>
+			</span>&nbsp;&nbsp;
+			<span class="c-black"><b>Driver Number:</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+					 {{upsertVm.oTrip.driver.prim_contact_no || upsertVm.oTrip.vehicle.driver.prim_contact_no || 'NA'}}
+				</span>
+			</span>
+		</div>
+		<div class="pull-right m-t-5" ng-if="upsertVm.oTrip.vendor.account.name">
+			<button class="btn btn-primary waves-effect" uib-tooltip="Preview Vendor Documents"
+					tooltip-placement="bottom"
+					ng-click="previewDocs()"><i
+					class="zmdi zmdi-border-color glyphicon glyphicon-list-alt"></i><span></span></button>
+		</div>
+	</div>
+</div>
+
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card">
+		<!--Form starts here -->
+		<div class="card-body">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Trip DETAILS -->
+				<li class="list-group-item">
+					<div class="col-md-6">
+						<span class="booking_list_header">TRIP PLANNING</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+								<div class="col-md-6">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-5">Route </label>
+										<div class="col-sm-6">
+											{{upsertVm.oTrip.route_name || upsertVm.oTrip.rName || 'NA'}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-5">Route Km(Ext. Km): </label>
+										<div class="col-sm-6">
+											{{upsertVm.oTrip.totalKm}}{{upsertVm.oTrip.extraKm ? ' ('+ (upsertVm.oTrip.extraKm < 0 ? upsertVm.oTrip.extraKm : ('+'+upsertVm.oTrip.extraKm)) +')' : ''}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.vehicle.current_budget.mileage">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-5">Mileage/km: </label>
+										<div class="col-sm-6">
+											{{upsertVm.oTrip.vehicle.current_budget.mileage || 'NA'}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.vehicle.current_budget.rpk">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-5">Rate/km: </label>
+										<div class="col-sm-6">
+											{{upsertVm.oTrip.vehicle.current_budget.rpk || 'NA'}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.vehicle.current_budget.rpk">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-5">Net Budget: </label>
+										<div class="col-sm-6">
+											{{upsertVm.oTrip.netBudget|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.vehicle.current_budget.mileage">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-5">Diesel Budget(ltr): </label>
+										<div class="col-sm-6">
+											{{upsertVm.oTrip.dieselBudgetLtr|roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<span class="booking_list_header">Account Outstanding</span>
+						<div class="card-body">
+							<div class="row" style="margin:5px">
+
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.vendor.account">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-7">Vendor: <span
+												style="font-size: 11px; color: rgb(183, 183, 183);">({{upsertVm.oTrip.vendor.account.name || 'No A/c Found'}})</span></label>
+										<div class="col-sm-5">{{(upsertVm.oTrip.vendor.account.balance|roundOff) || 'No A/c Balance'}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.vehicle.account">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-7">Vehicle: <span
+												style="font-size: 11px; color: rgb(183, 183, 183);">({{upsertVm.oTrip.vehicle.account.name || 'No A/c Found'}})</span></label>
+										<div class="col-sm-5">{{(upsertVm.oTrip.vehicle.account.balance|roundOff) || 'No A/c Balance'}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-7">Diesel: </label>
+										<div class="col-sm-5">{{(upsertVm.oTrip.vehicle.dieselInVehicle|roundOff)}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.driver.happay">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-7">Happay: <span
+												style="font-size: 11px; color: rgb(183, 183, 183);">({{upsertVm.oTrip.driver.happay.name || 'No A/c Found'}})</span></label>
+										<div class="col-sm-5">{{(upsertVm.oTrip.driver.happay.balance|roundOff) || 'No A/c Balance'}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.vehicle.fasttag">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-7">Fasttag: <span
+												style="font-size: 11px; color: rgb(183, 183, 183);">({{upsertVm.oTrip.vehicle.fasttag.name || 'No A/c Found'}})</span></label>
+										<div class="col-sm-5">{{(upsertVm.oTrip.vehicle.fasttag.balance|roundOff) || 'No A/c Balance'}}
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6" ng-show="!!upsertVm.oTrip.driver.account">
+									<div class="col-md-12 form-group m-b-5">
+										<label class="col-sm-7">Driver Cash: <span
+												style="font-size: 11px; color: rgb(183, 183, 183);">({{upsertVm.oTrip.driver.account.accountId || 'No A/c Found'}})</span></label>
+										<div class="col-sm-5">{{upsertVm.oTrip.driver.account.balance.toFixed(0) || 'No A/c Balance'}}
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div style="clear:both;"></div>
+				</li>
+
+				 <!--******** vendor deal payment code********-->
+				 <li class="list-group-item" ng-if="upsertVm.oTrip.ownershipType == 'Market'">
+					 <span class="booking_list_header" ng-if="upsertVm.oTrip.vendorDeal">VENDOR DEAL</span>
+					 <button class="btn-primary btn-xs m-l-5"
+							 ng-if="$role['Trip Performance']['Vendor Deal']"
+							 ng-click="upsertVm.vendorDealPopUp()">
+						 Vendor Deal
+					 </button>&nbsp;
+					 <button class="btn-primary btn-xs m-l-5"
+							 ng-if="$role['Trip Performance']['Acknowledge'] && upsertVm.oTrip.vendorDeal && !upsertVm.oTrip.vendorDeal.acknowledge.status && upsertVm.oTrip.vendorDeal.total_expense && selectedClient === upsertVm.oTrip.vendor.clientId"
+							 ng-click="upsertVm.acknowledgeDeal()">
+						 Acknowledge Deal
+					 </button>
+					 <button class="btn-primary btn-xs m-l-5"
+							 ng-if="$role['Trip Performance']['Revert Ack'] && upsertVm.oTrip.vendorDeal && upsertVm.oTrip.vendorDeal.acknowledge.status && selectedClient === upsertVm.oTrip.vendor.clientId"
+							 ng-click="upsertVm.revertAck()">
+						 Revert Acknowledge
+					 </button>
+
+					<button ng-if != "$configs.vendorDeal.multiVendorDealSlip" class="btn-primary btn-xs m-l-5"
+							ng-click="$event.preventDefault();preview(upsertVm.oTrip.vendorDeal.loading_slip)"
+							ng-show="upsertVm.oTrip.vendorDeal.loading_slip">Preview Slip
+					</button>
+					 <button ng-if="$configs.vendorDeal.multiVendorDealSlip" class="btn-primary btn-xs m-l-5"
+							 ng-click="printPreview(upsertVm.oTrip)"
+							 ng-show="upsertVm.oTrip.vendorDeal.loading_slip">Preview Slip
+					 </button>
+					<div ng-hide="upsertVm.oTrip.vendorDeal.loading_slip">
+						<form role="form" name="myForm" autocomplete="off">
+							<button class="btn btn-sm btn-primary"
+									onclick="document.getElementById('loading_slip').click();">
+								Select File
+							</button>
+							<input ng-hide="true" id="loading_slip" type="file"
+								   accept="image/*,application/pdf"
+								   ngf-select ng-model="loading_slip" name="loading_slip"
+								   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+							<i ng-show="myForm.loading_slip.$error.maxSize">File too large
+								{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+							<img ng-show="myForm.loading_slip.$valid" ngf-src="loading_slip"
+								 ngf-resize="{width: 100, height: 100}">
+							<button ng-click="$event.preventdefault();upsertVm.uploadLoadingSlip(loading_slip)"
+									ng-show="(loading_slip && myForm.loading_slip.$valid)"
+									class="btn btn-primary waves-effect pointer">
+								<i class="glyphicon glyphicon-upload"></i>
+							</button>
+						</form>
+					</div>
+
+					<div class="card-body" style="margin-left: 21px; margin-top: 12px;" ng-if="upsertVm.oTrip.vendorDeal.lorryAc.name">
+						<div class="col-md-12 ng-scope">
+							<div class="col-md-4">
+								<label class="col-sm-4">Lorry Hire A/c:</label>
+								<div class="col-sm-8">{{upsertVm.oTrip.vendorDeal.lorryAc.name}}</div>
+							</div>
+						</div>
+					</div>
+
+					 <div class="card-body">
+						 <div ng-if="upsertVm.oTrip.vendorDeal" class="col-md-12" style="margin-top: 13px;margin-left: 12px;">
+							 <div class="col-md-12">
+								 <div class="detailList">
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendor.name">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-4">Vendor:</label>
+											 <div class="col-sm-8">{{upsertVm.oTrip.vendor.name}}</div>
+										 </div>
+									 </div>
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendor.pan_no">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-4">Pan_no:</label>
+											 <div class="col-sm-8">{{upsertVm.oTrip.vendor.pan_no}}</div>
+										 </div>
+									 </div>
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendor.ho_address">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-4">address:</label>
+											 <div class="col-sm-8">
+												 {{upsertVm.oTrip.vendor.ho_address.line1}}
+												 {{upsertVm.oTrip.vendor.ho_address.city}}
+												 {{upsertVm.oTrip.vendor.ho_address.state}}
+											 </div>
+										 </div>
+									 </div>
+								 </div>
+							 </div>
+
+
+							 <div class="col-md-12">
+								 <div class="detailList">
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendorDeal">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-4">Created By:</label>
+											 <div class="col-sm-8">{{upsertVm.oTrip.vendorDeal.created_by}}</div>
+										 </div>
+									 </div>
+
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendorDeal">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-4">Created At:</label>
+											 <div class="col-sm-8">{{upsertVm.oTrip.vendorDeal.createdAt | date:"dd-MM-yyyy"}}</div>
+										 </div>
+									 </div>
+
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendorDeal">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-4">Last Modified By:</label>
+											 <div class="col-sm-8">{{upsertVm.oTrip.vendorDeal.lastModifiedBy}}</div>
+										 </div>
+									 </div>
+
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendorDeal">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-4">Last Modified At:</label>
+											 <div class="col-sm-8">{{upsertVm.oTrip.vendorDeal.lastModifiedAt | date:"dd-MM-yyyy"}}</div>
+										 </div>
+									 </div>
+								 </div>
+							 </div>
+
+							 <div class="col-md-12">
+								 <div class="detailList">
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendorDeal.deal_at">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-4">Deal_at:</label>
+											 <div class="col-sm-8">{{upsertVm.oTrip.vendorDeal.deal_at | date:"dd-MM-yyyy"}}</div>
+										 </div>
+									 </div>
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendorDeal.payment_type">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-7">Payment Type:</label>
+											 <div class="col-sm-5"> {{upsertVm.oTrip.vendorDeal.payment_type |
+												 date:'dd-MM-yyyy'}}</div>
+										 </div>
+									 </div>
+									 <div class="col-md-4" ng-if="upsertVm.oTrip.vendorDeal.weight_type">
+										 <div class="col-md-12 form-group m-b-5">
+											 <label class="col-sm-7">Payment Basis:</label>
+											 <div class="col-sm-5"> {{upsertVm.oTrip.vendorDeal.weight_type |
+												 date:'dd-MM-yyyy'}}</div>
+										 </div>
+									 </div>
+									 <!--<ul>-->
+										 <!--<li ng-if="upsertVm.oTrip.vendor.name">-->
+											<!--<div class="col-md-4">Vendor</div>-->
+											<!--<div class="col-md-8">: {{upsertVm.oTrip.vendor.name}}</div>-->
+										<!--</li>-->
+										<!--<li ng-if="upsertVm.oTrip.vendor.prim_contact_no">-->
+											<!--<div class="col-md-5">Vendor Contact</div>-->
+											<!--<div class="col-md-6">: {{upsertVm.oTrip.vendor.prim_contact_no}}</div>-->
+										<!--</li>-->
+										<!--<li ng-if="upsertVm.oTrip.vendorDeal.payment_type">-->
+											<!--<div class="col-md-5">Payment Type</div>-->
+											<!--<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.payment_type |-->
+												<!--date:'dd-MM-yyyy'}}-->
+											<!--</div>-->
+										<!--</li>-->
+										<!--<li ng-if="upsertVm.oTrip.vendorDeal.weight_type">-->
+											<!--<div class="col-md-5">Payment Basis</div>-->
+											<!--<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.weight_type |-->
+												<!--date:'dd-MM-yyyy'}}-->
+											<!--</div>-->
+										<!--</li>-->
+
+									<!--</ul>-->
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<li>
+											<div class="col-md-5">Total</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.total_expense|roundOff}}
+											</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.munshiyana">
+											<div class="col-md-5">Munshiyana</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.munshiyana}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.totWithMunshiyana">
+											<div class="col-md-5">Tot.With Munshiyana</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.totWithMunshiyana}}</div>
+										</li>
+										<li>
+											<div class="col-md-5">Advance</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.advance}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal && upsertVm.oTrip.vendorDeal.advance_due_date">
+											<div class="col-md-5">Adv. Due Date</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.advance_due_date |
+												date:'dd-MM-yyyy'}}
+											</div>
+										</li>
+										<li>
+											<div class="col-md-5">TDS Amount</div>
+											<div class="col-md-6">: {{(upsertVm.tdsAmount = (upsertVm.oTrip.vendorDeal.tdsAmount || 0))|roundOff:0}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal && upsertVm.oTrip.vendorDeal.toPay">
+											<div class="col-md-5">ToPay/Balance</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.toPay}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal && upsertVm.oTrip.vendorDeal.topay_due_date">
+											<div class="col-md-5">ToPay Due Date</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.topay_due_date | date:'dd-MM-yyyy'}}</div>
+										</li>
+										<li>
+											<div class="col-md-5">Tot. Charges</div>
+											<div class="col-md-6">: {{(upsertVm.totalExtraCharges = (upsertVm.oTrip.vendorDeal.totalCharges) || 0) | roundOff:0}}</div>
+										</li>
+										<li>
+											<div class="col-md-5">TDS(Ext. Charges)</div>
+											<div class="col-md-6">: {{(upsertVm.extChargesTdsAmount = (upsertVm.oTrip.vendorDeal.charges|sumObjKey:'tdsAmount') || 0) | roundOff}}</div>
+										</li>
+										<li>
+											<div class="col-md-5">Tot. Deduction</div>
+											<div class="col-md-6">: {{(upsertVm.totalDeduction = (upsertVm.oTrip.vendorDeal.totalDeduction) || 0) | roundOff:0}}</div>
+										</li>
+										<li>
+											<div class="col-md-5">Total Payable</div>
+											<div class="col-md-6">:{{(upsertVm.totalPayable = (upsertVm.oTrip.vendorDeal.totWithMunshiyana + upsertVm.oTrip.vendorDeal.totalCharges - upsertVm.oTrip.vendorDeal.totalDeduction - (upsertVm.tdsAmount || 0) - (upsertVm.extChargesTdsAmount || 0) )) | roundOff}}</div>
+										</li>
+										<li>
+											<div class="col-md-5">Total TDS</div>
+											<div class="col-md-6">:{{(upsertVm.tdsAmount + upsertVm.extChargesTdsAmount) | roundOff}}</div>
+										</li>
+										<li>
+											<div class="col-md-5">Remaining Amount</div>
+											<div class="col-md-6">: {{(upsertVm.oTrip.vendorDeal.remainingAmount = upsertVm.remainingAmount = upsertVm.totalPayable - upsertVm.oTrip.tAdv)|roundOff}}</div>
+										</li>
+
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<li ng-hide="true">
+											<div class="col-md-5">Purchase Amt</div>
+											{{
+											upsertVm.paymentAmt = ((upsertVm.oTrip.vendorDeal.other_charges || 0) +
+											(upsertVm.oTrip.vendorDeal.detention_charge || 0) +
+											(upsertVm.oTrip.vendorDeal.oveloading_charge || 0) +
+											(upsertVm.oTrip.vendorDeal.loading_charges || 0) +
+											(upsertVm.oTrip.vendorDeal.unloading_charges || 0) +
+											(upsertVm.oTrip.vendorDeal.chalan_charges || 0) +
+											(upsertVm.oTrip.vendorDeal.total_expense || 0))
+											}}
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.detention_charge">
+											<div class="col-md-5">Detention Charges</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.detention_charge}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.oveloading_charge">
+											<div class="col-md-5">Overload Charges</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.oveloading_charge}}
+											</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.loading_charges">
+											<div class="col-md-5">Loading Charges</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.loading_charges}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.unloading_charges">
+											<div class="col-md-5">Unloading Charges</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.unloading_charges}}
+											</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.unloading_charges">
+											<div class="col-md-5">Unloading Charges</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.chalan_charges}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.other_charges">
+											<div class="col-md-5">Other Charges</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.other_charges}}</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<!--all deduction-->
+
+										<li ng-if="upsertVm.oTrip.vendorDeal.tds_deduction">
+											<div class="col-md-5">TDS Detention</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.tds_deduction}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.damage_deduction">
+											<div class="col-md-5">Damage Detention</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.damage_deduction}}</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.penalty_deduction">
+											<div class="col-md-5">Penalty Detention</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.penalty_deduction}}
+											</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.other_deduction">
+											<div class="col-md-5">Other Detention</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.other_deduction}}</div>
+										</li>
+										<li ng-hide="true">{{ upsertVm.total_deduction =
+											(upsertVm.oTrip.vendorDeal.tds_deduction || 0) +
+											(upsertVm.oTrip.vendorDeal.damage_deduction || 0) +
+											(upsertVm.oTrip.vendorDeal.penalty_deduction || 0) +
+											(upsertVm.oTrip.vendorDeal.other_deduction || 0) }}
+										</li>
+
+										<!--upsertVm.paymentAmt-->
+
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="detailList">
+									<ul>
+										<li ng-if="upsertVm.oTrip.vendorDeal.acknowledge.status">
+											<div class="col-md-5">Ack. By</div>
+											<div class="col-md-6">:
+												{{upsertVm.oTrip.vendorDeal.acknowledge.userName}}
+											</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.acknowledge.status">
+											<div class="col-md-5">Ack. Date</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.acknowledge.date |
+												date:'dd-MM-yyyy'}}
+											</div>
+										</li>
+										<li ng-if="upsertVm.oTrip.vendorDeal.loading_slip" style="color:#ff5e5e;">
+											<div class="col-md-5">Hire Slip</div>
+											<div class="col-md-6">: {{upsertVm.oTrip.vendorDeal.loading_slip}}</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div ng-show="upsertVm.oTrip.vendorData.banking_details.length>0" class="col-sm-6">
+									<table style="border: 1px solid #ddd;margin-left: 15px;"
+										   class="table table-bordered">
+										<thead>
+										<th>Bank A/C</th>
+										<th>IFSC</th>
+										<th>Declaration</th>
+										<th>Cancel Cheque</th>
+										</thead>
+										<tbody>
+										<tr ng-style="{ 'background-color': upsertVm.oTrip.vendorData.vendorDeal.bankingDetail.a_c == bank.a_c ? '#5ce260' : 'white' }"
+											ng-repeat="bank in upsertVm.oTrip.vendorData.banking_details">
+											<td>{{bank.a_c}}</td>
+											<td>{{bank.ifsc}}</td>
+											<td>{{bank.declaration}}</td>
+											<td>
+												<button title="Preview" class="btn btn-warning"
+														ng-click="$event.preventDefault();preview(bank.cancelled_cheque)"
+														ng-show="bank.cancelled_cheque">
+													<span class="glyphicon glyphicon-eye-open"
+														  aria-hidden="true"></span>
+												</button>
+											</td>
+										</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</li>
+
+				<li class="list-group-item">
+					<span class="booking_list_header">Payment: ({{upsertVm.oTrip.tAdv.toFixed(2) || '0'}})</span>
+					<button class="btn-primary btn-xs"  ng-if="$role['Trip Performance']['Trip Payment']"
+							ng-click="upsertVm.vendorPayment(upsertVm.oTrip)"
+							uib-tooltip="vendor payment"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+					</button>
+<!--					<button class="btn-danger btn-xs"-->
+<!--							ng-click="upsertVm.vendorPayment()"-->
+<!--							uib-tooltip="Delete payment"-->
+<!--							tooltip-placement="bottom">-->
+<!--						<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+<!--					</button>-->
+
+					<div class="pull-right text-right m-t-5" ng-if="upsertVm.oTrip.ownershipType != 'Market'">
+						<button class="btn-primary btn-xs"
+								ng-if="!upsertVm.oTrip.advSettled.isCompletelySettled && (upsertVm.oTrip.ownershipType === 'Market' ? selectedClient === upsertVm.oTrip.vendor.clientId : true)"
+								ng-click="upsertVm.advanceOper()"
+								uib-tooltip="Add Advance"
+								tooltip-placement="bottom">
+							<i class="zmdi zmdi-account-add zmdi-hc-fw"></i>
+						</button>
+						&nbsp;&nbsp;
+						<button class="btn-primary btn-xs"
+								ng-if="!upsertVm.oTrip.advSettled.isCompletelySettled && (upsertVm.oTrip.ownershipType === 'Market' ? selectedClient === upsertVm.oTrip.vendor.clientId : true)"
+								ng-click="upsertVm.advanceOper('edit')"
+								uib-tooltip="Edit Advance"
+								tooltip-placement="bottom">
+							<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+						</button>
+						&nbsp;&nbsp;
+						<button class="btn-danger btn-xs"
+								ng-if="!upsertVm.oTrip.advSettled.isCompletelySettled && (upsertVm.oTrip.ownershipType === 'Market' ? selectedClient === upsertVm.oTrip.vendor.clientId : true)"
+								ng-click="upsertVm.advanceOper('delete')"
+								uib-tooltip="Delete Advance"
+								tooltip-placement="bottom">
+							<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+						</button>
+						&nbsp;&nbsp;
+					</div>
+
+					<!--<button class="btn-primary btn-xs pull-right"-->
+							<!--ng-click="upsertVm.editAdvance()"-->
+							<!--uib-tooltip="Edit Advance"-->
+							<!--tooltip-placement="bottom">-->
+						<!--<i class="zmdi zmdi-edit zmdi-hc-fw"></i>-->
+					<!--</button>&nbsp;&nbsp;-->
+					<!--<button class="btn-danger btn-xs pull-right"-->
+							<!--ng-click="upsertVm.deleteAdvance()"-->
+							<!--uib-tooltip="Delete Advance"-->
+							<!--tooltip-placement="bottom">-->
+						<!--<i class="zmdi zmdi-delete zmdi-hc-fw"></i>-->
+					<!--</button>&nbsp;&nbsp;-->
+					<div class="card-body">
+						<div class="row">
+							<div class="table-responsive" style="margin:15px">
+								<table class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th>Type</th>
+										<th>Person</th>
+										<th>Amount</th>
+										<th>Ref No</th>
+										<th>Date</th>
+										<th>Vendor Name</th>
+										<th>Payment Mode</th>
+										<th>Station</th>
+										<th>Liter</th>
+										<th>Rate</th>
+										<th>created at</th>
+										<th>Entry By</th>
+										<th>Remark</th>
+									</tr>
+									</thead>
+									<tbody ng-repeat="expense in upsertVm.oTrip.advanceBudget"
+										   class="pointer"
+										   ng-class="{grn: upsertVm.selectedAdvance._id === expense._id}"
+										   ng-click="upsertVm.selectedAdvance = expense">
+									<tr>
+										<td>{{expense.advanceType}}</td>
+										<td>{{expense.person}}</td>
+										<td>{{expense.amount.toFixed(2)}}</td>
+										<td>{{expense.reference_no}}</td>
+										<td>{{expense.date | date:'dd-MM-yyyy'}}</td>
+										<td>{{expense.dieseInfo.vendor.name}}</td>
+										<td>{{expense.vendorPayment.paymentMode}}</td>
+										<!-- mpcVm.paymentMode -->
+										<td>{{expense.dieseInfo.station.address}}</td>
+										<td>{{expense.dieseInfo.litre}}</td>
+										<td>{{expense.dieseInfo.rate}}</td>
+										<td>{{(expense.created_at||expense.uploaded_at) | date:'dd-MM-yyyy'}}</td>
+										<td>{{expense.created_by.full_name}}</td>
+										<td>{{expense.remark}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+<style type="text/css">
+	.fg-float .fg-label {
+		top: 0px;
+	}
+
+	.detailList ul li {
+		width: 22%;
+	}
+
+	.tbl-sm thead tr th {
+		padding: 2px !important;
+		font-size: 10px;
+		color: #fff;
+		background: #2196f3;
+	}
+
+	.tbl-sm tbody tr td {
+		padding: 0 !important;
+		font-size: 9px;
+	}
+
+	.tbl-sm tbody tr td button {
+		font-size: 7px;
+		padding: 4px;
+	}
+
+	label {
+		font-weight: bold;
+		margin-top: 5px;
+	}
+
+	.col-md-12.form-group {
+		margin-bottom: 10px;
+	}
+
+	form.tab-form-demo .tab-pane {
+		margin: 20px 20px;
+	}
+
+	.nav-tabs > li.active {
+		background: #2196f5;
+	}
+
+	.nav-tabs > li.active > a {
+		color: #fff !important;
+	}
+
+	.nav-tabs > li.active > a,
+	.nav-tabs > li.active > a:hover,
+	.nav-tabs > li.active > a:focus {
+		border: 1px solid #2196f5;
+	}
+
+	.list_border_background {
+		border: 2px solid blue !important;
+		background: #47d6c9;
+	}
+
+	.deduction {
+		background-color: lightcoral;
+	}
+
+	ul li .col-md-5 {
+		font-weight: bold;
+	}
+</style>

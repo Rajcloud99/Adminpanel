@@ -1,0 +1,378 @@
+<form name="accountMaster" ng-submit="submit(accountMaster)" autocomplete="off" novalidate>
+
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Account Master</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+							({{operationType}})
+						</span>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Account DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">BASIC ACCOUNT DETAILS</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-4" ng-if="isGroupAllowed">
+								<div class="form-group">
+									<div class="col-xs-6"><label>Is Group :</label></div>
+									<div class="col-xs-6">
+										<label class="checkbox checkbox-inline m-r-20">
+											<input type="checkbox"
+												   ng-model="oAccountMaster.isGroup">
+											<i class="input-helper"></i>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<div class="col-xs-6"><label>Bill A/c:</label></div>
+									<div class="col-xs-6">
+										<label class="checkbox checkbox-inline m-r-20">
+											<input type="checkbox"
+												   ng-model="oAccountMaster.billAc"
+												   ng-change="">
+											<i class="input-helper"></i>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<div class="col-xs-6"><label>TDS Apply:</label></div>
+									<div class="col-xs-6">
+										<label class="checkbox checkbox-inline m-r-20">
+											<input type="checkbox"
+												   ng-model="oAccountMaster.tdsApply"
+												   ng-change="">
+											<i class="input-helper"></i>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="m-t-10" style="clear:both;"></div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Account Name:  <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" autocomplete="off"
+												   placeholder="Enter Account Name"
+												   ng-model="oAccountMaster.name"
+												   ng-change="oAccountMaster.ledger_name = oAccountMaster.name"
+												   ng-readonly="operationType === 'Edit'"
+												   name="Account Name"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="accountMaster['Account Name'].$error.required
+																			&& (accountMaster['Account Name'].$touched
+																			|| accountMaster.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Ledger Name:  </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" autocomplete="off"
+												   ng-readonly="isReadOnly"
+												   placeholder="Enter Ledger Name"
+												   ng-model="oAccountMaster.ledger_name"
+												   name="Ledger Name"
+												   class="form-control"
+												   >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Branch Name: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="lvh-search ng-scope sear chosen-row-2">
+											<input autocomplete="off"
+													type="text"
+												    ng-readonly="isReadOnly"
+													class="form-control lvhs-input"
+													placeholder="Branch Name..."
+													ng-model="oAccountMaster.branch"
+													typeahead-wait-ms="10"
+													name="Branch Name"
+													typeahead="item as item.name for item in getBranch($viewValue) | limitTo:6"
+											>
+											<i ng-if="!isReadOnly" class="lvh-search-close" ng-click="oAccountMaster.branch=null;">×</i>
+											<span class="error" ng-if="accountMaster['Branch Name'].$error.required
+																			&& (accountMaster['Branch Name'].$touched
+																			|| accountMaster.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Ledger Group:<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+								<div class="lvh-search ng-scope sear chosen-row-2">
+									<input
+											type="text"
+											class="form-control lvhs-input"
+											placeholder="Ledger Group..."
+											ng-model="oAccountMaster.type"
+											typeahead-wait-ms="10"
+											typeahead="item as item.name for item in accountmaster($viewValue) | limitTo:6"
+											name="Group"
+											ng-readonly="isReadOnly"
+											required>
+									<i ng-if="!isReadOnly"  class="lvh-search-close" ng-click="oAccountMaster.type=null;">×</i>
+								</div>
+								<span class="error" ng-if="accountMaster['Group'].$error.required
+																			&& (accountMaster['Group'].$touched
+																			|| accountMaster.$submitted)">
+														This Field is Mandatory</span>
+							</div>
+								</div>
+							</div>
+							<!--<div class="m-t-10" style="clear:both;"></div>-->
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Type: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select chosen
+													multiple
+													class="form-control"
+													placeholder="Select Group"
+													ng-options="item as item for item in $constants.aAccountGroup"
+													ng-model="oAccountMaster.group"
+													name="Type"
+													ng-readonly="isReadOnly"
+													required>
+												<option value="" disabled>
+													Select Type
+												</option>
+											</select>
+										</div>
+										<span class="error" ng-if="accountMaster['Type'].$error.required
+																			&& (accountMaster['Type'].$touched
+																			|| accountMaster.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-if="oAccountMaster.tdsApply">
+								<div class="form-group">
+									<div class="col-xs-4"><label>TDS Category :</label></div>
+									<div class="col-xs-6">
+										<div class="select">
+											<select
+												class="form-control"
+												ng-options="item as item for item in $constants.tdsCategory"
+												ng-model="oAccountMaster.tdsCategory">
+												<option value="" selected disabled>Select TDS Category</option>d
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-md-4" ng-if="oAccountMaster.tdsApply">
+								<div class="form-group">
+									<div class="col-xs-4"><label>TDS Sources :</label></div>
+									<div class="col-xs-6">
+										<div class="select">
+											<select
+												class="form-control"
+												ng-model="oAccountMaster.tdsSources"
+												ng-options="item.source as (item.source + '('+(item.section)+')') for item in $constants.tdsSources"
+												ng-change="onSourcesSelect(oAccountMaster.tdsSources)"
+												>
+												<option value="" selected disabled>Select TDS Sources</option>d
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4" ng-if="oAccountMaster.tdsApply">
+								<div class="form-group">
+									<div class="col-xs-4"><label>TDS Section :</label></div>
+									<div class="col-xs-6">
+										{{oAccountMaster.tdsSection}}
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-if="oAccountMaster.tdsApply">
+								<div class="form-group">
+									<div class="col-xs-4"><label>PAN:</label></div>
+									<div class="col-xs-6">
+										<div class="fg-line">
+											<input type="text" class="form-control input-sm"
+												   ng-pattern="/^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$/"
+												   placeholder="PAN" name="pan_no"
+												   ng-model="oAccountMaster.pan_no">
+											<span style="color:red" ng-show="accountMaster.pan_no.$dirty && accountMaster.pan_no.$invalid">PAN no is incorrect.</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-if="oAccountMaster.tdsApply">
+								<div class="form-group">
+									<div class="col-xs-4"><label>Exempted Slab Rate :</label></div>
+									<div class="col-xs-6">
+										<div class="fg-line">
+											<input type="number"
+												   placeholder="Exempted Slab Rate"
+												   step="0.0001"
+												   min="0"
+												   ng-model="oAccountMaster.exeRate"
+												   ng-model-options="{ updateOn: 'blur' }"
+												   ng-change="validateRate(oAccountMaster.exeRate)"
+												   name="Exempted Slab Rate"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-if="oAccountMaster.tdsApply">
+								<div class="col-xs-4"><label>Exempted Valid From :</label></div>
+								<div class="col-xs-6">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   max-date="DatePicker.newDate"
+											   ng-model="oAccountMaster.exeFrom"
+											   ng-change="upDateToDate(oAccountMaster.exeFrom)"
+											   is-open="opened1"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Exempted Valid From"
+											   name="Exempted Valid From"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="DatePicker.openDatePicker(this, $event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+								</div>
+							</div>
+							</div>
+
+							<div class="col-md-4" ng-if="oAccountMaster.tdsApply">
+								<div class="form-group">
+									<div class="col-xs-4"><label>Exempted Valid To :</label></div>
+									<div class="col-xs-6">
+										<div class="fg-line">
+											{{oAccountMaster.exeTo  | date: "dd-MM-yyyy"}}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4" ng-if="$configs.account.address">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Address: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text"
+												   placeholder="Enter Address"
+												   ng-model="oAccountMaster.address"
+												   name="Address"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!--<div class="col-md-4" ng-if="operationType=='Add'">-->
+<!--							<div  ng-hide="operationType == 'Edit'" class="col-md-4">-->
+<!--								<div class="form-group m-b-0">-->
+<!--									<label class="col-sm-4 control-label">Opening Balance:</label>-->
+<!--									<div class="col-sm-6">-->
+<!--										<div class="fg-line">-->
+<!--											<input type="number"-->
+<!--												   ng-hide="operationType == 'Edit'"-->
+<!--												   placeholder="Enter opening Balance"-->
+<!--												   ng-model="oAccountMaster.opening_balance"-->
+<!--												   name="Opening Balance"-->
+<!--												   ng-readonly="isReadOnly"-->
+<!--												   class="form-control">-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+						</div>
+
+						<div class="row" ng-if="oAccountMaster.tdsApply">
+							<table class="table table-bordered vehicleAllot">
+								<thead>
+								<tr>
+									<th>#</th>
+									<th>Individual Pan Rate</th>
+									<th>Individual WithOut Pan Rate</th>
+									<th>Non - Individual Pan Rate</th>
+									<th>Non - Individual WithOut Pan Rate</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr ng-repeat="(key,value) in prepareTdsTable">
+									<td>{{$index+1}}</td>
+									<td>{{value.ipRate}}</td>
+									<td>{{value.iwpRate}}</td>
+									<td>{{value.nipRate}}</td>
+									<td>{{value.niwpRate}}</td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary" ng-disabled="isDisabled">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="closeModal()">Close</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container{
+		width: 98% !important;
+	}
+
+	.modal-dialog{
+		width: 90%;
+	}
+
+</style>

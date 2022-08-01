@@ -1,0 +1,234 @@
+<form name="backdateEntryforDriver" class="form-horizontal" novalidate>
+
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-title">BackDate Entry for Driver 
+		</h4>
+		<button type="button" ng-click="vm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<div class="clearfix"></div>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vehicle No.<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="text"
+													class="form-control lvhs-input"
+													placeholder="Vehicle No."
+													ng-model="vm.objbackdateDriver.vehicle"
+													typeahead-wait-ms="10"
+													typeahead="item as item.vehicle_reg_no for item in vm.getVehicle(vm.objbackdateDriver.vehicle) | limitTo:6"
+													>
+											<i class="lvh-search-close"
+											   ng-click="vm.objbackdateDriver.vehicle.vehicle_reg_no=null;
+											   vm.aVehicle=null;vm.objbackdateDriver.vehicle=null;">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Driver Name :<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="text"
+													class="form-control lvhs-input"
+													placeholder="Driver Name"
+													ng-model="vm.objbackdateDriver.driver"
+													typeahead-wait-ms="10"
+													typeahead="item as (item.nameCode || item.name) for item in vm.getDriver(vm.objbackdateDriver.driver) | limitTo:6"
+											>
+											<i class="lvh-search-close"
+											   ng-click="vm.objbackdateDriver.driver.name=null;
+											   vm.aDriver=null;vm.objbackdateDriver.driver=null;">×</i>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="m-t-10" style="clear:both;"></div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-10">
+								<div class="form-group m-b-0">
+								<label  class="col-sm-3 control-label">Association(date-time)<span class="req_r">*</span></label>
+								<div class="col-sm-3" style="padding-left: 15px;padding-right: 15px;">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text" class="form-control"
+												   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="vm.objbackdateDriver.ass_date"
+												   max-date="vm.DatePicker.newDate"
+												   is-open="opened1"
+												   datepicker-options="vm.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="date"
+												  
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+											<button 
+													type="button" class="btn btn-default m-t-0 f12"
+													ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+													class="glyphicon glyphicon-calendar"></i></button>
+										  </span>
+									</div>
+								</div>
+									<div>
+									<label class="col-sm-1 control-label" >HH</label>
+									<div class="col-sm-2">
+										<div class="select">
+											<select ng-model="vm.hourSel1" ng-options="sAlert as sAlert for sAlert in vm.aHours" class="form-control" ng-change="changeTime1(vm.hourSel1)" ng-init="vm.hourSel1 = vm.aHours[0]" >
+											</select>
+										</div>
+									</div>
+									<label class="col-sm-1 control-label" >MM</label>
+									<div class="col-sm-2">
+										<div class="select">
+											<select ng-model="vm.minuteSel1" ng-options="sAlert as sAlert for sAlert in vm.aMinutes" class="form-control"  ng-change="changeTime2(vm.minuteSel1)" ng-init="vm.minuteSel1 = vm.aMinutes[0]" >
+											</select>
+										</div>
+									</div>
+									</div>
+							</div>
+							</div>
+
+							<div class="col-md-10">
+								<div class="form-group m-b-0">
+								<label  class="col-sm-3 control-label">Disassociation (date-time)<span class="req_r">*</span></label>
+								<div class="col-sm-3" style="padding-left: 15px;padding-right: 15px;">
+									<div class="date-picker input-group dp-blue"
+										 ng-class="{ 'is-opened': opened2 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+											<input ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"
+												   type="text" class="form-control"
+												   datepicker-popup="{{vm.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="vm.objbackdateDriver.disass_date"
+												   is-open="opened2"
+												   datepicker-options="vm.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="date"
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+											<button type="button"
+													class="btn btn-default m-t-0 f12"
+													ng-click="vm.DatePicker.openDatePicker(this, $event, 'opened2')"><i
+													class="glyphicon glyphicon-calendar"></i></button>
+										  </span>
+									</div>
+								</div>
+									<label class="col-sm-1 control-label" >HH</label>
+										<div class="col-sm-2">
+											<div class="select">
+												<select ng-model="vm.hourSel11" ng-options="sAlert as sAlert for sAlert in vm.aHours" class="form-control" ng-change="changeTime1(hourSel11)" ng-init="vm.hourSel11 = vm.aHours[0]" >
+												</select>
+											</div>
+										</div>
+										<label class="col-sm-1 control-label" >MM</label>
+										<div class="col-sm-2">
+											<div class="select">
+												<select ng-model="vm.minuteSel11" ng-options="sAlert as sAlert for sAlert in vm.aMinutes" class="form-control"  ng-change="changeTime2(minuteSel11)" ng-init="vm.minuteSel11 = vm.aHours[0]">
+												</select>
+											</div>
+										</div>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vehicle Odometer (Association)</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input style="height:30px" type="number"
+												   ng-model="vm.objbackdateDriver.ass_veh_odo"
+                                                   placeholder="association Odometer"
+												   class="form-control input-sm"
+												 >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Remark (Association)</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" style="height:30px"
+												   ng-model="vm.objbackdateDriver.ass_remark"
+												   class="form-control input-sm"
+                                                   placeholder="Association Remark"
+												   >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Vehicle Odometer (Dis-association)</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input style="height:30px" type="number"
+												   ng-model="vm.objbackdateDriver.disass_veh_odo"
+                                                   placeholder="Dis-association Odometer"
+												   class="form-control input-sm">
+                                                   
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6" >
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Remark (Dis-association)</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" style="height:30px"
+												   ng-model="vm.objbackdateDriver.disass_remark"
+                                                   placeholder="Dis-association Remark"
+												   class="form-control input-sm">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-default" type="button"
+				ng-click="vm.closeModal()">Cancel
+		</button>
+		<button
+				class="btn btn-primary"
+				style="width: 60px"
+				type="button"
+				ng-click="vm.save(backdateEntryforDriver)"
+
+		>
+			Save
+		</button>
+	</div>
+</form>
+
+<style type="text/css">
+	.modal-dialog {
+		width: 60%;
+	}
+
+</style>

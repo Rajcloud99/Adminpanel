@@ -1,0 +1,79 @@
+<!-- ControllerAs: settleAdvPopupVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="settleAdvPopupVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Advances</b></span>
+	</h4>
+</div>
+
+<div class="modal-body">
+	<div class="justify col-md-12">
+		<ul class="list-group list-group-flush">
+			<!--Table DETAILS-->
+			<li class="list-group-item">
+				<span class="booking_list_header">Advances</span>
+				<div class="pull-right"
+					 ng-if="$role['Trip Settlement']['Move To Suspense']">
+					<button class="btn-danger btn-xs"
+							ng-click="settleAdvPopupVm.moveToSuspense()"
+							uib-tooltip="Move To Suspense"
+							tooltip-placement="bottom">
+						<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+					</button>&nbsp;&nbsp;
+				</div>
+
+				<div class="card-body">
+					<div class="row" style="margin:5px">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								<div ja-table
+									 table-body="settleAdvPopupVm.aAdvances"
+									 table-head="settleAdvPopupVm.tableHead"
+									 table-height='500px'
+									 table-column-setting="settleAdvPopupVm.columnSetting"
+									 table-selectable="$role['Trip Settlement']['Move To Suspense'] ? 'multiple' : 'index'"
+									 table-selectable-model="settleAdvPopupVm.oSelectedAdv"
+									 table-coloured-row="settleAdvPopupVm.coloredRow"
+									 table-api="settleAdvPopupVm.tableApi"
+								></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-primary"
+			ng-if="false"
+			ng-click="settleAdvPopupVm.editAndSettle()">Edit & Settle
+	</button>
+	<button class="btn btn-primary"
+			ng-if="false"
+			ng-click="settleAdvPopupVm.settleAll()">Settle
+	</button>
+	<button class="btn btn-warning"
+			ng-click="settleAdvPopupVm.closeModal()">Close
+	</button>
+</div>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

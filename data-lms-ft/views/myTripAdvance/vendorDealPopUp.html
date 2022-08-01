@@ -1,0 +1,1301 @@
+<!-- Controller: vendorDealPopUpController -->
+<!-- ControllerAs: ackDealVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="ackDealVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>Acknowledge Deal {{(ackDealVm.clientName = ($user.client_allowed|filter:{'clientId': ackDealVm.aTripData.vendor.clientId})[0].name) ? '('+ackDealVm.clientName+')' : ''}}</b>
+			<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+
+			</span>
+		</span>
+	</h4>
+</div>
+
+
+<form name="ackDealForm" ng-submit="ackDealVm.submit(ackDealForm)" novalidate autocomplete="off">
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- Basic DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">TRIP DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="form-group col-md-3">
+								<label class="col-sm-4 control-label">Pan Number: </label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Pan Number"
+												ng-model="ackDealVm.panNumber"
+												typeahead-wait-ms="10"
+												typeahead="item.pan_no as (item.name + ' ' + '('+item.pan_no+')') for item in ackDealVm.getVendorName(false, {'pan_no': ackDealVm.panNumber}) | limitTo:6"
+												typeahead-on-select="ackDealVm.onVendorSelect($item, $model, $label)"
+												ng-readonly="ackDealVm.isAcknowledge">
+										<i class="lvh-search-close" ng-if="!ackDealVm.isAcknowledge"
+										   ng-click="ackDealVm.panNumber=null;">×</i>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-md-3">
+								<label class="col-sm-4 control-label">Vendor: <span class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   placeholder="Vendor Search..."
+											   ng-init="ackDealVm.aTripData._vendor_= ackDealVm.aTripData.vendor || ackDealVm.aTripData.vendor_id"
+											   ng-model="ackDealVm.aTripData._vendor_"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in ackDealVm.getVendorName($viewValue) | limitTo:6"
+											   typeahead-on-select="ackDealVm.onVendorSelect($item, $model, $label)"
+											   class="form-control"
+											   ng-readonly="ackDealVm.isAcknowledge"
+											   required
+										>
+										<i class="lvh-search-close" ng-if="!ackDealVm.isAcknowledge"
+										   ng-click="ackDealVm.aTripData._vendor_=undefined;
+										ackDealVm.aTripData.vendorDeal.lorryAc=undefined;
+										ackDealVm.aTripData.vendor=undefined;">×</i>
+									</div>
+									<span class="error"
+										  ng-if="ackDealVm.vendorDealPayment.accountCr == 'vendor' && !ackDealVm.isAcknowledge && !ackDealVm.aTripData.vendorDeal.lorryAc">
+										Acount not linked.
+									</span>
+								</div>
+							</div>
+
+							<div class="form-group col-md-3">
+								<label class="col-sm-4 control-label">Branch: <span class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear">
+										<input type="text"
+											   placeholder="Branch Search..."
+											   ng-model="ackDealVm.aTripData.branch"
+											   class="lvhs-input"
+											   typeahead-wait-ms="10"
+											   typeahead="item as item.name for item in ackDealVm.getBranch($viewValue) | limitTo:6"
+											   typeahead-on-select="ackDealVm.onBranchSelect($item, $model, $label)"
+											   class="form-control"
+											   ng-readonly="ackDealVm.isAcknowledge"
+											   required>
+										<i class="lvh-search-close" ng-if="!ackDealVm.isAcknowledge"
+										   ng-click="ackDealVm.aTripData.branch=undefined;">×</i>
+										<span class="error"
+											  ng-if="('isEmptyObject'|otherUtilsFilt:ackDealVm.aTripData.branch)">
+											This Field is Mandatory
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+								<label class="col-sm-6 control-label">Deal Date: <span
+										class="req_r">*</span></label></label>
+<!--								<div class="date-picker input-group dp-blue" ng-if="!ackDealVm.isAcknowledge"-->
+<!--									 ng-class="{ 'is-opened': opened2 == true }"-->
+<!--									 style=" ">-->
+<!--									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">-->
+<!--										<input ng-click="ackDealVm.DatePicker.openDatePicker(this, $event, 'opened2')"-->
+<!--											   type="text"-->
+<!--											   class="form-control"-->
+<!--											   uib-datepicker-popup="{{ackDealVm.DatePicker.formats[0]}}"-->
+<!--											   show-weeks="false"-->
+<!--											   ng-model="ackDealVm.aTripData.vendorDeal.deal_at"-->
+<!--											   ng-change="ackDealVm.aTripData.vendorDeal.loading_slip = undefined; ackDealVm.getTDSRate();"-->
+<!--											   is-open="opened2"-->
+<!--											   datepicker-options="ackDealVm.DatePicker.dateSettings"-->
+<!--											   close-text="Close"-->
+<!--											   placeholder="Deal Date"-->
+<!--											   name="Deal Date"-->
+<!--											   required-->
+<!--											   style="padding: 0px 4px;height: 34px;"/>-->
+<!--									</div>-->
+<!--									<span class="input-group-btn">-->
+<!--										<button type="button"-->
+<!--												class="btn btn-default m-t-0 f12"-->
+<!--												ng-click="ackDealVm.DatePicker.openDatePicker(this, $event, 'opened2')">-->
+<!--											<i class="glyphicon glyphicon-calendar"></i></button>-->
+<!--									</span>-->
+<!--								</div>-->
+								<div class="col-sm-6" ng-if="!ackDealVm.isAcknowledge">
+									<input
+											fill-date
+											type="text"
+											class="form-control"
+											placeholder="Deal Date"
+											ng-model="ackDealVm.aTripData.vendorDeal.deal_at"
+											ng-blur="ackDealVm.aTripData.vendorDeal.loading_slip = undefined;ackDealVm.getTDSRate()"
+									>
+								</div>
+								<div ng-if="ackDealVm.isAcknowledge">
+									{{ackDealVm.aTripData.vendorDeal.deal_at |date:"dd-MM-yyyy"}}
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">Hire Slip<span
+											class="req_r">*</span></label></label>
+									<div class="col-sm-8">
+										<div class="lvh-search ng-scope sear" style="z-index: 1">
+											<input type="text"
+												   placeholder="Hire Slip No Search..."
+												   ng-model="ackDealVm.aTripData.vendorDeal.loading_slip"
+												   class="lvhs-input"
+												   typeahead-wait-ms="10"
+												   typeahead="item.bookNo as item.bookNo for item in ackDealVm.getBillBookNo($viewValue)|limitTo:10"
+												   class="form-control"
+												   required
+												   typeahead-on-select="ackDealVm.hireSlipOnSelect($item, $model, $label)"
+												   ng-readonly="ackDealVm.isAcknowledge">
+											<i class="lvh-search-close" ng-if="!ackDealVm.isAcknowledge"
+											   ng-click="ackDealVm.aTripData.vendorDeal.loading_slip='';">×</i>
+											<i class="lvh-search-close zmdi zmdi-plus-circle zmdi-hc-fw"
+											   ng-if="!(grUVm.readonly || grUVm.selectedGr.invToBill) && $role['GR']['Centralize Book']"
+											   style="right: -20px; background: #3096f3;"
+											   uib-tooltip="Centrailized"
+											   ng-click="ackDealVm.getBillBookNo('centrailized')"></i>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group col-md-3">
+								<label class="col-sm-4 control-label">Broker: <span class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="broker"
+												ng-model="ackDealVm.aTripData.vendorDeal.broker"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in ackDealVm.getVendorName($viewValue) | limitTo:6"
+												ng-readonly="ackDealVm.aTripData.vendorDeal.broker && ackDealVm.isAcknowledge"
+												required>
+										<i class="lvh-search-close"
+										   ng-hide="ackDealVm.aTripData.vendorDeal.broker && ackDealVm.isAcknowledge"
+										   ng-click="ackDealVm.aTripData.vendorDeal.broker=null;">×</i>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group col-md-3"
+								 ng-show="ackDealVm.vendorDealPayment.accountCr=='lorrihire'">
+								<label class="col-sm-4 control-label">Lorry Hire A/c: <span
+										class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Lorry Hire"
+												ng-model="ackDealVm.aTripData.vendorDeal.lorryAc"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in ackDealVm.getAc($viewValue,'Lorry Hire') | limitTo:20"
+												required
+												ng-readonly="ackDealVm.isAcknowledge">
+										<i class="lvh-search-close" ng-if="!ackDealVm.isAcknowledge"
+										   ng-click="ackDealVm.aTripData.vendorDeal.lorryAc=null;">×</i>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3" ng-hide="true">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Trip Manager</label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select chosen class="form-control"
+													ng-model="ackDealVm.aTripData.oTripManager"
+													ng-options="m as m.full_name for m in ackDealVm.aUsers"
+													style="background-color: white;">
+												<option value="" selected>Select</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3" ng-hide="true">
+								<label class="col-sm-6 control-label">Allocation Date</label>
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="ackDealVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{ackDealVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="ackDealVm.aTripData.allocation_date"
+											   is-open="opened1"
+											   datepicker-options="ackDealVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Allocation Date"
+											   name="Allocation To"
+											   required
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button"
+												class="btn btn-default m-t-0 f12"
+												ng-click="ackDealVm.DatePicker.openDatePicker(this, $event, 'opened1')">
+											<i class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Remark</label>
+									<div class="col-sm-6">
+										<input type="text"
+											   class="form-control"
+											   ng-model="ackDealVm.aTripData.vendorDeal.remark"
+											   ng-readonly="ackDealVm.isAcknowledge">
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-3" ng-show="ackDealVm.aTripData.ownershipType == 'Market'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5">Segment: </label>
+									<div class="col-sm-6" ng-if="!ackDealVm.isAcknowledge">
+										<div class="fg-line">
+											<select chosen
+													class="form-control"
+													ng-model="ackDealVm.aTripData.segment_type"
+													ng-options="item as item for item in ($configs.master.aSegmentType || $constants.aSegmentType)"
+													name="Segment">
+												<option value="" disabled>Select Segment</option>
+											</select>
+										</div>
+									</div>
+
+									<div class="col-sm-6" ng-if="ackDealVm.isAcknowledge">
+										{{ackDealVm.aTripData.segment_type}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!--VENDOEDEAL DETAILS-->
+				<li class="list-group-item">
+					<span class="booking_list_header">PAYMENT DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Payment Type: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!ackDealVm.isAcknowledge">
+										<div class="select chosen-row-2">
+											<select class="form-control"
+													ng-model="ackDealVm.aTripData.vendorDeal.payment_type"
+													ng-options="item as item for item in $constants.paymentType"
+													ng-change="ackDealVm.changePayType(ackDealVm.aTripData.vendorDeal.payment_type);ackDealVm.resetAll()"
+													required>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-if="ackDealVm.isAcknowledge">
+										{{ackDealVm.aTripData.vendorDeal.payment_type}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Payment Basis: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!ackDealVm.isAcknowledge">
+										<div class="select">
+											<select class="form-control"
+													ng-options="item as item for item in ackDealVm.aWeightTypes"
+													ng-model="ackDealVm.aTripData.vendorDeal.weight_type"
+													name="Weight Type"
+													ng-change="ackDealVm.resetAll()"
+													required>
+												<option selected disabled value="">Select</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-if="ackDealVm.isAcknowledge">
+										{{ackDealVm.aTripData.vendorDeal.weight_type}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">TDS %:</label>
+									<div class="col-sm-6">
+										{{ackDealVm.aTripData.vendorDeal.tdsPercent =
+										(ackDealVm.aTripData.vendorDeal.tdsPercent || 0)}}%
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<button class="btn btn-primary btn-xs"
+												type="button"
+												ng-disabled="ackDealVm.isAcknowledge"
+												uib-tooltip="Calculate Tds"
+												tooltip-placement="bottom"
+												ng-click="ackDealVm.getTDSRate()">
+											<i class="zmdi zmdi-search-for zmdi-hc-fw"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="ackDealVm.aTripData.vendorDeal.weight_type === 'Percentage'">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Percentage: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6" ng-if="!ackDealVm.isAcknowledge">
+										<div class="select">
+											<select class="form-control"
+													ng-options="item as (item + '%') for item in [70,75,80,85,90,95]"
+													ng-model="ackDealVm.aTripData.vendorDeal.weightPercent"
+													name="Weight Type"
+													ng-change="ackDealVm.changeAdvance()"
+													required>
+												<option selected disabled value="">Select</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-if="ackDealVm.isAcknowledge">
+										{{ackDealVm.aTripData.vendorDeal.weightPercent}}
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="clearfix"></div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="ackDealVm.aTripData.vendorDeal.weight_type === 'PMT'">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">PMT Weight: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													placeholder="enter here..."
+													ng-change="ackDealVm.calculateTotalPMT();ackDealVm.autoMunsiyanaCal();"
+													ng-model="ackDealVm.aTripData.vendorDeal.pmtWeight"
+													ng-required="ackDealVm.aTripData.vendorDeal.weight_type === 'PMT'"
+													ng-readonly="ackDealVm.isAcknowledge"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="ackDealVm.aTripData.vendorDeal.weight_type === 'PMT'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">PMT Rate: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													placeholder="enter here..."
+													ng-change="ackDealVm.calculateTotalPMT();ackDealVm.autoMunsiyanaCal();"
+													ng-model="ackDealVm.aTripData.vendorDeal.pmtRate"
+													ng-required="ackDealVm.aTripData.vendorDeal.weight_type === 'PMT'"
+													ng-readonly="ackDealVm.isAcknowledge"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3"  ng-if="ackDealVm.aTripData.vendorDeal.weight_type === 'PMT' && $configs.vendorDeal.otherExp">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Other Exp </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.otherExp"
+												   ng-readonly="ackDealVm.isAcknowledge"
+												   placeholder="Other Exp">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="ackDealVm.aTripData.vendorDeal.weight_type === 'PUnit'">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">No. of boxes: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													placeholder="enter here..."
+													ng-change="ackDealVm.calculateTotalPUnit();ackDealVm.autoMunsiyanaCal();"
+													ng-model="ackDealVm.aTripData.vendorDeal.perUnitPrice"
+													ng-required="ackDealVm.aTripData.vendorDeal.weight_type === 'PUnit'"
+													ng-readonly="ackDealVm.isAcknowledge"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Price per box: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													placeholder="enter here..."
+													ng-change="ackDealVm.calculateTotalPUnit();ackDealVm.autoMunsiyanaCal();"
+													ng-model="ackDealVm.aTripData.vendorDeal.totalUnits"
+													ng-required="ackDealVm.aTripData.vendorDeal.weight_type === 'PUnit'"
+													ng-readonly="ackDealVm.isAcknowledge"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:15px"
+							 ng-if="ackDealVm.aTripData.vendorDeal.weight_type">
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input
+													type="number"
+													class="form-control"
+													ng-change="ackDealVm.changeAdvance('total');ackDealVm.changeAcPayment();ackDealVm.autoMunsiyanaCal();"
+													ng-model="ackDealVm.aTripData.vendorDeal.total_expense"
+													ng-readonly="ackDealVm.aTripData.vendorDeal.weight_type === 'PMT' || ackDealVm.aTripData.vendorDeal.weight_type === 'PUnit' || ackDealVm.isAcknowledge"
+													required>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Munshiyana </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   ng-change="ackDealVm.changeAdvance('munshiyana');ackDealVm.changeAcPayment();"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.munshiyana"
+												   ng-readonly="ackDealVm.isAcknowledge"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total With Munshiyana: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{ackDealVm.aTripData.vendorDeal.totWithMunshiyana}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Advance <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   ng-change="ackDealVm.changeAdvance('advance');ackDealVm.changeAcPayment()"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.advance"
+												   placeholder="enter here..."
+												   name="advance"
+												   ng-readonly="(ackDealVm.aTripData.vendorDeal.payment_type==='To pay' || ackDealVm.aTripData.vendorDeal.payment_type === 'To be billed' || ackDealVm.isAcknowledge)"
+												   required>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">TDS Amount: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(ackDealVm.tdsAmount = ackDealVm.aTripData.vendorDeal.tdsAmount =
+											('ceil'|NumberUtilFilter:((ackDealVm.aTripData.vendorDeal.totWithMunshiyana
+											|| 0) * (ackDealVm.aTripData.vendorDeal.tdsPercent || 0) / 100)))|roundOff}}
+											<!--<span ng-hide="true">{{ackDealVm.tdsAccount = $clientConfigs.accountDetails.tdsPayable}}</span>-->
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">To Pay/Balance: <span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+<!--										<div class="fg-line">-->
+<!--											{{ackDealVm.aTripData.vendorDeal.toPay =-->
+<!--											(((ackDealVm.aTripData.vendorDeal.totWithMunshiyana || 0) - -->
+<!--											(ackDealVm.aTripData.vendorDeal.advance || 0) - (ackDealVm.tdsAmount ||-->
+<!--											0))|roundOff:0:0)}}-->
+<!--										</div>-->
+<!--										new changes-->
+										<div class="fg-line">
+											{{ackDealVm.aTripData.vendorDeal.toPay =
+												(((ackDealVm.aTripData.vendorDeal.totWithMunshiyana || 0) + (ackDealVm.aTripData.vendorDeal.totalCharges || 0)  -
+														(ackDealVm.aTripData.vendorDeal.advance || 0) - (ackDealVm.tdsAmount ||
+																0)-(ackDealVm.aTripData.vendorDeal.totalDeduction || 0) - (ackDealVm.extChargesTdsAmount || 0)
+												)|roundOff:0:0)}}
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+<!--							<div class="col-md-4">-->
+<!--								<div class="form-group m-b-0">-->
+<!--									<label class="col-sm-6 control-label">Internal Freight </label>-->
+<!--									<div class="col-sm-6">-->
+<!--										<div class="fg-line">-->
+<!--											<input type="number"-->
+<!--												   class="form-control"-->
+<!--												   ng-model="ackDealVm.aTripData.vendorDeal.internalFreight"-->
+<!--												   ng-readonly="ackDealVm.isAcknowledge"-->
+<!--												   placeholder="enter here...">-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</div>-->
+							<div class="clearfix"></div>
+							<hr>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total ExtraCharges:</label>
+									<div class="col-sm-6">
+										{{(ackDealVm.aTripData.vendorDeal.totalCharges =
+										(ackDealVm.aTripData.vendorDeal.charges|sumObjKey:'amount') || 0) | roundOff}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">TDS Amount (Ext. Charges): </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(ackDealVm.extChargesTdsAmount =
+											(ackDealVm.aTripData.vendorDeal.charges|sumObjKey:'tdsAmount') || 0) |
+											roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total Deduction: </label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(ackDealVm.aTripData.vendorDeal.totalDeduction =
+											(ackDealVm.aTripData.vendorDeal.deduction|sumObjKey:'amount') || 0) |
+											roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Total Payable:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(ackDealVm.totalPayable =
+											(ackDealVm.aTripData.vendorDeal.totWithMunshiyana +
+											ackDealVm.aTripData.vendorDeal.totalCharges -
+											ackDealVm.aTripData.vendorDeal.totalDeduction - (ackDealVm.tdsAmount || 0) -
+											(ackDealVm.extChargesTdsAmount || 0) )) | roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Remaining Amt:</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											{{(ackDealVm.aTripData.vendorDeal.remainingAmount = (ackDealVm.totalPayable
+											- ackDealVm.aTripData.tAdv)) | roundOff}}
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+
+						<div class="row" style="margin:15px" ng-hide="true">
+							<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+								<label class="col-sm-6 control-label">Advance Due Date: <span
+										class="req_r">*</span></label></label>
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="ackDealVm.DatePicker.openDatePicker(this, $event, 'opened3')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{ackDealVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="ackDealVm.aTripData.vendorDeal.advance_due_date"
+											   is-open="opened3"
+											   datepicker-options="ackDealVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Advance Due Date"
+											   name="Advance Due Date"
+											   required
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="ackDealVm.DatePicker.openDatePicker(this, $event, 'opened3')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-3 col-md-3 col-lg-3">
+								<label class="col-sm-6 control-label">Topay Due Date: <span
+										class="req_r">*</span></label></label>
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="ackDealVm.DatePicker.openDatePicker(this, $event, 'opened4')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{ackDealVm.DatePicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="ackDealVm.aTripData.vendorDeal.topay_due_date"
+											   is-open="opened4"
+											   datepicker-options="ackDealVm.DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Topay Due Date"
+											   name="Topay Due Date"
+											   required
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+						<button type="button"
+								class="btn btn-default m-t-0 f12"
+								ng-click="ackDealVm.DatePicker.openDatePicker(this, $event, 'opened4')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!-- Advance Component -->
+				<!--ng-hide="!ackDealVm.aTripData.vendorDeal.payment_type || ackDealVm.aTripData.vendorDeal.payment_type === 'To pay' || ackDealVm.aTripData.vendorDeal.payment_type === 'To be billed'"-->
+				<li class="list-group-item" ng-hide="true">
+					<span class="booking_list_header">Advance Component</span>
+					<div class="card-body">
+						<div class="row" style="margin:15px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Diesel</label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select ng-options="t for t in ackDealVm.aType"
+													class="form-control"
+													ng-model="ackDealVm.aTripData.vendorDeal.diesel.type"
+													ng-change="ackDealVm.changeAmount()">
+												<option value="" selected>Select</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-show="ackDealVm.aTripData.vendorDeal.diesel.type=='Liter'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Liter</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number" ng-change="ackDealVm.changeAmount()"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.diesel.quantity"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-show="ackDealVm.aTripData.vendorDeal.diesel.type=='Liter'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Rate</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number" ng-change="ackDealVm.changeAmount()"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.diesel.rate"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Amount</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number" ng-change="ackDealVm.changeAcPayment()"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.diesel.amount"
+												   placeholder="enter here..."
+												   ng-readonly="ackDealVm.aTripData.vendor_payment.diesel.type=='Liter'">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:15px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Driver Cash</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number" ng-change="ackDealVm.changeAcPayment()"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.driver_cash"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Toll Tax</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number" ng-change="ackDealVm.changeAcPayment()"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.toll_tax"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:15px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Other</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number" ng-change="ackDealVm.changeAcPayment()"
+												   class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.other_charges"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Remark For Other</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.other_charges_remark"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:15px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">A/C Payment</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number" class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.account_payment"
+												   placeholder="enter here..." ng-readonly="true">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Remark</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" class="form-control"
+												   ng-model="ackDealVm.aTripData.vendorDeal.remark"
+												   placeholder="enter here...">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Own Diesel</label>
+									<div class="col-sm-6">
+										<div class="checkbox">
+											<label>
+												<input type="checkbox" ng-model="ackDealVm.aTripData.diesel_stage"
+													   value="">
+												<i class="input-helper"></i>
+												Own Diesel
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!-- Extra Charges -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<span class="booking_list_header">Extra Charges</span>
+						<div class="pull-right text-right m-t-5">
+							<button type="button" class="btn-primary btn-xs"
+									ng-click="ackDealVm.validateObj(ackDealVm.oExtraCharges, 'charges'); ackDealVm.oExtraCharges = {};"
+									uib-tooltip="Add Charges"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button type="button" class="btn-danger btn-xs"
+									ng-click="ackDealVm.remove(ackDealVm.aTripData.vendorDeal.charges, ackDealVm.selectedExtraChargesIndex, 'charges');"
+									uib-tooltip="Delete ExtraCharges"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Charges: <span
+											class="req_r">*</span></label></label>
+									<div class="col-sm-8">
+										<div class="">
+											<select chosen
+													name="charges"
+													class="form-control"
+													ng-options="item as item.name for item in $constants.aCharges|filterArrayFromObj:'value':ackDealVm.aTripData.vendorDeal.charges"
+													ng-model="ackDealVm.oExtraCharges.type"
+													ng-change="ackDealVm.ChargesConfig(ackDealVm.oExtraCharges.type)">
+												<option value="" disabled selected>Select</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Amount: <span
+											class="req_r">*</span></label></label>
+									<div class="col-sm-8">
+										<input type="number"
+											   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   onwheel="return false"
+											   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+											   placeholder="Amount"
+											   name="amount"
+											   class="form-control"
+											   ng-model="ackDealVm.oExtraCharges.amount"
+											   required>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">Date: </label>
+									<div class="col-sm-6">
+
+										<input
+												fill-date
+												type="text"
+												class="form-control"
+												placeholder="Charges Date"
+												ng-model="ackDealVm.oExtraCharges.date"
+										>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="ackDealVm.$configs.master.showAccount">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Credit A/c:<span class="req_r">*</span></label>
+									<div class="col-sm-8">
+										{{(ackDealVm.oExtraCharges.from = ackDealVm.aTripData.vendorDeal.lorryAc).name}}
+									</div>
+
+								</div>
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-md-3" ng-if="ackDealVm.$configs.master.showAccount">
+								<label class="col-sm-4 control-label">Debit A/c: <span class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear" style="z-index: 20">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="To Account"
+												ng-model="ackDealVm.oExtraCharges.to"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in ackDealVm.getAc($viewValue,ackDealVm.aToGroup) | limitTo:6"
+												required>
+										<i class="lvh-search-close" ng-click="ackDealVm.oExtraCharges.to=null;">×</i>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col-md-3">
+								<div class="form-group">
+									<div class="fg-line">
+											<textarea class="form-control"
+													  rows="2"
+													  ng-model="ackDealVm.oExtraCharges.narration"
+													  ng-change=""
+													  placeholder="Narration..."></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="!('isEmptyObject'|otherUtilsFilt:ackDealVm.aTripData.vendorDeal.charges)">
+								<div class="" style="overflow-y: auto; max-height: 200px;">
+								<table class="table table-bordered vehicleAllot">
+									<thead>
+									<tr>
+										<th>#</th>
+										<th>Charges</th>
+										<th>Date</th>
+										<th>Amount</th>
+										<th>Apply TDS</th>
+										<th>TDS Amount</th>
+										<th>From Account</th>
+										<th>To Account</th>
+										<th>TDS Account</th>
+										<th>Narration</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="(key,value) in ackDealVm.aTripData.vendorDeal.charges"
+										ng-class="{grn: ackDealVm.selectedExtraChargesIndex === key}"
+										ng-click="ackDealVm.selectedExtraChargesIndex = key">
+										<td>{{$index+1}}</td>
+										<td>{{value.typ}}</td>
+										<td>{{value.date|date:'dd-MMM-yyyy'}}</td>
+										<td>
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Amount"
+													   ng-change="ackDealVm.applyTDSOnExtraCharges(value)"
+													   name="amount"
+													   class="form-control"
+													   ng-model="value.amount"
+													   required>
+											</div>
+										</td>
+										<td>
+											<label class="checkbox checkbox-inline">
+												<input type="checkbox"
+													   ng-init="value.toApplyTDS = value.tdsAmount ? true : (value.applyTDS ? true : false)"
+													   ng-model="value.toApplyTDS"
+													   ng-change="ackDealVm.applyTDSOnExtraCharges(value)"
+												>
+												<i class="input-helper"></i>
+											</label>
+										</td>
+										<td>{{value.tdsAmount || '0'}}</td>
+										<!--<td ng-if="value.typ != 'Other Charges' && value.typ != 'Chalan Charges RTO'">{{value.tdsAmount =  ('ceil'|NumberUtilFilter:((value.amount * ackDealVm.aTripData.vendorDeal.tdsPercent)/100))}}</td>-->
+										<td>{{value.fromName}}</td>
+										<td>{{value.toName}}</td>
+										<td>
+											<div class="col-md-12">
+												<div class="form-group m-b-0">
+													<div class="col-sm-12">
+														<div class="ng-scope sear chosen-row-3">
+															<input type="text"
+																   ng-init="value.tdsAccountName && value.tdsAccount && (value.tdsAccountObj = {_id: value.tdsAccount,name: value.tdsAccountName})"
+																   placeholder="TDS Account"
+																   name="TDS A/c"
+																   ng-model="value.tdsAccountObj"
+																   typeahead-wait-ms="10"
+																   typeahead="item as item.name for item in ackDealVm.getAc($viewValue, ['Vendor TDS'])"
+																   typeahead-on-select="ackDealVm.onTDSSelect($model, value)"
+																   class="form-control"
+																   required>
+															<i class="lvh-search-close"
+															   ng-click="value.tdsAccountObj=null;">×</i>
+														</div>
+													</div>
+												</div>
+											</div>
+										</td>
+										<td>{{value.narration}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!-- Deduction -->
+				<li class="list-group-item">
+					<div class="card-body">
+						<span class="booking_list_header">Deduction Charges</span>
+						<div class="pull-right text-right m-t-5">
+							<button type="button" class="btn-primary btn-xs"
+									ng-click="ackDealVm.validateObj(ackDealVm.oDeduction, 'deduction'); ackDealVm.oDeduction = {};"
+									uib-tooltip="Add Deduction"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+							</button>&nbsp;&nbsp;
+							<button type="button" class="btn-danger btn-xs"
+									ng-click="ackDealVm.remove(ackDealVm.aTripData.vendorDeal.deduction, ackDealVm.selectedDeductionIndex, 'deduction');"
+									uib-tooltip="Delete Deduction"
+									tooltip-placement="bottom">
+								<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+							</button>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Deduction: <span
+											class="req_r">*</span></label></label>
+									<div class="col-sm-8">
+										<div class="">
+											<select chosen
+													name="charges"
+													class="form-control"
+													ng-options="item as item.name for item in $constants.aDeductionCharges|filterArrayFromObj:'value':ackDealVm.aTripData.vendorDeal.deduction"
+													ng-model="ackDealVm.oDeduction.type"
+													ng-change="ackDealVm.deductionConfig(ackDealVm.oDeduction.type)">
+												<option value="" disabled selected>Select</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Amount: <span
+											class="req_r">*</span></label></label>
+									<div class="col-sm-8">
+										<input type="number"
+											   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+											   onwheel="return false"
+											   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+											   placeholder="Amount"
+											   name="amount"
+											   class="form-control"
+											   ng-model="ackDealVm.oDeduction.amount"
+											   required>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-5 control-label">Date: </label>
+									<div class="col-sm-6">
+
+										<input
+												fill-date
+												type="text"
+												class="form-control"
+												placeholder="Deduction Date"
+												ng-model="ackDealVm.oDeduction.date"
+										>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="ackDealVm.$configs.master.showAccount">
+								<label class="col-sm-4 control-label">Credit A/c: <span class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<div class="lvh-search ng-scope sear chosen-row-1">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="From Account"
+												ng-model="ackDealVm.oDeduction.from"
+												typeahead-wait-ms="10"
+												typeahead="item as item.name for item in ackDealVm.getAc($viewValue,ackDealVm.aFromGroup) | limitTo:6"
+												required>
+										<i class="lvh-search-close" ng-click="ackDealVm.oDeduction.from=null;">×</i>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-if="ackDealVm.$configs.master.showAccount">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Debit A/c:<span class="req_r">*</span></label>
+									<div class="col-sm-8">
+										{{(ackDealVm.oDeduction.to = ackDealVm.aTripData.vendorDeal.lorryAc).name}}
+									</div>
+
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<div class="fg-line">
+											<textarea class="form-control"
+													  rows="2"
+													  ng-model="ackDealVm.oDeduction.narration"
+													  ng-change=""
+													  placeholder="Narration..."></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:5px"
+							 ng-if="!('isEmptyObject'|otherUtilsFilt:ackDealVm.aTripData.vendorDeal.deduction)">
+							<div class="" style="overflow-y: auto; max-height: 200px;">
+								<table class="table table-bordered vehicleAllot">
+									<thead>
+									<tr>
+										<th>#</th>
+										<th>Charges</th>
+										<th>Date</th>
+										<th>Amount</th>
+										<th>From Account</th>
+										<th>To Account</th>
+										<th>Narration</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr ng-repeat="(key, value) in ackDealVm.aTripData.vendorDeal.deduction"
+										ng-class="{grn: ackDealVm.selectedDeductionIndex === key}"
+										ng-click="ackDealVm.selectedDeductionIndex = key">
+										<td>{{$index+1}}</td>
+										<td>{{value.typ}}</td>
+										<td>{{value.date|date:'dd-MMM-yyyy'}}</td>
+										<td>
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Amount"
+													   name="amount"
+													   class="form-control"
+													   ng-model="value.amount"
+													   required>
+											</div>
+										</td>
+										<td>{{value.fromName}}</td>
+										<td>{{value.toName}}</td>
+										<td>{{value.narration}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</li>
+
+				<!-- VENDOR ACCOUNT -->
+				<li class="list-group-item" ng-if="ackDealVm.aTripData.vendor.banking_details.length > 0">
+					<span class="booking_list_header">VENDOR A/C DETAIL</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="" style="overflow-y: auto; max-height: 200px;">
+								<table class="table table-bordered vehicleAllot">
+									<thead>
+									<tr>
+										<th>#</th>
+										<th>A/C No.</th>
+										<th>IFSC</th>
+										<th>Remark</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr data-ng-repeat="bank in ackDealVm.aTripData.vendor.banking_details track by $index">
+										<td><input type="checkbox" ng-model="bank.checked"
+												   ng-click="ackDealVm.updateSelection($index, banking_details)"/></td>
+										<td>{{bank.a_c}}</td>
+										<td>{{bank.ifsc}}</td>
+										<td>{{bank.declaration}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button ng-disabled="ackDealVm.isDisable"
+				class="btn btn-primary">SUBMIT
+		</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="ackDealVm.closeModal()">Close
+		</button>
+	</div>
+</form>
+
+<style>
+	.chosen-row-1 {
+		z-index: 1;
+	}
+
+	.chosen-row-2 {
+		z-index: 0;
+	}
+
+	.chosen-row-3 {
+		z-index: auto;
+	}
+
+	.container {
+		width: 98% !important;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

@@ -1,0 +1,239 @@
+<!--ControllerAs: rtSummaryVm-->
+
+<div class="modal-header" >
+	<button type="button" ng-click="rtSummaryVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<div>
+		<div class="col-md-2">
+			<button ng-click="printDiv('idOne')" class="btn btn-primary glyphicon glyphicon-print" style="margin-bottom: 12px;"> PRINT </button>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+<div class="clearfix"></div>
+<div class="modal-body">
+	<div id="idOne">
+
+		<div style="width: 100%;">
+			<div class="table-responsive" style="width: 100%;">
+				<table class="table ja-table" style="width: 100%;border-spacing: 0px;" border="1">
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr style="text-align: center">
+									<td style="border-right: 1px solid black; padding: 0 3px 0 3px;"><b style="white-space: nowrap;">RT No.: </b>{{rtSummaryVm.aTrips[0].advSettled.tsNo}}</td>
+									<td style="border-right: 1px solid black; padding: 0 3px 0 3px;"><b style="white-space: nowrap;">Stlmt Date: </b>{{rtSummaryVm.aTrips[0].markSettle.date | date:'dd-MM-yyyy'}}</td>
+									<td style="border-right: 1px solid black; padding: 0 3px 0 3px;"><b style="white-space: nowrap;">Audit Date: </b>{{rtSummaryVm.aTrips[0].markSettle.date | date:'dd-MM-yyyy'}} {{rtSummaryVm.aTrips[0].advSettled.date | date:'dd-MM-yyyy'}}</td>
+									<td style="border-right: 1px solid black;"><b>Stlmt By: </b>{{rtSummaryVm.aTrips[0].markSettle.user_full_name}}</td>
+									<td><b>Audit By: </b>{{rtSummaryVm.aTrips[0].markSettle.user_full_name}} {{rtSummaryVm.aTrips[0].advSettled.user_full_name}}</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<!--<tr style="border-top: 1px solid black">-->
+						<!--<td style="padding: 10px; border-top: 1px solid black">-->
+						<!--</td>-->
+					<!--</tr>-->
+					<!--<tr style="border-top: 1px solid black">-->
+						<!--<td style="padding: 0px; border-top: 1px solid black">-->
+							<!--<table class="insideTable" style="width: 100%;border-spacing: 0px;">-->
+								<!--<tr style="text-align: center">-->
+									<!--<td style="border-right: 1px solid black;"><b>RT Creation: </b></td>-->
+									<!--<td><b>RT User: </b></td>-->
+								<!--</tr>-->
+							<!--</table>-->
+						<!--</td>-->
+					<!--</tr>-->
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 10px; border-top: 1px solid black">
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr style="text-align: center">
+									<td style="border-right: 1px solid black;"><b>Vehicle No.: </b>{{rtSummaryVm.aTrips[0].vehicle_no}}</td>
+									<td style="border-right: 1px solid black;"><b>RT Period: </b>
+										{{rtSummaryVm.aTrips[0].tripStarted | date:'dd-MM-yyyy'}}
+										{{rtSummaryVm.aTrips.slice(-1)[0].tripEnded ? 'To' : ''}}
+										{{rtSummaryVm.aTrips.slice(-1)[0].tripEnded | date:'dd-MM-yyyy'}}
+									</td>
+									<td style="border-right: 1px solid black;"><b>Driver: </b>{{rtSummaryVm.aDriver}}</td>
+									<td style="border-right: 1px solid black;"><b>Dr. ST & LC Exp.:</b>{{rtSummaryVm.aDriverStatus}}&nbsp;&&nbsp;{{rtSummaryVm.aDriver_expiry | date:'dd-MM-yyyy'}}</td>
+									<td><b>Dr.Op. Bal: </b>
+										{{((rtSummaryVm.summary.openCloseBal.driver.opening +
+										rtSummaryVm.summary.openCloseBal.fastag.opening + rtSummaryVm.summary.openCloseBal.happay.opening
+										+ rtSummaryVm.summary.openCloseBal.vendor.opening) || 0)|roundOff:''}}
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 10px; border-top: 1px solid black">
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr>
+									<td style="padding-left: 10px"><b>Route : </b>{{(rtSummaryVm.aTrips|arrayOfObjectToArray:'route_name'|mergeString:', ') || 'NA'}}</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 10px; border-top: 1px solid black">
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr style="text-align: center">
+									<td style="border-right: 1px solid black;"><b>RT Prediction </b></td>
+									<td style="border-right: 1px solid black;"><b>Budgeted Diesel: </b>{{(rtSummaryVm.summary.dieselBudget|roundOff:'') || 0}}</td>
+									<td style="border-right: 1px solid black;"><b>Budgeted Advance: </b>{{(rtSummaryVm.summary.netBudget|roundOff:'') || 0}}</td>
+									<td style="border-right: 1px solid black;"><b>Net Suspense:</b> {{(rtSummaryVm.aggrOfSupense|roundOff:'') || 0}}</td>
+									<td><b>Suspense Remark:{{rtSummaryVm.susRemark}}</b></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 10px; border-top: 1px solid black">
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr>
+									<td style="padding-left: 10px"><b>Actual Advance In Total: </b></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr style="text-align: center">
+									<td style="border-right: 1px solid black;"><b>Total Of Happay: </b>{{(rtSummaryVm.summary.netAdvObj.happay|roundOff:'') || 0}}</td>
+									<td style="border-right: 1px solid black;"><b>Total Of Dr. Cash: </b>{{(rtSummaryVm.summary.netAdvObj.driverCash|roundOff:'') || 0}}</td>
+									<td style="border-right: 1px solid black;"><b>Total Of Diesel(Lit): </b>{{(rtSummaryVm.summary.netAdvObj.diesel|roundOff:'') || 0}}({{(rtSummaryVm.summary.dieselGivLit|roundOff)|| 0}})</td>
+									<td><b>Total Of Fastag: </b>{{(rtSummaryVm.summary.netAdvObj.fastag|roundOff:'') || 0}}</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr>
+									<td style="padding-left: 10px"><b>RT Details </b></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr style="text-align: center">
+									<td style="border-right: 1px solid black;"><b>Trip Km: </b>{{rtSummaryVm.summary.totalKm - rtSummaryVm.summary.totalExtraKm}}</td>
+									<td style="border-right: 1px solid black;"><b>Extra KM: </b>{{rtSummaryVm.summary.totalExtraKm || '0'}}</td>
+									<td style="border-right: 1px solid black;"><b>Total Km: </b>{{rtSummaryVm.summary.totalKm || '0'}}</td>
+									<td style="border-right: 1px solid black;"><b>Total Advance: </b>{{(rtSummaryVm.summary.netAdvance|roundOff:'')||0}}</td>
+									<td style="border-right: 1px solid black;"><b>Total Expense: </b>{{(rtSummaryVm.summary.netExpense|roundOff:'') ||0}}</td>
+									<td style="border-right: 1px solid black;"><b>Dr. Payment: </b>{{(rtSummaryVm.summary.driverPayment|roundOff:'') || 0}}</td>
+									<td style="border-right: 1px solid black;"><b>Trip Balance: </b>{{((rtSummaryVm.summary.netAdvance - rtSummaryVm.summary.netExpense - rtSummaryVm.summary.driverPayment)|roundOff:'')||0}}</td>
+									<td><b>Dr. Cl. Bal.: </b>
+										{{(rtSummaryVm.summary.openCloseBal.driver.closing +
+										rtSummaryVm.summary.openCloseBal.fastag.closing +
+										rtSummaryVm.summary.openCloseBal.happay.closing +
+										rtSummaryVm.summary.openCloseBal.vendor.closing).toFixed(2) || 0}}</td>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 10px; border-top: 1px solid black">
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr>
+									<td style="padding-left: 10px"><b>RT Performance </b></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr style="border-top: 1px solid black">
+						<td style="padding: 0px; border-top: 1px solid black">
+							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
+								<tr style="text-align: center">
+									<td style="border-right: 1px solid black;"><b>Advance Per Km: </b>{{((rtSummaryVm.summary.netAdvance ||0) /(rtSummaryVm.summary.totalKm||1))|roundOff:''}}</td>
+									<td style="border-right: 1px solid black;"><b>Expense Per Km: </b>{{((rtSummaryVm.summary.netExpense || 0) /(rtSummaryVm.summary.totalKm||1))|roundOff:''}}</td>
+									<td style="border-right: 1px solid black;"><b>Balance Per Km: </b>{{((((rtSummaryVm.summary.netAdvance || 0) - rtSummaryVm.summary.netExpense ||0) || 0)/ (rtSummaryVm.summary.totalKm ||1))|roundOff:''}}</td>
+									<td><b>Running Per Km: </b>
+										{{(rtSummaryVm.summary.totalKm / ('calDays'|dateUtilsFilt:rtSummaryVm.aTrips.slice(-1)[0].tripEnded:rtSummaryVm.aTrips[0].tripStarted))|roundOff:''}}
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<table style="width: 100%; padding-top: 10px;">
+					<tr>
+						<td style="padding-top: 7px;">
+							<table class="insideTable" style="width: 100%; ">
+								<tr ng-show="rtSummaryVm.aTrips[0].markSettle.remark">
+									<td style="padding-left: 4px;"><b>Settled Remark:</b> <span style="padding-left:9px;">{{rtSummaryVm.aTrips[0].markSettle.remark}}</span></td>
+								</tr>
+								<tr ng-show="rtSummaryVm.aTrips[0].advSettled.remark">
+									<td style="padding-left: 4px; padding-top: 3px;"><b>Manager Remark:</b> {{rtSummaryVm.aTrips[0].advSettled.remark}}</td>
+								</tr>
+								<tr ng-show="rtSummaryVm.aTrips[0].AccManagerRmk.remark">
+									<td style="padding-left: 4px; padding-top: 3px;"><b>Account Manager Remark:</b> {{rtSummaryVm.aTrips[0].AccManagerRmk.remark}}</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-warning" ng-click="rtSummaryVm.closeModal()">Close</button>
+</div>
+
+
+<style type="text/css">
+	.modal-dialog {width: 75%;
+		height: 173px
+	}
+
+	.fs-12{
+		font-size: 11px;
+	}
+
+	.text-center{
+		text-align: center;
+	}
+
+	.ja-table > tbody > tr > td{
+		border: 1px solid #000000;
+		padding: 2px 5px !important;
+		border-spacing: 0px;
+	}
+
+	.insideTable > tbody > tr > td{
+		border-right: 1px solid black;
+	}
+
+	.insideTable > tbody > tr > td:last-child{
+		border-right: 0px solid black;
+	}
+</style>

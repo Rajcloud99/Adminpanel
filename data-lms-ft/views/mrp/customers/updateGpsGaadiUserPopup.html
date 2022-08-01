@@ -1,0 +1,174 @@
+<div class="modal-header" style="padding-bottom: 5px;">
+	<button type="button" ng-click="closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Update User</h4><br>
+</div>
+<div class="modal-body">
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="user">
+			<form name="userForm" autocomplete="off">
+				<div class="container">
+					<div class="text-center" style="margin-bottom:20px;">
+						<hr class="hr-primary">
+						<div class="n-bg rdo">
+							<label class="radio radio-inline m-r-20" ng-class="{active : updation.role == 'dealer'}">
+								<input type="radio" name="options" id="option3" ng-model="updation.role" value="dealer" autocomplete="off" checked>
+								<i class="input-helper"></i>
+								Dealer
+							</label>
+							<label class="radio radio-inline m-r-20" ng-class="{active : updation.role == 'user'}">
+								<input type="radio" name="options" id="option2" ng-model="updation.role" value="user" autocomplete="off">
+								<i class="input-helper"></i>
+								User
+							</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<div class="fg-line">
+									<label for="name">User Name <span class="c-red">*</span></label>
+									<input ng-model="updation.name" name="name"
+										   type="text" id="name" class="form-control"
+										   placeholder="Enter User Name" required>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<div class=" fg-line">
+									<label>Mobile Number <span class="c-red">*</span></label>
+									<input ng-model="updation.mobile" name="number"
+										   type="number" name ="number" class="form-control"
+										   placeholder="Enter Mobile Number" ng-minlength="10" ng-maxlength="10" required>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<div class="select">
+									<label>User Type <span class="c-red">*</span></label>
+									<select ng-model="updation.user_type" ng-options="option for option in aUserType" class="form-control" required="">
+										<option value="" style="display: none;"> Select User Type </option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="form-group fg-line">
+								<label>Email</label>
+								<input ng-model="updation.email" type="email" class="form-control" placeholder="Enter Email">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<div class="select">
+									<label>Block User</label>
+									<select ng-model="updation.access" ng-options="item.access as item.value for item in aAccessType" ng-change="accessSelect(updation.access)" class="form-control">
+										<option value="" style="display: none;">Access Type </option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="form-group">
+								<div class="select">
+									<label>Reason </label>
+									<select ng-model="updation.reason" ng-options="option for option in aReason" class="form-control">
+										<option value="" style="display: none;"> Select User Type </option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 col-sm-6 col-xs-12">
+							<div class="form-group fg-line">
+								<label>Email</label>
+								<input ng-model="updation.more_info" type="text" class="form-control" placeholder="Remarks">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label>Activation Date:<span class="c-red">*</span> </label>
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{DatePcoicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="updation.activation_date"
+											   min-date="minDateAct"
+											   is-open="opened2"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Activation Date"
+											   name="Activation Date"
+											   required="true"
+											   style="padding: 0px 4px;height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+										  <button type="button" class="btn btn-default m-t-0 f12"
+												  ng-click="DatePicker.openDatePicker(this, $event, 'opened2')"><i
+												  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label>Renewal Date:<span class="c-red">*</span> </label>
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+										<input ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"
+											   type="text"
+											   class="form-control"
+											   uib-datepicker-popup="{{DatePcoicker.formats[0]}}"
+											   show-weeks="false"
+											   ng-model="updation.renewal_date"
+											   min-date="minDateRenewal"
+											   is-open="opened3"
+											   datepicker-options="DatePicker.dateSettings"
+											   close-text="Close"
+											   placeholder="Renewal Date"
+											   name="Renewal Date"
+											   required="true"
+											   style="padding: 0px 4px;height: 34px;" />
+									</div>
+									<span class="input-group-btn">
+										  <button type="button" class="btn btn-default m-t-0 f12"
+												  ng-click="DatePicker.openDatePicker(this, $event, 'opened3')"><i
+												  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+<div class="modal-footer">
+	<button ng-click="updateGPSUser()" class="btn btn-success waves-effect" ng-disabled="!((updation.role) && (updation.name) &&(updation.mobile))">Update</button>&nbsp;&nbsp;&nbsp;
+	<button class="btn btn-warning" ng-click="closeModal()">Cancel</button>
+</div>
+<style type="text/css">
+	.modal-dialog {
+		width: 70%;
+	}
+	.form-control {
+		height: 35px;
+	}
+</style>
+

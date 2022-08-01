@@ -1,0 +1,185 @@
+<form>
+	<div ng-if="drivers.length>0" class="row" style="margin: 5px auto;">
+	    <div class="col-md-2">
+	    </div>
+		<div class="col-md-12">
+			<h5 class="profile_h">Profile Details</h5>
+			<div class="detailList">
+				<ul>
+					<li ng-if="driver.employee_id"><span>Employee Id :</span> {{driver.employee_id || 'NA'}}</li>
+                    <li ng-if="driver.sap_id"><span>SAP Id :</span> {{driver.sap_id || 'NA'}}</li>
+                    <li ng-if="driver.name"><span>Driver Name :</span>{{driver.name || 'NA'}}</li>
+					<li ng-if="driver.employee_code"><span>Code :</span>{{driver.employee_code || 'NA'}}</li>
+					<li ng-if="driver.account"><span>Account :</span>{{driver.account.name || 'NA'}}</li>
+                    <li ng-if="driver.father_name"><span>Father Name :</span> {{driver.father_name || 'NA'}}</li>
+					<li ng-if="driver.prim_contact_no"><span>Mobile Number :</span> {{driver.prim_contact_no || 'NA'}}</li>
+                    <li ng-if="driver.employee_status"><span>Employee Status:</span> {{driver.employee_status || 'NA'}}</li>
+					<li ng-if="driver.educationTypes"><span>Education :</span> {{driver.educationTypes || 'NA'}}</li>
+                    <li ng-if="driver.age"><span>Driver Age</span>{{driver.age || 'NA'}}</li>
+                    <li ng-if="driver.mother_name"><span>Mother Name :</span> {{driver.mother_name || 'NA'}}</li>
+                    <li ng-if="driver.email_id"><span>E-mail Id :</span>{{driver.email_id || 'NA'}}</li>
+                    <li ng-if="driver.insurance_company"><span>Insurance Company :</span> {{driver.insurance_company || 'NA'}}</li>
+					<li ng-if="driver.insurance_policy_number"><span>Insurance Policy No:</span> {{driver.insurance_policy_number || 'NA'}}</li>
+                    <li ng-if="driver.insured_amount"><span>Insurance Amount :</span>{{driver.insured_amount || 'NA'}}</li>
+
+                    <li ng-if="driver.gross_fixed_salary"><span>Gross Fixed Salary :</span> {{driver.gross_fixed_salary || 'NA'}}</li>
+                    <li ng-if="driver.date_of_joining"><span>Join Date :</span>{{driver.date_of_joining | date:'dd-MM-yyyy' || 'NA'}}</li>
+                    <li ng-if="driver.date_of_leaving"><span>Leave Date :</span> {{driver.date_of_leaving | date:'dd-MM-yyyy' || 'NA'}}</li>
+					<li ng-if="driver.leave_reason"><span>Leave Reason :</span> {{driver.leave_reason || 'NA'}}</li>
+                    <li ng-if="driver.religion"><span>Religion :</span> {{driver.religion || 'NA'}}</li>
+                    <li ng-if="driver.gender"><span>Gender :</span>{{driver.gender || 'NA'}}</li>
+                    <li ng-if="driver.marital_status"><span>Marital Status :</span> {{driver.marital_status || 'NA'}}</li>
+                    <li ng-if="driver.blood_group"><span>Blood Group :</span>{{driver.blood_group || 'NA'}}</li>
+                    <li ng-if="driver.no_of_children"><span>No of Children :</span> {{driver.no_of_children || 'NA'}}</li>
+					<li ng-if="driver.no_of_girl_childs"><span>No of Girl Child :</span> {{driver.no_of_girl_childs || 'NA'}}</li>
+                    <li ng-if="driver.total_dependents"><span>Total Dependents :</span> {{driver.total_dependents || 'NA'}}</li>
+                    <li ng-if="driver.alt_contact_no1"><span>Alternate Contact 1 :</span> {{driver.alt_contact_no1 || 'NA'}}</li>
+					<li ng-if="driver.alt_contact_no2"><span>Alternate Contact 2 :</span> {{driver.alt_contact_no2 || 'NA'}}</li>
+					<li ng-if="driver.dob"><span>DOB :</span> {{driver.dob | date:'dd-MM-yyyy'}}</li>
+					<li ng-if="driver.nominee"><span>Nominee :</span> {{driver.nominee}}</li>
+					<li ng-if="driver.passportNo"><span>Passport No :</span> {{	driver.passportNo}}</li>
+					<li><span>Blacklisted :</span> {{	driver.blacklisted == true ? "Yes" : "No"}}</li>
+					<li ng-if="driver.driver_face_mark"><span>Driver Face Mark :</span> {{driver.driver_face_mark || 'NA'}}</li>
+					<li ng-if="driver.driver_vision_test"><span>Driver Vision Test :</span> {{driver.driver_vision_test || 'NA'}}</li>
+					<li ng-if="(driver.uploaded_by || driver.created_by_name)"><span>Created By :</span> {{driver.uploaded_by || driver.created_by_name || 'NA'}}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-12" ng-if="driver.account && $configs.master.showAccount">
+			<h5 class="profile_h">Account Details</h5>
+			<div class="detailList">
+				<ul>
+					<li ng-if="driver.account.name"><span>Name :</span> {{driver.account.name || 'NA'}}</li>
+<!--					<li ng-if="driver.account.branch"><span>Branch :</span> {{driver.account.branch || 'NA'}}</li>-->
+                    <li ng-if="driver.account.type"><span>Type :</span> {{driver.account.type.name || driver.account.type || 'NA'}}</li>
+                    <li ng-if="driver.account.limit"><span>Limit :</span> {{driver.account.limit || 'NA'}}</li>
+                </ul>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<h5 class="profile_h">License Details</h5>
+			<div class="detailList">
+				<ul>
+					<li ng-if="driver.license_no"><span>License No :</span> {{driver.license_no || 'NA'}}</li>
+					<li ng-if="driver.license_issuing_date"><span>License Issue Date :</span> {{driver.license_issuing_date | date:'dd-MM-yyyy' || 'NA'}}</li>
+					<li ng-if="driver.license_expiry_date"><span>License Expiry Date :</span> {{driver.license_expiry_date | date:'dd-MM-yyyy' || 'NA'}}</li>
+					<li ng-if="driver.license_authority"><span>License Authority :</span> {{driver.license_authority || 'NA'}}</li>
+
+
+					<li ng-if="driver.license_address"><span>License Address :</span> {{driver.license_address || 'NA'}}</li>
+					<li ng-if="driver.license_category"><span>License Category :</span>{{driver.license_category || 'NA'}}</li>
+
+					<li ng-if="driver.license_badge_no"><span>License Badge No :</span> {{driver.license_badge_no || 'NA'}}</li>
+					<li ng-if="driver.license_grade"><span>License Grade :</span>{{driver.license_grade || 'NA'}}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<h5 class="profile_h">Temporary Address</h5>
+			<div class="detailList">
+			<ul>
+				<li ng-if="driver.temporary_address.line1"><span>Address Line 1 :</span> {{driver.temporary_address.line1 || 'NA'}}</li>
+                <li ng-if="driver.temporary_address.line2"><span>Address Line 2 :</span>{{driver.temporary_address.line2 || 'NA'}}</li>
+                <li ng-if="driver.temporary_address.city"><span>City :</span> {{driver.temporary_address.city || 'NA'}}</li>
+				<li ng-if="driver.temporary_address.district"><span>District :</span> {{driver.temporary_address.district || 'NA'}}</li>
+                <li ng-if="driver.temporary_address.state"><span>State :</span> {{driver.temporary_address.state || 'NA'}}</li>
+                <li ng-if="driver.temporary_address.pincode"><span>Pincode :</span> {{driver.temporary_address.pincode || 'NA'}}</li>
+				<li ng-if="driver.temporary_address.country"><span>Country :</span> {{driver.temporary_address.country || 'NA'}}</li>
+                </ul>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<h5 class="profile_h">Permanent Address</h5>
+			<div class="detailList">
+			<ul>
+				<li ng-if="driver.permanent_address.line1"><span>Address Line 1 :</span> {{driver.permanent_address.line1 || 'NA'}}</li>
+                <li ng-if="driver.permanent_address.line2"><span>Address Line 2 :</span>{{driver.permanent_address.line2 || 'NA'}}</li>
+                <li ng-if="driver.permanent_address.city"><span>City :</span> {{driver.permanent_address.city || 'NA'}}</li>
+				<li ng-if="driver.permanent_address.district"><span>District :</span> {{driver.permanent_address.district || 'NA'}}</li>
+                <li ng-if="driver.permanent_address.state"><span>State :</span> {{driver.permanent_address.state || 'NA'}}</li>
+                <li ng-if="driver.permanent_address.pincode"><span>Pincode :</span> {{driver.permanent_address.pincode || 'NA'}}</li>
+				<li ng-if="driver.permanent_address.country"><span>Country :</span> {{driver.permanent_address.country || 'NA'}}</li>
+                </ul>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<h5 class="profile_h">Reference 1</h5>
+			<div class="detailList">
+				<ul>
+					<li ng-if="driver.reference1.name"><span>Name :</span> {{driver.reference1.name || 'NA'}}</li>
+	                <li ng-if="driver.reference1.relation_type"><span>Relation :</span> {{driver.reference1.relation_type || 'NA'}}</li>
+					<li ng-if="driver.reference1.employee_code"><span>Employee Code :</span> {{driver.reference1.employee_code || 'NA'}}</li>
+	                <li ng-if="driver.reference1.address"><span>Address :</span> {{driver.reference1.address || 'NA'}}</li>
+	                <li ng-if="driver.reference1.contact_no"><span>Contact Number :</span> {{driver.reference1.contact_no || 'NA'}}</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<h5 class="profile_h">Reference 2</h5>
+			<div class="detailList">
+				<ul>
+	                <li ng-if="driver.reference2.name"><span>Name :</span> {{driver.reference2.name || 'NA'}}</li>
+	                <li ng-if="driver.reference2.relation_type"><span>Relation :</span> {{driver.reference2.relation_type || 'NA'}}</li>
+	               <li ng-if="driver.reference2.employee_code"><span>Employee Code :</span> {{driver.reference2.employee_code || 'NA'}}</li>
+	                <li ng-if="driver.reference2.address"><span>Address :</span> {{driver.reference2.address || 'NA'}}</li>
+	                <li ng-if="driver.reference2.contact_no"><span>Contact Number :</span> {{driver.reference2.contact_no || 'NA'}}</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="col-md-12">
+			<h5 class="profile_h">Guarantor Details</h5>
+			<div class="detailList">
+				<ul>
+	                <li ng-if="driver.guarantor_name"><span>Gurantor Name :</span> {{driver.guarantor_name || 'NA'}}</li>
+	                <li ng-if="driver.guarantor_address"><span>Address :</span> {{driver.guarantor_address || 'NA'}}</li>
+	               <li ng-if="driver.guarantor_contact_no"><span>Contact Number :</span> {{driver.guarantor_contact_no || 'NA'}}</li>
+	                <li ng-if="driver.guarantor_photo_id_no"><span>Photo Id No :</span> {{driver.guarantor_photo_id_no || 'NA'}}</li>
+	                <li ng-if="driver.guarantor_address_proof_no"><span>Address Proof No :</span> {{driver.guarantor_address_proof_no || 'NA'}}</li>
+				</ul>
+			</div>
+		</div>
+
+
+		<div class="col-md-12">
+			<h5 class="profile_h">Previous Company Details</h5>
+			<div class="detailList">
+				<ul>
+	                <li ng-if="driver.verif_prev_company_name"><span>Name :</span> {{driver.verif_prev_company_name || 'NA'}}</li>
+	                <li ng-if="driver.verif_prev_contact_name"><span>Contact Name :</span> {{driver.verif_prev_contact_name || 'NA'}}</li>
+	               <li ng-if="driver.verif_prev_contact_no"><span>Contact Number :</span> {{driver.verif_prev_contact_no || 'NA'}}</li>
+
+	                <li ng-if="driver.verif_prev_contact_address"><span>Address :</span> {{driver.verif_prev_contact_address || 'NA'}}</li>
+				</ul>
+			</div>
+		</div>
+
+		<div ng-if="$role['Driver']['Old Docs']" class="col-md-12">
+			<h5 class="profile_h">Document Details</h5>
+			<div class="detailList">
+				<!--<ul>
+					<li><span>Driver Photo :</span> {{driver.photo ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Address Proof Front Copy :</span> {{driver.address_proof_front_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Address Proof Back Copy :</span> {{driver.address_proof_back_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Driver License Front Copy :</span> {{driver.license_front_copy ? "Uploaded" : "Not Uploaded"}}</li>
+					<li><span>Driver License Back Copy :</span> {{driver.license_back_copy ? "Uploaded" : "Not Uploaded"}}</li>
+	            </ul>-->
+				<table ng-table="tableParams" class="table">
+					<tr ng-repeat="f in driver.documents track by $index">
+						<td data-title="'File Name '">{{f.name}}</td>
+						<td data-title="'Preview'">
+							<button ng-click="$event.preventDefault();previewFile(f.docReference)" style="box-shadow: 10px 5px 12px 0px;border: antiquewhite;" ng-show="f.docReference">Preview</button >
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="col-md-2">
+	    </div>
+	</div>
+	<div ng-show="drivers.length == 0">
+        <h4 style="text-align: center;color: darkgrey;">You have no driver registered. Please Register First.</h4>
+    </div>
+</form>

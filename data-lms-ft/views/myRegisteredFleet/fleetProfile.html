@@ -1,0 +1,85 @@
+<form name="fleetReg" novalidate>
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">
+        <!-- <span class="booking_list_header">BASIC DETAILS</span> -->
+        <div class="card-body">
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Name: <span ng-hide="(fleet_mode=='View')" class="req_r">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Fleet Name" ng-model="oFleet.name" placeholder="Enter Fleet Name" class="form-control" ng-readonly="(fleet_mode=='View')||(fleet_mode=='Edit')" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Designation:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Fleet Designation" ng-model="oFleet.designation" placeholder="Enter Fleet Designation" class="form-control" ng-readonly="(fleet_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Contact: <span ng-hide="(fleet_mode=='View')" class="req_r">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="Fleet Contact" ng-model="oFleet.prim_cont_no" ng-minlength="10" ng-maxlength="10" placeholder="Enter Fleet Contact" class="form-control" required ng-readonly="(fleet_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Other Contact:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" name="Other Fleet Contact" ng-model="oFleet.other_cont_no" placeholder="Enter Other Fleet Contact" class="form-control" ng-readonly="(fleet_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">E-mail:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Fleet E-mail" ng-model="oFleet.prim_email" class="form-control" placeholder="Enter E-mail" ng-readonly="(fleet_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Other E-mail:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" name="Other Fleet E-mail" ng-model="oFleet.alt_email" class="form-control" placeholder="Enter Other E-mail" ng-readonly="(fleet_mode=='View')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin:5px">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Remark:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <textarea name="Remark" ng-model="oFleet.remarks" class="form-control" rows="3" placeholder="Enter Remark" ng-readonly="(fleet_mode=='View')"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+</form>

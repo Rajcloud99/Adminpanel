@@ -1,0 +1,980 @@
+<!-- Controller: editSupplyBillController -->
+<!-- ControllerAs: sbVm -->
+
+<div class="modal-header">
+	<button type="button" ng-click="sbVm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">
+		<span class="c-black"><b>SupplyBill Edit</b></span>
+	</h4>
+</div>
+<form name="supplyBillform" novalidate autocomplete="off">
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- supplementaryBill DETAILS -->
+				<li class="list-group-item" style="overflow-y: scroll;max-height: 350px;">
+					<div class="pull-left">
+						<span class="booking_list_header">SUPPLEMENTARYBILL DETAILS</span>
+					</div>
+					<div class="pull-left m-l-20"
+						 ng-if="sbVm.__FormList.isSupplementaryShow.visible|hdlUdf:true"
+						 style="padding: 5px 0px;">
+						<div class="form-group m-b-0">
+							<label class="checkbox checkbox-inline m-r-20"
+								   ng-if="!sbVm.supplyReadonly && sbVm.__FormList.isSupplementaryShow.editable|hdlUdf:true">
+								<input type="checkbox"
+									   ng-init="sbVm.selectedGr.isSupplementaryShow = true"
+									   ng-model="sbVm.selectedGr.isSupplementaryShow">
+								<i class="input-helper"></i>
+								{{sbVm.__FormList.isSupplementaryShow.label || 'Is Supplementary Show'}}
+							</label>
+							<span ng-if="sbVm.supplyReadonly || !(sbVm.__FormList.isSupplementaryShow.editable|hdlUdf:true)">
+									<label>{{sbVm.__FormList.isSupplementaryShow.label || 'Is Supplementary Show'}}:</label>
+									<span> {{sbVm.selectedGr.isSupplementaryShow ? 'True' : 'False'}}</span>
+								</span>
+						</div>
+					</div>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+							<div class="col-md-12" ng-if="sbVm.selectedGr.isSupplementaryShow">
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppLoading_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppLoading_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppLoading_charges, 'suppLoading_charges')"
+												   ng-model="sbVm.__FormList.suppLoading_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppLoading_charges.label || 'Supp Loading Charges:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.loading_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   placeholder="Supp Loading Charges"
+													   class="form-control"
+													   ng-readonly="!(sbVm.__FormList.suppLoading_charges.editable|hdlUdf:true) || sbVm.__FormList.suppLoading_charges.__disable"
+													   name="suppLoading_charges"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppUnloading_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppUnloading_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppUnloading_charges, 'suppUnloading_charges')"
+												   ng-model="sbVm.__FormList.suppUnloading_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppUnloading_charges.label || 'Supp Unloading Charges:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.unloading_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   placeholder="Supp Unloading Charges"
+													   class="form-control"
+													   ng-readonly="!(sbVm.__FormList.suppUnloading_charges.editable|hdlUdf:true) || sbVm.__FormList.suppUnloading_charges.__disable"
+													   name="suppUnloading_charges"
+												>
+											</div>
+										</div>
+									</div>
+								</div>
+<!--								<div class="col-md-3"-->
+<!--									 ng-if="sbVm.__FormList.suppIncentivePercent.visible|hdlUdf:true">-->
+<!--									<div class="form-group m-b-0">-->
+<!--										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppIncentivePercent.label || 'Supp Incentive Percent:'}}</label>-->
+<!--										<div class="col-sm-6">-->
+<!--											<div class="fg-line">-->
+<!--												<input type="number"-->
+<!--													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+<!--													   onwheel="return false"-->
+<!--													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+<!--													   ng-model="sbVm.selectedGr.supplementaryBill.incentivePercent"-->
+<!--													   ng-readonly="true"-->
+<!--													   placeholder="Supp Incentive Percent"-->
+<!--													   name="suppIncentivePercent"-->
+<!--													   class="form-control">-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppAdvance_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppAdvance_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppAdvance_charges, 'suppAdvance_charges', true)"
+												   ng-model="sbVm.__FormList.suppAdvance_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppAdvance_charges.label || 'Supp Advance Charges:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.deduction.advance_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppAdvance_charges.editable|hdlUdf:true) ||sbVm.__FormList.suppAdvance_charges.__disable"
+													   placeholder="Supp Advance Charges"
+													   name="suppAdvance_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppDala_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppDala_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppDala_charges, 'suppDala_charges')"
+												   ng-model="sbVm.__FormList.suppDala_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppDala_charges.label || 'Supp Dala Charge:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Supp Dala Charge"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.dala_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppDala_charges.editable|hdlUdf:true) || sbVm.__FormList.suppDala_charges.__disable"
+													   name="suppDala_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppKanta_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppKanta_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppKanta_charges, 'suppKanta_charges')"
+												   ng-model="sbVm.__FormList.suppKanta_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppKanta_charges.label || 'Supp Kanta Charge:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   placeholder="Supp Kanta Charge"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.kanta_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppKanta_charges.editable|hdlUdf:true) || sbVm.__FormList.suppKanta_charges.__disable"
+													   name="suppKanta_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppToll_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppToll_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppToll_charges, 'suppToll_charges')"
+												   ng-model="sbVm.__FormList.suppToll_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppToll_charges.label || 'Supp Toll Charge:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.toll_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppToll_charges.editable|hdlUdf:true) || sbVm.__FormList.suppToll_charges.__disable"
+													   placeholder="Supp Toll Charge"
+													   name="suppToll_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppGrCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppGrCharges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppGrCharges, 'suppGrCharges')"
+												   ng-model="sbVm.__FormList.suppGrCharges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppGrCharges.label || 'Supp GR Charge:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.grCharges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppGrCharges.editable|hdlUdf:true) || sbVm.__FormList.suppGrCharges.__disable"
+													   placeholder="Supp GR Charge"
+													   name="suppGrCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppDiesel_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppDiesel_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppDiesel_charges, 'suppDiesel_charges')"
+												   ng-model="sbVm.__FormList.suppDiesel_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppDiesel_charges.label || 'Supp Diesel Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.diesel_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppDiesel_charges.editable|hdlUdf:true) || sbVm.__FormList.suppDiesel_charges.__disable"
+													   placeholder="Supp Diesel Charge"
+													   name="suppDiesel_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppDiscount.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppDiscount.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppDiscount, 'suppDiscount', true)"
+												   ng-model="sbVm.__FormList.suppDiscount.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppDiscount.label || 'Supp Discount'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.deduction.discount"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppDiscount.editable|hdlUdf:true) || sbVm.__FormList.suppDiscount.__disable"
+													   placeholder="Supp Discount"
+													   name="suppDiscount"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppLabourCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppLabourCharges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppLabourCharges, 'suppLabourCharges')"
+												   ng-model="sbVm.__FormList.suppLabourCharges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppLabourCharges.label || 'Supp Labour Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.labourCharges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppLabourCharges.editable|hdlUdf:true) || sbVm.__FormList.suppLabourCharges.__disable"
+													   placeholder="Supp Labour Charge"
+													   name="suppLabourCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppOther_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppOther_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppOther_charges, 'suppOther_charges')"
+												   ng-model="sbVm.__FormList.suppOther_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppOther_charges.label || 'Supp Other Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.other_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppOther_charges.editable|hdlUdf:true) || sbVm.__FormList.suppOther_charges.__disable"
+													   placeholder="Supp Other Charge"
+													   name="suppOther_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppSurCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppSurCharges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppSurCharges, 'suppSurCharges')"
+												   ng-model="sbVm.__FormList.suppSurCharges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppSurCharges.label || 'Supp Surcharge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.surCharges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppSurCharges.editable|hdlUdf:true) || sbVm.__FormList.suppSurCharges.__disable"
+													   placeholder="Supp Surcharge Charge"
+													   name="suppSurCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppTtDelay.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppTtDelay.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppTtDelay, 'suppTtDelay', true)"
+												   ng-model="sbVm.__FormList.suppTtDelay.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppTtDelay.label || 'Supp TT Delay:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.deduction.ttDelay"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppTtDelay.editable|hdlUdf:true) || sbVm.__FormList.suppTtDelay.__disable"
+													   placeholder="Supp TT Delay"
+													   name="suppTtDelay"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppGreen_tax.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppGreen_tax.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppGreen_tax, 'suppGreen_tax')"
+												   ng-model="sbVm.__FormList.suppGreen_tax.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppGreen_tax.label || 'Supp Green Tax:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.green_tax"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppGreen_tax.editable|hdlUdf:true) || sbVm.__FormList.suppGreen_tax.__disable"
+													   placeholder="Supp Green Tax"
+													   name="suppGreen_tax"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppCartageCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppCartageCharges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppCartageCharges, 'suppCartageCharges')"
+												   ng-model="sbVm.__FormList.suppCartageCharges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppCartageCharges.label || 'Supp Cartage Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.cartageCharges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppCartageCharges.editable|hdlUdf:true) || sbVm.__FormList.suppCartageCharges.__disable"
+													   placeholder="Supp Cartage Charge"
+													   name="suppCartageCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppPrevFreightCharges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppPrevFreightCharges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppPrevFreightCharges ,'suppPrevFreightCharges')"
+												   ng-model="sbVm.__FormList.suppPrevFreightCharges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppPrevFreightCharges.label || 'Supp Prev Freight Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.prevFreightCharges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppPrevFreightCharges.editable|hdlUdf:true) || sbVm.__FormList.suppPrevFreightCharges.__disable"
+													   placeholder="Supp Prev Charge"
+													   name="suppPrevFreightCharges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppTwoPtDelivery.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppTwoPtDelivery.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppTwoPtDelivery, 'suppTwoPtDelivery')"
+												   ng-model="sbVm.__FormList.suppTwoPtDelivery.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppTwoPtDelivery.label || 'Supp Two Point Delivery:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.twoPtDelivery"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppTwoPtDelivery.editable|hdlUdf:true) || sbVm.__FormList.suppTwoPtDelivery.__disable"
+													   placeholder="Supp Two Point Delivery"
+													   name="suppTwoPtDelivery"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppWeightman_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppWeightman_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppWeightman_charges, 'suppWeightman_charges')"
+												   ng-model="sbVm.__FormList.suppWeightman_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppWeightman_charges.label || 'Supp Weightman Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.weightman_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppWeightman_charges.editable|hdlUdf:true) || sbVm.__FormList.suppWeightman_charges.__disable"
+													   placeholder="Supp Weightman Charge"
+													   name="suppWeightman_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppOverweight_charges.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppOverweight_charges.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppOverweight_charges, 'suppOverweight_charges')"
+												   ng-model="sbVm.__FormList.suppOverweight_charges.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppOverweight_charges.label || 'Supp Overweight Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.overweight_charges"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppOverweight_charges.editable|hdlUdf:true) || sbVm.__FormList.suppOverweight_charges.__disable"
+													   placeholder="Supp Overweight Charge"
+													   name="suppOverweight_charges"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppDamage.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppDamage.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppDamage, 'suppDamage', true)"
+												   ng-model="sbVm.__FormList.suppDamage.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppDamage.label || 'Supp Damage Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.deduction.damage"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppDamage.editable|hdlUdf:true) || sbVm.__FormList.suppDamage.__disable"
+													   placeholder="Supp Damage Charge"
+													   name="suppDamage"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppPenalty.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppPenalty.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppPenalty, 'suppPenalty', true)"
+												   ng-model="sbVm.__FormList.suppPenalty.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppPenalty.label || 'Supp Penalty'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.deduction.penalty"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppPenalty.editable|hdlUdf:true) || sbVm.__FormList.suppPenalty.__disable"
+													   placeholder="Supp Penalty Charge"
+													   name="suppPenalty"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppExtra_running.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppExtra_running.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppExtra_running, 'suppExtra_running')"
+												   ng-model="sbVm.__FormList.suppExtra_running.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppExtra_running.label || 'Supp Extra Running'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.extra_running"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppExtra_running.editable|hdlUdf:true) || sbVm.__FormList.suppExtra_running.__disable"
+													   placeholder="Supp Extra Running"
+													   name="suppExtra_running"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppShortage.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppShortage.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppShortage, 'suppShortage', true)"
+												   ng-model="sbVm.__FormList.suppShortage.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppShortage.label || 'Supp Shortage Charge'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.deduction.shortage"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppShortage.editable|hdlUdf:true) || sbVm.__FormList.suppShortage.__disable"
+													   placeholder="Shortage Charge"
+													   name="suppShortage"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppFactory_halt.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppFactory_halt.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppFactory_halt, 'suppFactory_halt')"
+												   ng-model="sbVm.__FormList.suppFactory_halt.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppFactory_halt.label || 'Supp Factory Halt'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.factory_halt"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppFactory_halt.editable|hdlUdf:true) || sbVm.__FormList.suppFactory_halt.__disable"
+													   placeholder="Supp Factroy Halt"
+													   name="suppFactory_halt"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppCompany_halt.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppCompany_halt.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppCompany_halt, 'suppCompany_halt')"
+												   ng-model="sbVm.__FormList.suppCompany_halt.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppCompany_halt.label || 'Supp Company Halt'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.company_halt"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   ng-readonly="!(sbVm.__FormList.suppCompany_halt.editable|hdlUdf:true) || sbVm.__FormList.suppCompany_halt.__disable"
+													   placeholder="Supp Company Halt"
+													   name="suppCompany_halt"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppDetentionLoading.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppDetentionLoading, 'suppDetentionLoading')"
+												   ng-disabled="sbVm.__FormList.suppDetentionLoading.__disable"
+												   ng-model="sbVm.__FormList.suppDetentionLoading.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppDetentionLoading.label || 'Supp Loading Detention'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-init=""
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.detentionLoading"
+													   ng-readonly="true"
+													   placeholder="suppDetentionLoading"
+													   name="suppDetentionLoading"
+													   class="form-control">
+											</div>
+										</div>
+										<!--<div class="col-sm-6">-->
+											<!--{{sbVm.selectedGr.supplementaryBill.charges.detentionLoading}}-->
+										<!--</div>-->
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppDetentionUnloading.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppDetentionUnloading.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppDetentionUnloading, 'suppDetentionUnloading')"
+												   ng-model="sbVm.__FormList.suppDetentionUnloading.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppDetentionUnloading.label || 'Supp Unloading Detention'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   ng-init=""
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.detentionUnloading"
+													   ng-readonly="true"
+													   placeholder="suppDetentionUnloading"
+													   name="suppDetentionUnloading"
+													   class="form-control">
+											</div>
+										</div>
+										<!--<div class="col-sm-6">-->
+											<!--{{sbVm.selectedGr.supplementaryBill.charges.detentionUnloading}}-->
+										<!--</div>-->
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppRate.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppRate.label || 'Supp Rate'}}:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.rate"
+													   ng-readonly="!(sbVm.__FormList.suppRate.editable|hdlUdf:true)"
+													   ng-change="sbVm.selectedGr.supplementaryBill.basicFreight = ((sbVm.selectedGr.supplementaryBill.routeDistance || 0) * sbVm.selectedGr.supplementaryBill.rate)"
+													   placeholder="Supp Rate"
+													   name="supplementaryBill.rate"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3" ng-if="sbVm.__FormList.suppIncentive.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppIncentive.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppIncentive, 'suppIncentive')"
+												   ng-model="sbVm.__FormList.suppIncentive.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label">
+											{{sbVm.__FormList.suppIncentive.label || 'Supp Incentive:'}}</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.charges.incentive"
+													   ng-readonly="true"
+													   placeholder="Supp incentive"
+													   name="suppIncentive"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppRouteDistance.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">{{sbVm.__FormList.suppRouteDistance.label || 'Supp Route Distance'}}:</label>
+										<div class="col-sm-6">
+											{{sbVm.selectedGr.supplementaryBill.routeDistance = (sbVm.selectedGr.invoices[0].routeDistance || 0)}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label" style="color: green">Total SuppCharges:</label>
+										<div class="col-sm-6" style="color: green">
+											{{(sbVm.totalCharges =
+											(sbVm.selectedGr.supplementaryBill.charges|sumOfObject))|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label" style="color: green">Total SuppDeduction:</label>
+										<div class="col-sm-6" style="color: green">
+											{{(sbVm.totalDeduction =
+											(sbVm.selectedGr.supplementaryBill.deduction|sumOfObject))|roundOff}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3"
+									 ng-if="sbVm.__FormList.suppBasicFreight.visible|hdlUdf:true">
+									<div class="form-group m-b-0">
+										<label class="col-sm-1 checkbox checkbox-inline">
+											<input type="checkbox"
+												   ng-disabled="sbVm.__FormList.suppBasicFreight.__disable"
+												   ng-change="sbVm.includeDisinclued(sbVm.__FormList.suppBasicFreight, 'suppBasicFreight')"
+												   ng-model="sbVm.__FormList.suppBasicFreight.__checked">
+											<i class="input-helper"></i>
+										</label>
+										<label class="col-sm-4 control-label" style="color: green">{{sbVm.__FormList.suppBasicFreight.label || 'Supp BasicFreight'}}:</label>
+										<div class="col-sm-6" style="color: green">
+											<div class="fg-line">
+												<input type="number"
+													   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+													   onwheel="return false"
+													   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+													   ng-model="sbVm.selectedGr.supplementaryBill.basicFreight"
+													   ng-change="sbVm.calculateCheckedCharges()"
+													   placeholder="Supp Basic Freight"
+													   ng-readonly="!(sbVm.__FormList.suppBasicFreight.editable|hdlUdf:true) || sbVm.__FormList.suppBasicFreight.__disable"
+													   name="suppBasicFreight"
+													   class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--<div class="col-md-3">-->
+									<!--<div class="form-group m-b-0">-->
+										<!--<label class="col-sm-4 control-label" style="color: green">Basic Freight:</label>-->
+										<!--<div class="col-sm-6" style="color: green">-->
+											<!--<div class="fg-line">-->
+												<!--<input type="number"-->
+													   <!--onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"-->
+													   <!--onwheel="return false"-->
+													   <!--onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"-->
+													   <!--ng-model="sbVm.selectedGr.supplementaryBill.basicFreight"-->
+													   <!--placeholder="Supp Basic Freight"-->
+													   <!--ng-readonly="sbVm.isDisable"-->
+													   <!--name="supplementaryBill.basicFreight"-->
+													   <!--class="form-control">-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label" style="color: green">Total Freight:</label>
+										<div class="col-sm-6" style="color: green">
+											{{(sbVm.selectedGr.supplementaryBill.totalFreight =
+											(sbVm.selectedGr.supplementaryBill.basicFreight || 0) + (sbVm.totalCharges || 0) - (sbVm.totalDeduction || 0))}}
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label" style="color: green">Checked Total Charges:</label>
+										<div class="col-sm-6" style="color: green">
+											{{(sbVm.totCheckedCharges)|roundOff:0}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label" style="color: green">Checked Total Deduction:</label>
+										<div class="col-sm-6" style="color: green">
+											{{(sbVm.totCheckedDeduction)|roundOff:0}}
+										</div>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label" style="color: green">Checked Total Freight:</label>
+										<div class="col-sm-6" style="color: green">
+											{{(sbVm.totalFreight =  (sbVm.totCheckedCharges || 0) - (sbVm.totCheckedDeduction || 0))}}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary"
+				ng-click="sbVm.submit(supplyBillform)">Submit
+		</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="sbVm.closeModal()">Close
+		</button>
+	</div>
+
+</form>
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+	label {
+		font-weight: bold !important;
+	}
+
+</style>

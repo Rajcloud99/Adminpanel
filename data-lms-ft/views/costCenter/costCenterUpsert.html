@@ -1,0 +1,160 @@
+<form name="costCenter" ng-submit="vm.submit(costCenter)" autocomplete="off" novalidate>
+
+	<div class="modal-header">
+		<button type="button" ng-click="vm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">
+			<span class="c-black"><b>Cost Center</b>
+				<span style="margin-left: 10px; color: rgb(183, 183, 183);">
+							({{vm.operationType}})
+						</span>
+			</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<!-- BASIC Account DETAILS -->
+				<li class="list-group-item">
+					<span class="booking_list_header">BASIC DETAILS</span>
+					<div class="card-body">
+						<div class="row" style="margin:5px">
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Name: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" autocomplete="off"
+												   placeholder="Enter Name"
+												   ng-model="vm.oCostCategory.name"
+												   name="Name"
+												   class="form-control"
+												   required>
+										</div>
+										<span class="error" ng-if="costCenter['Name'].$error.required
+																			&& (costCenter['Name'].$touched
+																			|| costCenter.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Feature: </label>
+									<div class="col-sm-6">
+										<div class="select">
+											<select chosen
+													multiple
+													class="form-control"
+													placeholder="Select Group"
+													ng-options="item as item for item in $constants.aFeature"
+													ng-model="vm.oCostCategory.feature"
+													name="Feature">
+												<option value="" disabled>
+													Select Type
+												</option>
+											</select>
+										</div>
+										<span class="error" ng-if="costCenter['Feature'].$error.required
+																			&& (costCenter['Feature'].$touched
+																			|| costCenter.$submitted)">
+														This Field is Mandatory</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Branch Name: </label>
+									<div class="col-sm-6">
+										<div class="lvh-search ng-scope sear chosen-row-2">
+											<input autocomplete="off"
+												   type="text"
+												   class="form-control lvhs-input"
+												   placeholder="Branch Name..."
+												   ng-model="vm.branch"
+												   typeahead-wait-ms="10"
+												   name="branch_name"
+												   typeahead-on-select="vm.onBranchSelect($item, $model, $label)"
+												   typeahead="item as item.name for item in vm.getBranch($viewValue) | limitTo:6"
+											>
+
+											<i class="lvh-search-close" ng-click="vm.oCostCategory.branch=null;">×</i>
+											<span class="error" ng-if="costCenter['Branch Name'].$error.required
+																			&& (costCenter['Branch Name'].$touched
+																			|| costCenter.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+									<div class="col-sm-12">
+										<div class="col-xs-6 col-sm-8 col-md-8 col-lg-8">
+											<span class="btn-lst"
+												  ng-repeat="branch in vm.oCostCategory.branch">
+												<button class="btn-xs" style="background: black; color: aliceblue;">
+													{{branch.name}}&nbsp;<a ng-click="vm.oCostCategory.branch.splice($index, 1)"> X </a>
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
+
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Category: <span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="lvh-search ng-scope sear chosen-row-2">
+											<input autocomplete="off"
+												   type="text"
+												   class="form-control lvhs-input"
+												   placeholder="Category Name..."
+												   ng-model="vm.oCostCategory.category"
+												   typeahead-wait-ms="10"
+												   name="Category Name"
+												   typeahead="item as item.name for item in vm.getCostCenter($viewValue) | limitTo:6"
+												   required
+											>
+											<i class="lvh-search-close" ng-click="vm.oCostCategory.category=null;">×</i>
+											<span class="error" ng-if="costCenter['Category Name'].$error.required
+																			&& (costCenter['Category Name'].$touched
+																			|| costCenter.$submitted)">
+														This Field is Mandatory</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-primary">SUBMIT</button>
+		<button class="btn btn-warning"
+				type="button"
+				ng-click="vm.closeModal()">Close
+		</button>
+	</div>
+
+</form>
+
+
+<style>
+	.container {
+		width: 98% !important;
+	}
+
+	.modal-dialog {
+		width: 90%;
+	}
+
+</style>

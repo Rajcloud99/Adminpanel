@@ -1,0 +1,77 @@
+<form role="form" name="myForm" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">GR No. {{selGR.gr_no}}</h4>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label"> Bank <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="select">
+								<select class="form-control" ng-model="bank" ng-options="item as item.a_c for item in oVendor.banking_details"
+										style="background-color: white;" required>
+									<option value="" disabled selected>Select Bank</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-show="bank" class="col-sm-6">
+					<label  class="col-sm-3 control-label">Select Cheque </label>
+					<div class="col-sm-9">
+						<button class="btn btn-sm btn-primary"
+								onclick="document.getElementById('cheque').click();">Select File</button>
+						<input ng-hide="true" id="cheque" type="file" accept="image/*,application/pdf"
+							   ngf-select ng-model="cheque" name="cheque"
+							   ngf-max-size="2MB" ngf-model-invalid="errorFile">
+						<i ng-show="myForm.cheque.$error.maxSize">File too large
+							{{errorFile.size / 1000000|number:1}}MB: max 2M</i>
+						<img ng-show="myForm.cheque.$valid" ngf-src="cheque"
+							 ngf-resize="{width: 100, height: 100}">
+						<br>
+					</div>
+				</div>
+			</div>
+
+			<div class="clearfix"></div>
+			<br>
+		</div>
+	</div>
+
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-disabled="!(cheque)"
+				ng-click="saveClick()">Upload
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 50%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>

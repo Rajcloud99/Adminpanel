@@ -1,0 +1,102 @@
+<!--controller: grNonBillablePopUpController-->
+<!--controllerAs: gnbVm-->
+
+<form role="form" name="nonBillGrPopUp" autocomplete="off">
+	<div class="modal-header">
+		<button type="button" ng-click="gnbVm.closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Trip No. {{gnbVm.gr.trip.trip_no}}</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group m-b-0">
+								<label class="col-sm-2 control-label"><b>NonBillable: </b></label>
+								<div class="col-sm-6">
+									{{(gnbVm.gr.isNonBillable) ? gnbVm.gr.isNonBillable : 'False'}}
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-3 control-label">Date:<span class="req_r">*</span></label>
+								<div class="col-sm-7">
+									<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+										<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+											<input ng-click="gnbVm.DatePicker.openDatePicker(this, $event, 'opened1')"
+												   type="text"
+												   class="form-control"
+												   uib-datepicker-popup="{{gnbVm.DatePicker.formats[0]}}"
+												   show-weeks="false"
+												   ng-model="gnbVm.date"
+												   is-open="opened1"
+												   datepicker-options="gnbVm.DatePicker.dateSettings"
+												   close-text="Close"
+												   placeholder="Date"
+												   name="Date"
+												   required
+												   style="padding: 0px 4px;height: 34px;"/>
+										</div>
+										<span class="input-group-btn">
+				<button type="button"
+						class="btn btn-default m-t-0 f12"
+						ng-click="gnbVm.DatePicker.openDatePicker(this, $event, 'opened1')"><i
+					class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group m-b-0">
+								<label class="col-sm-3 control-label">Remark: <span class="req_r">*</span></label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" ng-model="gnbVm.remark" required>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</li>
+			</ul>
+			<br>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="gnbVm.submit(nonBillGrPopUp)">Update
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="gnbVm.closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 50%;
+		height: 173px
+	}
+
+	.exced {
+		margin-top: 20px;
+		margin-left: 10px;
+	}
+
+	.exced div div .control-label {
+		font-weight: bolder;
+	}
+
+	td, th {
+		text-align: center;
+	}
+
+	.pac-container.pac-logo {
+		z-index: 9999;
+	}
+</style>
