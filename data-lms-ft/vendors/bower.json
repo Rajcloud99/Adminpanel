@@ -1,0 +1,36 @@
+{
+  "name": "vendors",
+  "authors": [],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "~0.14.3",
+    "angular-loading-bar": "~0.8.0",
+    "angular-nouislider": "~0.3.1",
+    "bootstrap-sweetalert": "~0.4.5",
+    "eonasdan-bootstrap-datetimepicker": "Eonasdan/bootstrap-datetimepicker#~4.7.14",
+    "flot-orderBars": "emmerich/flot-orderBars",
+    "flot.curvedlines": "MichaelZinsmaier/CurvedLines#~1.1.1",
+    "flot.tooltip": "~0.8.5",
+    "html2canvas": "^1.0.0-alpha.3",
+    "fullcalendar": "~2.4.0",
+    "jquery-placeholder": "~2.1.2",
+    "malihu-custom-scrollbar-plugin": "~3.1.0",
+    "material-design-iconic-font": "~2.1.1",
+    "Waves": "waves#~0.7.4",
+    "angular-nvd3": "^1.0.9"
+  },
+  "resolutions": {
+    "angular": ">=1.2.0"
+  }
+}
