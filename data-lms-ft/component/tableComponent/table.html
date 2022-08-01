@@ -1,0 +1,97 @@
+<div class="p-5 w-100">
+	<div class="setting pull-right">
+		<i class="zmdi zmdi-settings zmdi-hc-fw pointer" ng-click="vm.columnSettingPopup()"></i>
+	</div>
+	<form novalidate name="tableForm">
+		<table class="table table-bordered" id="ja-table" style="position: relative">
+			<thead style="visibility: hidden">
+				<tr>
+					<th ng-repeat="head in vm.head track by $index"
+						ng-class="vm.columnHeaderClasses($index, head)"
+						ng-click="vm.columnHeaderEvent($index, head)"
+					>
+						<p ng-if="head.html"
+						   ng-bind-html="head.name"
+						></p>
+						<span ng-if="!head.html">{{head.name}}</span>
+						<i class="zmdi zmdi-swap-vertical zmdi-hc-fw" ng-if="head.orderBy === 0"></i>
+						<i class="zmdi zmdi-long-arrow-down zmdi-hc-fw" ng-if="head.orderBy === -1"></i>
+						<i class="zmdi zmdi-long-arrow-up zmdi-hc-fw" ng-if="head.orderBy === 1"></i>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="aBody in vm.body track by $index"
+					ng-click="vm.selectable && vm.selectThisRow($index, aBody, $event)"
+					ng-dblclick="vm.dblClicked()"
+					ng-class="vm.rowBodyClasses()">
+					<td ng-repeat="body in aBody track by $index">
+						<p ng-if="body.html" ng-bind-html="body.html"></p>
+						<div ng-if="body.html" class='overlay-checkbox'></div>
+						<span ng-if="!body.html && !body.oHtml">{{body || 'NA'}}</span>
+						<span ng-if="body.oHtml" ng-bind-html="body.oHtml"></span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+
+
+<style>
+	table#ja-table thead tr th{
+		text-align: center;
+		color: #fff !important;
+		background: #2196f3 !important;
+	}
+
+	.setting{
+		color: #fff;
+		background: #2196f3;
+		position: relative;
+		top: 1px;
+		right: 1px;
+		cursor: pointer;
+	}
+
+	table#ja-table tbody tr td{
+		text-align: center;
+	}
+
+	table#ja-table tbody tr.selected{
+		background: #dedede;
+	}
+
+	table#ja-table p{
+		margin: 0 5px;
+	}
+
+	.overlay-checkbox{
+		content: ' ';
+		background: #ffffff00;
+		height: 20px;
+		width: 25px;
+		position: relative;
+		z-index: 4;
+		left: 0px;
+		top: -18px;
+	}
+
+	#ja-table.table > thead > tr > th:last-child,
+	#ja-table.table > tbody > tr > th:last-child,
+	#ja-table.table > tfoot > tr > th:last-child,
+	#ja-table.table > thead > tr > td:last-child,
+	#ja-table.table > tbody > tr > td:last-child,
+	#ja-table.table > tfoot > tr > td:last-child{
+		padding-right: 5px !important;
+	}
+
+	#ja-table.table > thead > tr > th,
+	#ja-table.table > tbody > tr > th,
+	#ja-table.table > tfoot > tr > th,
+	#ja-table.table > thead > tr > td,
+	#ja-table.table > tbody > tr > td,
+	#ja-table.table > tfoot > tr > td{
+		padding-left: 5px !important;
+	}
+</style>

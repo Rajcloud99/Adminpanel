@@ -1,0 +1,45 @@
+<a uib-dropdown-toggle="" href="" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+	<i class="tm-icon zmdi zmdi-notifications"></i> <i class="tmn-counts">{{notifShow.length || 0}}</i></a>
+<div class="dropdown-menu dropdown-menu-lg stop-propagate pull-right">
+	<div class="listview" id="notifications">
+
+		<div class="lv-header">Notification
+			<ul class="actions">
+				<li>
+
+					<a href="" data-ng-click="notifShow={};">
+						<i class="zmdi zmdi-check-all"></i></a></li>
+			</ul>
+		</div>
+
+		<div class="lv-body">
+
+			<a class="lv-item ng-scope" ng-href="" ng-repeat="w in notifShow">
+				<div class="media">
+					<div class="pull-left">{{w.refTo}}</div>
+					<div class="media-body">
+						<div class="lv-title ng-binding">{{w.delta.Success.status}} ({{w.delta.Success.count}}) -
+							{{w.time |
+							date:'dd-MM-yyyy'}}
+						</div>
+						<small class="lv-small ng-binding">{{w.delta.Success.message}}</small></div>
+					<div class="pull-left"></div>
+					<div class="media-body" style="padding-left: 95px;" ng-if="w.delta.Fail.count">
+						<div class="lv-title ng-binding">{{w.delta.Fail.status}} ({{w.delta.Fail.count}}) - {{w.time
+							|
+							date:'dd-MM-yyyy'}}
+						</div>
+						<small class="lv-small ng-binding">{{w.delta.Fail.message}}</small></div>
+
+					<button ng-show="(w.action && w.action.isActioned===true && (w.refTo=='TripAdvances' || w.refTo=='TripSettle'))"
+							class="btn btn-primary p-t-0 p-b-0 waves-effect" type="button"
+							style="margin-bottom: 3px;  font-size: 16px" uib-tooltip="Action"
+							ng-click="addManagerRemark()" tooltip-placement="bottom">
+						Action
+					</button>
+				</div>
+			</a>
+		</div>
+		<div class="clearfix"></div>
+		<a class="lv-footer" href="#!/reports/logreport">View All</a></div>
+</div>

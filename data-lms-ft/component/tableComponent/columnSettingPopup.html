@@ -1,0 +1,79 @@
+<div class="modal-header" >
+	<button type="button" ng-click="vm.closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title" align="center">Table Column Setting</h4><br>
+</div>
+<div class="col-md-3">
+	<div class="form-group">
+		<div class="col-xs-6"><label>Check All :</label></div>
+		<div class="col-xs-6">
+			<label class="checkbox checkbox-inline m-r-20">
+				<input type="checkbox"
+					   ng-model="vm.checkTrue"
+				       ng-change="vm.checkAll(vm.checkTrue)">
+				<i class="input-helper"></i>
+			</label>
+		</div>
+	</div>
+</div>
+<div class="col-md-4">
+	<div class="form-group">
+		<div class="col-xs-6"><label>UnCheck All :</label></div>
+		<div class="col-xs-6">
+			<label class="checkbox checkbox-inline m-r-20">
+				<input type="checkbox"
+					   ng-model="vm.UncheckTrue"
+				       ng-change="vm.UncheckAll(vm.UncheckTrue)">
+				<i class="input-helper"></i>
+			</label>
+		</div>
+	</div>
+</div>
+<div class="clearfix"></div>
+<!--ng-init="isCheck = vm.columnSetting.visibleColumn.indexOf(col) !== -1 ? true : false"-->
+<!--ng-change="vm.setVisibleColumn(col.isCheck, col.name)"-->
+<div class="modal-body">
+	<div class="ja-sortable-wrapper">
+		<ja-sortable>
+			<div ng-repeat="col in vm.allowedColumn">
+				<label class="checkbox checkbox-inline m-r-20">
+					<input type="checkbox"
+						   ng-model="col.isCheck">
+					<i class="input-helper"></i>
+					<span>{{col.name}}</span>
+				</label>
+			</div>
+		</ja-sortable>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary"
+			style="font-size: 14px;"
+			ng-click="vm.save()"
+			type="button">Save</button>
+	<button class="btn btn-primary"
+			style="font-size: 14px;"
+			ng-click="vm.closeModal()"
+			type="button"
+			ng-click="">Cancel</button>
+</div>
+<style>
+	.ui-state-highlight{
+		border: 1px solid #e8e8e8;
+		background: #f9f9f98c;
+		color: #777620;
+	}
+
+	.ja-sortable-wrapper{
+		width: 80%;
+		margin: auto;
+	}
+
+	ja-sortable > div {
+		height: 30px;
+		padding: 5px;
+
+	}
+</style>
