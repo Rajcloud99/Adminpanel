@@ -1,4 +1,3 @@
-/nodemodules
 /files/
 /package-lock.json
 /test/
@@ -11,3 +10,4 @@
 /data-lms-ft/gruntfile.js
 /data-lms-ft/lockscreen.html
 /pjson.json
+/node_modules/
