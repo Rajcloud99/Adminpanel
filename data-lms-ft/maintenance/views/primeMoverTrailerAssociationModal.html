@@ -1,0 +1,131 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Prime mover-trailer
+        <span style="margin-left:10px;
+         color:#B7B7B7">({{currentMode}})
+        </span>
+    </h4>
+</div>
+<div class="modal-body" id="modal-body" style="margin-top: 20px">
+    <form name="PrimeMoverTrailerAssociationForm" class="form-horizontal" novalidate>
+        <div class="validationError" ng-show="materialGroupmsg"><h5 class="c-red">* {{mmsg}}</h5></div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">Vehicle No.</label>
+          <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+            <select  style="height:30px" chosen data-placeholder-text-single="'Select vehicle no'" allow-single-deselect="true" no-results-text="'Could not find any vehicle'" class="form-control" ng-model="objPrimeMoverTrailerAssociation.vehicle_reg_no" ng-options="regVehicle.vehicle_reg_no as regVehicle.vehicle_reg_no for regVehicle in regVehicles" ng-disabled="currentMode==='Disassociate'" required>
+              <option value="" ></option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" >
+          <label class="col-sm-3 control-label">Trailer no.</label>
+          <div class="col-sm-8" ng-if="currentMode == 'Associate'" style="padding-left: 15px;padding-right: 15px;">
+            <select  style="height:30px" chosen data-placeholder-text-single="'Select trailer no.'" allow-single-deselect="true" no-results-text="'Could not find any trailer'" class="form-control" ng-model="objPrimeMoverTrailerAssociation.trailer_no" ng-options="trailer.vehicle_reg_no as trailer.vehicle_reg_no for trailer in trailers" required>
+              <option value="" ></option>
+            </select>
+          </div>
+          <div class="col-sm-8" ng-if="currentMode == 'Disassociate'" style="padding-left: 15px;padding-right: 15px;">
+            <label>{{objPrimeMoverTrailerAssociation.trailer_no}}</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label  class="col-sm-3 control-label">Association date-time</label>
+          <div class="col-sm-4" style="padding-left: 15px;padding-right: 15px;">
+			  <div class="date-picker input-group dp-blue"
+				   ng-class="{ 'is-opened': opened1 == true }">
+				  <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+					  <input ng-click="open($event, 'opened1')" type="text" class="form-control"
+							 datepicker-popup="{{format}}" show-weeks="false" ng-model="objPrimeMoverTrailerAssociation.association_datetime"
+							 is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+							 placeholder="date" ng-disabled="currentMode==='Disassociate'"
+							 style="padding: 0px 4px;height: 34px;"/>
+				  </div>
+				  <span class="input-group-btn">
+                    <button ng-disabled="currentMode==='Disassociate'" type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+			  </div>
+            <!--<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                <datetimepicker ng-model="objPrimeMoverTrailerAssociation.association_datetime" show-weeks="false" date-format="dd-MMM-yyyy" date-options="dateOptions" show-button-bar="false" style="background-color: white;" disabled-date="currentMode==='Disassociate'">
+                </datetimepicker>
+			</div>-->
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group">
+            <label  class="col-sm-3 control-label">Odometer reading on association</label>
+            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                <div class="fg-line" >
+                    <input style="height:30px" type="number" ng-model="objPrimeMoverTrailerAssociation.odometer_on_association" class="form-control input-sm" ng-disabled="currentMode==='Disassociate'" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="col-sm-3 control-label">Place of association</label>
+            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                <div class="fg-line" >
+                    <input type="text" style="height:30px" ng-model="objPrimeMoverTrailerAssociation.place_of_association" class="form-control input-sm" ng-disabled="currentMode==='Disassociate'" required>
+                </div>
+            </div>
+        </div>
+		<div class="form-group">
+			<label  class="col-sm-3 control-label">Remark</label>
+			<div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+				<div class="fg-line" >
+					<input type="text" style="height:30px" ng-model="objPrimeMoverTrailerAssociation.remark" class="form-control input-sm" ng-disabled="currentMode==='Disassociate'">
+				</div>
+			</div>
+		</div>
+        <div class="form-group" ng-hide="currentMode==='Associate'">
+            <label  class="col-sm-3 control-label">Disassociation date-time</label>
+            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened2 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+							   datepicker-popup="{{format}}" show-weeks="false" ng-model="objPrimeMoverTrailerAssociation.disassociation_datetime"
+							   is-open="opened2" datepicker-options="dateOptions" close-text="Close"
+							   placeholder="date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+				</div>
+              <!--<div class="fg-line" ng-class="{ 'fg-toggled': opened == true }">
+                <datetimepicker ng-model="objPrimeMoverTrailerAssociation.disassociation_datetime" show-weeks="false" date-format="dd-MMM-yyyy" date-options="dateOptions" show-button-bar="false" style="background-color: white;">
+                </datetimepicker>
+              </div>-->
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group" ng-hide="currentMode==='Associate'">
+            <label  class="col-sm-3 control-label">Odometer reading on disassociation<span class="req_r">*</span></label>
+            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                <div class="fg-line" >
+                    <input type="number" style="height:30px" ng-model="objPrimeMoverTrailerAssociation.odometer_on_disassociation" class="form-control input-sm" ng-blur="readingCheck()" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-hide="currentMode==='Associate'">
+            <label  class="col-sm-3 control-label">Place of disassociaation</label>
+            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+                <div class="fg-line" >
+                    <input type="text" style="height:30px"
+                           ng-model="objPrimeMoverTrailerAssociation.place_of_disassociation" class="form-control
+                            input-sm">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="closeModal()">Cancel</button>
+    <button class="btn btn-primary" style="width: 60px" type="button"
+            ng-click="savePrimeMoverTrailerAssociation(PrimeMoverTrailerAssociationForm)">Save</button>
+</div>
+
+<style type="text/css">
+  .modal-dialog {width: 60%;}
+
+</style>

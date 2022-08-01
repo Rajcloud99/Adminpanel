@@ -1,0 +1,121 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:5px 15px;">
+			<div class="col-md-2">
+				<select name="spare" class="form-control" chosen data-placeholder-text-single="'Spare'"
+						allow-single-deselect="true" no-results-text="'Could not find any Spare'" ng-model="spare_name"
+						ng-options="item.name as item.name for item in aSpare" ng-change="getAllInvInward()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-2">
+				<select name="vendor" class="form-control" chosen data-placeholder-text-single="'Vendor'"
+						allow-single-deselect="true" no-results-text="'Could not find any Vendor'"
+						ng-model="vendor_name" ng-options="item.name as item.name for item in aPOvendor"
+						ng-change="getAllInvInward()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+							   uib-datepicker-popup="{{format}}" show-weeks="false"
+							   ng-model="start_date" is-open="opened1" max-date="minDate"
+							   datepicker-options="dateOptions"
+							   close-text="Close" ng-change="getAllInvInward()" placeholder="From Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+					  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+							  class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+					 style=" ">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+						<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+							   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+							   is-open="opened2" ng-change="getAllInvInward()" max-date="minDate" min-date="start_date"
+							   datepicker-options="dateOptions" close-text="Close"
+							   placeholder="To Date"
+							   style="padding: 0px 4px; height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+					  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i
+							  class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+
+			<!-- <div class="col-md-1">
+               <select name="ponumder" class="form-control" chosen data-placeholder-text-single="'PO Number'" allow-single-deselect="true" no-results-text="'Could not find any PO Number'"  ng-model="po_number" ng-options="item.ponumder as item.ponumder for item in aPO" ng-change="getAllInvInward()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <div class="fg-line">
+                    <input type="text" ng-model="invoice_number" name="invoiceNumber" class="form-control input-sm" placeholder="Invoice Number" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllInvInward()" style="height: 34px;font-size: 13px;">
+                </div>
+            </div> -->
+			<div class="btns">
+				<!-- <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="returnSpare()">Return Spare</button>
+                <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="spareIssue()">Spare Issue</button>
+                <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="getInwords()">Inventory Inward</button> -->
+				<a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"><i
+						class="glyphicon glyphicon-download"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="detailsList">
+		<div class="" style="overflow: auto;background: #fff;height: 510px;">
+			<table class="table table-bordered unresponsive">
+				<thead>
+				<tr>
+					<th>INV. Id</th>
+					<th>Spare Name</th>
+					<th>Spare Code</th>
+					<th style="min-width: 200px;">Vendor Name</th>
+					<th>Vendor Id</th>
+					<th>Category Name</th>
+					<th>Category Code</th>
+					<th style="min-width: 100px;">Quantity</th>
+					<th style="min-width: 143px;">Remaining Quantity</th>
+					<th style="min-width: 80px;">Rate/Piece</th>
+					<th style="min-width: 80px;">UOM</th>
+					<th>Billing Amount</th>
+					<th style="min-width: 60px;">PO No.</th>
+					<th>Invoice No.</th>
+					<th style="min-width: 200px;">Inward Date</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="objInventory in inventories">
+					<td>{{objInventory.entryId}}</td>
+					<td>{{objInventory.spare_name}}</td>
+					<td>{{objInventory.spare_code}}</td>
+					<td>{{objInventory.vendor_name}}</td>
+					<td>{{objInventory.vendorId}}</td>
+					<td>{{objInventory.category_name}}</td>
+					<td>{{objInventory.category_code}}</td>
+					<td>{{objInventory.remaining_quantity}}</td>
+					<td>{{objInventory.quantity}}</td>
+					<td>{{objInventory.rate_per_piece}}</td>
+					<td>{{objInventory.uom}}</td>
+					<td>{{objInventory.billing_amount}}</td>
+					<td>{{objInventory.po_number}}</td>
+					<td>{{objInventory.invoice_number}}</td>
+					<td>{{objInventory.created_at | date:'d/M/yy h:mm a'}}</td>
+				</tr>
+				</tbody>
+			</table>
+
+			<div ng-if="inventories.length == 0" class="ms-body" style=" min-height: 50px;">
+				<h3>Inventory data not available !!!!!</h3>
+			</div>
+		</div>
+	</div>
+</div>

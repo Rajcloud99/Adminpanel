@@ -1,0 +1,104 @@
+<form role="form"  name="" autocomplete="off" novalidate>
+	<div class="modal-header" >
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h5 class="modal-title" align="center">Diesel Slip</h5><br>
+	</div>
+	<div class="modal-body">
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Flag</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.flag}}</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">FROM/TO</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.from_to}}</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Type</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.from_to_type}}</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Quantity</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.quantity}}</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Price</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.price}}</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Total Amount</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.total_amount}}</label>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Bill No.</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.bill_no}}</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Remark</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.remark}}</label>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Employee Name</label>
+					<div class="col-sm-6">
+						<label>{{dSlip.employee_involved_name}}</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button ng-click="downlaodSlip(dSlip)" class="btn btn-success" style="margin-bottom: 12px;">Download</button>&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()" style="margin-bottom: 12px;">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {width: 85%;
+		height: 173px
+	}
+	.multiselect-parent ul.dropdown-menu.dropdown-menu-form {
+		opacity: 1;
+		transform: none;    overflow: auto !important;
+	}
+	.chosen-container-single .chosen-single{height: 28px;margin-top: -7px;}
+</style>

@@ -1,0 +1,103 @@
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="card" style="overflow: auto">
+		<div class="card-header" style="padding: 0px 25px;">
+			<!-- <h2>Vehicle Trailer Association/Disassociation</h2> -->
+			<div class="select xx">
+				<select chosen class="form-control" ng-options="item as item for item in aCategory" ng-model="status"
+						ng-change="getAllPrimeMoverTrailerAssociations()">
+					<option value="">Search by Status</option>
+				</select>
+			</div>
+			<div class="select xx">
+				<select chosen class="form-control"
+						ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in regVehicles"
+						ng-model="selVehicle" ng-change="getAllPrimeMoverTrailerAssociations()">
+					<option value="">Search by Vehicle</option>
+				</select>
+			</div>
+			<div class="select xx">
+				<select chosen class="form-control"
+						ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aTrailersAll"
+						ng-model="selTrailer" ng-change="getAllPrimeMoverTrailerAssociations()">
+					<option value="">Search by Trailer</option>
+				</select>
+			</div>
+			<div class="btns" style="">
+
+				<button class="btn btn-warning waves-effect" ng-show="selectedPrimeMoverTrailerAssociation._id"
+						ng-disabled="(selectedPrimeMoverTrailerAssociation.isDisassociated)"
+						ng-click="associateOrDisassociate(selectedPrimeMoverTrailerAssociation)">Disassociate
+				</button>
+				<button class="btn btn-primary waves-effect"
+						ng-click="associateOrDisassociate()">Add new association
+				</button>
+				<button class="btn btn-primary waves-effect"
+						ng-click="downloadPMT()">Download
+				</button>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card-body" style="min-height:500px">
+						<table class="table table-bordered override-table-bordered">
+							<thead>
+							<tr>
+								<th>S.No.</th>
+								<th>Vehicle no.</th>
+								<th>Trailer no.</th>
+								<!-- <th>Association date-time</th> -->
+								<th>Place of association</th>
+								<th>Odometer reading on association</th>
+								<!-- <th>Disassociation date-time</th> -->
+								<th>Place of disassociation</th>
+								<th>Odometer reading on disassociation</th>
+								<th>Association entry by</th>
+								<th>Disassociation entry by</th>
+								<th>Remark</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr class="lv-item pointer selectItem"
+								ng-repeat="objPrimeMoverTrailerAssociation in primeMoverTrailerAssociations"
+								ng-click="selectPrimeMoverTrailerAssociationAtIndex($index)">
+								<td>{{(currentPage-1)+$index+1}}</td>
+								<td>{{objPrimeMoverTrailerAssociation.vehicle_reg_no}}</td>
+								<td>{{objPrimeMoverTrailerAssociation.trailer_no}}</td>
+								<!-- <td>{{objPrimeMoverTrailerAssociation.association_datetime | date:'medium'}}</td> -->
+								<td>{{objPrimeMoverTrailerAssociation.place_of_association}}</td>
+								<td>{{objPrimeMoverTrailerAssociation.odometer_on_association}}</td>
+								<!-- <td>{{objPrimeMoverTrailerAssociation.disassociation_datetime | date:'medium'}}</td> -->
+								<td>{{objPrimeMoverTrailerAssociation.place_of_disassociation}}</td>
+								<td>{{objPrimeMoverTrailerAssociation.odometer_on_disassociation}}</td>
+								<td>{{objPrimeMoverTrailerAssociation.associated_by_employee_name}}</td>
+								<td>{{objPrimeMoverTrailerAssociation.disassociated_by_employee_name}}</td>
+								<td>{{objPrimeMoverTrailerAssociation.remark}}</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="pagi" ng-show="totalPages>1" style="position: absolute;bottom:0;right:200px;">
+						<pagination ng-change="pageChanged()"
+									total-items="totalItems"
+									items-per-page="itemsPerPage" num-pages="numPages"
+									ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+									boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+									first-text="&laquo;" last-text="&raquo;">
+						</pagination>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.xx {
+		width: 190px;
+		float: left;
+		margin: 10px;
+	}
+</style>

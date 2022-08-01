@@ -1,0 +1,74 @@
+<div class="container" >
+    <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <div class="row hidden-print" style="margin:5px 15px;">
+            <div class="col-md-2">
+                <select name="spare" class="form-control" chosen data-placeholder-text-single="'Spare'" allow-single-deselect="true" no-results-text="'Could not find any Spare'"  ng-model="spare_name" ng-options="item.name as item.name for item in aSpare" ng-change="getAllAggreInventories()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <!-- <div class="col-md-2">
+               <select name="vendor" class="form-control" chosen data-placeholder-text-single="'Vendor'" allow-single-deselect="true" no-results-text="'Could not find any Vendor'"  ng-model="vendor_name" ng-options="item.name as item.name for item in aPOvendor" ng-change="getAllAggreInventories()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+               <select name="ponumder" class="form-control" chosen data-placeholder-text-single="'PO Number'" allow-single-deselect="true" no-results-text="'Could not find any PO Number'"  ng-model="po_number" ng-options="item.ponumder as item.ponumder for item in aPO" ng-change="getAllAggreInventories()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <div class="fg-line">
+                    <input type="text" ng-model="invoice_number" name="invoiceNumber" class="form-control input-sm" placeholder="Invoice Number" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllAggreInventories()" style="height: 34px;font-size: 13px;">
+                </div>
+            </div> -->
+            <div class="btns">
+                <!-- <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="returnSpare()">Return Spare</button>
+                <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="spareIssue()">Spare Issue</button>
+                <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="getInwords()">Inventory Inward</button> -->
+                <a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"><i class="glyphicon glyphicon-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="detailsList">
+        <div class="" style="overflow-y: auto;background: #fff;min-height: 500px;">
+            <table class="table table-bordered override-table-bordered">
+                <thead>
+                    <tr>
+						<th>S. No.</th>
+                        <th>Spare Name</th>
+                        <th>Spare Code</th>
+                        <th>Category Name</th>
+                        <th>Category Code</th>
+                        <th>Remaining Quantity</th>
+                        <th>Rate/Piece</th>
+                        <th>UOM</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="objInventory in inventories">
+						<td>{{$index+1}}</td>
+                        <td>{{objInventory.spare_name}}</td>
+                        <td>{{objInventory._id}}</td>
+                        <td>{{objInventory.category_name}}</td>
+                        <td>{{objInventory.category_code}}</td>
+                        <td>{{objInventory.remaining_quantity}}</td>
+                        <td>{{objInventory.rate_per_piece}}</td>
+                        <td>{{objInventory.uom}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagi" ng-show="totalPages>1" style="text-align: center;">
+                <pagination ng-change="pageChanged()"
+                            total-items="totalItems"
+                            items-per-page="itemsPerPage" num-pages="numPages"
+                            ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+                            boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;">
+                </pagination>
+            </div>
+            <div ng-if="inventories.length == 0" class="ms-body" style=" min-height: 50px;">
+              <h3>Inventory data not available !!!!!</h3>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,80 @@
+<div ng-controller="updateJobCardTaskController">
+  <div class="row" style="margin: 5px auto;">
+    <div class="col-md-12">
+      <div style="float: left;width: 70%;">
+        <b>Vehicle No. :- <span style="font-weight: normal;">{{forUpdateJobCard.vehicle_number}}</span>&nbsp;&nbsp;&nbsp;&nbsp; </b>
+        <!-- <b>{{forUpdateJobCard.veh_model}}&nbsp;&nbsp; </b> -->
+        <b>Job Id :- <span style="font-weight: normal;">{{forUpdateJobCard.jobId}}</span>&nbsp;&nbsp;&nbsp;&nbsp; </b>
+        <b>Maintenance Type :- <span style="font-weight: normal;">{{forUpdateJobCard.maintenance_type}}</span>&nbsp;&nbsp;&nbsp;&nbsp; </b>
+        <b>Flag :- <span style="font-weight: normal;">{{forUpdateJobCard.flag}}</span>&nbsp;&nbsp;&nbsp;&nbsp; </b>
+        <b ng-if="forUpdateJobCard.estimated_cost">Esti. Cost :- <span style="font-weight: normal;">{{forUpdateJobCard.estimated_cost}}</span></b>
+      </div>
+      <ul class="lv-actions actions">
+        <li class="btn-wave" data-ui-sref-active="active"><a class="pointer" uib-tooltip="Add New Task" tooltip-placement="bottom" ng-click="addNewTask()"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i></a></li>
+        <!-- <li class="btn-wave"><a class="pointer" uib-tooltip="Edit Selected Task" tooltip-placement="bottom" ng-click="updateSelTask()"><i class="zmdi zmdi-edit"></i></a></li> -->
+        <li><a href="" uib-tooltip="Delete" tooltip-placement="bottom"><i class="zmdi zmdi-delete"></i></a></li>
+        <div class="clearfix"></div>
+      </ul><br>
+      <div class="task">
+        <div class="col-md-12">
+          <div class="detailsList">
+            <div class="" style="overflow-y: auto;height: 230px;">
+              <table class="table table-bordered unresponsive">
+                <thead>
+                  <tr>
+                    <th>Task Name</th>
+                    <th>Superviser Name</th>
+                    <th>Status</th>
+                    <th>Mechanics</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-ng-repeat="objTask in aTaskForJobC" class="pointer selectItem22" ng-click="getTaskSingle(objTask, $index)">
+                    <td>{{objTask.task_name || 'NA'}}</td>
+                    <td>{{objTask.supervisor_name || 'NA'}}</td>
+                    <td>{{objTask.status || 'NA'}}</td>
+                    <td><span ng-repeat="mec in objTask.mechanics_involved">{{mec.name || 'NA'}} &nbsp;</span> </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div ng-if="aTaskForJobC == 0" class="ms-body" style=" min-height: 50px;">
+                <h3>No any task available !!!!!</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-12">
+          <div class="detailsList">
+            <h4>Spare List</h4>
+            <div class="" style="overflow-y: auto;height: 230px;">
+              <table class="table table-bordered unresponsive">
+                <thead>
+                  <tr>
+                    <th>Slip Number</th>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Qty.</th>
+                    <th>Cost Per Item</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-ng-repeat="objSpare in selectedTaskInfo.spares_allotted" class="pointer">
+                    <td>{{objSpare.slip_number || 'NA'}}</td>
+                    <td>{{objSpare.issued_spare.spare_name || 'NA'}}</td>
+                    <td>{{objSpare.issued_spare.spare_code || 'NA'}}</td>
+                    <td>{{objSpare.issued_spare.quantity || 'NA'}}</td>
+                    <td>{{objSpare.issued_spare.cost_per_piece || 'NA'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div ng-if="selectedTaskInfo.spares_allotted == 0" class="ms-body" style=" min-height: 50px;">
+                <h3>No any Spare available !!!!!</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

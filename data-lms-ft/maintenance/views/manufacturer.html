@@ -1,0 +1,315 @@
+<!--suppress HtmlUnknownAttribute -->
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+     id="messages-main">
+    <div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
+        <div class="lvh-search ng-scope sear">
+            <input type="text" placeholder="Search User ..."
+                   ng-model="searchValue" class="lvhs-input"
+                   typeahead="manufacturer.name as manufacturer.name for manufacturer in manufacturerNames"
+                   typeahead-min-length="2" ng-change="getUserNames(searchValeu)"
+                   typeahead-on-select="onUserTypeAheadSelect($item, $model, $label)" >
+            <i class="lvh-search-close" ng-click="resetUserName()">×</i>
+        </div>
+        <div class="listview lv-manufacturer clk" style="overflow: auto;height:97%;">
+            <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)"
+                 ng-repeat="manufacturer in manufacturers"
+                 ng-click="selectManufacturerAtIndex($index)">
+                <div class="truck-desc">
+                    <div class="row">
+                        <div class="col-md-8 bold">
+                            {{manufacturer.name}}
+                        </div>
+                        <div class="col-md-4 bold">
+                            {{manufacturer.code}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagi" ng-show="total_pages>1">
+                <pagination ng-change="pageChanged()" total-items="totalItems"
+                            items-per-page="items_per_page" num-pages="numPages"
+                            ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi"
+                            boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;"></pagination>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="min-height: 600px;margin-left:20%;overflow: auto">
+        <div class="card-header">
+            <h2 style="font-size: 18px">Manufacturer
+                <span style="margin-left:10px;">{{selectedManufacturer.name}}
+                    </span>
+                <span ng-hide="manufacturers.length===0 && (currentMode==='view' || currentMode==='edit')"
+                      style="margin-left:10px;color:#B7B7B7">({{currentMode.substring(0,1).toUpperCase()+ currentMode.substring(1)}})
+                    </span>
+            </h2>
+        </div>
+        <button class="btn btn-primary waves-effect"
+                style="margin-top:-45px;float: right;margin-right: 20px;"
+                ng-click="addNewManufacturerClicked()" ng-show="currentMode ==='view'">
+            Add New Manufacturer
+        </button>
+
+        <div class="separator" style="width: 100%;height:1px;background-color: #EAEAEA"></div>
+
+        <div class="card-header" style="margin: 0 auto;" ng-show="manufacturers.length===0 && currentMode==='view'">
+            <h2 style="color: grey">
+                No manufacturers found
+            </h2>
+        </div>
+
+        <!--Form starts here -->
+        <div class="card-body" ng-hide="manufacturers.length===0 && (currentMode==='view' || currentMode==='edit')">
+            <ul ng-show="currentMode==='view'" class="lv-actions actions"
+                style="position:absolute;margin-top: -25px;margin-left:90%;">
+                <li ng-hide="$loginUserRoleData.manufacturer.indexOf('edit')===-1"
+                    class="btn-wave" data-ui-sref-active="active">
+                    <a href=""  uib-tooltip="Edit Part Category" tooltip-placement="bottom"
+                       ng-click="editManufacturerClicked()" >
+                        <i class="zmdi zmdi-edit">
+                        </i>
+                    </a>
+                </li>
+                <li ng-hide="$loginUserRoleData.manufacturer.indexOf('remove')===-1">
+                    <a href="" uib-tooltip="Delete Part Category"
+                       tooltip-placement="bottom"
+                       ng-click="deleteManufacturerClicked()">
+                        <i class="zmdi zmdi-delete">
+                        </i>
+                    </a>
+                </li>
+            </ul>
+
+            <div id="div_icd_info" class="card-body" style="padding-left:10%;padding-right: 10%;margin-top: 50px">
+                <form name="ManufacturerForm" class="form-vertical">
+                    <div class="row" style="margin-bottom: 15px">
+                        <label class="col-sm-3 control-label">Name</label>
+                        <div class="col-sm-5">
+                            <div class="fg-line" ng-readonly="currentMode==='view'">
+                                <input ng-readonly="currentMode==='view'"
+                                       ng-model="selectedManufacturer.name" class="form-control input-sm"
+                                       name="port code" placeholder="Name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label">Contact person 1</label>
+                        <div class="col-sm-5" >
+                            <input ng-readonly="currentMode==='view'" class="form-control
+                                input-sm" ng-model="selectedManufacturer.prim_contact"
+                                   style="height: 30px" placeholder="Contact person 1">
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label">Contact person 2</label>
+                        <div class="col-sm-5" >
+                            <input ng-readonly="currentMode==='view'" class="form-control
+                                input-sm" ng-model="selectedManufacturer.sec_contact"
+                                   style="height: 30px" placeholder="Contact person 2">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label">Contact No. 1</label>
+                        <div class="col-sm-5" >
+                            <input type="number" ng-readonly="currentMode==='view'" maxlength="10" class="form-control
+                                input-sm" ng-model="selectedManufacturer.prim_contact_no"
+                                   style="height: 30px" placeholder="Contact No. 1">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label">Contact No. 2</label>
+                        <div class="col-sm-5" >
+                            <input type="number" ng-readonly="currentMode==='view'" maxlength="10" class="form-control
+                                input-sm" ng-model="selectedManufacturer.sec_contact_no"
+                                   style="height: 30px" placeholder="Contact No. 2">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label">Email</label>
+                        <div class="col-sm-5" >
+                            <input type="email" ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.email"
+                                       style="height: 30px" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label">Fax</label>
+                        <div class="col-sm-5" >
+                            <input ng-readonly="currentMode==='view'" maxlength="10" class="form-control
+                                input-sm" ng-model="selectedManufacturer.fax"
+                                       style="height: 30px" placeholder="Fax">
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label">Address 1</label>
+                        <div class="col-sm-6" >
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address1.line1"
+                                       style="height: 30px" placeholder="Line 1">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address1.line2"
+                                       style="height: 30px" placeholder="Line 2">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label"></label>
+                        <div class="col-sm-6">
+                            <div class="col-xs-6">
+                                <input id ="autoCompleteCity1" ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address1.city"
+                                       style="height: 30px" placeholder="City">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address1.district"
+                                       style="height: 30px" placeholder="District">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label"></label>
+                        <div class="col-sm-6" >
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address1.state"
+                                       style="height: 30px" placeholder="State">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address1.country"
+                                       style="height: 30px" placeholder="Country">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label"></label>
+                        <div class="col-sm-6" >
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address1.pincode"
+                                       style="height: 30px" placeholder="Pincode">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label">Address 2</label>
+                        <div class="col-sm-6" >
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address2.line1"
+                                       style="height: 30px" placeholder="Line 1">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address2.line2"
+                                       style="height: 30px" placeholder="Line 2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label"></label>
+                        <div class="col-sm-6" >
+                            <div class="col-xs-6">
+                                <input id ="autoCompleteCity2" ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address2.city"
+                                       style="height: 30px" placeholder="City">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address2.district"
+                                       style="height: 30px" placeholder="District">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label"></label>
+                        <div class="col-sm-6" >
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address2.state"
+                                       style="height: 30px" placeholder="State">
+                            </div>
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address2.country"
+                                       style="height: 30px" placeholder="Country">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 15px">
+                        <label  class="col-sm-3 control-label"></label>
+                        <div class="col-sm-6" >
+                            <div class="col-xs-6">
+                                <input ng-readonly="currentMode==='view'"  class="form-control
+                                input-sm" ng-model="selectedManufacturer.address2.pincode"
+                                       style="height: 30px" placeholder="Pincode">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="currentMode==='view'" style="margin: 60px 0px 60px 60px">
+                        <button type="submit" class="btn btn-primary"
+                                ng-click="saveManufacturer()"
+                                style="margin-left: 70%;">Save</button>
+                    </div>
+
+                    <div class="empty_space_for_footer" ng-show="currentMode==='view'">
+                    </div>
+
+                    <div ng-show="currentMode==='view'" style="position:absolute;width:80%;bottom:50px">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <label class="col-sm-5 control-label">Created by</label>
+                                <div class="col-sm-7">
+                                    <div class="fg-line" readonly>
+                                        <input readonly
+                                               ng-model="selectedManufacturer.created_by_name" class="form-control
+                                    input-sm redundantFields" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="col-sm-5 control-label">Last modified by</label>
+                                <div class="col-sm-7">
+                                    <div class="fg-line" readonly>
+                                        <input readonly
+                                               ng-model="selectedManufacturer.last_modified_by_name" class="form-control
+                                    input-sm redundantFields" name="port name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="col-sm-5 control-label">Created at</label>
+                                <div class="col-sm-7">
+                                    <div class="fg-line" readonly>
+                                        <input readonly
+                                               ng-model="selectedManufacturer.created_at" class="form-control
+                                    input-sm redundantFields" name="port name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="col-sm-5 control-label">Last modified at</label>
+                                <div class="col-sm-7">
+                                    <div class="fg-line" readonly>
+                                        <input readonly
+                                               ng-model="selectedManufacturer.last_modified_at" class="form-control
+                                    input-sm redundantFields" name="port name" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,408 @@
+<div class="container" ng-controller="tyreIssueCtrl">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style="">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span class="c-black"><b>Tyre Issue</b> &nbsp;&nbsp;&nbsp;</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<form name="InwordForm">
+					<div class="card-body" style="width: 97%;margin: 20px auto;">
+						<div class="row" style="margin-bottom: 15px">
+							<label>Tyre No.: {{tyreDataForIssue.tyre_number}} &nbsp;&nbsp;&nbsp;&nbsp;
+								Status:{{tyreDataForIssue.status}}&nbsp;&nbsp;&nbsp;&nbsp;
+								Category:{{tyreDataForIssue.tyre_category}}&nbsp;&nbsp;&nbsp;&nbsp;
+								Model:{{tyreDataForIssue.model || 'NA'}} &nbsp;&nbsp;&nbsp;&nbsp;
+								Retread Count:{{tyreDataForIssue.retread_count}}&nbsp;&nbsp;&nbsp;&nbsp;
+								Associated:{{job.vehicle.associationFlag || 'Select Job Card'}}&nbsp;&nbsp;&nbsp;&nbsp;
+								Attached to:{{job.vehicle.associated_vehicle || 'Select Job Card'}}
+							</label>
+						</div>
+						<div class="row" style="margin-bottom: 15px">
+							<div class="col-sm-4">
+								<label class="col-sm-4 control-label">Branch<span class="req_r">*</span></label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="select">
+										<select chosen class="form-control" placeholder="Select"
+												ng-options="item as item.name for item in aBranch" ng-model="branch"
+												required>
+											<option value="" selected> Select Branch</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<label class="col-sm-4 control-label">Job Card<span class="req_r">*</span></label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="select">
+										<select chosen class="form-control" placeholder="Select" search-contains="true"
+												ng-options="item as item.idVehicle for item in aJobCards" ng-model="job"
+												ng-change="jobCardSelected(job)" required>
+											<option value="" selected> Select Job Card</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<label class="col-sm-4 control-label">Task<span class="req_r">*</span></label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="select">
+										<select chosen class="form-control" placeholder="Select"
+												ng-options="item as item.task_name for item in aTaskForJobC"
+												ng-model="task" required>
+											<option value="" selected> Select Task</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 15px">
+							<div class="col-sm-4" ng-show="job.vehicle.associated_vehicle">
+								<label class="col-sm-4 control-label">Type</label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="select">
+										<select chosen class="form-control" placeholder="Select"
+												ng-options="item as item for item in aType"
+												ng-model="type" ng-change="onTypSel(type)">
+											<option value="" selected> Select Type</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<!--<div class="col-sm-4" ng-show="job.vehicle_category=='Horse'">
+								<label class="col-sm-4 control-label">Trailer No.<span class="req_r">*</span></label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;"
+									 ng-show="type=='Prime Mover'">
+									<div class="select">
+										<select chosen class="form-control" placeholder="Select"
+												ng-options="item as item.vehicle_reg_no for item in regVehicles"
+												ng-model="vehicle" ng-change="onVehicleSelect(vehicle)" required>
+											<option value="" selected> Select Vehicle</option>
+										</select>
+									</div>
+								</div-->
+							<!--<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;"
+								 ng-show="type=='Trailer'">
+								<div class="select">
+									<select chosen class="form-control" placeholder="Select"
+											ng-options="item as item.vehicle_reg_no for item in trailers"
+											ng-model="vehicle" ng-change="onVehicleSelect(vehicle)" required>
+										<option value="" selected> Select Vehicle</option>
+									</select>
+								</div>
+							</div>-->
+
+							<div class="col-sm-4">
+								<label class="col-sm-4 control-label">Issued to<span class="req_r">*</span></label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="select">
+										<select chosen class="form-control" placeholder="Select"
+												ng-options="item as item for item in aIssuere" ng-model="issued_to"
+												ng-change="issueClick(issued_to)" required>
+											<option value="" selected> Select</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 15px">
+							<div class="col-sm-4" ng-show="issued_to=='Driver'">
+								<label class="col-sm-4 control-label">Driver:</label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="select">
+										<select chosen class="form-control" placeholder="Select"
+												ng-options="item as item.name for item in drivers" ng-model="driver">
+											<option value="" selected> Select</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4" ng-show="issued_to=='Mechanic'">
+								<label class="col-sm-4 control-label">Mechanic:</label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="select">
+										<select chosen class="form-control" placeholder="Select"
+												ng-options="item as item.full_name for item in aMechanic"
+												ng-model="mechanic">
+											<option value="" selected> Select</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<label class="col-sm-4 control-label">Issue Date:</label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="fg-line">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened2 == true }">
+											<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+												<input ng-click="open($event, 'opened2')" type="text"
+													   class="form-control" datepicker-popup="{{format}}"
+													   show-weeks="false" ng-model="issue_date" is-open="opened2"
+													   min-date="minDate" datepicker-options="dateOptions"
+													   close-text="Close" placeholder="Date"
+													   style="padding: 0px 4px;height: 34px;"/>
+											</div>
+											<span class="input-group-btn">
+											  <button type="button" class="btn btn-default m-t-0 f12"
+													  ng-click="open($event, 'opened2')"><i
+													  class="glyphicon glyphicon-calendar"></i></button>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-bottom: 15px">
+							<div class="col-sm-4">
+								<label class="col-sm-4 control-label">Odometer Reading<span
+										class="req_r">*</span>:</label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="fg-line">
+										<input type="number" class="form-control" ng-model="issued_odometer" required>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-4">
+								<label class="col-sm-4 control-label">Remark:</label>
+								<div class="col-sm-7" style="padding-left: 15px;padding-right: 15px;">
+									<div class="fg-line">
+										<input type="text" class="form-control" ng-model="iRemark" placeholder="remark">
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</form>
+
+				<div ng-show="selectedStructure" style="margin: 0px 15px;">
+					<div class="separator_header"
+						 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+
+					<!--Preparing front tire UI-->
+					<h4>Front</h4>
+					<div style="width:100%">
+						<div class="row" ng-repeat="count in selectedStructure.front_mapping track by $index">
+							<div class="col-sm-12">
+								<div style="float: left;width: 150px;margin: 0 10px;">
+									<div class="tyre-class"
+										 ng-class="{'visible-tyre':(count===1 || count===2), 'tyre-highlighted': issued_positions.indexOf('F'+$index+'L'+0) < 0 && $parent.highlighted == 'F'+$index+'L'+0, 'tyre-disabled': issued_positions.indexOf('F'+$index+'L'+0)>-1}"
+										 ng-disabled="issued_positions.indexOf('F'+$index+'L'+0)<0"
+										 ng-click="$parent.highlighted = 'F'+$index+'L'+0; onTyreClicked('F', $index, 'L', 0)">
+									</div>
+									<div ng-show="issued_positions.indexOf('F'+$index+'L'+0)<0 && count<=2">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['F'+$index+'L'+0]" ng-change="tyre_selected('F'+$index+'L'+0)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['F'+$index+'L'+0]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>
+											</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('F'+$index+'L'+0)>-1">{{issued_tyres[issued_positions.indexOf('F'+$index+'L'+0)]}}</label>
+								</div>
+								<div style="float: left;width: 150px;margin: 0 60px 0 10px;">
+									<div class="tyre-class"
+										 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions.indexOf('F'+$index+'L'+1) < 0 && $parent.highlighted == 'F'+$index+'L'+1, 'tyre-disabled': issued_positions.indexOf('F'+$index+'L'+1)>-1} "
+										 ng-click="$parent.highlighted = 'F'+$index+'L'+1; onTyreClicked('F', $index, 'L', 1)">
+									</div>
+									<div ng-show="issued_positions.indexOf('F'+$index+'L'+1)<0 && count==2">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['F'+$index+'L'+1]" ng-change="tyre_selected('F'+$index+'L'+1)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['F'+$index+'L'+1]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>
+											</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('F'+$index+'L'+1)>-1">{{issued_tyres[issued_positions.indexOf('F'+$index+'L'+1)]}}</label>
+								</div>
+								<div style="float: left;width: 150px;margin: 0 10px 0 60px;">
+									<div class="tyre-class"
+										 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions.indexOf('F'+$index+'R'+0) < 0 && $parent.highlighted == 'F'+$index+'R'+0, 'tyre-disabled': issued_positions.indexOf('F'+$index+'R'+0)>-1}"
+										 ng-click="$parent.highlighted = 'F'+$index+'R'+0; onTyreClicked('F', $index, 'R', 0)">
+									</div>
+									<div ng-show="issued_positions.indexOf('F'+$index+'R'+0)<0 && count==2">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['F'+$index+'R'+0]" ng-change="tyre_selected('F'+$index+'R'+0)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['F'+$index+'R'+0]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>
+											</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('F'+$index+'R'+0)>-1">{{issued_tyres[issued_positions.indexOf('F'+$index+'R'+0)]}}</label>
+								</div>
+								<div style="float: left;width: 150px;margin: 0 10px;">
+									<div class="tyre-class"
+										 ng-class="{'visible-tyre':count===1 || count===2, 'tyre-highlighted': issued_positions.indexOf('F'+$index+'R'+1) < 0 && $parent.highlighted == 'F'+$index+'R'+1, 'tyre-disabled': issued_positions.indexOf('F'+$index+'R'+1)>-1}"
+										 ng-click="$parent.highlighted = 'F'+$index+'R'+1; onTyreClicked('F', $index, 'R', 1)">
+									</div>
+									<div ng-show="issued_positions.indexOf('F'+$index+'R'+1)<0 && count<=2">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['F'+$index+'R'+1]" ng-change="tyre_selected('F'+$index+'R'+1)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['F'+$index+'R'+1]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>									</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('F'+$index+'R'+1)>-1">{{issued_tyres[issued_positions.indexOf('F'+$index+'R'+1)]}}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--Preparing spare tire UI-->
+					<div class="separator_header"
+						 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+					<h4>Spare</h4>
+					<div style="width:100%">
+						<div class="row" style="margin-left: 20%">
+							<div style="float: left;width: 150px;margin: 0 10px;">
+								<div
+									 ng-repeat="i in getNumber(selectedStructure.spare_tyre) track by $index">
+									<div class="tyre-class visible-tyre" ng-click="$parent.highlighted = 'SPA'+$index;"></div>
+									<div ng-show="issued_positions.indexOf('SPA'+$index)<0 ">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['SPA'+$index]" ng-change="tyre_selected('SPA'+$index)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['SPA'+$index]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>
+											</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('SPA'+$index)>-1">{{issued_tyres[issued_positions.indexOf('SPA'+$index)]}}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--Preparing rear tire UI-->
+					<div class="separator_header"
+						 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+					<h4>Rear</h4>
+					<div style="width:100%">
+						<div class="row" ng-repeat="count in selectedStructure.rear_mapping track by $index">
+							<div class="col-sm-12">
+								<div style="float: left;width: 150px;margin: 0 10px;">
+									<div class="tyre-class"
+										 ng-class="{'visible-tyre':(count===1 || count===2), 'tyre-highlighted': issued_positions.indexOf('R'+$index+'L'+0) < 0 && $parent.highlighted == 'R'+$index+'L'+0, 'tyre-disabled': issued_positions.indexOf('R'+$index+'L'+0)>-1}"
+										 ng-click="$parent.highlighted = 'R'+$index+'L'+0; onTyreClicked('R', $index, 'L', 0)">
+									</div>
+									<div ng-show="issued_positions.indexOf('R'+$index+'L'+0)<0 && count<=2">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['R'+$index+'L'+0]" ng-change="tyre_selected('R'+$index+'L'+0)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['R'+$index+'L'+0]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>
+											</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('R'+$index+'L'+0)>-1">{{issued_tyres[issued_positions.indexOf('R'+$index+'L'+0)]}}</label>
+								</div>
+								<div style="float: left;width: 150px;margin: 0 60px 0px 10px;">
+									<div class="tyre-class"
+										 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions.indexOf('R'+$index+'L'+1) < 0 && $parent.highlighted == 'R'+$index+'L'+1, 'tyre-disabled': issued_positions.indexOf('R'+$index+'L'+1)>-1}"
+										 ng-click="$parent.highlighted = 'R'+$index+'L'+1; onTyreClicked('R', $index, 'L', 1)">
+									</div>
+									<div ng-show="issued_positions.indexOf('R'+$index+'L'+1)<0 && count==2">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['R'+$index+'L'+1]" ng-change="tyre_selected('R'+$index+'L'+1)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['R'+$index+'L'+1]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>
+											</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('R'+$index+'L'+1)>-1">{{issued_tyres[issued_positions.indexOf('R'+$index+'L'+1)]}}</label>
+								</div>
+								<div style="float: left;width: 150px;margin: 0 10px;">
+									<div class="tyre-class"
+										 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions.indexOf('R'+$index+'R'+0) < 0 && $parent.highlighted == 'R'+$index+'R'+0, 'tyre-disabled': issued_positions.indexOf('R'+$index+'R'+0)>-1}"
+										 ng-click="$parent.highlighted = 'R'+$index+'R'+0; onTyreClicked('R', $index, 'R', 0)">
+									</div>
+									<div ng-show="issued_positions.indexOf('R'+$index+'R'+0)<0 && count==2">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['R'+$index+'R'+0]" ng-change="tyre_selected('R'+$index+'R'+0)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['R'+$index+'R'+0]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>
+											</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('R'+$index+'R'+0)>-1">{{issued_tyres[issued_positions.indexOf('R'+$index+'R'+0)]}}</label>
+								</div>
+								<div style="float: left;width: 150px;margin: 0 10px 0px 60px;">
+									<div class="tyre-class"
+										 ng-class="{'visible-tyre':count===1 || count===2, 'tyre-highlighted': issued_positions.indexOf('R'+$index+'R'+1) < 0 && $parent.highlighted == 'R'+$index+'R'+1, 'tyre-disabled': issued_positions.indexOf('R'+$index+'R'+1)>-1}"
+										 ng-click="$parent.highlighted = 'R'+$index+'R'+1; onTyreClicked('R', $index, 'R', 1)">
+									</div>
+									<div ng-show="issued_positions.indexOf('R'+$index+'R'+1)<0 && count<=2">
+										<div class="select">
+											<select chosen class="form-control" placeholder="Select"
+													ng-model="posi['R'+$index+'R'+1]" ng-change="tyre_selected('R'+$index+'R'+1)">
+												<option value="" selected> Select Tyre</option>
+												<option
+														ng-repeat="tyre in aIssueTyreData"
+														ng-disabled="((selectedTyre.indexOf(tyre.tyre_number)!==-1) && (posi['R'+$index+'R'+1]!== tyre.tyre_number))"
+														ng-value="tyre"
+												>{{tyre.tyre_number}}</option>
+											</select>
+										</div>
+									</div>
+									<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('R'+$index+'R'+1)>-1">{{issued_tyres[issued_positions.indexOf('R'+$index+'R'+1)]}}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="separator_header"
+						 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+				</div>
+
+				<div>
+					<button ng-click="addTyreIssue()"
+							class="btn btn-primary waves-effect pull-right">ADD ISSUE
+					</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+

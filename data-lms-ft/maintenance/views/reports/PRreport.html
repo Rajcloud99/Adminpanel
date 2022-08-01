@@ -1,0 +1,98 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+
+							<div class="select col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-4">
+								<select class="form-control"
+										ng-options="item as item.value for item in $constants.aPRreportTypes"
+										ng-model="report" ng-change="downloadReport()" style="height: 34px;">
+									<option style="display:none" value="">Report Type</option>
+								</select>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false"
+											   ng-model="start_date" is-open="opened1" datepicker-options="dateOptions"
+											   close-text="Close" placeholder="From Date" ng-change="downloadReport()"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+									  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+											   is-open="opened2" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="To Date" ng-change="downloadReport()"
+											   style="padding: 0px 4px; height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+									  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+
+							<!--<button ng-click="downloadReport(true)" class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Download
+							</button>-->
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th>Sl No</th>
+										<th>Tyre Number</th>
+										<th>Vehicle No.</th>
+										<th>PO Number</th>
+										<th>Status</th>
+										<th>Tyre Category</th>
+										<th>Vendor Name</th>
+										<th>Retreated Count</th>
+										<th>Invoice No</th>
+
+									</tr>
+									</thead>
+									<tbody ng-repeat="(name,val) in aPRreport">
+									<tr style="background:#f2da97">
+										<td colspan="23" style="text-align: start; font-weight: bold;">{{ name }}
+										</td>
+									</tr>
+									<tr ng-repeat="value in aPRreport[name]">
+										<td>{{$index+1}}</td>
+										<td>{{value.tyre_number}}</td>
+										<td>{{value.po_number}}</td>
+										<td>{{value.status}}</td>
+										<td>{{value.tyre_category}}</td>
+										<td>{{value.vendor_name}}</td>
+										<td>{{value.retread_count}}</td>
+										<td>{{value.invoice_number}}</td>
+
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

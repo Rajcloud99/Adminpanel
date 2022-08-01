@@ -1,0 +1,85 @@
+<div class="container" ng-controller="returnSpareCtrl">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 550px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix">
+          <div class="lvh-label">
+            <span class="c-black"><b>Return Spare</b> &nbsp;&nbsp;&nbsp;</span>
+          </div>
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="lv-body">
+            <div class="row" style="margin: 5px auto;">
+                <div class="col-md-12">
+                  <div class="task">
+                    <div class="col-md-2">
+                      <div class="select" style="width: 180px;">
+                        <select class="form-control" placeholder="Select" ng-options="item as item.newShowField for item in aJobCardsOpen" ng-model="selJobIdVehicle" ng-change="selSerachQuery22()">
+                          <option value="" selected> Select Vehicle </option>
+                        </select>
+                      </div>
+                      <br>
+                      <div class="listview lv-user clk" style="overflow: auto;height:97%;">
+                        <h5>Slip List</h5>
+                        <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)" ng-repeat="slip in aSlipList">
+                          <div class="truck-desc pointer" ng-click="selectSlipSide(slip, $index)">
+                            <div class="row">
+                              <div class="col-md-12 bold">
+                                {{slip.slip_number}}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="fg-line" style="width: 260px;">
+                        <input type="text" class="form-control" ng-model="slip_no" ng-blur="selSlipNo()" placeholder="Enter Slip No." style="width: 150px;float: left;margin-right: 10px;">
+                        <button class="btn btn-primary">Search</button>
+                      </div>
+                      <div class="clearfix"></div>
+                      <br>
+                      <div class="detailsList">
+                        <div class="" style="overflow-y: auto;height: 280px;">
+                          <table class="table table-bordered unresponsive">
+                            <thead>
+                              <tr>
+                                <th>Task Name</th>
+                                <th>Spare Name</th>
+                                <th>Spare Code</th>
+                                <th>Cost Per Item</th>
+                                <th>Issued Qty.</th>
+                                <th>Returned Qty.</th>
+                                <th>Quantity</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr data-ng-repeat="issueSpare in aSlipDetail[0].issued_spare" class="pointer">
+                                <td>{{issueSpare.task_name || 'NA'}}</td>
+                                <td>{{issueSpare.spare_name || 'NA'}}</td>
+                                <td>{{issueSpare.spare_code || 'NA'}}</td>
+                                <td>{{issueSpare.cost_per_piece || 'NA'}}</td>
+                                <td>{{issueSpare.quantity22 || 0}}</td>
+                                <td>{{issueSpare.total_returned || 0}}</td>
+                                <td><input type="number" style="width: 50px;" ng-model="issueSpare.quantity" ng-change="qtyCheck(issueSpare,$index)"></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div ng-if="aSlipDetail == 0" class="ms-body" style=" min-height: 50px;">
+                            <h3>No data available !!!!!</h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <button ng-click="reIssueSubmit()" class="btn btn-primary waves-effect pull-right">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>

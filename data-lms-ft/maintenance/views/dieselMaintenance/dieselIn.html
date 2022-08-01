@@ -1,0 +1,130 @@
+<div class="container">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 550px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix">
+          <div class="lvh-label">
+            <span class="c-black" ng-if="in==true"><b>Diesel In</b> &nbsp;&nbsp;&nbsp;</span>
+            <span class="c-black" ng-if="out==true"><b>Diesel Out</b> &nbsp;&nbsp;&nbsp;</span>
+          </div>
+          <div class="btns">
+            <a href="" uib-tooltip="BACK" tooltip-placement="bottom" ng-click="backList()" style="font-size: 18px;"><i class="glyphicon glyphicon-list"></i></a>&nbsp;&nbsp;
+
+          </div>
+
+          <div class="clearfix"></div>
+        </div>
+        <div class="lv-body">
+            <div class="row" style="margin: 15px auto;">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">From/To Type:<span class="req_r">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="select">
+                                <select class="form-control"  placeholder="Select" ng-options="item as item for item in aFromTo" ng-model="inData.from_to_type" required>
+                                    <option value="" selected> Select </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">From/To:<span class="req_r">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="select" ng-show="inData.from_to_type=='Vendor'">
+                                <select chosen  search-contains="true" class="form-control"  placeholder="Select" ng-options="item.name as item.name for item in avendor" ng-model="inData.from_to" required>
+                                    <option value="" selected> Select </option>
+                                </select>
+                            </div>
+                            <div class="select" ng-show="inData.from_to_type=='Vehicle'">
+                                <select chosen  search-contains="true" class="form-control"  placeholder="Select" ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aVehicles" ng-model="inData.from_to" required>
+                                    <option value="" selected> Select </option>
+                                </select>
+                            </div>
+                            <div class="fg-line" ng-show="inData.from_to_type=='Generator' || inData.from_to_type=='Other'">
+                                <input type="text" class="form-control" ng-model="inData.from_to" placeholder="enter here">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Quantity:<span class="req_r">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" class="form-control" ng-model="inData.quantity" placeholder="enter here" required ng-blur="cal()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin: 15px auto;">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Price:<span class="req_r">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="number" ng-model="inData.price" class="form-control" placeholder="Enter here..." required ng-blur="cal()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Total Amount:<span class="req_r">*</span></label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" class="form-control" ng-model="inData.total_amount" placeholder="enter here" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4" ng-hide="out==true">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Bill No.:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="inData.bill_no" class="form-control" placeholder="Enter here...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin: 15px auto;">
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Remark:</label>
+                        <div class="col-sm-6">
+                            <div class="fg-line">
+                                <input type="text" ng-model="inData.remark" class="form-control" placeholder="Enter here...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group m-b-0">
+                        <label class="col-sm-4 control-label">Employee involved:</label>
+                        <div class="col-sm-6">
+                            <div class="select">
+                                <select chosen search-contains="true" class="form-control"  placeholder="Select" ng-options="item as item.full_name for item in users" ng-model="inData.employee_involved" >
+                                    <option value="" selected> Select </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="text-align: right;margin: 20px 15px 10px 0px;">
+				<button class="btn btn-success waves-effect" ng-click="dieselInClick()"><span ng-if="in==true">Diesel In</span><span ng-if="out==true">Diesel Out</span></button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

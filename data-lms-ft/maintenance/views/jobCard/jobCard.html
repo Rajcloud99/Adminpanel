@@ -1,0 +1,32 @@
+<div class="container" ng-controller="addJobCardCommonController">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style="min-height: 575px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix">
+          <div class="lvh-label">
+            <span class="c-black"><b>Add Job Card</b> &nbsp;&nbsp;&nbsp;</span>
+          </div>
+          <ul class="lv-actions actions">
+            <li class="btn-wave" data-ui-sref-active="active">
+              <a data-ui-sref="maintenance_process.jobCardMain" uib-tooltip="Job Card" tooltip-placement="bottom">
+                <i class="zmdi zmdi-menu zmdi-hc-fw"></i>
+              </a>
+            </li>
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <div class="lv-body">
+          <ul class="tab-nav tn-justified" style="border-top: 1px solid #eee;">
+            <li class="btn-wave" data-ui-sref-active="active"><a data-ui-sref="maintenance_process.jobCard.basic">Job Card Info</a></li>
+            <li class="btn-wave" data-ui-sref-active="active"><a ng-if="!enableNextTab">Task Info</a></li>
+            <li class="btn-wave" data-ui-sref-active="active"><a ng-if="enableNextTab" data-ui-sref="maintenance_process.jobCard.task">Task Info</a></li>
+          </ul>
+          <data ui-view></data>
+        </div>
+        
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>
+

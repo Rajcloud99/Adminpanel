@@ -1,0 +1,174 @@
+<div class="container" ng-controller="spareIssueCtrl">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 550px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix">
+          <div class="lvh-label">
+            <span class="c-black"><b>Spare Issue</b> &nbsp;&nbsp;&nbsp;</span>
+          </div>
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="lv-body">
+            <div class="row" style="margin: 5px auto;">
+                <div class="col-md-12">
+                  <div class="task">
+                    <div class="col-md-6">
+                      <div class="select" style="width: 180px; float: left;">
+                        <select chosen class="form-control" placeholder="Select" ng-options="item as item for item in aIssueType" ng-model="issue_type" ng-change="changeType()" >
+                          <option value="" selected> Select Issue Type </option>
+                        </select>
+                      </div>
+                      <div class="select" style="width: 180px; float: left;margin-left: 5px;">
+                        <select chosen search-contains="true" class="form-control" placeholder="Select" ng-options="item as item.newShowField for item in aJobCardsForSpareIssue" ng-model="selJobIdVehicle" ng-change="selSerachQuery()">
+                          <option value="" selected> Select Vehicle </option>
+                        </select>
+                      </div>
+                      <div ng-show="issue_type == 'Branch'" class="select" style="width: 180px; float: left;margin-left: 5px;">
+                        <select chosen class="form-control" placeholder="Select" ng-options="item.name as item.name for item in branches" ng-model="branch" >
+                          <option value="" selected> Select Issuer </option>
+                        </select>
+                      </div>
+                      <div ng-show="issue_type == 'Other'" class="fg-line" style="width: 180px; float: left;margin-left: 5px;">
+                        <input type="text" class="form-control" ng-model="issuer" placeholder="enter Issuer..." style="line-height: 33px;">
+                      </div>
+                      <div class="clearfix"></div>
+                      <br>
+                      <div class="detailsList">
+                        <div class="" style="overflow-y: auto;height: 280px;">
+                          <table class="table table-bordered unresponsive">
+                            <thead>
+                              <tr>
+                                <th>Part Name</th>
+                                <th>Task</th>
+                                <th>Assume Qty.</th>
+                                <th>Available Qty.</th>
+                                <!-- <th>Issue Qty.</th> -->
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr data-ng-repeat="objTask in aTasks track by $index" class="">
+                                <td>{{objTask.spare_name || 'NA'}}</td>
+                                <td>{{objTask.task_name || 'NA'}}</td>
+                                <td>{{objTask.quantity || 'NA'}}</td>
+                                <td>{{objTask.remaining_quantity || 'NA'}}</td>
+                                <!-- <td>
+                                    <input type="number" style="width: 50px;" ng-model="issue_quantity">
+                                </td> -->
+                                <td>
+                                    <button ng-disabled="isDisabled" ng-click="issue(objTask, $index);isDisabled='true'" class="btn btn-primary waves-effect">Issue</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div ng-if="aTasks == 0" class="ms-body" style=" min-height: 50px;">
+                            <h3>No any task available !!!!!</h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="detailsList">
+                        <div class="">
+                            <div class="col-sm-8">
+                                <div class="form-group m-b-0">
+                                  <label class="col-sm-4 control-label">JobId : {{gJobId}}</label>
+                                  <!-- <div class="col-sm-8">
+                                    <label class="radio radio-inline m-r-20">
+                                      <input type="radio" ng-model="sel.selector" name="inlineRadioOptions" value="mechanic">
+                                      <i class="input-helper"></i>
+                                      Mechanic
+                                    </label>
+                                    <label class="radio radio-inline m-r-20">
+                                      <input type="radio" ng-model="sel.selector" name="inlineRadioOptions" value="contractor">
+                                      <i class="input-helper"></i>
+                                      Contractor
+                                    </label>
+                                  </div> -->
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="form-group m-b-0" ng-show="issue_type =='Mechanic'">
+                                  <label class="col-sm-6 control-label">Mechanic<span class="req_r">*</span></label>
+                                  <div class="col-sm-6">
+                                    <div class="select">
+                                      <select class="form-control"  placeholder="Select" ng-options="item as item.full_name for item in aMechanic" ng-model="mech">
+                                        <option value="" selected> Select </option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group m-b-0" ng-show="issue_type=='Contractor'">
+                                  <label class="col-sm-6 control-label">Contractor<span class="req_r">*</span></label>
+                                  <div class="col-sm-6">
+                                    <div class="select">
+                                      <select class="form-control"  placeholder="Select" ng-options="item as item.name for item in contractors" ng-model="contr">
+                                        <option value="" selected> Select </option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group m-b-0" ng-show="issue_type=='Branch' || issue_type=='Other'">
+                                  <label class="col-sm-6 control-label">Users</label>
+                                  <div class="col-sm-6">
+                                    <div class="select">
+                                      <select class="form-control"  placeholder="Select" ng-options="item as item.full_name for item in aUser" ng-model="mech">
+                                        <option value="" selected> Select </option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <button class="btn btn-primary waves-effect" ng-click="addMore()">Add</button>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="" style="overflow-y: auto;height: 280px;">
+                          <table class="table table-bordered unresponsive">
+                            <thead>
+                              <tr>
+                                <th>Part Name</th>
+                                <th>Part code</th>
+                                <th>Task Name</th>
+                                <!-- <th>Assume Qty.</th> -->
+                                <th>Available Qty.</th>
+                                <th>Qty.</th>
+                                <th>Action</th>
+                                <!-- <th>Rate</th> -->
+                                <!--  <th>Inventory Id</th> -->
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr data-ng-repeat="objSpare in aAddedTask track by $index" class="pointer">
+                                <td>{{objSpare.spare_name || 'NA'}}</td>
+                                <td>{{objSpare.spare_code || 'NA'}}</td>
+                                <td>{{objSpare.task_name || 'NA'}}</td>
+                                <!-- <td>{{objSpare.quantity || 'NA'}}</td> -->
+                                <td>{{objSpare.remaining_quantity || 'NA'}}</td>
+                                <td><input type="text" style="width: 50px;" ng-model="objSpare.issue_quantity"></td>
+                                <td>
+                                    <button ng-click="removeThis(objSpare, $index)" class="btn btn-primary waves-effect"><i class="glyphicon glyphicon-remove-circle" ng-click="closeJobCard()"></i></button>
+                                </td>
+                                <!-- <td>{{objSpare.cost_per_piece || 'NA'}}</td> -->
+                              </tr>
+                            </tbody>
+                          </table>
+                          <div ng-if="aAddedTask == 0" class="ms-body" style=" min-height: 50px;">
+                            <h3>No any Spare available !!!!!</h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                          <button ng-click="postIssueFinal()" class="btn btn-primary waves-effect pull-right" ng-disabled="!mech && !selJobIdVehicle">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>
+

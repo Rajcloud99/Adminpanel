@@ -1,0 +1,170 @@
+<form role="form"  name="toolCard" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Tool History</h4><br>
+  </div>
+  <style type="text/css">
+    .modal-backdrop.in{z-index:9 !important;}
+    .modal-open .modal{z-index:99 !important;}
+  </style>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-5 control-label">Tool ID:</label>
+          <div class="col-sm-6">
+            {{history.toolId}}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-5 control-label">Tool Code:</label>
+          <div class="col-sm-6">
+            {{history.code}}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-5 control-label">Tool:</label>
+          <div class="col-sm-6">
+            {{history.spare_name}}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-5 control-label">Category:</label>
+          <div class="col-sm-6">
+            {{history.category}}
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Manufacturer:</label>
+          <div class="col-sm-6">
+            {{history.manufacturer}}
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-5 control-label">Purchase Category:</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              {{history.purchase_category}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-5 control-label">Purchase Date:</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              {{history.created_at | date : "dd-MM-yyyy"}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-5 control-label">Purchased By:</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              {{history.created_by_employee_name}}
+            </div>
+          </div>
+        </div>
+      </div>
+	  <div class="col-md-3">
+			<div class="form-group m-b-0">
+				<label class="col-sm-5 control-label">Current Rate:</label>
+				<div class="col-sm-6">
+					<div class="fg-line">
+						{{history.current_price}}
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="row" style="margin:15px">
+		  <div class="col-md-3">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-5 control-label">Rate:</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  {{history.rate}}
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+		  <div class="col-md-3">
+			  <div class="form-group m-b-0">
+				  <label class="col-sm-5 control-label">Rate Inc. Tax:</label>
+				  <div class="col-sm-6">
+					  <div class="fg-line">
+						  {{history.rate_inc_tax}}
+					  </div>
+				  </div>
+			  </div>
+		  </div>
+  	</div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-12">
+          <div class="card-body">
+              <table class="table table-bordered override-table-bordered">
+                  <thead>
+                      <tr>
+                        <th>Issued To</th>
+                        <th>Issue Date</th>
+                        <th>Issue Slip</th>
+                        <th>Vehicle</th>
+					  	<th>Rate</th>
+                        <th>Issue Status</th>
+                        <th>Returned By</th>
+                        <th>Returne Status</th>
+                        <th>Return Date</th>
+                        <th>Return Slip</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  <tr ng-repeat="oIssue in aIssue" class="pointer selectItem">
+                    <td>{{oIssue.issue_to_employee_name}}</td>
+                    <td>{{oIssue.created_at | date : "dd-MM-yyyy"}}</td>
+                    <td>{{oIssue.issue_slip_number}}</td>
+                    <td>{{oIssue.vehicle_number}}</td>
+				  	<td>{{oIssue.rate}}</td>
+                    <td>{{oIssue.issue_status}}</td>
+                    <td>{{oIssue.return_by_employee_name}}</td>
+                    <td>{{oIssue.return_status}}</td>
+                    <td>{{oIssue.return_date | date : "dd-MM-yyyy"}}</td>
+                    <td>{{oIssue.return_slip_number}}</td>
+                  </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" ng-click="closeModal()" style="margin-bottom: 12px;">Close</button>
+  </div>
+</form>
+<style type="text/css">
+  .modal-dialog {width: 75%;
+      height: 173px
+  }
+  .multiselect-parent ul.dropdown-menu.dropdown-menu-form {
+    opacity: 1;
+    transform: none;    overflow: auto !important;
+  }
+  .chosen-container-single .chosen-single{height: 28px;margin-top: -7px;}
+</style>

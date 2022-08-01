@@ -1,0 +1,27 @@
+<form ng-controller="modelProfileCtrl">
+    <div ng-if="aModelsRoot.length>0" class="row" style="margin: 5px auto;">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-12">
+            <h5 class="profile_h">Brand Details</h5>
+            <div class="detailList">
+                <ul>
+                    <li><span>Model Manufacturer :</span>{{sModel.manufacturer || 'NA'}}</li>
+                    <li><span>Model Variant :</span> {{sModel.variant || 'NA'}}</li>
+                    <li><span>Axel Type :</span> {{sModel.axel_type || 'NA'}}</li>
+                    <li><span>Fuel Tank :</span> {{sModel.fuel_tank || 'NA'}}</li>
+                    <li><span>Wheelbase :</span> {{sModel.wheelbase || 'NA'}}</li>
+                    <li><span>Length :</span> {{sModel.length || 'NA'}}</li>
+                    <li><span>Width :</span> {{sModel.width || 'NA'}}</li>
+                    <li><span>Height :</span> {{sModel.height || 'NA'}}</li>
+                    <li><span>Ground Clearance :</span> {{sModel.ground_clearance || 'NA'}}</li>
+                 </ul>
+            </div>
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>
+    <div ng-show="aModelsRoot.length <= 0">
+        <h4 style="text-align: center;color: darkgrey;">You have no model registered. Please Register First.</h4>
+    </div>
+</form>

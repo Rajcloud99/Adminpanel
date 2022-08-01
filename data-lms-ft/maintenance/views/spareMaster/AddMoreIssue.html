@@ -1,0 +1,53 @@
+<form role="form"  name="newIssueAdd" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Add New Issue</h4><br>
+  </div>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div class="col-md-6" ng-show="typeSel">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Task Name</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select class="form-control"  placeholder="Select" ng-options="item as item.task_name for item in aTaskByJobId" ng-model="taskName" ng-change="selTaskForServ()">
+                <option value="" selected> Select </option> 
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Part Name</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select chosen class="form-control"  placeholder="Select" ng-options="item as item.newObj for item in aSpareRoot" ng-model="partName">
+                <option value="" selected> Select </option> 
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>    
+  <div class="modal-footer">
+    <button class="btn btn-success waves-effect"  ng-click="addIssueSubmit(newIssueAdd)">Add Issue</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>  
+</form> 
+
+<style type="text/css">
+  .modal-dialog {width: 80%;
+      height: 173px
+  }
+  .multiselect-parent ul.dropdown-menu.dropdown-menu-form {
+    opacity: 1;
+    transform: none;    overflow: auto !important;
+  }
+  .chosen-container-single .chosen-single{height: 28px;margin-top: -7px;}
+</style>

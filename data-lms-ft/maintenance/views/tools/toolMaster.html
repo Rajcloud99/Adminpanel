@@ -1,0 +1,93 @@
+<div class="container" >
+    <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <div class="row hidden-print" style="margin:15px;">
+            <div class="col-md-2">
+                <select name="spare" class="form-control" chosen search-contains="true" data-placeholder-text-single="'Spare'" allow-single-deselect="true" no-results-text="'Could not find any Spare'"  ng-model="spare_name" ng-options="item.name as item.name for item in aSpare" ng-change="getAllTools()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+               <select name="vendor" class="form-control" chosen search-contains="true" data-placeholder-text-single="'Vendor'" allow-single-deselect="true" no-results-text="'Could not find any Vendor'"  ng-model="vendor_name" ng-options="item.name as item.name for item in aPOvendor" ng-change="getAllTools()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+               <select name="category" class="form-control" chosen data-placeholder-text-single="'Category'" allow-single-deselect="true" no-results-text="'Could not find any Category Number'"  ng-model="category" ng-options="item as item for item in atoolCategory" ng-change="getAllTools()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+               <select name="ponumder" class="form-control" chosen search-contains="true" data-placeholder-text-single="'PO Number'" allow-single-deselect="true" no-results-text="'Could not find any PO Number'"  ng-model="po_number" ng-options="item.ponumder as item.ponumder for item in aPO" ng-change="getAllTools()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <div class="fg-line">
+                    <input type="text" ng-model="invoice_number" name="invoiceNumber" class="form-control input-sm" placeholder="Invoice Number" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllTools()" style="height: 34px;font-size: 13px;">
+                </div>
+            </div>
+            <div class="col-md-1" ng-if="invoice_number &&(po_number || vendor_name )&& !spare_name &&  !category">
+                <div class="">
+                    <button class="btn btn-primary" ng-click="grnDown()">Download GRN</button>
+                </div>
+            </div>
+            <div class="btns">
+                <button class="btn btn-primary waves-effect" ng-click="returnTool()" style="font-size: 11px;padding: 4px;" ng-if="selectedTool.status == 'issued'">Return Tool</button>
+                <button class="btn btn-primary waves-effect" ng-click="toolsIssue()" style="font-size: 11px;padding: 4px;" ng-if="selectedTool.status == 'InStock'">Issue Tool </button>
+                <button class="btn btn-primary waves-effect" ng-click="toolHistory()" style="font-size: 11px;padding: 4px;">History</button>
+                <button class="btn btn-primary waves-effect" ng-click="toolInward()" style="font-size: 11px;padding: 4px;">Tool Inward</button>
+                <a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"><i class="glyphicon glyphicon-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="detailsList">
+        <div class="card-body" style="min-height:500px;background: #fff;">
+            <table class="table table-bordered override-table-bordered">
+                            <thead>
+                                <tr>
+									<th>S. No.</th>
+                                    <th>Tool Id</th>
+                                    <th>Tool Code</th>
+                                    <th>Tool Name</th>
+                                    <!-- <th>Manufacturer</th> -->
+                                    <th>Vendor</th>
+                                    <th>Category</th>
+                                    <th>Rate/Piece</th>
+                                    <th>Status</th>
+                                    <th>PO Number</th>
+                                    <th>Invoice No</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="objInventory in inventories" class="pointer selectItem" ng-click="selectTool(objInventory,$index)">
+								<td>{{$index+1}}</td>
+								<td>{{objInventory.toolId}}</td>
+                                <td>{{objInventory.code}}</td>
+                                <td>{{objInventory.spare_name}}</td>
+                                <!-- <td>{{objInventory.manufacturer}}</td> -->
+                                <td>{{objInventory.vendor_name}}</td>
+                                <td>{{objInventory.category}}</td>
+                                <td>{{objInventory.price}}</td>
+                                <td>{{objInventory.status}}</td>
+                                <td>{{objInventory.po_number}}</td>
+                                <td>{{objInventory.invoice_number}}</td>
+                                <!-- <td>{{objInventory.hom_short_name}}</td> -->
+                            </tr>
+                            </tbody>
+            </table>
+            <div class="pagi" ng-show="totalPages>1" style="text-align: center;">
+                <pagination ng-change="pageChanged()"
+                            total-items="totalItems"
+                            items-per-page="itemsPerPage" num-pages="numPages"
+                            ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+                            boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;">
+                </pagination>
+            </div>
+            <div ng-if="inventories.length == 0" class="ms-body" style=" min-height: 50px;">
+              <h3>No any Tool available !!!!!</h3>
+            </div>
+        </div>
+    </div>
+</div>

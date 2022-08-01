@@ -1,0 +1,416 @@
+<div class="container" ng-controller="tyreInwordCtrl">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 550px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="col-md-4 lvh-label">
+						<span class="c-black"><b>Tyre Inward</b> &nbsp;&nbsp;&nbsp;</span>
+					</div>
+					<div class="col-md-4" style="padding-top: 6px;">
+						<label class="radio radio-inline m-r-20">
+							<input type="radio" ng-model="category" name="inlineRadioOptions" value="new" ng-change="catChange('new')">
+							<i class="input-helper"></i>
+							New
+						</label>
+						<label class="radio radio-inline m-r-20">
+							<input type="radio" ng-model="category" name="inlineRadioOptions" value="old" ng-change="catChange('old')">
+							<i class="input-helper"></i>
+							Old
+						</label>
+					</div>
+					<div class="col-md-4">
+						<button ng-click="addRowInTable()" ng-if="category == 'old'" class="btn btn-primary waves-effect pointer">
+							<i class="zmdi zmdi-plus zmdi-hc-fw"></i>&nbsp;&nbsp; Add Row
+						</button>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<form name="InwordForm">
+					<div class="lv-body" ng-show="category=='new'">
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-sm-12">
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">PO:</label>
+										<div class="col-sm-9">
+											<div class="select">
+												<select class="form-control" placeholder="Select"
+														ng-options="item as item.ponumder for item in inventories"
+														ng-model="selectPO" ng-change="selPOFunc(selectPO)">
+													<option value="" selected> Select PO</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Invoice No:</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="text" class="form-control" ng-model="invoice_number"
+													   placeholder="Enter Invoice No." required>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Invoice Date:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened2 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+														<input ng-click="open($event, 'opened2')" type="text"
+															   class="form-control" datepicker-popup="{{format}}"
+															   show-weeks="false" ng-model="invoice_date"
+															   is-open="opened2" datepicker-options="dateOptions"
+															   close-text="Close" placeholder="Date"
+															   style="padding: 0px 4px;height: 34px;"/>
+													</div>
+													<span class="input-group-btn">
+                                    <button type="button" class="btn btn-default m-t-0 f12"
+											ng-click="open($event, 'opened2')"><i
+											class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vendor Name:</label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												{{aPOData.vendor_name}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Inw. Freight:</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="number" class="form-control" ng-model="aPOData.freight" ng-change="checkFreight()"
+													   placeholder="Enter here" required>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Freight:</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												{{aPOData.rFreight}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="" style="overflow-y: auto;height: 400px;">
+										<table class="table table-bordered">
+											<thead>
+											<tr>
+												<th style="color:#fff;background: #2196f3;">#</th>
+												<th style="color:#fff;background: #2196f3;">SPARE CODE</th>
+												<th style="color:#fff;background: #2196f3;">SPARE NAME</th>
+												<th style="color:#fff;background: #2196f3;">REMAINING QTY.</th>
+												<th style="color:#fff;background: #2196f3;">QUANTITY</th>
+												<th style="color:#fff;background: #2196f3;">TAX(%)</th>
+												<th style="color:#fff;background: #2196f3;">RATE/PIECE</th>
+												<th style="color:#fff;background: #2196f3;">RATE INC. TAX</th>
+												<!-- <th style="color:#fff;background: #2196f3;">PREV. RATE</th> -->
+												<th style="color:#fff;background: #2196f3;">AMOUNT</th>
+												<th style="color:#fff;background:#2196f3;width:350px;">TYRE Data</th>
+												<th style="color:#fff;background:#2196f3;width:150px;">Remark</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr data-ng-repeat="spareData in aPOData.spare" class="pointer">
+												<td>
+													<label class="checkbox checkbox-inline m-r-20">
+														<input type="checkbox" ng-model="spareData.selected"
+															   ng-click=clickCheckBX()>
+														<i class="input-helper"></i>
+													</label>
+												</td>
+												<td>{{spareData.code || 'NA'}}</td>
+												<td>{{spareData.name || 'NA'}}</td>
+												<td>{{spareData.remaining_quantity}}</td>
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].quantity"
+														   placeholder="Enter Quantity"
+														   ng-change="checkQty(spareData,$index);calculate($index);"
+														   required></td>
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].tax" placeholder="Enter tax"
+														   ng-change="calculate($index)"></td>
+												<td><input type="number" class="form-control" ng-model="aPOData.spare[$index].rate_per_piece" placeholder="Enter Rate/Piece" ng-change="calculate($index)" required></td>
+												<!--<td>{{spareData.rate_per_piece}}</td>-->
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].rate_inc_tax"
+														   placeholder="rate with tax" ng-change="calculate($index)"
+														   readonly="true"></td>
+												<!-- <td><input type="number" class="form-control" ng-model="aPOData.spare[$index].previousRate" placeholder="previous Rate"  readonly="true"></td> -->
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].billing_amount"
+														   placeholder="Enter Billing Amount" readonly="true"></td>
+												<td>
+													<div class="row">
+														<div class="col-md-12">
+															<div class="form-group m-b-0">
+																<div class="col-sm-6">
+																	<div class="fg-line">
+																		<input type="text" class="form-control"
+																			   ng-model="spareData.tyreN"
+																			   placeholder="Tyre No.">
+																	</div>
+																</div>
+																<!-- <div class="col-sm-3">
+                                                                  <div class="fg-line">
+                                                                    <input type="text" class="form-control" ng-model="spareData.retread" placeholder="Retread">
+                                                                  </div>
+                                                                </div>
+                                                                <div class="col-sm-3">
+                                                                  <div class="select">
+                                                                    <select class="form-control" placeholder="Status" ng-options="item as item for item in aSts" ng-model="spareData.sts">
+                                                                      <option value="" selected> Select Status </option>
+                                                                    </select>
+                                                                  </div>
+                                                                </div> -->
+																<div class="col-sm-3">
+																	<button ng-click="addCode(spareDaata.tyreN, $index)"
+																			ng-disabled="!(spareData.tyreN)"
+																			class="btn btn-primary waves-effect pointer">
+																		<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row" style="margin:5px">
+														<div class="col-md-12">
+															<span class="route_iCity" style="margin-left: 5px;"
+																  ng-repeat="oCode in spareData.aTyreNumber">{{oCode.tyre_number}} <a
+																	class="route_iCityRemove"
+																	ng-click="removeCode(oCode,$index)">x</a></span>
+														</div>
+													</div>
+												</td>
+												<td><input type="text" class="form-control"
+														   ng-model="aPOData.spare[$index].remark"
+														   placeholder="remark"></td>
+											</tr>
+											</tbody>
+										</table>
+										<div ng-if="aPOData == 0" class="ms-body" style=" min-height: 50px;">
+											<h3> Data not available !!!!!</h3>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<div>
+									<button ng-disabled="InwordForm.$invalid" ng-click="addNewTyre()"
+											class="btn btn-primary waves-effect pull-right">ADD
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- ****///// OLD Tyre Inward /////****-->
+					<div class="lv-body" ng-show="category=='old'">
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-sm-12">
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Invoice No:</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="text" class="form-control" ng-model="invoice_number"
+													   placeholder="Enter Invoice No.">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Invoice Date:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened2 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+														<input ng-click="open($event, 'opened2')" type="text"
+															   class="form-control" datepicker-popup="{{format}}"
+															   show-weeks="false" ng-model="invoice_date"
+															   is-open="opened2" datepicker-options="dateOptions"
+															   close-text="Close" placeholder="Date"
+															   style="padding: 0px 4px;height: 34px;"/>
+													</div>
+													<span class="input-group-btn">
+														<button type="button" class="btn btn-default m-t-0 f12"
+																ng-click="open($event, 'opened2')"><i
+																class="glyphicon glyphicon-calendar"></i></button>
+													  </span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vendor Name:</label>
+										<div class="col-sm-8">
+											<select chosen search-contains="true" class="form-control" ng-options="item as item.name for item in aVendors" ng-model="vendor" >
+												<option value="" selected>Select Vendor</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Freight:</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="number" class="form-control" ng-model="freight"
+													   placeholder="Enter here">
+											</div>
+										</div>
+									</div>
+								</div>
+								<!--<div class="col-sm-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Tyre Category:</label>
+										<div class="col-sm-8">
+											<select chosen search-contains="true" class="form-control" ng-options="item as item for item in aTcat" ng-model="tyreCategory">
+												<option value="" selected>Select</option>
+											</select>
+										</div>
+									</div>
+								</div>-->
+								<div class="col-sm-3">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Status:</label>
+										<div class="col-sm-8">
+											<select chosen search-contains="true" class="form-control" ng-options="item as item for item in aTstatus" ng-model="statusTyre">
+												<option value="" selected>Select</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="" style="overflow-y: auto;height: 400px;">
+										<table class="table table-bordered">
+											<thead>
+											<tr>
+												<th style="color:#fff;background: #2196f3;">#</th>
+												<th style="color:#fff;background: #2196f3;">SPARE CODE</th>
+												<th style="color:#fff;background: #2196f3;">SPARE NAME</th>
+												<!--<th style="color:#fff;background: #2196f3;">REMAINING QTY.</th>-->
+												<th style="color:#fff;background: #2196f3;">QUANTITY</th>
+												<th style="color:#fff;background: #2196f3;">TAX(%)</th>
+												<th style="color:#fff;background: #2196f3;">RATE/PIECE</th>
+												<th style="color:#fff;background: #2196f3;">INC. TAX</th>
+												<th style="color:#fff;background: #2196f3;">AMOUNT</th>
+												<th style="color:#fff;background:#2196f3;width:350px;">TYRE Data</th>
+												<th style="color:#fff;background:#2196f3;width:150px;">Remark</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr data-ng-repeat="spareData in aPOData.spare" class="pointer">
+												<td>
+													<a href="" ng-click="removeThis(spareData, $index)" class="btn btn-primary"><i class="zmdi zmdi-delete zmdi-hc-fw"></i></a>
+												</td>
+												<td>{{spareData.code || 'NA'}}</td>
+												<td>{{spareData.name || 'NA'}}</td>
+												<!--<td>{{spareData.remaining_quantity}}</td>-->
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].quantity"
+														   placeholder="Enter Quantity"
+														   ng-change="checkQty(spareData,$index);calculateOld($index);"
+														   required></td>
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].tax" placeholder="Enter tax"
+														   ng-change="calculateOld($index)"></td>
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].rate_per_p" placeholder="Enter rate/piece"
+														   ng-change="calculateOld($index)"></td>
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].rate_inc_tax"
+														   placeholder="rate with tax" ng-change="calculateOld($index)"
+														   readonly="true"></td>
+												<td><input type="number" class="form-control"
+														   ng-model="aPOData.spare[$index].billing_amount"
+														   placeholder="Enter Billing Amount" readonly="true"></td>
+												<td>
+													<div class="row">
+														<div class="col-md-12">
+															<div class="form-group m-b-0">
+																<div class="col-sm-6">
+																	<div class="fg-line">
+																		<input type="text" class="form-control"
+																			   ng-model="spareData.tyreN"
+																			   placeholder="Tyre No.">
+																	</div>
+																</div>
+																<div class="col-sm-3">
+																	<div class="fg-line">
+																		<input type="text" class="form-control" ng-model="spareData.retread" placeholder="Retread">
+																	</div>
+																</div>
+																<div class="col-sm-3">
+																	<button ng-click="addCode(spareDaata.tyreN, $index)"
+																			ng-disabled="!(spareData.tyreN)"
+																			class="btn btn-primary waves-effect pointer">
+																		<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row" style="margin:5px">
+														<div class="col-md-12">
+															<span class="route_iCity" style="margin-left: 5px;"
+																  ng-repeat="oCode in spareData.aTyreNumber">{{oCode.tyre_number}} - {{oCode.retread_count}} <a
+																	class="route_iCityRemove"
+																	ng-click="removeCode(oCode,$index)">x</a></span>
+														</div>
+													</div>
+												</td>
+												<td><input type="text" class="form-control"
+														   ng-model="aPOData.spare[$index].remark"
+														   placeholder="remark"></td>
+											</tr>
+											</tbody>
+										</table>
+
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<div>
+									<button ng-disabled="" ng-click="addOldTyre()"
+											class="btn btn-primary waves-effect pull-right">ADD
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

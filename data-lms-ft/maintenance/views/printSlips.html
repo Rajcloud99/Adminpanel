@@ -1,0 +1,65 @@
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px" id="messages-main">
+    <div class="card" style="overflow: auto;margin-bottom: 10px;">
+        <div class="">
+            <h2 style="font-size: 18px;float: left;"> &nbsp;</h2>
+            <div class="col-md-1">
+                <select name="jobId" class="form-control" chosen search-contains="true" data-placeholder-text-single="'Job ID'" allow-single-deselect="true" no-results-text="'Could not find any Job ID'"  ng-model="jobId" ng-options="item.jobId as item.jobId for item in aJobID" ng-change="getAllSlip()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row" style="margin-right: 0;">
+                <div class="col-md-12">
+
+                    <div class="card-body" style="min-height:500px">
+
+                        <table class="table table-bordered override-table-bordered">
+                            <thead>
+                                <tr>
+									<th>S. No.</th>
+                                    <th>Slip No.</th>
+									<th>Type</th>
+									<th>Vehicle No.</th>
+									<th>Job Id</th>
+                                    <th>Mechanic/Contractor Name</th>
+                                    <th>Mechanic/Contractor Code</th>
+                                    <!-- <th>Spares</th> -->
+                                    <th>Date</th>
+                                    <th>Quantity</th>
+									<th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="slip in aSlips">
+								<td>{{$index+1}}</td>
+                                <td>{{slip.slip_number}}</td>
+								<td>{{slip.flag}}</td>
+								<td>{{slip.vehicle_number}}</td>
+								<td>{{slip.jobId}}</td>
+                                <td>{{slip.mechanic_name || 'NA'}}</td>
+                                <td>{{slip.mechanic_employee_code}}</td>
+                                <!-- <td>{{slip.spares}}</td> -->
+                                <td>{{slip.created_at | date:'dd-MM-yyyy'}}</td>
+                                <td>{{slip.all_quantity}}</td>
+                                <td>
+                                    <i class="zmdi zmdi-download pointer" tooltip="Download" ng-click="printSlip(slip)"></i>&nbsp;&nbsp;
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagi" ng-show="totalPages>1" style="text-align: center;">
+                        <pagination ng-change="pageChanged()"
+                                    total-items="totalItems"
+                                    items-per-page="itemsPerPage" num-pages="numPages"
+                                    ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+                                    boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+                                    first-text="&laquo;" last-text="&raquo;">
+                        </pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

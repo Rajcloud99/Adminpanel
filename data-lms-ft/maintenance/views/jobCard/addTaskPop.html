@@ -1,0 +1,163 @@
+<form role="form"  name="newTaskAdd" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Add New Task</h4><br>
+  </div>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Task Name</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select class="form-control"  placeholder="Select" ng-options="item as item.task_name for item in aTask" ng-model="objJcTaskNew.task_name" ng-change="selTaskForServ()">
+                <option value="" selected> Select </option> 
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Supervisor Name</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select class="form-control"  placeholder="Select" ng-options="item as item.full_name for item in aSuperviser" ng-model="supervisor_full">
+                <option value="" selected> Select </option> 
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Status</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select class="form-control"  placeholder="Select" ng-options="item as item for item in aStatus" ng-model="objJcTaskNew.status">
+                <option value="" selected> Select </option> 
+              </select>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Task Priority</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select class="form-control"  placeholder="Select" ng-options="item as item for item in aPriority" ng-model="objJcTaskNew.priority">
+                <option value="" selected> Select </option> 
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Employee Involved</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select class="form-control"  placeholder="Select" ng-options="item as item.full_name for item in aMechanic" ng-model="empEnvld" ng-change="addEmployee()">
+                <option value="" selected> Select </option> 
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group arr_empl m-b-0" ng-if="employeeEnvolved.length>0">
+          <span ng-repeat="emp in employeeEnvolved track by $index"> {{emp.full_name}} <span class="pointer" ng-click="removeEmplyee($index)">x</span></span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Remark</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" ng-model="objJcTaskNew.remarks" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> 
+    <hr class="m5">
+    <div class="row" style="margin: 10px;">
+      <h4 style="margin-top: 2px;">Select Parts ....</h4>
+      <div class="col-md-4" ng-repeat="sprSugg in aSpareSugg track by $index">
+        <div class="blk">
+          <span class="spn1">{{sprSugg.name}}</span>
+          <span class="spn2">{{sprSugg.category_name}}</span>
+          <span class="spn3" uib-tooltip="Available">{{sprSugg.remaining_quantity}}</span>
+          <span class="spn3">
+            <input type="number" uib-tooltip="Required" ng-model="qtyTest" ng-blur="addReqQty(qtyTest)" ng-readonly="checked" class="form-control" placeholder="Qty.">
+          </span>
+          <span class="spn4">
+            <div class="checkbox" style="margin: 0px;">
+              <label>
+                <input type="checkbox" value="" ng-model="checked" ng-disabled="!qtyTest" ng-checked="selection.indexOf(sprSugg) > -1" ng-click="toggleSelection(sprSugg)">
+                <i class="input-helper"></i>
+              </label>
+            </div>
+          </span>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+    <hr class="m5">
+    <div class="row" style="margin: 10px;">
+      <h4 style="margin-top: 2px;">Selected Parts ....</h4>
+      <div class="col-md-12 adjust">
+        <p class="arr_empl" ng-repeat="selObj in selection">
+          <span>{{selObj.name}} 
+            <span class="pointer" ng-click="removeSelPart($index)">x</span>
+          </span>
+        </p>
+        <!-- <p class="arr_empl"><span>part22 <span class="pointer" ng-click="removeSelPart()">x</span></span></p> -->
+      </div>
+    </div>
+  </div>    
+  <div class="modal-footer">
+    <button class="btn btn-success waves-effect"  ng-click="addJobCardTask(newTaskAdd)">Add Task</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>  
+  <div class="col-md-12">
+          <h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+        </div>
+  </form> 
+  <style type="text/css">
+    .modal-dialog {width: 85%;
+        height: 173px
+    }
+    .arr_empl > span {
+      margin-left: 10px;
+      background: #eee;
+    }
+    .arr_empl > span >span {
+      background: red;
+      padding: 1px 7px;
+      color: #fff;
+    }
+    .m5{    margin-top: 5px;
+      margin-bottom: 5px;}
+
+    .blk {
+      border: 1px solid #9e9c9c;margin-bottom: 10px;
+    }
+
+    .blk span {
+      float: left;
+      border-right: 1px solid #9e9c9c;
+      padding: 4px;
+    }
+    .blk span.spn1{width: 32%;}
+    .blk span.spn2{width: 32%;}
+    .blk span.spn3{width: 12%;}
+    .blk span.spn4{width: 10%;border-right: 0;}
+    .adjust p{float: left;margin-left: 5px;}
+  </style>

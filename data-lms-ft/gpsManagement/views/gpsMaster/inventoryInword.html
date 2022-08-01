@@ -1,0 +1,208 @@
+<div class="container" ng-controller="deviceInwordCtrl">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 550px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="col-md-4 lvh-label">
+						<span class="c-black"><b>Device Inward</b> &nbsp;&nbsp;&nbsp;</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<form name="InwordForm">
+					<div class="lv-body">
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-sm-12">
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-3 control-label">PO:</label>
+										<div class="col-sm-9">
+											<div class="select">
+												<select chosen class="form-control" placeholder="Select"
+														ng-options="item as item.ponumder for item in inventories"
+														ng-model="poData" ng-change="onPOSelect(poData)">
+													<option value="" selected>Select PO</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Invoice No:</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="text" class="form-control" ng-model="invoice_number"
+													   placeholder="Enter Invoice No." required>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-6 control-label">Invoice Date:</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<div class="date-picker input-group dp-blue"
+													 ng-class="{ 'is-opened': opened2 == true }">
+													<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+														<input ng-click="open($event, 'opened2')" type="text"
+															   class="form-control" datepicker-popup="{{format}}"
+															   show-weeks="false" ng-model="invoice_date"
+															   is-open="opened2" datepicker-options="dateOptions"
+															   close-text="Close" placeholder="Date"
+															   style="padding: 0px 4px;height: 34px;"/>
+													</div>
+													<span class="input-group-btn">
+														<button type="button" class="btn btn-default m-t-0 f12"
+																ng-click="open($event, 'opened2')"><i
+																class="glyphicon glyphicon-calendar"></i>
+														</button>
+                                  					</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Vendor Name:</label>
+										<div class="col-sm-8">
+											<div class="fg-line">
+												{{selectedPO.vendor_name}}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Inw. Freight:</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												<input type="number" class="form-control" ng-model="selectedPO.freight"
+													   ng-change="checkFreight()"
+													   placeholder="Enter here" required>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-2">
+									<div class="form-group m-b-0">
+										<label class="col-sm-5 control-label">Freight:</label>
+										<div class="col-sm-7">
+											<div class="fg-line">
+												{{selectedPO.rFreight}}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="" style="overflow-y: auto;height: 400px;">
+										<table class="table table-bordered">
+											<thead>
+											<tr>
+												<th style="color:#fff;background: #2196f3;">#</th>
+												<th style="color:#fff;background: #2196f3;">SPARE CODE</th>
+												<th style="color:#fff;background: #2196f3;">SPARE NAME</th>
+												<th style="color:#fff;background: #2196f3;">REMAINING QUANTITY</th>
+												<th style="color:#fff;background: #2196f3;">QUANTITY</th>
+												<th style="color:#fff;background: #2196f3;">TAX(%)</th>
+												<th style="color:#fff;background: #2196f3;">RATE/PIECE</th>
+												<th style="color:#fff;background: #2196f3;">INC. TAX</th>
+												<th style="color:#fff;background: #2196f3;">AMOUNT</th>
+												<th style="color:#fff;background:#2196f3;width:350px;">IMEI</th>
+												<th style="color:#fff;background:#2196f3;width:150px;">Remark</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr data-ng-repeat="spareData in selectedPO.spare" class="pointer">
+												<td>
+													<label class="checkbox checkbox-inline m-r-20">
+														<input type="checkbox" ng-model="selectedPO.spare[$index].selected">
+														<i class="input-helper"></i>
+													</label>
+												</td>
+												<td>{{spareData.code || 'NA'}}</td>
+												<td>{{spareData.name || 'NA'}}</td>
+												<td>{{spareData.remaining_quantity}}</td>
+												<td><input type="number" class="form-control"
+														   ng-model="selectedPO.spare[$index].quantity"
+														   placeholder="Enter Quantity"
+														   ng-change="checkQty($index);calculate($index);"
+														   required></td>
+												<td><input type="number" class="form-control"
+														   ng-model="selectedPO.spare[$index].tax" placeholder="Enter tax"
+														   ng-change="calculate($index)"></td>
+												<td><input type="number" class="form-control"
+														   ng-model="selectedPO.spare[$index].rate_per_piece"
+														   placeholder="Enter Rate/Piece" ng-change="calculate($index)"
+														   required></td>
+												<td><input type="number" class="form-control"
+														   ng-model="selectedPO.spare[$index].rate_inc_tax"
+														   placeholder="rate with tax" ng-change="calculate($index)"
+														   readonly="true"></td>
+												<td><input type="number" class="form-control"
+														   ng-model="selectedPO.spare[$index].billing_amount"
+														   placeholder="Enter Billing Amount" readonly="true"></td>
+												<td>
+													<div class="row">
+														<div class="col-md-12">
+															<div class="form-group m-b-0">
+																<div class="col-sm-6">
+																	<div class="fg-line">
+																		<input type="number" class="form-control" name="{{imei+$index}}"
+																			   ng-model="selectedPO.spare[$index].newIMEIData"
+																			   placeholder="IMEI" ng-pattern="/^[0-9]{9,16}$/">
+																		<span style="color:red" ng-show="InwordForm[imei+$index].$dirty && InwordForm[imei+$index].$invalid">IMEI is not valid.</span>
+																	</div>
+																</div>
+																<div class="col-sm-3">
+																	<button ng-click="addIMEI(selectedPO.spare[$index].newIMEIData, selectedPO.spare[$index].quantity, $index)"
+																			ng-disabled="!(InwordForm[imei+$index].$valid && selectedPO.spare[$index].newIMEIData)"
+																			class="btn btn-primary waves-effect pointer">
+																		<i class="zmdi zmdi-plus zmdi-hc-fw">{{selectedPO.spare[$index].quantity-selectedPO.spare[$index].imei_list.length}}</i>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div ng-show="(selectedPO.spare[$index].imei_list.length>0)" class="row" style="margin:5px">
+														<div class="col-md-12">
+															<span class="route_iCity" style="margin-left: 5px;"
+																  ng-repeat="i in selectedPO.spare[$index].imei_list">{{i}} <a
+																	class="route_iCityRemove"
+																	ng-click="removeIMEI(i,$parent.$index)">x</a>
+															</span>
+														</div>
+													</div>
+												</td>
+												<td><input type="text" class="form-control"
+														   ng-model="selectedPO.spare[$index].remark"
+														   placeholder="remark"></td>
+											</tr>
+											</tbody>
+										</table>
+										<div ng-show="!(selectedPO && selectedPO._id)" class="ms-body" style=" min-height: 50px;">
+											<h3> Data not available !!!!!</h3>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<div>
+									<button ng-disabled="InwordForm.$invalid" ng-click="inwordDevice(selectedPO)"
+											class="btn btn-primary waves-effect pull-right">ADD
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

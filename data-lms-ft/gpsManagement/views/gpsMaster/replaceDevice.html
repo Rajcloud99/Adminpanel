@@ -1,0 +1,170 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 550px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="col-md-4 lvh-label">
+						<span class="c-black"><b>Device Replacement</b> &nbsp;&nbsp;&nbsp;</span>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<form role="form" ng-submit="filter(form)">
+					<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+						<div class="fg-line">
+							<input type="text" ng-model="purchase_invoice_no" name="purchase_invoice_no"
+										 class="form-control input-sm" placeholder="Purchase Invoice No"
+										 ng-model-options="{ updateOn: 'blur' }" ng-change="getDevice()"
+										 style="height: 34px;font-size: 13px;">
+						</div>
+					</div>
+					<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+						<div class="fg-line">
+							<input type="text" ng-model="po_number" name="po_number"
+										 class="form-control input-sm" placeholder="PO No"
+										 ng-model-options="{ updateOn: 'blur' }" ng-change="getDevice()"
+										 style="height: 34px;font-size: 13px;">
+						</div>
+					</div>
+					<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+						<div class="select">
+							<select chosen
+											class="form-control"
+											ng-model="stock_status"
+											ng-options="item as item for item in availability"
+											name="Availability"
+											ng-change="getDevice()" ng-disabled="true">
+								<option value="" selected>Device Status</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+						<div class="select">
+							<select chosen
+											class="form-control"
+											ng-model="health_status"
+											ng-options="item as item for item in aHealth"
+											name="health"
+											ng-change="getDevice()" ng-disabled="true">
+								<option value="" selected>Device Health</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+						<div class="lvh-search ng-scope sear">
+							<input type="text" placeholder="Customer Search..." ng-model="issued_to"
+										 class="lvhs-input" typeahead-wait-ms="10"
+										 typeahead="item as item.name for item in aCustomer"
+										 ng-change="getCname1(issued_to)" class="form-control"
+										 typeahead-on-select="onSelect($item, $model, $label)">
+							<i class="lvh-search-close" ng-click="clearSearch1()">×</i>
+						</div>
+					</div>
+					<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+						<select
+								chosen
+								name="return_reason"
+								class="form-control"
+								ng-model="return_reason"
+								data-placeholder-text-single="'Return Reason'"
+								ng-options="item as item for item in aReasons"
+								ng-disabled="!selectedAllotedGPS"
+						>
+							<option selected disabled>Select return reason</option>
+						</select>
+					</div>
+					<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+						<textarea
+								rows="2"
+								ng-model="return_remark"
+								placeholder="Return Remark"
+								ng-disabled="!selectedAllotedGPS"
+						>
+						</textarea>
+					</div>
+					<div class="clearfix"></div>
+				</form>
+			</div>
+			<div class="col-sm-6" style="min-height: 400px;overflow-y: auto;">
+				<div class="row" style="margin: 5px auto;">
+					<div style="border:1px solid darkslategray">
+						<div>
+							<div class="detailsList">
+								<div class="">
+									<table class="table table-bordered">
+										<thead>
+										<tr>
+											<th style="color:#fff;background: #2196f3;">IMEI Number</th>
+											<th style="color:#fff;background: #2196f3;">GPS Category</th>
+											<th style="color:#fff;background: #2196f3;">Vendor</th>
+											<th style="color:#fff;background: #2196f3;padding-right:0;">PO No.</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr class="pointer selectItem" ng-repeat="gps in aGPS" ng-click="selectGPS($index)">
+											<td>{{gps.imei || 'NA'}}</td>
+											<td>{{gps.part_ref.name || 'NA'}}</td>
+											<td>{{gps.purchased_from_vendor.name || 'NA'}}</td>
+											<td>{{gps.po_number || 'NA'}}</td>
+										</tr>
+										</tbody>
+									</table>
+									<div ng-show="aGPS.length == 0" class="ms-body" style=" min-height: 50px;">
+										<h3> Data not available !!!!!</h3>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="pagi text-center" ng-show="aGPS.length > 0">
+								<uib-pagination ng-change="pagination.pageChanged()"
+																total-items="pagination.totalItems"
+																items-per-page="pagination.items_per_page"
+																num-pages="pagination.numPages"
+																ng-model="pagination.currentPage" max-size="pagination.maxSize"
+																class="pagination-sm smallPagi" boundary-links="true"
+																previous-text="&lsaquo;" next-text="&rsaquo;"
+																first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6" style="min-height: 400px;overflow-y: auto;">
+				<div class="row" style="margin: 5px auto;">
+					<div style="border:1px solid darkslategray">
+						<div class="detailsList">
+							<div ng-show="aAllotedGPS.length > 0">
+								<table class="table table-bordered"  >
+									<thead>
+									<tr>
+										<th style="color:#fff;background: #2196f3;">IMEI Number</th>
+										<th style="color:#fff;background: #2196f3;">GPS Category</th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr class="pointer selectItem1" ng-repeat="allot in aAllotedGPS" ng-click="selectAllotedGPS($index)">
+										<td>{{allot.imei || 'NA'}}</td>
+										<td>{{allot.part_ref.name || 'NA'}}</td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+							<div ng-show="aAllotedGPS.length < 1" style="min-height: 50px;">
+								<h3>Select the customer's device you want to replace with</h3>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<button ng-show="(aAllotedGPS.length>0)" class="btn btn-success pull-right"
+							ng-disabled="!selectedGPS || !selectedAllotedGPS || !return_reason || !return_remark"
+							type="button" ng-click="submitData()" style="margin: 20px 20px;">Replace
+			</button>
+		</div>
+	</div>
+</div>
+
+<style>
+	.grn22{background: #4de9d3;}
+</style>

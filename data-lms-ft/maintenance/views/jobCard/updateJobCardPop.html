@@ -1,0 +1,242 @@
+<form role="form" name="upjCard" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h5 class="modal-title" align="center">Update JobCard</h5><br>
+	</div>
+	<div class="modal-body">
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Branch<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<input type="text" placeholder="Search Branch" ng-model="upJobCard.branch" class="lvhs-input"
+							typeahead-wait-ms="10"
+							typeahead="item as item.name for item in getBname($viewValue)"
+							class="form-control" search-contains="true" name="branch" typeahead-on-select="onBranchSelect($item, $model, $label)" required>
+						<i class="lvh-search-close" ng-click="upJobCard.branch = ''; clearsearch()">×</i>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Select Vehicle<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<input type="text" placeholder="" ng-model="upJobCard.vehicle"
+							class="lvhs-input" typeahead-wait-ms="10" typeahead-min-length="2"
+							typeahead="item as item.vehicle_reg_no for item in vehiclesOwn | filter:$viewValue"
+							ng-change="getVname(upJobCard.vehicle)" class="form-control"
+							typeahead-on-select="onVehicleSelect($item, $model, $label)" ng-disabled="true" search-contains="true" name="vehicle" required>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Last Trip No.</label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="number" class="form-control" ng-model="upJobCard.last_trip_number"
+								   ng-disabled="true">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Type of Job<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control" placeholder="Select"
+									ng-options="item as item for item in jobType" ng-model="upJobCard.job_type"
+									required>
+								<option value="" selected> Select Type</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Odometer Reading<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="number" class="form-control" ng-model="upJobCard.odometer_reading" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">HOM Name<span class="req_r">*</span></label>
+                <div class="col-sm-6">
+                  <div class="fg-line">
+                    <input type="number" class="form-control" ng-model="objJobCard.homId">
+                  </div>
+                  <div class="select">
+                    <select class="form-control"  placeholder="Select" ng-options="item as item.short_name for item in aHOM" ng-model="objJobCard.hom" required>
+                      <option value="" selected> Select Type </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+			<!-- <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Status</label>
+                <div class="col-sm-6">
+                  <div class="select">
+                    <select class="form-control"  placeholder="Select" ng-options="item as item for item in aStatus" ng-model="objJobCard.status">
+                      <option value="" selected> Select Type </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Flag<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control" placeholder="Select"
+									ng-options="item as item for item in aFlag" ng-model="upJobCard.flag" required>
+								<option value="" selected> Select Flag</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div class="row" style="margin:15px">
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Driver name <span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text" class="form-control" ng-model="upJobCard.driver_name" required
+								   ng-disabled="true">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Type of maintenance<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="select">
+							<select class="form-control" placeholder="Select"
+									ng-options="item as item for item in aMainType"
+									ng-model="upJobCard.maintenance_type" required>
+								<option value="" selected> Select Type</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Vehicle In date<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+								<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+									   datepicker-popup="{{format}}" show-weeks="false"
+									   ng-model="upJobCard.vehicle_in_datetime" is-open="opened2"
+									   datepicker-options="dateOptions" close-text="Close" placeholder="Vehicle In date"
+									   style="padding: 0px 4px;height: 34px;" ng-disabled="true"/>
+							</div>
+							<!-- <span class="input-group-btn">
+                              <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span> -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="margin:15px">
+
+			<!-- <div class="col-md-4">
+              <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Job card open date</label>
+                <div class="col-sm-6">
+                  <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+                    <div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+                      <input ng-click="open($event, 'opened3')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="job_card_open_date" is-open="opened3" datepicker-options="dateOptions" close-text="Close" placeholder="card open date" style="padding: 0px 4px;height: 34px;" />
+                    </div>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened3')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Estimated release date<span class="req_r">*</span></label>
+					<div class="col-sm-6">
+						<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+							<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+								<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+									   datepicker-popup="{{format}}" show-weeks="false"
+									   ng-model="upJobCard.estimated_release_date" is-open="opened1"
+									   datepicker-options="dateOptions" close-text="Close" placeholder="release date"
+									   style="padding: 0px 4px;height: 34px;"/>
+							</div>
+							<!-- <span class="input-group-btn">
+                              <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span> -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Location </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text" class="form-control" ng-model="upJobCard.location">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group m-b-0">
+					<label class="col-sm-6 control-label">Remark </label>
+					<div class="col-sm-6">
+						<div class="fg-line">
+							<input type="text" class="form-control" ng-model="upJobCard.remark">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="submit" ng-click="updateBasicJobCard(upjCard)" class="btn btn-success"
+				style="margin-bottom: 12px;">Update Job Card
+		</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()" style="margin-bottom: 12px;">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 85%;
+		height: 173px
+	}
+
+	.multiselect-parent ul.dropdown-menu.dropdown-menu-form {
+		opacity: 1;
+		transform: none;
+		overflow: auto !important;
+	}
+
+	.chosen-container-single .chosen-single {
+		height: 28px;
+		margin-top: -7px;
+	}
+</style>

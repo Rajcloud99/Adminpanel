@@ -1,0 +1,102 @@
+<div class="container">
+	<div class="card m-b-0" style="box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px" id="messages-main">
+		<div class="" style=" min-height: 535px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix" style="padding: 5px;">
+					<div class="clearfix"></div>
+				</div>
+				<div class="lv-body">
+					<div class="row hidden-print" style="margin:5px 15px;">
+
+						<div class="col-md-2">
+							<select chosen name="vendor" class="form-control" data-placeholder-text-single="'SO No.'"
+											allow-single-deselect="true" no-results-text="'Could not find any SO Number'"
+											ng-model="so_number" ng-options="item.so_number as item.so_number for item in aSO"
+											ng-change="getSO()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-2">
+							<select chosen name="vendor" class="form-control" data-placeholder-text-single="'Approved By'"
+											allow-single-deselect="true"
+											no-results-text="'Could not find'" ng-model="approver"
+											ng-options="item._id as item.full_name for item in aApprover"
+											ng-change="getSO()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-2">
+							<select name="vendor" class="form-control" chosen data-placeholder-text-single="'By Status'"
+											allow-single-deselect="true"
+											no-results-text="'Could not find'" ng-model="status" ng-options="item as item for item in aStatus"
+											ng-change="getSO()">
+								<option value="" selected></option>
+							</select>
+						</div>
+
+						<div class="col-md-6" style="text-align: right;">
+							<button class="btn btn-primary btn-xs p-l-5 p-r-5" style="font-size: 20px" uib-tooltip="Preview"
+											tooltip-placement="bottom"
+											type="button" ng-click="previewSlip()" ng-disabled="!selectedSlip">
+								<i class="zmdi zmdi-print zmdi-hc-fw"></i>
+							</button>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+
+					<div class="detailsList">
+						<table class="table table-bordered slipTable">
+							<thead>
+							<tr>
+								<th style="color:#ffffff;background: #2196f3;">#</th>
+								<th style="color:#ffffff;background: #2196f3;">Slip Number</th>
+								<th style="color:#ffffff;background: #2196f3;">Slip Type</th>
+								<th style="color:#ffffff;background: #2196f3;">Issued To</th>
+								<th style="color:#ffffff;background: #2196f3;">Issued Date</th>
+								<th style="color:#ffffff;background: #2196f3;">Returned To</th>
+								<th style="color:#ffffff;background: #2196f3;">Returned Date</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="slip in deviceSlips" class="pointer selectItem" ng-click="selectThisRow(slip, $index)">
+								<td>{{$index+1}}</td>
+								<td>{{slip.slip_number}}</td>
+								<td>{{slip.slip_type}}</td>
+								<td>{{slip.issued_to.full_name || 'NA'}}</td>
+								<td>{{slip.issued_date || 'NA' | date:'dd-MMM-yyyy' }}</td>
+								<td>{{slip.returned_to.full_name || 'NA'}}</td>
+								<td>{{slip.returned_date  || 'NA' | date:'dd-MMM-yyyy'}}</td>
+							</tr>
+							</tbody>
+						</table>
+						<div ng-show="!deviceSlips.length" class="ms-body" style=" min-height: 50px;">
+							<h3> Data not available !!!!!</h3>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<hr>
+				</div>
+			</div>
+			<br>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="pagi text-center" ng-show="aGPS.length > 0">
+		<uib-pagination ng-change="pagination.pageChanged()"
+										total-items="pagination.totalItems"
+										items-per-page="pagination.items_per_page"
+										num-pages="pagination.numPages"
+										ng-model="pagination.currentPage" max-size="pagination.maxSize"
+										class="pagination-sm smallPagi" boundary-links="true"
+										previous-text="&lsaquo;" next-text="&rsaquo;"
+										first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+	</div>
+</div>
+</div>
+<style>
+	.grn22 {
+		background: #4de9d3;
+	}
+</style>

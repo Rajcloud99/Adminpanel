@@ -1,0 +1,135 @@
+<form role="form"  name="toolCard" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Add New Tool</h4><br>
+    <div class="row">
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-2">
+        <label class="radio radio-inline m-r-20">
+            <input type="radio" ng-model="tool.category" name="inlineRadioOptions" value="new">
+            <i class="input-helper"></i>
+            New
+        </label>
+      </div>
+      <div class="col-md-2">
+        <label class="radio radio-inline m-r-20">
+            <input type="radio" ng-model="tool.category" name="inlineRadioOptions" value="old">
+            <i class="input-helper"></i>
+            Old
+        </label>
+      </div>
+      <div class="col-md-4">
+      </div>
+    </div>
+  </div>
+  <style type="text/css">
+    .modal-backdrop.in{z-index:9 !important;}
+    .modal-open .modal{z-index:99 !important;}
+  </style>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div ng-hide="(tool.category=='old')" class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Select PO:</label>
+          <div class="col-sm-6">
+            <select chosen class="form-control" ng-options="item as item.ponumder for item in aPO" ng-model="tool.po_number" ng-change="poSelect()">
+                <option value="">Select PO</option> 
+            </select>
+          </div>
+        </div>
+      </div>
+      <div ng-hide="(tool.category=='old')" class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Select Vendor:</label>
+          <div class="col-sm-6">
+            <select chosen class="form-control" ng-options="item as item.name for item in aVendors" ng-model="tool.vendorData">
+                <option value="">Select Vendor</option> 
+              </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Select Tool:</label>
+          <div class="col-sm-6">
+            <select chosen class="form-control" ng-options="item as item.name for item in aTool" ng-model="tool.toolData">
+                <option value="">Select Tool</option> 
+              </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Quantity</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="number" class="form-control" ng-model="tool.quantity">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Invoice Number</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-model="tool.invoice_number">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Billing Amount</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="number" class="form-control" ng-model="tool.billing_amount">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-3">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Enter Tool Codes</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-model="data.toolCode">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <button ng-click="addCode(data.toolCode)" ng-disabled="!(data.toolCode)" class="btn btn-primary waves-effect pointer">
+          <i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+        </button>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-12">
+        <span class="route_iCity" ng-repeat="oCode in aToolCode">{{oCode}} <a class="route_iCityRemove" ng-click="removeCode($index)">x</a></span>
+      </div>
+    </div>
+  </div>    
+  <div class="modal-footer">
+    <button type="submit" ng-click="addInward(tool)" ng-disabled="!((tool.category=='new'?(tool.po_number && tool.vendorData):true)&&(aToolCode.length>0)&&(tool.quantity)&&(tool.category)&&(tool.toolData))" class="btn btn-success" style="margin-bottom: 12px;">Add Tool</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()" style="margin-bottom: 12px;">Close</button>
+  </div>  
+</form> 
+<style type="text/css">
+  .modal-dialog {width: 75%;
+      height: 173px
+  }
+  .multiselect-parent ul.dropdown-menu.dropdown-menu-form {
+    opacity: 1;
+    transform: none;    overflow: auto !important;
+  }
+  .chosen-container-single .chosen-single{height: 28px;margin-top: -7px;}
+</style>

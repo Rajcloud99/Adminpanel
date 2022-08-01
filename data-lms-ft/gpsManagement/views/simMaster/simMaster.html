@@ -1,0 +1,605 @@
+<!--suppress HtmlUnknownAttribute -->
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+	 id="messages-main">
+	<div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
+		<div class="lvh-search ng-scope sear">
+			<input type="text" placeholder="Search Sim ..."
+				   ng-model="searchValue" class="lvhs-input"
+				   typeahead="simMaster.name as simMaster.name for simMaster in simMasteres  | filter:searchValue"
+			typeahead-min-length="2" ng-change="getSimMasterNames(searchValue)"
+			typeahead-on-select="onSimMasterTypeAheadSelect($item, $model, $label)" >
+			<i class="lvh-search-close" ng-click="searchValue='';getAllSimMasteres()">×</i>
+		</div>
+		<div class="listview lv-simMaster clk" style="overflow: auto;height:97%;">
+			<div class="lv-item media" ng-repeat="simMaster in simMasteres"
+				 ng-click="selectSimMasterAtIndex($index)">
+				<div class="truck-desc">
+					<div class="row">
+						<div class="col-md-8 bold">
+							{{simMaster.name}}
+						</div>
+						<div class="col-md-4 bold">
+							{{simMaster.code}}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pagi" ng-show="total_pages>1">
+				<pagination ng-change="pageChanged()" total-items="totalItems"
+							items-per-page="items_per_page" num-pages="numPages"
+							ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi"
+							boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+							first-text="&laquo;" last-text="&raquo;"></pagination>
+			</div>
+		</div>
+	</div>
+
+	<div class="card" style="min-height: 600px;margin-left:20%;overflow: auto">
+		<div class="card-header" style="padding: 10px 25px;">
+			<h2>
+                <span style="margin-left:10px;">{{selectedSimMaster.name}}
+                    </span>
+				<span style="margin-left:10px;color:#B7B7B7"
+					  ng-hide="simMasteres.length===0 && (currentMode==='view' || currentMode==='edit')">
+                    ({{currentMode.substring(0,1).toUpperCase()+ currentMode.substring(1)}})
+                    </span> </h2>
+		</div>
+		<button class="btn btn-primary waves-effect"
+				style="margin-top:-25px;float: right;margin-right: 20px;"
+				ng-click="addNewSimMasterClicked()" ng-show="currentMode ==='view'">
+			Add New SimMaster
+		</button>
+
+		<div class="card-header" ng-show="simMasteres.length===0 && currentMode==='view'">
+			<h2 style="color: grey">
+				No simMasteres found
+			</h2>
+		</div>
+
+		<!--Form starts here -->
+		<div class="card-body" ng-hide="simMasteres.length===0 && (currentMode==='view' || currentMode==='edit')">
+			<ul class="tab-nav" ng-show="simMasteres.length || form_user=='add'"
+				style="margin-right: 25px;margin-left: 25px;width: auto">
+				<li ng-class="{active: tab_active_simMaster===1}">
+					<a href="" ng-click="selectTabSimMaster(1)">SimMaster Info.</a>
+				</li>
+				<li ng-class="{active: tab_active_simMaster===2}">
+					<a href="" ng-click="selectTabSimMaster(2)" > Departments</a>
+				</li>
+			</ul>
+
+			<div class="card-body" >
+				<form name="SimMasterForm" ng-show="tab_active_simMaster===1" novalidate>
+					<div class="validationError" ng-show="simMaster"><h5 class="c-red">* {{bmsg}}</h5></div>
+					<ul ng-show="currentMode==='view'" class="lv-actions actions"
+						style="position:absolute;margin-top:10px;margin-left:90%;">
+						<li ng-hide="$loginUserRoleData.simMaster.indexOf('edit')===-1"
+							class="btn-wave" data-ui-sref-active="active">
+							<a href=""  uib-tooltip="Edit SimMaster" tooltip-placement="bottom"
+							   ng-click="editSimMasterClicked()" >
+								<i class="zmdi zmdi-edit">
+								</i>
+							</a>
+						</li>
+						<li ng-hide="$loginUserRoleData.simMaster.indexOf('remove')===-1">
+							<a href="" uib-tooltip="Delete SimMaster"
+							   tooltip-placement="bottom"
+							   ng-click="deleteSimMasterClicked()">
+								<i class="zmdi zmdi-delete">
+								</i>
+							</a>
+						</li>
+					</ul>
+					<!-- simMaster basic info -->
+					<div id="div_simMaster_info" class="card-body" style="padding: 25px;">
+						<div class="row" style="margin:5px">
+							<div class="col-md-6" ng-show="currentMode==='view'">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Code: </label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="text" ng-model="selectedSimMaster.code" class="form-control"
+												   ng-readonly="currentMode==='view'" name="simMaster code" >
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Name:  </label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="text" ng-model="selectedSimMaster.name" class="form-control"
+												   ng-readonly="currentMode==='view'" name="simMaster name" >
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Type:  <span style="color: red;">*</span> </label>
+									<div class="col-sm-6" ng-if="currentMode !='view'">
+										<div class="select" ng-show="(currentMode==='view' && selectedSimMaster.type.length) ||
+                                    currentMode==='add' || currentMode==='edit'"
+											 ng-readonly="currentMode==='view'">
+											<select class="form-control" required
+													ng-readonly="currentMode==='view'"
+													ng-disabled="currentMode==='view'"
+													name="type" ng-model="selectedSimMaster.type">
+												<option value="" disabled selected>Select Category</option>
+												<option ng-repeat="x in $constants.simMasterTypes" ng-disabled="currentMode==='view'"
+														value="{{x}}" >{{x}}</option>
+											</select>
+										</div>
+									</div>
+									<div class="col-sm-6" ng-if="currentMode==='view'">
+										<label>{{selectedSimMaster.type}}</label>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Primary contact no:  <span style="color: red;">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="number"  ng-model="selectedSimMaster.prim_contact_no" class="form-control" ng-minlength="10" ng-maxlength="10" ng-readonly="currentMode==='view'" name="primary contact number"  required>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Alternate contact no</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input  ng-model="selectedSimMaster.alt_contact_no1" class="form-control"
+													ng-readonly="currentMode==='view'" name="alternate contact no">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Primary email:  <span style="color: red;">*</span></label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="email" ng-model="selectedSimMaster.prim_email" class="form-control" name ="SimMaster primary email" ng-readonly="currentMode==='view'" required>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Alternate email</label>
+										<div class="col-sm-6">
+											<div class="fg-line">
+												<input ng-readonly="currentMode==='view'" type="email"
+													   name="SimMaster alternate email"        ng-model="selectedSimMaster.alt_email" class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Fax </label>
+										<div class="col-sm-6">
+											<div class="fg-line" ng-readonly="currentMode==='view'">
+												<input ng-readonly="currentMode==='view'"
+													   name ="fax"        ng-model="selectedSimMaster.fax" class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<div class="form-group m-b-0">
+										<label class="col-sm-4 control-label">Opening date </label>
+										<div class="col-sm-6">
+											<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+												<div class="fg-line" ng-readonly="currentMode==='view'" ng-class="{ 'fg-toggled': opened1 == true }">
+													<input ng-readonly="currentMode==='view'"
+														   ng-click="open($event, 'opened1')"
+														   type="text" class="form-control"
+														   uib-datepicker-popup="{{format}}"
+														   show-weeks="false" max-date="minDate" name="opening date"
+														   ng-model="selectedSimMaster.simMaster_open_date" is-open="opened1"
+														   uib-datepicker-options="dateOptions" close-text="Close"
+														   placeholder="Select Date" />
+												</div>
+												<span class="input-group-btn" ng-hide="currentMode==='view'">
+                                                <button type="button" class="btn btn-default m-t-0 f12"
+														ng-click="open($event, 'opened1')">
+                                                    <i class="glyphicon glyphicon-calendar">
+                                                    </i>
+                                                </button>
+                                            </span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Profit Center:</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="number" ng-model="selectedSimMaster.profit_center"
+												   name="profit center"       class="form-control" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+									<div class="col-sm-1" ng-show="!currentMode==='view'">
+										<button class="btn btn-default waves-effect" style="padding: 3px 10px;margin-top: -5px;"
+												ng-click="searchEmployeeCode($viewValue)" >
+											<i class="zmdi zmdi-search"></i></button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Cost Center</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="number" ng-model="selectedSimMaster.cost_center"
+												   ng-readonly="currentMode==='view'"
+												   class="form-control">
+										</div>
+									</div>
+									<div class="col-sm-1" ng-show="!currentMode==='view'">
+										<button class="btn btn-default waves-effect" style="padding: 3px 10px;margin-top: -5px;"
+												ng-click="searchEmployeeCode($viewValue)"
+										><i class="zmdi zmdi-search"></i></button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					<div id="div_simMaster_employee_details" class="card-body" style="padding: 25px;">
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Head employee code:</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="text" ng-model="selectedSimMaster.simMaster_head_employee_code"
+												   name="head employee code"       class="form-control" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+									<div class="col-sm-1" ng-show="!currentMode==='view'">
+										<button class="btn btn-default waves-effect" style="padding: 3px 10px;margin-top: -5px;"
+												ng-click="searchEmployeeCode($viewValue)" >
+											<i class="zmdi zmdi-search"></i></button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Alternate contact person employee code</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input  ng-model="selectedSimMaster.alt_contact_employee_code"
+													ng-readonly="currentMode==='view'"
+													class="form-control">
+										</div>
+									</div>
+									<div class="col-sm-1" ng-show="!currentMode==='view'">
+										<button class="btn btn-default waves-effect" style="padding: 3px 10px;margin-top: -5px;"
+												ng-click="searchEmployeeCode($viewValue)"
+										><i class="zmdi zmdi-search"></i></button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Head name: </label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="text" ng-model="selectedSimMaster.simMaster_head_name" class="form-control"
+												   name="simMaster head name" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Alternate contact person name</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input  ng-model="selectedSimMaster.alt_contact_name" name="Alternate contact person name"
+													class="form-control" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Head contact no.: </label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="number" ng-model="selectedSimMaster.simMaster_head_contact_no" class="form-control" name="SimMaster head contact number" ng-minlength="10" ng-maxlength="10"
+												   ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Alternate contact person no.</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input  ng-model="selectedSimMaster.alt_contact_employee_no" ng-minlength="10" ng-maxlength="10"
+													name="Alternate contact person no."       class="form-control" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Head email</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input  ng-model="selectedSimMaster.simMaster_head_email" type="email"
+													name="SimMaster head email"       class="form-control" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Alternate contact person email</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input  ng-model="selectedSimMaster.alt_contact_email" type="email"
+													name="Alternate contact person email"       class="form-control" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!--simMaster address-->
+
+					<div id="div_simMaster_address" class="card-body" style="padding: 25px;">
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Address Line 1: </label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="text" ng-model="selectedSimMaster.address.line1" name="Address Line 1"
+												   class="form-control" ng-readonly="currentMode==='view'"
+											>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Address Line 2</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input type="text" ng-model="selectedSimMaster.address.line2" name="Address Line 2"
+												   class="form-control" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">City: </label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input id ="autoCompleteCity" type="text" ng-model="selectedSimMaster.address.city" class="form-control" name="city"
+
+												   ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">District</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input  ng-model="selectedSimMaster.address.district" name="district"
+													class="form-control" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">State:</label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input ng-model="selectedSimMaster.address.state" class="form-control"
+												   name="state" ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Country: </label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input ng-model="selectedSimMaster.address.country" name="country"
+												   class="form-control"
+
+												   ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:5px">
+							<div class="col-md-6">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">PIN code: </label>
+									<div class="col-sm-6">
+										<div class="fg-line" ng-readonly="currentMode==='view'">
+											<input ng-model="selectedSimMaster.address.pincode" class="form-control" name="Pin Code"
+												   ng-readonly="currentMode==='view'">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+							</div>
+						</div>
+					</div>
+
+					<div class="row" ng-show="!(currentMode==='view')" style="margin: 0px 0px 30px 0px">
+						<div style="margin-left: 40%">
+							<button class="btn btn-default" ng-disabled="(currentMode==='edit'
+                             ||(currentMode==='add' && !(SimMasterForm.$dirty)))"
+									ng-click="clearForm()" style="margin-bottom: 15px;margin-right:30px"> Clear</button>
+							<button type="submit" class="btn btn-primary" ng-disabled="!(selectedSimMaster.type && selectedSimMaster.prim_contact_no && selectedSimMaster.prim_email)"
+									ng-click="saveSimMaster(SimMasterForm)" style="margin-bottom: 15px;margin-right:30px">Save</button>
+						</div>
+					</div>
+				</form>
+
+				<!--********** department association form *******************-->
+				<form name="DepartmentForm" ng-show="tab_active_simMaster===2">
+					<div ng-repeat="departmentSimMaster in selectedSimMaster.departments" class="card-body" style="padding: 25px;">
+						<div class="row" style="margin: 0px">
+							<ul class="lv-actions actions"
+								style="position:absolute;margin-top:10px;margin-left:90%;">
+								<li class="btn-wave" data-ui-sref-active="active">
+									<a href=""  uib-tooltip="Edit Department" tooltip-placement="bottom"
+									   ng-click="editDepartmentSimMasterClicked($index)" >
+										<i class="zmdi zmdi-edit">
+										</i>
+									</a>
+								</li>
+								<li>
+									<a href="" uib-tooltip="Delete department"
+									   tooltip-placement="bottom"
+									   ng-click="deleteDepartmentSimMasterClicked($index)">
+										<i class="zmdi zmdi-delete">
+										</i>
+									</a>
+								</li>
+							</ul>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<label  class="col-sm-4 control-label">Department Id</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="fg-line" >
+											<input style="height:30px" ng-model="departmentSimMaster.depId" class="form-control
+                                            input-sm" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group" >
+									<label class="col-sm-4 control-label">Department</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="fg-line" >
+											<input style="height:30px" ng-model="departmentSimMaster.depName" class="form-control
+                                        input-sm" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group" >
+									<label class="col-sm-4 control-label">Head</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="fg-line" >
+											<input style="height:30px" ng-model="departmentSimMaster.head" class="form-control
+                                                input-sm" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group" >
+									<label class="col-sm-4 control-label">Head employee id</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="fg-line" >
+											<input style="height:30px" ng-model="departmentSimMaster.headEmployeeId" class="form-control
+                                                input-sm" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group" >
+									<label class="col-sm-4 control-label">Open date</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="fg-line" >
+											<input ui-dateformat style="height:30px" ng-model="departmentSimMaster.openDate"
+												   class="form-control
+                                            input-sm" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group" >
+									<label class="col-sm-4 control-label">Department email</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="fg-line" >
+											<input style="height:30px" ng-model="departmentSimMaster.email" class="form-control
+                                            input-sm" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group" >
+									<label class="col-sm-4 control-label">Strength</label>
+									<div class="col-sm-6" style="padding-left: 15px;padding-right: 15px;">
+										<div class="fg-line" >
+											<input style="height:30px" ng-model="departmentSimMaster.strength" class="form-control
+                                            input-sm" readonly>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-1" style="float:right; margin-top:20px">
+						<button ng-click="addDepartmentSimMasterClicked()" class="btn btn-primary waves-effect pointer">
+							<i class="zmdi zmdi-plus zmdi-hc-fw"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

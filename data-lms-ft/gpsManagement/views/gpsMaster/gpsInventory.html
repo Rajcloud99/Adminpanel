@@ -1,0 +1,220 @@
+<div class="container">
+	<div class="card m-b-0" style="box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+		 id="messages-main">
+		<div class="" style=" min-height: 535px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix" style="padding: 5px;">
+					<div class="clearfix"></div>
+				</div>
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="purchase_invoice_no" name="purchase_invoice_no"
+										   class="form-control input-sm" placeholder="Purchase Invoice No"
+										   ng-model-options="{ updateOn: 'blur' }" ng-change="getDevice()"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="imei" name="IMEI"
+										   class="form-control input-sm" placeholder="IMEI No"
+										   ng-model-options="{ updateOn: 'blur' }" ng-change="getDevice()"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-1 col-md-1 col-lg-1">
+								<div class="fg-line">
+									<input type="text" ng-model="po_number" name="po_number"
+										   class="form-control input-sm" placeholder="PO No"
+										   ng-model-options="{ updateOn: 'blur' }" ng-change="getDevice()"
+										   style="height: 34px;font-size: 13px;">
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="select">
+									<select chosen
+											class="form-control"
+											ng-model="stock_status"
+											ng-options="item as item for item in availability"
+											name="Availability"
+											ng-change="getDevice()">
+										<option value="" selected>Device Status</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="select">
+									<select chosen
+											class="form-control"
+											ng-model="health_status"
+											ng-options="item as item for item in aHealth"
+											name="health"
+											ng-change="getDevice()">
+										<option value="" selected>Device Health</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2">
+								<div class="select">
+									<select chosen
+											class="form-control"
+											ng-model="allocation_status"
+											ng-options="item as item for item in aAllocation"
+											name="health"
+											ng-change="getDevice()">
+										<option value="" selected>Allocation Status</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-md-3" style="text-align: right;">
+								<button
+										type="button"
+										class="btn btn-primary btn-xs p-l-5 p-r-5"
+										style="font-size: 20px"
+										uib-tooltip="Move to In Stock"
+										tooltip-placement="bottom"
+										ng-disabled="!aGPS.length || !selectedGPS || selectedGPS.stock_status !== 'In Repobin' || selectedGPS.health_status !== 'Healthy'"
+										ng-click="toInStock()">
+									<i class="zmdi zmdi-undo zmdi-hc-fw"></i>
+								</button>
+								<button
+										type="button"
+										class="btn btn-primary btn-xs p-l-5 p-r-5"
+										style="font-size: 20px"
+										uib-tooltip="Send for Repair"
+										tooltip-placement="bottom"
+										ng-disabled="!aGPS.length || !selectedGPS || selectedGPS.stock_status !== 'In Repobin' || selectedGPS.health_status !== 'Damaged'"
+										ng-click="sendForRepair()">
+									<i class="zmdi zmdi-wrench zmdi-hc-fw"></i>
+								</button>
+								<button
+										type="button"
+										class="btn btn-primary btn-xs p-l-5 p-r-5"
+										style="font-size: 20px"
+										uib-tooltip="Scrap Device"
+										tooltip-placement="bottom"
+										ng-disabled="!aGPS.length || !selectedGPS || selectedGPS.stock_status !== 'In Repobin' || selectedGPS.health_status !== 'Damaged'"
+										ng-click="scrapDevice()">
+									<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+								</button>
+								<button
+									type="button"
+									class="btn btn-primary btn-xs p-l-5 p-r-5"
+									style="font-size: 20px"
+									uib-tooltip="Download Report"
+									tooltip-placement="bottom"
+									ng-disabled="!aGPS.length"
+									ng-click="downloadReport()">
+										<i class="zmdi zmdi-download zmdi-hc-fw"></i>
+								</button>
+							</div>
+
+							<div class="clearfix"></div>
+						</form>
+						<div class="pull-right">
+							<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+									ng-click="returnFromCustomer()">Return from Customer
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+									ng-click="returnFromSalesExecutive()">Return from Sales Executive
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+									ng-click="issueDevice()">Issue to Sales Executive
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+									ng-click="allocateDevice()">Allocate
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+									ng-click="inwordsDevice()">Inward
+							</button>&nbsp;&nbsp;
+							<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+											ng-click="replaceDevice()">Replace
+							</button>&nbsp;&nbsp;
+						</div>
+						<div class="clearfix"></div>
+						<div uib-collapse="isCollapsed">
+							<!--<h4>Selected GPS</h4>-->
+							<div class="lv-body">
+								<div class="row" style="margin: 5px auto;">
+									<div class="col-md-12">
+										<div class="detailsList">
+											<div class="">
+												<table class="table table-bordered">
+													<thead>
+													<tr>
+														<th style="color:#fff;background: #2196f3;">#</th>
+														<th style="color:#fff;background: #2196f3;">IMEI Number</th>
+														<th style="color:#fff;background: #2196f3;">GPS Category</th>
+														<th style="color:#fff;background: #2196f3;">Stock Status</th>
+														<th style="color:#fff;background: #2196f3;">Health Status</th>
+														<th style="color:#fff;background: #2196f3;">Allocation Status</th>
+														<th style="color:#fff;background: #2196f3;">Vendor</th>
+														<th style="color:#fff;background: #2196f3;">PO No.</th>
+														<th style="color:#fff;background: #2196f3;">Billing Amount</th>
+														<th style="color:#fff;background: #2196f3;">Purchase Invoice</th>
+														<th style="color:#fff;background: #2196f3;">Purchase Date</th>
+														<th style="color:#fff;background: #2196f3;">Sell Invoice</th>
+														<th style="color:#fff;background: #2196f3;">Sell Date</th>
+														<th style="color:#fff;background: #2196f3;">Activation Date</th>
+														<th style="color:#fff;background: #2196f3;">Expiry Date</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr ng-repeat="gps in aGPS" class="pointer selectItem" ng-click="selectGPS($index)">
+														<td>{{$index+1}}</td>
+														<td>{{gps.imei || 'NA'}}</td>
+														<td>{{gps.part_ref.name || 'NA'}}</td>
+														<td>{{gps.stock_status || 'NA'}}</td>
+														<td>{{gps.health_status || 'NA'}}</td>
+														<td>{{gps.allocation_status || 'NA'}}</td>
+														<td>{{gps.purchased_from_vendor.name || 'NA'}}</td>
+														<td>{{gps.po_number || 'NA'}}</td>
+														<td>{{gps.billing_amount || 0}}</td>
+														<td>{{gps.purchase_invoice_no || 'NA'}}</td>
+														<td>{{gps.purchase_date | date:'dd-MMM-yyyy'}}</td>
+														<td>{{gps.sell_invoice_no}}</td>
+														<td>{{gps.sell_date | date:'dd-MMM-yyyy'}}</td>
+														<td>{{gps.activation_date | date:'dd-MMM-yyyy'}}</td>
+														<td>{{gps.expiry_date | date:'dd-MMM-yyyy'}}</td>
+													</tr>
+													</tbody>
+												</table>
+												<div ng-if="aGPS.length == 0" class="ms-body" style=" min-height: 50px;">
+													<h3> Data not available !!!!!</h3>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr>
+						</div>
+					</div>
+				</div>
+				<br>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="pagi text-center" ng-show="aGPS.length > 0">
+			<uib-pagination ng-change="pagination.pageChanged()"
+							total-items="pagination.totalItems"
+							items-per-page="pagination.items_per_page"
+							num-pages="pagination.numPages"
+							ng-model="pagination.currentPage" max-size="pagination.maxSize"
+							class="pagination-sm smallPagi" boundary-links="true"
+							previous-text="&lsaquo;" next-text="&rsaquo;"
+							first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+		</div>
+	</div>
+</div>
+<style>
+	.grn22{background: #4de9d3;}
+</style>
+
+

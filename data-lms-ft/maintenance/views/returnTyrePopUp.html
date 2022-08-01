@@ -1,0 +1,227 @@
+<form role="form" name="tyreCard" autocomplete="off" novalidate>
+    <div class="modal-header">
+        <button type="button" ng-click="closeModal()" class="close"
+                data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" align="center">Return Tyre</h4><br>
+        <div class="row">
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </div>
+    <style type="text/css">
+        .modal-backdrop.in {
+            z-index: 9 !important;
+        }
+
+        .modal-open .modal {
+            z-index: 99 !important;
+        }
+    </style>
+    <div class="modal-body">
+        <div class="row" style="margin:15px">
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Tyre No:</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="tyre.tyre_number">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Tyre Category:</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="tyre.tyre_category">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Trailer/Vehicle No:</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="tyre.vehicle_no">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin:15px">
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Job Id</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="objIssuedTyre.jobId">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Task Id</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="objIssuedTyre.taskId">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Branch</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="objIssuedTyre.branch">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin:15px">
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Issued To</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="objIssuedTyre.issued_by_employee_name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Issue Slip No.</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="objIssuedTyre.issue_slip_number">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Issued Odometer Reading</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-readonly="true" ng-model="objIssuedTyre.issued_odometer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin:15px">
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Issue Date</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <!--<input type="text" class="form-control" ng-readonly="true" ng-model="objIssuedTyre.created_at">-->
+							<label>{{objIssuedTyre.created_at | date:'dd-MM-yyyy  h:mma' || 'NA'}}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Return Category:</label>
+                    <div class="col-sm-6">
+                        <div class="select">
+                            <select class="form-control" placeholder="Select"
+                                    ng-options="item as item for item in aIssueCat" ng-model="tyre.return_by_type" ng-change="getCatagoryList(tyre.return_by_type)">
+                                <!--<option value="" selected> Select type</option>-->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Return By:</label>
+                    <div class="col-sm-6">
+                        <div class="select">
+                            <select class="form-control" placeholder="Select" chosen
+                                    ng-options="item as item.full_name || item.name  for item in aUsers" ng-model="tyre.returnBy">
+                                <option value="" selected> Select type</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="margin:15px">
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Return Status:</label>
+                    <div class="col-sm-6">
+                        <div class="select">
+                            <select class="form-control" placeholder="Select"
+                                    ng-options="item as item for item in aReturnStatus" ng-model="tyre.return_status">
+                                <option value="" selected> Select type</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Return Odometer Reading <span style="color: red;">*</span>:</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-model="tyre.returned_odometer" ng-required="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group m-b-0">
+                    <label class="col-sm-4 control-label">Quality Remark <span style="color: red;">*</span>:</label>
+                    <div class="col-sm-6">
+                        <div class="fg-line">
+                            <input type="text" class="form-control" ng-model="tyre.tyre_return_quality_remark" ng-required="true">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" ng-click="returnTyre(tyre)"
+                ng-disabled="!((tyre.tyre_number)&&(tyre.return_status)&&(tyre.returnBy)&&(tyre.returned_odometer)&&(tyre.tyre_return_quality_remark))" class="btn btn-success"
+                style="margin-bottom: 12px;">Return
+        </button>&nbsp;&nbsp;&nbsp;
+        <button class="btn btn-warning" ng-click="closeModal()" style="margin-bottom: 12px;">Close</button>
+    </div>
+</form>
+<style type="text/css">
+    .modal-dialog {
+        width: 75%;
+        height: 173px
+    }
+
+    .multiselect-parent ul.dropdown-menu.dropdown-menu-form {
+        opacity: 1;
+        transform: none;
+        overflow: auto !important;
+    }
+
+    .chosen-container-single .chosen-single {
+        height: 28px;
+        margin-top: -7px;
+    }
+</style>

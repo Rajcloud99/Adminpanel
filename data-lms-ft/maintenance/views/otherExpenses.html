@@ -1,0 +1,66 @@
+<div class="container" >
+    <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <div class="row hidden-print" style="margin:5px 15px;">
+            <div class="col-md-2">
+                <!-- <select name="vehicle" class="form-control" chosen data-placeholder-text-single="'Vehicle'" allow-single-deselect="true" no-results-text="'Could not find any Vehicle'"  ng-model="vehicle_no" ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aVehicles" ng-change="fetchOE()">
+                    <option value="" selected></option>
+                </select> -->
+                <div class=" fg-line">
+                    <input type="text" ng-model="vehicle_no" class="form-control input-sm" placeholder="Search here..." ng-model-options="{ updateOn: 'blur' }" ng-change="fetchOE()" style="height: 34px;font-size: 13px;">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <select name="type" class="form-control" chosen data-placeholder-text-single="'Type'" allow-single-deselect="true" no-results-text="'Could not find any Type'" ng-model="type" ng-options="item as item for item in $constants.aExpenseType" ng-change="fetchOE()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <button class="btn btn-primary pull-right hidden-print" style="font-size: 14px;padding: 5px;" ng-click="addClicked()">Add Expense</button>
+        </div>
+    </div>
+
+    <div class="detailsList">
+        <div class="" style="overflow-y: auto;">
+            <table class="table table-bordered override-table-bordered">
+                <thead>
+                    <tr>
+                        <th>Sl No.</th>
+                        <th>Type</th>
+                        <th>Vehicle No.</th>
+                        <th>Bill No.</th>
+                        <th>Date</th>
+						<th>Party Name</th>
+                        <th>Created By</th>
+                        <th>Approved By</th>
+                        <th>Remark</th>
+                        <th>Amount</th>
+                        <!--<th>Action</th>-->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="exp in aExpenses">
+                        <td>{{$index+1}}</td>
+                        <td>{{exp.type}}</td>
+                        <td>{{exp.vehicle_no || 'NA'}}</td>
+                        <td>{{exp.bill_no}}</td>
+                        <td>{{exp.bill_date | date:'dd-MM-yyyy'}}</td>
+						<td>{{exp.partyName}}</td>
+						<td>{{exp.created_by_name}}</td>
+                        <td>{{exp.approved_by_name || 'NA'}}</td>
+                        <td>{{exp.remark || 'NA'}}</td>
+                        <td>{{exp.amount || 'NA'}}</td>
+                        <!--<td>
+                            &lt;!&ndash; <i class="zmdi zmdi-edit pointer" tooltip="Edit" ng-click="editOE(exp, $index)"></i>&nbsp;&nbsp; &ndash;&gt;
+                            <i class="zmdi zmdi-shield-check pointer" ng-click="approveOE(exp, $index)" tooltip="Approve"></i>&nbsp;&nbsp;
+                        </td>-->
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagi" ng-show="total_pages>1">
+                <uib-pagination ng-change="pageChanged()" total-items="totalItems" items-per-page="items_per_page" num-pages="numPages" ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi" boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+            </div>
+            <div ng-if="aExpenses.length == 0" class="ms-body" style=" min-height: 50px;">
+              <h3>Expense not available !!!!!</h3>
+            </div>
+        </div>
+    </div>
+</div>

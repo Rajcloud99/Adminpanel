@@ -1,0 +1,114 @@
+<form name="model" ng-controller="registerModelController" novalidate>
+    <div class="validationError" ng-show="createModelerrormsg"><h5 class="c-red">* {{modelMsg}}</h5></div>
+    <div class="row" style="margin:15px">
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Manufacturer:</label>
+                <div class="col-sm-6">
+                    <div class="select">
+                        <select class="form-control"
+                                ng-model="modelReg.manufacturer"
+                                ng-options="option for option in arrStrVehManufacturers">
+                            <option value="" selected disabled> Select Manufacturer </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Variant: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="text" ng-model="modelReg.variant" placeholder="Enter here" class="form-control" name="SL code" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Axle Type:</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="text" ng-model="modelReg.axle_type" placeholder="Enter here" class="form-control" name="SL code">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin:15px">
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Fuel Tank:</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="modelReg.fuel_tank" placeholder="Enter here" class="form-control" name="Fuel Tank">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Wheelbase:</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="modelReg.wheelbase" placeholder="Enter here" class="form-control" name="Whellbase">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Length:</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="modelReg.length" placeholder="Enter here" class="form-control" name="Length">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin:15px">
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Width:</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="modelReg.width" placeholder="Enter here" class="form-control" name="Width">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Height:</label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="modelReg.height" placeholder="Enter here" class="form-control" name="Whellbase">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group m-b-0">
+                <label class="col-sm-6 control-label">Ground Clearance: <span style="color: red;">*</span></label>
+                <div class="col-sm-6">
+                    <div class="fg-line">
+                        <input type="number" ng-model="modelReg.ground_clearance" placeholder="Enter here" class="form-control" name="ground clearance" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="m-l-30 col-md-10">
+            <div class="form-group m-b-10">
+                <button type="submit" class="btn btn-primary"
+                    ng-click="saveModel(model)" style="margin-bottom: 12px;">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <h5 style="color: red; text-align: right;">* Mandatory Field....</h5>
+    </div>
+</form>

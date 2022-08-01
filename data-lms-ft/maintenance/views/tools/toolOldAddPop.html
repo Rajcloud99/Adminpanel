@@ -1,0 +1,46 @@
+<form role="form"  name="oldToolAdd" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Add Table Data</h4><br>
+  </div>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div class="col-md-6">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Spare Name/Code</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select chosen class="form-control" ng-model="spare_name_code" ng-options="item as item.spare_name_code for item in aSpareRoot" name="spare code">
+                <option value=""></option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group m-b-0">
+          <label class="col-sm-6 control-label">Quantity<span class="req_r">*</span></label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="number" class="form-control" ng-model="qty" placeholder="enter here..." required>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>    
+  <div class="modal-footer">
+    <button class="btn btn-success waves-effect"  ng-click="addToolData(oldToolAdd)">Add Old Tool Data</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()">Close</button>
+  </div>  
+</form> 
+<style type="text/css">
+  .modal-dialog {
+      width: 70%;
+    }
+</style>
+

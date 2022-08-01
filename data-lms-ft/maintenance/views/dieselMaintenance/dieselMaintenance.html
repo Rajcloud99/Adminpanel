@@ -1,0 +1,110 @@
+<div class="container" >
+    <div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+        <div class="row hidden-print" style="margin:5px 15px;">
+            <div class="col-md-2">
+                <select chosen search-contains="true" class="form-control"  ng-model="flag" ng-options="item as item for item in aFlag" ng-change="getAllDieselList()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+               <select name="type" class="form-control" chosen data-placeholder-text-single="'Type'" allow-single-deselect="true" no-results-text="'Could not find any Type'"  ng-model="from_to_type" ng-options="item as item for item in aType" ng-change="getAllDieselList()">
+                    <option value="" selected></option>
+                </select>
+            </div>
+            <!-- <div class="col-md-1">
+               <select name="ponumder" class="form-control" chosen data-placeholder-text-single="'PO Number'" allow-single-deselect="true" no-results-text="'Could not find any PO Number'"  ng-model="po_number" ng-options="item.ponumder as item.ponumder for item in aPO" ng-change="getAllInventories()">
+                    <option value="" selected></option>
+                </select>
+            </div> -->
+            <div class="col-md-1">
+                <div class="fg-line">
+                    <input type="text" ng-model="bill_no" name="billnumber" class="form-control input-sm" placeholder="Bill Number" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllDieselList()" style="height: 34px;font-size: 13px;">
+                </div>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;">Search</button>
+            </div>
+            <!-- <div class="col-md-2">
+              <div class="form-group m-b-0">
+                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+                  <div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+                    <input ng-click="open($event, 'opened1')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date" is-open="opened1" datepicker-options="dateOptions" close-text="Close" placeholder="start date" ng-change="getAllInventories()" style="padding: 0px 4px;height: 34px;" />
+                  </div>
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group m-b-0">
+                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened12 == true }">
+                  <div class="fg-line" ng-class="{ 'fg-toggled': opened12 == true }">
+                    <input ng-click="open($event, 'opened12')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date" min-date="start_date" is-open="opened12" datepicker-options="dateOptions" close-text="Close" placeholder="end date" ng-change="getAllInventories()" style="padding: 0px 4px;height: 34px;" />
+                  </div>
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened12')"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </div>
+              </div>
+            </div> -->
+            <div class="btns">
+                <label>Diesel In:  {{dieselInCount || 0}} &nbsp;&nbsp;/&nbsp;&nbsp;</label>
+                <label>Diesel Out:  {{dieselOutCount || 0}}</label>
+                <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="dieselIn()">Diesel In</button>
+                <button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="dieselOut()">Diesel Out</button>
+                <a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"><i class="glyphicon glyphicon-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="detailsList">
+        <div class="" style="overflow-y: auto;background: #fff;min-height: 500px;">
+            <table class="table table-bordered override-table-bordered">
+                <thead>
+                    <tr>
+						<th>S. No.</th>
+                        <th>Flag</th>
+                        <th>From/To</th>
+                        <th>Type</th>
+                        <th>Qty.</th>
+                        <th>Price</th>
+                        <th>Total Amount</th>
+                        <th>Bill No.</th>
+                        <th>Remark</th>
+                        <th>Employee Name</th>
+						<th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="objDiesel in aDiesel">
+						<td>{{$index+1}}</td>
+                        <td>{{objDiesel.flag}}</td>
+                        <td>{{objDiesel.from_to}}</td>
+                        <td>{{objDiesel.from_to_type}}</td>
+                        <td>{{objDiesel.quantity}}</td>
+                        <td>{{objDiesel.price}}</td>
+                        <td>{{objDiesel.total_amount}}</td>
+                        <td>{{objDiesel.bill_no}}</td>
+                        <td>{{objDiesel.remark}}</td>
+                        <td>{{objDiesel.employee_involved_name}}</td>
+						<td><a href="" uib-tooltip="Print" ng-click="printSlip(objDiesel)" tooltip-placement="bottom"><span class="glyphicon glyphicon-print"></span></a></td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagi" ng-show="totalPages>1" style="text-align: center;">
+                <pagination ng-change="pageChanged()"
+                            total-items="totalItems"
+                            items-per-page="itemsPerPage" num-pages="numPages"
+                            ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+                            boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;">
+                </pagination>
+            </div>
+            <div ng-if="aDiesel.length == 0" class="ms-body" style=" min-height: 50px;">
+              <h3>Data not available !!!!!</h3>
+            </div>
+        </div>
+    </div>
+</div>

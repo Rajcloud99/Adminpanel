@@ -1,0 +1,76 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:5px 15px;">
+			<div class="col-md-2">
+				<div class="fg-line">
+					<input type="text" ng-model="searchText" name="Spare Search" class="form-control input-sm" placeholder="Spare Search"  style="height: 34px;font-size: 13px;">
+				</div>
+			</div>
+			<!--<div class="col-md-2">
+				<select name="vendor" class="form-control" chosen data-placeholder-text-single="'Vendor'"
+						allow-single-deselect="true" no-results-text="'Could not find any Vendor'"
+						ng-model="vendor_name" ng-options="item.name as item.name for item in aPOvendor"
+						ng-change="getAllAggreInventories()">
+					<option value="" selected></option>
+				</select>
+			</div>-->
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+				<div class="date-picker input-group dp-blue"
+					 ng-class="{ 'is-opened': opened1 == true }">
+					<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+						<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+							   uib-datepicker-popup="{{format}}" show-weeks="false"
+							   ng-model="date" is-open="opened1"
+							   datepicker-options="dateOptions" date-disabled="disabled(date, mode)"
+							   close-text="Close" placeholder="Date"
+							   style="padding: 0px 4px;height: 34px;"/>
+					</div>
+					<span class="input-group-btn">
+					  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+							  class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</div>
+			</div>
+			<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+				<button ng-click="getAllInvSnapshot()" class="btn btn-primary">Search</button>
+			</div>
+			<div class="btns">
+				<a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"><i
+						class="glyphicon glyphicon-download"></i></a>
+			</div>
+
+		</div>
+	</div>
+	<div class="detailsList">
+		<div class="" style="overflow: auto;background: #fff;height: 510px;">
+			<table class="table table-bordered override-table-bordered">
+				<thead>
+				<tr>
+					<th>Spare Name</th>
+					<th>Spare Code</th>
+					<th>Category Name</th>
+					<th>Category Code</th>
+					<th>Remaining Quantity</th>
+					<th>Rate/Piece</th>
+					<th>UOM</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="objInventory in inventories | filter:searchText">
+					<td>{{objInventory.spare_name}}</td>
+					<td>{{objInventory.spare_code}}</td>
+					<td>{{objInventory.category_name}}</td>
+					<td>{{objInventory.category_code}}</td>
+					<td>{{objInventory.remaining_quantity}}</td>
+					<td><span ng-repeat="i in objInventory.rate_per_piece track by $index">{{i}}, </span></td>
+					<td>{{objInventory.uom}}</td>
+				</tr>
+				</tbody>
+			</table>
+
+			<div ng-if="inventories.length == 0" class="ms-body" style=" min-height: 50px;">
+				<h3>Inventory data not available !!!!!</h3>
+			</div>
+		</div>
+	</div>
+</div>

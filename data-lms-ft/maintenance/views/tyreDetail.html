@@ -1,0 +1,446 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 550px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span class="c-black"><b>Detail Of Tyre No. {{selectedTyreMaster.tyre_number}} And Category: {{selectedTyreMaster.tyre_category}} And Status: {{selectedTyreMaster.status}}</b> &nbsp;&nbsp;&nbsp;</span>
+					</div>
+					<div class="btns">
+						<a href="" uib-tooltip="BACK" tooltip-placement="bottom" ng-click="back()"
+						   style="font-size: 18px;"><i class="glyphicon glyphicon-list"></i></a>&nbsp;&nbsp;
+
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<form name="InwordForm">
+					<div class="lv-body" style="margin: 5px 20px;">
+						<form class="form-vertical">
+							<h4>Basic Info</h4>
+							<div class="row" style="margin: 15px">
+                                <div class="col-sm-4">
+                                    <label class="col-sm-3 control-label">Tyre number</label>
+                                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                        <label>{{selectedTyreMaster.tyre_number}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="col-sm-3 control-label">Tyre Category</label>
+                                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                        <label>{{selectedTyreMaster.tyre_category}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="col-sm-3 control-label">Status</label>
+                                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                        <label>{{selectedTyreMaster.status || 'NA'}}</label>
+                                    </div>
+                                </div>
+                            </div>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-4">
+                                    <label class="col-sm-3 control-label">PO Number</label>
+                                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                        <label>{{selectedTyreMaster.po_number || 'NA'}}</label>
+                                    </div>
+                                </div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Total Run</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.total_run || 0}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+                                    <label class="col-sm-3 control-label">Mileage</label>
+                                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                        <label>{{selectedTyreMaster.mileage || 'NA'}}</label>
+                                    </div>
+                                </div>
+							</div>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Retreated Count</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.retread_count || 0}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+                                    <label class="col-sm-3 control-label">Spare Name</label>
+                                    <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                        <label>{{selectedTyreMaster.spare_name || 'NA'}}</label>
+                                    </div>
+                                </div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Spare Code</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.spare_code || 'NA'}}</label>
+									</div>
+								</div>
+							</div>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Remark</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.remark || 'NA'}}</label>
+									</div>
+								</div>
+							</div>
+
+							<h4>Purchase Info</h4>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Vendor</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.vendor_name || 'NA'}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Bill No.</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.invoice_number || 'NA'}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Bill Date</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.invoice_date | date:'dd-MM-yyyy'}}</label>
+									</div>
+								</div>
+							</div>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Price</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.billing_amount || 0}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Tax</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.tax || 0}} %</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Date Of Purchase</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.created_at | date:'dd-MM-yyyy' || 'NA'}}</label>
+									</div>
+								</div>
+							</div>
+
+							<h4>Association Info</h4>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Vehicle No.</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.vehicle_no || 'NA'}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Association Date</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.association_date | date:'dd-MM-yyyy' ||
+											'NA'}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Structure</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{selectedTyreMaster.structure_name ||
+											'NA'}}</label>
+									</div>
+								</div>
+							</div>
+							<h4>Structure</h4>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-12">
+									<div ng-show="selectedStructure">
+										<div class="separator_header"
+											 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+
+										<!--Preparing front tire UI-->
+										<h4>Front</h4>
+										<div style="width:100%">
+											<div class="row" ng-repeat="count in selectedStructure.front_mapping track by $index">
+												<div class="col-sm-12">
+													<div style="float: left;width: 150px;margin: 0 10px;">
+														<div class="tyre-class"
+															 ng-class="{'visible-tyre':(count===1 || count===2), 'tyre-highlighted': issued_positions.indexOf('F'+$index+'L'+0) < 0 && $parent.highlighted == 'F'+$index+'L'+0, 'tyre-disabled': issued_positions.indexOf('F'+$index+'L'+0)>-1}"
+															 ng-disabled="issued_positions.indexOf('F'+$index+'L'+0)<0"
+															 ng-click="$parent.highlighted = 'F'+$index+'L'+0; onTyreClicked('F', $index, 'L', 0)">
+														</div>
+														<div ng-show="issued_positions.indexOf('F'+$index+'L'+0)<0 && count<=2">
+														</div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('F'+$index+'L'+0)>-1">{{issued_tyres[issued_positions.indexOf('F'+$index+'L'+0)]}}</label>
+													</div>
+													<div style="float: left;width: 150px;margin: 0 60px 0 10px;">
+														<div class="tyre-class"
+															 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions.indexOf('F'+$index+'L'+1) < 0 && $parent.highlighted == 'F'+$index+'L'+1, 'tyre-disabled': issued_positions.indexOf('F'+$index+'L'+1)>-1} "
+															 ng-click="$parent.highlighted = 'F'+$index+'L'+1; onTyreClicked('F', $index, 'L', 1)">
+														</div>
+														<div ng-show="issued_positions.indexOf('F'+$index+'L'+1)<0 && count==2">
+														</div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('F'+$index+'L'+1)>-1">{{issued_tyres[issued_positions.indexOf('F'+$index+'L'+1)]}}</label>
+													</div>
+													<div style="float: left;width: 150px;margin: 0 10px 0 60px;">
+														<div class="tyre-class"
+															 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions.indexOf('F'+$index+'R'+0) < 0 && $parent.highlighted == 'F'+$index+'R'+0, 'tyre-disabled': issued_positions.indexOf('F'+$index+'R'+0)>-1}"
+															 ng-click="$parent.highlighted = 'F'+$index+'R'+0; onTyreClicked('F', $index, 'R', 0)">
+														</div>
+														<div ng-show="issued_positions.indexOf('F'+$index+'R'+0)<0 && count==2">
+														</div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('F'+$index+'R'+0)>-1">{{issued_tyres[issued_positions.indexOf('F'+$index+'R'+0)]}}</label>
+													</div>
+													<div style="float: left;width: 150px;margin: 0 10px;">
+														<div class="tyre-class"
+															 ng-class="{'visible-tyre':count===1 || count===2, 'tyre-highlighted': issued_positions.indexOf('F'+$index+'R'+1) < 0 && $parent.highlighted == 'F'+$index+'R'+1, 'tyre-disabled': issued_positions.indexOf('F'+$index+'R'+1)>-1}"
+															 ng-click="$parent.highlighted = 'F'+$index+'R'+1; onTyreClicked('F', $index, 'R', 1)">
+														</div>
+														<div ng-show="issued_positions.indexOf('F'+$index+'R'+1)<0 && count<=2">
+														</div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('F'+$index+'R'+1)>-1">{{issued_tyres[issued_positions.indexOf('F'+$index+'R'+1)]}}</label>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<!--Preparing spare tire UI-->
+										<div class="separator_header"
+											 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+										<h4>Spare</h4>
+										<div style="width:100%">
+											<div class="row" style="margin-left: 20%">
+												<div style="float: left;width: 150px;margin: 0 10px;">
+													<div
+															ng-repeat="i in getNumber(selectedStructure.spare_tyre) track by $index">
+														<div class="tyre-class visible-tyre" ng-click="$parent.highlighted = 'SPA'+$index;"></div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('SPA'+$index)>-1">{{issued_tyres[issued_positions.indexOf('SPA'+$index)]}}</label>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<!--Preparing rear tire UI-->
+										<div class="separator_header"
+											 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+										<h4>Rear</h4>
+										<div style="width:100%">
+											<div class="row" ng-repeat="count in selectedStructure.rear_mapping track by $index">
+												<div class="col-sm-12">
+													<div style="float: left;width: 150px;margin: 0 10px;">
+														<div class="tyre-class"
+															 ng-class="{'visible-tyre':(count===1 || count===2), 'tyre-highlighted': issued_positions.indexOf('R'+$index+'L'+0) < 0 && $parent.highlighted == 'R'+$index+'L'+0, 'tyre-disabled': issued_positions.indexOf('R'+$index+'L'+0)>-1}"
+															 ng-click="$parent.highlighted = 'R'+$index+'L'+0; onTyreClicked('R', $index, 'L', 0)">
+														</div>
+														<div ng-show="issued_positions.indexOf('R'+$index+'L'+0)<0 && count<=2">
+														</div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('R'+$index+'L'+0)>-1">{{issued_tyres[issued_positions.indexOf('R'+$index+'L'+0)]}}</label>
+													</div>
+													<div style="float: left;width: 150px;margin: 0 60px 0px 10px;">
+														<div class="tyre-class"
+															 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions.indexOf('R'+$index+'L'+1) < 0 && $parent.highlighted == 'R'+$index+'L'+1, 'tyre-disabled': issued_positions.indexOf('R'+$index+'L'+1)>-1}"
+															 ng-click="$parent.highlighted = 'R'+$index+'L'+1; onTyreClicked('R', $index, 'L', 1)">
+														</div>
+														<div ng-show="issued_positions.indexOf('R'+$index+'L'+1)<0 && count==2">
+														</div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('R'+$index+'L'+1)>-1">{{issued_tyres[issued_positions.indexOf('R'+$index+'L'+1)]}}</label>
+													</div>
+													<div style="float: left;width: 150px;margin: 0 10px;">
+														<div class="tyre-class"
+															 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions.indexOf('R'+$index+'R'+0) < 0 && $parent.highlighted == 'R'+$index+'R'+0, 'tyre-disabled': issued_positions.indexOf('R'+$index+'R'+0)>-1}"
+															 ng-click="$parent.highlighted = 'R'+$index+'R'+0; onTyreClicked('R', $index, 'R', 0)">
+														</div>
+														<div ng-show="issued_positions.indexOf('R'+$index+'R'+0)<0 && count==2">
+														</div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('R'+$index+'R'+0)>-1">{{issued_tyres[issued_positions.indexOf('R'+$index+'R'+0)]}}</label>
+													</div>
+													<div style="float: left;width: 150px;margin: 0 10px 0px 60px;">
+														<div class="tyre-class"
+															 ng-class="{'visible-tyre':count===1 || count===2, 'tyre-highlighted': issued_positions.indexOf('R'+$index+'R'+1) < 0 && $parent.highlighted == 'R'+$index+'R'+1, 'tyre-disabled': issued_positions.indexOf('R'+$index+'R'+1)>-1}"
+															 ng-click="$parent.highlighted = 'R'+$index+'R'+1; onTyreClicked('R', $index, 'R', 1)">
+														</div>
+														<div ng-show="issued_positions.indexOf('R'+$index+'R'+1)<0 && count<=2">
+														</div>
+														<label style="margin-bottom: 40px;" ng-show="issued_positions.indexOf('R'+$index+'R'+1)>-1">{{issued_tyres[issued_positions.indexOf('R'+$index+'R'+1)]}}</label>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div class="separator_header"
+											 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+									</div>
+								</div>
+							</div>
+							<h4>Basic Info of associated vehicle</h4>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Associated Vehicle</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{associatedVehData.vehicle_reg_no}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Category</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{associatedVehData.category}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Structure Name</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{associatedVehData.structure_name || 'NA'}}</label>
+									</div>
+								</div>
+
+							</div>
+							<!--<div class="row" style="margin: 15px">
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Status</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{associatedVehData.status || 'NA'}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Vehicle Group</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{associatedVehData.veh_group_name}}</label>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<label class="col-sm-3 control-label">Vehicle Type</label>
+									<div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+										<label>{{associatedVehData.veh_type_name || 'NA'}}</label>
+									</div>
+								</div>
+							</div>-->
+
+							<h4>Structure</h4>
+							<div class="row" style="margin: 15px">
+								<div class="col-sm-12">
+								<div ng-show="selectedStructure2">
+									<div class="separator_header"
+										 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+
+									<!--Preparing front tire UI-->
+									<h4>Front</h4>
+									<div style="width:100%">
+										<div class="row" ng-repeat="count in selectedStructure2.front_mapping track by $index">
+											<div class="col-sm-12">
+												<div style="float: left;width: 150px;margin: 0 10px;">
+													<div class="tyre-class"
+														 ng-class="{'visible-tyre':(count===1 || count===2), 'tyre-highlighted': issued_positions222.indexOf('F'+$index+'L'+0) < 0 && $parent.highlighted == 'F'+$index+'L'+0, 'tyre-disabled': issued_positions222.indexOf('F'+$index+'L'+0)>-1}"
+														 ng-disabled="issued_positions222.indexOf('F'+$index+'L'+0)<0"
+														 ng-click="$parent.highlighted = 'F'+$index+'L'+0; onTyreClicked('F', $index, 'L', 0)">
+													</div>
+													<div ng-show="issued_positions222.indexOf('F'+$index+'L'+0)<0 && count<=2">
+													</div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('F'+$index+'L'+0)>-1">{{issued_tyres222[issued_positions222.indexOf('F'+$index+'L'+0)]}}</label>
+												</div>
+												<div style="float: left;width: 150px;margin: 0 60px 0 10px;">
+													<div class="tyre-class"
+														 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions222.indexOf('F'+$index+'L'+1) < 0 && $parent.highlighted == 'F'+$index+'L'+1, 'tyre-disabled': issued_positions222.indexOf('F'+$index+'L'+1)>-1} "
+														 ng-click="$parent.highlighted = 'F'+$index+'L'+1; onTyreClicked('F', $index, 'L', 1)">
+													</div>
+													<div ng-show="issued_positions222.indexOf('F'+$index+'L'+1)<0 && count==2">
+													</div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('F'+$index+'L'+1)>-1">{{issued_tyres222[issued_positions222.indexOf('F'+$index+'L'+1)]}}</label>
+												</div>
+												<div style="float: left;width: 150px;margin: 0 10px 0 60px;">
+													<div class="tyre-class"
+														 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions222.indexOf('F'+$index+'R'+0) < 0 && $parent.highlighted == 'F'+$index+'R'+0, 'tyre-disabled': issued_positions222.indexOf('F'+$index+'R'+0)>-1}"
+														 ng-click="$parent.highlighted = 'F'+$index+'R'+0; onTyreClicked('F', $index, 'R', 0)">
+													</div>
+													<div ng-show="issued_positions222.indexOf('F'+$index+'R'+0)<0 && count==2">
+													</div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('F'+$index+'R'+0)>-1">{{issued_tyres222[issued_positions222.indexOf('F'+$index+'R'+0)]}}</label>
+												</div>
+												<div style="float: left;width: 150px;margin: 0 10px;">
+													<div class="tyre-class"
+														 ng-class="{'visible-tyre':count===1 || count===2, 'tyre-highlighted': issued_positions222.indexOf('F'+$index+'R'+1) < 0 && $parent.highlighted == 'F'+$index+'R'+1, 'tyre-disabled': issued_positions222.indexOf('F'+$index+'R'+1)>-1}"
+														 ng-click="$parent.highlighted = 'F'+$index+'R'+1; onTyreClicked('F', $index, 'R', 1)">
+													</div>
+													<div ng-show="issued_positions222.indexOf('F'+$index+'R'+1)<0 && count<=2">
+													</div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('F'+$index+'R'+1)>-1">{{issued_tyres222[issued_positions222.indexOf('F'+$index+'R'+1)]}}</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!--Preparing spare tire UI-->
+									<div class="separator_header"
+										 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+									<h4>Spare</h4>
+									<div style="width:100%">
+										<div class="row" style="margin-left: 20%">
+											<div style="float: left;width: 150px;margin: 0 10px;">
+												<div
+														ng-repeat="i in getNumber(selectedStructure2.spare_tyre) track by $index">
+													<div class="tyre-class visible-tyre" ng-click="$parent.highlighted = 'SPA'+$index;"></div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('SPA'+$index)>-1">{{issued_tyres222[issued_positions222.indexOf('SPA'+$index)]}}</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!--Preparing rear tire UI-->
+									<div class="separator_header"
+										 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+									<h4>Rear</h4>
+									<div style="width:100%">
+										<div class="row" ng-repeat="count in selectedStructure2.rear_mapping track by $index">
+											<div class="col-sm-12">
+												<div style="float: left;width: 150px;margin: 0 10px;">
+													<div class="tyre-class"
+														 ng-class="{'visible-tyre':(count===1 || count===2), 'tyre-highlighted': issued_positions222.indexOf('R'+$index+'L'+0) < 0 && $parent.highlighted == 'R'+$index+'L'+0, 'tyre-disabled': issued_positions222.indexOf('R'+$index+'L'+0)>-1}"
+														 ng-click="$parent.highlighted = 'R'+$index+'L'+0; onTyreClicked('R', $index, 'L', 0)">
+													</div>
+													<div ng-show="issued_positions222.indexOf('R'+$index+'L'+0)<0 && count<=2">
+													</div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('R'+$index+'L'+0)>-1">{{issued_tyres222[issued_positions222.indexOf('R'+$index+'L'+0)]}}</label>
+												</div>
+												<div style="float: left;width: 150px;margin: 0 60px 0px 10px;">
+													<div class="tyre-class"
+														 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions222.indexOf('R'+$index+'L'+1) < 0 && $parent.highlighted == 'R'+$index+'L'+1, 'tyre-disabled': issued_positions222.indexOf('R'+$index+'L'+1)>-1}"
+														 ng-click="$parent.highlighted = 'R'+$index+'L'+1; onTyreClicked('R', $index, 'L', 1)">
+													</div>
+													<div ng-show="issued_positions.indexOf('R'+$index+'L'+1)<0 && count==2">
+													</div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('R'+$index+'L'+1)>-1">{{issued_tyres222[issued_positions222.indexOf('R'+$index+'L'+1)]}}</label>
+												</div>
+												<div style="float: left;width: 150px;margin: 0 10px;">
+													<div class="tyre-class"
+														 ng-class="{'visible-tyre':count===2, 'tyre-highlighted': issued_positions222.indexOf('R'+$index+'R'+0) < 0 && $parent.highlighted == 'R'+$index+'R'+0, 'tyre-disabled': issued_positions222.indexOf('R'+$index+'R'+0)>-1}"
+														 ng-click="$parent.highlighted = 'R'+$index+'R'+0; onTyreClicked('R', $index, 'R', 0)">
+													</div>
+													<div ng-show="issued_positions.indexOf('R'+$index+'R'+0)<0 && count==2">
+													</div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('R'+$index+'R'+0)>-1">{{issued_tyres222[issued_positions222.indexOf('R'+$index+'R'+0)]}}</label>
+												</div>
+												<div style="float: left;width: 150px;margin: 0 10px 0px 60px;">
+													<div class="tyre-class"
+														 ng-class="{'visible-tyre':count===1 || count===2, 'tyre-highlighted': issued_positions222.indexOf('R'+$index+'R'+1) < 0 && $parent.highlighted == 'R'+$index+'R'+1, 'tyre-disabled': issued_positions222.indexOf('R'+$index+'R'+1)>-1}"
+														 ng-click="$parent.highlighted = 'R'+$index+'R'+1; onTyreClicked('R', $index, 'R', 1)">
+													</div>
+													<div ng-show="issued_positions222.indexOf('R'+$index+'R'+1)<0 && count<=2">
+													</div>
+													<label style="margin-bottom: 40px;" ng-show="issued_positions222.indexOf('R'+$index+'R'+1)>-1">{{issued_tyres222[issued_positions222.indexOf('R'+$index+'R'+1)]}}</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="separator_header"
+										 style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+								</div>
+							</div>
+							</div>
+						</form>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+

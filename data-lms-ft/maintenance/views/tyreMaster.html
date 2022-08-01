@@ -1,0 +1,313 @@
+<div class="container">
+	<div class="card m-b-0" style="box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+		 id="messages-main">
+		<div class="" style=" min-height: 535px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix" style="padding-left: 0px;">
+					<div class="lvh-label" style="width: 100%;padding-left: 0px;">
+						<div class="col-sm-1" style="padding-left: 0px;">
+							<div class="form-group m-b-0">
+								<div class="col-sm-12">
+									<div class="select">
+										<select class="form-control" placeholder="Status"
+												ng-options="item as item for item in aSts" ng-model="status"
+												ng-change="getAllTyreMasters()" style="padding: 6px;margin-top: 2px;">
+											<option value="" selected>status</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-1" style="padding-left: 0px;">
+							<div class="form-group m-b-0">
+								<div class="col-sm-12">
+									<div class="select">
+										<select class="form-control" placeholder="Category"
+												ng-options="item as item for item in aCts" ng-model="tyre_category"
+												ng-change="getAllTyreMasters()" style="padding: 6px;margin-top: 2px;">
+											<option value="" selected> Category</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="form-group m-b-0">
+								<div class="col-sm-12">
+									<!--{{tyre_number}}-->
+									<select name="tyre_no" class="form-control" chosen  search-contains="true"
+											data-placeholder-text-single="'Tyre Number'" allow-single-deselect="true"
+											no-results-text="'Could not find any tyre number'" ng-model="tyre_number"
+											ng-options="item.tyre_number as item.tyre_number for item in aTyresSearch"
+											ng-change="getAllTyreMasters()">
+										<option value="" selected></option>
+									</select>
+									<!--<div class="lvh-search ng-scope sear">-->
+										<!--<input type="text"-->
+											   <!--name="tyre_no"-->
+											   <!--placeholder="Tyre Number..."-->
+											   <!--ng-model="tyre_number"-->
+											   <!--class="lvhs-input"-->
+											   <!--typeahead-wait-ms="10"-->
+											   <!--typeahead="item.tyre_number as item.tyre_number for item in aTyresSearch"-->
+											   <!--ng-change="getAllTyreForSearch(tyre_number)"-->
+											   <!--class="form-control"-->
+											   <!--typeahead-on-select="onSelect($item, $model, $label)" >-->
+										<!--<i class="lvh-search-close" ng-click="clearSearch('tyre_number')">×</i>-->
+									<!--</div>-->
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-2" style="padding-left: 0;padding-right: 0;">
+							<div class="form-group m-b-0">
+								<div class="col-sm-12" style="padding-left: 0;padding-right: 0;">
+									<select name="tyre_no" class="form-control" chosen  search-contains="true"
+											data-placeholder-text-single="'Vehicle Number'" allow-single-deselect="true"
+											no-results-text="'Could not find any Vehicle'" ng-model="vehicle_no"
+											ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in regVehicles"
+											ng-change="getAllTyreMasters()">
+										<option value="" selected></option>
+									</select>
+									<!--<div class="lvh-search ng-scope sear">-->
+										<!--<input type="text"-->
+										<!--name="vehicle_no"-->
+										<!--placeholder="Vehicle Number..."-->
+										<!--ng-model="vehicle_no"-->
+										<!--class="lvhs-input"-->
+										<!--typeahead-wait-ms="10"-->
+										<!--typeahead="item.vehicle_reg_no as item.vehicle_reg_no for item in regVehicles"-->
+										<!--ng-change="getAllRegVehicles(vehicle_no)"-->
+										<!--class="form-control"-->
+										<!--typeahead-on-select="onSelect($item, $model, $label)" >-->
+										<!--<i class="lvh-search-close" ng-click="clearSearch('vehicle_no')">×</i>-->
+									<!--</div>-->
+								</div>
+							</div>
+						</div>
+						<!-- <div class="col-sm-2">
+                            <div class="form-group m-b-0">
+                                <div class="col-sm-12">
+                                    <div class="fg-line">
+                                        <input type="text" style="line-height: 34px;" class="form-control" ng-model="vehicle_no" placeholder="Vehicle Number" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllTyreMasters()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+						<div class="col-md-2">
+							<select name="vendor" class="form-control" chosen  search-contains="true" data-placeholder-text-single="'Vendor'"
+									allow-single-deselect="true" no-results-text="'Could not find any Vendor'"
+									ng-model="vendor_name" ng-options="item as item.name for item in aPOvendor"
+									ng-change="getAllTyreMasters()">
+								<option value="" selected></option>
+							</select>
+							<!--<div class="lvh-search ng-scope sear">-->
+								<!--<input type="text"-->
+									   <!--name="vendor_name"-->
+									   <!--placeholder="Vendor..."-->
+									   <!--ng-model="vendor_name"-->
+									   <!--class="lvhs-input"-->
+									   <!--typeahead-wait-ms="10"-->
+									   <!--typeahead="item as item.name for item in aPOvendor"-->
+									   <!--ng-change="getAllPOvendor(vendor_name)"-->
+									   <!--class="form-control"-->
+									   <!--typeahead-on-select="onSelect($item, $model, $label)" >-->
+								<!--<i class="lvh-search-close" ng-click="clearSearch('vendor_name')">×</i>-->
+							<!--</div>-->
+						</div>
+						<div class="col-md-2">
+							<select name="ponumder" class="form-control" chosen search-contains="true"
+									data-placeholder-text-single="'PO Number'" allow-single-deselect="true"
+									no-results-text="'Could not find any PO Number'" ng-model="po_number"
+									ng-options="item.ponumder as item.ponumder for item in aPO"
+									ng-change="getAllTyreMasters()">
+								<option value="" selected></option>
+							</select>
+							<!--<div class="lvh-search ng-scope sear">-->
+								<!--<input type="text"-->
+									   <!--name="vendor_name"-->
+									   <!--placeholder="PO Number..."-->
+									   <!--ng-model="po_number"-->
+									   <!--class="lvhs-input"-->
+									   <!--typeahead-wait-ms="10"-->
+									   <!--typeahead="item.ponumder as item.ponumder for item in aPO"-->
+									   <!--ng-change="getAllPO(po_number)"-->
+									   <!--class="form-control"-->
+									   <!--typeahead-on-select="onSelect($item, $model, $label)" >-->
+								<!--<i class="lvh-search-close" ng-click="clearSearch('po_number')">×</i>-->
+							<!--</div>-->
+						</div>
+						<div class="col-md-1">
+							<div class="fg-line">
+								<input type="text" ng-model="invoice_number" name="invoiceNumber"
+									   class="form-control input-sm" placeholder="Invoice Number"
+									   ng-model-options="{ updateOn: 'blur' }" ng-change="getAllTyreMasters()"
+									   style="height: 34px;font-size: 13px;">
+							</div>
+						</div>
+						<div class="col-md-1"
+							 ng-if="invoice_number &&(po_number || vendor_name) && !status && !tyre_number ">
+							<div class="">
+								<button class="btn btn-primary" ng-click="grnDown()">Download GRN</button>
+							</div>
+						</div>
+
+						<div class="col-md-3 text-right">
+							<!--<button class="btn btn-info waves-effect btn-xs" ng-click="getStructure()">Structure</button>-->
+							<button class="btn btn-info waves-effect btn-xs" ng-click="isCollapsed = !isCollapsed">Selected</button>
+							<button class="btn btn-primary waves-effect btn-xs" ng-click="tyreInwardClicked()">Inward
+							</button>
+							<button class="btn btn-primary waves-effect btn-xs"
+									ng-show="selectedTyreMaster.status == 'Stock'" ng-click="tyreIssueClicked()">Issue
+							</button>
+							<button class="btn btn-primary waves-effect btn-xs"
+									ng-hide="selectedTyreMaster.status != 'On Road'" ng-click="tyreReturnClicked()">Return
+							</button>
+							<button class="btn btn-primary waves-effect btn-xs"
+									ng-hide="selectedTyreMaster.status != 'Repository Bin'" ng-click="moveToScrap()">
+								Move to Scrap
+							</button>
+							<button class="btn btn-primary waves-effect btn-xs"
+									ng-hide="selectedTyreMaster.status != 'Repository Bin'" ng-click="moveToStock()">
+								Move to Stock
+							</button>
+							<button class="btn btn-primary waves-effect btn-xs"
+									ng-show="selectedTyreMaster.status == 'Stock'" ng-click="moveToRepobin()">Move to
+								Repo Bin
+							</button>
+							<!-- <button class="btn btn-primary waves-effect" style="margin-top:10px;float: right;margin-right: 10px;">Retreated</button> -->
+
+
+							<a href="" uib-tooltip="Download Report" tooltip-placement="bottom"
+							   ng-click="downloadReport()"><i class="glyphicon glyphicon-download"></i></a>
+						</div>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div uib-collapse="isCollapsed">
+					<h3>Selected Tyre</h3>
+					<div class="lv-body">
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="" style="overflow-y: auto;height: 200px;">
+										<table class="table table-bordered">
+											<thead>
+											<tr>
+												<th style="color:#fff;background: #2196f3;">#</th>
+												<th style="color:#fff;background: #2196f3;">Invoice Number</th>
+												<th style="color:#fff;background: #2196f3;">Tyre Number</th>
+												<th style="color:#fff;background: #2196f3;">Tyre Category</th>
+												<th style="color:#fff;background: #2196f3;">Status</th>
+												<th style="color:#fff;background: #2196f3;">Vendor</th>
+												<th style="color:#fff;background: #2196f3;">PO No.</th>
+												<th style="color:#fff;background: #2196f3;">Total Run</th>
+												<th style="color:#fff;background: #2196f3;">Retreated Count</th>
+												<th style="color:#fff;background: #2196f3;">Billing Amount</th>
+												<th style="color:#fff;background: #2196f3;">Action</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat="tyre in aIssueTyreData" class="">
+												<td>{{$index+1}}</td>
+												<td>{{tyre.invoice_number || 'NA'}}</td>
+												<td>{{tyre.tyre_number || 'NA'}}</td>
+												<td>{{tyre.tyre_category || 'NA'}}</td>
+												<td>{{tyre.status || 'NA'}}</td>
+												<td>{{tyre.vendor_name || 'NA'}}</td>
+												<td>{{tyre.po_number || 'NA'}}</td>
+												<td>{{tyre.total_run}}</td>
+												<td>{{tyre.retread_count || 0}}</td>
+												<td>{{tyre.billing_amount || 0}}</td>
+												<td>
+													<i class="zmdi zmdi-delete zmdi-hc-fw" style="color: red" tooltip="remove"
+													   ng-click="removeSelected(tyre, $index)"></i>&nbsp;&nbsp;
+												</td>
+											</tr>
+											</tbody>
+										</table>
+										<div ng-if="aIssueTyreData.length == 0" class="ms-body" style=" min-height: 50px;">
+											<h3> Data not available !!!!!</h3>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+				</div>
+				<form name="InwordForm">
+					<div class="lv-body">
+						<div class="row" style="margin: 5px auto;">
+							<div class="col-md-12">
+								<div class="detailsList">
+									<div class="" style="overflow-y: auto;height: 460px;">
+										<table class="table table-bordered" ng-if="aTyres.length > 0">
+											<thead>
+											<tr>
+												<th style="color:#fff;background: #2196f3;">#</th>
+												<th style="color:#fff;background: #2196f3;">Invoice Number</th>
+												<th style="color:#fff;background: #2196f3;">Tyre Number</th>
+												<th style="color:#fff;background: #2196f3;">Tyre Category</th>
+												<th style="color:#fff;background: #2196f3;">Status</th>
+												<th style="color:#fff;background: #2196f3;">Vendor</th>
+												<th style="color:#fff;background: #2196f3;">PO No.</th>
+												<th style="color:#fff;background: #2196f3;">Total Run</th>
+												<th style="color:#fff;background: #2196f3;">Retreated Count</th>
+												<th style="color:#fff;background: #2196f3;">Billing Amount</th>
+												<!-- <th style="color:#fff;background: #2196f3;">Manufacturers</th> -->
+												<th style="color:#fff;background: #2196f3;">Action</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr ng-repeat="tyre in aTyres" ng-click="selectTyreMasterAtIndex($index)"
+												class="pointer itemSel">
+												<td><i ng-show="tyre.status=='Stock'" class="zmdi zmdi-plus zmdi-hc-fw" style="color: red" tooltip="Select for Issue"
+													   ng-click="selectTyreIndex(tyre , $index)"></i>&nbsp;
+													&nbsp;&nbsp;&nbsp;{{$index+1}}</td>
+												<td>{{tyre.invoice_number || 'NA'}}</td>
+												<td>{{tyre.tyre_number || 'NA'}}</td>
+												<td>{{tyre.tyre_category || 'NA'}}</td>
+												<td>{{tyre.status || 'NA'}}</td>
+												<td>{{tyre.vendor_name || 'NA'}}</td>
+												<td>{{tyre.po_number || 'NA'}}</td>
+												<td>{{tyre.total_run}}</td>
+												<td>{{tyre.retread_count || 0}}</td>
+												<td>{{tyre.billing_amount || 0}}</td>
+												<!-- <td>{{tyre.manufacturers || 'NA'}}</td> -->
+												<td>
+													<i class="zmdi zmdi-eye zmdi-hc-fw" tooltip="Detail View"
+													   ng-click="detailTyre(tyre, $index)"></i>&nbsp;&nbsp;
+													<i ng-show="tyre.status == 'On Road'"
+													   class="zmdi zmdi-open-in-browser pointer"
+													   ng-click="previewIssueSlip(tyre, $index)"
+													   tooltip="Preview Slip"></i>&nbsp;&nbsp;
+													<!-- <i ng-show="tyre.status == 'On Road'" class="zmdi zmdi-download pointer" ng-click="downloadSlip(tyre, $index)" tooltip="Download Slip"></i>&nbsp;&nbsp; -->
+												</td>
+											</tr>
+											</tbody>
+										</table>
+										<div ng-if="aTyres.length == 0" class="ms-body" style=" min-height: 50px;">
+											<h3> Data not available !!!!!</h3>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="pagi" ng-show="totalPages>1" style="position: absolute;bottom:0;margin-left: 30%; margin-top: 5%">
+			<pagination ng-change="pageChanged()" total-items="totalItems"
+						items-per-page="itemsPerPage" num-pages="numPages"
+						ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi"
+						boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+						first-text="&laquo;" last-text="&raquo;"></pagination>
+		</div>
+	</div>
+</div>
+
+
+

@@ -1,0 +1,320 @@
+<div class="container" ng-controller="editServiceController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 550px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix">
+					<div class="lvh-label">
+						<span class="c-black"><b>Edit Service  {{selTaskData.task_name}} - {{selTaskData.jobId}} - {{selectedJobCardInfoForService.vehicle_number}}</b> </span>
+					</div>
+					<ul class="lv-actions actions">
+						<li class="btn-wave" data-ui-sref-active="active">
+							<a data-ui-sref="maintenance_process.jobCardMain" uib-tooltip="Job Card"
+							   tooltip-placement="bottom">
+								<i class="zmdi zmdi-menu zmdi-hc-fw"></i>
+							</a>
+						</li>
+						<div class="clearfix"></div>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<div class="lv-body">
+					<form name="jobCardTask">
+						<div class="row" style="margin:15px">
+							<!-- <div class="col-md-4">
+                              <div class="form-group m-b-0">
+                                <label class="col-sm-6 control-label">Name<span class="req_r">*</span></label>
+                                <div class="col-sm-6">
+                                  <div class="">
+                                    <select chosen class="form-control"  placeholder="Select" ng-options="item as item.task_name for item in aTask" ng-model="objService.task_name" ng-change="selTaskForServ()" required>
+                                      <option value="" selected> </option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> -->
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Supervisor Name<span
+											class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="">
+											<select chosen class="form-control" placeholder="Select"
+													ng-options="item as item.full_name for item in aSuperviser" search-contains="true"
+													ng-model="objService.supervisor_full" required>
+												<option value="" selected></option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Priority<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="">
+											<select chosen class="form-control" placeholder="Select"
+													ng-options="item as item for item in aPriority" search-contains="true"
+													ng-model="objService.priority" required>
+												<option value="" selected></option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">&nbsp;</label>
+									<div class="col-sm-6">
+										<button class="btn btn-primary waves-effect" ng-click="closeServIn()">Close
+											Service
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:15px">
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Start Time<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="date-picker input-group dp-blue"
+											 ng-class="{ 'is-opened': opened2 == true }">
+											<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+												<input ng-click="open($event, 'opened2')" type="text"
+													   class="form-control" datepicker-popup="{{format}}"
+													   show-weeks="false" ng-model="objService.start_datetime"
+													   is-open="opened2" datepicker-options="dateOptions"
+													   close-text="Close" placeholder="start date" required
+													   style="padding: 0px 4px;height: 34px;"/>
+											</div>
+											<span class="input-group-btn">
+                        <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i
+								class="glyphicon glyphicon-calendar"></i></button>
+                      </span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Remarks</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="text" ng-model="objService.remarks" class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="col-md-4">
+                              <div class="form-group m-b-0">
+                                <label class="col-sm-6 control-label">Close date</label>
+                                <div class="col-sm-6">
+                                  <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+                                    <div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+                                      <input ng-click="open($event, 'opened3')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="close_datetime" is-open="opened3" datepicker-options="dateOptions" close-text="Close" placeholder="close date" style="padding: 0px 4px;height: 34px;" />
+                                    </div>
+                                    <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened3')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> -->
+						</div>
+						<div class="row" style="margin:15px">
+							<div class="col-md-4">
+								<div class="form-group m-b-0">
+									<label class="col-sm-6 control-label">Mechanics<span class="req_r">*</span></label>
+									<div class="col-sm-6">
+										<div class="">
+											<select chosen class="form-control" placeholder="Select"
+													ng-options="item as item.full_name for item in aMechanic" search-contains="true"
+													ng-model="empEnvld" ng-change="addEmployee()">
+												<option value="" selected></option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group arr_empl m-b-0" ng-if="employeeEnvolved.length>0">
+									<span ng-repeat="emp in employeeEnvolved track by $index"> {{emp.full_name}} <span
+											class="pointer" ng-click="removeEmplyee($index)">x</span></span>
+								</div>
+							</div>
+						</div>
+						<div class="row" style="margin:15px">
+							<div class="col-md-3">
+								<div class="form-group fg-line">
+									<label for="">Contractor</label>
+									<div class="">
+										<select chosen class="form-control" placeholder="Select"
+												ng-options="item as item.name for item in aContractor" search-contains="true"
+												ng-model="cont.contractor_full" ng-change="">
+											<option value="" selected></option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group fg-line">
+									<label for="">Amount</label>
+									<div class="fg-line">
+										<input type="number" style="line-height: 33px;" class="form-control"
+											   placeholder="0" ng-model="cont.amount">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group fg-line">
+									<label for="">Bill No.</label>
+									<div class="fg-line">
+										<input type="text" style="line-height: 33px;" class="form-control"
+											   placeholder="enter" ng-model="cont.bill_number">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="form-group">
+									<label for="">Remarks</label>
+									<div class="fg-line">
+										<input type="text" style="line-height: 33px;" class="form-control"
+											   placeholder="enter here..." ng-model="cont.remark">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="">&nbsp;</label>
+									<div class="clearfix"></div>
+									<button class="btn btn-primary"
+											ng-disabled="!(cont.contractor_full && cont.amount && cont.bill_number)"
+											ng-click="addContractor()"><i class="zmdi zmdi-plus-circle-o"></i></button>
+									<button ng-click="reviewServiceSlip()" class="btn btn-primary btn-wave">Preview
+									</button>
+									<button class="btn btn-primary btn-wave">Download</button>
+
+								</div>
+							</div>
+						</div>
+						<hr class="m5">
+						<div class="row" ng-repeat="dt in aContractorList" style="margin:5px">
+							<div class="col-md-3">
+								<label>{{dt.contractor_name}}</label>
+							</div>
+							<div class="col-md-1">
+								{{dt.amount}}
+							</div>
+							<div class="col-md-1">
+								{{dt.bill_number}}
+							</div>
+							<div class="col-md-1">
+								{{dt.remark}}
+							</div>
+							<div class="col-md-3">
+								<button class="btn btn-danger" ng-if="dt.deleted==false"
+										ng-click="removeContractor($index);dt.deleted=true"><i
+										class="zmdi zmdi-close-circle"></i></button>
+								<label ng-if="dt.deleted==true">Deleted</label>
+							</div>
+						</div>
+						<!-- <div class="row" style="margin: 10px;">
+                          <h4 style="margin-top: 2px;">Select Parts ....</h4>
+                          <div class="col-md-4" ng-repeat="sprSugg in aSpareSugg track by $index">
+                            <div class="blk">
+                              <span class="spn1">{{sprSugg.name}}</span>
+                              <span class="spn2">{{sprSugg.category_name}}</span>
+                              <span class="spn3" uib-tooltip="Available">40</span>
+                              <span class="spn3">
+                                <input type="number" uib-tooltip="Required" ng-model="qtyTest" ng-blur="addReqQty(qtyTest)" ng-readonly="checked" class="form-control" placeholder="Qty.">
+                              </span>
+                              <span class="spn4">
+                                <div class="checkbox" style="margin: 0px;">
+                                  <label>
+                                    <input type="checkbox" value="" ng-model="checked" ng-disabled="!qtyTest" ng-checked="selection.indexOf(sprSugg) > -1" ng-click="toggleSelection(sprSugg)">
+                                    <i class="input-helper"></i>
+                                  </label>
+                                </div>
+                              </span>
+                              <div class="clearfix"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <hr class="m5">
+                        <div class="row" style="margin: 10px;">
+                          <h4 style="margin-top: 2px;">Selected Parts ....</h4>
+                          <div class="col-md-12 adjust">
+                            <p class="arr_empl" ng-repeat="selObj in selection">
+                              <span>{{selObj.name}}
+                                <span class="pointer" ng-click="removeSelPart($index)">x</span>
+                              </span>
+                            </p>
+                            <p class="arr_empl"><span>part22 <span class="pointer" ng-click="removeSelPart()">x</span></span></p>
+                          </div>
+                        </div> -->
+						<div class="row">
+							<div class="m-l-30 col-md-10">
+								<div class="form-group">
+									<button type="submit" ng-click="updateJobCardService()" class="btn btn-primary"
+											style="margin-bottom: 12px;">Update Service
+									</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<style type="text/css">
+	.arr_empl > span {
+		margin-left: 10px;
+		background: #eee;
+	}
+
+	.arr_empl > span > span {
+		background: red;
+		padding: 1px 7px;
+		color: #fff;
+	}
+
+	.m5 {
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+
+	.blk {
+		border: 1px solid #9e9c9c;
+		margin-bottom: 10px;
+	}
+
+	.blk span {
+		float: left;
+		border-right: 1px solid #9e9c9c;
+		padding: 4px;
+	}
+
+	.blk span.spn1 {
+		width: 32%;
+	}
+
+	.blk span.spn2 {
+		width: 32%;
+	}
+
+	.blk span.spn3 {
+		width: 12%;
+	}
+
+	.blk span.spn4 {
+		width: 10%;
+		border-right: 0;
+	}
+
+	.adjust p {
+		float: left;
+		margin-left: 5px;
+	}
+</style>

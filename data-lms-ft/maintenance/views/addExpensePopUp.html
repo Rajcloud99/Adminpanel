@@ -1,0 +1,145 @@
+<form role="form" name="addExpensePopUp" autocomplete="off" novalidate>
+	<div class="modal-header">
+		<button type="button" ng-click="closeModal()" class="close"
+				data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="modal-title" align="center">Add Expense</h4><br>
+	</div>
+	<div class="modal-body">
+		<div class="justify col-md-12">
+			<div class="row" style="margin:10px;">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Expense Type: <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<div class="select">
+									<select class="form-control" ng-options="item as item for item in ['Other']"
+											ng-model="oExpense.type" name="Expense Type" required>
+										<option value="" disabled selected>Select Expense Type</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Job Id: <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<select name="oExpense.jobid_full" class="form-control" chosen
+										data-placeholder-text-single="'Search Job Id'" allow-single-deselect="true"
+										no-results-text="'Could not find any Vehicle'" ng-model="oExpense.jobid_full"
+										ng-options="item as item.jobId for item in aJobCards" search-contains="true"
+										ng-change="selJobid(oExpense.jobid_full)" required>
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Vehicle No.: <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line" ng-show="!oExpense.jobid_full">
+								<select name="oExpense.vehicle_no" class="form-control" chosen
+										data-placeholder-text-single="'Search Vehicle'" allow-single-deselect="true"
+										no-results-text="'Could not find any Vehicle'" search-contains="true" ng-model="oExpense.vehicle_no"
+										ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aVehicles" required>
+									<option value=""></option>
+								</select>
+							</div>
+							<div class="" ng-show="oExpense.jobid_full">
+								{{oExpense.jobid_full.vehicle_number}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" style="margin:10px;">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Bill No.</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="oExpense.bill_no" name="bill_no"
+									   class="form-control input-sm" placeholder="Bill No.">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Billing Date</label>
+						<div class="col-sm-6">
+							<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+								<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+									<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+										   uib-datepicker-popup="{{format}}" show-weeks="false"
+										   ng-model="oExpense.bill_date" is-open="opened1"
+										   datepicker-options="dateOptions" close-text="Close"
+										   placeholder="Billing Date"/>
+								</div>
+								<span class="input-group-btn">
+                  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+						  class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Amount: <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="number" ng-model="oExpense.amount" name="amount"
+									   class="form-control input-sm" placeholder="Amount" required>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin:10px;">
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Party Name</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="oExpense.partyName" name="remark"
+									   class="form-control input-sm" placeholder="party name">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group m-b-0">
+						<label class="col-sm-6 control-label">Remark: <span style="color: red;">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input type="text" ng-model="oExpense.remark" name="remark"
+									   class="form-control input-sm" placeholder="Remark" required>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="modal-footer">
+		<button class="btn btn-success waves-effect" ng-click="add(addExpensePopUp)" ng-disabled="!(oExpense.type && oExpense.jobid_full && oExpense.vehicle_no && oExpense.amount && oExpense.remark)">Add</button>
+		&nbsp;&nbsp;&nbsp;
+		<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+	</div>
+</form>
+<style type="text/css">
+	.modal-dialog {
+		width: 75%;
+		height: 173px
+	}
+</style>

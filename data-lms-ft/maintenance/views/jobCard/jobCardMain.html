@@ -1,0 +1,270 @@
+<div class="container" ng-controller="jobCardCommonController">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 550px;">
+			<div class="listview lv-message">
+				<div class="lv-header-alt clearfix" style="padding-left: 2px;">
+					<!-- <div class="lvh-label">
+                      <span class="c-black"><b>Job Card</b> &nbsp;&nbsp;&nbsp;</span>
+                    </div> -->
+
+					<ul class="lv-actions actions">
+						<li class="btn-wave" data-ui-sref-active="active"><a ng-click="addJobCardPop()"
+																			 uib-tooltip="Add Job Card"
+																			 tooltip-placement="bottom"><i
+								class="zmdi zmdi-account-add zmdi-hc-fw"></i></a></li>
+						<li class="btn-wave"><a class="pointer" uib-tooltip="Edit Job Card" tooltip-placement="bottom"
+												ng-click="editModeJobCard()"><i class="zmdi zmdi-edit"></i></a></li>
+						<li ng-hide="(selectedJobCardInfo.status=='Closed')"><a href="" uib-tooltip="Close"
+																				tooltip-placement="bottom"><i
+								class="glyphicon glyphicon-remove-circle" ng-click="closeJobCard()"></i></a></li>
+						<li><a href="" uib-tooltip="Add and edit Contractor expenses" tooltip-placement="bottom"
+							   ng-click="addExpense()"><i class="zmdi zmdi-money"></i></a></li>
+						<li><a href="" uib-tooltip="JCD" tooltip-placement="bottom" ng-click="jcdClick()"><i
+								class="zmdi zmdi-dns"></i></a></li>
+						<li><a href="" uib-tooltip="Download Report" tooltip-placement="bottom"
+							   ng-click="downloadReport()"><i class="glyphicon glyphicon-download"></i></a></li>
+						<div class="clearfix"></div>
+					</ul>
+					<br>
+					<form role="form" ng-submit="filter(form)">
+						<div class="col-md-1">
+							<div class="fg-line">
+								<input type="text" ng-model="jobId" class="form-control input-sm"
+									   placeholder="JobId here..." ng-model-options="{ updateOn: 'blur' }"
+									   ng-change="getAllJobCard()" style="height: 34px;font-size: 13px;">
+							</div>
+							<!-- <select name="jobId" class="form-control" chosen data-placeholder-text-single="'Job ID'" allow-single-deselect="true" no-results-text="'Could not find any Job ID'"  ng-model="jobId" ng-options="item.jobId as item.jobId for item in aJobID" ng-change="getAllJobCard()">
+                                <option value="" selected></option>
+                            </select> -->
+						</div>
+
+						<!-- <div class="col-md-1">
+                            <div class="fg-line">
+                                <input type="text" ng-model="last_trip_number" name="invoiceNumber" class="form-control input-sm" placeholder="Last Trip Number" ng-model-options="{ updateOn: 'blur' }" ng-change="getAllJobCard()" style="height: 34px;font-size: 13px;">
+                            </div>
+                        </div> -->
+						<!-- <div class="col-md-1">
+                           <select name="spare" class="form-control" chosen data-placeholder-text-single="'Vendor'" allow-single-deselect="true" no-results-text="'Could not find any Vendor'"  ng-model="status" ng-options="item as item for item in aStatus" ng-change="getAllJobCard()">
+                                <option value="" selected></option>
+                            </select>
+                        </div> -->
+						<div class="col-md-1">
+							<select name="spare" class="form-control" chosen data-placeholder-text-single="'Job Type'"
+									allow-single-deselect="true" no-results-text="'Could not find any Job type'"
+									ng-model="job_type" ng-options="item as item for item in jobType"
+									ng-change="getAllJobCard()">
+								<option value="" selected></option>
+							</select>
+						</div>
+						<!-- <div class="col-md-1">
+                           <select name="spare" class="form-control" chosen data-placeholder-text-single="'Maintenance Type'" allow-single-deselect="true" no-results-text="'Could not find any Maintenance type'"  ng-model="vendor_name" ng-options="item as item for item in aMainType" ng-change="getAllJobCard()">
+                                <option value="" selected></option>
+                            </select>
+                        </div> -->
+						<div class="col-md-1">
+							<select name="status" class="form-control" chosen data-placeholder-text-single="'Status'"
+									allow-single-deselect="true" no-results-text="'Could not find any Maintenance type'"
+									ng-model="status" ng-options="item as item for item in aStatus"
+									ng-change="getAllJobCard()">
+								<option value="" selected>All</option>
+							</select>
+						</div>
+						<div class="col-md-2">
+							<!--<select name="spare" class="form-control" chosen data-placeholder-text-single="'Vehicle'"
+									allow-single-deselect="true"
+									no-results-text="'Could not find any registered Vehicle'" search-contains="true"
+									ng-model="vehicle_number"
+									ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in aVehicle"
+									ng-change="getAllJobCard()">
+								<option value="" selected></option>
+							</select>-->
+							<div class="lvh-search ng-scope sear">
+								<input type="text" placeholder="Vehicle Search..." ng-model="vehicle_number" class="lvhs-input" typeahead-wait-ms="10" typeahead="person.vehicle_reg_no as person.vehicle_reg_no for person in aVehicles | filter:$viewValue" ng-change="getVname(vehicle_number)" class="form-control" typeahead-on-select="onSelect($item, $model, $label)">
+								<i class="lvh-search-close" ng-click="clearSearch('vehicle')">×</i>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group m-b-0">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+											   datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date"
+											   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="start date" ng-change="getAllJobCard()"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group m-b-0">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened12 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened12 == true }">
+										<input ng-click="open($event, 'opened12')" type="text" class="form-control"
+											   datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+											   min-date="start_date" is-open="opened12" datepicker-options="dateOptions"
+											   close-text="Close" placeholder="end date" ng-change="getAllJobCard()"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened12')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+								</div>
+							</div>
+						</div>
+					</form>
+					<div class="clearfix"></div>
+				</div>
+				<div class="lv-body">
+					<div class="row" style="margin: 5px auto;">
+						<div class="col-md-12">
+							<div class="detailsList">
+								<div class="" style="overflow-y: auto;height: 180px;">
+									<table class="table table-bordered unresponsive">
+										<thead>
+										<tr>
+											<th>S No.</th>
+											<th>Job Id</th>
+											<th>Vehicle No.</th>
+											<th>Odometer Reading</th>
+											<th>Last Trip No.</th>
+											<th>Status</th>
+											<th>Vehicle IN Date</th>
+											<th>Job Card open Date</th>
+											<th>Type of maintenance</th>
+										</tr>
+										</thead>
+										<tbody>
+										<tr data-ng-repeat="oJobCard in aJobCards" class="pointer selectItem"
+											ng-click="getJobCardSingle(oJobCard, $index)">
+											<td>{{$index+1}}</td>
+											<td>{{oJobCard.jobId || 'NA'}}</td>
+											<td>{{oJobCard.vehicle_number || 'NA'}}</td>
+											<td>{{oJobCard.odometer_reading}}</td>
+											<td>{{oJobCard.last_trip_number}}</td>
+											<td>{{oJobCard.sts || oJobCard.status || 'NA'}}</td>
+											<td>{{oJobCard.vehicle_in_datetime | date:'d/M/yy h:mm a' || 'NA'}}</td>
+											<td>{{oJobCard.created_at | date:'d/M/yy h:mm a' || 'NA'}}</td>
+											<td>{{oJobCard.maintenance_type || 'NA'}}</td>
+										</tr>
+										</tbody>
+									</table>
+									<div class="pagi text-center" ng-show="totalPages>1">
+										<pagination ng-change="pageChanged()" total-items="totalItems"
+													items-per-page="itemsPerPage" num-pages="numPages"
+													ng-model="currentPage" max-size="maxSize"
+													class="pagination-sm smallPagi" boundary-links="false"
+													previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;"
+													last-text="&raquo;">
+										</pagination>
+									</div>
+									<div ng-if="aJobCards == 0" class="ms-body" style=" min-height: 50px;">
+										<h3>Job card not available !!!!!</h3>
+									</div>
+								</div>
+							</div>
+							<hr style="margin-top: 10px;margin-bottom: 0px;">
+							<div class="task">
+								<div class="col-md-6">
+									<div class="detailsList">
+										<h4 class="pull-left">Service List</h4>
+										<ul class="lv-actions actions">
+											<li ng-hide="!selectedJobCardInfo" class="btn-wave"><a
+													ng-click="addServiceInJobCard()" uib-tooltip="Add Service"
+													tooltip-placement="bottom"><i
+													class="zmdi zmdi-plus-circle-o"></i></a></li>
+											<li ng-hide="selectedTaskInfo.status=='Closed' || !selectedTaskInfo"
+												class="btn-wave"><a class="pointer" uib-tooltip="Edit Service"
+																	tooltip-placement="bottom"
+																	ng-click="editServiceInJobCard()"><i
+													class="zmdi zmdi-edit"></i></a></li>
+											<li ng-hide="selectedTaskInfo.status=='Closed' || !selectedTaskInfo"
+												class="btn-wave"><a href="" uib-tooltip="Close Service"
+																	tooltip-placement="bottom"
+																	ng-click="closeService()"><i
+													class="zmdi zmdi-close-circle-o"></i></a></li>
+											<li ng-hide="selectedTaskInfo.start_datetime || !selectedTaskInfo"
+												class="btn-wave"><a href="" uib-tooltip="Start Service"
+																	tooltip-placement="bottom"
+																	ng-click="startService()"><i
+													class="zmdi zmdi-case-check"></i></a></li>
+
+											<div class="clearfix"></div>
+										</ul>
+										<div class="clearfix"></div>
+										<div class="" style="overflow-y: auto;height: 255px;">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>Name</th>
+													<th>Superviser Name</th>
+													<th>Status</th>
+													<th>Mechanics</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr data-ng-repeat="objTask in aTaskForJobC"
+													class="pointer selectItem22"
+													ng-click="getTaskSingle(objTask, $index)">
+													<td>{{objTask.task_name || 'NA'}}</td>
+													<td>{{objTask.supervisor_name || 'NA'}}</td>
+													<td>{{objTask.status || 'NA'}}</td>
+													<td><span ng-repeat="mec in objTask.mechanics_involved">{{mec.name || 'NA'}}, &nbsp;</span>
+													</td>
+												</tr>
+												</tbody>
+											</table>
+											<div ng-if="aTaskForJobC == 0" class="ms-body" style=" min-height: 50px;">
+												<h3>Service not available !!!!!</h3>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="detailsList">
+										<h4>Spare List</h4>
+										<div class="" style="overflow-y: auto;height: 255px;">
+											<table class="table table-bordered unresponsive">
+												<thead>
+												<tr>
+													<th>Slip Number</th>
+													<th>Name</th>
+													<th>Code</th>
+													<th>Qty.</th>
+													<th>Cost Per Item</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr data-ng-repeat="objSpare in spares_allotted.issued_spare"
+													class="pointer">
+													<td>{{spares_allotted.slip_number || 'NA'}}</td>
+													<td>{{objSpare.spare_name || 'NA'}}</td>
+													<td>{{objSpare.spare_code || 'NA'}}</td>
+													<td>{{objSpare.quantity || 'NA'}}</td>
+													<td>{{objSpare.cost_per_piece || 'NA'}}</td>
+												</tr>
+												</tbody>
+											</table>
+											<div ng-if="spares_allotted.issued_spare == 0" class="ms-body"
+												 style=" min-height: 50px;">
+												<h3>Spare not available !!!!!</h3>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

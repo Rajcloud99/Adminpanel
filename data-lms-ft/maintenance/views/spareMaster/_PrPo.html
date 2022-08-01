@@ -1,0 +1,226 @@
+<div class="container" ng-controller="PrPoCntrl">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 550px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix">
+          <div class="lvh-label">
+            <!-- <span class="c-black"><b>Spare Issue</b> &nbsp;&nbsp;&nbsp;</span> -->
+          </div>
+
+            <div class="clearfix"></div>
+        </div>
+        <div class="lv-body">
+          <div class="row" style="margin: 5px auto;">
+            <div class="col-md-12">
+              <div class="task">
+                <div class="col-md-5" style="border-right: 1px solid #2196f3;">
+                  <!-- <div class="select" style="width: 180px;">
+                    <select class="form-control" placeholder="Select" ng-options="item as item.newShowField for item in aJobCardsOpen" ng-model="selJobIdVehicle" ng-change="selSerachQuery()">
+                      <option value="" selected> Select Vehicle </option>
+                    </select>
+                  </div>
+                  <br> -->
+                  <div class="col-sm-1">
+                    <h4>PR</h4>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="fg-line">
+                      <input  class="form-control" type="text" ng-model="searchAll" placeholder="Search here..." style="height: 30px;">
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="fg-line">
+                      <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                        <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                          <input ng-click="open($event, 'opened2')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="dateSearch" ng-change="changeDate()" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="Date Search" style="padding: 0px 4px;height: 34px;" />
+                        </div>
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2 text-right">
+                    <button class="btn btn-primary waves-effect" ng-click="addMorePR()">Add</button>
+                  </div>
+                  <div class="clearfix"></div>
+
+                  <div class="detailsList">
+                    <div class="" style="overflow-y: auto;min-height: 470px;">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="color:#fff;background: #2196f3;">Spare</th>
+                            <th style="color:#fff;background: #2196f3;">Rem/Total Qty.</th>
+                            <th style="color:#fff;background: #2196f3;">Created By</th>
+                            <th style="color:#fff;background: #2196f3;">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr data-ng-repeat="objTask in aPR | filter: searchAll track by $index" class="">
+                            <td>{{objTask.spare_code + ' - ' +objTask.spare_name }}</td>
+                            <td>{{(objTask.remaining_quantity || 0 )+'/'+ objTask.quantity}}</td>
+                            <td>{{objTask.created_by_name || 'NA'}}</td>
+                            <td style="width: 70px;padding-right: 0px;">
+                                <i class="zmdi zmdi-long-arrow-tab" tooltip="push" ng-click="push(objTask, $index)" ng-if="!objTask.disableThis"></i>
+                                <i class="zmdi zmdi-long-arrow-tab reds" style="background: red;color: #f6f6f6;" tooltip="disabled" ng-if="objTask.disableThis"></i>&nbsp;&nbsp;
+                                <i class="zmdi zmdi-minus-circle zmdi-hc-fw" tooltip="remove" ng-click="removePRdt(objTask, $index)" style="font-size:20px;"></i>&nbsp;&nbsp;
+                                <!-- <button ng-disabled="isDisabled" ng-click="issue(objTask, $index);isDisabled='true'" class="btn btn-primary waves-effect">Issue</button> -->
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div ng-if="aTasks == 0" class="ms-body" style=" min-height: 50px;">
+                        <h3>Task data not available !!!!!</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-7">
+                  <div class="detailsList">
+                    <div class="">
+                        <div class="col-sm-8">
+                            <div class="form-group m-b-0">
+                              <label class="col-sm-6 control-label">PO Number<span class="req_r">*</span></label>
+                              <div class="col-sm-6">
+                                <div class="select">
+                                  <select chosen class="form-control"  placeholder="Select" ng-options="item as item.ponumder for item in aPO" ng-model="poNoSel" ng-change="changePO(poNoSel)" required>
+                                    <option value=""> Select </option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                          </div>
+                        <div class="col-sm-4">
+                            <button class="btn btn-primary waves-effect" ng-click="createPOnew()">New PO</button>
+                            <button class="btn btn-primary waves-effect" ng-click="dwnPOnew()">Print PO</button>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-sm-6">
+                          <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label">Vendor</label>
+                            <div class="col-sm-6">
+                              <div class="select">
+                                <select chosen class="form-control"  placeholder="Select" ng-options="item as item.name for item in aPOvendor" ng-model="vendorSel">
+                                  <option value=""> Select </option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label">Approver<span class="req_r">*</span></label>
+                            <div class="col-sm-6">
+                              <div class="select">
+                                <select chosen class="form-control"  placeholder="Select" ng-options="item as item.full_name for item in aApprover" ng-model="POapprover" required>
+                                  <option value=""> Select </option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-sm-6">
+                          <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label">Freight (Rs)</label>
+                            <div class="col-sm-6">
+                              <div class="fg-line">
+                                <input type="number" class="form-control" ng-model="freight" placeholder="enter here ..." name="">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label">Tax(%)</label>
+                            <div class="col-sm-6">
+                              <div class="fg-line">
+                                <input type="number" class="form-control" ng-model="tax" placeholder="enter here ..." ng-change="addAllTax()">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-sm-6">
+                          <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label">Promise Date</label>
+                            <div class="col-sm-6">
+                              <div class="fg-line">
+                                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+                                  <div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+                                    <input ng-click="open($event, 'opened3')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="promiseDate" is-open="opened3" datepicker-options="dateOptions" close-text="Close" placeholder="Date Search" style="padding: 0px 4px;height: 34px;" />
+                                  </div>
+                                  <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened3')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group m-b-0">
+                            <label class="col-sm-6 control-label">Needed Date</label>
+                            <div class="col-sm-6">
+                              <div class="fg-line">
+                                <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4 == true }">
+                                  <div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+                                    <input ng-click="open($event, 'opened4')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="neededDate" is-open="opened4" datepicker-options="dateOptions" close-text="Close" placeholder="Date Search" style="padding: 0px 4px;height: 34px;" />
+                                  </div>
+                                  <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened4')"><i class="glyphicon glyphicon-calendar"></i></button>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="" style="overflow-y: auto;min-height: 350px;">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="color:#fff;background: #2196f3;">Spare</th>
+                            <th style="color:#fff;background: #2196f3;">Prev Rate</th>
+                            <th style="color:#fff;background: #2196f3;">Qty.</th>
+                            <th style="color:#fff;background: #2196f3;">Tax(%)</th>
+                            <th style="color:#fff;background: #2196f3;">New Rate</th>
+                            <th style="color:#fff;background: #2196f3;">Inc Tax</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr data-ng-repeat="objPO in aAddedTask track by $index" class="pointer">
+                            <td>
+                                <i class="zmdi zmdi-minus-circle zmdi-hc-fw" tooltip="remove" ng-click="removeDt(objPO, $index)" style="font-size:20px;"></i>&nbsp;&nbsp;
+                              {{objPO.code + ' - ' +objPO.name }}</td>
+                            <td>{{objPO.previousRate || 'NA'}}</td>
+                            <td><input type="Number" style="width: 30px;" ng-model="objPO.quantity"></td>
+                            <td><input type="Number" style="width: 30px;" ng-model="objPO.tax"></td>
+                            <td><input type="Number" style="width: 30px;" ng-change="" ng-model="objPO.rate"></td>
+                            <td>{{objPO.rate_inc_tax = (objPO.rate + (objPO.rate*(objPO.tax/100) )) || 0}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div ng-if="aAddedTask == 0" class="ms-body" style=" min-height: 50px;">
+                        <h3>PO data not available !!!!!</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                      <button ng-click="POeditSave()" class="btn btn-primary waves-effect pull-right" style="margin-left: 10px;" ng-disabled="!vendorSel && !poNoSel">Save</button>
+                      <!-- <button class="btn btn-primary waves-effect pull-right">Approve</button> &nbsp;&nbsp;&nbsp; -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</div>

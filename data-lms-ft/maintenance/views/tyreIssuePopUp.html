@@ -1,0 +1,108 @@
+<form role="form"  name="tyreCard" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Tyre Issue</h4><br>
+    <div class="row">
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-4">
+      </div>
+    </div>
+  </div>
+  <style type="text/css">
+    .modal-backdrop.in{z-index:9 !important;}
+    .modal-open .modal{z-index:99 !important;}
+  </style>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div class="col-sm-6">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Tyre Number:</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select class="form-control" placeholder="Select"  chosen search-contains="true" ng-options="item.tyre_number as item.tyre_number for item in aTyres" ng-model="tyre.tyre_number">
+                <option value="" selected> Select type</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Vendor:</label>
+          <div class="col-sm-6">
+            <div class="select">
+              <select class="form-control" placeholder="Select" chosen search-contains="true" ng-options="item as item.name for item in aVendors" ng-model="tyre.vendor">
+                <option value="" selected> Select Vendor</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-sm-6">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Issue Date:</label>
+          <div class="col-sm-6">
+            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened3 == true }">
+              <div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+                <input ng-click="open($event, 'opened3')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="tyre.issue_date" is-open="opened3" datepicker-options="dateOptions" close-text="Close" placeholder=" Issue date" style="padding: 0px 4px;height: 34px;" />
+              </div>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened3')"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Expected Return Date:</label>
+          <div class="col-sm-6">
+            <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+              <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                <input ng-click="open($event, 'opened2')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="tyre.expected_return_date" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="Return date" style="padding: 0px 4px;height: 34px;" ng-readonly="returnClick"/>
+              </div>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-sm-6">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Issue Slip Number:</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-model="tyre.issue_slip_no" placeholder="slip no...">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="submit" ng-click="issue(tyre)" class="btn btn-success" style="margin-bottom: 12px;">Issue</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()" style="margin-bottom: 12px;">Close</button>
+  </div>
+</form>
+<style type="text/css">
+  .modal-dialog {width: 75%;
+      height: 173px
+  }
+  .multiselect-parent ul.dropdown-menu.dropdown-menu-form {
+    opacity: 1;
+    transform: none;    overflow: auto !important;
+  }
+  .chosen-container-single .chosen-single{height: 28px;margin-top: -7px;}
+</style>

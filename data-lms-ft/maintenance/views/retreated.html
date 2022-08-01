@@ -1,0 +1,108 @@
+<div class="container" ng-controller="tyreRetreatedCtrl">
+  <div class="card m-b-0" id="messages-main">
+    <div class="" style=" min-height: 550px;">
+      <div class="listview lv-message">
+        <div class="lv-header-alt clearfix" style="padding-left: 0px;">
+          <div class="lvh-label" style="width: 100%;padding-left: 0px;">
+            <!-- <div class="col-md-2">
+              <span class="c-black"><b>Tyre Retreate</b> &nbsp;&nbsp;&nbsp;</span>
+            </div> -->
+            <div class="col-sm-2" style="padding-left: 0px;">
+                <div class="form-group m-b-0">
+                    <div class="col-sm-12">
+                        <div class="select">
+                            <select class="form-control" placeholder="Status" ng-options="item as item for item in aMasterSts" ng-model="returned" ng-change="getAllRetrIssueTyre()" style="padding: 6px;margin-top: 2px;">
+                                <option value="" selected> Select status</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group m-b-0">
+                    <div class="col-sm-12">
+                        <select name="ponumder" class="form-control" chosen data-placeholder-text-single="'Tyre Number'" allow-single-deselect="true" no-results-text="'Could not find any tyre number'"  ng-model="tyre_number" ng-options="item.tyre_number as item.tyre_number for item in aTyres" ng-change="getAllRetrIssueTyre()">
+                            <option value="" selected></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <!-- <div class="form-group m-b-0">
+                    <div class="col-sm-12">
+                        <div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }">
+                          <div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+                            <input ng-click="open($event, 'opened2')" type="text" class="form-control" datepicker-popup="{{format}}" show-weeks="false" ng-model="vehicle_in_datetime" is-open="opened2" datepicker-options="dateOptions" close-text="Close" placeholder="Vehicle In date" style="padding: 0px 4px;height: 34px;" />
+                          </div>
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <div class="col-sm-2"></div>
+            <div class="col-md-4 text-right">
+              <button ng-click="tyreReturnPop()" ng-disabled="(aRetreated.length < 1)||(selectedTyreIssue.returned==true)" class="btn btn-warning waves-effect pointer">Return</button>
+              <button ng-click="tyreIssuePop()" class="btn btn-primary waves-effect pointer">Issue</button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <form name="InwordForm">
+          <div class="lv-body">
+              <div class="row" style="margin: 5px auto;">
+                <div class="col-md-12">
+                  <div class="detailsList">
+                    <div class="" style="overflow-y: auto;height: 400px;">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="color:#fff;background: #2196f3;">#</th>
+                            <th style="color:#fff;background: #2196f3;">Tyre Number</th>
+                            <th style="color:#fff;background: #2196f3;">Issue By</th>
+                            <th style="color:#fff;background: #2196f3;">Issue Date</th>
+                            <th style="color:#fff;background: #2196f3;">Expected Return Date</th>
+                            <th style="color:#fff;background: #2196f3;">Vendor</th>
+                            <th style="color:#fff;background: #2196f3;">Slip Number</th>
+                            <th style="color:#fff;background: #2196f3;">Action</th>
+                            
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr data-ng-repeat="issue in aRetreated" ng-click="selectTyreReIssue($index)" class="pointer full-item ">
+                            <td>
+                              <label class="radio radio-inline m-r-20">
+                                {{$index+1}}
+                              </label>
+                            </td>
+                            <td>{{issue.tyre_number || 'NA'}}</td>
+                            <td>{{issue.issued_by_employee_name || 'NA'}}</td>
+                            <td>{{issue.issue_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+                            <td>{{issue.return_date | date:'dd-MM-yyyy' || 'NA'}}</td>
+                            <td>{{issue.vendor_name || 'NA'}}</td>
+                            <td>{{issue.issue_slip_no || 'NA'}}</td>
+                            <td>
+                              <i class="zmdi zmdi-open-in-browser pointer" ng-click="previewReIssueSlip(issue, $index)" tooltip="Preview Slip"></i>&nbsp;&nbsp;
+                              <!-- <i class="zmdi zmdi-download pointer" ng-click="downloadReSlip(issue, $index)" tooltip="Download Slip"></i>&nbsp;&nbsp; -->
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div ng-if="aRetreated.length == 0" class="ms-body" style=" min-height: 50px;">
+                        <h3> Data not available !!!!!</h3>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    </div>
+</div>
+
+
+

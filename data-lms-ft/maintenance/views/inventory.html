@@ -1,0 +1,160 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main" style="width:100%; margin-right: -23px;">
+		<div class="row hidden-print" style="margin:5px 15px;">
+			<div class="col-md-2">
+				<!--<select name="spare" class="form-control" chosen data-placeholder-text-single="'Spare'" search-contains="true"
+						allow-single-deselect="true" no-results-text="'Could not find any Spare'" ng-model="spare_name"
+						ng-options="item.name as item.name for item in aSpare" ng-change="getAllInventories()">
+					<option value="" selected></option>
+				</select>-->
+				<div class="lvh-search ng-scope sear">
+					<input type="text" placeholder="Spare Search..." ng-model="spare_name" class="lvhs-input"
+						   typeahead-wait-ms="10" typeahead="item.name as item.name for item in aSpare"
+						   ng-change="getSname(spare_name)" class="form-control"
+						   typeahead-on-select="onSelect($item, $model, $label)">
+					<i class="lvh-search-close" ng-click="clearSearch('spare')">×</i>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<!--<select name="vendor" class="form-control" chosen data-placeholder-text-single="'Vendor'"
+						search-contains="true"
+						allow-single-deselect="true" no-results-text="'Could not find any Vendor'"
+						ng-model="vendor_name" ng-options="item.name as item.name for item in aPOvendor"
+						ng-change="getAllInventories()">
+					<option value="" selected></option>
+				</select>-->
+				<div class="lvh-search ng-scope sear">
+					<input type="text" placeholder="Vendor Search..." ng-model="vendor_name" class="lvhs-input"
+						   typeahead-wait-ms="10" typeahead="item.name as item.name for item in aPOvendor"
+						   ng-change="getVendorName(vendor_name)" class="form-control"
+						   typeahead-on-select="onSelect($item, $model, $label)">
+					<i class="lvh-search-close" ng-click="clearSearch('vendor')">×</i>
+				</div>
+			</div>
+			<div class="col-md-1">
+				<select name="ponumder" class="form-control" chosen data-placeholder-text-single="'PO Number'"
+						allow-single-deselect="true" no-results-text="'Could not find any PO Number'"
+						search-contains="true"
+						ng-model="po_number" ng-options="item.ponumder as item.ponumder for item in aPO"
+						ng-change="getAllInventories()">
+					<option value="" selected></option>
+				</select>
+			</div>
+			<div class="col-md-1">
+				<div class="fg-line">
+					<input type="text" ng-model="invoice_number" name="invoiceNumber" class="form-control input-sm"
+						   placeholder="Invoice Number" ng-model-options="{ updateOn: 'blur' }"
+						   ng-change="getAllInventories()" style="height: 34px;font-size: 13px;">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened1 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+							<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+								   datepicker-popup="{{format}}" show-weeks="false" ng-model="start_date"
+								   is-open="opened1" datepicker-options="dateOptions" close-text="Close"
+								   placeholder="start date" ng-change="getAllInventories()"
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group m-b-0">
+					<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened12 == true }">
+						<div class="fg-line" ng-class="{ 'fg-toggled': opened12 == true }">
+							<input ng-click="open($event, 'opened12')" type="text" class="form-control"
+								   datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+								   min-date="start_date" is-open="opened12" datepicker-options="dateOptions"
+								   close-text="Close" placeholder="end date" ng-change="getAllInventories()"
+								   style="padding: 0px 4px;height: 34px;"/>
+						</div>
+						<span class="input-group-btn">
+                    <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened12')"><i
+							class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-1"
+				 ng-if="invoice_number &&(po_number || vendor_name) && !end_date && !start_date && !spare_name">
+				<div class="">
+					<button class="btn btn-primary" ng-click="grnDown()">Download GRN</button>
+				</div>
+			</div>
+			<div class="btns">
+				<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+						ng-click="returnSpare()">Return Spare
+				</button>
+				<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+						ng-click="spareIssue()">Spare Issue
+				</button>
+				<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;" ng-click="getPr()">
+					Get PR
+				</button>
+				<button class="btn btn-primary waves-effect" style="font-size: 11px;padding: 4px;"
+						ng-click="getInwords()">Inventory Inward
+				</button>
+				<a href="" uib-tooltip="Download Report" tooltip-placement="bottom" ng-click="downloadReport()"><i
+						class="glyphicon glyphicon-download"></i></a>
+			</div>
+		</div>
+	</div>
+	<div class="detailsList">
+		<div class="" style="overflow-y: auto;background: #fff;min-height: 500px;">
+			<table class="table table-bordered override-table-bordered">
+				<thead>
+				<tr>
+					<th>S No.</th>
+					<th>Entry Id</th>
+					<th>Spare Code</th>
+					<th>Spare Name</th>
+					<th>Vendor Name</th>
+					<th>Vendor Id</th>
+					<th>Quantity</th>
+					<th>Remaining Quantity</th>
+					<th>Rate/Piece</th>
+					<th>Billing Amt.</th>
+					<th>PO Number</th>
+					<th>Invoice No</th>
+					<!-- <th>HOM</th> -->
+				</tr>
+				</thead>
+				<tbody>
+				<tr ng-repeat="objInventory in inventories">
+					<td>{{$index+1}}</td>
+					<td>{{objInventory.entryId}}</td>
+					<td>{{objInventory.spare_code}}</td>
+					<td>{{objInventory.spare_name}}</td>
+					<td>{{objInventory.vendor_name}}</td>
+					<td>{{objInventory.vendorId}}</td>
+					<td>{{objInventory.quantity}}</td>
+					<td>{{objInventory.remaining_quantity}}</td>
+					<td>{{objInventory.rate_inc_tax || objInventory.rate_per_piece}}</td>
+					<td>{{objInventory.billing_amount}}</td>
+					<td>{{objInventory.po_number}}</td>
+					<td>{{objInventory.invoice_number}}</td>
+					<!-- <td>{{objInventory.hom_short_name}}</td> -->
+				</tr>
+				</tbody>
+			</table>
+			<div class="pagi" ng-show="totalPages>1" style="text-align: center;">
+				<pagination ng-change="pageChanged()"
+							total-items="totalItems"
+							items-per-page="itemsPerPage" num-pages="numPages"
+							ng-model="currentPage" max-size="maxSize" class="pagination-sm"
+							boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+							first-text="&laquo;" last-text="&raquo;">
+				</pagination>
+			</div>
+			<div ng-if="inventories.length == 0" class="ms-body" style=" min-height: 50px;">
+				<h3>Inventory data not available !!!!!</h3>
+			</div>
+		</div>
+	</div>
+</div>

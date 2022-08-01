@@ -1,0 +1,165 @@
+<form role="form"  name="toolCard" autocomplete="off" novalidate>
+  <div class="modal-header" >
+    <button type="button" ng-click="closeModal()" class="close"
+    data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" align="center">Return Tool</h4><br>
+    <div class="row">
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-4">
+      </div>
+      <div class="col-md-4">
+      </div>
+    </div>
+  </div>
+  <style type="text/css">
+    .modal-backdrop.in{z-index:9 !important;}
+    .modal-open .modal{z-index:99 !important;}
+  </style>
+  <div class="modal-body">
+    <div class="row" style="margin:15px">
+      <div ng-hide="(tool.category=='old')" class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Tool Id:</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-readonly="true" ng-model="tool.toolId">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ng-hide="(tool.category=='old')" class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Tool Code:</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-readonly="true" ng-model="tool.spare_code">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Tool Name:</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-readonly="true" ng-model="tool.spare_name">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Issue Status</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-readonly="true" ng-model="tool.issue_status">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Manufacturer</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-readonly="true" ng-model="tool.manufacturer">
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Issuere Category</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-readonly="true" ng-model="tool.issuer_type">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin:15px">
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Issuere</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-readonly="true" ng-model="tool.issuer">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Vehicle No.</label>
+          <div class="col-sm-6">
+            <div class="fg-line">
+              <input type="text" class="form-control" ng-readonly="true" ng-model="tool.vehicle_number">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin:15px">
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Return Category</label>
+          <div class="col-sm-6">
+            <select chosen class="form-control" ng-options="item as item for item in aIssueCat" ng-model="tool.return_by_type" ng-change="getUserByCat(tool.return_by_type)">
+              <option value="" selected>Select</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Return By</label>
+          <div class="col-sm-6">
+            <select ng-if="tool.return_by_type=='mechanic'" chosen class="form-control" ng-options="item as item.full_name for item in aUsers" ng-model="tool.returnBy">
+              <option value="" selected>Select</option>
+            </select>
+		  	<select ng-if="tool.return_by_type=='driver'" chosen class="form-control" ng-options="item as item.name for item in aDrivers" ng-model="tool.returnBy">
+			  <option value="" selected>Select</option>
+		  	</select>
+		  	<select ng-if="tool.return_by_type=='contractor'" chosen class="form-control" ng-options="item as item.name for item in aContractor" ng-model="tool.returnBy">
+			  <option value="" selected>Select Issuer</option>
+		  	</select>
+		  	<div class="fg-line" ng-if="tool.return_by_type=='other'">
+			  	<input type="text" class="form-control" ng-model="tool.returnBy_name" placeholder="Enter returnBy">
+		  	</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group m-b-0">
+          <label class="col-sm-4 control-label">Return Status</label>
+          <div class="col-sm-6">
+            <select chosen class="form-control" ng-options="item as item for item in aReturnStatus" ng-model="tool.return_status">
+              <option value="" selected>Select</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" ng-click="returnTool(tool)" ng-disabled="!((tool.return_status)&&(tool.returnBy || tool.returnBy_name)&&(tool.return_by_type))" class="btn btn-success" style="margin-bottom: 12px;">Return</button>&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-warning" ng-click="closeModal()" style="margin-bottom: 12px;">Close</button>
+  </div>
+</form>
+<style type="text/css">
+  .modal-dialog {width: 75%;
+      height: 173px
+  }
+  .multiselect-parent ul.dropdown-menu.dropdown-menu-form {
+    opacity: 1;
+    transform: none;    overflow: auto !important;
+  }
+  .chosen-container-single .chosen-single{height: 28px;margin-top: -7px;}
+</style>

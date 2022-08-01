@@ -1,0 +1,260 @@
+<!--suppress HtmlUnknownAttribute -->
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+     id="messages-main">
+    <div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
+        <div class="lvh-search ng-scope sear">
+            <input type="text" placeholder="Search Structure ..."
+                   ng-model="searchValue" class="lvhs-input"
+                   typeahead="mechanic.name as mechanic.name for mechanic in mechanicNames"
+                   typeahead-min-length="2" ng-change="getUserNames(mechanicTypeAheadValue)"
+                   typeahead-on-select="onUserTypeAheadSelect($item, $model, $label)" >
+            <i class="lvh-search-close" ng-click="resetUserName()">×</i>
+        </div>
+        <div class="listview clk" style="overflow: auto;height:97%;">
+            <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)"
+                 ng-repeat="structure in structures"
+                 ng-click="selectStructureAtIndex($index)">
+                <div class="truck-desc">
+                    <div class="row">
+                        <div class="col-md-6 bold">
+                            {{structure.structure_name}}
+                        </div>
+                        <div class="col-md-6 bold">
+                            {{structure.vehicle_type}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagi" ng-show="totalPages>1" style="position: absolute;bottom:0;margin-left: 20%">
+                <pagination ng-change="pageChanged()" total-items="totalItems"
+                            items-per-page="itemsPerPage" num-pages="numPages"
+                            ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi"
+                            boundary-links="false" previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;"></pagination>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="min-height: 600px;margin-left:20%;overflow: auto">
+        <div class="card-header">
+            <h2 style="font-size: 18px"><!-- Structure Master -->
+                <span style="margin-left:10px;">{{selectedStructure.structure_name}}
+                    </span>
+                <span style="margin-left:10px;color:#B7B7B7"
+                      ng-hide="structures.length===0 && (currentMode==='view' || currentMode==='edit')">
+                    ({{currentMode.substring(0,1).toUpperCase()+ currentMode.substring(1)}})
+                    </span> </h2>
+        </div>
+        <button class="btn btn-primary waves-effect"
+                style="margin-top:-45px;float: right;margin-right: 20px;"
+                ng-click="addNewStructureClicked()">
+            Add New Structure
+        </button>
+
+        <div class="separator" style="width: 100%;height:1px;background-color: #EAEAEA"></div>
+
+        <div class="card-header" style="margin: 0 auto;min-height:400px"
+             ng-show="structures.length===0 && currentMode==='view'">
+            <h2 style="color: grey">
+                Structures not found
+            </h2>
+        </div>
+
+        <!--Form starts here -->
+        <div class="card-body" ng-hide="structures.length===0 && (currentMode==='view' || currentMode==='edit')">
+            <ul ng-show="currentMode==='view'" class="lv-actions actions"
+                style="position:absolute;margin-top:-30px;margin-left:95%;">
+                <!--li ng-hide="$loginUserRoleData.structures.indexOf('edit')===-1"
+                    class="btn-wave" data-ui-sref-active="active">
+                    <a href=""  uib-tooltip="Edit Structure" tooltip-placement="bottom"
+                       ng-click="editStructureClicked()" >
+                        <i class="zmdi zmdi-edit">
+                        </i>
+                    </a>
+                </li-->
+                <li ng-hide="$loginUserRoleData.structures.indexOf('remove')===-1">
+                    <a href="" uib-tooltip="Delete Structure"
+                       tooltip-placement="bottom"
+                       ng-click="deleteStructureClicked()">
+                        <i class="zmdi zmdi-delete">
+                        </i>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="card-body" style="padding-left:7%;padding-right: 7%;margin-top: 40px">
+                <form name="StructureForm" class="form-vertical">
+                    <div class="row" style="margin-bottom: 15px">
+                        <label class="col-sm-3 control-label">Structure name</label>
+                        <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="currentMode==='view'">
+                                <input ng-readonly="currentMode==='view'"
+                                       ng-model="selectedStructure.structure_name" class="form-control input-sm"
+                                       required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 15px">
+                        <label class="col-sm-3 control-label">Total tyres</label>
+                        <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="fg-line" ng-readonly="currentMode==='view'">
+                                <input ng-readonly="currentMode==='view'"
+                                       ng-model="selectedStructure.total_tyres" class="form-control input-sm"
+                                       required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-bottom: 15px">
+                        <label class="col-sm-3 control-label">Vehicle type</label>
+                        <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                            <div class="select" ng-show="(currentMode=='view'
+                            && selectedStructure.vehicle_type.length) ||
+                                            currentMode=='add' || currentMode=='edit'"
+                                 ng-readonly="currentMode==='view'">
+                                <select class="form-control"
+                                        ng-readonly="currentMode==='view'"
+                                        ng-disabled="currentMode==='view'"
+                                        ng-model="selectedStructure.vehicle_type">
+                                    <option value="" disabled selected>Select vehicle type</option>
+                                    <option ng-repeat="x in $constants.vehicleStructureTypes"
+                                            ng-disabled="currentMode==='view'"
+                                            value="{{x}}">{{x}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="separator_header"
+                         style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+
+                    <!--Preparing front tire UI-->
+                    <h4>Front</h4>
+                    <div style="width:100%">
+                            <div class="row" ng-repeat="count in selectedStructure.front_mapping track by $index">
+                                <div class="tyre-class w22 tyre-leftmost" ng-class="{'visible-tyre':(count===1 || count===2)}">
+                                </div>
+                                <div class="tyre-class w22 tyre-left"  ng-class="{'visible-tyre':count===2}">
+                                </div>
+                                <div class="tyre-class w22 tyre-right"  ng-class="{'visible-tyre':count===2}">
+                                </div>
+                                <div class="tyre-class w22 tyre-rightmost"  ng-class="{'visible-tyre':count===1 || count===2}">
+                                </div>
+                                <button type="button" ng-click="addFrontTire($index)" ng-hide="count===2 || currentMode==='view'"
+                                        class="btn btn-default btn-icon waves-effect waves-circle waves-float add-front-tire">
+                                    <i class="zmdi zmdi-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" ng-click="addFrontNewTireRow()"
+                                ng-hide="currentMode==='view'"
+                                class="btn btn-primary btn-icon waves-effect waves-circle waves-float add-front-tire-row">
+                            <i class="zmdi zmdi-plus"></i>
+                        </button>
+
+                    <!--Preparing spare tire UI-->
+                    <div class="separator_header" style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+                    <h4>Spare</h4>
+                    <div style="width:100%">
+                        <div class="row" style="margin-left: 20%">
+                            <div class="tyre-class w22 tyre-spare visible-tyre"
+                                 ng-repeat="i in getNumber(selectedStructure.spare_tyre) track by $index" >
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" ng-click="addSpareTire()"
+                            class="btn btn-primary btn-icon waves-effect waves-circle waves-float add-front-tire-row"
+                            ng-hide="currentMode==='view'">
+                        <i class="zmdi zmdi-plus"></i>
+                    </button>
+
+                    <!--Preparing rear tire UI-->
+                    <div class="separator_header" style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+                    <h4>Rear</h4>
+                    <div style="width:100%">
+                            <div class="row" ng-repeat="count in selectedStructure.rear_mapping track by $index">
+                                <div class="tyre-class w22 tyre-leftmost" ng-class="{'visible-tyre':(count===1 || count===2)}">
+                                </div>
+                                <div class="tyre-class w22 tyre-left"  ng-class="{'visible-tyre':count===2}">
+                                </div>
+                                <div class="tyre-class w22 tyre-right"  ng-class="{'visible-tyre':count===2}">
+                                </div>
+                                <div class="tyre-class w22 tyre-rightmost"  ng-class="{'visible-tyre':count===1 || count===2}">
+                                </div>
+                                <button type="button" ng-click="addRearTire($index)" ng-hide="count===2
+                                || currentMode==='view'"
+                                        class="btn btn-default btn-icon waves-effect waves-circle waves-float add-front-tire">
+                                    <i class="zmdi zmdi-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" ng-click="addRearNewTireRow()"
+                                class="btn btn-primary btn-icon waves-effect waves-circle waves-float add-front-tire-row"
+                            ng-hide="currentMode==='view'">
+                            <i class="zmdi zmdi-plus"></i>
+                        </button>
+
+                    <div class="separator_header" style="width:auto;margin-left: -8%;margin-right: -8%;margin-top: 30px;"></div>
+                    <!--Save button -->
+                    <div class="row" ng-hide="currentMode==='view'" style="margin: 20px 0 30px 0">
+                        <button type="submit" class="btn btn-primary"
+                                ng-click="saveStructure(StructureForm)"
+                                style="margin-bottom: 15px;margin-left: 90%;margin-right:30px">Save</button>
+                    </div>
+
+                    <!--Empty space for bottom absolute footer -->
+                    <div class="empty_space_for_footer" ng-show="currentMode==='view'">
+                    </div>
+
+                    <!--Bottom footer -->
+                    <div ng-show="currentMode==='view'" style="position:absolute;width:80%;bottom:50px">
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <label class="col-sm-5 control-label">Created by</label>
+                                <div class="col-sm-7">
+                                    <div class="fg-line" readonly>
+                                        <input readonly
+                                               ng-model="selectedStructure.created_by_name" class="form-control
+                                    input-sm redundantFields" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="col-sm-5 control-label">Last modified by</label>
+                                <div class="col-sm-7">
+                                    <div class="fg-line" readonly>
+                                        <input readonly
+                                               ng-model="selectedStructure.last_modified_by_name" class="form-control
+                                    input-sm redundantFields"  required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="col-sm-5 control-label">Created at</label>
+                                <div class="col-sm-7">
+                                    <div class="fg-line" readonly>
+                                        <input ui-datetimeformat ormat readonly
+                                               ng-model="selectedStructure.created_at" class="form-control
+                                    input-sm redundantFields"  required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <label class="col-sm-5 control-label">Last modified at</label>
+                                <div class="col-sm-7">
+                                    <div class="fg-line" readonly>
+                                        <input ui-datetimeformat readonly
+                                               ng-model="selectedStructure.last_modified_at" class="form-control
+                                    input-sm redundantFields"  required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

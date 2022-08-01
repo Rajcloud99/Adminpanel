@@ -1,0 +1,70 @@
+<div id="" ng-controller="approveBookingController">
+	<form name="approveBooking" class="form-horizontal" novalidate>
+	    <div class="modal-header" >
+			<button type="button" ng-click="closeModal()" class="close"
+			data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>			
+			</button>
+			
+		</div>
+		<h4 class="" align="center">{{approveData}} Booking</h4><hr>
+		<style type="text/css">
+		 .modal-backdrop.in{z-index:9 !important;}
+		 .modal-open .modal{z-index:99 !important;}
+		</style>
+		
+		<div class="modal-body">
+		    <div class="col-md-12">
+		        <div class="col-md-6">
+                    <span>Booking No. :</span><b>{{selectedBooking.booking_no || 'NA'}}</b>
+                </div>
+                <div class="col-md-6">
+                    <span>Booking Type :</span><b> {{selectedBooking.booking_type || 'NA'}}</b>
+                </div><br>
+                <div class="col-md-6">
+                    <span>Customer :</span><b> {{selectedBooking.customer_name || 'NA'}}</b>
+                </div>
+                <div class="col-md-6">
+                    <span>Route :</span><b> {{selectedBooking.route.route_name || 'NA'}}</b>
+                </div>
+                <div class="col-md-6">
+                    <span>BOE No. :</span><b> {{selectedBooking.boe_no || 'NA'}}</b>
+                </div>
+	            <!-- <label class=" control-label" style=" margin-left: 20%;">Update Booking type {{selectedBooking.booking_type}} and booking no {{selectedBooking.booking_no}} </label> -->
+	        </div>
+			<div class="form-group" style="margin-left: 25%;color: red;" ng-if="approveData != 'Approve'">
+	            <label class=" control-label">Why are you {{approveData}} this Booking? </label>
+	        </div>
+	        <div class="form-group" ng-if="approveData != 'Approve'">
+	            <label class="col-sm-3 control-label">Select: <span style="color: red;">*</span></label>
+	            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+	                <div class="select">
+                      <select class=""  placeholder="Select Type" ng-options="item as item for item in aRegion" ng-model="approveValue.option"  style="width: 100%; border: groove;">
+                      <option value="" disabled selected style="display: none;"> Select </option> </select>
+                    </div>
+	            </div>
+	        </div>
+	        <div class="form-group" ng-if="approveData != 'Approve'">
+	            <label class="col-sm-3 control-label">Comments: </label>
+	            <div class="col-sm-8" style="padding-left: 15px;padding-right: 15px;">
+	                <div class="fg-line">
+						<textarea rows="5" type="text" ng-model="approveValue.comment" placeholder="Type here..............." class="" style="width: 100%; border: groove;"> </textarea>
+					</div>
+	            </div>
+	        </div>
+	        <div class="form-group" ng-if="approveData == 'Approve'" style="margin-left: 29px;font-size: 16px;">
+	            <br><br><br><br>
+	            <span>Do you want to approve this booking</span>
+	        </div>
+		</div>
+		<div class="modal-footer">
+		    <button type="submit" class="btn btn-primary" ng-click="approveUpdate(approveValue)" style="" ng-if="approveData == 'Approve'">Approve</button>
+		    
+		    <button type="submit" class="btn btn-primary" ng-click="approveUpdate(approveValue)" style="" ng-disabled="!approveValue.option" ng-if="approveData != 'Approve'">Update</button>&nbsp;&nbsp;&nbsp;
+			<button class="btn btn-warning" ng-click="closeModal()">Close</button>
+		</div>
+	</form>
+</div>
+<style type="text/css">
+   .md-dialog-container{z-index: 9999;}
+</style>

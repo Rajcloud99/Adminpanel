@@ -1,0 +1,168 @@
+<div class="container">
+	<div class="card m-b-0" id="messages-main">
+		<div class="" style=" min-height: 575px;">
+			<div class="listview lv-message">
+				<div class="lv-body">
+					<div class="col-md-12" style="min-height: 272px;">
+						<div class="clearfix"></div>
+						<form role="form" ng-submit="filter(form)">
+
+							<div class="select col-xs-2 m-b-2 col-sm-2 col-md-2 col-lg-2">
+								<select class="form-control"
+										ng-options="item as item.value for item in $constants.aSpareConReportType"
+										ng-model="report" style="height: 34px;">
+									<option style="display:none" value="">Report Type</option>
+								</select>
+							</div>
+							<div class=" col-xs-2 m-b-2 col-sm-2 col-md-2 col-lg-2">
+								<input type="text" placeholder="Enter {{report.key}}" class="form-control"
+										ng-model="find" style="height: 34px;">
+								</input>
+							</div>
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened1 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened1 == true }">
+										<input ng-click="open($event, 'opened1')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false"
+											   ng-model="start_date" is-open="opened1" datepicker-options="dateOptions"
+											   close-text="Close" placeholder="From Date"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened1')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened2 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened2 == true }">
+										<input ng-click="open($event, 'opened2')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false" ng-model="end_date"
+											   is-open="opened2" datepicker-options="dateOptions" close-text="Close"
+											   placeholder="To Date"
+											   style="padding: 0px 4px; height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+									  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened2')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+							<!--<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue"
+									 ng-class="{ 'is-opened': opened3 == true }">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened3 == true }">
+										<input ng-click="open($event, 'opened3')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false"
+											   ng-model="c_start_date" is-open="opened3"
+											   datepicker-options="dateOptions" close-text="Close"
+											   placeholder="Close Start Date" ng-change="downloadReport()"
+											   style="padding: 0px 4px;height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+									  <button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened3')"><i
+											  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<div class="date-picker input-group dp-blue" ng-class="{ 'is-opened': opened4 == true }"
+									 style=" ">
+									<div class="fg-line" ng-class="{ 'fg-toggled': opened4 == true }">
+										<input ng-click="open($event, 'opened4')" type="text" class="form-control"
+											   uib-datepicker-popup="{{format}}" show-weeks="false"
+											   ng-model="c_end_date" is-open="opened4" datepicker-options="dateOptions"
+											   close-text="Close" placeholder="Close End Date"
+											   ng-change="downloadReport()" style="padding: 0px 4px; height: 34px;"/>
+									</div>
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default m-t-0 f12" ng-click="open($event, 'opened4')"><i
+									  class="glyphicon glyphicon-calendar"></i></button>
+									</span>
+								</div>
+							</div>-->
+
+							<button ng-click="downloadReport(true)" class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;margin-left: 10px;">Download
+							</button>
+							<button ng-click="downloadReport()" class="btn btn-primary hidden-print pull-right"
+									style="font-size: 11px; padding: 5px;margin-top: 5px;">Search
+							</button>
+						</form>
+						<div class="clearfix"></div>
+
+						<div class="detailsList">
+							<div class="" style="overflow-y: auto; max-height: 500px;">
+								<table class="table table-bordered unresponsive">
+									<thead>
+									<tr>
+										<th>Sl No</th>
+										<th>Job Id</th>
+										<th>Job Type</th>
+										<th>Vehicle No.</th>
+										<th>Slip No.</th>
+										<th>Issue Type</th>
+										<th>Issuer</th>
+										<th>Mechanic</th>
+										<th>Task Id</th>
+										<th>Task Name</th>
+										<th>Spare Code</th>
+										<th>Spare Name</th>
+										<th>Category Code</th>
+										<th>Category Name</th>
+										<th>UOM</th>
+										<th>Flag</th>
+										<th>Quantity</th>
+										<th>Return Qty</th>
+										<th>Price</th>
+										<th>Cost</th>
+										<th>EntryId</th>
+										<th>Issued By</th>
+										<th>Issue Date</th>
+
+									</tr>
+									</thead>
+									<tbody ng-repeat="(name,val) in aspareConReport">
+									<tr style="background:#f2da97">
+										<td colspan="23" style="text-align: start; font-weight: bold;">{{ name }}
+										</td>
+									</tr>
+									<tr ng-repeat="value in aspareConReport[name]">
+										<td>{{$index+1}}</td>
+										<td>{{value.jobId}}</td>
+										<td>{{value.job_type}}</td>
+										<td>{{value.vehicle_number}}</td>
+										<td>{{value.slip_number}}</td>
+										<td>{{value.issue_type}}</td>
+										<td>{{value.issuer}}</td>
+										<td>{{value.mechanic_name}}</td>
+										<td>{{value.issued_spare.taskId}}</td>
+										<td>{{value.issued_spare.task_name || "NA"}}</td>
+										<td>{{value.issued_spare.spare_code || "NA"}}</td>
+										<td>{{value.issued_spare.spare_name || "NA"}}</td>
+										<td>{{value.issued_spare.category_code || "NA"}}</td>
+										<td>{{value.issued_spare.category_name || "NA"}}</td>
+										<td>{{value.issued_spare.uom || "NA"}}</td>
+										<td>{{value.issued_spare.flag || "NA"}}</td>
+										<td>{{value.issued_spare.quantity || "NA"}}</td>
+										<td>{{value.issued_spare.total_returned || "NA"}}</td>
+										<td>{{value.issued_spare.cost_per_piece || "NA"}}</td>
+										<td>{{value.issued_spare.cost_per_piece*value.issued_spare.quantity}}</td>
+										<td>{{value.issued_spare.inventory_entryid || "NA"}}</td>
+										<td>{{value.created_by_name || "NA"}}</td>
+										<td>{{value.created_at | date:'dd-MM-yyyy'}}</td>
+
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

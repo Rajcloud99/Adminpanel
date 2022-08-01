@@ -1,0 +1,241 @@
+<!--suppress HtmlUnknownAttribute -->
+<div class="card m-b-0" style="background: none;box-shadow: none;width:98%;margin: 10px auto;padding-bottom: 10px"
+     id="messages-main">
+    <div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
+        <div class="lvh-search ng-scope sear">
+            <input type="text" placeholder="Search Mechanic ..." ng-model="searchValue" class="lvhs-input">
+            <i class="lvh-search-close" ng-click="resetSearch()">×</i>
+        </div>
+        <div class="listview lv-mechanic clk" style="overflow: auto;height:97%;">
+            <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)"
+                 ng-repeat="mechanic in mechanics | filter:searchValue"
+                 ng-click="selectMechanicAtIndex($index)">
+                <div class="truck-desc">
+                    <div class="row">
+                        <div class="col-md-8 bold">
+                            {{mechanic.full_name}}
+                        </div>
+                        <div class="col-md-4 bold">
+                            {{mechanic.employee_code}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagi" ng-show="total_pages>1">
+                <pagination ng-change="pageChanged()" total-items="totalItems"
+                            items-per-page="items_per_page" num-pages="numPages"
+                            ng-model="currentPage" max-size="maxSize" class="pagination-sm smallPagi"
+                            boundary-links="true" previous-text="&lsaquo;" next-text="&rsaquo;"
+                            first-text="&laquo;" last-text="&raquo;"></pagination>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="min-height: 600px;margin-left:20%;overflow: auto">
+        <div class="card-header">
+            <h2 style="font-size: 18px">
+                <span style="margin-left:10px;">{{selectedMechanic.full_name}}
+                    </span>
+                <span style="margin-left:10px;color:#B7B7B7"
+                      ng-hide="mechanics.length===0 && (currentMode==='view' || currentMode==='edit')">
+                    ({{currentMode.substring(0,1).toUpperCase()+ currentMode.substring(1)}})
+                    </span> </h2>
+        </div>
+        <!--button class="btn btn-primary waves-effect"
+                style="margin-top:-45px;float: right;margin-right: 20px;"
+                ng-click="addNewMechanicClicked()" ng-show="currentMode ==='view'">
+            Add New Mechanic
+        </button-->
+
+        <div class="separator" style="width: 100%;height:1px;background-color: #EAEAEA"></div>
+
+        <div class="card-header" style="margin: 0 auto;" ng-show="mechanics.length===0 && currentMode==='view'">
+            <h2 style="color: grey">
+                No mechanics found
+            </h2>
+        </div>
+
+        <!--Form starts here -->
+        <div class="card-body" ng-hide="mechanics.length===0 && (currentMode==='view' || currentMode==='edit')">
+                    <!-- <ul ng-show="currentMode==='view'" class="lv-actions actions"
+                        style="position:absolute;margin-top:-20px;margin-left:90%;">
+                        <li ng-hide="$loginUserRoleData.mechanic.indexOf('edit')===-1"
+                            class="btn-wave" data-ui-sref-active="active">
+                            <a href=""  uib-tooltip="Edit Mechanic" tooltip-placement="bottom"
+                               ng-click="editMechanicClicked()" >
+                                <i class="zmdi zmdi-edit">
+                                </i>
+                            </a>
+                        </li>
+                        <li ng-hide="$loginUserRoleData.mechanic.indexOf('remove')===-1">
+                            <a href="" uib-tooltip="Delete Mechanic"
+                               tooltip-placement="bottom"
+                               ng-click="deleteMechanicClicked()">
+                                <i class="zmdi zmdi-delete">
+                                </i>
+                            </a>
+                        </li>
+                    </ul> -->
+
+                    <div class="card-body" style="padding-left:10%;padding-right: 10%;margin-top: 60px">
+                        <form name="MechanicForm" class="form-vertical">
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-3 control-label">Employee code </label>
+                                <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input readonly
+                                               ng-model="selectedMechanic.employee_code" class="form-control input-sm"
+                                               name="port code" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 15px">
+                                <label class="col-sm-3 control-label">Full name </label>
+                                <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg-line" ng-readonly="currentMode==='view'">
+                                        <input readonly
+                                               ng-model="selectedMechanic.full_name" class="form-control
+                                input-sm" name="port name" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-3 control-label">Employee type</label>
+                                <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg_line">
+                                        <div class="select" ng-show="(currentMode=='view' && selectedMechanic.employee_type.length) ||
+                                            currentMode=='add' || currentMode=='edit'"
+                                             ng-readonly="currentMode==='view'">
+                                            <select class="form-control"
+                                                    ng-readonly="currentMode==='view'"
+                                                    ng-disabled="currentMode==='view'"
+                                                    ng-model="selectedMechanic.employee_type" name="employee type">
+                                                <option value="" disabled selected>Select employee type</option>
+                                                <option ng-repeat="x in $constants.mechanicRoleTypes" ng-disabled="currentMode==='view'"
+                                                        value="{{x}}">{{x}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div-->
+
+                            <!--div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-3 control-label">Employment type</label>
+                                <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                    <div class="fg_line">
+                                        <div class="select" ng-show="(currentMode=='view' && selectedMechanic.employment_type.length) ||
+                                            currentMode=='add' || currentMode=='edit'"
+                                             ng-readonly="currentMode==='view'">
+                                            <select class="form-control"
+                                                    ng-readonly="currentMode==='view'"
+                                                    ng-disabled="currentMode==='view'"
+                                                    ng-model="selectedMechanic.employment_type" name="employee type">
+                                                <option value="" disabled selected>Select employement type</option>
+                                                <option ng-repeat="x in $constants.employmentTypes" ng-disabled="currentMode==='view'"
+                                                        value="{{x}}">{{x}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div-->
+
+                            <!--div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-3 control-label">Joining date</label>
+                                <div class="col-sm-5" style="padding-left: 15px;padding-right: 15px;">
+                                        <datepicker_ date-format="dd/MM/yy">
+                                            <input ui-dateformat ng-disabled="currentMode==='view'" ng-readonly="currentMode==='view'"  class="form-control
+                                    input-sm dateShow" ng-model="selectedMechanic.joining_date" type="text"
+                                                   placeholder="Joining date"/>
+                                        </datepicker_>
+                                </div>
+                            </div-->
+
+                            <!---Part categories --->
+                            <div class="row" style="margin-bottom: 15px">
+                                <label  class="col-sm-3 control-label">Specializes in</label>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-3" ng-repeat="partCategory in partCategories">
+                                        <div class="checkbox m-b-15">
+                                            <label ng-disabled="currentMode==='view'"
+                                                   ng-readonly="currentMode==='view'">
+                                                <input type="checkbox"
+                                                       value="true"
+                                                       ng-checked = "selectedMechanic.speciality_parts.indexOf(partCategory.name)>-1"
+                                                       ng-disabled="currentMode==='view'"
+                                                       ng-readonly="currentMode==='view'"
+                                                       ng-model="selectedPartCategories[partCategory.name]">
+                                                <i class="input-helper"></i>
+                                                {{partCategory.name}}
+                                            </label>
+                                        </div>
+                                </div>
+                            </div>
+
+                            <!--Save button -->
+                            <div class="row" ng-hide="currentMode==='view'" style="margin: 60px 0px 30px 0px">
+                                <button type="submit" class="btn btn-primary"
+                                        ng-click="saveMechanic(MechanicForm)"
+                                        style="margin-bottom: 15px;margin-left: 80%;margin-right:30px">Save</button>
+                            </div>
+
+                            <!--Empty space for bottom absolute footer -->
+                            <div class="empty_space_for_footer" ng-show="currentMode==='view'">
+                            </div>
+
+                            <!--Bottom footer -->
+                            <div ng-show="currentMode==='view'" style="position:absolute;width:80%;bottom:50px">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <label class="col-sm-5 control-label">Created by</label>
+                                        <div class="col-sm-7">
+                                            <div class="fg-line" readonly>
+                                                <input readonly
+                                                       ng-model="selectedMechanic.created_by_name" class="form-control
+                                    input-sm redundantFields" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label class="col-sm-5 control-label">Last modified by</label>
+                                        <div class="col-sm-7">
+                                            <div class="fg-line" readonly>
+                                                <input readonly
+                                                       ng-model="selectedMechanic.last_modified_by_name" class="form-control
+                                    input-sm redundantFields" name="port name" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label class="col-sm-5 control-label">Created at</label>
+                                        <div class="col-sm-7">
+                                            <!-- <div class="fg-line" readonly>
+                                                <input ui-datetimeformat ormat readonly
+                                                       ng-model="selectedMechanic.created_at" class="form-control
+                                                                                input-sm redundantFields" name="port name" required>
+                                            </div> -->
+                                            <label>{{selectedMechanic.created_at | date:'dd-MM-yyyy'}}</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label class="col-sm-5 control-label">Last modified at</label>
+                                        <div class="col-sm-7">
+                                            <!-- <div class="fg-line" readonly>
+                                                <input ui-datetimeformat readonly
+                                                       ng-model="selectedMechanic.last_modified_at" class="form-control
+                                                                                input-sm redundantFields" name="port name" required>
+                                            </div> -->
+                                            <label>{{selectedMechanic.last_modified_at | date:'dd-MM-yyyy'}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+        </div>
+    </div>
+</div>
