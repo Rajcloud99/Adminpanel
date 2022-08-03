@@ -1,0 +1,142 @@
+<div class="row" style="margin: 5px auto;">
+
+	<div class="col-md-12" style="padding: 20px">
+		<form name="SaveForm" ng-submit="submitForm()" autocomplete="off">
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Transporter Name <span style="color: red">*</span>:</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="Name" ng-model="vendor.name" required>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<label class="col-xs-6">Ownership Type: <span style="color: red">*</span>:</label></label>
+					<div class="col-sm-6">
+						<select chosen
+								class="form-control"
+								ng-init="vendor.ownershipType = vendor.ownershipType || 'Market'"
+								ng-options="item as item for item in $constants.aOwnershipVendor"
+								ng-model="vendor.ownershipType"
+								name="Ownership Type"
+                                ng-disabled="true"
+								required>
+							<option value="" disabled>
+								Select Ownership Type
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<label class="col-xs-6">Category: <span style="color: red">*</span>:</label></label>
+					<div class="col-sm-6">
+						<select chosen
+								multiple
+                                ng-disabled="true"
+								class="form-control"
+								ng-options="item as item for item in $constants.aVendorCategory"
+								ng-model="vendor.category"
+								name="category"
+					        	required>
+							<option value="" disabled>
+								Select Category
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+	
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>City :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="City" ng-model="vendor.ho_address.city" required>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>State :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-sm-6">
+						<select chosen
+								ng-model="vendor.ho_address.state"
+								class="form-control"
+								ng-change="setStateCode(vendor.ho_address.state)"
+								ng-options="item.state as item.state for item in aGSTstates" required>
+							<option value="" disabled>
+								Select State
+							</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>State Code :</label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="State Code" ng-model="vendor.ho_address.state_code" ng-readonly="true">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>Country :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="Country" ng-model = "vendor.ho_address.country" ng-disabled="true" required>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>PAN :<span class="req_r">*</span></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" ng-pattern="/^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$/" placeholder="PAN" name="pan_no" ng-model="vendor.pan_no" ng-readonly="(vendor.account && vendor.account.length && vendor.account.pan_no)" required>
+							<span style="color:red" ng-show="SaveForm.pan_no.$dirty && SaveForm.pan_no.$invalid">PAN no is incorrect.</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 m-b-5">
+				<div class="form-group">
+					<div class="col-xs-6"><label>GSTIN :<span ng-show="isBroker" class="req_r">*</span></label></div>
+					<div class="col-xs-6">
+						<div class="fg-line">
+							<input type="text" class="form-control input-sm" placeholder="GSTIN" ng-model="vendor.gstn" ng-required="isBroker" >
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="col-md-12 m-b-5">
+				<div class="form-group">
+					<button class="btn btn-primary" ng-disabled="!(vendor.name)">Save</button>
+				</div>
+			</div>
+		</form>
+
+	</div>
+</div>
+<style type="text/css">
+	.bxx1 {
+		border: 1px solid #c6c5c5;
+		padding: 0px 10px;
+	}
+</style>
