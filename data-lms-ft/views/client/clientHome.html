@@ -4,13 +4,13 @@
              id="messages-main">
             <div class="ms-menu" style="width:20%;max-height: 600px;padding-bottom: 60px" >
                 <div class="lvh-search ng-scope sear">
-                    <input type="text" placeholder="Search Client ..."
-                           ng-model="clientTypeAheadValue" class="lvhs-input"
-                           typeahead="client.client_display_name as client.client_display_name for client in clientNames"
-                           typeahead-min-length="2" ng-change="getClientNames(clientTypeAheadValue)"
+                    <input type="text" placeholder="Search Client..." ng-model="clientFullName" class="lvhs-input"
+                           typeahead-wait-ms="10" typeahead="client.client_display_name as client.client_display_name for client in clientNames|filter:clientFullName"
+                           ng-change="getClientNames(clientFullName)" class="form-control"
                            typeahead-on-select="onClientTypeAheadSelect($item, $model, $label)" >
-                    <i class="lvh-search-close" ng-click="resetClientName()">×</i>
+                    <i class="lvh-search-close" ng-click="clientFullName = ''; resetClientName()">×</i>
                 </div>
+
                 <div class="listview lv-user clk" style="overflow: auto;height:97%;">
                     <div class="lv-item media"  style="border-bottom:1px solid rgb(232, 232, 232)"
                          ng-repeat="client in clients"
@@ -43,7 +43,7 @@
                     </span> </h2>
                 </div>
                 <button class="btn btn-primary waves-effect"
-                        style="margin-top:-45px;float: right;margin-right: 20px;"
+                        style="margin-top:-20px;align-self: center;margin-left: 500px;margin-right: 20px;"
                         ng-click="addClient()" ng-show="client_show_add_button">
                     Register New Client
                 </button>

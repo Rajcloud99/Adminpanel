@@ -1141,9 +1141,34 @@ materialAdmin.controller("registerRouteController", function ($http, $timeout, $
 	};
 
 	function getRoute() {
-		if ($scope.allPoints.length >= 2)
-			$scope.regRouteNew.route_distance = utils.getDistanceInKm($scope.allPoints[0].latitude, $scope.allPoints[0].longitude, $scope.allPoints[1].latitude, $scope.allPoints[1].longitude);
-		$scope.regRouteNew.route_distance = (Math.round(($scope.regRouteNew.route_distance) * 100) / 100) || 0;
+		// route distance get  using google map service
+		if ($scope.allPoints.length >= 2){
+			if ($scope.allPoints[0].latitude && $scope.allPoints[0].longitude && $scope.allPoints[1].latitude && $scope.allPoints[1].longitude) {
+				let source  = [];
+				let destination = [];
+				source.location  =  new google.maps.LatLng($scope.allPoints[0].latitude, $scope.allPoints[0].longitude);
+				destination.location  = new google.maps.LatLng($scope.allPoints[1].latitude, $scope.allPoints[1].longitude);
+				if (google && google.maps && google.maps.DistanceMatrixService) {
+					new google.maps.DistanceMatrixService()
+						.getDistanceMatrix(
+							{
+								origins: [source.location],
+								destinations: [destination.location],
+								travelMode: 'DRIVING',
+							}, (response) => {
+								console.log(response)
+								if(response && Array.isArray(response.rows) && response.rows[0]){
+									let element = response.rows[0].elements;
+									$scope.regRouteNew.route_distance = Math.round2(element[0].distance.value / 1000, 2);
+									$scope.$apply();
+								}
+							});
+				}
+			}
+
+		}
+		// 	$scope.regRouteNew.route_distance = utils.getDistanceInKm($scope.allPoints[0].latitude, $scope.allPoints[0].longitude, $scope.allPoints[1].latitude, $scope.allPoints[1].longitude);
+		// $scope.regRouteNew.route_distance = (Math.round(($scope.regRouteNew.route_distance) * 100) / 100) || 0;
 		// let oUrl = $scope.aLocationUrl[3];
 
 		// 	let q = {
@@ -1220,7 +1245,7 @@ materialAdmin.controller("editRouteController", function ($http, $uibModal, $roo
 	if ($rootScope.route) {
 		$scope.route = angular.copy($rootScope.route);
 		$scope.islndmrk = $scope.route.islndmrk;
-		if( $scope.$configs.master && $scope.$configs.master.TransportRoute && $scope.$configs.master.TransportRoute.googleRoute) {
+		if( $scope.$configs.master && $scope.$configs.master.TransportRoute && $scope.$configs.master.TransportRoute.googleRoute &&  !$scope.islndmrk) {
 			$scope.route.source = $scope.route.source;
 			$scope.route.destination = $scope.route.destination;
 			$scope.route.name = $scope.route.name;
@@ -1491,10 +1516,35 @@ materialAdmin.controller("editRouteController", function ($http, $uibModal, $roo
 	// Actual Function
 
 	function getRoute() {
-		if ($scope.allPoints.length >= 2)
-			$scope.route.route_distance = utils.getDistanceInKm($scope.allPoints[0].latitude, $scope.allPoints[0].longitude, $scope.allPoints[1].latitude, $scope.allPoints[1].longitude);
-		$scope.route.route_distance = $scope.route.route_distance + ($scope.route.route_distance * 0.15);
-		$scope.route.route_distance = (Math.round(($scope.route.route_distance) * 100) / 100) || 0;
+		if ($scope.allPoints.length >= 2){
+			if ($scope.allPoints[0].latitude && $scope.allPoints[0].longitude && $scope.allPoints[1].latitude && $scope.allPoints[1].longitude) {
+				let source  = [];
+				let destination = [];
+				source.location  =  new google.maps.LatLng($scope.allPoints[0].latitude, $scope.allPoints[0].longitude);
+				destination.location  = new google.maps.LatLng($scope.allPoints[1].latitude, $scope.allPoints[1].longitude);
+				if (google && google.maps && google.maps.DistanceMatrixService) {
+					new google.maps.DistanceMatrixService()
+						.getDistanceMatrix(
+							{
+								origins: [source.location],
+								destinations: [destination.location],
+								travelMode: 'DRIVING',
+							}, (response) => {
+								console.log(response)
+								if(response && Array.isArray(response.rows) && response.rows[0]){
+									let element = response.rows[0].elements;
+									$scope.route.route_distance = Math.round2(element[0].distance.value / 1000, 2);
+									$scope.$apply();
+								}
+							});
+				}
+			}
+
+		}
+		// if ($scope.allPoints.length >= 2)
+		// 	$scope.route.route_distance = utils.getDistanceInKm($scope.allPoints[0].latitude, $scope.allPoints[0].longitude, $scope.allPoints[1].latitude, $scope.allPoints[1].longitude);
+		// $scope.route.route_distance = $scope.route.route_distance + ($scope.route.route_distance * 0.15);
+		// $scope.route.route_distance = (Math.round(($scope.route.route_distance) * 100) / 100) || 0;
 		// 	let oUrl = $scope.aLocationUrl[3];
 		//
 		// 	let q = {

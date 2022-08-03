@@ -249,6 +249,7 @@
 									<td>
 										<label class="checkbox checkbox-inline">
 											<input type="checkbox"
+													   ng-change="confVm.reqfieldremove(value)"
 												   ng-model="value.visible">
 											<i class="input-helper"></i>
 										</label>
@@ -272,6 +273,7 @@
 										<td>
 											<label class="checkbox checkbox-inline">
 												<input type="checkbox"
+													   ng-change="confVm.reqfieldvisible(value)"
 													   ng-model="value.req">
 												<i class="input-helper"></i>
 											</label>

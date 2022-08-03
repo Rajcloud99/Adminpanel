@@ -887,6 +887,13 @@ materialAdmin.filter('getShipmentNum', [
 	}
 }]);
 
+materialAdmin.filter('getNameConcat', [
+	function () {
+	return function (user) {
+		return Array.isArray(user) ? user.map(o => o.name).join(', ') : '';
+	}
+}]);
+
 /*
 * return Formatted Vehicle number and its type : number(Type)
 * */

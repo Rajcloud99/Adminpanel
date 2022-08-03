@@ -141,7 +141,8 @@ tripHistoryReportCtrl.$inject = [
 	'Driver',
 	'objToCsv',
 	'HTTPConnection',
-	'URL'
+	'URL',
+	'customer'
 ];
 
 playbackCtrl.$inject = [
@@ -2694,6 +2695,7 @@ function mapViewController(
 			'S.No',
 			'TL No.',
 			'V. No.',
+			'Vehicle type',
 			'V. Status',
 			'Customer',
 			//'Consignor',
@@ -2704,22 +2706,22 @@ function mapViewController(
 			'KM. left',
 			'Halt Time',
 			'Vehicle Arrival - Loading',
-			'Vehicle Arrival - Unloading',
 			'Loading End',
+			'Trip Start D&T',
+			'Vehicle Arrival - Unloading',
 			'Unloading End',
 			'Trip Status',
 			'Comment Status',
 			'Comment Remark',
+			'Remark',
 			'GPS Status',
 			'Location',
 			'Last Known D&amp;T',
-			'Trip Start D&T',
 			'TAT Hour',
 			'Planned ETA',
 			'Predicted ETA',
 			'Segment',
 			'Mob. No',
-			'Remark'
 		], aData.map( o => {
 			let arr = [];
 
@@ -2738,6 +2740,12 @@ function mapViewController(
 
 			try{
 				arr.push(o.vehicle.vehicle_reg_no || 'NA');
+			}catch(e){
+				arr.push("NA");
+			}
+
+			try{
+				arr.push( o.vehicle.veh_type_name || 'NA');
 			}catch(e){
 				arr.push("NA");
 			}
@@ -2807,17 +2815,21 @@ function mapViewController(
 			}catch(e){
 				arr.push("NA");
 			}
-
 			try{
-				arr.push($filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.pod && o.vehicle.gr.pod.unloadingArrivalTime, 'dd-MMM-yyyy \'at\' h:mma')||$filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.vehicle_arrived_for_unloading_status && o.vehicle.gr.vehicle_arrived_for_unloading_status.date, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
-				// arr.push($filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.vehicle_arrived_for_unloading_status && o.vehicle.gr.vehicle_arrived_for_unloading_status.date, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
+				arr.push($filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.pod && o.vehicle.gr.pod.billingLoadingTime, 'dd-MMM-yyyy \'at\' h:mma') || $filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.loading_ended_status && o.vehicle.gr.loading_ended_status.date, 'dd-MMM-yyyy \'at\' h:mma')|| 'NA');
+				// arr.push($filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.loading_ended_status && o.vehicle.gr.loading_ended_status.date, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
+			}catch(e){
+				arr.push("NA");
+			}
+			try{
+				arr.push($filter('date')(o.vehicle && o.vehicle.trip && o.vehicle.trip.trip_start_status && o.vehicle.trip.trip_start_status.date, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
 			}catch(e){
 				arr.push("NA");
 			}
 
 			try{
-				arr.push($filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.pod && o.vehicle.gr.pod.billingLoadingTime, 'dd-MMM-yyyy \'at\' h:mma') || $filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.loading_ended_status && o.vehicle.gr.loading_ended_status.date, 'dd-MMM-yyyy \'at\' h:mma')|| 'NA');
-				// arr.push($filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.loading_ended_status && o.vehicle.gr.loading_ended_status.date, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
+				arr.push($filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.pod && o.vehicle.gr.pod.unloadingArrivalTime, 'dd-MMM-yyyy \'at\' h:mma')||$filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.vehicle_arrived_for_unloading_status && o.vehicle.gr.vehicle_arrived_for_unloading_status.date, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
+				// arr.push($filter('date')(o.vehicle && o.vehicle.gr && o.vehicle.gr.vehicle_arrived_for_unloading_status && o.vehicle.gr.vehicle_arrived_for_unloading_status.date, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
 			}catch(e){
 				arr.push("NA");
 			}
@@ -2846,6 +2858,13 @@ function mapViewController(
 			}catch(e){
 				arr.push("NA");
 			}
+			//remark
+			try{
+				arr.push(o.vehicle.trip.rmk || 'NA');
+			}catch(e){
+				arr.push("NA");
+			}
+
 			//***********************gps status
 			try{
 				arr.push(o.vehicle.gpsData && o.vehicle.gpsData.status || 'NA');
@@ -2862,11 +2881,6 @@ function mapViewController(
 
 			try{
 				arr.push($filter('date')(o.vehicle.gpsData.datetime, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
-			}catch(e){
-				arr.push("NA");
-			}
-			try{
-				arr.push($filter('date')(o.vehicle && o.vehicle.trip && o.vehicle.trip.trip_start_status && o.vehicle.trip.trip_start_status.date, 'dd-MMM-yyyy \'at\' h:mma') || 'NA');
 			}catch(e){
 				arr.push("NA");
 			}
@@ -2896,15 +2910,9 @@ function mapViewController(
 
 			try{
 				if($scope.$configs && $scope.$configs.tracking && $scope.$configs.tracking.driverMob)
-				    arr.push(o.vehicle.driver_contact_no || 'NA');
+				    arr.push(o.vehicle.driver_contact_no || o.vehicle.trip && o.vehicle.trip.driver && o.vehicle.trip.driver.prim_contact_no || 'NA');
 				else
 					arr.push(o.vehicle.owner_mobile || 'NA');
-			}catch(e){
-				arr.push("NA");
-			}
-
-			try{
-				arr.push(o.vehicle.trip.rmk || 'NA');
 			}catch(e){
 				arr.push("NA");
 			}
@@ -5615,7 +5623,8 @@ function tripHistoryReportCtrl(
 	Driver,
 	objToCsv,
 	HTTPConnection,
-	URL
+	URL,
+	customer
 ) {
 
 	$scope.graphView = false;
@@ -5730,6 +5739,10 @@ function tripHistoryReportCtrl(
 		if(filter.driver) {
 			filter.driver = filter.driver._id;
 		}
+		if(filter.customer) {
+			filter.customer = filter.customer._id;
+		}
+
 		filter.all = 'true';
 		if(isDownload) {
 			filter.download = 1;
@@ -5748,11 +5761,12 @@ function tripHistoryReportCtrl(
 			} else {
 				$scope.aTrips = res.data.data;
 				$scope.aTrips.forEach( o => {
-					if(o.status === 'Early'){
+					let status = o.trip.v_status || o.status;
+					if(status === 'Early'){
 						$scope.aGraphTrip[0].count++;
-					}else if(o.status === 'Delayed'){
+					}else if(status === 'Delayed'){
 						$scope.aGraphTrip[1].count++;
-					}else if(o.status === 'On Time'){
+					}else if(status === 'On Time'){
 						$scope.aGraphTrip[2].count++;
 					}
 					$scope.aGraphTrip[0].total = $scope.aGraphTrip[1].total = ++$scope.aGraphTrip[2].total;
@@ -5771,6 +5785,7 @@ function tripHistoryReportCtrl(
 			'Vehicle No.',
 			'Vehicle Status',
 			'Consignor',
+			'Customer',
 			'Segment',
 			'Route',
 			'KM. covered',
@@ -5800,13 +5815,19 @@ function tripHistoryReportCtrl(
 			}
 
 			try{
-				arr.push(o.status || 'NA');
+				arr.push(o.vehicle.status || 'NA');
 			}catch(e){
 				arr.push("NA");
 			}
 
 			try{
 				arr.push(o.gr.consignor.name || o.gr.consignor.name.replace(/,/g,' ') || o.gr.booking.consigner || o.gr.booking.consigner.name.replace(/,/g,' ') || 'NA');
+			}catch(e){
+				arr.push("NA");
+			}
+
+			try{
+				arr.push(o.gr.customer.name || 'NA');
 			}catch(e){
 				arr.push("NA");
 			}
@@ -5848,7 +5869,7 @@ function tripHistoryReportCtrl(
 			}
 
 			try{
-				arr.push(o.t_status);
+				arr.push(o.trip && o.trip.v_status);
 			}catch(e){
 				arr.push("NA");
 			}
@@ -5892,6 +5913,28 @@ function tripHistoryReportCtrl(
 			return arr;
 		}));
 	};
+
+	$scope.getCustomer = viewValue => {
+		if (viewValue && viewValue.toString().length > 1) {
+			return new Promise(function (resolve, reject) {
+
+				let req = {
+					name: viewValue,
+					no_of_docs: 10,
+				};
+
+				customer.getCustomerSearch(viewValue, res => {
+					resolve(res.data);
+				}, err => {
+					console.log`${err}`;
+					reject([]);
+				});
+
+			});
+		}
+
+		return [];
+	}
 
 	(() => {
 		consignorConsigneeService.getConsignorConsignee({type: 'Consignor', all: 'true'}, res => {

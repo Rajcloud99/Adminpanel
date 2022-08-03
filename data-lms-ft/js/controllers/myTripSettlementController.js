@@ -367,6 +367,7 @@ function myTripSettlementController(
 	vm.getDriver = getDriver;
 	vm.getVehicle = getVehicle;
 	vm.getGr = getGr;
+	vm.getsearchGr = getsearchGr;
 	vm.getVendorName = getVendorName;
 	vm.getCustomer = getCustomer;
 	vm.settlementCacheCSV = settlementCacheCSV;
@@ -629,7 +630,7 @@ function myTripSettlementController(
 		}
 
 		if (vm.oFilter.grData) {
-			requestFilter._id =  vm.oFilter.grData.trip._id;
+			requestFilter._id =  vm.oFilter.grData.trip;
 		}
 
 		if (vm.oFilter.segment_type) {
@@ -671,6 +672,29 @@ function myTripSettlementController(
 					reject([]);
 				});
 
+			});
+		}
+
+		return [];
+	}
+	function getsearchGr(viewValue) {
+		if (viewValue && viewValue.toString().length > 1) {
+			return new Promise(function (resolve, reject) {
+				let req = {
+					grNumber: viewValue,
+					no_of_docs: 10,
+					skip: 1,
+				};
+				tripServices.getGrTrim(
+					req,
+					(res) => {
+						resolve(res.data.data);
+					},
+					(err) => {
+						console.log`${err}`;
+						reject([]);
+					}
+				);
 			});
 		}
 
@@ -1518,6 +1542,7 @@ function tripSettlementViewController(
 						tsNo: vm.selectedTrip.advSettled.tsNo,
 						aTrips: vm.aTrips,
 						aTripsSummary: vm.summary,
+						closingBal: vm.summary.openCloseBal.driver.closing || 0
 					};
 				}
 			}
@@ -1765,15 +1790,24 @@ function tripSettlementViewController(
 				}
 					if($scope.$configs && $scope.$configs.tripSettlement && $scope.$configs.tripSettlement.gpsKm){
 						vm.totalgpskm =0;
-					 if(res.data[0].vehicle.device_imei){
-				    let device_imei = [];
-               let stdate = res.data[0].start_date;
-					let enddate = res.data[res.data.length-1].end_date;
-					device_imei.push(res.data[0].vehicle.device_imei);
-					if(stdate && enddate){
-					gettotalgpskm(stdate,enddate,device_imei);
-					}
-					 }
+				// 	 if(res.data[0].vehicle.device_imei){
+				//     let device_imei = [];
+               // let stdate = res.data[0].start_date;
+				// 	let enddate = res.data[res.data.length-1].end_date;
+				// 	device_imei.push(res.data[0].vehicle.device_imei);
+				// 	if(stdate && enddate){
+				// 	gettotalgpskm(stdate,enddate,device_imei);
+				// 	}
+				// 	 }
+						//new gkm km changes
+						for(let i=0; i<res.data.length; i++){
+							if(res.data[i].playBack && res.data[i].playBack.tot_dist){
+								vm.totalgpskm =  vm.totalgpskm + res.data[i].playBack.tot_dist;
+							}
+						}
+						if(vm.totalgpskm > 0){
+							vm.totalgpskm =  vm.totalgpskm /1000;
+						}
 				}
 			}
 		});
@@ -2357,19 +2391,20 @@ function tripSettlementViewController(
 
 		function successCallback(res) {
 			swal('', res.data.message, 'success');
-			vm.aSettle = []; // Empty the added settle array
-			vm.selectedAdvType = undefined; // remove selected mark from advance summary table
+			vm.disableSubmit = false;
+			getAllTrip();
+			// vm.aSettle = []; // Empty the added settle array
+			// vm.selectedAdvType = undefined; // remove selected mark from advance summary table
 
 			// update atrips with settled trip data
-			res.data.data.forEach(oTrip => {
-				vm.aTrips[vm.aTrips.findIndex(o => o._id === oTrip._id)] = oTrip;
-			});
+			// res.data.data.forEach(oTrip => {
+			// 	vm.aTrips[vm.aTrips.findIndex(o => o._id === oTrip._id)] = oTrip;
+			// });
 
-			vm.selectedTrip = vm.aTrips[0];
-			vm.tableApi && vm.tableApi.refresh();
-			vm.summary = res.data.summary;
-			updateTripSummary();
-			vm.disableSubmit = false;
+			// vm.selectedTrip = vm.aTrips[0];
+			// vm.tableApi && vm.tableApi.refresh();
+			// vm.summary = res.data.summary;
+			// updateTripSummary();
 		}
 	}
 
@@ -3232,6 +3267,7 @@ function settleTripCompPopupCtrl(
 		vm.DatePicker = angular.copy(DatePicker);
 		vm.selectedTrip = angular.copy(otherData.selectedTrip);
 		vm.type = angular.copy(otherData.type);
+		vm.closingBal = angular.copy(otherData.closingBal) || 0;
 		if(vm.selectedTrip && vm.selectedTrip.markSettle && vm.selectedTrip.markSettle.date)
 			vm.markDate = vm.date = new Date(vm.selectedTrip.markSettle.date);
 		else
@@ -3377,6 +3413,7 @@ function settleTripCompPopupCtrl(
 			let request = {
 				date: vm.date,
 				openingBal: vm.aDriver[0].balance - otherData.aTripsSummary.driverIncentiveVch,
+				closingBal: vm.closingBal,
 				remark: vm.remark,
 				tsNo: otherData.tsNo,
 				vehicle: vm.vehicle,
@@ -3612,7 +3649,7 @@ function paymentsController(
 		vm.driver = vm.aTrips[0].driver;
 		vm.hideFrom = false;
 		vm.hideTo = false;
-		vm.oVoucher.billDate = new Date(vm.aTrips[0].tripStartDate);
+		vm.oVoucher.billDate = new Date(vm.aTrips[0].tripStartDate || vm.aTrips[0].start_date);
 		vm.billBookId = $scope.$configs.driverPayments.branch && $scope.$configs.driverPayments.branch.billBook
 
 	})();

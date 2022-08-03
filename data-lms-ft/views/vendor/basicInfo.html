@@ -233,10 +233,10 @@
 			</div>
 			<div class="col-md-4 m-b-5">
 				<div class="form-group">
-					<div class="col-xs-6"><label>GSTIN :</label></div>
+					<div class="col-xs-6"><label>GSTIN :<span ng-show="isBroker" class="req_r">*</span></label></div>
 					<div class="col-xs-6">
 						<div class="fg-line">
-							<input type="text" class="form-control input-sm" placeholder="GSTIN" ng-model="vendor.gstn" ng-readonly="opertaionType | operation">
+							<input type="text" class="form-control input-sm" placeholder="GSTIN" ng-model="vendor.gstn" ng-required="isBroker" ng-readonly="opertaionType | operation">
 						</div>
 					</div>
 				</div>
@@ -262,17 +262,17 @@
 			<div class="clearfix"></div>
 			<div class="col-md-4 m-b-5">
 				<div class="form-group">
-					<div class="col-xs-6"><label>Contact Person :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6"><label>Contact Person :<span ng-hide="isBroker" style="color: red">*</span>:</label></label></div>
 					<div class="col-xs-6">
 						<div class="fg-line">
-							<input type="text" class="form-control input-sm" placeholder="Contact Person" ng-model="vendor.contact_person_name" ng-readonly="opertaionType | operation" required>
+							<input type="text" class="form-control input-sm" placeholder="Contact Person" ng-model="vendor.contact_person_name" ng-readonly="opertaionType | operation" ng-required="!isBroker">
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-4 m-b-5">
 				<div class="form-group">
-					<div class="col-xs-6"><label>Vendor Mobile : <span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6"><label>Vendor Mobile : <span ng-hide="isBroker" style="color: red">*</span>:</label></label></div>
 <!--					<div class="col-xs-6">-->
 <!--						<div class="fg-line">-->
 <!--							<input type="number" class="form-control input-sm" placeholder="Contact Num" ng-model="vendor.prim_contact_no" ng-readonly="opertaionType | operation" required>-->
@@ -291,7 +291,7 @@
 								   ng-maxlength="10"
 								   class="form-control"
 								   ng-readonly="opertaionType | operation"
-								   required
+								   ng-required="!isBroker"
 							>
 						</div>
 						<span class="error" ng-if="SaveForm['Mobile Number'].$error.required
@@ -360,7 +360,7 @@
 
 			<div class="col-md-4 m-b-5">
 				<div class="form-group">
-					<div class="col-xs-6"><label>No Of Vehicle :<span style="color: red">*</span>:</label></label></div>
+					<div class="col-xs-6"><label>No Of Vehicle :<span ng-hide="isBroker" style="color: red">*</span>:</label></label></div>
 					<div class="col-xs-6">
 						<div class="fg-line">
 							<input type="number"
@@ -370,7 +370,7 @@
 								   class="form-control input-sm"
 								   placeholder="No Of Vehicle"
 								   ng-model="vendor.noOfVehilce"
-								   required
+								   ng-required="!isBroker"
 								   ng-readonly="opertaionType | operation">
 						</div>
 					</div>

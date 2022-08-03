@@ -8,7 +8,7 @@
                <span>
 				<button class="btn-primary btn-xs"
 						ng-click="vm.UnMapAdvance()"
-						ng-if="$role['Trip Advance']['UnMap Advance'] && vm.selectType == 'index' && vm.aSelectedTrips"
+						ng-if="$role['Trip Advance']['UnMap Advance'] && $configs.tripAdv && !$configs.tripAdv.hideUnMapAdvance && vm.selectType == 'index' && vm.aSelectedTrips"
 						uib-tooltip="UnMap Advance"
 						tooltip-placement="bottom">
 					<i class="zmdi zmdi-undo zmdi-hc-fw"></i>

@@ -1625,6 +1625,7 @@ function acknowledgeDealController(
 	vm.getTripsRecoRep = getTripsRecoRep;
 	vm.upload = uploadHandler;
 	vm.getGr = getGr;
+	vm.getsearchGr = getsearchGr;
 	vm.getVname = getVname;
 	vm.setRouteKm = setRouteKm;
 	vm.getDname = getDname;
@@ -1791,6 +1792,29 @@ function acknowledgeDealController(
 
 		return [];
 	}
+		function getsearchGr(viewValue) {
+			if (viewValue && viewValue.toString().length > 1) {
+				return new Promise(function (resolve, reject) {
+					let req = {
+						grNumber: viewValue,
+						no_of_docs: 10,
+						skip: 1,
+					};
+					tripServices.getGrTrim(
+						req,
+						(res) => {
+							resolve(res.data.data);
+						},
+						(err) => {
+							console.log`${err}`;
+							reject([]);
+						}
+					);
+				});
+			}
+
+			return [];
+		}
 
 	function downloadCacheCSV() {
 		let oFilter = prepareFilterObject();
@@ -2161,7 +2185,7 @@ function acknowledgeDealController(
 			myFilter['vendor.clientId'] = vm.oFilter.bPclientId;
 		}
 		if (vm.oFilter.grData) {
-			myFilter._id =  vm.oFilter.grData.trip._id;
+			myFilter._id =  vm.oFilter.grData.trip;
 		}
 		if (vm.oFilter.vehicle_id) {
 			myFilter.vehicle = vm.oFilter.vehicle_id._id;
@@ -4544,6 +4568,7 @@ function advancePopupUpsertController(
 	vm.setAmountRate = setAmountRate;
 	vm.getSingleBranch = getSingleBranch;
 	vm.tableRowClick = tableRowClick;
+	vm.calculatebudget = calculatebudget;
 	vm.validateAmount = validateAmount;
 	vm.advanceDateType = advanceDateType;
 	vm.getAutoStationaryNo = getAutoStationaryNo;
@@ -5204,6 +5229,33 @@ function advancePopupUpsertController(
 			return;
 
 		let oFilter = prepareFilter();
+		oFilter.project={
+			agr : 1,
+			vehicle : 1,
+			vehicle_no : 1,
+			trip_no : 1,
+			tripBudget : 1,
+			status : 1,
+			start_date : 1,
+			end_date : 1,
+			serviceTyp : 1,
+			"route.route_distance" : 1,
+			driver : 1,
+			allocation_date : 1,
+			statuses : 1,
+			clientId : 1,
+			markSettle: 1,
+			ownershipType: 1,
+			payments: 1,
+			route_name: 1,
+			segment_type: 1,
+			settled: 1,
+			suspenseAdv: 1,
+			type: 1,
+			vendorDeal:1,
+			vendor : 1,
+		};
+
 
 		tripServices.findByAdvanceDate(oFilter, function (res) {
 			if (res && res.data) {
@@ -5299,6 +5351,24 @@ function advancePopupUpsertController(
 			return;
 		}
 		vm.oAdvance.amount = amt;
+	}
+	function calculatebudget(){
+		if(vm.selectedTrip){
+			let totKm = vm.selectedTrip.agr && vm.selectedTrip.agr.acknowledge && vm.selectedTrip.agr.acknowledge.routeDistance || vm.selectedTrip.route && vm.selectedTrip.route.route_distance || vm.selectedTrip.rKm;
+			vm.Budgeted_Diesel = 0;
+			vm.Budgeted_Advance = 0;
+			if(totKm) {
+				if (vm.selectedTrip.tripBudget) {
+					vm.Budgeted_Diesel = totKm / vm.selectedTrip.tripBudget.dieselKm;
+					vm.Budgeted_Advance = totKm * vm.selectedTrip.tripBudget.rateKm;
+
+				} else if (vm.selectedTrip.vehicle && vm.selectedTrip.vehicle.current_budget && vm.selectedTrip.vehicle.current_budget[vm.selectedTrip.serviceTyp]) {
+					vm.Budgeted_Diesel = totKm / vm.selectedTrip.vehicle.current_budget[vm.selectedTrip.serviceTyp].mileage;
+					vm.Budgeted_Advance = totKm * vm.selectedTrip.vehicle.current_budget[vm.selectedTrip.serviceTyp].rpk;
+
+				}
+			}
+		}
 	}
 
 	function setAmountRate(rate) {
@@ -5546,6 +5616,9 @@ function advancePopupUpsertController(
 	function tableRowClick() {
 		if (vm.selectedTrip.length) {
 			vm.selectedTrip = vm.selectedTrip[0];
+		}
+		if($scope.$configs.tripAdv && $scope.$configs.tripAdv.AdvisedBudget) {
+			calculatebudget();
 		}
 		setAccount();
 		setAdvType();

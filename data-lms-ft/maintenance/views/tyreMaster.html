@@ -61,26 +61,40 @@
 						<div class="col-sm-2" style="padding-left: 0;padding-right: 0;">
 							<div class="form-group m-b-0">
 								<div class="col-sm-12" style="padding-left: 0;padding-right: 0;">
-									<select name="tyre_no" class="form-control" chosen  search-contains="true"
-											data-placeholder-text-single="'Vehicle Number'" allow-single-deselect="true"
-											no-results-text="'Could not find any Vehicle'" ng-model="vehicle_no"
-											ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in regVehicles"
-											ng-change="getAllTyreMasters()">
-										<option value="" selected></option>
-									</select>
-									<!--<div class="lvh-search ng-scope sear">-->
-										<!--<input type="text"-->
-										<!--name="vehicle_no"-->
-										<!--placeholder="Vehicle Number..."-->
-										<!--ng-model="vehicle_no"-->
-										<!--class="lvhs-input"-->
-										<!--typeahead-wait-ms="10"-->
-										<!--typeahead="item.vehicle_reg_no as item.vehicle_reg_no for item in regVehicles"-->
-										<!--ng-change="getAllRegVehicles(vehicle_no)"-->
-										<!--class="form-control"-->
-										<!--typeahead-on-select="onSelect($item, $model, $label)" >-->
-										<!--<i class="lvh-search-close" ng-click="clearSearch('vehicle_no')">×</i>-->
-									<!--</div>-->
+									<div class="lvh-search ng-scope sear chosen-row-2">
+										<input
+												type="text"
+												class="form-control lvhs-input"
+												placeholder="Vehicle Search..."
+												ng-model="vehicle_no"
+												typeahead-wait-ms="10"
+												typeahead-on-select="getAllTyreMasters()"
+												typeahead="item as item.vehicle_reg_no for item in getVehicles($viewValue) | limitTo:6"
+										>
+										<i class="lvh-search-close" ng-click="vehicle_no=''; getAllTyreMasters()">×</i>
+									</div>
+
+
+<!--									<select name="tyre_no" class="form-control" chosen  search-contains="true"-->
+<!--											data-placeholder-text-single="'Vehicle Number'" allow-single-deselect="true"-->
+<!--											no-results-text="'Could not find any Vehicle'" ng-model="vehicle_no"-->
+<!--											ng-options="item.vehicle_reg_no as item.vehicle_reg_no for item in regVehicles"-->
+<!--											ng-change="getAllTyreMasters()">-->
+<!--										<option value="" selected></option>-->
+<!--									</select>-->
+<!--									<div class="lvh-search ng-scope sear">-->
+<!--										<input type="text"-->
+<!--										name="vehicle_no"-->
+<!--										placeholder="Vehicle Number..."-->
+<!--										ng-model="vehicle_no"-->
+<!--										class="lvhs-input"-->
+<!--										typeahead-wait-ms="10"-->
+<!--										typeahead="item.vehicle_reg_no as item.vehicle_reg_no for item in regVehicles"-->
+<!--										ng-change="getAllRegVehicles(vehicle_no)"-->
+<!--										class="form-control"-->
+<!--										typeahead-on-select="onSelect($item, $model, $label)" >-->
+<!--										<i class="lvh-search-close" ng-click="clearSearch('vehicle_no')">×</i>-->
+<!--									</div>-->
 								</div>
 							</div>
 						</div>

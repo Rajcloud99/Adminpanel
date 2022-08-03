@@ -13,7 +13,7 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
-		<div class="col-md-5" ng-if ="!$configs.master.TransportRoute.googleRoute && islndmrk">
+		<div class="col-md-5" ng-if ="$configs.master.TransportRoute.addressBook && islndmrk">
 			<div class="form-group m-b-0">
 				<label class="col-sm-4 control-label">Source <span style="color: red;">*</span> </label>
 				<div class="col-sm-8">
@@ -52,7 +52,7 @@
 			</div>
 		</div>
 		<!--					********* Google Source *****************-->
-		<div class="col-md-5" ng-if ="$configs.master.TransportRoute.googleRoute">
+		<div class="col-md-5" ng-if ="$configs.master.TransportRoute.googleRoute && !islndmrk">
 			<div class="form-group m-b-0" >
 				<label class="col-sm-4 control-label">Source: <span style="color: red;">*</span> </label>
 				<div class="col-sm-8">
@@ -89,7 +89,7 @@
 			</div>
 		</div>
 		<div class="clearfix"></div>
-		<div class="col-md-5" ng-if ="!$configs.master.TransportRoute.googleRoute && islndmrk">
+		<div class="col-md-5" ng-if ="$configs.master.TransportRoute.addressBook  && islndmrk">
 			<div class="form-group m-b-0">
 				<label class="col-sm-4 control-label">Destination:<span style="color: red;">*</span> </label>
 				<div class="col-sm-8">
@@ -128,7 +128,7 @@
 		</div>
 
 		<!--					**************Google  Destination ********-->
-		<div class="col-md-5" ng-if ="$configs.master.TransportRoute.googleRoute">
+		<div class="col-md-5" ng-if ="$configs.master.TransportRoute.googleRoute && !islndmrk">
 			<div class="form-group m-b-0">
 				<label class="col-sm-4 control-label">Destination: <span style="color: red;">*</span> </label>
 				<div class="col-sm-8">

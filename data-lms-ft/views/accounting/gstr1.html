@@ -76,8 +76,8 @@
                      uib-tooltip="Search" type="submit" tooltip-placement="bottom"><i
                         class="zmdi zmdi-search zmdi-hc-fw"></i></button>
                   <button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile" style="font-size: 16px"
-                     uib-tooltip="Clear Search" tooltip-placement="bottom" type="submit"
-                     ng-click="oFilter={};setDefaultDate(); "><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
+                     uib-tooltip="Clear Search" tooltip-placement="bottom" type="button"
+                     ng-click="oFilter={};reportType = ''; aReport = []; reset(); "><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
                </div>
             </form>
          </div>

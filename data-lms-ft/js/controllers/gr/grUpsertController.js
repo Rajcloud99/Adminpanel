@@ -196,7 +196,7 @@ function grUpsertController(
 				vm.billingUnloadingTimeModel = dateUtils.setHoursFromDate(vm.billingUnloadingTimeModel, vm.selectedGr.pod.billingUnloadingTime);
 			}
 
-			if($scope.$configs.GR && $scope.$configs.GR.multiDetention && $scope.$configs.GR.multiDetention.cust === vm.selectedGr.customer._id) {
+			if($scope.$configs.GR && $scope.$configs.GR.multiDetention && $scope.$configs.GR.multiDetention.cust === (vm.selectedGr.customer && vm.selectedGr.customer._id)) {
 				calDetentionDayWise();
 			}
 
@@ -207,8 +207,8 @@ function grUpsertController(
 			if(vm.selectedGr && vm.selectedGr.gateoutDate)
 				getDPHRate(vm.selectedGr.gateoutDate);
 
-			if(vm.selectedGr.trip && vm.selectedGr.trip.imd && vm.selectedGr.trip.imd.length && vm.selectedGr.trip.rName){
-				vm.imd = vm.selectedGr.trip && vm.selectedGr.trip.imd;
+			if(vm.selectedGr.trip && vm.selectedGr.trip.imd && vm.selectedGr.trip.rName){
+				vm.imd = vm.selectedGr.trip && vm.selectedGr.trip.imd || [];
 
 				let route = vm.selectedGr.trip.rName.split(' to ').map(o => o.trim());
 				vm.ldCode = vm.selectedGr.trip.ld && vm.selectedGr.trip.ld.code;
@@ -1595,7 +1595,7 @@ function grUpsertController(
 
 		if (vm.selectedGr.totalFreight < 0)
 			return swal('Error', 'Total Freight should be grater than 0', 'error');
-		
+
 			let materialFlag=false;
 			let paymentBasicFlag=false;
 		if (vm.selectedGr.invoices && vm.selectedGr.invoices.length) {
@@ -1606,7 +1606,7 @@ function grUpsertController(
 				if (oInv.paymentBasis !== vm.selectedGr.payment_basis){
 					paymentBasicFlag=true;
 				}
-				
+
 			});
 		}
 		if(materialFlag)
@@ -1744,6 +1744,9 @@ function grUpsertController(
 					if (invObj.gatePassDate)
 						request.invoices[index].gatePassDate = moment(invObj.gatePassDate, 'DD/MM/YYYY').toISOString();
 				});
+				if(!(request.route && request.route._id)){
+					delete request.route;
+				}
 				 if (vm.mode === 'edit') {
 					tripServices.updateGRservice(request, success, failure);
 				} else {

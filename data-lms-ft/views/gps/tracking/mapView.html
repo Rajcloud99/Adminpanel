@@ -342,7 +342,7 @@
 				<div ng-if="vehicle.vehicle.route.route_distance - vehicle.distance_travelled">
 					Trip KM Remaining 	: <b style="color: #f49542;">
 					<!--{{'max'|NumberUtilFilter:(vehicle.vehicle.route.route_distance - vehicle.distance_travelled):0}}-->
-					{{ vehicle.vehicle.route.route_distance - vehicle.distance_travelled }}
+					{{ (vehicle.vehicle.route.route_distance - vehicle.distance_travelled) | roundOff }}
 				</b></div>
 				</h5>
 				<div ng-if="vehicle.vehicle.trip && vehicle.vehicle.trip.tat_hr">

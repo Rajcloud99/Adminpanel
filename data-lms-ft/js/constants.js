@@ -4897,6 +4897,11 @@ materialAdmin.factory('constants', function () {
 
 		clientTypes: ["Indivisual", "Company"],
 
+		misTypes: ["Report","Alert"],
+		misServiceTypes: ["Email", "SMS"],
+		misReportAs: ["Daily", "Weekly","Monthly"],
+		misReportName: ["Job Order Report", " Job Risky Report"],
+
 		idTypes: ["Driving License", "Aadhaar Card", "Passport", "Voter ID"],
 
 		aAccountGroup: ["Bad Dept", "Customer", "Driver", "Happay", "Happay Master", "FastTag", "FastTag Master", "Diesel", "Managers", "Miscellaneous",
@@ -5319,6 +5324,7 @@ materialAdmin.factory('constants', function () {
 			"grAckDetails": "booking_manage.grAckDetails",
 			"createGR": "booking_manage.createGR",
 			"vehicleAccident": "booking_manage.vehicleList",
+			"tripMemo": "booking_manage.tripMemo",
 			"brokerMemo": "booking_manage.brokerMemo",
 			"crossDocking": "booking_manage.crossDocking",
 			"ewayBill": "booking_manage.ewayBill",

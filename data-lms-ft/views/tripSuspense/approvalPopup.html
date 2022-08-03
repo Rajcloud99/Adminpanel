@@ -131,6 +131,22 @@
 									</button>
 								</div>
 							</div>
+							<div class="col-md-3" ng-show="$configs.tripAdv.AdvisedBudget">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Budgeted Diesel (Ltr): </label>
+									<div class="col-sm-6 p-t-5">
+										{{approvalVm.Budgeted_Diesel.toFixed(2) || 0}}
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3" ng-show="$configs.tripAdv.AdvisedBudget">
+								<div class="col-md-12 form-group m-b-5">
+									<label class="col-sm-5">Budgeted Advance: </label>
+									<div class="col-sm-6 p-t-5">
+										{{approvalVm.Budgeted_Advance.toFixed(2) || 0}}
+									</div>
+								</div>
+							</div>
 
 
 							<div class="col-xs-6 m-b-5 col-sm-2 col-md-2 col-lg-2"

@@ -492,7 +492,7 @@ function jaTable(
 							else if (Number.isNaN(value))
 								value = 0;
 							else if ((typeof value === 'string' || (typeof value === 'object' && value instanceof Date)) && (typeof oHead.date === 'undefined' ? true : oHead.date) && isDate(value))
-								value = $filter('date')(value, typeof oHead.date === 'string' ? oHead.date : "dd-MMM-yyyy 'at' h:mma");
+								value = $filter('date')(value, typeof oHead.date === 'string' ? oHead.date : "dd-MMM-yyyy 'at' h:mma",'+0530');
 							arr.push(value);
 						} else
 							arr.push(undefined);

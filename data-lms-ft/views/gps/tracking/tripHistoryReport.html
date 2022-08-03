@@ -113,7 +113,7 @@
 				  </select>
 			  </div>
       </div>
-      <div class="col-md-2">
+      <div ng-hide="$configs.master.historicalTripRpt" class="col-md-2">
         <div class="fg-line form-group m-b-0">
             <select chosen
                     class="form-control"
@@ -125,6 +125,26 @@
             </select>
         </div>
       </div>
+
+		<div ng-if="$configs.master.historicalTripRpt" class="col-md-3">
+			<div class="form-group m-b-0">
+				<label class="col-sm-4 control-label">Customer:</label>
+				<div class="col-sm-6">
+					<div class="ng-scope sear chosen-row-1">
+						<input
+								type="text"
+								class="form-control"
+								placeholder=" Search Customer"
+								ng-model="filter.customer"
+								typeahead-wait-ms="10"
+								name="Customer"
+								typeahead="item as item.name for item in getCustomer($viewValue) | limitTo:6"
+						>
+						<i class="lvh-search-close" ng-click="filter.customer=null;">×</i>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="col-md-2">
 			<select
 					class="fg-line form-control"
@@ -180,7 +200,7 @@
         <!--</div>-->
       <!--</div>-->
 
-      <div class="col-md-1">
+      <div class="col-md-2">
 		  <button
 				  class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-t-5 m-r-5 app_tile"
 				  style="font-size: 16px"
@@ -188,9 +208,13 @@
 				  ng-click="search(true)">
 			  <i class="zmdi zmdi-download zmdi-hc-fw"></i>
 		  </button>
-			<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-l-5 m-r-5 app_tile"
+			<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-t-5 m-r-5 app_tile"
 					style="font-size: 16px"
 					type="submit"><i class="zmdi zmdi-search zmdi-hc-fw"></i></button>
+		  <button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 m-t-5 m-r-5 app_tile"
+				  style="font-size: 16px"
+				  ng-click="filter = {}"
+				  type="button"><i class="zmdi zmdi-close zmdi-hc-fw"></i></button>
         <!--<button class="btn btn-primary p-l-10 p-r-10 p-t-0 p-b-0 app_tile"-->
             <!--style="font-size: 16px"-->
             <!--uib-tooltip="Clear Search"-->
@@ -219,6 +243,7 @@
 			<th>V. No.</th>
 			<th>V. Status</th>
 			<th>Consignor</th>
+			<th>Customer</th>
 			<th>Segment</th>
 			<th>Route</th>
 			<th>KM. covered</th>
@@ -240,8 +265,9 @@
 			  <td>{{$index+1}}</td>
 			  <td>{{trip.trip_no || 'NA'}}</td>
 			  <td>{{trip.vehicle.vehicle_reg_no || 'NA'}}</td>
-			  <td>{{trip.status || 'NA'}}</td>
+			  <td>{{trip.vehicle.status || 'NA'}}</td>
 			  <td>{{trip.gr.consignor.name || trip.gr.booking && trip.gr.booking.consigner.name || 'NA'}}</td>
+			  <td>{{trip.gr.customer.name || 'NA'}}</td>
 			  <td>{{trip.vehicle.segment_type || 'NA'}}</td>
 			  <td>
 				  {{trip.route.name || 'NA'}}
@@ -251,7 +277,7 @@
 			  <td>{{(trip.route.route_distance - trip.distance_travelled | number:0	) }}</td>
 			  <td>{{(trip.gr.loading_ended_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
 			  <td>{{(trip.gr.unloading_ended_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
-			  <td>{{trip.t_status || 'NA'}}</td>
+			  <td>{{trip.trip.v_status || 'NA'}}</td>
 			  <td>{{(trip.expected_eta|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
 			  <td>{{(trip.gr.vehicle_arrived_for_loading_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>
 			  <td>{{(trip.gr.vehicle_arrived_for_unloading_status.date|date:'dd-MMM-yyyy \'at\' h:mma') || 'NA'}}</td>

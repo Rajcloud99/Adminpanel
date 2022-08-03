@@ -354,11 +354,11 @@
 									<th>Weight</th>
 									<th ng-if="!($configs.booking.showRoute || $configs.booking.showGoogleRoute)">Route
 									</th>
-									<th ng-if="$role['Vehicle Allocation']['GR'] && $configs.vehAlloc.grDetailView || (($configs.tripMemo && $configs.tripMemo.show)
-									? (tripMemoBookType === 'skipBooking') : true)">Gr Info</th>
-									<th ng-if="(($configs.tripMemo && $configs.tripMemo.show) && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
+									<th ng-if="!isBroker && ($role['Vehicle Allocation']['GR'] && $configs.vehAlloc.grDetailView || (($configs.tripMemo && $configs.tripMemo.show)
+									? (tripMemoBookType === 'skipBooking') : true))">Gr Info</th>
+									<th ng-if="(($configs.tripMemo && $configs.tripMemo.show)&& !isBroker && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
 										ng-click="openTripMemoModal(oSelBookVeh)">Trip Memo</th>
-									<th ng-if="(($configs.brokerMemo && $configs.brokerMemo.show) && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
+									<th ng-if="($configs.brokerMemo && $configs.brokerMemo.show)&& isBroker && tripMemoBookType === 'skipBooking'"
 										ng-click="openBrokerMemoModal(oSelBookVeh)">Broker Memo</th>
 									<th ng-show="veh.veh_type_name=='20 Feet' || veh.veh_type_name=='40 Feet'">Container
 									</th>
@@ -400,16 +400,16 @@
 											</div>
 										</div>
 									</td>
-									<td ng-if="$role['Vehicle Allocation']['GR'] && $configs.vehAlloc.grDetailView || (($configs.tripMemo && $configs.tripMemo.show)
-									? (tripMemoBookType === 'skipBooking') : true)">
+									<td ng-if="!isBroker && ($role['Vehicle Allocation']['GR'] && $configs.vehAlloc.grDetailView || (($configs.tripMemo && $configs.tripMemo.show)
+									? (tripMemoBookType === 'skipBooking') : true))">
 										<a ng-click="grDetailPopup(veh, $index)"> &nbsp;&nbsp; Gr Details</a>
 									</td>
-									<td ng-if="(($configs.tripMemo && $configs.tripMemo.show) && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
+									<td ng-if="(($configs.tripMemo && $configs.tripMemo.show) && !isBroker && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
 										ng-click="openTripMemoModal(oSelBookVeh)">
 										<a>Trip Memo Info </a>
 									</td>
 
-									<td ng-if="(($configs.brokerMemo && $configs.brokerMemo.show) && (tripMemoBookType === 'skipBooking') ? true : (selBookData.booking_type === 'Transporter Booking'))"
+									<td ng-if="($configs.brokerMemo && $configs.brokerMemo.show) && isBroker && tripMemoBookType === 'skipBooking'"
 										ng-click="openBrokerMemoModal(oSelBookVeh)">
 										<a>Broker Memo Info </a>
 									</td>

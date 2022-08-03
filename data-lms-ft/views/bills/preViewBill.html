@@ -608,6 +608,22 @@
 											ng-click="vm.selectedBill && vm.editSupplyBill(vm.selectedBill, vm.selectedBillIndex)">
 										<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
 									</button>
+									<button ng-if="$configs && $configs.Bill && $configs.Bill.shuffleGr" class="btn btn-primary p-t-0 p-b-0 btn-xs"
+												style="margin-top: 10px;  font-size: 16px"
+												type="button"
+												ng-click="vm.rowUp(vm.selectedBillIndex)"
+												uib-tooltip="Up"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-long-arrow-up zmdi-hc-fw"></i>
+										</button>
+										<button ng-if="$configs && $configs.Bill && $configs.Bill.shuffleGr" class="btn btn-primary p-t-0 p-b-0 btn-xs"
+												style="margin-top: 10px;  font-size: 16px"
+												type="button"
+												ng-click="vm.rowDown(vm.selectedBillIndex)"
+												uib-tooltip="Down"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-long-arrow-down zmdi-hc-fw"></i>
+										</button>
 <!--									<button ng-if="$role['Unbilled Gr']['Update Gr']"-->
 <!--											class="btn btn-primary p-t-0 p-b-0"-->
 <!--											style="margin-top: 10px;  font-size: 16px"-->
@@ -652,7 +668,7 @@
 												</tr>
 												</thead>
 												<tbody>
-												<tr data-ng-repeat="oItem in vm.aItems  | orderBy : 'gr.grNumber'  | orderBy : 'gr.trip_no'"
+												<tr data-ng-repeat="oItem in vm.aItems"
 													ng-click="vm.selectedBillIndex = $index ;vm.selectedBill = oItem"
 													ng-class="{grn: vm.selectedBillIndex === $index}"
 													class="pointer">
@@ -662,7 +678,7 @@
 														: 'NA'}}
 													</td>
 													<td>{{oItem.gr.trip_no || 'NA'}}</td>
-													<td>{{(oItem.gr.grDate | date : "dd-MM-y") || 'NA'}}</td>
+													<td>{{(oItem.gr.grDate | date : "dd-MM-y":'+0530') || 'NA'}}</td>
 													<td>{{oItem.gr.grNumber || 'NA'}}</td>
 													<td ng-if="$configs.tripMemo.show">{{oItem.gr.tMemo.tMNo || 'NA'}}</td>
 													<td>{{oItem.gr.vehicle_no || oItem.gr.vehicle.vehicle_reg_no ||

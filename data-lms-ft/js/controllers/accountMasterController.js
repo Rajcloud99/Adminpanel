@@ -3375,7 +3375,7 @@ materialAdmin.controller('gstr1ReportController', function (
 	$scope.getGstr1MonthlyReport = getGstr1MonthlyReport;
 	$scope.getGstr1SummaryReport = getGstr1SummaryReport;
 	$scope.getGstr1CreditNoteReport = getGstr1CreditNoteReport;
-
+	$scope.reset = reset;
 
 	// INIT functions
 	(function init() {
@@ -3392,6 +3392,17 @@ materialAdmin.controller('gstr1ReportController', function (
 		});
 	})();
 	// Actual Functions
+
+	function reset() {
+		$scope.aReportgst = {};
+		$scope.totaltaxaablefreight	= 0;
+		$scope.totaltax = 0;
+		$scope.grandtotaltax = 0;
+		$scope.totalCreditNotetaxValue  = 0;
+		$scope.grandtotaltaxable = 0;
+		$scope.totalinvoiceAmt = 0;
+		$scope.grandtotalinvoiceAmt = 0;
+	}
 	function getGstr1MonthlyReport(isDownloadTrue) {
 		let request = prepareFilter($scope.oFilter);
 		if (isDownloadTrue) {

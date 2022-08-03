@@ -996,6 +996,8 @@ materialAdmin.controller('previewBillCtrl', function (
 	vm.removeGr = removeGr;
 	vm.amountCeil = amountCeil;
 	vm.amountFloor = amountFloor;
+	vm.rowUp=rowUp;
+	vm.rowDown=rowDown;
 	vm.amountRefresh = amountRefresh;
 	vm.onBillNoSelect = onBillNoSelect;
 	vm.onChangeBillType = onChangeBillType;
@@ -1211,7 +1213,10 @@ materialAdmin.controller('previewBillCtrl', function (
 				vm.aItems = [];
 
 			calculateTax();
-
+			if(vm.aItems.length) {
+				vm.aItems = $filter('orderBy')(vm.aItems,'gr.grNumber');
+				vm.aItems = $filter('orderBy')(vm.aItems,'gr.trip_no');
+			}
 		} catch (e) {
 			swal('Error', e && e.message || e.toString(), 'error');
 			console.error(e.toString());
@@ -1471,8 +1476,10 @@ materialAdmin.controller('previewBillCtrl', function (
 			if (res.data)
 				updateGr(gr);
 			calculateTax();
+
 		}
 		// calculateTax();
+
 	}
 
 	function updateGr(gr) {
@@ -1961,6 +1968,20 @@ materialAdmin.controller('previewBillCtrl', function (
 		vm.adjAmount = vm.totalAmount - vm.billAmount;
 	}
 
+	function rowUp(index) {
+		if(!isNaN(index) && vm.aItems.length>1 && index!==0){
+			[vm.aItems[index],vm.aItems[index-1]] = [vm.aItems[index-1],vm.aItems[index]];
+			vm.selectedBillIndex=index-1;
+		}
+	}
+
+	function rowDown(index) {
+		if(!isNaN(index) && vm.aItems.length>1 && index!==vm.aItems.length-1){
+			[vm.aItems[index],vm.aItems[index+1]] = [vm.aItems[index+1],vm.aItems[index]];
+			vm.selectedBillIndex=index+1;
+		}
+	}
+
 	function amountRefresh() {
 		vm.billAmount = vm.totalAmount;
 		vm.adjAmount = 0;
@@ -2336,7 +2357,7 @@ materialAdmin.controller('previewBillCtrl', function (
 		let oFilter = {
 			'billingParty._id': vm.billingParty._id,
 			skip: 1,
-			no_of_docs: 500,
+			no_of_docs: 1000,
 			// cClientId: $scope.$configs.clientOps,
 			bClientId: vm.billingParty.clientId
 		};
@@ -2397,9 +2418,11 @@ materialAdmin.controller('previewBillCtrl', function (
 
 				// vm.aItems.sort( (a,b) => (a.gr.grNumber) - (b.gr.grNumber) );
 				// vm.aItems.sort( (a,b) => (a.gr.trip_no) - (b.gr.trip_no) );
-
-
 				calculateTax();
+				if(vm.aItems.length) {
+					vm.aItems = $filter('orderBy')(vm.aItems,'gr.grNumber');
+					vm.aItems = $filter('orderBy')(vm.aItems,'gr.trip_no');
+				}
 			} else {
 				swal('Warning', 'No Gr Found', 'warning');
 			}
@@ -2408,6 +2431,8 @@ materialAdmin.controller('previewBillCtrl', function (
 		function failure(res) {
 			swal('Some error with GET trips.', '', 'error');
 		}
+		
+
 	}
 
 	function grUpsertPopup(gr, index) {
@@ -6954,8 +6979,14 @@ materialAdmin.controller('generatedBillsCntrl', function (
 		myFilter.no_of_docs = 15;
 		myFilter.skip = $scope.lazyLoad.getCurrentPage();
 		myFilter.sort = {
-			billNo: -1
+			billDate: -1
 		};
+
+		if($scope.$configs && $scope.$configs.Bill && $scope.$configs.Bill.sortBillNoDesc){
+			myFilter.sort = {
+				billNo: -1
+			};	
+		}
 
 		return myFilter;
 	}
@@ -7174,7 +7205,7 @@ materialAdmin.controller('generatedBillsCntrl', function (
 					oBill.dphfinalAmount=0;
 					oBill.items.forEach(oItem => {
 						oItem.rate=oItem.gr && oItem.gr.invoices && oItem.gr.invoices[0] && oItem.gr.invoices[0].rate || 0;
-						oItem.dph=oItem.rate*((oItem.gr && oItem.gr.invoices && oItem.gr.invoices[0] && oItem.gr.invoices[0].dphRate||1)/100) ||  0;
+						oItem.dph=oItem.rate*((oItem.gr && oItem.gr.invoices && oItem.gr.invoices[0] && oItem.gr.invoices[0].dphRate||0)/100) ||  0;
 						oItem.igst=(oItem.rate+oItem.dph)*12/100 ||0;
 						oItem.totalAmount=oItem.rate+oItem.dph+oItem.igst ||0;
 						oItem.totalDphAmount=oItem.rate+oItem.dph ||0;

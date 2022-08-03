@@ -33,7 +33,15 @@ materialAdmin.controller("tyreMasterController",
 	            var queryFilter = {};
 	            for (var i = 0; i < allowedKey.length; i++) {
 	                if($scope[allowedKey[i]]){
-	                    queryFilter[allowedKey[i]] = $scope[allowedKey[i]];
+						if(allowedKey[i] == 'vehicle_no'){
+							if($scope[allowedKey[i]].vehicle_reg_no){
+							queryFilter[allowedKey[i]] = $scope[allowedKey[i]].vehicle_reg_no;
+							}else{
+								queryFilter[allowedKey[i]] = $scope[allowedKey[i]];
+							}
+						}else {
+							queryFilter[allowedKey[i]] = $scope[allowedKey[i]];
+						}
 	                }
 	            }
 	            if($scope.currentPage){
@@ -188,6 +196,21 @@ materialAdmin.controller("tyreMasterController",
 			}
 			Vehicle.getAllregList({}, success); //get category = Horse and own vehicle
 		})();
+		$scope.getVehicles = function (viewValue) {
+			if (viewValue && viewValue.toString().length > 1) {
+				return new Promise(function (resolve, reject) {
+					Vehicle.getNameTrim(viewValue, res => {
+						resolve(res.data.data);
+					}, err => {
+						console.log`${err}`;
+						reject([]);
+					});
+
+				});
+			}
+
+			return [];
+		}
 
         $scope.grnDown = function(){
             $rootScope.returnInwardData = {};
@@ -1696,6 +1719,7 @@ materialAdmin.controller("returnTyrePopUpCtrl", function ($rootScope, $scope, $u
 
 	function success(res) {
 		if (res && res.data && (res.status == "OK")) {
+			swal("Success",res.message,"success");
 			$uibModalInstance.close(res);
 		} else {
 			$uibModalInstance.dismiss(res);

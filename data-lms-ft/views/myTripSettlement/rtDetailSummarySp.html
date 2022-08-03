@@ -95,8 +95,8 @@
 									<td style="border-right: 1px solid black;"><b>RT Prediction </b></td>
 									<td style="border-right: 1px solid black;"><b>Budgeted Diesel: </b>{{(rtDetSummaryVm.summary.dieselBudget|roundOff:'') || 0}}</td>
 									<td style="border-right: 1px solid black;"><b>Budgeted Advance: </b>{{(rtDetSummaryVm.summary.netBudget|roundOff:'') || 0}}</td>
-									<td style="border-right: 1px solid black;"><b>Net Suspense: </b>{{(rtDetSummaryVm.aggrOfSupense|roundOff:'') || 0}}</td>
-									<td><b>Suspense Remark: {{rtDetSummaryVm.susRemark}}</b></td>
+									<td style="border-right: 1px solid black;"><b>Driver Security: </b>{{rtDetSummaryVm.summary.totDrSecurity || 0}}</td>
+									<!-- <td><b>Suspense Remark: {{rtDetSummaryVm.susRemark}}</b></td> -->
 								</tr>
 							</table>
 						</td>
@@ -160,7 +160,7 @@
 						<td style="padding: 10px; border-top: 1px solid black">
 						</td>
 					</tr>
-					<tr style="border-top: 1px solid black;">
+					<!-- <tr style="border-top: 1px solid black;">
 						<td style="padding: 0px; border-top: 1px solid black">
 							<table class="insideTable" style="width: 100%;border-spacing: 0px;">
 								<tr>
@@ -182,7 +182,7 @@
 								</tr>
 							</table>
 						</td>
-					</tr>
+					</tr> -->
 					<tr style="border-top: 1px solid black">
 						<td style="padding: 10px; border-top: 1px solid black">
 						</td>

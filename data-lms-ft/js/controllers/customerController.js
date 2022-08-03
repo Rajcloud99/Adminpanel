@@ -11,6 +11,7 @@ materialAdmin.controller("customerCommonController", function($rootScope, $scope
     $scope.items_per_page = 10;
     $scope.filterObj={}
     $scope.dateChange = dateChange;
+    $scope.dateChangeClear = dateChangeClear;
 	$scope.DatePicker = angular.copy(DatePicker);
     $scope.pageChanged = function() {
         $scope.getCustomers(true);
@@ -241,6 +242,12 @@ materialAdmin.controller("customerCommonController", function($rootScope, $scope
            } */
         return myFilter;
     };
+
+    function dateChangeClear(){
+        delete $scope.filterObj.end_date;
+       delete $scope.min_date;
+       delete $scope.filterObj.start_date;
+    }
 
 	function  dateChange() {
 		$scope.filterObj.end_date = new Date($scope.filterObj.end_date.setHours(0,0,0)); //sets hour minutes & sec on selected date

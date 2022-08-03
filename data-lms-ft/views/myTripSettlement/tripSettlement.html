@@ -283,7 +283,7 @@
 						placeholder="Gr Number"
 						ng-model="vm.oFilter.grData"
 						typeahead-wait-ms="10"
-						typeahead="item as item.grNumber for item in vm.getGr($viewValue) | limitTo:6"
+						typeahead="item as item.grNumber for item in vm.getsearchGr($viewValue) | limitTo:6"
 					>
 					<i class="lvh-search-close" ng-click="vm.oFilter.grData='';">×</i>
 				</div>

@@ -63,10 +63,10 @@ function brokerMemoController(
 	$scope.mrOperation = mrOperation;
 	// $scope.editTripMemo = editTripMemo;
 	// $scope.printBill = printBill;
-	// $scope.uploadDocs = uploadDocs;
-	// $scope.previewBuilty = previewBuilty;
+	$scope.uploadDocs = uploadDocs;
+	$scope.previewBuilty = previewBuilty;
 	$scope.editBrokerMemo = editBrokerMemo;
-	// $scope.grReceive = grReceive;
+	$scope.grReceive = grReceive;
 	// $scope.grAckRevert = grAckRevert;
 	// $scope.multiPaymentReceipt = multiPaymentReceipt;
 	// $scope.getBrokerMemoReport = getTripMemoReport;
@@ -289,26 +289,26 @@ function brokerMemoController(
 		}
 	}
 
-	// function grReceive(oTrip) {
+	function grReceive(oTrip) {
 
-	// 	var modalInstance = $uibModal.open({
-	// 		templateUrl: 'views/myGR/grReceive.html',
-	// 		controller: 'grReceivePopUpCtrl',
-	// 		resolve: {
-	// 			thatTrip: function () {
-	// 				return oTrip;
-	// 			}
-	// 		}
-	// 	});
+		var modalInstance = $uibModal.open({
+			templateUrl: 'views/myGR/grReceive.html',
+			controller: 'grReceivePopUpCtrl',
+			resolve: {
+				thatTrip: function () {
+					return oTrip;
+				}
+			}
+		});
 
-	// 	modalInstance.result.then(function () {
+		modalInstance.result.then(function () {
 
-	// 	}, function (data) {
-	// 		if (data != 'cancel') {
-	// 			swal('Oops!', data.data.message, 'error');
-	// 		}
-	// 	});
-	// }
+		}, function (data) {
+			if (data != 'cancel') {
+				swal('Oops!', data.data.message, 'error');
+			}
+		});
+	}
 
 	// $scope.grAckRmk = function (remark) {
 	// 	if (remark.acknowledge.status == true) {
@@ -329,26 +329,26 @@ function brokerMemoController(
 	// 	});
 	// };
 
-	// function uploadDocs(selectedRow) {
-	// 	console.log(selectedRow);
-	// 	var modalInstance = $uibModal.open({
-	// 		templateUrl: 'views/uploadFiles.html',
-	// 		controller: 'uploadFilesPopUpCtrl',
-	// 		resolve: {
-	// 			oUploadData: {
-	// 				modelName: 'gr',
-	// 				scopeModel: selectedRow,
-	// 				scopeModelId: selectedRow._id,
-	// 				uploadText: "Upload TMemo Documents",
-	// 			}
-	// 		}
-	// 	});
-	// 	modalInstance.result.then(function (data) {
-	// 		$state.reload();
-	// 	}, function (data) {
-	// 		$state.reload();
-	// 	});
-	// }
+	function uploadDocs(selectedRow) {
+		console.log(selectedRow);
+		var modalInstance = $uibModal.open({
+			templateUrl: 'views/uploadFiles.html',
+			controller: 'uploadFilesPopUpCtrl',
+			resolve: {
+				oUploadData: {
+					modelName: 'gr',
+					scopeModel: selectedRow,
+					scopeModelId: selectedRow._id,
+					uploadText: "Upload Broker Memo Documents",
+				}
+			}
+		});
+		modalInstance.result.then(function (data) {
+			$state.reload();
+		}, function (data) {
+			$state.reload();
+		});
+	}
 
 	// function grAckRevert(){
 	// 	if($scope.aSelectedMemo.bill)
@@ -386,130 +386,130 @@ function brokerMemoController(
 	// };
 
 
-	// function previewBuilty(gr) {
-	// 	if(!gr._id)
-	// 		return;
-	// 	$scope.getAllDocs = getAllDocs;
-	// 	let documents = [];
-	// 	(function init() {
-	// 		getAllDocs();
-	// 	})();
+	function previewBuilty(gr) {
+		if(!gr._id)
+			return;
+		$scope.getAllDocs = getAllDocs;
+		let documents = [];
+		(function init() {
+			getAllDocs();
+		})();
 
-	// 	function getAllDocs(){
-	// 		let req = {
-	// 			_id: gr._id,
-	// 			modelName: "gr"
-	// 		};
+		function getAllDocs(){
+			let req = {
+				_id: gr._id,
+				modelName: "gr"
+			};
 
-	// 		let aAllDoc = [];
-	// 		aAllDoc.push(gr._id);
+			let aAllDoc = [];
+			aAllDoc.push(gr._id);
 
-	// 		if(gr.trip && gr.trip._id)
-	// 			aAllDoc.push(gr.trip._id);
+			if(gr.trip && gr.trip._id)
+				aAllDoc.push(gr.trip._id);
 
-	// 		if(gr.trip.vehicle)
-	// 			aAllDoc.push(gr.trip.vehicle);
+			if(gr.trip.vehicle)
+				aAllDoc.push(gr.trip.vehicle);
 
-	// 		let reqId = {};
-	// 		let _id = [];
-	// 		reqId._id =  aAllDoc;
-	// 		//dmsService.getAllDocs( req,success,failure);
-	// 		dmsService.getAllDocsV2(reqId, success, failure);
+			let reqId = {};
+			let _id = [];
+			reqId._id =  aAllDoc;
+			//dmsService.getAllDocs( req,success,failure);
+			dmsService.getAllDocsV2(reqId, success, failure);
 
-	// 		function success(res) {
-	// 			if (res && res.data.length>0 ) {
-	// 				//$scope.oDoc = res.data;
-	// 				let aDocData 	= [];
-	// 				let aDocRes 	= [];
-	// 				let obTrip 		= {};
-	// 				let livedObj 	= {};
-	// 				aDocData = res.data;
-	// 				livedObj = aDocData.reduce(function(o,i){
-	// 					if(!o.hasOwnProperty(i.linkTo)){
-	// 						o[i.linkTo] = [];
+			function success(res) {
+				if (res && res.data.length>0 ) {
+					//$scope.oDoc = res.data;
+					let aDocData 	= [];
+					let aDocRes 	= [];
+					let obTrip 		= {};
+					let livedObj 	= {};
+					aDocData = res.data;
+					livedObj = aDocData.reduce(function(o,i){
+						if(!o.hasOwnProperty(i.linkTo)){
+							o[i.linkTo] = [];
 
-	// 					}
+						}
 
-	// 					var grouped = {};
-	// 					if(i.files && i.files.length>0) {
-	// 						i.files.forEach(function (t) {
-	// 							if (!grouped[t.category]) {
-	// 								grouped[t.category] = [];
-	// 							}
+						var grouped = {};
+						if(i.files && i.files.length>0) {
+							i.files.forEach(function (t) {
+								if (!grouped[t.category]) {
+									grouped[t.category] = [];
+								}
 
-	// 							if(i.linkTo=='gr') {
-	// 								if(gr._id==i.linkToId){
-	// 									grouped[t.category].push({
-	// 										name: `${URL.file_server}${t.name}`,
-	// 										iName:t.name,
-	// 										_id: i._id,
-	// 										sId: gr._id,
-	// 										sNumber:gr.grNumber
-	// 									});
-	// 								}
-	// 							}
+								if(i.linkTo=='gr') {
+									if(gr._id==i.linkToId){
+										grouped[t.category].push({
+											name: `${URL.file_server}${t.name}`,
+											iName:t.name,
+											_id: i._id,
+											sId: gr._id,
+											sNumber:gr.grNumber
+										});
+									}
+								}
 
-	// 							if(i.linkTo=='trip') {
-	// 								if(gr.trip && (gr.trip._id==i.linkToId)){
-	// 									grouped[t.category].push({
-	// 										name: `${URL.file_server}${t.name}`,
-	// 										iName:t.name,
-	// 										_id: i._id,
-	// 										sId: gr.trip._id,
-	// 										sNumber:gr.trip.trip_no
-	// 									});
-	// 								}
-	// 							}
+								if(i.linkTo=='trip') {
+									if(gr.trip && (gr.trip._id==i.linkToId)){
+										grouped[t.category].push({
+											name: `${URL.file_server}${t.name}`,
+											iName:t.name,
+											_id: i._id,
+											sId: gr.trip._id,
+											sNumber:gr.trip.trip_no
+										});
+									}
+								}
 
-	// 							if(i.linkTo=='regVehicle') {
-	// 								if(gr.vehicle && (gr.vehicle._id==i.linkToId)){
-	// 									grouped[t.category].push({
-	// 										name: `${URL.file_server}${t.name}`,
-	// 										iName:t.name,
-	// 										_id: i._id,
-	// 										sId: gr.vehicle,
-	// 										sNumber:gr.vehicle_no
-	// 									});
-	// 								}
-	// 							}
-	// 						})
-	// 					}
-	// 					o[i.linkTo].push(grouped);
-	// 					return o;
-	// 				},{});
+								if(i.linkTo=='regVehicle') {
+									if(gr.vehicle && (gr.vehicle._id==i.linkToId)){
+										grouped[t.category].push({
+											name: `${URL.file_server}${t.name}`,
+											iName:t.name,
+											_id: i._id,
+											sId: gr.vehicle,
+											sNumber:gr.vehicle_no
+										});
+									}
+								}
+							})
+						}
+						o[i.linkTo].push(grouped);
+						return o;
+					},{});
 
-	// 				//$scope.oDoc = res.data;
-	// 				$scope.oDoc = livedObj;
-	// 				livedObj.pod = livedObj.gr;
-	// 				delete livedObj.gr;
-	// 				prepareData();
+					//$scope.oDoc = res.data;
+					$scope.oDoc = livedObj;
+					livedObj.pod = livedObj.gr;
+					delete livedObj.gr;
+					prepareData();
 
-	// 			}else{
-	// 				growlService.growl("No documents to preview", "warning");
-	// 				return;
-	// 			}
-	// 		}
+				}else{
+					growlService.growl("No documents to preview", "warning");
+					return;
+				}
+			}
 
-	// 		function failure(res) {
-	// 			var msg = res.data.message;
-	// 			growlService.growl(msg, "error");
-	// 			return;
-	// 		}
-	// 	}
+			function failure(res) {
+				var msg = res.data.message;
+				growlService.growl(msg, "error");
+				return;
+			}
+		}
 
-	// };
+	};
 
-	// function prepareData() {
-	// 	$uibModal.open({
-	// 		templateUrl: 'views/previewDocumentPopup.html', //'views/carouselPopup.html',
-	// 		controller:  'preiveDocPopupCtrl',
-	// 		resolve: {
-	// 			documents: function () {
-	// 				return $scope.oDoc;
-	// 			}
-	// 		}
-	// 	});
-	// }
+	function prepareData() {
+		$uibModal.open({
+			templateUrl: 'views/previewDocumentPopup.html', //'views/carouselPopup.html',
+			controller:  'preiveDocPopupCtrl',
+			resolve: {
+				documents: function () {
+					return $scope.oDoc;
+				}
+			}
+		});
+	}
 
 	function getBrokerMemoReport(type ) {
 		let oFilter = prepareFilterObject(type);
@@ -559,10 +559,10 @@ function brokerMemoController(
 
 		if (selectedRow) {
 
-			var modalInstance = $modal.open({
-				templateUrl: 'views/tripMemo/editTripMemo.html',
-				controller: ['$scope', '$uibModalInstance', '$stateParams', 'DatePicker', 'formulaFactory', 'billingPartyService', 'consignorConsigneeService','customer', 'billBookService', 'Vehicle', 'tripServices', 'selectedInfo',editTripMemoController],
-				controllerAs: 'etmVm',
+			var modalInstance = $uibModal.open({
+				templateUrl: 'views/brokerMemo/editBrokerMemo.html',
+				controller: ['$scope', '$uibModalInstance', '$stateParams', 'DatePicker', 'formulaFactory', 'billingPartyService', 'consignorConsigneeService','customer', 'billBookService', 'Vehicle', 'tripServices', 'selectedInfo',editBrokerMemoController],
+				controllerAs: 'ebmVm',
 				size: 'xl',
 				resolve: {
 
@@ -1439,24 +1439,25 @@ function editBrokerMemoController(
 		vm.munsiyanaFromula = new formulaFactory('Total With Munshiyana');
 		vm.DatePicker = angular.copy(DatePicker); // initialize Datepicker
 		vm.oGrData = angular.copy(selectedInfo);
-		vm.oTripMemo = vm.oGrData.tMemo || {};
+		vm.oBrokerMemo = vm.oGrData.bMemo || {};
+		vm.branch = vm.oGrData.branch;
 		vm.grBookInfo = {_id:vm.oGrData.stationaryId,bookNo:vm.oGrData.grNumber};
-		vm.bookInfo = {_id:vm.oTripMemo.stationaryId,bookNo:vm.oTripMemo.tMNo};
+		vm.bookInfo = {_id:vm.oBrokerMemo.stationaryId,bookNo:vm.oBrokerMemo.bmNo};
 		if(vm.oGrData.grDate)
 			vm.oGrData.grDate = new Date(vm.oGrData.grDate);
 
-		if(vm.oTripMemo.date)
-			vm.oTripMemo.date = new Date(vm.oTripMemo.date);
+		if(vm.oBrokerMemo.date)
+			vm.oBrokerMemo.date = new Date(vm.oBrokerMemo.date);
 
 		vm.aWeightTypes = angular.copy($scope.$constants.aWeightTypes);
 		if ($scope.$configs.vendorDeal && $scope.$configs.vendorDeal.pmt) {
 			vm.aWeightTypes.push('PMT');
 		}
-		vm.oTripMemo.tRecv = 0;
-		if(vm.oGrData.tMemoReceipt && vm.oGrData.tMemoReceipt.length){
+		vm.oBrokerMemo.tRecv = 0;
+		if(vm.oGrData.bMemoReceipt && vm.oGrData.bMemoReceipt.length){
 			vm.readonly = true;
-			vm.oGrData.tMemoReceipt.forEach(obj=>{
-				vm.oTripMemo.tRecv += obj.amount;
+			vm.oGrData.bMemoReceipt.forEach(obj=>{
+				vm.oBrokerMemo.tRecv += obj.amount;
 			})
 		}
 		// if($scope.$configs.GR && $scope.$configs.GR.grReceive && vm.oGrData.pod && vm.oGrData.pod.received) {
@@ -1470,7 +1471,7 @@ function editBrokerMemoController(
 
 
 
-		$scope.$watchGroup(['etmVm.oTripMemo.munshiyana', 'etmVm.oTripMemo.rate', 'etmVm.oTripMemo.otherExp'], function (...aMod) {
+		$scope.$watchGroup(['ebmVm.oBrokerMemo.munshiyana', 'ebmVm.oBrokerMemo.rate', 'ebmVm.oBrokerMemo.otherExp'], function (...aMod) {
 			formulaCommonCalFun();
 		});
 	})();
@@ -1483,12 +1484,12 @@ function editBrokerMemoController(
 
 	function getBillBookNo(viewValue) {
 
-		if (viewValue != 'centrailized' && !(vm.oGrData.branch && Array.isArray(vm.oGrData.branch.tripMemoBook) && vm.oGrData.branch.tripMemoBook.length))
+		if (viewValue != 'centrailized' && !(vm.oGrData.branch && Array.isArray(vm.oGrData.branch.brokerMemoBook) && vm.oGrData.branch.brokerMemoBook.length))
 			return;
 
 
-		if (!vm.oTripMemo.date) {
-			swal('Error', 'Trip Memo Date is required', 'error');
+		if (!vm.oBrokerMemo.date) {
+			swal('Error', 'Broker Memo Date is required', 'error');
 			return [];
 		}
 
@@ -1496,9 +1497,9 @@ function editBrokerMemoController(
 
 			let requestObj = {
 				bookNo: viewValue,
-				billBookId: vm.oGrData.branch.tripMemoBook ? vm.oGrData.branch.tripMemoBook.map(o => o.ref) : '',
-				type: 'Trip Memo',
-				useDate: moment(vm.oTripMemo.date).startOf('day').toDate(),
+				billBookId: vm.oGrData.branch.brokerMemoBook ? vm.oGrData.branch.brokerMemoBook.map(o => o.ref) : '',
+				type: 'Broker Memo',
+				useDate: moment(vm.oBrokerMemo.date).startOf('day').toDate(),
 				status: 'unused'
 			};
 
@@ -1517,7 +1518,7 @@ function editBrokerMemoController(
 			function oSuc(response) {
 				if (viewValue === 'centrailized' || viewValue === 'auto') {
 					if (response.data[0]) {
-						vm.oTripMemo.tMNo = response.data[0].bookNo;
+						vm.oBrokerMemo.bmNo = response.data[0].bookNo;
 						vm.bookInfo.bookNo = response.data[0].bookNo;
 						delete vm.bookInfo._id;
 					}
@@ -1689,77 +1690,77 @@ function getRoute (viewValue) {
 
 	function formulaCommonCalFun() {
 		vm.munsiyanaFromula.bind({
-			'munshiyana': vm.oTripMemo &&  (vm.oTripMemo.munshiyana || 0),
-			'total_expense': vm.oTripMemo && (vm.oTripMemo.rate || 0),
-			'otherExp': vm.oTripMemo  && (vm.oTripMemo.otherExp || 0)
+			'munshiyana': vm.oBrokerMemo &&  (vm.oBrokerMemo.munshiyana || 0),
+			'total_expense': vm.oBrokerMemo && (vm.oBrokerMemo.rate || 0),
+			'otherExp': vm.oBrokerMemo  && (vm.oBrokerMemo.otherExp || 0)
 		});
-		vm.oTripMemo.total = Math.round(vm.munsiyanaFromula.eval());
+		vm.oBrokerMemo.total = Math.round(vm.munsiyanaFromula.eval());
 	}
 
 	function changePayType(pType) {
 		if (pType === 'To pay' || pType === 'To be billed') {
-			vm.oTripMemo.toPay = (vm.oTripMemo.rate || 0) - (vm.oTripMemo.munshiyana || 0);
-			vm.oTripMemo.advance = 0;
-			if (vm.oTripMemo.diesel) {
-				vm.oTripMemo.diesel.quantity = 0;
-				vm.oTripMemo.diesel.rate = 0;
-				vm.oTripMemo.diesel.amount = 0;
+			vm.oBrokerMemo.toPay = (vm.oBrokerMemo.rate || 0) - (vm.oBrokerMemo.munshiyana || 0);
+			vm.oBrokerMemo.advance = 0;
+			if (vm.oBrokerMemo.diesel) {
+				vm.oBrokerMemo.diesel.quantity = 0;
+				vm.oBrokerMemo.diesel.rate = 0;
+				vm.oBrokerMemo.diesel.amount = 0;
 			}
-			vm.oTripMemo.driver_cash = 0;
-			vm.oTripMemo.toll_tax = 0;
-			vm.oTripMemo.other_charges = 0;
-			vm.oTripMemo.other_charges_remark = '';
-			vm.oTripMemo.account_payment = 0;
+			vm.oBrokerMemo.driver_cash = 0;
+			vm.oBrokerMemo.toll_tax = 0;
+			vm.oBrokerMemo.other_charges = 0;
+			vm.oBrokerMemo.other_charges_remark = '';
+			vm.oBrokerMemo.account_payment = 0;
 		}
 	}
 
 	function calculateTotalPMT() {
-		vm.oTripMemo.rate = (vm.oTripMemo.pmtWeight || 0) * (vm.oTripMemo.pmtRate || 0);
+		vm.oBrokerMemo.rate = (vm.oBrokerMemo.pmtWeight || 0) * (vm.oBrokerMemo.pmtRate || 0);
 		changeAdvance('total');
 		changeAcPayment();
 	}
 
 	function calculateTotalPUnit() {
-		vm.oTripMemo.rate = (vm.oTripMemo.perUnitPrice || 0) * (vm.oTripMemo.totalUnits || 0);
+		vm.oBrokerMemo.rate = (vm.oBrokerMemo.perUnitPrice || 0) * (vm.oBrokerMemo.totalUnits || 0);
 		changeAdvance('total');
 		changeAcPayment();
 	}
 
 	function resetAll() {
-		vm.oTripMemo.rate = undefined;
-		vm.oTripMemo.munshiyana = undefined;
-		vm.oTripMemo.advance = undefined;
-		vm.oTripMemo.toPay = undefined;
-		vm.oTripMemo.pmtWeight = undefined;
-		vm.oTripMemo.pmtRate = undefined;
-		vm.oTripMemo.perUnitPrice = undefined;
-		vm.oTripMemo.totalUnits = undefined;
+		vm.oBrokerMemo.rate = undefined;
+		vm.oBrokerMemo.munshiyana = undefined;
+		vm.oBrokerMemo.advance = undefined;
+		vm.oBrokerMemo.toPay = undefined;
+		vm.oBrokerMemo.pmtWeight = undefined;
+		vm.oBrokerMemo.pmtRate = undefined;
+		vm.oBrokerMemo.perUnitPrice = undefined;
+		vm.oBrokerMemo.totalUnits = undefined;
 	}
 
 	function changeAcPayment() {
-		vm.oTripMemo.account_payment = (vm.oTripMemo.advance || 0) - (vm.oTripMemo.diesel ? (vm.oTripMemo.diesel.amount || 0) : 0) - (vm.oTripMemo.driver_cash || 0) - (vm.oTripMemo.toll_tax || 0) - (vm.oTripMemo.other_charges || 0);
+		vm.oBrokerMemo.account_payment = (vm.oBrokerMemo.advance || 0) - (vm.oBrokerMemo.diesel ? (vm.oBrokerMemo.diesel.amount || 0) : 0) - (vm.oBrokerMemo.driver_cash || 0) - (vm.oBrokerMemo.toll_tax || 0) - (vm.oBrokerMemo.other_charges || 0);
 	}
 
 	function changeAdvance(type) {
 
-		var tot_exp = angular.copy(vm.oTripMemo.rate);
-		var joint_exp = (vm.oTripMemo.toPay || 0) + (vm.oTripMemo.advance || 0);
+		var tot_exp = angular.copy(vm.oBrokerMemo.rate);
+		var joint_exp = (vm.oBrokerMemo.toPay || 0) + (vm.oBrokerMemo.advance || 0);
 		if (type === 'munshiyana') {
 			// vm.aTripData.vendorDeal.toPay = ((vm.aTripData.vendorDeal.total_expense || 0) - (vm.aTripData.vendorDeal.munshiyana || 0)) - (vm.aTripData.vendorDeal.advance || 0) - (vm.aTripData.vendorDeal.tdsAmount || 0);
 		}
 		if (type === 'advance') {
 			// vm.aTripData.vendorDeal.toPay = ((vm.aTripData.vendorDeal.total_expense || 0) - (vm.aTripData.vendorDeal.munshiyana || 0)) - (vm.aTripData.vendorDeal.advance || 0) - (vm.aTripData.vendorDeal.tdsAmount || 0);
 		}
-		if (vm.oTripMemo.payment_type === 'To pay' || vm.oTripMemo.payment_type === 'To be billed') {
+		if (vm.oBrokerMemo.payment_type === 'To pay' || vm.oBrokerMemo.payment_type === 'To be billed') {
 			// vm.aTripData.vendorDeal.toPay = (vm.aTripData.vendorDeal.total_expense || 0) - (vm.aTripData.vendorDeal.munshiyana || 0) - (vm.aTripData.vendorDeal.tdsAmount || 0);
-			vm.oTripMemo.advance = 0;
+			vm.oBrokerMemo.advance = 0;
 		}
 	}
 
 	function submit(formData) {
 		if (formData.$valid) {
 			let payload = {...vm.oGrData};
-			payload.tMemo = vm.oTripMemo;
+			payload.bMemo = vm.oBrokerMemo;
 
 			if(payload.grNumber && !(vm.grBookInfo && vm.grBookInfo._id || vm.grBookInfo.bookNo)){
 				if(!$scope.$configs.GR.manualGr)
@@ -1770,11 +1771,11 @@ function getRoute (viewValue) {
 			if(vm.grBookInfo && vm.grBookInfo._id)
 				payload.stationaryId = vm.grBookInfo._id;
 
-			if(payload.tMemo && payload.tMemo.tMNo  && !(vm.bookInfo && vm.bookInfo._id || vm.bookInfo.bookNo))
-				return swal('Error', `please enter valid trip memo number`, 'error');
+			if(payload.bMemo && payload.bMemo.bmNo  && !(vm.bookInfo && vm.bookInfo._id || vm.bookInfo.bookNo))
+				return swal('Error', `please enter valid broker memo number`, 'error');
 
 			if(vm.bookInfo && vm.bookInfo._id)
-				payload.tMemo.stationaryId = vm.bookInfo._id;
+				payload.bMemo.stationaryId = vm.bookInfo._id;
 			else
 				return swal('Error', `please enter valid trip memo number`, 'error');
 
@@ -1785,11 +1786,11 @@ function getRoute (viewValue) {
 				payload.grNumber = payload.grNumber.bookNo;
 
 
-			if(payload.tMemo.tMNo && payload.tMemo.tMNo._id)
-				payload.tMemo.tMNo = payload.tMemo.tMNo.bookNo;
+			if(payload.bMemo.bmNo && payload.bMemo.bmNo._id)
+				payload.bMemo.bmNo = payload.bMemo.bmNo.bookNo;
 
 			vm.isDisable = true;
-			tripServices.updateTripMemo(payload, success, failure);
+			tripServices.updateBrokerMemo(payload, success, failure);
 
 			function success(res) {
 				vm.isDisable = false;

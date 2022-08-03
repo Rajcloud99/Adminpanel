@@ -6,7 +6,7 @@
     </div>
 </div>
 <!--  <div class="container"> -->
-    <div class="card m-b-0" id="messages-main">
+    <div class="card m-b-0 m-l-10 m-r-10" id="messages-main">
         <div class="" style=" min-height: 575px;">
             <div class="listview lv-message">
                 <div class="lv-body">
@@ -275,7 +275,7 @@
 							<span ng-if="false && $role['GR']['Gr Ack'] && aSelectedMemo.acknowledge.status && $configs.GR.grAck"><a href="" uib-tooltip="revert Acknowledgement" ng-click="grAckRevert(aSelectedMemo)" tooltip-placement="bottom">
 									<span class="glyphicon glyphicon-share-alt"></span>
 								</a>&nbsp;&nbsp;</span>
-							<span ng-if="false && $role['GR']['Gr Receive'] && $configs.GR.grReceive && aSelectedMemo"><a href="" uib-tooltip="Gr Receive" ng-click="grReceive(aSelectedMemo)" tooltip-placement="bottom">
+							<span ng-if="$role['GR']['Gr Receive'] && $configs.GR.grReceive && aSelectedMemo"><a href="" uib-tooltip="Gr Receive" ng-click="grReceive(aSelectedMemo)" tooltip-placement="bottom">
                                 <span class="glyphicon glyphicon-thumbs-up"></span>
                             </a>&nbsp;&nbsp;</span>
                             <span ng-if="false && aSelectedMemo"><a href="" uib-tooltip="Preview" ng-click="printBill(aSelectedMemo)"  tooltip-placement="bottom">

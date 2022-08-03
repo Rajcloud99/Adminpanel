@@ -2469,7 +2469,7 @@ materialAdmin.controller("addMoreLocationCtrl", function (
 	$scope.oLiveData.reportingdatetime = $scope.oLiveData.reportingdate;
 
 	// $scope.liveTrackStatus = ["Running", "Stopped", "In Traffic"];
-	$scope.liveTrackStatus = ["Running", "Stopped", "In Traffic","Driver Issue","Vehicle Breakdown","Puncture","Traffic Jam","Customer Issue","Driver Rest"],
+	$scope.liveTrackStatus = ["Running", "Stopped", "In Traffic","Driver Issue","Vehicle Breakdown","Puncture","Traffic Jam","Customer Issue","Driver Rest", "Maintenance"],
 
 	$scope.closeModal = function() {
 		$uibModalInstance.dismiss('cancel');

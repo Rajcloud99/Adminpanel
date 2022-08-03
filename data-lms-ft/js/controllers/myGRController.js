@@ -1152,6 +1152,7 @@ materialAdmin.controller('myGRController', function (
 		let aDownloadRistrict = [];
 		var oFilter = prepareFilterObject();
 		lastGRFilter = oFilter;
+		oFilter.sort = {trip_no: 1,grNumber : 1};
 		$scope.disableDwnGrRpt = true;
 		if(isCSV)
 			oFilter.downloadCSV = true;

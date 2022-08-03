@@ -26,6 +26,50 @@ materialAdmin.service('clientService', ['$rootScope', 'HTTPConnection', 'URL', '
             HTTPConnection.get(url_with_params, parseSuccessResp, parseFailureResp);
         };
 
+        this.getMisConfig = function(filter, success, failure) {
+            var parseSuccessResp = function(data) {
+                success(data.data);
+            };
+            var parseFailureResp = function(data) {
+                failure(data.data);
+            };
+            var url = URL.POST_MIS_CONFIG_GET;
+            HTTPConnection.post(url,filter, parseSuccessResp, parseFailureResp);
+        };
+        
+        this.saveMisConfig = function(filter, success, failure) {
+            var parseSuccessResp = function(data) {
+                success(data.data);
+            };
+            var parseFailureResp = function(data) {
+                failure(data.data);
+            };
+            var url = URL.POST_MIS_CONFIG_SAVE;
+            HTTPConnection.post(url,filter, parseSuccessResp, parseFailureResp);
+        };
+
+        this.editMisConfig = function(client, success, failure) {
+            var parseSuccessResp = function(data) {
+                success(data.data);
+            };
+            var parseFailureResp = function(data) {
+                failure(data.data);
+            };
+            HTTPConnection.put(URL.PUT_MIS_CONFIG_EDIT + client._id, client, parseSuccessResp, parseFailureResp);
+        };
+
+        this.deleteMisConfig = function(filter, success, failure) {
+            var parseSuccessResp = function(data) {
+                success(data.data);
+            };
+            var parseFailureResp = function(data) {
+                failure(data.data);
+            };
+            var url = URL.POST_MIS_CONFIG_DELETE+filter._id;
+            HTTPConnection.delete(url, filter, parseSuccessResp, parseFailureResp);
+        };
+
+
         this.getClientByID = function(oQuery, success, failure) {
             var parseSuccessResp = function(data) {
                 success(data.data);
@@ -86,7 +130,7 @@ materialAdmin.service('clientService', ['$rootScope', 'HTTPConnection', 'URL', '
                 failure(data.data);
             };
             //var url_with_params = URL.CLIENT_GET_TRIM + "?name=" + nameQuery;
-            var url_with_params = URL.CLIENT_GET;
+            var url_with_params = URL.CLIENT_GET + "?client_display_name=" + nameQuery;
             HTTPConnection.get(url_with_params, parseSuccessResp, parseFailureResp);
         };
 

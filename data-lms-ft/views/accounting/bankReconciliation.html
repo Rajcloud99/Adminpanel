@@ -140,9 +140,9 @@
 						<li>Closing Balance: {{summary.cb || 0}}{{(summary.cb > 0) ? ' DR' : ' CR'}}</li>
 						<li ng-if="showBankReconAmt">UnClear Check Amount: {{summary.tNclAmt || 0}}</li>
 						<li ng-if="showBankReconAmt">Closing Balance with UnClear Check: {{(summary.tNclAmt+ summary.cb) || 0}}</li>
-						<li ng-if="showBankReconAmt">Balance as per company book: {{summary.cb || 0}}</li>
+						<li ng-if="showBankReconAmt">Balance as per company book: {{(summary.cb - summary.ob) || 0}}</li>
 						<li ng-if="showBankReconAmt">Amount not reflected in Bank: {{(summary.tNclDr - summary.tNclCr ) || 0}}</li>
-						<li ng-if="showBankReconAmt">Balance as per Bank: {{((summary.cb - (summary.tNclDr - summary.tNclCr))  || 0)}}</li>
+						<li ng-if="showBankReconAmt">Balance as per Bank: {{((summary.cb - summary.ob) - (summary.tNclDr - summary.tNclCr))  || 0}}</li>
 						<li>Date(From - To): {{oFilter.from_date|date:"dd-MMM-yyyy"}} - {{oFilter.to_date|date:"dd-MMM-yyyy"}}</li>
 						<li>Current Total(Dr.): {{summary.dr || 0}}</li>
 						<li>Current Total(Cr.): {{summary.cr || 0}}</li>

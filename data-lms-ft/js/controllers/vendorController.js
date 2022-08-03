@@ -552,6 +552,15 @@ materialAdmin.controller('vendorProfileRegController', function (
 			country: 'India'
 		};
 	}
+
+	// for stc if broker is using then category will be transporter by default prefilled
+	if($scope.$user && $scope.$user.user_type && $scope.$user.user_type.length && $scope.$user.user_type.indexOf('Broker')+1) {
+		$scope.isBroker = true;
+		$scope.$constants.aVendorCategory.push("Transporter");
+		$scope.vendor.category = [];
+		$scope.vendor.category.push("Transporter");
+	}
+
 	$scope.client_allowed = angular.copy($scope.$configs.client_allowed);
 	if($scope.vendor.account){
 		$scope.vendor.account.forEach(item => {
@@ -864,7 +873,7 @@ materialAdmin.controller('vendorProfileRegController', function (
 		if(!$scope.vendor.pan_no) {
 			return swal('Required', 'Pan No. is required', 'error');
 		}
-		if(!$scope.vendor.prim_contact_no) {
+		if(!$scope.isBroker && !$scope.vendor.prim_contact_no) {
 			return swal('Required', 'Vendor Mob. No. is required', 'error');
 		}
 		const pattern = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$";
@@ -880,12 +889,16 @@ materialAdmin.controller('vendorProfileRegController', function (
 				var msg = 'Vendor Added Successfully!';
 
 			swal(msg);
+			
 			$rootScope.opertaionType='show';
 			$state.go('masters.vendorRegistration.profile.basicInfo');
 
 		}
 		function failure(response) {
 			console.log(response);
+			response = response.data;
+			let msg = response.message || 'Message not defined';
+			swal('Error!', msg, 'error');
 		}
 
 		if($scope.client_allowed){

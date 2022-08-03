@@ -24,7 +24,7 @@
 					<span class="booking_list_header">BASIC DETAIL</span>
 					<div class="card-body">
 						<div class="row" style="margin:5px">
-							 <div class="form-group col-md-4" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
+							 <div class="form-group col-md-3" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
 								<label class="col-sm-4 control-label">Branch: </label>
 								<div class="col-sm-8">
 									{{bMemoVm.branch.name}}
@@ -69,63 +69,51 @@
 										   ng-click="bMemoVm.aTripData.vendorDeal.selectedVendor=undefined;
 										bMemoVm.aTripData.vendor=undefined;">×</i>
 									</div>
+									<div>
+										&nbsp;&nbsp;
+										<button class="btn-primary btn ng-scope waves-effect btn-sm"
+												ng-click="bMemoVm.addTransporter()"
+												uib-tooltip="Add Transporter"
+												tooltip-placement="bottom">
+											<i class="zmdi zmdi-account-add zmdi-hc-sm"></i>
+										</button>
+									</div>
 									<span class="error"
 										  ng-if="bMemoVm.vendorDealPayment.accountCr == 'vendor' && !bMemoVm.isAcknowledge && !bMemoVm.aTripData.vendorDeal.lorryAc">
 										Acount not linked.
 									</span>
 								</div>
+
 							</div>
 
-							<div class="col-md-4 form-group" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
-								<div class="text-center booking_list_header m-t-4 label"><u><b>Customer</b></u></div>  <span class="req_r">*</span>
-								<div class="col-md-2"></div>
-								<div class="col-md-8">
-									<div class="lvh-search ng-scope sear chosen-row-1">
-										<input type="text"
-											   placeholder="Customer Search..."
-											   ng-model="bMemoVm.aTripData.vendorDeal.customer"
-											   class="lvhs-input form-control"
-											   typeahead-wait-ms="10"
-											   typeahead="item as item.name for item in bMemoVm.getCustomers($viewValue)"
-											   typeahead-on-select="bMemoVm.onCustomerSelect($item, $model, $label)"
-											   ng-disabled="brokerMemoBType"
-											   ng-required>
-										<i ng-if="!(brokerMemoBType)" class="lvh-search-close" ng-click="bMemoVm.aTripData.vendorDeal.customer=undefined;">×</i>
-									</div>
+							<div class="col-md-3 form-group" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
+								<label class="col-sm-4 control-label">Customer: </label>
+								<div class="col-md-8" ng-if="isBroker">
+									{{$user.brokerCustName}}
 								</div>
 							</div>
 
-							<div class="form-group col-md-4" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
-								<div class="text-center booking_list_header m-t-4 label"><u><b>Billing Party</b></u></div>  <span class="req_r">*</span>
-								<div class="col-md-2"></div>
-									<div class="col-md-8">
-										<div class="lvh-search ng-scope sear chosen-row-1">
-											<input type="text"
-													class="lvhs-input form-control"
-													placeholder="Billing Party Search.."
-													ng-model="bMemoVm.aTripData.vendorDeal.billingParty"
-													typeahead-wait-ms="10"
-													name="Billing Party"
-													typeahead="item as item.name for item in bMemoVm.getAllBillingParty($viewValue)|limitTo:6"
-													typeahead-on-select="bMemoVm.onBillingPartySelect($item, $model, $label)">
-											<i class="lvh-search-close"
-											   ng-click="bMemoVm.aTripData.vendorDeal.billingParty = undefined;">×</i>
-										</div>
-									</div>
-									<div>
-										&nbsp;&nbsp;
-										<button class="btn-primary btn ng-scope waves-effect btn-sm"
-												ng-click="bMemoVm.upsertBillingParty();$event.preventDefault();"
-												uib-tooltip="Add BillingParty"
-												tooltip-placement="bottom">
-											<i class="zmdi zmdi-account-add zmdi-hc-sm"></i>
-										</button>
-									</div>
+							<div class="form-group col-md-3" ng-if="bMemoVm.isShowBrokerMemo && !(bMemoVm.brokerMemoUpdate)">
+								<label class="col-sm-4 control-label">Billing Party: </label>
+								<div class="col-md-8">
+									{{$user.brokerbpName}}
+								</div>
 							</div>
 
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-3 control-label">POD Customer</label>
+									<div class="col-sm-9">
+										<input type="text"
+											   class="form-control"
+											   ng-model="bMemoVm.aTripData.vendorDeal.podCustomer"
+											   ng-readonly="bMemoVm.isAcknowledge">
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="row" style="margin:5px">
-							<div class="form-group col-md-4">
+							<div ng-hide="true" class="form-group col-md-4">
 								<div class="text-center booking_list_header m-t-5 label"><u><b>Consignor</b></u></div>
 								<div class="col-md-2"></div>
 								<div class="col-md-8">
@@ -142,18 +130,9 @@
 										   ng-click="bMemoVm.aTripData.vendorDeal.consignor = undefined;">×</i>
 									</div>
 								</div>
-								<div>
-									&nbsp;&nbsp;
-									<button class="btn-primary btn ng-scope waves-effect btn-sm"
-									ng-click="bMemoVm.upsertConsignorConsignee();$event.preventDefault();"
-									uib-tooltip="Add Consignor"
-									tooltip-placement="bottom">
-									<i class="zmdi zmdi-account-add zmdi-hc-sm"></i>
-									</button>
-								</div>
 							</div>
 
-							<div class="form-group col-md-4">
+							<div ng-hide="true" class="form-group col-md-4">
 								<div class="text-center booking_list_header m-t-5 label"><u><b>Consignee</b></u></div>
 								<div class="col-md-2"></div>
 								<div class="col-md-8">
@@ -169,15 +148,6 @@
 										<i class="lvh-search-close"
 										   ng-click="bMemoVm.aTripData.vendorDeal.consignee = undefined;">×</i>
 									</div>
-								</div>
-								<div>
-									&nbsp;&nbsp;
-									<button class="btn-primary btn ng-scope waves-effect btn-sm"
-									ng-click="bMemoVm.upsertConsignorConsignee();$event.preventDefault();"
-									uib-tooltip="Add Consignee"
-									tooltip-placement="bottom">
-									<i class="zmdi zmdi-account-add zmdi-hc-sm"></i>
-									</button>
 								</div>
 							</div>
 
@@ -197,6 +167,15 @@
 										<i class="lvh-search-close"
 										   ng-click="bMemoVm.aTripData.vendorDeal.vendor = undefined;">×</i>
 									</div>
+								</div>
+								<div>
+									&nbsp;&nbsp;
+									<button class="btn-primary btn ng-scope waves-effect btn-sm"
+											ng-click="$event.preventDefault();bMemoVm.addTransporter();"
+											uib-tooltip="Add Transporter"
+											tooltip-placement="bottom">
+										<i class="zmdi zmdi-account-add zmdi-hc-sm"></i>
+									</button>
 								</div>
 							</div>
 
@@ -648,7 +627,7 @@
 									<label class="col-sm-6 control-label">Total Payable:</label>
 									<div class="col-sm-6">
 										<div class="fg-line">
-											{{bMemoVm.aTripData.vendorDeal.totalDeal = (bMemoVm.aTripData.vendorDeal.totalFreight) | roundOff}}
+											{{bMemoVm.aTripData.vendorDeal.totalDeal = (bMemoVm.aTripData.vendorDeal.totalFreight - (bMemoVm.aTripData.vendorDeal.advance || 0)) | roundOff}}
 										</div>
 									</div>
 								</div>
@@ -656,7 +635,7 @@
 
 							<div class="clearfix"></div>
 
-							 <div class="col-md-4">
+							 <div class="col-md-4" ng-hide="true">
 								<div class="form-group m-b-0">
 									<label class="col-sm-6 control-label">Remaining Amt:</label>
 									<div class="col-sm-6">
@@ -1119,15 +1098,83 @@
 
 							<div class="col-md-3">
 								<div class="form-group m-b-0">
-									<label class="col-sm-4 control-label">Dala Comission :</label>
+									<label class="col-sm-4 control-label">Comission :</label>
 									<div class="col-sm-6">
 										<div class="fg-line">
 											<input type="number"
 												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
 												   onwheel="return false"
 												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
-												   ng-model="bMemoVm.aTripData.vendorDeal.deduction.dalaComission"
-												   name="ttDelay"
+												   ng-model="bMemoVm.aTripData.vendorDeal.deduction.comission"
+												   name="commisson"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Builty Charge :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.deduction.builty"
+												   name="builty"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Driver Advance :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.deduction.driver_advance"
+												   name="driver_advance"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Other Expense :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.deduction.other_expense"
+												   name="other_expense"
+												   class="form-control">
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="form-group m-b-0">
+									<label class="col-sm-4 control-label">Dala and Labour Challan :</label>
+									<div class="col-sm-6">
+										<div class="fg-line">
+											<input type="number"
+												   onkeypress="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 46 && event.charCode <= 57"
+												   onwheel="return false"
+												   onkeydown="return ((event.which != 40) && (event.charCode == 8 || event.charCode == 0 || event.charCode == 13)) ? null : event.charCode >= 48 && event.charCode <= 57"
+												   ng-model="bMemoVm.aTripData.vendorDeal.deduction.dala_labour_challan"
+												   name="dala_labour_challan"
 												   class="form-control">
 										</div>
 									</div>

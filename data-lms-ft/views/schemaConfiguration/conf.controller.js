@@ -22,6 +22,8 @@ function configurationsController($modal, $scope, customer, billingPartyService,
 	vm.onBaseRateDel = onBaseRateDel;
 	vm.deleteConfigs = deleteConfigs;
 	vm.deleteFormula = deleteFormula;
+	vm.reqfieldvisible = reqfieldvisible;
+	vm.reqfieldremove = reqfieldremove;
 	vm.Modifieddate = Modifieddate;
 
 	//init
@@ -249,6 +251,7 @@ function configurationsController($modal, $scope, customer, billingPartyService,
 		}else{
 			for(let key in vm.selectedConfig) {
 				vm.selectedConfig[key].visible = false;
+				vm.selectedConfig[key].req = false;
 			}
 		}
 	};
@@ -269,6 +272,7 @@ function configurationsController($modal, $scope, customer, billingPartyService,
 		if(check){
 			for(let key in vm.selectedConfig) {
 				vm.selectedConfig[key].req = true;
+				vm.selectedConfig[key].visible = true;
 			}
 		}else{
 			for(let key in vm.selectedConfig) {
@@ -289,6 +293,18 @@ function configurationsController($modal, $scope, customer, billingPartyService,
 				vm.selectedConfig[key].notApplyTax = false;
 			}
 		}
+	};
+	function  reqfieldvisible(check){
+		if(check.req){
+			check.visible = true;
+		}
+
+	};
+	function  reqfieldremove(check){
+		if(!check.visible){
+			check.req = false;
+		}
+
 	};
 
 	function openFormulaModal(expressionType){

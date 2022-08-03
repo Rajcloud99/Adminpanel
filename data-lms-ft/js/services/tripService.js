@@ -151,6 +151,10 @@ materialAdmin.service('tripServices', ['$rootScope', 'HTTPConnection', 'URL', fu
         var url_with_params = URL.GET_ALL_GR;
         HTTPConnection.post(url_with_params, oFilter, success, failure);
     };
+	this.getGrTrim = function(oFilter, success, failure) {
+		var url_with_params = URL.GET_GR_TRIM;
+		HTTPConnection.post(url_with_params, oFilter, success, failure);
+	};
 	// this.downloadShipmentReport = function(oFilter, success, failure) {
 	// 	var url_with_params = URL.GET_ALL_GR;
 	// 	HTTPConnection.post(url_with_params, oFilter, success, failure);
@@ -673,6 +677,9 @@ materialAdmin.service('tripServices', ['$rootScope', 'HTTPConnection', 'URL', fu
     };
 	this.updateTripMemo = function(data, success, failure) {
         HTTPConnection.post(URL.UPDATE_TRIP_MEMO + data._id, data, success, failure);
+    };
+	this.updateBrokerMemo = function(data, success, failure) {
+        HTTPConnection.post(URL.UPDATE_BROKER_MEMO + data._id, data, success, failure);
     };
 
 	this.custPaymentReceipt = function(data, success, failure) {

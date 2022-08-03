@@ -2402,11 +2402,14 @@ function addVoucherController(
 				aVouchers.chequeDate = moment(vm.oVoucher.billDate, 'DD/MM/YYYY').toISOString();
 			}
 			// vm.isdisabled = true;
-
+			var count= 0;
 			if(vm.aSecV && vm.aSecV.length){
 				vm.aSecV.forEach(obj=>{
 					if(obj.to && obj.to.opn_bal_date && new Date(obj.to.opn_bal_date) > new Date(aVouchers.date)){
 						msg = 'The transaction is not allowed before opening balance date in account ' + obj.to.name;
+					}
+					if(obj.billType == "New Ref"){
+						count = count+1;
 					}
 				})
 			}
@@ -2416,6 +2419,9 @@ function addVoucherController(
 			if(!(vm.selectedStationary && (vm.selectedStationary._id || vm.selectedStationary.bookNo)))
 				return swal('Error', 'inValid ref Number', 'error');
 
+			if(vm.aSecV && count == vm.aSecV.length){
+				return swal('Error', 'invalid voucher new ref should be less then ledger length', 'error');
+			}
 			if (vm.totTDSAmt) {
 				let req = {
 					parentVoucher: aVouchers,

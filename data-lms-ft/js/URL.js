@@ -53,6 +53,12 @@ materialAdmin.service("URL", [
 		this.PULL_VOUCHER = this.BASE_URL + "api/moneyReceipt/pullVoucher/";
 		this.VOUCHER_PRINT = this.BASE_URL + "api/pdf/voucher/";
 
+		//Geo Mis Config
+		this.POST_MIS_CONFIG_GET = this.GEO_URL + "mis/get/";
+		this.POST_MIS_CONFIG_SAVE = this.GEO_URL + "mis/add/";
+		this.PUT_MIS_CONFIG_EDIT = this.GEO_URL + "mis/upsert/";
+		this.POST_MIS_CONFIG_DELETE = this.GEO_URL + "mis/delete/";
+
 		// client urls
 		this.CLIENT_GET = this.BASE_URL + "api/client/get/";
 		this.CLIENT_BY_ID = this.BASE_URL + "api/client/findById/";
@@ -367,6 +373,7 @@ materialAdmin.service("URL", [
 		// Trips
 		this.GRITEM_GET = this.SEARCH_URL + "api/trip_gr/get";
 		this.GET_ALL_GR = this.SEARCH_URL + "api/trip_gr/getGr";
+		this.GET_GR_TRIM = this.SEARCH_URL + "api/trip_gr/getGrTrim";
 		this.SYNC_STATUS = this.REPORTING_URL + "api/trip_gr/syncStatus";
 		this.GET_GR = this.BASE_URL + "api/trip_gr/";
 		this.GR_NUMBER_ADD = this.BASE_URL + "api/trip_gr/add_gr_number/";
@@ -447,8 +454,9 @@ materialAdmin.service("URL", [
 		this.RVT_ACK_DEAL = this.BASE_URL + "api/trips/vendorRvtAck/";
 		this.HIRE_PAYMENT_RPT = this.BASE_URL + "api/trips/hirePaymentRpt";
 		this.TRIP_MEMO = this.BASE_URL + "api/trip_memo/get_trip_memo";
-		this.BROKER_MEMO = this.BASE_URL + "api/broker_memo/get";
+		this.BROKER_MEMO = this.BASE_URL + "api/brokerMemo/get";
 		this.UPDATE_TRIP_MEMO = this.BASE_URL + "api/trip_memo/updateTripMemo/";
+		this.UPDATE_BROKER_MEMO = this.BASE_URL + "api/brokerMemo/update/";
 		this.CUST_PAYMENT_RECEIPT =
 			this.BASE_URL + "api/trip_memo/custPaymentReceipt";
 		this.UPDATE_CUST_PAYMENT_RECEIPT =

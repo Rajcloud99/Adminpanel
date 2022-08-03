@@ -34,6 +34,11 @@ materialAdmin.controller("vehicleAllcateController",
 		$("p").text("Vehicle Allcation");
 		$scope.getAllBranch = getAllBranch;
 		(function init() {
+		
+		// for stc if broker is using then category will be transporter by default prefilled
+		if($scope.$user && $scope.$user.user_type && $scope.$user.user_type.length && $scope.$user.user_type.indexOf('Broker')+1) {
+			$scope.isBroker = true;
+		}
 			$scope.vehiclePagination = angular.copy(Pagination);
 			$scope.bookingPagination = angular.copy(Pagination);
 		})();
@@ -2841,6 +2846,7 @@ materialAdmin.controller('addbMemoControllers', function (
     Vendor,
 	billsService,
 	$stateParams,
+	$uibModal,
 	formulaFactory,
 	Vehicle,
 	billingPartyService,
@@ -2873,6 +2879,7 @@ materialAdmin.controller('addbMemoControllers', function (
 	vm.getConsignor =  getConsignor;
 	vm.getTDSRate = getTDSRate;
 	vm.getVname = getVname;
+	vm.addTransporter = addTransporter;
 	vm.getQuotationData = getQuotationData;
 	vm.changeAdvance = changeAdvance;
 	vm.calculateTotalPMT = calculateTotalPMT;
@@ -2884,8 +2891,6 @@ materialAdmin.controller('addbMemoControllers', function (
 	vm.validateObj = validateObj;
 	vm.munsiyanaFromula = new formulaFactory('Total With Munshiyana');
 	vm.resetAll = resetAll;
-	vm.upsertBillingParty = upsertBillingParty;
-	vm.upsertConsignorConsignee = upsertConsignorConsignee;
 	// INIT functions
     (function init() {
 		vm.isShowBrokerMemo = brokerMemo;
@@ -2903,7 +2908,7 @@ materialAdmin.controller('addbMemoControllers', function (
 			// vm.aTripData.vendorDeal.selectedVendor = $scope.oTripMemo.vendorName;
 			vm.aTripData.vendorDeal.customer = $scope.oBrokerMemo.customer;
 			vm.aTripData.vendorDeal.billingParty = $scope.oBrokerMemo.billingParty;
-			vm.aTripData.vendorDeal.bMemo = $scope.oBrokerMemo.tMNo;
+			vm.aTripData.vendorDeal.bMemo = $scope.oBrokerMemo.bmNo;
 			vm.aTripData.vendorDeal.brokerMemoDate = new Date($scope.oBrokerMemo.date);
 			// vm.aTripData.vendorDeal.date = new Date($scope.oTripMemo.dealDate);
 			vm.aTripData.vendorDeal.advance = $scope.oBrokerMemo.advance;
@@ -2921,6 +2926,11 @@ materialAdmin.controller('addbMemoControllers', function (
 			if($scope.oBrokerMemo.bmNo && $scope.oBrokerMemo.stationaryId){
 				vm.bookInfo = {_id: $scope.oBrokerMemo.stationaryId, bookNo: $scope.oBrokerMemo.bmNo}
 			}
+		}
+		if($scope.$user && $scope.$user.user_type && $scope.$user.user_type.length && $scope.$user.user_type.indexOf('Broker')+1) {
+			$scope.isBroker = true;
+			vm.aTripData.vendorDeal.customer = {_id: $scope.$user.brokerCustomer};
+			vm.aTripData.vendorDeal.billingParty ={_id: $scope.$user.brokerbp};
 		}
 		vm.aWeightTypes = angular.copy($scope.$constants.aWeightTypes);
 		if ($scope.$configs.vendorDeal && $scope.$configs.vendorDeal.pmt) {
@@ -2984,56 +2994,6 @@ materialAdmin.controller('addbMemoControllers', function (
 
 	// Actual Functions
 
-	function upsertConsignorConsignee(selectedConsignorConsignee) {
-
-		var modalInstance = $modal.open({
-			templateUrl: 'views/myConsignorConsignee/consignorUpsert.html',
-			controller: 'ConsignorConsigneeUpsertController',
-			resolve: {
-				'selectedConsignorConsignee': function () {
-					return selectedConsignorConsignee;
-				}
-			}
-		});
-
-		modalInstance.result.then(function(response) {
-			if(response)
-				if(selectedConsignorConsignee)
-					$scope.selectedConsignorConsignee = response;
-				else
-					$scope.aConsignorConsignee.push(response);
-
-			console.log('close',response);
-		}, function(data) {
-			console.log('cancel');
-		});
-	}
-
-	function upsertBillingParty(selectedBillingParty) {
-
-		var modalInstance = $modal.open({
-			templateUrl: 'views/myBillingParty/billingPartyUpsert.html',
-			controller: 'billingPartyUpsertController',
-			resolve: {
-				'selectedBillingParty': function () {
-					return selectedBillingParty;
-				}
-			}
-		});
-
-		modalInstance.result.then(function(response) {
-			if(response)
-				if(selectedBillingParty)
-					vm.selectedBillingParty = response;
-				else
-					vm.aBillingParty.push(response);
-
-			console.log('close',response);
-		}, function(data) {
-			console.log('cancel');
-		});
-	}
-
 	function closeModal() {
 		$uibModalInstance.dismiss();
 	}
@@ -3062,7 +3022,7 @@ materialAdmin.controller('addbMemoControllers', function (
 
 
 		if (!vm.aTripData.vendorDeal.brokerMemoDate) {
-			swal('Error', 'Trip Memo Date is required', 'error');
+			swal('Error', 'Broker Memo Date is required', 'error');
 			return [];
 		}
 
@@ -3289,6 +3249,29 @@ materialAdmin.controller('addbMemoControllers', function (
 		vm.aTripData.vendorDeal.totWithMunshiyana = Math.round(vm.munsiyanaFromula.eval());
 	}
 
+	function addTransporter () {
+		$rootScope.opertaionType = 'add';
+		var modalInstance = $uibModal.open({
+			templateUrl: 'views/vehicleAllcation/vendorPopup.html',
+			controller: 'addNewTransporterCtrl',
+			size: 'lg',
+			resolve: {
+				'selectedTransporter': function () {
+					return true;
+				}
+			}
+	});
+
+	modalInstance.result.then(function (response) {
+		if(response) {
+			 vm.aTripData.vendorDeal.selectedVendor = response;
+		}
+
+	}, function (data) {
+		console.log('cancel');
+	});
+	}
+
     function getVendorName(viewValue, elseObj = false) {
 		return new Promise(function (resolve, reject) {
 			function oSuc(response) {
@@ -3300,7 +3283,8 @@ materialAdmin.controller('addbMemoControllers', function (
 			}
 
 			let res = {
-				deleted: false
+				deleted: false,
+				category:{$in:["Transporter"]}
 			};
 
 			if (elseObj)
@@ -3528,12 +3512,12 @@ materialAdmin.controller('addbMemoControllers', function (
 			if(!vm.aTripData.vendorDeal.total_expense) {
 				return swal('Error', 'Please Enter Total', 'error');
 			}
-			if(!vm.aTripData.vendorDeal.customer) {
-				return swal('Error', 'Please Enter Customer', 'error');
-			}
-			if(!vm.aTripData.vendorDeal.billingParty) {
-				return swal('Error', 'Please Enter Billing Party', 'error');
-			}
+			// if(!vm.aTripData.vendorDeal.customer) {
+			// 	return swal('Error', 'Please Enter Customer', 'error');
+			// }
+			// if(!vm.aTripData.vendorDeal.billingParty) {
+			// 	return swal('Error', 'Please Enter Billing Party', 'error');
+			// }
 			if(!vm.aTripData.vendorDeal.bMemo) {
 				return swal('Error', 'Please Enter Slip No', 'error');
 			}
@@ -3541,7 +3525,7 @@ materialAdmin.controller('addbMemoControllers', function (
 				return swal('Error', 'Please Enter valid Slip No', 'error');
 			}
 			if(!vm.aTripData.vendorDeal.brokerMemoDate) {
-				return swal('Error', 'Please Enter Trip memo date', 'error');
+				return swal('Error', 'Please Enter Broker memo date', 'error');
 			}
 
 			vm.aTripData.vendorDeal.total_expense = vm.aTripData.vendorDeal.total_expense || 0;
@@ -3583,9 +3567,11 @@ materialAdmin.controller('addbMemoControllers', function (
 			oGr['totalFreight'] = vm.aTripData.vendorDeal.totalFreight;
 
 		oBrokerMemo['vendor'] = vm.aTripData.vendorDeal.selectedVendor._id ? vm.aTripData.vendorDeal.selectedVendor._id : vm.aTripData.vendorDeal.selectedVendor;
+		oBrokerMemo['vendorName'] = vm.aTripData.vendorDeal.selectedVendor.name;
 		oBrokerMemo['customer'] = vm.aTripData.vendorDeal.customer;
 		oBrokerMemo['billingParty'] = vm.aTripData.vendorDeal.billingParty;
 		oBrokerMemo['vehicleId'] = vm.aTripData.vendorDeal.vehicle._id;
+		oBrokerMemo['podCustomer'] = vm.aTripData.vendorDeal.podCustomer;
 		oBrokerMemo['bmNo'] = vm.aTripData.vendorDeal.bMemo.bookNo || vm.aTripData.vendorDeal.bMemo;
 		oBrokerMemo['stationaryId'] = vm.bookInfo._id;
 		oBrokerMemo['date'] = vm.aTripData.vendorDeal.brokerMemoDate;
@@ -3623,6 +3609,130 @@ materialAdmin.controller("previewVendorPopUpCtrl", function ($rootScope, $scope,
 
 });
 
+materialAdmin.controller('addNewTransporterCtrl', function (
+	$rootScope,
+	$scope,
+	$state,
+	otherUtils,
+	DatePicker,
+	Vendor,
+	selectedTransporter,
+	$uibModalInstance
+) {
+	$scope.aGSTstates = otherUtils.getState();
+	$scope.DatePicker = angular.copy(DatePicker); // initialize pagination
+	$scope.setStateCode = function(state){
+		$scope.vendor.ho_address.state_code = $scope.aGSTstates.find(obj => obj.state === state).first_two_txn;
+	};
+	$scope.banking = {};
+	$scope.vendorAc = {};
+	if(!$rootScope.vendor){
+		$scope.vendor = {};
+		$scope.vendor.clientId = $scope.selectedClient;
+	}else{
+		$scope.vendor = $rootScope.vendor;
+	}
+	if($scope.vendor && $scope.vendor.ho_address && $scope.vendor.ho_address.country) {
+		$scope.vendor.ho_address.country = $scope.vendor.ho_address.country;
+	}else {
+		$scope.vendor.ho_address = {
+			country: 'India'
+		};
+	}
+
+	// for stc if broker is using then category will be transporter by default prefilled
+	if($scope.$user && $scope.$user.user_type && $scope.$user.user_type.length && $scope.$user.user_type.indexOf('Broker')+1) {
+		$scope.isBroker = true;
+		$scope.$constants.aVendorCategory.push("Transporter");
+		$scope.vendor.category = [];
+		$scope.vendor.category.push("Transporter");
+	}
+
+	$scope.client_allowed = angular.copy($scope.$configs.client_allowed);
+	if($scope.vendor.account){
+		$scope.vendor.account.forEach(item => {
+			$scope.client_allowed.forEach(itm =>{
+				if(item.clientId === itm.clientId){
+					itm.vendorAccountObj = item.ref;
+			}
+			});
+	});
+	}
+	if($scope.client_allowed &&  $scope.client_allowed.length == 1 && $scope.client_allowed[0].vendorAccountObj){
+		$scope.readonlyAc = true;
+	}else{
+		$scope.readonlyAc = false;
+	}
+
+
+	if ($scope.$configs.clientOps) {
+		$scope.vendor.clientR =  $scope.$configs.clientOps;
+	}else {
+		$scope.vendor.clientR =  $scope.selectedClient;
+	}
+	$scope.bindContactPerson = function() {
+		if($scope.$configs.master && $scope.$configs.master.vendor && $scope.$configs.master.vendor.upDateField) {
+			$scope.vendor.contact_person_name = $scope.vendor.name;
+			$scope.vendor.phn = $scope.vendor.name
+		}
+	}
+
+	$scope.submitForm = function(){
+		if(!$scope.vendor.pan_no) {
+			return swal('Required', 'Pan No. is required', 'error');
+		}
+		if(!$scope.isBroker && !$scope.vendor.prim_contact_no) {
+			return swal('Required', 'Vendor Mob. No. is required', 'error');
+		}
+		const pattern = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$";
+		const found = $scope.vendor.pan_no.match(pattern);
+		if(!found) {
+			return swal('Error', 'Invalid Pan No. It should be Like ALWPG5809L', 'error');
+		}
+		function success(response) {
+			// console.log(response);
+			if($rootScope.opertaionType === 'update')
+				var msg = 'Vendor Updated Successfully!';
+			else if($rootScope.opertaionType === 'add')
+				var msg = 'Vendor Added Successfully!';
+
+			// swal(msg);
+			if(selectedTransporter) {
+				$uibModalInstance.close(response.data);
+			} else {
+				$rootScope.opertaionType='show';
+				$state.go('masters.vendorRegistration.profile.basicInfo');
+			}
+
+		}
+		function failure(response) {
+			console.log(response);
+			response = response.data;
+			let msg = response.message || 'Message not defined';
+			swal('Error!', msg, 'error');
+		}
+
+		if($scope.client_allowed){
+			$scope.vendor.account = [];
+				$scope.client_allowed.forEach(item =>{
+					if(item.vendorAccountObj && item.vendorAccountObj._id){
+						$scope.vendor.account.push({
+							clientId: item.clientId,
+							ref: item.vendorAccountObj
+						});
+					}
+			});
+		}
+
+		if($scope.vendor.exeRate && !($scope.vendor.exeFrom || $scope.vendor.exeTo))
+			return swal('warning', "Both exeFrom and exeTo Date should be Filled",'warning');
+
+		if($rootScope.opertaionType === 'update')
+			Vendor.updateTransportVendor(angular.copy($scope.vendor),success,failure);
+		else if($rootScope.opertaionType === 'add')
+			Vendor.putTransportVendor(angular.copy($scope.vendor),success,failure);
+	};
+});
 
 materialAdmin.controller("addNewMvehicleCtrl", function ($rootScope, $scope, $uibModalInstance, thatData, growlService, formValidationgrowlService,accountingService, Vehicle, Driver, Vendor) {
 

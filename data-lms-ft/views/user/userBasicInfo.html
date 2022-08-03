@@ -99,6 +99,16 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-md-4" ng-if="$configs.brokerMemo.show && oUser.user_type.indexOf('Broker') != -1">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Broker BillName: <span class="req_r" ng-hide="(user_mode=='View')">*</span></label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								<input class="form-control" name="Broker BillName" ng-model="oUser.bmBillName" ng-readonly="(user_mode=='View')||(user_mode=='Edit')" placeholder="Enter BillName" type="text">
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="col-md-4">
 					<div class="form-group m-b-0">
 						<label class="col-sm-4 control-label">Father's name: <span ng-hide="(user_mode=='View')" class="req_r">*</span></label>
@@ -235,6 +245,26 @@
 						<div class="col-sm-6">
 							<div class="fg-line">
 								<input type="text" name="Nationality" ng-model="oUser.nationality" class="form-control" placeholder="Enter Nationality" ng-readonly="(user_mode=='View')">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4" ng-if="user_mode=='View'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Broker Customer:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{oUser.brokerCustName}}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4" ng-if="user_mode=='View'">
+					<div class="form-group m-b-0">
+						<label class="col-sm-4 control-label">Broker BP:</label>
+						<div class="col-sm-6">
+							<div class="fg-line">
+								{{oUser.brokerbpName}}
 							</div>
 						</div>
 					</div>
